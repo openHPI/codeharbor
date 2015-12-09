@@ -34,4 +34,7 @@ bower.json
 # Ignore pow environment settings
 .powenv
 
+# vagrant
+.vagrant
+
 secrets.yml
