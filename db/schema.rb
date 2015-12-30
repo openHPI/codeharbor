@@ -11,7 +11,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151230200622) do
+ActiveRecord::Schema.define(version: 20151230202409) do
+
+  create_table "answers", force: :cascade do |t|
+    t.integer  "comment_id"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "answers", ["comment_id"], name: "index_answers_on_comment_id"
+  add_index "answers", ["user_id"], name: "index_answers_on_user_id"
+
+  create_table "comments", force: :cascade do |t|
+    t.text     "text"
+    t.integer  "exercise_id"
+    t.integer  "user_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "comments", ["exercise_id"], name: "index_comments_on_exercise_id"
+  add_index "comments", ["user_id"], name: "index_comments_on_user_id"
 
   create_table "exercise_files", force: :cascade do |t|
     t.boolean  "main"
@@ -35,6 +56,17 @@ ActiveRecord::Schema.define(version: 20151230200622) do
     t.datetime "updated_at",  null: false
   end
 
+  create_table "ratings", force: :cascade do |t|
+    t.integer  "rating"
+    t.integer  "exercise_id"
+    t.integer  "user_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "ratings", ["exercise_id"], name: "index_ratings_on_exercise_id"
+  add_index "ratings", ["user_id"], name: "index_ratings_on_user_id"
+
   create_table "testing_frameworks", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
@@ -51,5 +83,14 @@ ActiveRecord::Schema.define(version: 20151230200622) do
   end
 
   add_index "tests", ["testing_framework_id"], name: "index_tests_on_testing_framework_id"
+
+  create_table "users", force: :cascade do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "email"
+    t.string   "password_digest"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
 
 end
