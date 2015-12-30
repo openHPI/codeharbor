@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Main:</strong>
+  <%= @exercise_file.main %>
+</p>
+
+<p>
+  <strong>Content:</strong>
+  <%= @exercise_file.content %>
+</p>
+
+<p>
+  <strong>Path:</strong>
+  <%= @exercise_file.path %>
+</p>
+
+<p>
+  <strong>Solution:</strong>
+  <%= @exercise_file.solution %>
+</p>
+
+<p>
+  <strong>Filetype:</strong>
+  <%= @exercise_file.filetype %>
+</p>
+
+<p>
+  <strong>Exercise:</strong>
+  <%= @exercise_file.exercise %>
+</p>
+
+<%= link_to 'Edit', edit_exercise_file_path(@exercise_file) %> |
+<%= link_to 'Back', exercise_files_path %>

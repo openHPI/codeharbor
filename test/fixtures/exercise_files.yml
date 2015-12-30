@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  main: 
+  content: MyText
+  path: MyString
+  solution: 
+  filetype: MyString
+  exercise_id: 
+
+two:
+  main: 
+  content: MyText
+  path: MyString
+  solution: 
+  filetype: MyString
+  exercise_id: 

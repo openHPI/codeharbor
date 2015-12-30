@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Content:</strong>
+  <%= @test.content %>
+</p>
+
+<p>
+  <strong>Rating:</strong>
+  <%= @test.rating %>
+</p>
+
+<p>
+  <strong>Feedback message:</strong>
+  <%= @test.feedback_message %>
+</p>
+
+<p>
+  <strong>Testing framework:</strong>
+  <%= @test.testing_framework %>
+</p>
+
+<%= link_to 'Edit', edit_test_path(@test) %> |
+<%= link_to 'Back', tests_path %>

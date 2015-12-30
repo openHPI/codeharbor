@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  resources :answers
+  resources :comments
+  resources :ratings
+  resources :users
+  resources :tests
+  resources :exercise_files
+  resources :testing_frameworks
   resources :exercises
   resources :exercises
 
