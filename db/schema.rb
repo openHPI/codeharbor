@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151230202409) do
+ActiveRecord::Schema.define(version: 20151230210929) do
 
   create_table "answers", force: :cascade do |t|
     t.integer  "comment_id"
@@ -22,6 +22,14 @@ ActiveRecord::Schema.define(version: 20151230202409) do
 
   add_index "answers", ["comment_id"], name: "index_answers_on_comment_id"
   add_index "answers", ["user_id"], name: "index_answers_on_user_id"
+
+  create_table "assemblies_parts", id: false, force: :cascade do |t|
+    t.integer "assembly_id"
+    t.integer "part_id"
+  end
+
+  add_index "assemblies_parts", ["assembly_id"], name: "index_assemblies_parts_on_assembly_id"
+  add_index "assemblies_parts", ["part_id"], name: "index_assemblies_parts_on_part_id"
 
   create_table "comments", force: :cascade do |t|
     t.text     "text"
@@ -55,6 +63,21 @@ ActiveRecord::Schema.define(version: 20151230202409) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
+
+  create_table "label_categories", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "labels", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "label_category_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "labels", ["label_category_id"], name: "index_labels_on_label_category_id"
 
   create_table "ratings", force: :cascade do |t|
     t.integer  "rating"

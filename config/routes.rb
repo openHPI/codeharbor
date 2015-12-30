@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :labels
+  resources :label_categories
   resources :answers
   resources :comments
   resources :ratings
