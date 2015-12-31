@@ -1,4 +1,13 @@
 Rails.application.routes.draw do
+  controller :sessions do
+    get 'login' => :new
+    post 'login' => :create
+    delete 'logout' => :destroy
+  end
+
+  get 'sessions/create'
+  get 'sessions/destroy'
+
   resources :labels
   resources :label_categories
   resources :answers
@@ -8,7 +17,6 @@ Rails.application.routes.draw do
   resources :tests
   resources :exercise_files
   resources :testing_frameworks
-  resources :exercises
   resources :exercises
 
 
