@@ -38,3 +38,6 @@ bower.json
 .vagrant
 
 secrets.yml
+
+# simplecov
+coverage
