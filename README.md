@@ -1,10 +1,16 @@
 # CodeHarbor
 
+## current status (master branch)
+
+<img src="https://travis-ci.org/openHPI/codeharbor.svg?branch=master" />
+<img src="https://codeclimate.com/github/openHPI/codeharbor/badges/gpa.svg" />
+<img src="https://codeclimate.com/github/openHPI/codeharbor/badges/coverage.svg" />
+
 ## unix development
 
 ```
-git clone https://github.com/openHPI/codeharbour.git
-cd codeharbour
+git clone https://github.com/openHPI/codeharbor.git
+cd codeharbor
 bundle
 rake db:migrate
 rails s
@@ -18,8 +24,8 @@ Install virtual box.
 Install vagrant (http://vagrantup.com/)
 
 ```
-git clone https://github.com/openHPI/codeharbour.git
-cd codeharbour
+git clone https://github.com/openHPI/codeharbor.git
+cd codeharbor
 vagrant up
 ```
 Wait ~20 minutes.
@@ -32,3 +38,13 @@ rails s -b 0
 ```
 
 Visit your browser at: `http://localhost:3001/`
+
+## testing
+
+Run all tests with
+```
+rspec .
+```
+or just one test (e.g. `rspec spec/controllers/exercises_controller_spec.rb`)
+
+You can find the coverage results in `coverage/index.html`
