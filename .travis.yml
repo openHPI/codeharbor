@@ -1,6 +1,6 @@
 addons:
-    code_climate:
-        repo_token: 6d1107ed298902217e9ba186b3d717461f190e8c783e6561095d45d01864470alanguage: ruby
+  code_climate:
+    repo_token: 6d1107ed298902217e9ba186b3d717461f190e8c783e6561095d45d01864470alanguage: ruby
 rvm:
 - 2.3.0
 script:
