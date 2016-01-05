@@ -2,5 +2,4 @@
 
 <%= render 'form' %>
 
-<%= link_to 'Show', edit_user_account_link_path(@account_link.user, @account_link) %> |
-<%= link_to 'Back', user_account_link_path(@account_link.user, @account_link) %>
+<%= link_to 'Back', user_path(@account_link.user) %>

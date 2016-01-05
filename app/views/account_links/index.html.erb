@@ -2,24 +2,8 @@
 
 <h1>Listing Account Links</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @account_links.each do |account_link| %>
-      <tr>
-        <td><%= link_to 'Show', account_link %></td>
-        <td><%= link_to 'Edit', edit_account_link_path(account_link) %></td>
-        <td><%= link_to 'Destroy', account_link, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<%= render partial: "all", locals: {account_links: @account_links} %>
 
 <br>
 
-<%= link_to 'New Account link', new_account_link_path %>
+<%= link_to 'New Account link', new_user_account_link_path(@user) %>

@@ -57,7 +57,7 @@ class AccountLinksController < ApplicationController
   def destroy
     @account_link.destroy
     respond_to do |format|
-      format.html { redirect_to account_links_url, notice: 'Account link was successfully destroyed.' }
+      format.html { redirect_to @account_link.user, notice: 'Account link was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
