@@ -1,4 +1,4 @@
-<%= form_for(@account_link) do |f| %>
+<%= form_for([@user, @account_link]) do |f| %>
   <% if @account_link.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@account_link.errors.count, "error") %> prohibited this account_link from being saved:</h2>

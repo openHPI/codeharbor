@@ -15,7 +15,9 @@
   <%= @user.email %>
 </p>
 
-<%= link_to 'Account Links', account_links_path %>
+<%= render partial: "account_links/all", locals: {account_links: @user.account_links} %>
+
+<%= link_to 'Add Account Link', new_user_account_link_path(@user) %>
 
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>

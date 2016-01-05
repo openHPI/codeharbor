@@ -1,4 +1,5 @@
 class AccountLinksController < ApplicationController
+  before_action :set_user
   before_action :set_account_link, only: [:show, :edit, :update, :destroy]
 
   # GET /account_links
@@ -25,10 +26,10 @@ class AccountLinksController < ApplicationController
   # POST /account_links.json
   def create
     @account_link = AccountLink.new(account_link_params)
-
+    @account_link.user = @user;
     respond_to do |format|
       if @account_link.save
-        format.html { redirect_to @account_link, notice: 'Account link was successfully created.' }
+        format.html { redirect_to @account_link.user, notice: 'Account link was successfully created.' }
         format.json { render :show, status: :created, location: @account_link }
       else
         format.html { render :new }
@@ -42,7 +43,7 @@ class AccountLinksController < ApplicationController
   def update
     respond_to do |format|
       if @account_link.update(account_link_params)
-        format.html { redirect_to @account_link, notice: 'Account link was successfully updated.' }
+        format.html { redirect_to @account_link.user, notice: 'Account link was successfully updated.' }
         format.json { render :show, status: :ok, location: @account_link }
       else
         format.html { render :edit }
@@ -65,6 +66,10 @@ class AccountLinksController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_account_link
       @account_link = AccountLink.find(params[:id])
+    end
+
+    def set_user
+      @user = User.find(params[:user_id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

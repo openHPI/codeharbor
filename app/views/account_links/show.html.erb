@@ -1,14 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Push URL:</strong>
-  <%= @account_link.push_url %>
-</p>
+<%= render "show" %>
 
-<p>
-  <strong>Account Name:</strong>
-  <%= @account_link.account_name %>
-</p>
-
-<%= link_to 'Edit', edit_account_link_path(@account_link) %> |
-<%= link_to 'Back', account_links_path %>
+<%= link_to 'Edit', edit_user_account_link_path(@account_link.user, @account_link) %> |
+<%= link_to 'Back', user_account_link_path(@account_link.user, @account_link) %>
