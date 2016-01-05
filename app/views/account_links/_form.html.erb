@@ -1,0 +1,26 @@
+<%= form_for(@account_link) do |f| %>
+  <% if @account_link.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@account_link.errors.count, "error") %> prohibited this account_link from being saved:</h2>
+
+      <ul>
+      <% @account_link.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :push_url %><br>
+    <%= f.text_field :push_url %>
+  </div>
+  <div class="field">
+    <%= f.label :account_name %><br>
+    <%= f.text_field :account_name %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

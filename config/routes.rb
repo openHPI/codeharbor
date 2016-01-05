@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :account_links
   controller :sessions do
     get 'login' => :new
     post 'login' => :create
@@ -18,6 +19,7 @@ Rails.application.routes.draw do
   resources :exercise_files
   resources :testing_frameworks
   resources :exercises
+  resources :account_links
 
 
   # The priority is based upon order of creation: first created -> highest priority.

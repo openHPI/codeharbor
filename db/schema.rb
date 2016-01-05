@@ -11,7 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151230210929) do
+ActiveRecord::Schema.define(version: 20160105120735) do
+
+  create_table "account_links", force: :cascade do |t|
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.string   "push_url"
+    t.string   "account_name"
+  end
 
   create_table "answers", force: :cascade do |t|
     t.integer  "comment_id"
