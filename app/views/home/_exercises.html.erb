@@ -1,0 +1,7 @@
+<% @exercises.each do |exercise| %>
+  <h2><%= exercise.title %></h2>
+
+<% end %>
+
+
+<%= will_paginate @exercises %>
