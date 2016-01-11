@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160111184436) do
+ActiveRecord::Schema.define(version: 20160111190324) do
 
   create_table "account_links", force: :cascade do |t|
     t.datetime "created_at",   null: false
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(version: 20160111184436) do
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
     t.integer  "exercise_id"
+    t.string   "color"
   end
 
   add_index "labels", ["exercise_id"], name: "index_labels_on_exercise_id"
