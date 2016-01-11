@@ -1,5 +1,6 @@
 <p id="notice"><%= notice %></p>
 
+<h1>Exercise:</h1>
 <p>
   <strong>Title:</strong>
   <%= @exercise.title %>
@@ -19,6 +20,32 @@
   <strong>Public:</strong>
   <%= @exercise.public %>
 </p>
+
+<h1>Files:</h1>
+<% @files.each do |file| %>
+<p>
+  <strong>Content:</strong>
+  <%= file.content %>
+</p>
+<p>
+  <strong>Mainfile:</strong>
+  <%= file.main %>
+</p>
+<p>
+  <strong>Path:</strong>
+  <%= file.path %>
+</p>
+<p>
+  <strong>Filetype:</strong>
+  <%= file.filetype %>
+</p>
+<p>
+  <strong>Solution File:</strong>
+  <%= file.solution %>
+</p>
+<p> ____________ </p>
+
+<% end %>
 
 <%= link_to 'Edit', edit_exercise_path(@exercise) %> |
 <%= link_to 'Back', exercises_path %>

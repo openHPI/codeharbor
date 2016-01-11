@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160105125241) do
+ActiveRecord::Schema.define(version: 20160111181210) do
 
   create_table "account_links", force: :cascade do |t|
     t.datetime "created_at",   null: false
@@ -113,8 +113,10 @@ ActiveRecord::Schema.define(version: 20160105125241) do
     t.integer  "testing_framework_id"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
+    t.integer  "exercise_id"
   end
 
+  add_index "tests", ["exercise_id"], name: "index_tests_on_exercise_id"
   add_index "tests", ["testing_framework_id"], name: "index_tests_on_testing_framework_id"
 
   create_table "users", force: :cascade do |t|
