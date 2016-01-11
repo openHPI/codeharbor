@@ -1,0 +1,12 @@
+<%= form_tag home_index_path, method: 'get' do %>
+ <p>
+  <%= text_field_tag :search, params[:search] %>
+  <%= submit_tag "Search", name: nil %>
+ </p>
+<% end %>
+
+<% @exercises.each do |exercise| %>
+  <h2><%= exercise.title %></h2>
+
+<% end %>
+<%= will_paginate @exercises %>
