@@ -36,3 +36,12 @@ Rating.create(rating: 2, exercise: exercise, user: user3)
 
 comment = Comment.create(text: 'random comment asdklöfjkldöasdfklödf', exercise: exercise, user: user1)
 Answer.create(text: 'text text text', comment: comment, user: user2)
+
+AccountLink.create(push_url: 'google.com/pushpush', account_name: 'account1000')
+
+category1 = LabelCategory.create(name: 'Languages')
+category2 = LabelCategory.create(name: 'Level')
+category3 = LabelCategory.create(name: 'Target Group')
+Label.create(name: 'Java', label_category: category1, exercise: exercise)
+Label.create(name: 'basic', label_category: category2, exercise: exercise)
+Label.create(name: 'pupil', label_category: category3, exercise: exercise)

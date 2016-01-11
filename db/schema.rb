@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160111183437) do
+ActiveRecord::Schema.define(version: 20160111184436) do
 
   create_table "account_links", force: :cascade do |t|
     t.datetime "created_at",   null: false
@@ -86,8 +86,10 @@ ActiveRecord::Schema.define(version: 20160111183437) do
     t.integer  "label_category_id"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
+    t.integer  "exercise_id"
   end
 
+  add_index "labels", ["exercise_id"], name: "index_labels_on_exercise_id"
   add_index "labels", ["label_category_id"], name: "index_labels_on_label_category_id"
 
   create_table "ratings", force: :cascade do |t|
