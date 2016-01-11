@@ -26,3 +26,13 @@ ExerciseFile.create(main: true, content: 'public class HelloWorld
 
 test_framework = TestingFramework.create(name: 'JUnit 4')
 Test.create(content: 'Junit test .....', rating: 7, feedback_message: 'Test x failed!', exercise: exercise, testing_framework: test_framework)
+
+user1 = User.create(email: 'test1@test.de', password: 'pwd')
+Rating.create(rating: 4, exercise: exercise, user: user1)
+user2 = User.create(email: 'test2@test.de', password: 'pwd')
+Rating.create(rating: 4, exercise: exercise, user: user2)
+user3 = User.create(email: 'test3@test.de', password: 'pwd')
+Rating.create(rating: 2, exercise: exercise, user: user3)
+
+comment = Comment.create(text: 'random comment asdklöfjkldöasdfklödf', exercise: exercise, user: user1)
+Answer.create(text: 'text text text', comment: comment, user: user2)
