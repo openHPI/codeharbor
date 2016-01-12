@@ -29,6 +29,16 @@ gem 'bcrypt', '~> 3.1.7'
 #pagination
 gem 'will_paginate'
 
+# Use Bootstrap (app/assets/stylesheets)
+gem 'therubyracer', platforms: :ruby
+gem 'twitter-bootstrap-rails'
+gem 'devise-bootstrap-views'
+
+# Typeahead gem
+gem 'bootstrap-typeahead-rails'
+
+
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 
