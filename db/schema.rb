@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160111190324) do
+ActiveRecord::Schema.define(version: 20160112130145) do
 
   create_table "account_links", force: :cascade do |t|
     t.datetime "created_at",   null: false
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20160111190324) do
     t.string   "push_url"
     t.string   "account_name"
     t.integer  "user_id"
+    t.string   "oauth2_token"
   end
 
   add_index "account_links", ["user_id"], name: "index_account_links_on_user_id"

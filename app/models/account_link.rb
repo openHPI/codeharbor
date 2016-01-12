@@ -1,6 +1,7 @@
 class AccountLink < ActiveRecord::Base
   validates :push_url, presence: true
   validates :account_name, presence: true
+  validates :oauth2_token, presence: true
 
   belongs_to :user
 
