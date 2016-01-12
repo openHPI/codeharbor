@@ -74,6 +74,6 @@ class AccountLinksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def account_link_params
-      params.require(:account_link).permit(:push_url, :account_name)
+      params.require(:account_link).permit(:push_url, :account_name, :oauth2_token)
     end
 end
