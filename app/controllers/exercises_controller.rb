@@ -1,5 +1,5 @@
 class ExercisesController < ApplicationController
-  before_action :set_exercise, only: [:show, :edit, :update, :destroy]
+  before_action :set_exercise, only: [:show, :edit, :update, :destroy, :push_external]
 
   # GET /exercises
   # GET /exercises.json
@@ -60,6 +60,14 @@ class ExercisesController < ApplicationController
       format.html { redirect_to exercises_url, notice: 'Exercise was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def push_external
+    print(params);
+    account_link = AccountLink.find(params[:account_link][:id]);
+    print(account_link)
+    redirect_to @exercise, notice: ('Exercise pushed to ' + account_link.readable)
+    #token = OAuth2::AccessToken.from_hash(client, query_string)
   end
 
   private

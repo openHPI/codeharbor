@@ -22,7 +22,11 @@ Rails.application.routes.draw do
   resources :tests
   resources :exercise_files
   resources :testing_frameworks
-  resources :exercises
+  resources :exercises do
+    member do
+      post :push_external
+    end
+  end
 
 
 

@@ -47,5 +47,13 @@
 
 <% end %>
 
+<%= form_tag(push_external_exercise_path(@exercise), method: "post") do |f| %>
+
+  <%= collection_select(:account_link, :id, AccountLink.all, :id, :account_name) %>
+
+  <%= button_tag %>
+
+<% end %>
+
 <%= link_to 'Edit', edit_exercise_path(@exercise) %> |
 <%= link_to 'Back', exercises_path %>
