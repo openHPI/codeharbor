@@ -8,7 +8,16 @@ class Exercise < ActiveRecord::Base
   	if search
   		where('title LIKE ?', "%#{search}%")
   	else
-  		scoped
+      all
   	end
+  end
+
+  def avg_rating
+    if ratings.empty?
+      return 0
+    else
+      result = 1.0 * ratings.map(&:rating).inject(:+) / ratings.size
+      return result.round(1)
+    end
   end
 end
