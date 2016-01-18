@@ -1,24 +1,42 @@
 <% @exercises.each do |exercise| %>
  <div id="exercise">
-  <h2><%= exercise.title %></h2>
-  
-  <div id="rating">
-   <p>
-    <% if exercise.avg_rating == 0 %>
-     no ratings
-    <% else %>
-     <% 1.upto(5) do |i| %>
-      <% if i < exercise.avg_rating %>
-       <%= image_tag("star1.png", width: "15", height: "15") %>
+   <div id="left-column">
+    <h3 id="title"><%= exercise.title %></h3>
+    
+    <div id="rating">
+     <p>
+      <% if exercise.avg_rating == 0 %>
+       no ratings
       <% else %>
-       <%= image_tag("star2.png", width: "15", height: "15") %>
+       <% 1.upto(5) do |i| %>
+        <% if i < exercise.avg_rating %>
+         <%= image_tag("star1.png", width: "15", height: "15") %>
+        <% else %>
+         <%= image_tag("star2.png", width: "15", height: "15") %>
+        <% end %>
+       <% end %>
+       (<%= exercise.avg_rating %>)
       <% end %>
-     <% end %>
-     (<%= exercise.avg_rating %>)
-    <% end %>
-   </p>
-  </div>
+     </p>
+    </div>
 
+    <div id="description">
+      <p><%= exercise.description %></p>
+    </div>
+
+    <div id="labels">
+      <% exercise.labels.each do |label| %>
+        <span class="label " style="background-color: #<%= label.color %>; color: #fff;"><%= label.name %></span>
+      <% end %>
+    </div>
+   </div>
+   <div id="right-column">
+    <p><%= link_to "Select", exercises_path %></p>
+    <p><%= link_to "Edit", exercises_path %></p>
+    <p><%= link_to "Rate", exercises_path %></p>
+    <p><%= link_to "Comment", exercises_path %></p>
+
+   </div>
 
 
  </div>
