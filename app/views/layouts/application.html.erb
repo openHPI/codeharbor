@@ -6,28 +6,38 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body class="<%= controller.controller_name %>">
-  <div id="banner">
-    <%= link_to image_tag("codeharbor_logo.png", width: "301", height: "66"), exercises_path %>
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top navbar-offset" style="border-bottom: solid green;">
+    <div class="pull-left"><%= link_to image_tag("codeharbor_logo.png", width: "301", height: "66"), exercises_path  %> </div>
+    <div class="nav navbar-nav navbar-right">
+      <% unless current_user.nil?%>
+        <div class="pull-right" style="margin-right: 40px">
+          <div> <%= link_to image_tag('user.png'), current_user %></div>
+        </div>
+        <div style="margin-right: 120px; margin-top: 20px">
+          <%= current_user.email %>
+          <div> <%= link_to "Logout", logout_path, method: :delete, class:'btn btn-default btn-xs' %> </div>
+        </div>
+      <% else %>
+        <div class="btn-group" role="group" aria-label="...">
+          <%= link_to 'Sign up', new_user_path, class:'btn btn-default btn-md', style:'margin-top: 20px' %>
+          <%= link_to 'Login', login_path, class:'btn btn-primary btn-md', style:'margin-right: 40px; margin-top: 20px' %>
+        </div>
+      <% end %>
+
+    </div>
+
+  </nav>
+
+
+  <div class="container" style="margin-top: 100px">
     
-    <div id="user">
-     <% unless current_user.nil? %>
-      <%= link_to image_tag("user.png"), current_user %>
-      <%= current_user.email %><br>
-      <%= link_to "Logout", logout_path, method: :delete %>
-     <% else %>
-      <%= link_to "Sign up", new_user_path %><br>
-      <%= link_to "Login", login_path %>
-     <% end %>
-    </div>
-  </div>
-  <div id="columns">
-    <div id="side">
-     <!-- side ... -->
-    </div>
-    <div id="main">
+    <div class="col-md-12">
       <%= yield %>
     </div>
   </div>
+
+  <%= yield :modals %>
+
  </body>
 </html>
