@@ -1,3 +1,5 @@
+require 'oauth2'
+
 class ExercisesController < ApplicationController
   before_action :set_exercise, only: [:show, :edit, :update, :destroy, :push_external]
 
@@ -63,11 +65,12 @@ class ExercisesController < ApplicationController
   end
 
   def push_external
-    print(params);
     account_link = AccountLink.find(params[:account_link][:id]);
-    print(account_link)
+    oauth2Client = OAuth2::Client.new('client_id', 'client_secret', :site => account_link.push_url)
+    oauth2_token = account_link[:oauth2_token]
+    token = OAuth2::AccessToken.from_hash(oauth2Client, :access_token => oauth2_token)
+    token.post(account_link.push_url)
     redirect_to @exercise, notice: ('Exercise pushed to ' + account_link.readable)
-    #token = OAuth2::AccessToken.from_hash(client, query_string)
   end
 
   private
