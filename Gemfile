@@ -37,7 +37,7 @@ gem 'devise-bootstrap-views'
 # Typeahead gem
 gem 'bootstrap-typeahead-rails'
 
-
+gem 'oauth2'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
