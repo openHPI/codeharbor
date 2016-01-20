@@ -1,8 +1,9 @@
 <%= form_tag home_index_path, method: 'get' do %>
- <p>
+  <div class="col-md-12">
   <%= text_field_tag :search, params[:search] %>
   <%= submit_tag "Search", name: nil %>
- </p>
+  <%= link_to 'New Exercise', new_exercise_path %>
+  </div>
 <% end %>
 
 <div id="exercises"><%= render 'exercises' %></div>

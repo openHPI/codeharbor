@@ -1,12 +1,12 @@
 <% @exercises.each do |exercise| %>
  <div id="exercise">
    <div id="left-column">
-    <h3 id="title"><%= exercise.title %></h3>
-    
+    <h3 id="title"><%= link_to exercise.title, exercise_path(exercise) %></h3>
+
     <div id="rating">
      <p>
       <% if exercise.avg_rating == 0 %>
-       no ratings
+       <%= link_to 'no ratings', new_rating_path %>
       <% else %>
        <% 1.upto(5) do |i| %>
         <% if i < exercise.avg_rating %>
@@ -26,21 +26,20 @@
 
     <div id="labels">
       <% exercise.labels.each do |label| %>
-        <span class="label " style="background-color: #<%= label.color %>; color: #fff;"><%= label.name %></span>
+        <span class="label " style="background-color: #{<%= label.color %>}; color: #fff;"> <%= label.name %> </span>
       <% end %>
     </div>
    </div>
    <div id="right-column">
-    <p><%= link_to "Select", exercises_path %></p>
-    <p><%= link_to "Edit", exercises_path %></p>
-    <p><%= link_to "Rate", exercises_path %></p>
-    <p><%= link_to "Comment", exercises_path %></p>
+    <p><%= link_to "Select", exercise_path(exercise) %></p>
+    <p><%= link_to "Edit", edit_exercise_path(exercise) %></p>
+    <p><%= link_to "Rate", ratings_path %></p>
+    <p><%= link_to "Comment", comments_path %></p>
 
    </div>
 
 
  </div>
 <% end %>
-
 
 <%= will_paginate @exercises %>
