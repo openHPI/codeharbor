@@ -1,8 +1,14 @@
 <%= form_tag home_index_path, method: 'get' do %>
-  <div class="col-md-12">
-  <%= text_field_tag :search, params[:search] %>
-  <%= submit_tag "Search", name: nil %>
-  <%= link_to 'New Exercise', new_exercise_path %>
+  <div class="col-md-6">
+    <div class="input-group">
+      <%= text_field_tag :search, params[:search], class:"form-control", type:"text" %>
+      <span class="input-group-btn">
+        <%= submit_tag "Search", name: nil, class:"btn btn-default" %>
+      </span>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <%= link_to 'New Exercise', new_exercise_path, class:"btn btn-default pull-right" %>
   </div>
 <% end %>
 
