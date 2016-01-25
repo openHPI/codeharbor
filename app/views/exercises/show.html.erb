@@ -1,3 +1,4 @@
+
 <%- model_class = Exercise -%>
 <div class="page-header">
   <h1><%= @exercise.title %></h1>
@@ -18,7 +19,7 @@
     <dd>
       <% @files.each do |file| %>
       <dt><%= 'Content: '%></dt>
-      <dd><%= file.content %></dd>
+      <dd style="white-space: pre-wrap;"><%= file.content %></dd>
       <dt><%= 'Mainfile: '%></dt>
       <dd><%= file.main %></dd>
       <dt><%= 'Path: '%></dt>
@@ -27,6 +28,18 @@
       <dd><%= file.filetype %></dd>
       <dt><%= 'Solution File: '%></dt>
       <dd><%= file.solution %></dd>
+      <% end %>
+    </dd>
+
+    <dt><%= 'Tests' %>: </dt>
+    <dd>
+      <% @tests.each do |test| %>
+      <dt><%= 'Content: '%></dt>
+      <dd style="white-space: pre-wrap;"><%= test.content %></dd>
+      <dt><%= 'Feedback Message: '%></dt>
+      <dd><%= test.feedback_message %></dd>
+      <dt><%= 'Testing Framework: '%></dt>
+      <dd><%= test.testing_framework.name %></dd>
       <% end %>
     </dd>
 </dl>

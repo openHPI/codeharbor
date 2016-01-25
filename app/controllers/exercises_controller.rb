@@ -13,6 +13,8 @@ class ExercisesController < ApplicationController
   # GET /exercises/1.json
   def show
     @files = ExerciseFile.where(exercise: @exercise)
+    @tests = Test.where(exercise: @exercise)
+
   end
 
   # GET /exercises/new
