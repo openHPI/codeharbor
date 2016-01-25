@@ -1,43 +1,21 @@
 <% @exercises.each do |exercise| %>
   <div class="panel panel-default" style="margin-top: 40px">
    <div class="panel-heading">
-     <span>
-       <h3 class="panel-title"><%= link_to exercise.title, exercise_path(exercise) %>
-         <span>
-          <% if exercise.avg_rating == 0 %>
-              <%= link_to 'no ratings', new_rating_path %>
-          <% else %>
-              <% 1.upto(5) do |i| %>
-                  <% if i < exercise.avg_rating %>
-                      <%= image_tag("star1.png", width: "15", height: "15") %>
-                  <% else %>
-                      <%= image_tag("star2.png", width: "15", height: "15") %>
-                  <% end %>
-              <% end %>
-             (<%= exercise.avg_rating %>)
-          <% end %>
-        </span>
+       <h3 class="panel-title"> <span><%= link_to exercise.title%></span>
+            <span class="star-rating">
+              <span class="fa fa-star-o" data-rating="1"></span>
+              <span class="fa fa-star-o" data-rating="2"></span>
+              <span class="fa fa-star-o" data-rating="3"></span>
+              <span class="fa fa-star-o" data-rating="4"></span>
+              <span class="fa fa-star-o" data-rating="5"></span>
+              <input type="hidden" name="whatever" class="rating-value" value="3">
+            </span>
        </h3>
-     </span>
    </div>
 
     <div class="panel-body">
 
-      <% if exercise.avg_rating == 0 %>
-       <%= link_to 'no ratings', new_rating_path %>
-      <% else %>
-       <% 1.upto(5) do |i| %>
-        <% if i < exercise.avg_rating %>
-         <%= image_tag("star1.png", width: "15", height: "15") %>
-        <% else %>
-         <%= image_tag("star2.png", width: "15", height: "15") %>
-        <% end %>
-       <% end %>
-       (<%= exercise.avg_rating %>)
-      <% end %>
-
-
-      <div class="col-md-6">
+      <div class="col-md-10">
         <%= exercise.description %>
       </div>
 
