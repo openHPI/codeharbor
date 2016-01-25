@@ -1,10 +1,28 @@
 <% @exercises.each do |exercise| %>
- <div id="exercise">
-   <div id="left-column">
-    <h3 id="title"><%= link_to exercise.title, exercise_path(exercise) %></h3>
+  <div class="panel panel-default" style="margin-top: 40px">
+   <div class="panel-heading">
+     <span>
+       <h3 class="panel-title"><%= link_to exercise.title, exercise_path(exercise) %>
+         <span>
+          <% if exercise.avg_rating == 0 %>
+              <%= link_to 'no ratings', new_rating_path %>
+          <% else %>
+              <% 1.upto(5) do |i| %>
+                  <% if i < exercise.avg_rating %>
+                      <%= image_tag("star1.png", width: "15", height: "15") %>
+                  <% else %>
+                      <%= image_tag("star2.png", width: "15", height: "15") %>
+                  <% end %>
+              <% end %>
+             (<%= exercise.avg_rating %>)
+          <% end %>
+        </span>
+       </h3>
+     </span>
+   </div>
 
-    <div id="rating">
-     <p>
+    <div class="panel-body">
+
       <% if exercise.avg_rating == 0 %>
        <%= link_to 'no ratings', new_rating_path %>
       <% else %>
@@ -17,26 +35,26 @@
        <% end %>
        (<%= exercise.avg_rating %>)
       <% end %>
-     </p>
-    </div>
 
-    <div id="description">
-      <p><%= exercise.description %></p>
-    </div>
 
-    <div id="labels">
-      <% exercise.labels.each do |label| %>
-        <span class="label " style="background-color: #{<%= label.color %>}; color: #fff;"> <%= label.name %> </span>
-      <% end %>
-    </div>
-   </div>
-   <div id="right-column">
-    <p><%= link_to "Select", exercise_path(exercise), class:'btn btn-danger' %></p>
-    <p><%= link_to "Edit", edit_exercise_path(exercise) %></p>
-    <p><%= link_to "Rate", ratings_path %></p>
-    <p><%= link_to "Comment", comments_path %></p>
+      <div class="col-md-6">
+        <%= exercise.description %>
+      </div>
 
-   </div>
+      <div class="btn-group-vertical pull-right" role="group" aria-label="...">
+        <%= link_to "Select", exercise_path(exercise), class:'btn btn-default' %>
+        <%= link_to "Edit", edit_exercise_path(exercise), class:'btn btn-default' %>
+        <%= link_to "Rate", ratings_path, class:'btn btn-default' %>
+        <%= link_to "Comment", comments_path, class:'btn btn-default' %>
+      </div>
+
+      <div class="col-md-6">
+        <% exercise.labels.each do |label| %>
+            <span class="label " style="background-color: #{<%= label.color %>}; color: #fff;"> <%= label.name %> </span>
+        <% end %>
+      </div>
+
+    </div>
 
 
  </div>
