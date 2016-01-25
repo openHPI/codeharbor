@@ -1,77 +1,63 @@
-<p id="notice"><%= notice %></p>
 
-<h1>Exercise:</h1>
-<p>
-  <strong>Title:</strong>
-  <%= @exercise.title %>
-</p>
+<%- model_class = Exercise -%>
+<div class="page-header">
+  <h1><%= @exercise.title %></h1>
+</div>
 
-<p>
-  <strong>Description:</strong>
-  <%= @exercise.description %>
-</p>
+<dl class="dl-horizontal">
+  <dt><%= 'Title' %>:</dt>
+  <dd><%= @exercise.title %></dd>
+  <dt><%= 'Description' %></dt>
+  <dd><%= @exercise.description %></dd>
+  <dt><%= 'Visibility' %>:</dt>
+  <dd><%= @exercise.public ? 'public' : 'private' %></dd>
+</dl>
 
-<p>
-  <strong>Maxrating:</strong>
-  <%= @exercise.maxrating %>
-</p>
+<dl class="dl-horizontal">
 
-<p>
-  <strong>Public:</strong>
-  <%= @exercise.public %>
-</p>
+    <dt><%= 'Files' %>: </dt>
+    <dd>
+      <% @files.each do |file| %>
+      <dt><%= 'Content: '%></dt>
+      <dd style="white-space: pre-wrap;"><%= file.content %></dd>
+      <dt><%= 'Mainfile: '%></dt>
+      <dd><%= file.main %></dd>
+      <dt><%= 'Path: '%></dt>
+      <dd><%= file.path %></dd>
+      <dt><%= 'Filetype: '%></dt>
+      <dd><%= file.filetype %></dd>
+      <dt><%= 'Solution File: '%></dt>
+      <dd><%= file.solution %></dd>
+      <% end %>
+    </dd>
 
-<h1>Files:</h1>
-<% @files.each do |file| %>
-<strong>Content:</strong>
-<p style="white-space: pre-wrap;"><%= file.content %></p>
-<p>
-  <strong>Mainfile:</strong>
-  <%= file.main %>
-</p>
-<p>
-  <strong>Path:</strong>
-  <%= file.path %>
-</p>
-<p>
-  <strong>Filetype:</strong>
-  <%= file.filetype %>
-</p>
-<p>
-  <strong>Solution File:</strong>
-  <%= file.solution %>
-</p>
-<p> ____________ </p>
+    <dt><%= 'Tests' %>: </dt>
+    <dd>
+      <% @tests.each do |test| %>
+      <dt><%= 'Content: '%></dt>
+      <dd style="white-space: pre-wrap;"><%= test.content %></dd>
+      <dt><%= 'Feedback Message: '%></dt>
+      <dd><%= test.feedback_message %></dd>
+      <dt><%= 'Testing Framework: '%></dt>
+      <dd><%= test.testing_framework.name %></dd>
+      <% end %>
+    </dd>
+</dl>
 
-<% end %>
+<dl class="dl-horizontal">
+  <dt><%= 'Export to ... :' %></dt>
+  <dd>
+    <%= form_tag(push_external_exercise_path(@exercise), method: "post") do |f| %>
 
+      <%= collection_select(:account_link, :id, AccountLink.all, :id, :account_name, {},  {class: 'btn btn-default dropdown-toggle'}) %>
+      <%= button_tag 'Submit', class: 'btn btn-default btn-xs' %>
+    <% end %>
+  </dd>
+</dl>
 
-<h1>Tests:</h1>
-<% @tests.each do |test| %>
-<strong>Content:</strong>
-<p style="white-space: pre-wrap;"><%= test.content %></p>
-<p>
-  <strong>Feedback Message:</strong>
-  <%= test.feedback_message %>
-</p>
-<p>
-  <strong>Testing Framework:</strong>
-  <%= test.testing_framework.name %>
-</p>
-<p> ____________ </p>
+<div class="actions btn-group" role="group">
+  <%= link_to 'Edit', edit_exercise_path(@exercise),  class: 'btn btn-default' %>
+  <%= link_to 'Back', exercises_path,  class: 'btn btn-default' %>
 
+</div>
 
-<% end %>
-
-
-
-<%= form_tag(push_external_exercise_path(@exercise), method: "post") do |f| %>
-
-  <%= collection_select(:account_link, :id, AccountLink.all, :id, :account_name) %>
-
-  <%= button_tag %>
-
-<% end %>
-
-<%= link_to 'Edit', edit_exercise_path(@exercise) %> |
-<%= link_to 'Back', exercises_path %>
