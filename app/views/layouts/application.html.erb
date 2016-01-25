@@ -7,31 +7,28 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <nav class="navbar navbar-default navbar-fixed-top navbar-offset" style="border-bottom: solid green;">
-    <div class="pull-left"><%= link_to image_tag("codeharbor_logo.png", width: "301", height: "66"), exercises_path  %> </div>
-    <div class="nav navbar-nav navbar-right">
-      <% unless current_user.nil?%>
-        <div class="pull-right" style="margin-right: 40px">
-          <div> <%= link_to image_tag('user.png'), current_user %></div>
-        </div>
-        <div style="margin-right: 120px; margin-top: 20px">
-          <%= current_user.email %>
-          <div> <%= link_to "Logout", logout_path, method: :delete, class:'btn btn-default btn-xs' %> </div>
-        </div>
-      <% else %>
-        <div class="btn-group" role="group" aria-label="...">
-          <%= link_to 'Sign up', new_user_path, class:'btn btn-default btn-md', style:'margin-top: 20px' %>
-          <%= link_to 'Login', login_path, class:'btn btn-primary btn-md', style:'margin-right: 40px; margin-top: 20px' %>
-        </div>
-      <% end %>
 
-    </div>
-
+  <nav class="navbar navbar-default navbar-fixed-top navbar-offset">
+    <%= nav_bar fixed: :top, brand: 'Code Harbor', responsive: true do %>
+        <%= menu_group do %>
+          <%= menu_item 'Exercises', exercises_path %>
+        <% end %>
+        <%= menu_group pull: :right do %>
+            <% if not  current_user.nil? %>
+              <%= menu_item 'User', user_path(current_user)  %>
+                <%= menu_item current_user.email %>
+                <%= menu_item 'Log out',  logout_path, method: :delete %>
+            <% else %>
+              <%= menu_item 'Sign up', new_users_path %>
+              <%= menu_item 'Login', login_path %>
+            <% end %>
+        <% end %>
+    <% end %>
   </nav>
 
 
   <div class="container" style="margin-top: 100px">
-    
+
     <div class="col-md-12">
       <%= yield %>
     </div>
