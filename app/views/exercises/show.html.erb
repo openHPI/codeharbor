@@ -23,10 +23,8 @@
 
 <h1>Files:</h1>
 <% @files.each do |file| %>
-<p>
-  <strong>Content:</strong>
-  <%= file.content %>
-</p>
+<strong>Content:</strong>
+<p style="white-space: pre-wrap;"><%= file.content %></p>
 <p>
   <strong>Mainfile:</strong>
   <%= file.main %>
@@ -46,6 +44,26 @@
 <p> ____________ </p>
 
 <% end %>
+
+
+<h1>Tests:</h1>
+<% @tests.each do |test| %>
+<strong>Content:</strong>
+<p style="white-space: pre-wrap;"><%= test.content %></p>
+<p>
+  <strong>Feedback Message:</strong>
+  <%= test.feedback_message %>
+</p>
+<p>
+  <strong>Testing Framework:</strong>
+  <%= test.testing_framework.name %>
+</p>
+<p> ____________ </p>
+
+
+<% end %>
+
+
 
 <%= form_tag(push_external_exercise_path(@exercise), method: "post") do |f| %>
 
