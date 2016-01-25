@@ -1,33 +1,15 @@
-<p id="notice"><%= notice %></p>
+<%= form_tag home_index_path, method: 'get' do %>
+    <div class="col-md-6">
+      <div class="input-group">
+        <%= text_field_tag :search, params[:search], class:"form-control", type:"text" %>
+        <span class="input-group-btn">
+        <%= submit_tag "Search", name: nil, class:"btn btn-default" %>
+      </span>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <%= link_to 'New Exercise', new_exercise_path, class:"btn btn-default pull-right" %>
+    </div>
+<% end %>
 
-<h1>Listing Exercises</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Description</th>
-      <th>Maxrating</th>
-      <th>Public</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @exercises.each do |exercise| %>
-      <tr>
-        <td><%= exercise.title %></td>
-        <td><%= exercise.description %></td>
-        <td><%= exercise.maxrating %></td>
-        <td><%= exercise.public %></td>
-        <td><%= link_to 'Show', exercise %></td>
-        <td><%= link_to 'Edit', edit_exercise_path(exercise) %></td>
-        <td><%= link_to 'Destroy', exercise, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Exercise', new_exercise_path %>
+<%= render 'home/exercises' %>

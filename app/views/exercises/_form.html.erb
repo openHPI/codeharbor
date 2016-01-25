@@ -1,33 +1,55 @@
-<%= form_for(@exercise) do |f| %>
-  <% if @exercise.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@exercise.errors.count, "error") %> prohibited this exercise from being saved:</h2>
-
-      <ul>
-      <% @exercise.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+<div class="col-md-12">
+<%= form_for @exercise, html: { class: 'form-horizontal project' } do |f| %>
+      <% if @exercise.errors.any? %>
+          <div id='error_explanation' class='panel panel-danger'>
+            <div class='panel-heading'>
+              <h3 class='panel-title'>
+                <%= pluralize(@exercise.errors.count, 'error') %> <%= 'prohibited_this_project_from_being_saved' %>
+              </h3>
+            </div>
+            <div class='panel-body'>
+              <ul>
+                <% @exercise.errors.full_messages.each do |msg| %>
+                    <li><%= msg %></li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
       <% end %>
-      </ul>
-    </div>
-  <% end %>
 
-  <div class="field">
-    <%= f.label :title %><br>
-    <%= f.text_field :title %>
+  <div class="form-group">
+    <%= f.label :title, class:'control-label' %><br>
+    <div class="controls">
+      <%= f.text_field :title, class:'form-control' %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :description %><br>
-    <%= f.text_field :description %>
+
+  <div class="form-group">
+    <%= f.label :description, class:'control-label' %><br>
+    <div class="controls">
+      <%= f.text_field :description, class:'form-control' %>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :maxrating %><br>
-    <%= f.number_field :maxrating %>
+
+  <div class="form-group">
+    <%= f.label :public,  class: 'control-label' %>
+    <div class='radio'>
+      <div class='col-md-2'>
+        <div style='margin-left: 20px'> <%= f.radio_button :public, true, value: true%>
+          <%= label :public, 'public '%>
+        </div>
+      </div>
+      <div class='col-md-2'>
+        <div style='margin-left: 20px'> <%= f.radio_button :public, false, value: false%>
+          <%= label :public, 'private'%>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="field">
-    <%= f.label :public %><br>
-    <%= f.check_box :public %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+
+
+  <div class="actions btn-group" role="group">
+    <%= f.submit nil, class: 'btn btn-primary' %>
   </div>
 <% end %>
+</div>
