@@ -44,6 +44,7 @@ GEM
       railties (>= 3.0)
     builder (3.2.2)
     byebug (8.2.1)
+    cancancan (1.13.1)
     codeclimate-test-reporter (0.4.8)
       simplecov (>= 0.7.1, < 1.0.0)
     coffee-rails (4.1.0)
@@ -209,6 +210,7 @@ DEPENDENCIES
   bcrypt (~> 3.1.7)
   bootstrap-typeahead-rails
   byebug
+  cancancan (~> 1.10)
   codeclimate-test-reporter
   coffee-rails (~> 4.1.0)
   devise-bootstrap-views
@@ -230,6 +232,3 @@ DEPENDENCIES
   uglifier (>= 1.3.0)
   web-console (~> 2.0)
   will_paginate
-
-BUNDLED WITH
-   1.11.2
