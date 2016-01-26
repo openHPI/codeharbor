@@ -15,33 +15,38 @@
 
 <dl class="dl-horizontal">
 
-    <dt><%= 'Files' %>: </dt>
-    <dd>
-      <% @files.each do |file| %>
-      <dt><%= 'Content: '%></dt>
-      <dd style="white-space: pre-wrap;"><%= file.content %></dd>
-      <dt><%= 'Mainfile: '%></dt>
-      <dd><%= file.main %></dd>
-      <dt><%= 'Path: '%></dt>
-      <dd><%= file.path %></dd>
-      <dt><%= 'Filetype: '%></dt>
-      <dd><%= file.filetype %></dd>
-      <dt><%= 'Solution File: '%></dt>
-      <dd><%= file.solution %></dd>
-      <% end %>
-    </dd>
-
-    <dt><%= 'Tests' %>: </dt>
-    <dd>
-      <% @tests.each do |test| %>
-      <dt><%= 'Content: '%></dt>
-      <dd style="white-space: pre-wrap;"><%= test.content %></dd>
-      <dt><%= 'Feedback Message: '%></dt>
-      <dd><%= test.feedback_message %></dd>
-      <dt><%= 'Testing Framework: '%></dt>
-      <dd><%= test.testing_framework.name %></dd>
-      <% end %>
-    </dd>
+    <dt><em><%= 'Files' %>:</em> </dt>
+    <% @files.each do |file| %>
+      <br>
+      <dd>
+        <dt><%= 'Content: '%></dt>
+        <dd style="white-space: pre-wrap;"><%= file.content %></dd>
+        <dt><%= 'Mainfile: '%></dt>
+        <dd><%= file.main %></dd>
+        <dt><%= 'Path: '%></dt>
+        <dd><%= file.path %></dd>
+        <dt><%= 'Filetype: '%></dt>
+        <dd><%= file.filetype %></dd>
+        <dt><%= 'Solution File: '%></dt>
+        <dd><%= file.solution %></dd>
+      </dd>
+      <br>
+  <% end %>
+</dl>
+<dl class="dl-horizontal">
+    <dt><em><%= 'Tests' %>:</em> </dt>
+    <% @tests.each do |test| %>
+      <br>
+      <dd>
+        <dt><%= 'Content: '%></dt>
+        <dd style="white-space: pre-wrap;"><%= test.content %></dd>
+        <dt><%= 'Feedback Message: '%></dt>
+        <dd><%= test.feedback_message %></dd>
+        <dt><%= 'Testing Framework: '%></dt>
+        <dd><%= test.testing_framework.name %></dd>
+      </dd>
+      <br>
+    <% end %>
 </dl>
 
 <dl class="dl-horizontal">
