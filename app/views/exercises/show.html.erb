@@ -20,7 +20,7 @@
       <br>
       <dd>
         <dt><%= 'Content: '%></dt>
-        <dd><div id="editor"><%= file.content %></div></dd>
+        <dd><div class="editor"><%= file.content %></div></dd>
         <dt><%= 'Mainfile: '%></dt>
         <dd><%= file.main %></dd>
         <dt><%= 'Path: '%></dt>
@@ -39,7 +39,7 @@
       <br>
       <dd>
         <dt><%= 'Content: '%></dt>
-        <dd><div id="editor"><%= test.content %></div></dd>
+        <dd><div class="editor"><%= test.content %></div></dd>
         <dt><%= 'Feedback Message: '%></dt>
         <dd><%= test.feedback_message %></dd>
         <dt><%= 'Testing Framework: '%></dt>
@@ -67,12 +67,16 @@
 </div>
 
 <script>
+  ace.config.set('basePath', '/assets/ace/');
+  var all = document.getElementsByClassName("editor");
+  alert(all[0]);
 
-    ace.config.set('basePath', '/assets/ace/');
-    var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/twilight");
-    editor.getSession().setMode("ace/mode/java");
-    document.getElementById('editor').style.fontSize='18px';
+  for (var i=0, max=all.length; i < max; i++) {
+      var editor = ace.edit(all[i]);
+      editor.setTheme("ace/theme/twilight");
+      editor.getSession().setMode("ace/mode/java");
+      all[i].style.fontSize='18px';
+  }
 
 </script>
 
