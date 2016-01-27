@@ -6,7 +6,9 @@ class Ability
       if user.role == 'admin'
         can :manage, :all
       elsif user.role == 'teacher'
-        can :manage, :all
+        can :read, Exercise
+        can :read, Test
+        can :read, ExerciseFile
       elsif user.role == 'user'
         can :read, Exercise
       end
