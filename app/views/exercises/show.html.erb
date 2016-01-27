@@ -20,7 +20,7 @@
       <br>
       <dd>
         <dt><%= 'Content: '%></dt>
-        <dd style="white-space: pre-wrap;"><%= file.content %></dd>
+        <dd><div id="editor"><%= file.content %></div></dd>
         <dt><%= 'Mainfile: '%></dt>
         <dd><%= file.main %></dd>
         <dt><%= 'Path: '%></dt>
@@ -39,7 +39,7 @@
       <br>
       <dd>
         <dt><%= 'Content: '%></dt>
-        <dd style="white-space: pre-wrap;"><%= test.content %></dd>
+        <dd><div id="editor"><%= test.content %></div></dd>
         <dt><%= 'Feedback Message: '%></dt>
         <dd><%= test.feedback_message %></dd>
         <dt><%= 'Testing Framework: '%></dt>
@@ -65,4 +65,14 @@
   <%= link_to 'Back', exercises_path,  class: 'btn btn-default' %>
 
 </div>
+
+<script>
+
+    ace.config.set('basePath', '/assets/ace/');
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/twilight");
+    editor.getSession().setMode("ace/mode/java");
+    document.getElementById('editor').style.fontSize='18px';
+
+</script>
 
