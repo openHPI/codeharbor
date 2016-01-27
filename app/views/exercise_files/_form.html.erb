@@ -48,9 +48,12 @@
   </div>
 <% end %>
    
-<script src="/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
+
+    ace.config.set('basePath', '/assets/ace/');
     var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/monokai");
+    editor.setTheme("ace/theme/twilight");
     editor.getSession().setMode("ace/mode/javascript");
+    document.getElementById('editor').style.fontSize='18px';
+
 </script>
