@@ -14,8 +14,6 @@ Rails.application.routes.draw do
   resources :labels
   resources :label_categories
   resources :answers
-  resources :comments
-  resources :ratings
   resources :users do
     resources :account_links
   end
@@ -23,6 +21,8 @@ Rails.application.routes.draw do
   resources :exercise_files
   resources :testing_frameworks
   resources :exercises do
+    resources :comments
+    resources :ratings
     member do
       post :push_external
     end

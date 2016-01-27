@@ -1,4 +1,5 @@
 class CommentsController < ApplicationController
+  before_action :set_exercise
   before_action :set_comment, only: [:show, :edit, :update, :destroy]
 
   # GET /comments
@@ -25,7 +26,7 @@ class CommentsController < ApplicationController
   # POST /comments.json
   def create
     @comment = Comment.new(comment_params)
-
+    @comment.exercise = @exercise
     respond_to do |format|
       if @comment.save
         format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
@@ -65,6 +66,10 @@ class CommentsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_comment
       @comment = Comment.find(params[:id])
+    end
+
+    def set_exercise
+      @exercise = Exercise.find(params[:exercise_id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -19,9 +19,8 @@
         <td><%= link_to comment.exercise.title, exercise_path(comment.exercise) %></td>
         <td><%= link_to comment.user.email, user_path(comment.user) %></td>
         <td><div class="actions btn-group" role="group">
-          <%= link_to 'Show', comment, class:'btn btn-default btn-xs' %>
-          <%= link_to 'Edit', edit_comment_path(comment), class:'btn btn-default btn-xs' %>
-          <%= link_to 'Destroy', comment, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-xs' %>
+          <%= link_to 'Show', exercise_comment_path(@exercise, comment), class:'btn btn-default btn-xs' %>
+          <%= link_to 'Edit', edit_exercise_comment_path(@exercise, comment), class:'btn btn-default btn-xs' %>
         </div></td>
       </tr>
     <% end %>
@@ -30,4 +29,4 @@
 
 <br>
 
-<%= link_to 'New Comment', new_comment_path, class:'btn btn-primary' %>
+<%= link_to 'New Comment', new_exercise_comment_path(@exercise), class:'btn btn-primary' %>

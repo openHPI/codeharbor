@@ -1,10 +1,10 @@
-<%= form_for(@rating) do |f| %>
-  <% if @rating.errors.any? %>
+<%= form_for :rating, url: exercise_ratings_path(@exercise) do |f| %>
+  <% if @exercise.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@rating.errors.count, "error") %> prohibited this rating from being saved:</h2>
 
       <ul>
-      <% @rating.errors.full_messages.each do |message| %>
+      <% @exercise.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
       </ul>
@@ -15,14 +15,8 @@
     <%= f.label :rating %><br>
     <%= f.number_field :rating %>
   </div>
-  <div class="field">
-    <%= f.label :exercise_id %><br>
-    <%= f.text_field :exercise_id %>
-  </div>
-  <div class="field">
-    <%= f.label :user_id %><br>
-    <%= f.text_field :user_id %>
-  </div>
+
+
   <div class="actions">
     <%= f.submit %>
   </div>
