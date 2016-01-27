@@ -18,6 +18,14 @@
   <div class="field">
     <%= f.label :content %><br>
     <%= f.text_area :content %>
+
+
+
+    <div id="editor">function foo(items) {
+        var x = "All this is syntax highlighted";
+        return x;
+    }</div>
+ 
   </div>
   <div class="field">
     <%= f.label :path %><br>
@@ -39,3 +47,10 @@
     <%= f.submit %>
   </div>
 <% end %>
+   
+<script src="/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.getSession().setMode("ace/mode/javascript");
+</script>
