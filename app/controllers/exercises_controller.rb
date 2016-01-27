@@ -4,6 +4,9 @@ class ExercisesController < ApplicationController
   load_and_authorize_resource
   before_action :set_exercise, only: [:show, :edit, :update, :destroy, :push_external]
 
+  rescue_from CanCan::AccessDenied do |_exception|
+    redirect_to root_path, alert: 'You are not authorized for this exercise.'
+  end
   # GET /exercises
   # GET /exercises.json
   def index
