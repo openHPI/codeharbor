@@ -1,4 +1,5 @@
 class RatingsController < ApplicationController
+  before_action :set_exercise
   before_action :set_rating, only: [:show, :edit, :update, :destroy]
 
   # GET /ratings
@@ -25,10 +26,11 @@ class RatingsController < ApplicationController
   # POST /ratings.json
   def create
     @rating = Rating.new(rating_params)
-
+    @rating.exercise = @exercise
+    @rating.user = current_user
     respond_to do |format|
       if @rating.save
-        format.html { redirect_to @rating, notice: 'Rating was successfully created.' }
+        format.html { redirect_to exercises_path, notice: 'Rating was successfully created.' }
         format.json { render :show, status: :created, location: @rating }
       else
         format.html { render :new }
@@ -65,6 +67,10 @@ class RatingsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_rating
       @rating = Rating.find(params[:id])
+    end
+
+    def set_exercise
+      @exercise = Exercise.find(params[:exercise_id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

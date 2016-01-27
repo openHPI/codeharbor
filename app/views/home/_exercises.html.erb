@@ -22,8 +22,8 @@
       <div class="btn-group-vertical pull-right" role="group" aria-label="...">
         <%= link_to "Select", exercise_path(exercise), class:'btn btn-default' %>
         <%= link_to "Edit", edit_exercise_path(exercise), class:'btn btn-default' %>
-        <%= link_to "Rate", ratings_path, class:'btn btn-default' %>
-        <%= link_to "Comment", comments_path, class:'btn btn-default' %>
+        <%= link_to "Rate", new_exercise_rating_path(exercise), class:'btn btn-default' %>
+        <%= link_to "Comment", exercise_comments_path(exercise), class:'btn btn-default' %>
       </div>
 
       <div class="col-md-6">
