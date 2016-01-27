@@ -3,11 +3,16 @@
    <div class="panel-heading">
        <h3 class="panel-title"> <span><%= link_to exercise.title, exercise_path(exercise) %></span>
             <span class="star-rating">
-              <span class="fa fa-star-o" data-rating="1"></span>
-              <span class="fa fa-star-o" data-rating="2"></span>
-              <span class="fa fa-star-o" data-rating="3"></span>
-              <span class="fa fa-star-o" data-rating="4"></span>
-              <span class="fa fa-star-o" data-rating="5"></span>
+              <% [*1..5].each do |i| %>
+                <% if exercise.round_avg_rating >= i %>
+                  <span class="fa fa-star" data-rating="<%= i %>"></span>
+                <% elsif (exercise.round_avg_rating + 0.5) >= i %>
+                  <span class="fa fa-star-half-o" data-rating="<%= i %>"></span>
+                <% else %>
+                  <span class="fa fa-star-o" data-rating="<%= i %>"></span>
+                <% end %>
+              <% end %>
+              <%= exercise.round_avg_rating %>
               <input type="hidden" name="whatever" class="rating-value" value="3">
             </span>
        </h3>

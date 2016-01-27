@@ -21,4 +21,8 @@ class Exercise < ActiveRecord::Base
       return result.round(1)
     end
   end
+
+  def round_avg_rating
+    (avg_rating*2).round / 2.0
+  end
 end
