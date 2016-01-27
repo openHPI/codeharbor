@@ -1,6 +1,11 @@
 class RatingsController < ApplicationController
+  load_and_authorize_resource
   before_action :set_exercise
   before_action :set_rating, only: [:show, :edit, :update, :destroy]
+
+  rescue_from CanCan::AccessDenied do |_exception|
+    redirect_to root_path, alert: 'You are not authorized to rate.'
+  end
 
   # GET /ratings
   # GET /ratings.json
@@ -25,17 +30,21 @@ class RatingsController < ApplicationController
   # POST /ratings
   # POST /ratings.json
   def create
-    @rating = Rating.new(rating_params)
-    @rating.exercise = @exercise
-    @rating.user = current_user
-    respond_to do |format|
-      if @rating.save
-        format.html { redirect_to exercises_path, notice: 'Rating was successfully created.' }
-        format.json { render :show, status: :created, location: @rating }
-      else
-        format.html { render :new }
-        format.json { render json: @rating.errors, status: :unprocessable_entity }
-      end
+    rating = @exercise.ratings.find_by(user: current_user)
+    notice = 'Rating was successfully created.'
+    if rating
+      notice = 'Rating was successfully updated.'
+      rating.update(rating_params)
+    else
+      rating = Rating.new(rating_params)
+    end
+    rating.exercise = @exercise
+    rating.user = current_user
+
+    if rating.save
+      redirect_to exercises_path, notice: notice
+    else
+      render :new
     end
   end
 
