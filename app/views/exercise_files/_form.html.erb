@@ -18,10 +18,11 @@
   <div class="field">
     <%= f.label :content %><br>
     <div class="edit">
-
-    <div class="editor"><%= @exercise_file.content %></div>
+      <div class="editor"><%= @exercise_file.content %></div>
+      <textarea class="hidden" name="exercise_file[content]" id="exercise_file_content" style="display:none;">
+        <%= @exercise_file.content %>
+      </textarea>
     </div>
-    <%= f.text_area :content %>
   </div>
   <div class="field">
     <%= f.label :path %><br>
