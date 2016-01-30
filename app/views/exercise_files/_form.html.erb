@@ -1,4 +1,4 @@
-<%= form_for(@exercise_file) do |f| %>
+<%= form_for @exercise_file do |f| %>
   <% if @exercise_file.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@exercise_file.errors.count, "error") %> prohibited this exercise_file from being saved:</h2>
@@ -17,15 +17,11 @@
   </div>
   <div class="field">
     <%= f.label :content %><br>
+    <div class="edit">
+
+    <div class="editor"><%= @exercise_file.content %></div>
+    </div>
     <%= f.text_area :content %>
-
-
-
-    <div id="editor">function foo(items) {
-        var x = "All this is syntax highlighted";
-        return x;
-    }</div>
-
   </div>
   <div class="field">
     <%= f.label :path %><br>
@@ -47,13 +43,3 @@
     <%= f.submit %>
   </div>
 <% end %>
-   
-<script>
-
-    ace.config.set('basePath', '/assets/ace/');
-    var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/twilight");
-    editor.getSession().setMode("ace/mode/javascript");
-    document.getElementById('editor').style.fontSize='18px';
-
-</script>
