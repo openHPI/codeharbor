@@ -47,6 +47,9 @@
     </div>
   </div>
 
+  <% @exercise.exercise_files.each do |file| %>
+    <%= render 'file_form', f: f, file: file %>
+  <% end %>
 
   <div class="actions btn-group" role="group">
     <%= f.submit nil, class: 'btn btn-primary' %>
