@@ -11,12 +11,9 @@ ready = function() {
     var editor = ace.edit(elem);
     editor.setTheme("ace/theme/monokai");
     editor.getSession().setMode("ace/mode/java");
-    //editor.setReadOnly(true);
-    elem.style.fontSize='18px';
+    elem.style.fontSize='16px';
 
-    editor.getSession().on('change', function(e) {
-      hidden.value = editor.getValue();
-    });
+    initACE(editor,hidden);
   }
 
   var all = document.getElementsByClassName("editor_readonly");
@@ -29,6 +26,12 @@ ready = function() {
   }
 
 };
+
+function initACE(editor,hidden) {
+  editor.getSession().on('change', function(e) {
+    hidden.value=editor.getValue();
+  });
+}
 
 $(document).ready(ready);
 $(document).on('page:load', ready);

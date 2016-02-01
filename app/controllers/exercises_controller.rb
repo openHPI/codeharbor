@@ -53,7 +53,6 @@ class ExercisesController < ApplicationController
       file.update(file_params(file))
     end
     @exercise.tests.each do |test|
-      print test_params(test)
       test.update(test_params(test))
     end
     respond_to do |format|
@@ -102,6 +101,6 @@ class ExercisesController < ApplicationController
     end
 
     def test_params(test)
-      params.require(test.id.to_s).permit(:content, :feedback_message, :testing_framework_id)
+      params.require('test_'+test.id.to_s).permit(:content, :feedback_message, :testing_framework_id)
     end
 end
