@@ -2,9 +2,7 @@
   <%= f.label :content %><br>
   <div class="edit">
     <div class="editor"><%= test.content %></div>
-    <textarea class="hidden" name="test_<%= test.id %>[content]">
-      <%= test.content %>
-    </textarea>
+    <textarea class="hidden" name="test_<%= test.id %>[content]"><%= test.content %></textarea>
   </div>
 </div>
 <div class="field">
