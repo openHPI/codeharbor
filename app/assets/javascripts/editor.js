@@ -19,6 +19,15 @@ ready = function() {
     });
   }
 
+  var all = document.getElementsByClassName("editor_readonly");
+  for (var i=0, max=all.length; i < max; i++) {
+    var editor = ace.edit(all[i]);
+    editor.setTheme("ace/theme/chrome");
+    editor.getSession().setMode("ace/mode/java");
+    editor.setReadOnly(true);
+    all[i].style.fontSize='14px';
+  }
+
 };
 
 $(document).ready(ready);
