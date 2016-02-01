@@ -50,10 +50,11 @@ class ExercisesController < ApplicationController
   # PATCH/PUT /exercises/1.json
   def update
     @exercise.exercise_files.each do |file|
-      print "dfsaklöfasdjöfjklödasklöfjklöd"
-      print params[file.id.to_s]
-      print file_params(file)
       file.update(file_params(file))
+    end
+    @exercise.tests.each do |test|
+      print test_params(test)
+      test.update(test_params(test))
     end
     respond_to do |format|
       if @exercise.update(exercise_params)
@@ -98,5 +99,9 @@ class ExercisesController < ApplicationController
 
     def file_params(file)
       params.require(file.id.to_s).permit(:main, :content, :path, :solution, :filetype)
+    end
+
+    def test_params(test)
+      params.require(test.id.to_s).permit(:content, :feedback_message, :testing_framework_id)
     end
 end

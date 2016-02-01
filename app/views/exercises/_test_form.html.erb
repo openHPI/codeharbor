@@ -13,7 +13,7 @@
 </div>
 <div class="field">
   <%= f.label :testing_framework %><br>
-  <%= collection_select test.id.to_s+'[testing_framework]', test.id, TestingFramework.all, :id, :name %>
+  <%= collection_select test.id.to_s, :testing_framework_id, TestingFramework.all, :id, :name %>
 </div>
 
 
