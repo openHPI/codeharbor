@@ -8,9 +8,20 @@ class Exercise < ActiveRecord::Base
 
   def self.search(search)
   	if search
-  		where('title LIKE ?', "%#{search}%")
+  		results = where('title LIKE ?', "%#{search}%")
+      label = Label.find_by(name: search)
+
+      if label
+        collection = label.exercises
+        results.each do |r|
+          collection << r unless collection.find_by(id: r.id)
+        end
+        return collection
+      end
+      return results
+
   	else
-      all
+      return all
   	end
   end
 
