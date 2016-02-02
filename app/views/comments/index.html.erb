@@ -1,32 +1,42 @@
-<p id="notice"><%= notice %></p>
+<%= form_tag exercise_comments_path, method: 'get' do %>
 
-<h1>Listing Comments</h1>
+  <p id="notice"><%= notice %></p>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Text</th>
-      <th>User</th>
-      <th>Created at</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
+  <h1>Listing Comments</h1>
 
-  <tbody>
-    <% @comments.each do |comment| %>
+  <div class="input-group col-md-6">
+    <%= text_field_tag :search, params[:search], class:"form-control", type:"text" %>
+    <span class="input-group-btn">
+      <%= submit_tag "Search", name: nil, class:"btn btn-default" %>
+    </span>
+  </div>
+
+  <table class="table">
+    <thead>
       <tr>
-        <td><%= comment.text %></td>
-        <td><%= link_to comment.user.email, user_path(comment.user) %></td>
-        <td><%= comment.created_at %>
-        <td><div class="actions btn-group" role="group">
-          <%= link_to 'Show', exercise_comment_path(@exercise, comment), class:'btn btn-default btn-xs' %>
-          <%= link_to 'Edit', edit_exercise_comment_path(@exercise, comment), class:'btn btn-default btn-xs' %>
-        </div></td>
+        <th>Text</th>
+        <th>User</th>
+        <th>Created at</th>
+        <th>Actions</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
 
-<br>
+    <tbody>
+      <% @comments.each do |comment| %>
+        <tr>
+          <td><%= comment.text %></td>
+          <td><%= link_to comment.user.email, user_path(comment.user) %></td>
+          <td><%= comment.created_at %>
+          <td><div class="actions btn-group" role="group">
+            <%= link_to 'Show', exercise_comment_path(@exercise, comment), class:'btn btn-default btn-xs' %>
+            <%= link_to 'Edit', edit_exercise_comment_path(@exercise, comment), class:'btn btn-default btn-xs' %>
+          </div></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-<%= link_to 'New Comment', new_exercise_comment_path(@exercise), class:'btn btn-primary' %>
+  <br>
+
+  <%= link_to 'New Comment', new_exercise_comment_path(@exercise), class:'btn btn-primary' %>
+<% end %>
