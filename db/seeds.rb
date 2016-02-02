@@ -18,12 +18,12 @@ l1 = Label.create(name: 'Java', color: '006600', label_category: category1)
 l2 = Label.create(name: 'basic-users', color: 'DF0101', label_category: category2)
 l3 = Label.create(name: 'pupils', color: '3333CC', label_category: category3)
 
-
+test_framework = TestingFramework.create(name: 'JUnit 4')
 
 exercise1 = Exercise.create(title: "Hello World", description: "Schreibe ein Java Programm, das 'Hello World' am Bildschirm ausgibt.", maxrating: '10', public: true)
 ExerciseFile.create(main: true, content: "public class HelloWorld{ public static void main String[] args) { } }", path: '', solution: false, filetype: 'java', exercise: exercise1)
 Test.create(content: "public class HelloWorld{ public static void main String[] args) {System.out.println('Hello World.'); } }", rating: 5, feedback_message: "Es wird noch nicht 'Hello World' am Bildschrim ausgegeben!", exercise: exercise1, testing_framework: test_framework)
-test_framework = TestingFramework.create(name: 'JUnit 4')
+
 
 
 Rating.create(rating: 4, exercise: exercise1, user: user1)
