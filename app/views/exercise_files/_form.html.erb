@@ -1,4 +1,4 @@
-<%= form_for(@exercise_file) do |f| %>
+<%= form_for @exercise_file do |f| %>
   <% if @exercise_file.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@exercise_file.errors.count, "error") %> prohibited this exercise_file from being saved:</h2>
@@ -17,7 +17,12 @@
   </div>
   <div class="field">
     <%= f.label :content %><br>
-    <%= f.text_area :content %>
+    <div class="edit">
+      <div class="editor"><%= @exercise_file.content %></div>
+      <textarea class="hidden" name="exercise_file[content]" id="exercise_file_content" style="display:none;">
+        <%= @exercise_file.content %>
+      </textarea>
+    </div>
   </div>
   <div class="field">
     <%= f.label :path %><br>
@@ -38,4 +43,6 @@
   <div class="actions">
     <%= f.submit %>
   </div>
+
+
 <% end %>

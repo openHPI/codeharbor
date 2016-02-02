@@ -20,7 +20,7 @@
       <br>
       <dd>
         <dt><%= 'Content: '%></dt>
-        <dd style="white-space: pre-wrap;"><%= file.content %></dd>
+        <dd><div class="editor_readonly"><%= file.content %></div></dd>
         <dt><%= 'Mainfile: '%></dt>
         <dd><%= file.main %></dd>
         <dt><%= 'Path: '%></dt>
@@ -39,7 +39,7 @@
       <br>
       <dd>
         <dt><%= 'Content: '%></dt>
-        <dd style="white-space: pre-wrap;"><%= test.content %></dd>
+        <dd><div class="editor_readonly"><%= test.content %></div></dd>
         <dt><%= 'Feedback Message: '%></dt>
         <dd><%= test.feedback_message %></dd>
         <dt><%= 'Testing Framework: '%></dt>
@@ -65,4 +65,8 @@
   <%= link_to 'Back', exercises_path,  class: 'btn btn-default' %>
 
 </div>
+
+<script>
+
+</script>
 
