@@ -29,7 +29,10 @@
           <td><%= comment.created_at %>
           <td><div class="actions btn-group" role="group">
             <%= link_to 'Show', exercise_comment_path(@exercise, comment), class:'btn btn-default btn-xs' %>
-            <%= link_to 'Edit', edit_exercise_comment_path(@exercise, comment), class:'btn btn-default btn-xs' %>
+            <% if comment.user == current_user %>
+              <%= link_to 'Edit', edit_exercise_comment_path(@exercise, comment), class:'btn btn-default btn-xs' %>
+              <%= link_to 'Delete', exercise_comment_path(@exercise, comment), class:'btn btn-danger btn-xs', method: :delete, data: { confirm: 'Are you sure?' }  %>
+            <% end %>
           </div></td>
         </tr>
       <% end %>

@@ -9,9 +9,9 @@ class CommentsController < ApplicationController
 
   # GET /comments
   # GET /comments.json
-  def index
-    @comments = Comment.all
-  end
+  # def index
+  #   @comments = Comment.all
+  # end
 
   # GET /comments/1
   # GET /comments/1.json
@@ -42,7 +42,7 @@ class CommentsController < ApplicationController
     comment.user = current_user
 
     if comment.save
-      redirect_to exercises_path, notice: notice
+      redirect_to exercise_comments_path(@exercise), notice: notice
     else
       render :new
     end
@@ -67,7 +67,7 @@ class CommentsController < ApplicationController
   def destroy
     @comment.destroy
     respond_to do |format|
-      format.html { redirect_to comments_url, notice: 'Comment was successfully destroyed.' }
+      format.html { redirect_to exercise_comments_path(@exercise), notice: 'Comment was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
