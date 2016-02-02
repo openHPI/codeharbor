@@ -44,4 +44,4 @@ secrets.yml
 # simplecov
 coverage
 
-.idea
+.idea/

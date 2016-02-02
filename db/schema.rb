@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160127085100) do
+ActiveRecord::Schema.define(version: 20160202082321) do
 
   create_table "account_links", force: :cascade do |t|
     t.datetime "created_at",   null: false
@@ -79,6 +79,14 @@ ActiveRecord::Schema.define(version: 20160127085100) do
 
   add_index "exercises", ["user_id"], name: "index_exercises_on_user_id"
 
+  create_table "exercises_labels", id: false, force: :cascade do |t|
+    t.integer "exercise_id"
+    t.integer "label_id"
+  end
+
+  add_index "exercises_labels", ["exercise_id"], name: "index_exercises_labels_on_exercise_id"
+  add_index "exercises_labels", ["label_id"], name: "index_exercises_labels_on_label_id"
+
   create_table "label_categories", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
@@ -90,11 +98,9 @@ ActiveRecord::Schema.define(version: 20160127085100) do
     t.integer  "label_category_id"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
-    t.integer  "exercise_id"
     t.string   "color"
   end
 
-  add_index "labels", ["exercise_id"], name: "index_labels_on_exercise_id"
   add_index "labels", ["label_category_id"], name: "index_labels_on_label_category_id"
 
   create_table "ratings", force: :cascade do |t|
