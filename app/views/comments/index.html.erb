@@ -6,7 +6,6 @@
   <thead>
     <tr>
       <th>Text</th>
-      <th>Exercise</th>
       <th>User</th>
       <th>Actions</th>
     </tr>
@@ -16,7 +15,6 @@
     <% @comments.each do |comment| %>
       <tr>
         <td><%= comment.text %></td>
-        <td><%= link_to comment.exercise.title, exercise_path(comment.exercise) %></td>
         <td><%= link_to comment.user.email, user_path(comment.user) %></td>
         <td><div class="actions btn-group" role="group">
           <%= link_to 'Show', exercise_comment_path(@exercise, comment), class:'btn btn-default btn-xs' %>
