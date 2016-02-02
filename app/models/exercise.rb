@@ -8,11 +8,11 @@ class Exercise < ActiveRecord::Base
 
   def self.search(search)
   	if search
-  		results = where('title LIKE ?', "%#{search}%")
-      label = Label.find_by(name: search)
+  		results = where('lower(title) LIKE ?', "%#{search.downcase}%")
+      label = Label.find_by('lower(name) = ?', search.downcase)
 
       if label
-        collection = label.exercises
+        collection = Label.find_by('lower(name) = ?', search.downcase).exercises
         results.each do |r|
           collection << r unless collection.find_by(id: r.id)
         end
