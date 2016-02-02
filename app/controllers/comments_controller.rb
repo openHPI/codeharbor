@@ -9,9 +9,9 @@ class CommentsController < ApplicationController
 
   # GET /comments
   # GET /comments.json
-  # def index
-  #   @comments = Comment.all
-  # end
+  def index
+    @comments = Comment.all
+  end
 
   # GET /comments/1
   # GET /comments/1.json
@@ -70,10 +70,6 @@ class CommentsController < ApplicationController
       format.html { redirect_to exercise_comments_path(@exercise), notice: 'Comment was successfully destroyed.' }
       format.json { head :no_content }
     end
-  end
-
-  def index
-    @comment = Comment.search(params[:search]).paginate(per_page: 5, page: params[:page])
   end
 
   private
