@@ -29,7 +29,8 @@ gem 'bcrypt', '~> 3.1.7'
 #pagination
 gem 'will_paginate'
 
-gem 'cancancan', '~> 1.10'
+# Continuation of CanCan (authoriation Gem for RoR)
+gem 'cancancan'
 
 # Use Bootstrap (app/assets/stylesheets)
 gem 'therubyracer', platforms: :ruby

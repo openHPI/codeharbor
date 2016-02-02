@@ -210,7 +210,7 @@ DEPENDENCIES
   bcrypt (~> 3.1.7)
   bootstrap-typeahead-rails
   byebug
-  cancancan (~> 1.10)
+  cancancan
   codeclimate-test-reporter
   coffee-rails (~> 4.1.0)
   devise-bootstrap-views

@@ -1,6 +1,11 @@
 class CommentsController < ApplicationController
+  load_and_authorize_resource
   before_action :set_exercise
   before_action :set_comment, only: [:show, :edit, :update, :destroy]
+
+  rescue_from CanCan::AccessDenied do |_exception|
+    redirect_to root_path, alert: 'You are not authorized to comment.'
+  end
 
   # GET /comments
   # GET /comments.json
@@ -25,16 +30,21 @@ class CommentsController < ApplicationController
   # POST /comments
   # POST /comments.json
   def create
-    @comment = Comment.new(comment_params)
-    @comment.exercise = @exercise
-    respond_to do |format|
-      if @comment.save
-        format.html { redirect_to @comment, notice: 'Comment was successfully created.' }
-        format.json { render :show, status: :created, location: @comment }
-      else
-        format.html { render :new }
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
-      end
+    comment = @exercise.comments.find_by(user: current_user)
+    notice = 'Comment was successfully created.'
+    if comment
+      notice = 'Comment was successfully updated.'
+      comment.update(comment_params)
+    else
+      comment = Comment.new(comment_params)
+    end
+    comment.exercise = @exercise
+    comment.user = current_user
+
+    if comment.save
+      redirect_to exercises_path, notice: notice
+    else
+      render :new
     end
   end
 
