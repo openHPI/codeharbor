@@ -10,7 +10,7 @@ class ExercisesController < ApplicationController
   # GET /exercises
   # GET /exercises.json
   def index
-    @exercises = Exercise.all
+    @exercises = Exercise.search(params[:search]).paginate(per_page: 5, page: params[:page])
   end
 
   # GET /exercises/1
