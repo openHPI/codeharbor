@@ -7,13 +7,13 @@
 
 <p>
   <strong>Exercise:</strong>
-  <%= @comment.exercise %>
+  <%= @comment.exercise.title %>
 </p>
 
 <p>
   <strong>User:</strong>
-  <%= @comment.user %>
+  <%= @comment.user.email %>
 </p>
 
-<%= link_to 'Edit', edit_comment_path(@comment) %> |
-<%= link_to 'Back', comments_path %>
+<%= link_to 'Edit', edit_exercise_comment_path(@exercise, @comment), class:'btn btn-default btn-xs' %> |
+<%= link_to 'Back', exercise_comments_path %>
