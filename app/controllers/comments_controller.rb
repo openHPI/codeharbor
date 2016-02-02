@@ -73,7 +73,7 @@ class CommentsController < ApplicationController
   end
 
   def index
-    @comment = Comment.search(params[:search]).paginate(per_page: 5, page: params[:page])
+    @comments = Comment.where(exercise: @exercise).search(params[:search]).paginate(per_page: 5, page: params[:page])
   end
 
   private
