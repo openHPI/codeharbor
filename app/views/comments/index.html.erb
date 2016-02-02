@@ -7,6 +7,7 @@
     <tr>
       <th>Text</th>
       <th>User</th>
+      <th>Created at</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -16,6 +17,7 @@
       <tr>
         <td><%= comment.text %></td>
         <td><%= link_to comment.user.email, user_path(comment.user) %></td>
+        <td><%= comment.created_at %>
         <td><div class="actions btn-group" role="group">
           <%= link_to 'Show', exercise_comment_path(@exercise, comment), class:'btn btn-default btn-xs' %>
           <%= link_to 'Edit', edit_exercise_comment_path(@exercise, comment), class:'btn btn-default btn-xs' %>

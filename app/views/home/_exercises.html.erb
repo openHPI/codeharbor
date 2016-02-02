@@ -2,7 +2,7 @@
   <div class="panel panel-default" style="margin-top: 40px">
    <div class="panel-heading">
        <h3 class="panel-title"> <span><%= link_to exercise.title, exercise_path(exercise) %></span>
-            <span class="star-rating">
+            <span class="star-rating pull-right">
               <% [*1..5].each do |i| %>
                 <a href="/exercises/<%= exercise.id %>/ratings?rating[rating]=<%= i %>" data-method="post">
                   <% if exercise.round_avg_rating >= i %>
@@ -29,7 +29,7 @@
       <div class="btn-group-vertical pull-right" role="group" aria-label="...">
         <%= link_to "Select", exercise_path(exercise), class:'btn btn-default' %>
         <%= link_to "Edit", edit_exercise_path(exercise), class:'btn btn-default' %>
-        <%= link_to "Comment", exercise_comments_path(exercise), class:'btn btn-default' %>
+        <%= link_to "Show Comments", exercise_comments_path(exercise), class:'btn btn-default' %>
       </div>
 
       <div class="col-md-6">
