@@ -1,16 +1,16 @@
-<%= form_tag home_index_path, method: 'get' do %>
-  <div class="col-md-6">
-    <div class="input-group">
-      <%= text_field_tag :search, params[:search], class:"form-control", type:"text" %>
-      <span class="input-group-btn">
-        <%= submit_tag "Search", name: nil, class:"btn btn-default" %>
-      </span>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <%= link_to 'New Exercise', new_exercise_path, class:"btn btn-primary pull-right" %>
-  </div>
-<% end %>
+<h2 style="text-align: center"><%= 'Welcome to Code Harbor' %></h2>
 
-<br>
-<%= render 'exercises' %>
+<div style="text-align: center"><h4><em><%= 'Your coding exercise repository '%></em></h4></div>
+
+<div style="text-align: center; margin-top: 50px">
+  <% if current_user.nil?%>
+    <%= link_to 'Login', login_path, class:'btn btn-primary'%>
+    <%= link_to 'Sign up', new_user_path, class:'btn  btn-success'%>
+  <% else %>
+    <%= link_to 'Search for Exercises', exercises_path, class:'btn btn-primary' %>
+    <%= link_to 'Create Exercise', new_exercise_path, class:'btn btn-success'%>
+    <%= link_to 'Update Your Profile', edit_user_path(current_user), class:'btn btn-warning'%>
+
+  <% end %>
+
+</div>
