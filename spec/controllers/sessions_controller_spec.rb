@@ -7,9 +7,9 @@ RSpec.describe SessionsController, type: :controller do
       expect(response).to have_http_status(:success)
     end
 
-    it "returns redirection to login" do
+    it "returns redirection to home" do
       get :destroy
-      expect(response).to redirect_to "/login"
+      expect(response).to redirect_to "/home/index"
     end
   end
 
