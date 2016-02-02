@@ -7,12 +7,6 @@ class CommentsController < ApplicationController
     redirect_to root_path, alert: 'You are not authorized to comment.'
   end
 
-  # GET /comments
-  # GET /comments.json
-  # def index
-  #   @comments = Comment.all
-  # end
-
   # GET /comments/1
   # GET /comments/1.json
   def show
