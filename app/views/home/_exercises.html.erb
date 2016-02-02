@@ -32,9 +32,9 @@
         <%= link_to "Show Comments", exercise_comments_path(exercise), class:'btn btn-default' %>
       </div>
 
-      <div class="col-md-6">
+      <div class="col-md-6" style="margin-top: 60px">
         <% exercise.labels.each do |label| %>
-            <span class="label " style="background-color: #{<%= label.color %>}; color: #fff;"> <%= label.name %> </span>
+            <div class="exerciseLabel" style="background-color: <%= '#' + label.color.to_s %>; color: white;"> <%= label.name %> </div>
         <% end %>
       </div>
 
