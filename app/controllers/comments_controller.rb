@@ -7,12 +7,6 @@ class CommentsController < ApplicationController
     redirect_to root_path, alert: 'You are not authorized to comment.'
   end
 
-  # GET /comments
-  # GET /comments.json
-  def index
-    @comments = Comment.all
-  end
-
   # GET /comments/1
   # GET /comments/1.json
   def show
@@ -70,6 +64,10 @@ class CommentsController < ApplicationController
       format.html { redirect_to exercise_comments_path(@exercise), notice: 'Comment was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def index
+    @comments = Comment.where(exercise: @exercise).search(params[:search]).paginate(per_page: 5, page: params[:page])
   end
 
   private

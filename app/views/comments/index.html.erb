@@ -4,6 +4,13 @@
 
   <h1>Listing Comments</h1>
 
+  <div class="input-group col-md-6">
+    <%= text_field_tag :search, params[:search], class:"form-control", type:"text" %>
+    <span class="input-group-btn">
+      <%= submit_tag "Search", name: nil, class:"btn btn-default" %>
+    </span>
+  </div>
+
   <table class="table">
     <thead>
       <tr>
