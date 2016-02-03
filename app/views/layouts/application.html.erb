@@ -13,16 +13,14 @@
   <nav class="navbar navbar-default navbar-fixed-top navbar-offset">
     <%= nav_bar fixed: :top, brand: 'Code Harbor', responsive: true do %>
         <%= menu_group do %>
-          <%= menu_item 'Exercises', exercises_path %>
+          <% if current_user %>
+            <%= menu_item 'Exercises', exercises_path %>
+          <% end %>
         <% end %>
         <%= menu_group pull: :right do %>
-            <% if not  current_user.nil? %>
-              <%= menu_item 'User', user_path(current_user)  %>
-                <%= menu_item current_user.email %>
-                <%= menu_item 'Log out',  logout_path, method: :delete %>
-            <% else %>
-              <%= menu_item 'Sign up', new_user_path %>
-              <%= menu_item 'Login', login_path %>
+            <% if current_user%>
+              <%= menu_item current_user.email, user_path(current_user) %>
+              <%= menu_item 'Log out',  logout_path, method: :delete %>
             <% end %>
         <% end %>
     <% end %>

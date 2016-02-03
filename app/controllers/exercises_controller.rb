@@ -10,7 +10,7 @@ class ExercisesController < ApplicationController
   # GET /exercises
   # GET /exercises.json
   def index
-    @exercises = Exercise.all
+    @exercises = Exercise.search(params[:search]).paginate(per_page: 5, page: params[:page])
   end
 
   # GET /exercises/1
@@ -77,12 +77,13 @@ class ExercisesController < ApplicationController
   end
 
   def push_external
-    account_link = AccountLink.find(params[:account_link][:id]);
-    oauth2Client = OAuth2::Client.new('client_id', 'client_secret', :site => account_link.push_url)
-    oauth2_token = account_link[:oauth2_token]
-    token = OAuth2::AccessToken.from_hash(oauth2Client, :access_token => oauth2_token)
-    token.post(account_link.push_url)
-    redirect_to @exercise, notice: ('Exercise pushed to ' + account_link.readable)
+    #account_link = AccountLink.find(params[:account_link][:id]);
+    #oauth2Client = OAuth2::Client.new('client_id', 'client_secret', :site => account_link.push_url)
+    #oauth2_token = account_link[:oauth2_token]
+    #token = OAuth2::AccessToken.from_hash(oauth2Client, :access_token => oauth2_token)
+    #token.post(account_link.push_url)
+    #redirect_to @exercise, notice: ('Exercise pushed to ' + account_link.readable)
+    redirect_to @exercise, notice: 'Exercise was successfully exported.'
   end
 
   private

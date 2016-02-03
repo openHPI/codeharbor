@@ -7,7 +7,7 @@ class SessionsController < ApplicationController
     user = User.find_by(email: params[:email])
     if user and user.authenticate(params[:password])
       session[:user_id] = user.id
-      redirect_to exercises_path
+      redirect_to home_index_path
     else
       redirect_to login_url, altert: 'Invalid user/password combination'
     end
@@ -15,6 +15,6 @@ class SessionsController < ApplicationController
 
   def destroy
     session[:user_id] = nil
-    redirect_to login_url, notice: 'Logged out'
+    redirect_to home_index_path, notice: 'Logged out'
   end
 end
