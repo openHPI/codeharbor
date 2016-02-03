@@ -1,3 +1,5 @@
+require 'nokogiri'
+
 class Exercise < ActiveRecord::Base
   has_many :exercise_files
   has_many :tests
@@ -26,4 +28,21 @@ class Exercise < ActiveRecord::Base
   def round_avg_rating
     (avg_rating*2).round / 2.0
   end
+
+  def to_proforma_xml
+    builder = Nokogiri::XML::Builder.new do |xml|
+      xml.root('xmlns:p' => 'urn:proforma:task:v0.9.4') {
+        p = xml['p']
+        p.task {
+          p.description(self.description)
+          p.send('grading-hints', 'max-rating' => self.maxrating.to_s)
+          p.send('meta-data') {
+            p.title(self.title)
+          }
+        }
+      }
+    end
+    return builder.to_xml
+  end
+
 end

@@ -43,6 +43,7 @@ gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) support
 gem 'bootstrap-typeahead-rails'
 
 gem 'oauth2'
+gem 'nokogiri'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
