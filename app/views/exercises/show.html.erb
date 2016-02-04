@@ -5,6 +5,8 @@
 </div>
 
 <dl class="dl-horizontal">
+  <dt><%= 'Title' %>:</dt>
+  <dd><%= @exercise.title %></dd>
   <dt><%= 'Description' %></dt>
   <dd><%= @exercise.description %></dd>
   <dt><%= 'Visibility' %>:</dt>
@@ -53,8 +55,7 @@
     <%= form_tag(push_external_exercise_path(@exercise), method: "post") do |f| %>
 
       <%= collection_select(:account_link, :id, AccountLink.all, :id, :account_name, {},  {class: 'btn btn-default dropdown-toggle'}) %>
-
-      <%= link_to 'Submit', labels_path, class:'btn btn-default btn-xs' %>
+      <%= button_tag 'Submit', class: 'btn btn-default btn-xs' %>
     <% end %>
   </dd>
 </dl>
