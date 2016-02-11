@@ -31,6 +31,14 @@
     </div>
   </div>
 
+  <% if @exercise.persisted? %>
+    <div class="col-md-12">
+      <div class="col-md-3">
+        <input type="button" id="add_description" class="btn btn-success" value="Add Description" style="margin-left: -40px">
+      </div>
+    </div>
+  <% end %>
+
   <div class="form-group">
     <%= f.label :public,  class: 'control-label' %>
     <div class='radio'>

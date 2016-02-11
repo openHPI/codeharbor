@@ -7,6 +7,7 @@ class Exercise < ActiveRecord::Base
   has_many :comments
   has_many :ratings
   belongs_to :user
+  has_many :descriptions
 
   def self.search(search)
   	if search
