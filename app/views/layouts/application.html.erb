@@ -15,10 +15,14 @@
         <%= menu_group do %>
           <% if current_user %>
             <%= menu_item 'Exercises', exercises_path %>
+            <%= menu_item 'Collections', collections_path %>
           <% end %>
         <% end %>
         <%= menu_group pull: :right do %>
-            <% if current_user%>
+            <% if current_user %>
+              <% if current_user.cart %>
+                <%= menu_item 'Cart (' + current_user.cart_count.to_s + ')', current_user.cart %>
+              <% end %>
               <%= menu_item current_user.email, user_path(current_user) %>
               <%= menu_item 'Log out',  logout_path, method: :delete %>
             <% end %>
