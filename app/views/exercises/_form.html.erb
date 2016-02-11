@@ -26,18 +26,18 @@
 
   <div class="form-group">
     <%= f.label :description, class:'control-label' %><br>
-    <div class="controls">
+    <div class="controls" style="margin-bottom: 10px">
       <%= f.text_area :description, class:'form-control' %>
     </div>
+    <%= f.nested_fields_for :descriptions do |description| %>
+        <div class="controls" style="margin-top: 10px; margin-bottom: 10px">
+          <%= description.text_area :text, class:'form-control' %>
+          <%= description.remove_nested_fields_link 'Remove Description', class:'btn btn-danger btn-xs' %>
+        </div>
+    <% end %>
+    <%= f.add_nested_fields_link :descriptions, 'Add Description', class:'btn btn-success' %>
   </div>
 
-  <% if @exercise.persisted? %>
-    <div class="col-md-12">
-      <div class="col-md-3">
-        <input type="button" id="add_description" class="btn btn-success" value="Add Description" style="margin-left: -40px">
-      </div>
-    </div>
-  <% end %>
 
   <div class="form-group">
     <%= f.label :public,  class: 'control-label' %>

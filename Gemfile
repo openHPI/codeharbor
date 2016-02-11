@@ -37,6 +37,8 @@ gem 'therubyracer', platforms: :ruby
 gem 'twitter-bootstrap-rails'
 gem 'devise-bootstrap-views'
 
+gem 'nested_form_fields'
+
 gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
 
 # Typeahead gem

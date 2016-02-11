@@ -9,6 +9,8 @@ class Exercise < ActiveRecord::Base
   belongs_to :user
   has_many :descriptions
 
+  accepts_nested_attributes_for :descriptions, allow_destroy: true
+
   def self.search(search)
   	if search
   		results = where('lower(title) LIKE ?', "%#{search.downcase}%")
