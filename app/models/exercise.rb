@@ -6,6 +6,7 @@ class Exercise < ActiveRecord::Base
   has_and_belongs_to_many :labels
   has_many :comments
   has_many :ratings
+  has_and_belongs_to_many :collections
   belongs_to :user
 
   def self.search(search)

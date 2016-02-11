@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :collections
   get 'home/index'
 
   controller :sessions do
