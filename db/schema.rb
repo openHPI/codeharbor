@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160211221759) do
+ActiveRecord::Schema.define(version: 20160211230544) do
 
   create_table "account_links", force: :cascade do |t|
     t.datetime "created_at",   null: false
@@ -42,6 +42,22 @@ ActiveRecord::Schema.define(version: 20160211221759) do
 
   add_index "assemblies_parts", ["assembly_id"], name: "index_assemblies_parts_on_assembly_id"
   add_index "assemblies_parts", ["part_id"], name: "index_assemblies_parts_on_part_id"
+
+  create_table "carts", force: :cascade do |t|
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "carts", ["user_id"], name: "index_carts_on_user_id"
+
+  create_table "carts_exercises", force: :cascade do |t|
+    t.integer "exercise_id"
+    t.integer "cart_id"
+  end
+
+  add_index "carts_exercises", ["cart_id"], name: "index_carts_exercises_on_cart_id"
+  add_index "carts_exercises", ["exercise_id"], name: "index_carts_exercises_on_exercise_id"
 
   create_table "collections", force: :cascade do |t|
     t.integer  "user_id"
