@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :execution_environments
   resources :carts
   resources :collections
   get 'home/index'

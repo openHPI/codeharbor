@@ -118,6 +118,13 @@ exercise4.labels << l4
 exercise4.labels << l2
 exercise4.labels << l3
 
+ee1 = ExecutionEnvironment.create(language: 'Java', version: '8')
+ee2 = ExecutionEnvironment.create(language: 'Python', version: '2.7')
+
+exercise1.update(execution_environment: ee1)
+exercise2.update(execution_environment: ee1)
+exercise3.update(execution_environment: ee1)
+exercise4.update(execution_environment: ee2)
 
 
 

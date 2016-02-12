@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Execution Environments</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Language</th>
+      <th>Version</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @execution_environments.each do |execution_environment| %>
+      <tr>
+        <td><%= execution_environment.language %></td>
+        <td><%= execution_environment.version %></td>
+        <td><%= link_to 'Show', execution_environment %></td>
+        <td><%= link_to 'Edit', edit_execution_environment_path(execution_environment) %></td>
+        <td><%= link_to 'Destroy', execution_environment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Execution environment', new_execution_environment_path %>

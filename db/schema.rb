@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160211230544) do
+ActiveRecord::Schema.define(version: 20160212110642) do
 
   create_table "account_links", force: :cascade do |t|
     t.datetime "created_at",   null: false
@@ -86,6 +86,13 @@ ActiveRecord::Schema.define(version: 20160211230544) do
   add_index "comments", ["exercise_id"], name: "index_comments_on_exercise_id"
   add_index "comments", ["user_id"], name: "index_comments_on_user_id"
 
+  create_table "execution_environments", force: :cascade do |t|
+    t.string   "language"
+    t.string   "version"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "exercise_files", force: :cascade do |t|
     t.boolean  "main"
     t.text     "content"
@@ -104,11 +111,13 @@ ActiveRecord::Schema.define(version: 20160211230544) do
     t.string   "description"
     t.integer  "maxrating"
     t.boolean  "public"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
     t.integer  "user_id"
+    t.integer  "execution_environment_id"
   end
 
+  add_index "exercises", ["execution_environment_id"], name: "index_exercises_on_execution_environment_id"
   add_index "exercises", ["user_id"], name: "index_exercises_on_user_id"
 
   create_table "exercises_labels", id: false, force: :cascade do |t|
