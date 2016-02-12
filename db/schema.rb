@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160211170225) do
+ActiveRecord::Schema.define(version: 20160212110642) do
 
   create_table "account_links", force: :cascade do |t|
     t.datetime "created_at",   null: false
@@ -43,6 +43,38 @@ ActiveRecord::Schema.define(version: 20160211170225) do
   add_index "assemblies_parts", ["assembly_id"], name: "index_assemblies_parts_on_assembly_id"
   add_index "assemblies_parts", ["part_id"], name: "index_assemblies_parts_on_part_id"
 
+  create_table "carts", force: :cascade do |t|
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "carts", ["user_id"], name: "index_carts_on_user_id"
+
+  create_table "carts_exercises", force: :cascade do |t|
+    t.integer "exercise_id"
+    t.integer "cart_id"
+  end
+
+  add_index "carts_exercises", ["cart_id"], name: "index_carts_exercises_on_cart_id"
+  add_index "carts_exercises", ["exercise_id"], name: "index_carts_exercises_on_exercise_id"
+
+  create_table "collections", force: :cascade do |t|
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "collections", ["user_id"], name: "index_collections_on_user_id"
+
+  create_table "collections_exercises", force: :cascade do |t|
+    t.integer "exercise_id"
+    t.integer "collection_id"
+  end
+
+  add_index "collections_exercises", ["collection_id"], name: "index_collections_exercises_on_collection_id"
+  add_index "collections_exercises", ["exercise_id"], name: "index_collections_exercises_on_exercise_id"
+
   create_table "comments", force: :cascade do |t|
     t.text     "text"
     t.integer  "exercise_id"
@@ -60,6 +92,13 @@ ActiveRecord::Schema.define(version: 20160211170225) do
   end
 
   add_index "descriptions", ["exercise_id"], name: "index_descriptions_on_exercise_id"
+
+  create_table "execution_environments", force: :cascade do |t|
+    t.string   "language"
+    t.string   "version"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "exercise_files", force: :cascade do |t|
     t.boolean  "main"
@@ -79,11 +118,13 @@ ActiveRecord::Schema.define(version: 20160211170225) do
     t.string   "description"
     t.integer  "maxrating"
     t.boolean  "public"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
     t.integer  "user_id"
+    t.integer  "execution_environment_id"
   end
 
+  add_index "exercises", ["execution_environment_id"], name: "index_exercises_on_execution_environment_id"
   add_index "exercises", ["user_id"], name: "index_exercises_on_user_id"
 
   create_table "exercises_labels", id: false, force: :cascade do |t|

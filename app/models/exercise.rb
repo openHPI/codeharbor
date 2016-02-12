@@ -43,6 +43,24 @@ class Exercise < ActiveRecord::Base
     (avg_rating*2).round / 2.0
   end
 
+  def add_descriptions(description_array)
+    description_array.each do |key, array|
+      destroy = array[:_destroy]
+      id = array[:id]
+      
+      if id
+        description = Description.find(id)
+        if destroy
+          description.destroy
+        else
+          description.update(text: array[:text])
+        end
+      else
+        descriptions << Description.create(text: array[:text]) unless destroy
+      end
+    end
+  end
+
   def to_proforma_xml
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.root('xmlns:p' => 'urn:proforma:task:v0.9.4') {
