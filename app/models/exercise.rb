@@ -10,6 +10,9 @@ class Exercise < ActiveRecord::Base
   #has_and_belongs_to_many :carts
   belongs_to :user
   belongs_to :execution_environment
+  has_many :descriptions
+
+  accepts_nested_attributes_for :descriptions, allow_destroy: true
 
   def self.search(search)
   	if search
@@ -41,6 +44,24 @@ class Exercise < ActiveRecord::Base
 
   def round_avg_rating
     (avg_rating*2).round / 2.0
+  end
+
+  def add_descriptions(description_array)
+    description_array.each do |key, array|
+      destroy = array[:_destroy]
+      id = array[:id]
+      
+      if id
+        description = Description.find(id)
+        if destroy
+          description.destroy
+        else
+          description.update(text: array[:text])
+        end
+      else
+        descriptions << Description.create(text: array[:text]) unless destroy
+      end
+    end
   end
 
   def to_proforma_xml

@@ -16,3 +16,4 @@
 //= require turbolinks
 //= require_tree .
 //= require ace/ace
+//= require nested_form_fields

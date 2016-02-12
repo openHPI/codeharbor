@@ -86,6 +86,16 @@ ActiveRecord::Schema.define(version: 20160212110642) do
   add_index "comments", ["exercise_id"], name: "index_comments_on_exercise_id"
   add_index "comments", ["user_id"], name: "index_comments_on_user_id"
 
+<<<<<<< HEAD
+=======
+  create_table "descriptions", force: :cascade do |t|
+    t.string  "text"
+    t.integer "exercise_id"
+  end
+
+  add_index "descriptions", ["exercise_id"], name: "index_descriptions_on_exercise_id"
+
+>>>>>>> addAdditionalDescription
   create_table "execution_environments", force: :cascade do |t|
     t.string   "language"
     t.string   "version"

@@ -24,6 +24,7 @@ class ExercisesController < ApplicationController
   # GET /exercises/new
   def new
     @exercise = Exercise.new
+    @exercise.descriptions << Description.new
   end
 
   # GET /exercises/1/edit
@@ -34,7 +35,7 @@ class ExercisesController < ApplicationController
   # POST /exercises.json
   def create
     @exercise = Exercise.new(exercise_params)
-
+    @exercise.add_descriptions(params[:exercise][:descriptions_attributes])
     respond_to do |format|
       if @exercise.save
         format.html { redirect_to @exercise, notice: 'Exercise was successfully created.' }
@@ -55,6 +56,7 @@ class ExercisesController < ApplicationController
     @exercise.tests.each do |test|
       test.update(test_params(test))
     end
+    @exercise.add_descriptions(params[:exercise][:descriptions_attributes])
     respond_to do |format|
       if @exercise.update(exercise_params)
         format.html { redirect_to @exercise, notice: 'Exercise was successfully updated.' }

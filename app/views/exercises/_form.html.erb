@@ -25,11 +25,16 @@
   </div>
 
   <div class="form-group">
-    <%= f.label :description, class:'control-label' %><br>
-    <div class="controls">
-      <%= f.text_area :description, class:'form-control' %>
-    </div>
+    <%= f.label :descriptions, class:'control-label' %><br>
+    <%= f.nested_fields_for :descriptions do |description| %>
+        <div class="controls" style="margin-top: 10px; margin-bottom: 10px">
+          <%= description.text_area :text, class:'form-control' %>
+          <%= description.remove_nested_fields_link 'Remove Description', class:'btn btn-danger btn-xs' %>
+        </div>
+    <% end %>
+    <%= f.add_nested_fields_link :descriptions, 'Add Description', class:'btn btn-success' %>
   </div>
+
 
   <div class="form-group">
     <%= f.label :public,  class: 'control-label' %>
