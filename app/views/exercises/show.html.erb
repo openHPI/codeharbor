@@ -16,7 +16,7 @@
     <% if @exercise.user.first_name.nil?%>
       <dd><%= "User#{@exercise.user.id}"%></dd>
     <% else %>
-        <dd><%= @exercise.user %></dd>
+        <dd><%= @exercise.user.name %></dd>
     <% end %>
   <% else %>
     <%= 'User undefined' %>

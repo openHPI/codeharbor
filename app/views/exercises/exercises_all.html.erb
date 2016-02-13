@@ -15,7 +15,15 @@
   <% @exercises.each do |exercise| %>
       <tr>
         <td><%= link_to exercise.title, exercise %></td>
-        <td><%= link_to exercise.user.email, user_path(exercise.user.id) %></td>
+        <% if defined? exercise.user %>
+            <% if exercise.user.first_name.nil?%>
+                <td><%= link_to "User#{exercise.user.id}", user_path(exercise.user)%></td>
+            <% else %>
+                <td><%= link_to exercise.user.name, user_path(exercise.user) %></td>
+            <% end %>
+        <% else %>
+            <%= 'User undefined' %>
+        <% end %>
         <td><%= exercise.created_at %> </td>
         <td><%= exercise.public ? 'public' : 'private' %> </td>
         <td class="actions btn-group" role="group">

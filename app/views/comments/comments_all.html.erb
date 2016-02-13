@@ -16,7 +16,11 @@
       <tr>
         <td><%= link_to comment.exercise.title, exercise_path(comment.exercise) %></td>
         <td><%= comment.text %></td>
-        <td><%= link_to comment.user.email, user_path(comment.user) %></td>
+        <% if comment.user.first_name.nil? %>
+            <td><%= link_to "User#{comment.user.id}", user_path(comment.user)%></td>
+        <% else %>
+            <td><%= link_to comment.user.name, user_path(comment.user) %></td>
+        <% end %>
         <td><%= comment.created_at %> </td>
         <td class="actions btn-group" role="group">
           <%= link_to 'Edit', edit_exercise_comment_path(comment.exercise, comment), class:'btn btn-warning btn-xs' %>
