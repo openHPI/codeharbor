@@ -1,0 +1,31 @@
+<h1>Comments Administration </h1>
+
+<table class="table">
+  <thead>
+  <tr>
+    <th>Exercise</th>
+    <th>Comment</th>
+    <th>User</th>
+    <th>Created at</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @comments.each do |comment| %>
+      <tr>
+        <td><%= link_to comment.exercise.title, exercise_path(comment.exercise) %></td>
+        <td><%= comment.text %></td>
+        <td><%= link_to comment.user.email, user_path(comment.user) %></td>
+        <td><%= comment.created_at %> </td>
+        <td class="actions btn-group" role="group">
+          <%= link_to 'Edit', edit_exercise_comment_path(comment.exercise, comment), class:'btn btn-warning btn-xs' %>
+          <%= link_to 'X', exercise_comment_path(comment.exercise, comment), class:'btn btn-danger btn-xs', method: :delete, data: { confirm: 'Are you sure?' }  %>
+        </td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br>
+

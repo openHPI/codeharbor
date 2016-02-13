@@ -25,7 +25,7 @@ l4 = Label.create(name: 'Python', color: 'FFA500', label_category: category1)
 test_framework = TestingFramework.create(name: 'JUnit 4')
 test_framework2 = TestingFramework.create(name: 'Pytest')
 
-exercise1 = Exercise.create(title: "Hello World", description: "Schreibe ein Java Programm, das 'Hello World' am Bildschirm ausgibt.", maxrating: '10', public: true)
+exercise1 = Exercise.create(title: "Hello World", description: "Schreibe ein Java Programm, das 'Hello World' am Bildschirm ausgibt.", maxrating: '10', public: true, user_id:user1.id)
 ExerciseFile.create(main: true, content: "public class HelloWorld{ public static void main String[] args) { } }", path: '', solution: false, filetype: 'java', exercise: exercise1)
 Test.create(content: "public class HelloWorld{ public static void main String[] args) {System.out.println('Hello World.'); } }", rating: 5, feedback_message: "Es wird noch nicht 'Hello World' am Bildschrim ausgegeben!", exercise: exercise1, testing_framework: test_framework)
 
@@ -48,7 +48,7 @@ AccountLink.create(push_url: 'google.com/pushpush', account_name: 'account1000')
 
 
 
-exercise2 = Exercise.create(title: "Java Einstieg ", description: "In diesem Programm sind zwei Fehler versteckt. Versuche diese zu finden und zu beheben. Anschließend soll das Programm ""Hallo Welt"" ausgeben.\nFinde die beiden Fehler, die wir in das Programm eingebaut haben.", maxrating: '10', public: true)
+exercise2 = Exercise.create(title: "Java Einstieg ", description: "In diesem Programm sind zwei Fehler versteckt. Versuche diese zu finden und zu beheben. Anschließend soll das Programm ""Hallo Welt"" ausgeben.\nFinde die beiden Fehler, die wir in das Programm eingebaut haben.", maxrating: '10', public: true, user_id:user2.id)
 ExerciseFile.create(main: true, content: "public class HalloWelt {\n    // Hier haben sich zwei Fehler eingeschlichen\n    public static void main (String [] args){\n        System.out.println(Hallo Welt)\n    }\n}", path: '', solution: false, filetype: 'java', exercise: exercise2)
 Test.create(content: "import static org.junit.Assert.*;\nimport java.io.ByteArrayOutputStream;\nimport java.io.PrintStream;\nimport org.junit.AfterClass;\nimport org.junit.Before;\nimport org.junit.BeforeClass;\nimport org.junit.Test;\npublic class HalloWeltTest1 {\n    \n    private final static ByteArrayOutputStream outContent = new ByteArrayOutputStream();\n    private static PrintStream old;\n    @BeforeClass\n    public static void setUpStreams() {\n        old = System.out;\n        System.setOut(new PrintStream(outContent));\n    }\n    @AfterClass\n    public static void cleanUpStreams() {\n        System.setOut(old);\n    }\n    \n    @Before\n    public void resetOut(){\n        outContent.reset();\n    }\n    \n    @Test\n    public void testIfErrorFree(){\n        try{\n            HalloWelt.main(new String[] {});\n        }catch (Error e){\n            fail();\n        }\n    }\n    @Test\n    public void testSomething(){\n        assert(true);\n    }\n}", rating: 5, feedback_message: "Es existieren noch Fehler im Programm. Daher kann dieses noch nicht ausgeführt werden", exercise: exercise2, testing_framework: test_framework)
 Test.create(content: "import static org.junit.Assert.*;\nimport java.io.ByteArrayOutputStream;\nimport java.io.PrintStream;\nimport org.junit.AfterClass;\nimport org.junit.Before;\nimport org.junit.BeforeClass;\nimport org.junit.Test;\npublic class HalloWeltTest2 {\n    \n    private final static ByteArrayOutputStream outContent = new ByteArrayOutputStream();\n    private static PrintStream old;\n    @BeforeClass\n    public static void setUpStreams() {\n        old = System.out;\n        System.setOut(new PrintStream(outContent));\n    }\n    @AfterClass\n    public static void cleanUpStreams() {\n        System.setOut(old);\n    }\n    \n    @Before\n    public void resetOut(){\n        outContent.reset();\n    }\n    \n    @Test\n    public void checkForCorrectOutput(){\n        HalloWelt.main(new String[] {});\n        String separator = System.getProperty(""line.separator"");\n        assertEquals(""Hallo Welt""+separator, outContent.toString());\n    }\n    @Test\n    public void testSomething(){\n        assert(true);\n    }\n}", rating: 1, feedback_message: "Es wird ein falscher String ausgegeben, erwartet ist die Ausgabe\nHallo Welt", exercise: exercise2, testing_framework: test_framework)
@@ -65,7 +65,7 @@ exercise2.labels << l2
 exercise2.labels << l3
 
 
-exercise3 = Exercise.create(title: "Asterisk Pattern", description: "Schreibe ein Java Programm, das das Asterisk Pattern ausgibt. Das Pattern sieht folgendermaßen aus: ***** ***** ***** ***** *****", maxrating: '10', public: true)
+exercise3 = Exercise.create(title: "Asterisk Pattern", description: "Schreibe ein Java Programm, das das Asterisk Pattern ausgibt. Das Pattern sieht folgendermaßen aus: ***** ***** ***** ***** *****", maxrating: '10', public: true, user_id:user3.id)
 ExerciseFile.create(main: true, content: "public class AsteriksPattern{ public static void main String[] args) { } }", path: '', solution: false, filetype: 'java', exercise: exercise3)
 
 
@@ -95,7 +95,7 @@ exercise3.labels << l2
 exercise3.labels << l3
 
 
-exercise4 = Exercise.create(title: "factorial of given numbers", description: "Write a program which can compute the factorial of a given numbers. The results should be printed in a comma-separated sequence on a single line.", maxrating: '10', public: true)
+exercise4 = Exercise.create(title: "factorial of given numbers", description: "Write a program which can compute the factorial of a given numbers. The results should be printed in a comma-separated sequence on a single line.", maxrating: '10', public: true, user_id:user4.id)
 ExerciseFile.create(main: true, content: "def fact(x): return", path: '', solution: false, filetype: 'python', exercise: exercise4)
 
 
