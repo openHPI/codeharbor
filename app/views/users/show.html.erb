@@ -35,6 +35,9 @@
 
 
 <div class="actions btn-group" role="group">
-  <%= link_to 'Edit', edit_user_path(@user), class:'btn btn-warning' %>
-  <%= link_to 'Delete Account', @user, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger' %>
+  <% if can? :manage, @user %>
+    <%= link_to 'Edit', edit_user_path(@user), class:'btn btn-warning' %>
+    <%= link_to 'Delete Account', @user, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger' %>
+  <% end %>
+  <%= link_to 'Back', :back, class:'btn btn-default' %>
 </div>

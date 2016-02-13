@@ -16,7 +16,8 @@
     <%= f.text_area :text %>
   </div>
 
-  <div class="actions">
+  <div class="actions btn-group" role="group">
     <%= f.submit nil, class: 'btn btn-primary'  %>
+    <%= link_to 'Cancel', :back, class:'btn btn-danger' %>
   </div>
 <% end %>
