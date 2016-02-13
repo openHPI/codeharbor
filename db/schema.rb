@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160212110642) do
+ActiveRecord::Schema.define(version: 20160213230122) do
 
   create_table "account_links", force: :cascade do |t|
     t.datetime "created_at",   null: false
@@ -122,6 +122,7 @@ ActiveRecord::Schema.define(version: 20160212110642) do
     t.datetime "updated_at",               null: false
     t.integer  "user_id"
     t.integer  "execution_environment_id"
+    t.string   "language"
   end
 
   add_index "exercises", ["execution_environment_id"], name: "index_exercises_on_execution_environment_id"
