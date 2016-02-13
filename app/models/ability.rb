@@ -9,12 +9,15 @@ class Ability
         can :read, Exercise
         can :show, Exercise
         can :read, Test
-        can :manage, Comment
+        can :read, Comment
+        can :create, Comment
         can :read, ExerciseFile
         can :create, Rating
       elsif user.role == 'user'
         can :read, Exercise
         can :create, Rating
+        can :read, Comment
+        can :create, Comment
       end
     end
     # Define abilities for the passed in user here. For example:
