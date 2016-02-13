@@ -41,6 +41,7 @@
   </table>
 
   <br>
-
-  <%= link_to 'New Comment', new_exercise_comment_path(@exercise), class:'btn btn-success' %>
+  <% if can? :manage, Comment %>
+    <%= link_to 'New Comment', new_exercise_comment_path(@exercise), class:'btn btn-success' %>
+  <% end %>
 <% end %>

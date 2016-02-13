@@ -15,7 +15,6 @@ class Ability
         can :read, Exercise
         can :create, Rating
         can :read, Comment
-        can :create, Comment
       end
     end
     # Define abilities for the passed in user here. For example:
