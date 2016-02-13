@@ -27,7 +27,6 @@ class Exercise < ActiveRecord::Base
         return collection
       end
       return results
-
   	else
       return all
   	end
@@ -47,19 +46,21 @@ class Exercise < ActiveRecord::Base
   end
 
   def add_descriptions(description_array)
-    description_array.each do |key, array|
-      destroy = array[:_destroy]
-      id = array[:id]
-      
-      if id
-        description = Description.find(id)
-        if destroy
-          description.destroy
+    if description_array
+      description_array.each do |key, array|
+        destroy = array[:_destroy]
+        id = array[:id]
+        
+        if id
+          description = Description.find(id)
+          if destroy
+            description.destroy
+          else
+            description.update(text: array[:text])
+          end
         else
-          description.update(text: array[:text])
+          descriptions << Description.create(text: array[:text]) unless destroy
         end
-      else
-        descriptions << Description.create(text: array[:text]) unless destroy
       end
     end
   end

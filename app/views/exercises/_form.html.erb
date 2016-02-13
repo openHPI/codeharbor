@@ -81,12 +81,7 @@
 
   <div class="actions btn-group" role="group">
     <%= f.submit nil, class: 'btn btn-primary' %>
-    <% if @exercise.persisted? %>
-        <%= link_to 'Show', exercise_path(@exercise), class: 'btn btn-default' %>
-        <%= link_to 'Back', exercises_path, class: 'btn btn-default' %>
-    <% else %>
-        <%= link_to 'Back', exercises_path, class: 'btn btn-default' %>
-    <% end %>
+    <%= link_to 'Cancel', :back, class: 'btn btn-danger' %>
   </div>
 <% end %>
 </div>

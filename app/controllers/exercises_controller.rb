@@ -10,7 +10,7 @@ class ExercisesController < ApplicationController
   # GET /exercises
   # GET /exercises.json
   def index
-    @exercises = Exercise.search(params[:search]).paginate(per_page: 5, page: params[:page])
+    @exercises = Exercise.search(params[:search]).sort{ |y,x| x.avg_rating <=> y.avg_rating }.paginate(per_page: 5, page: params[:page])
   end
 
   # GET /exercises/1
@@ -36,6 +36,7 @@ class ExercisesController < ApplicationController
   def create
     @exercise = Exercise.new(exercise_params)
     @exercise.add_descriptions(params[:exercise][:descriptions_attributes])
+    @exercise.user = current_user
     respond_to do |format|
       if @exercise.save
         format.html { redirect_to @exercise, notice: 'Exercise was successfully created.' }

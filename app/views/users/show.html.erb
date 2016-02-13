@@ -1,6 +1,6 @@
 <%- model_class = User -%>
 <div class="page-header">
-  <h1><%= @user.first_name %> <%= @user.last_name %></h1>
+  <h1><%= @user.name %></h1>
 </div>
 
 <dl class="dl-horizontal">
@@ -13,25 +13,31 @@
   <dt><%= 'Role' %>:</dt>
   <dd><%= @user.role %></dd>
 </dl>
-<dl class="dl-horizontal">
-  <dt><%= 'Account Links'%> </dt>
-  <dd><%= link_to 'Add Account Link', new_user_account_link_path(@user), class:'btn btn-success btn-xs' %></dd>
-  <% @user.account_links.each do |account_link| %>
-    <dd>
-      <dt style="margin-top: 10px"><%= 'Links'%>: </dt>
-      <dd style="margin-top: 10px"><%= account_link.readable %> </dd>
-      <dt style="margin-top: 5px"> <%= 'Actions'%>: </dt>
-      <dd class="actions btn-group" role="group" style="margin-top: 5px; margin-left: 20px;">
-        <%= link_to 'Show', user_account_link_path(account_link.user, account_link), class:'btn btn-default btn-xs' %>
-        <%= link_to 'Edit', edit_user_account_link_path(account_link.user, account_link), class:'btn btn-warning btn-xs' %>
-        <%= link_to 'Destroy', user_account_link_path(account_link.user, account_link), method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-xs' %>
-      </dd>
+<% unless @user.role === 'user' %>
+  <dl class="dl-horizontal">
+    <dt><%= 'Account Links'%> </dt>
+    <dd><%= link_to 'Add Account Link', new_user_account_link_path(@user), class:'btn btn-success btn-xs' %></dd>
+    <% @user.account_links.each do |account_link| %>
+      <dd>
+        <dt style="margin-top: 10px"><%= 'Links'%>: </dt>
+        <dd style="margin-top: 10px"><%= account_link.readable %> </dd>
+        <dt style="margin-top: 5px"> <%= 'Actions'%>: </dt>
+        <dd class="actions btn-group" role="group" style="margin-top: 5px; margin-left: 20px;">
+          <%= link_to 'Show', user_account_link_path(account_link.user, account_link), class:'btn btn-default btn-xs' %>
+          <%= link_to 'Edit', edit_user_account_link_path(account_link.user, account_link), class:'btn btn-warning btn-xs' %>
+          <%= link_to 'Destroy', user_account_link_path(account_link.user, account_link), method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-xs' %>
+        </dd>
 
-    </dd>
-  <% end %>
-</dl>
+      </dd>
+    <% end %>
+  </dl>
+<% end %>
 
 
 <div class="actions btn-group" role="group">
-  <%= link_to 'Edit', edit_user_path(@user), class:'btn btn-warning' %>
+  <% if can? :manage, @user %>
+    <%= link_to 'Edit', edit_user_path(@user), class:'btn btn-warning' %>
+    <%= link_to 'Delete Account', @user, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger' %>
+  <% end %>
+  <%= link_to 'Back', :back, class:'btn btn-default' %>
 </div>
