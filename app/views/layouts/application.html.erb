@@ -16,6 +16,14 @@
           <% if current_user %>
             <%= menu_item 'Exercises', exercises_path %>
             <%= menu_item 'Collections', collections_path %>
+            <%= menu_divider %>
+            <% if current_user.role === 'admin' %>
+              <%= drop_down 'Admin Panel' do%>
+                <%= menu_item 'User Administration', users_path %>
+                <%= menu_item 'Exercise Administration', exercises_path %>
+                <%= menu_item 'Comments Administration'%>
+              <% end %>
+            <% end %>
           <% end %>
         <% end %>
         <%= menu_group pull: :right do %>
