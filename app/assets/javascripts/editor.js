@@ -25,6 +25,12 @@ ready = function() {
     all[i].style.fontSize='14px';
   }
 
+  $("#addFileButton").click(function() {
+    setTimeout(function() {
+      $(ready);
+    }, 10);
+  });
+
 };
 
 function initACE(editor,hidden) {
@@ -32,6 +38,8 @@ function initACE(editor,hidden) {
     hidden.value=editor.getValue();
   });
 }
+
+
 
 $(document).ready(ready);
 $(document).on('page:load', ready);
