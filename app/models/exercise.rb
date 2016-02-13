@@ -27,7 +27,6 @@ class Exercise < ActiveRecord::Base
         return collection
       end
       return results
-
   	else
       return all
   	end

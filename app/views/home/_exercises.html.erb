@@ -1,4 +1,4 @@
-<% @exercises.order('title').each do |exercise| %>
+<% @exercises.each do |exercise| %>
   <div class="panel panel-default" style="margin-top: 40px">
    <div class="panel-heading">
        <h3 class="panel-title"> <span><%= link_to exercise.title, exercise_path(exercise) %></span>
