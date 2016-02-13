@@ -30,7 +30,7 @@
           <% end %>
           <td><%= comment.created_at %>
           <td><div class="actions btn-group" role="group">
-            <% if comment.user === current_user or current_user.role === 'admin' %>
+            <% if can? :edit, comment %>
               <%= link_to 'Edit', edit_exercise_comment_path(@exercise, comment), class:'btn btn-warning btn-xs' %>
               <%= link_to 'Delete', exercise_comment_path(@exercise, comment), class:'btn btn-danger btn-xs', method: :delete, data: { confirm: 'Are you sure?' }  %>
             <% end %>
@@ -41,7 +41,7 @@
   </table>
 
   <br>
-  <% if can? :manage, Comment %>
+  <% if can? :create, Comment %>
     <%= link_to 'New Comment', new_exercise_comment_path(@exercise), class:'btn btn-success' %>
   <% end %>
 <% end %>

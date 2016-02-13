@@ -6,9 +6,21 @@ class Ability
       if user.role == 'admin'
         can :manage, :all
       elsif user.role == 'teacher'
-        can :manage, Exercise
+        can :show, Exercise
+        can :create, Exercise
+        can :read, Exercise
+        can :edit, Exercise do |exercise|
+          exercise.user == user
+        end
+
+        can :show, Comment
+        can :create, Comment
+        can :read, Comment
+        can :edit, Comment do |comment|
+          comment.user == user
+        end
+
         can :read, Test
-        can :manage, Comment
         can :read, ExerciseFile
         can :create, Rating
       elsif user.role == 'user'
