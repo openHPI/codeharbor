@@ -52,14 +52,26 @@
     </div>
   </div>
 
-  <h2>Files:</h2>
-
-  <% @exercise.exercise_files.each do |file| %>
-    <%= render 'file_form', f: f, file: file %>
-    <br>
+  <h4>Files:</h4>
+  <% if @exercise.persisted? %>
+    <% @exercise.exercise_files.each do |file| %>
+      <%= render 'file_form', f: f, file: file %>
+      <br>
+    <% end %>
+  <% else %>
+    <%= f.nested_fields_for :exercise_files do |file| %>
+      <div class="field">
+        <%= file.label :content %><br>
+        <div class="edit">
+          <div class="editor"><%= file.text_area :content %></div>
+          <%= file.text_area :content, class:'hidden'%>
+        </div>
+      </div>
+    <% end %>
+      <%= f.add_nested_fields_link :exercise_files, 'Add Files', class:'btn btn-success' %>
   <% end %>
 
-  <h2>Tests:</h2>
+  <h4>Tests:</h4>
 
   <% @exercise.tests.each do |test| %>
     <%= render 'test_form', f: f, test: test %>
