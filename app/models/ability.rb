@@ -23,10 +23,17 @@ class Ability
         can :read, Test
         can :read, ExerciseFile
         can :create, Rating
+
+        can :manage, User do |_user|
+          _user == user
+        end
       elsif user.role == 'user'
         can :read, Exercise
         can :create, Rating
         can :read, Comment
+        can :manage, User do |_user|
+          _user == user
+        end
       end
     end
     # Define abilities for the passed in user here. For example:
