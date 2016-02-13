@@ -27,8 +27,8 @@
       </div>
 
       <div class="btn-group-vertical pull-right" role="group" aria-label="...">
-        <%= link_to "Select", exercise_path(exercise), class:'btn btn-default' %>
-        <%= link_to "Show Comments", exercise_comments_path(exercise), class:'btn btn-default' %>
+        <%= link_to 'Select', exercise_path(exercise), class:'btn btn-default' %>
+        <%= link_to 'Show Comments', exercise_comments_path(exercise), class:'btn btn-default' %>
         <% if current_user === exercise.user or current_user.role === 'admin' %>
             <%= link_to 'Edit', edit_exercise_path(exercise), class:'btn btn-default' %>
             <%= link_to 'Delete', exercise_path(exercise), class:'btn btn-default', method: :delete, data: { confirm: 'Are you sure?' }  %>
