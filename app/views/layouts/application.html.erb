@@ -20,7 +20,7 @@
             <% if current_user.role === 'admin' %>
               <%= drop_down 'Admin Panel' do%>
                 <%= menu_item 'User Administration', users_path %>
-                <%= menu_item 'Exercise Administration', exercises_path %>
+                <%= menu_item 'Exercise Administration', exercises_exercises_all_path %>
                 <%= menu_item 'Comments Administration', comments_comments_all_path%>
               <% end %>
             <% end %>

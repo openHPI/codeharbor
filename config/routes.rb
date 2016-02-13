@@ -16,6 +16,8 @@ Rails.application.routes.draw do
 
   get 'comments/comments_all'
 
+  get 'exercises/exercises_all'
+
   resources :labels
   resources :label_categories
   resources :answers

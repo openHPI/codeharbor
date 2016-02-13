@@ -1,0 +1,29 @@
+<h1>Exercises Administration <%= link_to 'New Exercise', new_exercise_path, class:'btn btn-success' %> </h1>
+
+<table class="table">
+  <thead>
+  <tr>
+    <th>Title</th>
+    <th>Created by</th>
+    <th>Created at</th>
+    <th>Accessibility</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @exercises.each do |exercise| %>
+      <tr>
+        <td><%= link_to exercise.title, exercise %></td>
+        <td><%= link_to exercise.user.email, user_path(exercise.user.id) %></td>
+        <td><%= exercise.created_at %> </td>
+        <td><%= exercise.public ? 'public' : 'private' %> </td>
+        <td class="actions btn-group" role="group">
+          <%= link_to 'Show', exercise, class:'btn btn-default btn-xs'%>
+          <%= link_to 'Edit', edit_exercise_path(exercise), class:'btn btn-warning btn-xs' %>
+          <%= link_to 'X', exercise_path(exercise), class:'btn btn-danger btn-xs', method: :delete, data: { confirm: 'Are you sure?' }  %>
+        </td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
