@@ -1,6 +1,6 @@
 class CommentsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_exercise
+  before_action :set_exercise, except: [:comments_all]
   before_action :set_comment, only: [:show, :edit, :update, :destroy]
 
   rescue_from CanCan::AccessDenied do |_exception|
@@ -68,6 +68,10 @@ class CommentsController < ApplicationController
 
   def index
     @comments = Comment.where(exercise: @exercise).search(params[:search]).paginate(per_page: 5, page: params[:page])
+  end
+
+  def comments_all
+    @comments = Comment.all
   end
 
   private
