@@ -3,8 +3,7 @@
 <table class="table">
   <thead>
     <tr>
-      <th>First name</th>
-      <th>Last name</th>
+      <th>Name</th>
       <th>Email</th>
       <th>Role</th>
       <th>Actions</th>
@@ -14,14 +13,17 @@
   <tbody>
     <% @users.each do |user| %>
       <tr>
-        <td><%= user.first_name %></td>
-        <td><%= user.last_name %></td>
+        <% if user.first_name.nil?%>
+            <td><%= link_to "User#{user.id}", user_path(user)%></td>
+        <% else %>
+            <td><%= link_to user.name, user_path(user) %></td>
+        <% end %>
         <td><%= user.email %></td>
         <td><%= user.role %></td>
         <td class="actions btn-group" role="group">
           <%= link_to 'Show', user, class:'btn btn-default btn-xs' %>
           <%= link_to 'Edit', edit_user_path(user), class:'btn btn-warning btn-xs' %>
-          <%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-xs' %>
+          <%= link_to 'X', user, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-xs' %>
         </td>
       </tr>
     <% end %>

@@ -11,6 +11,18 @@
   <dd><%= @exercise.description %></dd>
   <dt><%= 'Visibility' %>:</dt>
   <dd><%= @exercise.public ? 'public' : 'private' %></dd>
+  <dt><%= 'Created by' %>:</dt>
+  <% if defined? @exercise.user %>
+    <% if @exercise.user.first_name.nil?%>
+      <dd><%= "User#{@exercise.user.id}"%></dd>
+    <% else %>
+        <dd><%= @exercise.user.name %></dd>
+    <% end %>
+  <% else %>
+    <%= 'User undefined' %>
+  <% end %>
+  <dt><%= 'Created at' %>:</dt>
+  <dd><%= @exercise.created_at %></dd>
 </dl>
 
 <dl class="dl-horizontal">

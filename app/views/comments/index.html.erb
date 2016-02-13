@@ -23,10 +23,13 @@
       <% @comments.each do |comment| %>
         <tr>
           <td><%= comment.text %></td>
-          <td><%= link_to comment.user.email, user_path(comment.user) %></td>
+          <% if comment.user.first_name.nil? %>
+            <td><%= "User#{comment.user.id}"%></td>
+          <% else %>
+            <td><%= comment.user.name %></td>
+          <% end %>
           <td><%= comment.created_at %>
           <td><div class="actions btn-group" role="group">
-            <%= link_to 'Show', exercise_comment_path(@exercise, comment), class:'btn btn-default btn-xs' %>
             <% if comment.user == current_user %>
               <%= link_to 'Edit', edit_exercise_comment_path(@exercise, comment), class:'btn btn-warning btn-xs' %>
               <%= link_to 'Delete', exercise_comment_path(@exercise, comment), class:'btn btn-danger btn-xs', method: :delete, data: { confirm: 'Are you sure?' }  %>
