@@ -36,6 +36,7 @@ class ExercisesController < ApplicationController
   def create
     @exercise = Exercise.new(exercise_params)
     @exercise.add_descriptions(params[:exercise][:descriptions_attributes])
+    @exercise.user = current_user
     respond_to do |format|
       if @exercise.save
         format.html { redirect_to @exercise, notice: 'Exercise was successfully created.' }
