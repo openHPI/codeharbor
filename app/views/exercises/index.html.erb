@@ -8,7 +8,9 @@
       </div>
     </div>
     <div class="col-md-6">
-      <%= link_to 'New Exercise', new_exercise_path, class:'btn btn-success pull-right' %>
+      <% if can? :create, Exercise %>
+        <%= link_to 'New Exercise', new_exercise_path, class:'btn btn-success pull-right' %>
+      <% end %>
     </div>
 <% end %>
 <br>
