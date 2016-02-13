@@ -27,9 +27,12 @@
       </div>
 
       <div class="btn-group-vertical pull-right" role="group" aria-label="...">
-        <%= link_to "Select", exercise_path(exercise), class:'btn btn-default' %>
-        <%= link_to "Edit", edit_exercise_path(exercise), class:'btn btn-default' %>
-        <%= link_to "Show Comments", exercise_comments_path(exercise), class:'btn btn-default' %>
+        <%= link_to 'Select', exercise_path(exercise), class:'btn btn-default' %>
+        <%= link_to 'Show Comments', exercise_comments_path(exercise), class:'btn btn-default' %>
+        <% if can? :edit, exercise %>
+            <%= link_to 'Edit', edit_exercise_path(exercise), class:'btn btn-default' %>
+            <%= link_to 'Delete', exercise_path(exercise), class:'btn btn-default', method: :delete, data: { confirm: 'Are you sure?' }  %>
+        <% end %>
       </div>
 
       <div class="col-md-6" style="margin-top: 60px">

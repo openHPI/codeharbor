@@ -61,19 +61,23 @@
     <% end %>
 </dl>
 
-<dl class="dl-horizontal">
-  <dt><%= 'Export to ... :' %></dt>
-  <dd>
-    <%= form_tag(push_external_exercise_path(@exercise), method: "post") do |f| %>
+<% if can? :manage, Exercise%>
+  <dl class="dl-horizontal">
+    <dt><%= 'Export to ... :' %></dt>
+    <dd>
+      <%= form_tag(push_external_exercise_path(@exercise), method: "post") do |f| %>
 
-      <%= collection_select(:account_link, :id, AccountLink.all, :id, :account_name, {},  {class: 'btn btn-default dropdown-toggle'}) %>
-      <%= button_tag 'Submit', class: 'btn btn-default btn-xs' %>
-    <% end %>
-  </dd>
-</dl>
+        <%= collection_select(:account_link, :id, AccountLink.all, :id, :account_name, {},  {class: 'btn btn-default dropdown-toggle'}) %>
+        <%= button_tag 'Submit', class: 'btn btn-default btn-xs' %>
+      <% end %>
+    </dd>
+  </dl>
+<% end %>
 
 <div class="actions btn-group" role="group">
-  <%= link_to 'Edit', edit_exercise_path(@exercise),  class: 'btn btn-default' %>
+  <% if can? :edit, @exercise %>
+    <%= link_to 'Edit', edit_exercise_path(@exercise),  class: 'btn btn-default' %>
+  <% end %>
   <%= link_to 'Back', exercises_path,  class: 'btn btn-default' %>
 
 </div>

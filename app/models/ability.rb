@@ -6,14 +6,34 @@ class Ability
       if user.role == 'admin'
         can :manage, :all
       elsif user.role == 'teacher'
-        can :manage, Exercise
+        can :show, Exercise
+        can :create, Exercise
+        can :read, Exercise
+        can :edit, Exercise do |exercise|
+          exercise.user == user
+        end
+
+        can :show, Comment
+        can :create, Comment
+        can :read, Comment
+        can :edit, Comment do |comment|
+          comment.user == user
+        end
+
         can :read, Test
-        can :manage, Comment
         can :read, ExerciseFile
         can :create, Rating
+
+        can :manage, User do |_user|
+          _user == user
+        end
       elsif user.role == 'user'
         can :read, Exercise
         can :create, Rating
+        can :read, Comment
+        can :manage, User do |_user|
+          _user == user
+        end
       end
     end
     # Define abilities for the passed in user here. For example:
