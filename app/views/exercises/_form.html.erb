@@ -53,23 +53,12 @@
   </div>
 
   <h4>Files:</h4>
-  <% if @exercise.persisted? %>
-    <% @exercise.exercise_files.each do |file| %>
-      <%= render 'file_form', f: f, file: file %>
-      <br>
-    <% end %>
-  <% else %>
-    <%= f.nested_fields_for :exercise_files do |file| %>
-      <div class="field">
-        <%= file.label :content %><br>
-        <div class="edit">
-          <div class="editor"><%= file.text_area :content %></div>
-          <%= file.text_area :content, class:'hidden'%>
-        </div>
-      </div>
-    <% end %>
-      <%= f.add_nested_fields_link :exercise_files, 'Add Files', class:'btn btn-success', id: 'addFileButton' %>
+  <%= f.nested_fields_for :exercise_files do |file| %>
+    <%= render 'file_form', f: f, file: file %>
+    <%= file.remove_nested_fields_link 'Remove File', class:'btn btn-danger btn-xs' %>
+    <br><br>
   <% end %>
+  <%= f.add_nested_fields_link :exercise_files, 'Add File', class:'btn btn-success', id: 'addFileButton' %>
 
   <h4>Tests:</h4>
 

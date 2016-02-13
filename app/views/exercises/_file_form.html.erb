@@ -1,23 +1,23 @@
 <div class="field">
   <%= f.label :main %><br>
-  <%= text_field_tag file.id.to_s+'[main]', file.main %>
+  <%= text_field_tag :main %>
 </div>
 <div class="field">
   <%= f.label :content %><br>
   <div class="edit">
-    <div class="editor"><%= file.content %></div>
-    <textarea class="hidden" name="<%= file.id %>[content]" style="width: 300px; height: 500px;"><%= file.content %></textarea>
+    <div class="editor"><%= file.text_area :content %></div>
+    <%= file.text_area :content, class:'hidden'%>
   </div>
 </div>
 <div class="field">
   <%= f.label :path %><br>
-  <%= text_field_tag file.id.to_s+'[path]', file.path %>
+  <%= text_field_tag :path %>
 </div>
 <div class="field">
   <%= f.label :solution %><br>
-  <%= text_field_tag file.id.to_s+'[solution]', file.solution %>
+  <%= text_field_tag :solution %>
 </div>
 <div class="field">
   <%= f.label :filetype %><br>
-  <%= text_field_tag file.id.to_s+'[filetype]', file.filetype %>
+  <%= text_field_tag :filetype %>
 </div>
