@@ -31,7 +31,8 @@
     <%= f.label :password_confirmation %><br>
     <%= f.password_field :password_confirmation %>
   </div>
-  <div class="actions">
+  <div class="actions btn-group" role="group">
     <%= f.submit nil, class:'btn btn-primary' %>
+    <%= link_to 'Back', :back, class:'btn btn-default' %>
   </div>
 <% end %>

@@ -1,6 +1,8 @@
 <%= form_tag exercise_comments_path(@exercise), method: 'get' do %>
 
-  <h1>Comments for: <%=@exercise.title %></h1>
+  <h1>Comments for: <%=@exercise.title %> <% if can? :create, Comment %>
+        <%= link_to 'New Comment', new_exercise_comment_path(@exercise), class:'btn btn-success' %>
+    <% end %> </h1>
 
   <div class="input-group col-md-6" style="margin-top: 40px; margin-bottom: 20px">
     <%= text_field_tag :search, params[:search], class:"form-control", type:"text", placeholder: 'Search for comment' %>
@@ -41,7 +43,5 @@
   </table>
 
   <br>
-  <% if can? :create, Comment %>
-    <%= link_to 'New Comment', new_exercise_comment_path(@exercise), class:'btn btn-success' %>
-  <% end %>
+  <%= link_to 'Back', exercises_path, class:'btn btn-default' %>
 <% end %>

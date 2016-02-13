@@ -68,7 +68,7 @@
       <%= form_tag(push_external_exercise_path(@exercise), method: "post") do |f| %>
 
         <%= collection_select(:account_link, :id, AccountLink.all, :id, :account_name, {},  {class: 'btn btn-default dropdown-toggle'}) %>
-        <%= button_tag 'Submit', class: 'btn btn-default btn-xs' %>
+        <%= button_tag 'Submit', class: 'btn btn-success btn-xs' %>
       <% end %>
     </dd>
   </dl>
@@ -76,7 +76,7 @@
 
 <div class="actions btn-group" role="group">
   <% if can? :edit, @exercise %>
-    <%= link_to 'Edit', edit_exercise_path(@exercise),  class: 'btn btn-default' %>
+    <%= link_to 'Edit', edit_exercise_path(@exercise),  class: 'btn btn-warning' %>
   <% end %>
   <%= link_to 'Back', exercises_path,  class: 'btn btn-default' %>
 
