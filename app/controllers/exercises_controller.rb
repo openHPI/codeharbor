@@ -35,8 +35,7 @@ class ExercisesController < ApplicationController
   # POST /exercises.json
   def create
     @exercise = Exercise.new(exercise_params)
-    @exercise.add_files(params[:exercise][:exercise_files_attributes])
-    @exercise.add_descriptions(params[:exercise][:descriptions_attributes])
+    @exercise.add_attributes(params[:exercise])
     @exercise.user = current_user
     respond_to do |format|
       if @exercise.save
@@ -52,12 +51,7 @@ class ExercisesController < ApplicationController
   # PATCH/PUT /exercises/1
   # PATCH/PUT /exercises/1.json
   def update
-    #@exercise.exercise_files.each do |file|
-    #  file.update(file_params(file))
-    #end
-    @exercise.add_tests(params[:exercise][:tests_attributes])
-    @exercise.add_files(params[:exercise][:exercise_files_attributes])
-    @exercise.add_descriptions(params[:exercise][:descriptions_attributes])
+    @exercise.add_attributes(params[:exercise])
     respond_to do |format|
       if @exercise.update(exercise_params)
         format.html { redirect_to @exercise, notice: 'Exercise was successfully updated.' }
@@ -102,13 +96,5 @@ class ExercisesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def exercise_params
       params.require(:exercise).permit(:title, :description, :maxrating, :public)
-    end
-
-    def file_params(file)
-      params.require(file.id.to_s).permit(:main, :content, :path, :solution, :filetype)
-    end
-
-    def test_params(test)
-      params.require('test_'+test.id.to_s).permit(:content, :feedback_message, :testing_framework_id)
     end
 end

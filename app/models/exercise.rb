@@ -45,6 +45,12 @@ class Exercise < ActiveRecord::Base
     (avg_rating*2).round / 2.0
   end
 
+  def add_attributes(params)
+    add_tests(params[:tests_attributes])
+    add_files(params[:exercise_files_attributes])
+    add_descriptions(params[:descriptions_attributes])
+  end
+
   def add_descriptions(description_array)
     description_array.try(:each) do |key, array|
       destroy = array[:_destroy]
