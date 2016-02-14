@@ -46,21 +46,27 @@ class Exercise < ActiveRecord::Base
   end
 
   def add_descriptions(description_array)
-    if description_array
-      description_array.each do |key, array|
-        destroy = array[:_destroy]
-        id = array[:id]
-        
-        if id
-          description = Description.find(id)
-          if destroy
-            description.destroy
-          else
-            description.update(text: array[:text])
-          end
-        else
-          descriptions << Description.create(text: array[:text]) unless destroy
-        end
+    description_array.try(:each) do |key, array|
+      destroy = array[:_destroy]
+      id = array[:id]
+      if id
+        description = Description.find(id)
+        destroy ? description.destroy : description.update(text: array[:text])
+      else
+        descriptions << Description.create(text: array[:text]) unless destroy
+      end
+    end
+  end
+
+  def add_files(file_array)
+    file_array.try(:each) do |key, array|
+      destroy = array[:_destroy]
+      id = array[:id]
+      if id
+        file = ExerciseFile.find(id)
+        destroy ? file.destroy : file.update(file_permit(array))
+      else
+        exercise_files << ExerciseFile.create(file_permit(array)) unless destroy
       end
     end
   end
@@ -81,4 +87,7 @@ class Exercise < ActiveRecord::Base
     return builder.to_xml
   end
 
+  def file_permit(params)
+    params.permit(:main, :content, :path, :solution, :filetype)
+  end
 end

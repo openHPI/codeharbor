@@ -35,6 +35,7 @@ class ExercisesController < ApplicationController
   # POST /exercises.json
   def create
     @exercise = Exercise.new(exercise_params)
+    @exercise.add_files(params[:exercise][:exercise_files_attributes])
     @exercise.add_descriptions(params[:exercise][:descriptions_attributes])
     @exercise.user = current_user
     respond_to do |format|
@@ -51,12 +52,10 @@ class ExercisesController < ApplicationController
   # PATCH/PUT /exercises/1
   # PATCH/PUT /exercises/1.json
   def update
-    @exercise.exercise_files.each do |file|
-      file.update(file_params(file))
-    end
-    @exercise.tests.each do |test|
-      test.update(test_params(test))
-    end
+    #@exercise.exercise_files.each do |file|
+    #  file.update(file_params(file))
+    #end
+    @exercise.add_files(params[:exercise][:exercise_files_attributes])
     @exercise.add_descriptions(params[:exercise][:descriptions_attributes])
     respond_to do |format|
       if @exercise.update(exercise_params)
