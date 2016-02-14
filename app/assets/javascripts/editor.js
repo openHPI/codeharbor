@@ -31,6 +31,12 @@ ready = function() {
     }, 10);
   });
 
+  $("#addTestButton").click(function() {
+    setTimeout(function() {
+      $(ready);
+    }, 10);
+  });
+
 };
 
 function initACE(editor,hidden) {

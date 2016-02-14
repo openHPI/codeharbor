@@ -55,6 +55,7 @@ class ExercisesController < ApplicationController
     #@exercise.exercise_files.each do |file|
     #  file.update(file_params(file))
     #end
+    @exercise.add_tests(params[:exercise][:tests_attributes])
     @exercise.add_files(params[:exercise][:exercise_files_attributes])
     @exercise.add_descriptions(params[:exercise][:descriptions_attributes])
     respond_to do |format|

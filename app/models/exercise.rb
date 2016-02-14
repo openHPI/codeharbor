@@ -71,6 +71,19 @@ class Exercise < ActiveRecord::Base
     end
   end
 
+  def add_tests(test_array)
+    test_array.try(:each) do |key, array|
+      destroy = array[:_destroy]
+      id = array[:id]
+      if id
+        test = Test.find(id)
+        destroy ? test.destroy : test.update(test_permit(array))
+      else
+        tests << Test.create(test_permit(array)) unless destroy
+      end
+    end
+  end
+
   def to_proforma_xml
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.root('xmlns:p' => 'urn:proforma:task:v0.9.4') {
@@ -89,5 +102,9 @@ class Exercise < ActiveRecord::Base
 
   def file_permit(params)
     params.permit(:main, :content, :path, :solution, :filetype)
+  end
+
+  def test_permit(params)
+    params.permit(:content, :feedback_message, :testing_framework_id)
   end
 end
