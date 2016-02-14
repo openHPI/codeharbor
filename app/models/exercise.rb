@@ -50,7 +50,7 @@ class Exercise < ActiveRecord::Base
     description_array.each do |key, array|
       destroy = array[:_destroy]
       id = array[:id]
-      
+
       if id
         description = Description.find(id)
         if destroy

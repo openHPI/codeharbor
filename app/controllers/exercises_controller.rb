@@ -35,7 +35,16 @@ class ExercisesController < ApplicationController
   # POST /exercises.json
   def create
     @exercise = Exercise.new(exercise_params)
+    @exercise.user = current_user
     @exercise.add_descriptions(params[:exercise][:descriptions_attributes])
+    if params[:language].blank?
+      @exercise.language = 'EN'
+    else
+      @exercise.language = ''
+      params[:language].values.each do |lang|
+        @exercise.language += lang
+      end
+    end
     respond_to do |format|
       if @exercise.save
         format.html { redirect_to @exercise, notice: 'Exercise was successfully created.' }

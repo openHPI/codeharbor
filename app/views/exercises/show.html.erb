@@ -7,8 +7,10 @@
 <dl class="dl-horizontal">
   <dt><%= 'Title' %>:</dt>
   <dd><%= @exercise.title %></dd>
-  <dt><%= 'Description' %></dt>
+  <dt><%= 'Description' %>:</dt>
   <dd><%= @exercise.description %></dd>
+  <dt><%= 'Language' %>:</dt>
+  <dd><%= @exercise.language %></dd>
   <dt><%= 'Visibility' %>:</dt>
   <dd><%= @exercise.public ? 'public' : 'private' %></dd>
   <dt><%= 'Created by' %>:</dt>
@@ -77,7 +79,9 @@
 <div class="actions btn-group" role="group">
   <% if can? :edit, @exercise %>
     <%= link_to 'Edit', edit_exercise_path(@exercise),  class: 'btn btn-warning' %>
-  <% end %>
+    <%= link_to 'Delete', exercise_path(@exercise), class:'btn btn-danger', method: :delete, data: { confirm: 'Are you sure?' }  %>
+
+<% end %>
   <%= link_to 'Back', exercises_path,  class: 'btn btn-default' %>
 
 </div>
