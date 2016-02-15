@@ -89,6 +89,7 @@ ActiveRecord::Schema.define(version: 20160213230122) do
   create_table "descriptions", force: :cascade do |t|
     t.string  "text"
     t.integer "exercise_id"
+    t.string  "language",    default: "EN"
   end
 
   add_index "descriptions", ["exercise_id"], name: "index_descriptions_on_exercise_id"
@@ -118,11 +119,10 @@ ActiveRecord::Schema.define(version: 20160213230122) do
     t.string   "description"
     t.integer  "maxrating"
     t.boolean  "public"
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
     t.integer  "user_id"
     t.integer  "execution_environment_id"
-    t.string   "language",                 default: "EN"
   end
 
   add_index "exercises", ["execution_environment_id"], name: "index_exercises_on_execution_environment_id"
