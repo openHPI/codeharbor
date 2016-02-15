@@ -27,6 +27,11 @@ class ExercisesController < ApplicationController
     @exercise.descriptions << Description.new
   end
 
+  def duplicate
+    @exercise = Exercise.new(Exercise.find(params[:id]).attributes)
+    render 'new'
+  end
+
   # GET /exercises/1/edit
   def edit
   end

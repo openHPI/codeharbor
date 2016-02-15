@@ -8,6 +8,7 @@ class Ability
       elsif user.role == 'teacher'
         can :show, Exercise
         can :create, Exercise
+        can :duplicate, Exercise
         can :read, Exercise
         can :edit, Exercise do |exercise|
           exercise.user == user
