@@ -1,6 +1,8 @@
 require 'nokogiri'
 
 class Exercise < ActiveRecord::Base
+  validates :title, presence: true
+
   has_many :exercise_files
   has_many :tests
   has_and_belongs_to_many :labels
@@ -27,7 +29,6 @@ class Exercise < ActiveRecord::Base
         return collection
       end
       return results
-
   	else
       return all
   	end
@@ -46,21 +47,48 @@ class Exercise < ActiveRecord::Base
     (avg_rating*2).round / 2.0
   end
 
+  def add_attributes(params)
+    add_tests(params[:tests_attributes])
+    add_files(params[:exercise_files_attributes])
+    add_descriptions(params[:descriptions_attributes])
+  end
+
   def add_descriptions(description_array)
-    description_array.each do |key, array|
+    description_array.try(:each) do |key, array|
       destroy = array[:_destroy]
       id = array[:id]
-      language = array[:language]
 
       if id
         description = Description.find(id)
-        if destroy
-          description.destroy
-        else
-          description.update(text: array[:text], language: language)
-        end
+        destroy ? description.destroy : description.update(text: array[:text], language: array[:language])
       else
         descriptions << Description.create(text: array[:text], language: language) unless destroy
+      end
+    end
+  end
+
+  def add_files(file_array)
+    file_array.try(:each) do |key, array|
+      destroy = array[:_destroy]
+      id = array[:id]
+      if id
+        file = ExerciseFile.find(id)
+        destroy ? file.destroy : file.update(file_permit(array))
+      else
+        exercise_files << ExerciseFile.create(file_permit(array)) unless destroy
+      end
+    end
+  end
+
+  def add_tests(test_array)
+    test_array.try(:each) do |key, array|
+      destroy = array[:_destroy]
+      id = array[:id]
+      if id
+        test = Test.find(id)
+        destroy ? test.destroy : test.update(test_permit(array))
+      else
+        tests << Test.create(test_permit(array)) unless destroy
       end
     end
   end
@@ -81,4 +109,11 @@ class Exercise < ActiveRecord::Base
     return builder.to_xml
   end
 
+  def file_permit(params)
+    params.permit(:main, :content, :path, :solution, :filetype)
+  end
+
+  def test_permit(params)
+    params.permit(:content, :feedback_message, :testing_framework_id)
+  end
 end

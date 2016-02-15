@@ -1,4 +1,4 @@
-<% @exercises.order('title').each do |exercise| %>
+<% @exercises.each do |exercise| %>
   <div class="panel panel-default" style="margin-top: 40px">
    <div class="panel-heading">
        <h3 class="panel-title"> <span><%= link_to exercise.title, exercise_path(exercise) %></span>
@@ -29,6 +29,9 @@
       <div class="btn-group-vertical pull-right" role="group" aria-label="...">
         <%= link_to 'Select', exercise_path(exercise), class:'btn btn-default' %>
         <%= link_to 'Show Comments', exercise_comments_path(exercise), class:'btn btn-default' %>
+        <% if can? :create, exercise %>
+            <%= link_to 'Duplicate', duplicate_exercise_path(exercise), class:'btn btn-default' %>
+        <% end %>
         <% if can? :edit, exercise %>
             <%= link_to 'Edit', edit_exercise_path(exercise), class:'btn btn-default' %>
             <%= link_to 'Delete', exercise_path(exercise), class:'btn btn-default', method: :delete, data: { confirm: 'Are you sure?' }  %>

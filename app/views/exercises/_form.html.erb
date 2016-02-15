@@ -53,22 +53,22 @@
       </div>
     </div>
   </div>
-
-
-  <h2>Files:</h2>
-
-  <% @exercise.exercise_files.each do |file| %>
+  <h4>Files:</h4>
+  <%= f.nested_fields_for :exercise_files do |file| %>
     <%= render 'file_form', f: f, file: file %>
-    <br>
+    <%= file.remove_nested_fields_link 'Remove File', class:'btn btn-danger btn-xs' %>
+    <br><br>
   <% end %>
+  <%= f.add_nested_fields_link :exercise_files, 'Add File', class:'btn btn-success', id: 'addFileButton' %>
 
-  <h2>Tests:</h2>
-
-  <% @exercise.tests.each do |test| %>
+  <h4>Tests:</h4>
+  <%= f.nested_fields_for :tests do |test| %>
     <%= render 'test_form', f: f, test: test %>
-    <br>
+    <%= test.remove_nested_fields_link 'Remove Test', class:'btn btn-danger btn-xs' %>
+    <br><br>
   <% end %>
-
+  <%= f.add_nested_fields_link :tests, 'Add Test', class:'btn btn-success', id: 'addTestButton' %>
+  <br><br>
 
   <div class="actions btn-group" role="group">
     <%= f.submit nil, class: 'btn btn-primary' %>

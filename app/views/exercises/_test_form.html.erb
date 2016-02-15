@@ -1,18 +1,15 @@
 <div class="field">
   <%= f.label :content %><br>
   <div class="edit">
-    <div class="editor"><%= test.content %></div>
-    <textarea class="hidden" name="test_<%= test.id %>[content]"><%= test.content %></textarea>
+    <div class="editor"><%= test.text_area :content %></div>
+    <%= test.text_area :content, class:'hidden'%>
   </div>
 </div>
 <div class="field">
   <%= f.label :feedback_message %><br>
-  <%= text_field_tag 'test_'+test.id.to_s+'[feedback_message]', test.feedback_message %>
+  <%= test.text_field :feedback_message, size:80 %>
 </div>
 <div class="field">
   <%= f.label :testing_framework %><br>
-  <%= collection_select 'test_'+test.id.to_s, :testing_framework_id, TestingFramework.all, :id, :name, {selected: test.id} %>
+  <%= test.collection_select :testing_framework_id, TestingFramework.all, :id, :name %>
 </div>
-
-
-

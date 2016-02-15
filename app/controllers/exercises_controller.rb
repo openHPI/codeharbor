@@ -10,7 +10,7 @@ class ExercisesController < ApplicationController
   # GET /exercises
   # GET /exercises.json
   def index
-    @exercises = Exercise.search(params[:search]).paginate(per_page: 5, page: params[:page])
+    @exercises = Exercise.search(params[:search]).sort{ |y,x| x.avg_rating <=> y.avg_rating }.paginate(per_page: 5, page: params[:page])
   end
 
   # GET /exercises/1
@@ -27,6 +27,11 @@ class ExercisesController < ApplicationController
     @exercise.descriptions << Description.new
   end
 
+  def duplicate
+    @exercise = Exercise.new(Exercise.find(params[:id]).attributes)
+    render 'new'
+  end
+
   # GET /exercises/1/edit
   def edit
   end
@@ -35,8 +40,8 @@ class ExercisesController < ApplicationController
   # POST /exercises.json
   def create
     @exercise = Exercise.new(exercise_params)
+    @exercise.add_attributes(params[:exercise])
     @exercise.user = current_user
-    @exercise.add_descriptions(params[:exercise][:descriptions_attributes])
     respond_to do |format|
       if @exercise.save
         format.html { redirect_to @exercise, notice: 'Exercise was successfully created.' }
@@ -51,13 +56,7 @@ class ExercisesController < ApplicationController
   # PATCH/PUT /exercises/1
   # PATCH/PUT /exercises/1.json
   def update
-    @exercise.exercise_files.each do |file|
-      file.update(file_params(file))
-    end
-    @exercise.tests.each do |test|
-      test.update(test_params(test))
-    end
-    @exercise.add_descriptions(params[:exercise][:descriptions_attributes])
+    @exercise.add_attributes(params[:exercise])
     respond_to do |format|
       if @exercise.update(exercise_params)
         format.html { redirect_to @exercise, notice: 'Exercise was successfully updated.' }
@@ -102,13 +101,5 @@ class ExercisesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def exercise_params
       params.require(:exercise).permit(:title, :description, :maxrating, :public)
-    end
-
-    def file_params(file)
-      params.require(file.id.to_s).permit(:main, :content, :path, :solution, :filetype)
-    end
-
-    def test_params(test)
-      params.require('test_'+test.id.to_s).permit(:content, :feedback_message, :testing_framework_id)
     end
 end
