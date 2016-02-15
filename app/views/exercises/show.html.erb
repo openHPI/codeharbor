@@ -61,7 +61,7 @@
     <% end %>
 </dl>
 
-<% if can? :manage, Exercise%>
+<% if can? :export, Exercise%>
   <dl class="dl-horizontal">
     <dt><%= 'Export to ... :' %></dt>
     <dd>
@@ -71,7 +71,17 @@
         <%= button_tag 'Submit', class: 'btn btn-success btn-xs' %>
       <% end %>
     </dd>
+
+    <dt>or<br><br></dt>
+    <dd></dd>
+    <dt>Add to cart :</dt>
+    <dd>
+      <%= button_to 'Add to cart', add_to_cart_path(@exercise), class: 'btn btn-primary btn-xs' %>
+    </dd>
   </dl>
+
+
+
 <% end %>
 
 <div class="actions btn-group" role="group">
@@ -83,8 +93,3 @@
   <%= link_to 'Back', exercises_path,  class: 'btn btn-default' %>
 
 </div>
-
-<script>
-
-</script>
-
