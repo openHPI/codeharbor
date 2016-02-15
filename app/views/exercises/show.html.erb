@@ -16,7 +16,7 @@
   <dt><%= 'Created by' %>:</dt>
   <% if !@exercise.user %>
       <dd><%= 'User undefined' %></dd>
-  <% elsif @exercise.user.first_name.nil?%>
+  <% elsif @exercise.user.first_name.nil? || current_user.role === 'user'%>
       <dd><%= "User#{@exercise.user.id}"%></dd>
   <% else %>
       <dd><%= @exercise.user.name %></dd>

@@ -4,7 +4,9 @@
        <h3 class="panel-title"> <span><%= link_to exercise.title, exercise_path(exercise) %></span>
             <span class="star-rating pull-right">
               <% [*1..5].each do |i| %>
-                <a href="/exercises/<%= exercise.id %>/ratings?rating[rating]=<%= i %>" data-method="post">
+                <% if can? :create, Rating %>
+                  <a href="/exercises/<%= exercise.id %>/ratings?rating[rating]=<%= i %>" data-method="post">
+                <% end %>
                   <% if exercise.round_avg_rating >= i %>
                     <span class="fa fa-star" data-rating="<%= i %>"></span>
                   <% elsif (exercise.round_avg_rating + 0.5) >= i %>
@@ -15,7 +17,6 @@
                 </a>
               <% end %>
               <small><%= exercise.ratings.count %> ratings</small>
-              <input type="hidden" name="whatever" class="rating-value" value="3">
             </span>
        </h3>
    </div>
@@ -27,7 +28,7 @@
       </div>
 
       <div class="btn-group-vertical pull-right" role="group" aria-label="...">
-        <%= link_to 'Select', exercise_path(exercise), class:'btn btn-default' %>
+        <%= link_to 'View', exercise_path(exercise), class:'btn btn-default' %>
         <%= link_to 'Show Comments', exercise_comments_path(exercise), class:'btn btn-default' %>
         <% if can? :create, exercise %>
             <%= link_to 'Duplicate', duplicate_exercise_path(exercise), class:'btn btn-default' %>

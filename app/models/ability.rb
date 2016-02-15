@@ -30,7 +30,7 @@ class Ability
         end
       elsif user.role == 'user'
         can :read, Exercise
-        can :create, Rating
+        can :read, Rating
         can :read, Comment
         can :manage, User do |_user|
           _user == user

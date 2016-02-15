@@ -27,7 +27,7 @@
           <td><%= comment.text %></td>
           <% if !comment.user %>
              <td> <%= 'User undefined' %> </td>
-          <% elsif comment.user.first_name.nil?%>
+          <% elsif comment.user.first_name.nil? || current_user.role === 'user'%>
               <td><%=  "User#{comment.user.id}"%></td>
           <% else %>
               <td><%= comment.user.name%></td>
