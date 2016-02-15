@@ -67,8 +67,13 @@
     <dd>
       <%= form_tag(push_external_exercise_path(@exercise), method: "post") do |f| %>
 
-        <%= collection_select(:account_link, :id, AccountLink.all, :id, :account_name, {},  {class: 'btn btn-default dropdown-toggle'}) %>
-        <%= button_tag 'Submit', class: 'btn btn-success btn-xs' %>
+        <% if !current_user.account_links.empty?%>
+          <%= collection_select(:account_link, :id, AccountLink.all, :id, :account_name, {},  {class: 'btn btn-default dropdown-toggle'}) %>
+          <%= button_tag 'Submit', class: 'btn btn-success btn-xs' %>
+        <% else %>
+          <%= link_to 'Please define a account link first', new_user_account_link_path(current_user)%>
+        <% end %>
+
       <% end %>
     </dd>
 
