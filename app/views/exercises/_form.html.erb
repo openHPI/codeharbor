@@ -30,10 +30,15 @@
         <div class="controls" style="margin-top: 10px; margin-bottom: 10px">
           <%= description.text_area :text, class:'form-control' %>
           <%= description.remove_nested_fields_link 'Remove Description', class:'btn btn-danger btn-xs' %>
+          <div class="field">
+            <%= f.label :language %><br>
+            <%= description.collection_select :language, Description::LANGUAGES, :to_s, :to_s, include_blank: false %>
+          </div>
         </div>
     <% end %>
     <%= f.add_nested_fields_link :descriptions, 'Add Description', class:'btn btn-success' %>
   </div>
+
 
 
   <div class="form-group">
@@ -51,7 +56,6 @@
       </div>
     </div>
   </div>
-
   <h4>Files:</h4>
   <%= f.nested_fields_for :exercise_files do |file| %>
     <%= render 'file_form', f: f, file: file %>

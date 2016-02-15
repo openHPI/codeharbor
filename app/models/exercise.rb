@@ -57,11 +57,12 @@ class Exercise < ActiveRecord::Base
     description_array.try(:each) do |key, array|
       destroy = array[:_destroy]
       id = array[:id]
+
       if id
         description = Description.find(id)
-        destroy ? description.destroy : description.update(text: array[:text])
+        destroy ? description.destroy : description.update(text: array[:text], language: array[:language])
       else
-        descriptions << Description.create(text: array[:text]) unless destroy
+        descriptions << Description.create(text: array[:text], language: array[:language]) unless destroy
       end
     end
   end

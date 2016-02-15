@@ -14,9 +14,15 @@
   <tbody>
   <% @comments.each do |comment| %>
       <tr>
-        <td><%= link_to comment.exercise.title, exercise_path(comment.exercise) %></td>
+        <% if !comment.exercise %>
+            <td> <%= 'Exercise undefined' %> </td>
+        <% else %>
+          <td><%= link_to comment.exercise.title, exercise_path(comment.exercise) %></td>
+        <% end %>
         <td><%= comment.text %></td>
-        <% if comment.user.first_name.nil? %>
+        <% if !comment.user %>
+           <td> <%= 'User undefined' %> </td>
+        <% elsif comment.user.first_name.nil?%>
             <td><%= link_to "User#{comment.user.id}", user_path(comment.user)%></td>
         <% else %>
             <td><%= link_to comment.user.name, user_path(comment.user) %></td>
