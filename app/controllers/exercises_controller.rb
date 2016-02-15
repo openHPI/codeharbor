@@ -83,8 +83,12 @@ class ExercisesController < ApplicationController
       Cart.create(user: current_user)
     end
     cart = Cart.find_by(user: current_user)
-    cart.exercises << @exercise
-    redirect_to @exercise, notice: 'Exercise was successfully added to your cart.'
+    unless cart.exercises.find_by(id: @exercise.id)
+      cart.exercises << @exercise
+      redirect_to @exercise, notice: 'Exercise was successfully added to your cart.'
+    else
+      redirect_to @exercise, alert: 'Exercise already in your cart.'
+    end
   end
 
   def exercises_all
