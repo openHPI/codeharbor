@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   get 'sessions/destroy'
 
   get 'comments/comments_all'
+  get 'exercises/exercises_all'
 
   get 'exercises/:id/duplicate', to: 'exercises#duplicate', as: 'duplicate_exercise'
 
@@ -34,8 +35,6 @@ Rails.application.routes.draw do
       post :push_external
     end
   end
-
-  get 'exercises/exercises_all'
 
 
 

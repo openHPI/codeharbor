@@ -110,6 +110,7 @@ ActiveRecord::Schema.define(version: 20160213230122) do
     t.integer  "exercise_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.string   "file_name"
   end
 
   add_index "exercise_files", ["exercise_id"], name: "index_exercise_files_on_exercise_id"
