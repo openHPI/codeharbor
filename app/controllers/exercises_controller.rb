@@ -83,13 +83,15 @@ class ExercisesController < ApplicationController
   end
 
   def push_external
-    #account_link = AccountLink.find(params[:account_link][:id]);
-    #oauth2Client = OAuth2::Client.new('client_id', 'client_secret', :site => account_link.push_url)
-    #oauth2_token = account_link[:oauth2_token]
-    #token = OAuth2::AccessToken.from_hash(oauth2Client, :access_token => oauth2_token)
-    #token.post(account_link.push_url)
-    #redirect_to @exercise, notice: ('Exercise pushed to ' + account_link.readable)
-    redirect_to @exercise, notice: 'Exercise was successfully exported.'
+    account_link = AccountLink.find(params[:account_link][:id]);
+    oauth2Client = OAuth2::Client.new('client_id', 'client_secret', :site => account_link.push_url)
+    oauth2_token = account_link[:oauth2_token]
+    token = OAuth2::AccessToken.from_hash(oauth2Client, :access_token => oauth2_token)
+    logger.fatal('@exercise.to_proforma_xml')
+    logger.fatal(@exercise.to_proforma_xml)
+    logger.fatal('@exercise.to_proforma_xml')
+    token.post(account_link.push_url, {body: @exercise.to_proforma_xml})
+    redirect_to @exercise, notice: ('Exercise pushed to ' + account_link.readable)
   end
 
   private

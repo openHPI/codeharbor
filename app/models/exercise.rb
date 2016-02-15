@@ -93,6 +93,20 @@ class Exercise < ActiveRecord::Base
     end
   end
 
+  def build_proforma_xml_for_exercise_file(builder, exercise_file)
+    if exercise_file.main
+      proforma_file_class = 'template'
+    else
+      proforma_file_class = 'internal'
+    end
+
+    builder.file(exercise_file.content,
+      'filename' => exercise_file.full_file_name,
+      'id' => exercise_file.id,
+      'class' => proforma_file_class
+    )
+  end
+
   def to_proforma_xml
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.root('xmlns:p' => 'urn:proforma:task:v0.9.4') {
@@ -102,6 +116,11 @@ class Exercise < ActiveRecord::Base
           p.send('grading-hints', 'max-rating' => self.maxrating.to_s)
           p.send('meta-data') {
             p.title(self.title)
+          }
+          p.files {
+            self.exercise_files.all? { |file|
+              build_proforma_xml_for_exercise_file(p, file)
+            }
           }
         }
       }
