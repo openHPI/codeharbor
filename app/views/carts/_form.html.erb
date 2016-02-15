@@ -12,13 +12,13 @@
   <% end %>
 
   <% if @cart.persisted?%>
-    <dl class="dl-horizontal">
+    <dl class="dl-horizontal col-md-12">
       <dt>Exercises</dt>
         <% if @cart.user === current_user %>
             <% if @cart.exercises %>
                 <% @cart.exercises.each do |exercise| %>
                     <dd><%= link_to exercise.title, exercise_path(exercise) %></dd>
-                    <dd><%= link_to 'Delete', nil, class:'btn btn-danger btn-xs' %></dd>
+                    <dd><%= link_to 'Delete', @cart.exercises.delete(exercise), method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-xs' %></dd>
                 <% end %>
             <% else%>
                 <dd> <%= 'No exercises added' %></dd>

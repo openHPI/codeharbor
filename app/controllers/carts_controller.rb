@@ -24,7 +24,8 @@ class CartsController < ApplicationController
   # POST /carts
   # POST /carts.json
   def create
-    @cart = Cart.new(cart_params)
+    @cart = Cart.new
+    @cart.user = current_user
 
     respond_to do |format|
       if @cart.save
@@ -41,13 +42,8 @@ class CartsController < ApplicationController
   # PATCH/PUT /carts/1.json
   def update
     respond_to do |format|
-      if @cart.update(cart_params)
-        format.html { redirect_to @cart, notice: 'Cart was successfully updated.' }
-        format.json { render :show, status: :ok, location: @cart }
-      else
-        format.html { render :edit }
-        format.json { render json: @cart.errors, status: :unprocessable_entity }
-      end
+      format.html { render :edit }
+      format.json { render json: @cart.errors, status: :unprocessable_entity }
     end
   end
 
@@ -68,7 +64,4 @@ class CartsController < ApplicationController
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    def cart_params
-      params.require(:cart).permit(:user_id)
-    end
 end
