@@ -30,7 +30,7 @@ ExerciseFile.create(main: true, content: "public class HelloWorld{ public static
 Test.create(content: "public class HelloWorld{ public static void main String[] args) {System.out.println('Hello World.'); } }", rating: 5, feedback_message: "Es wird noch nicht 'Hello World' am Bildschrim ausgegeben!", exercise: exercise1, testing_framework: test_framework)
 
 Description.create(text:"Schreibe ein Java Programm, das 'Hello World' am Bildschirm ausgibt.", language: 'de', exercise: exercise1)
-Description.create(text:"Write a Java program, which returns 'Hello World'.", language: 'en', exercise: exercise1)
+Description.create(text:"Write a Java program, which returns and prints 'Hello World'.", language: 'en', exercise: exercise1)
 
 
 Rating.create(rating: 4, exercise: exercise1, user: user5)
@@ -56,6 +56,8 @@ exercise2 = Exercise.create(title: "Java Einstieg ", description: "In diesem Pro
 ExerciseFile.create(main: true, content: "public class HalloWelt {\n    // Hier haben sich zwei Fehler eingeschlichen\n    public static void main (String [] args){\n        System.out.println(Hallo Welt)\n    }\n}", path: '', solution: false, filetype: 'java', exercise: exercise2)
 Test.create(content: "import static org.junit.Assert.*;\nimport java.io.ByteArrayOutputStream;\nimport java.io.PrintStream;\nimport org.junit.AfterClass;\nimport org.junit.Before;\nimport org.junit.BeforeClass;\nimport org.junit.Test;\npublic class HalloWeltTest1 {\n    \n    private final static ByteArrayOutputStream outContent = new ByteArrayOutputStream();\n    private static PrintStream old;\n    @BeforeClass\n    public static void setUpStreams() {\n        old = System.out;\n        System.setOut(new PrintStream(outContent));\n    }\n    @AfterClass\n    public static void cleanUpStreams() {\n        System.setOut(old);\n    }\n    \n    @Before\n    public void resetOut(){\n        outContent.reset();\n    }\n    \n    @Test\n    public void testIfErrorFree(){\n        try{\n            HalloWelt.main(new String[] {});\n        }catch (Error e){\n            fail();\n        }\n    }\n    @Test\n    public void testSomething(){\n        assert(true);\n    }\n}", rating: 5, feedback_message: "Es existieren noch Fehler im Programm. Daher kann dieses noch nicht ausgeführt werden", exercise: exercise2, testing_framework: test_framework)
 Test.create(content: "import static org.junit.Assert.*;\nimport java.io.ByteArrayOutputStream;\nimport java.io.PrintStream;\nimport org.junit.AfterClass;\nimport org.junit.Before;\nimport org.junit.BeforeClass;\nimport org.junit.Test;\npublic class HalloWeltTest2 {\n    \n    private final static ByteArrayOutputStream outContent = new ByteArrayOutputStream();\n    private static PrintStream old;\n    @BeforeClass\n    public static void setUpStreams() {\n        old = System.out;\n        System.setOut(new PrintStream(outContent));\n    }\n    @AfterClass\n    public static void cleanUpStreams() {\n        System.setOut(old);\n    }\n    \n    @Before\n    public void resetOut(){\n        outContent.reset();\n    }\n    \n    @Test\n    public void checkForCorrectOutput(){\n        HalloWelt.main(new String[] {});\n        String separator = System.getProperty(""line.separator"");\n        assertEquals(""Hallo Welt""+separator, outContent.toString());\n    }\n    @Test\n    public void testSomething(){\n        assert(true);\n    }\n}", rating: 1, feedback_message: "Es wird ein falscher String ausgegeben, erwartet ist die Ausgabe\nHallo Welt", exercise: exercise2, testing_framework: test_framework)
+
+Description.create(text:"In diesem Programm sind zwei Fehler versteckt. Versuche diese zu finden und zu beheben. Anschließend soll das Programm ""Hallo Welt"" ausgeben.\nFinde die beiden Fehler, die wir in das Programm eingebaut haben", language: 'de', exercise: exercise2)
 
 comment5 = Comment.create(text: 'Gute Übung für Anfänger! mfg Manfred', exercise: exercise2, user: user1)
 comment6 = Comment.create(text: 'Meine Schüler fanden die Aufgabe echt toll! Viele Grüße aus der 7b in Buckdeheide!', exercise: exercise2, user: user3)
@@ -87,6 +89,9 @@ Test.create(content: "public class AsteriksPattern {
 }", rating: 5, feedback_message: "Dein Pattern sieht noch nicht wie das Asteriks Pattern aus. Schaue es dir nochmal genauer an!", exercise: exercise3, testing_framework: test_framework)
 
 
+Description.create(text:"Schreibe ein Java Programm, das das Asterisk Pattern ausgibt. Das Pattern sieht folgendermaßen aus: ***** ***** ***** ***** *****", language: 'de', exercise: exercise3)
+Description.create(text:"Escribir un programa en Java que imprime el patrón del asterisco. El patrón es el siguiente: ***** ***** ***** ***** *****", language: 'es', exercise: exercise3)
+
 comment7 = Comment.create(text: 'Sehr schlecht! Pattern unbekannt! Viel Erklärungsaufwand', exercise: exercise3, user: user2)
 comment8 = Comment.create(text: 'Mittelmäßig, Schüler waren verwirrd!', exercise: exercise3, user: user3)
 
@@ -110,6 +115,8 @@ Test.create(content: "def fact(x):
 
 x=int(raw_input())
 print fact(x)", rating: 5, feedback_message: "In case of input data being supplied to the question, it should be assumed to be a console input.", exercise: exercise4, testing_framework: test_framework2)
+
+Description.create(text:"Write a program which can compute the factorial of a given numbers. The results should be printed in a comma-separated sequence on a single line.", language: 'en', exercise: exercise4)
 
 
 comment9 = Comment.create(text: 'Awesome, nice work!', exercise: exercise4, user: user5)
