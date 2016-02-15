@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   get 'comments/comments_all'
 
   get 'exercises/:id/duplicate', to: 'exercises#duplicate', as: 'duplicate_exercise'
+  post 'exercises/:id/add_to_cart', to: 'exercises#add_to_cart', as: 'add_to_cart'
 
   resources :labels
   resources :label_categories
