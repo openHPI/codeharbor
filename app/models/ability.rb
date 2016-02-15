@@ -9,6 +9,8 @@ class Ability
         can :show, Exercise
         can :create, Exercise
         can :duplicate, Exercise
+        can :export, Exercise
+        can :add_to_cart, Exercise
         can :read, Exercise
         can :edit, Exercise do |exercise|
           exercise.user == user

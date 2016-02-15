@@ -2,7 +2,7 @@ require 'oauth2'
 
 class ExercisesController < ApplicationController
   load_and_authorize_resource
-  before_action :set_exercise, only: [:show, :edit, :update, :destroy, :push_external]
+  before_action :set_exercise, only: [:show, :edit, :update, :destroy, :add_to_cart,:push_external]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized for this exercise.'
@@ -76,6 +76,15 @@ class ExercisesController < ApplicationController
       format.html { redirect_to exercises_url, notice: 'Exercise was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def add_to_cart
+    unless current_user.cart
+      Cart.create(user: current_user)
+    end
+    cart = Cart.find_by(user: current_user)
+    cart.exercises << @exercise
+    redirect_to @exercise, notice: 'Exercise was successfully added to your cart.'
   end
 
   def exercises_all
