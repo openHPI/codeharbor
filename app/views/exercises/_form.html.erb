@@ -30,51 +30,12 @@
         <div class="controls" style="margin-top: 10px; margin-bottom: 10px">
           <%= description.text_area :text, class:'form-control' %>
           <%= description.remove_nested_fields_link 'Remove Description', class:'btn btn-danger btn-xs' %>
+          <%= render 'language_dropdown_form', f: f, description: description %>
         </div>
     <% end %>
     <%= f.add_nested_fields_link :descriptions, 'Add Description', class:'btn btn-success' %>
   </div>
 
-  <div class="form-group">
-    <div class="dropdown">
-      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-        Language
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-        <li>
-          <div class="checkbox">
-            <label><input type="checkbox" name="language[EN]" value="EN">EN</label>
-          </div>
-        </li>
-        <li>
-          <div class="checkbox">
-            <label><input type="checkbox" name="language[DE]" value="DE">DE</label>
-          </div>
-        </li>
-        <li>
-          <div class="checkbox">
-            <label><input type="checkbox" name="language[FR]" value="FR">FR</label>
-          </div>
-        </li>
-        <li>
-          <div class="checkbox">
-            <label><input type="checkbox" name="language[ES]" value="ES">ES</label>
-          </div>
-        </li>
-        <li>
-          <div class="checkbox">
-            <label><input type="checkbox" name="language[JA]" value="JA">JA</label>
-          </div>
-        </li>
-        <li>
-          <div class="checkbox">
-            <label><input type="checkbox" name="language[CN]" value="CN">CN</label>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </div>
 
 
   <div class="form-group">
