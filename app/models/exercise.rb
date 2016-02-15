@@ -62,7 +62,7 @@ class Exercise < ActiveRecord::Base
         description = Description.find(id)
         destroy ? description.destroy : description.update(text: array[:text], language: array[:language])
       else
-        descriptions << Description.create(text: array[:text], language: language) unless destroy
+        descriptions << Description.create(text: array[:text], language: array[:language]) unless destroy
       end
     end
   end
