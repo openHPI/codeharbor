@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160213230122) do
+ActiveRecord::Schema.define(version: 20160215215407) do
 
   create_table "account_links", force: :cascade do |t|
     t.datetime "created_at",   null: false
@@ -63,6 +63,7 @@ ActiveRecord::Schema.define(version: 20160213230122) do
     t.integer  "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "title"
   end
 
   add_index "collections", ["user_id"], name: "index_collections_on_user_id"

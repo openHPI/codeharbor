@@ -1,27 +1,34 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Collections</h1>
+<h2>Your Collections <%= link_to 'New Collection', new_collection_path, class:'btn btn-success' %> </h2>
 
-<table>
+<table class="table">
   <thead>
     <tr>
-      <th>User</th>
-      <th colspan="3"></th>
+      <th>Title</th>
+      <th>Exercises</th>
+      <th colspan="2">Actions</th>
     </tr>
   </thead>
 
   <tbody>
     <% @collections.each do |collection| %>
-      <tr>
-        <td><%= collection.user %></td>
-        <td><%= link_to 'Show', collection %></td>
-        <td><%= link_to 'Edit', edit_collection_path(collection) %></td>
-        <td><%= link_to 'Destroy', collection, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+      <% if collection.user === current_user %>
+        <tr>
+          <td><%= collection.title %></td>
+          <% if collection.exercises %>
+            <% collection.exercises.each do |exercise| %>
+              <td><%= link_to exercise.title, exercise_path(exercise) %></td>
+            <% end %>
+          <% else%>
+            <td> <%= 'No exercises added' %></td>
+          <% end %>
+          <td><%= link_to 'Edit', edit_collection_path(collection), class:'btn btn-warning btn-xs' %></td>
+          <td><%= link_to 'Destroy', collection, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-xs' %></td>
+        </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>
 
 <br>
-
-<%= link_to 'New Collection', new_collection_path %>

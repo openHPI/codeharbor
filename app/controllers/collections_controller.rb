@@ -25,6 +25,7 @@ class CollectionsController < ApplicationController
   # POST /collections.json
   def create
     @collection = Collection.new(collection_params)
+    @collection.user = current_user
 
     respond_to do |format|
       if @collection.save
@@ -69,6 +70,6 @@ class CollectionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def collection_params
-      params.require(:collection).permit(:user_id)
+      params.require(:collection).permit(:title)
     end
 end

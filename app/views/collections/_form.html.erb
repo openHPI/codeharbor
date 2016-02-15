@@ -10,12 +10,11 @@
       </ul>
     </div>
   <% end %>
-
   <div class="field">
-    <%= f.label :user_id %><br>
-    <%= f.text_field :user_id %>
+    <%= f.label :title %><br>
+    <%= f.text_field :title%>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit nil, class:'btn btn-primary' %>
   </div>
 <% end %>
