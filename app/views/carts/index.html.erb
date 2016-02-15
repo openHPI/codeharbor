@@ -9,7 +9,9 @@
       <% if cart.user === current_user %>
         <% if cart.exercises %>
           <% cart.exercises.each do |exercise| %>
-            <dd><%= link_to exercise.title, exercise_path(exercise) %></dd>
+            <% if exercise %>
+              <dd><%= link_to exercise.title, exercise_path(exercise) %></dd>
+            <% end %>
           <% end %>
         <% else%>
           <dd> <%= 'No exercises added' %></dd>
