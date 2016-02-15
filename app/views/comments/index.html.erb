@@ -25,10 +25,12 @@
       <% @comments.each do |comment| %>
         <tr>
           <td><%= comment.text %></td>
-          <% if comment.user.first_name.nil? %>
-            <td><%= "User#{comment.user.id}"%></td>
+          <% if !comment.user %>
+             <td> <%= 'User undefined' %> </td>
+          <% elsif comment.user.first_name.nil?%>
+              <td><%=  "User#{comment.user.id}"%></td>
           <% else %>
-            <td><%= comment.user.name %></td>
+              <td><%= comment.user.name%></td>
           <% end %>
           <td><%= comment.created_at %>
           <td><div class="actions btn-group" role="group">

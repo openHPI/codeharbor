@@ -16,7 +16,7 @@
       <tr>
         <td><%= link_to exercise.title, exercise %></td>
         <% if !exercise.user %>
-            <%= 'User undefined' %>
+            <td> <%= 'User undefined' %> </td>
         <% elsif exercise.user.first_name.nil?%>
             <td><%= link_to "User#{exercise.user.id}", user_path(exercise.user)%></td>
         <% else %>
