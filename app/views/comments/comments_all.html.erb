@@ -22,7 +22,7 @@
         <td><%= comment.text %></td>
         <% if !comment.user %>
            <td> <%= 'User undefined' %> </td>
-        <% elsif @exercise.user == current_user %>
+        <% elsif comment.user == current_user %>
             <td><%= 'yourself' %></td>
         <% elsif comment.user.first_name.nil?%>
             <td><%= link_to "User#{comment.user.id}", user_path(comment.user)%></td>

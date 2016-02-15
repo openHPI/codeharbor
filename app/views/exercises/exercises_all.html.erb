@@ -17,7 +17,7 @@
         <td><%= link_to exercise.title, exercise %></td>
         <% if !exercise.user %>
             <td> <%= 'User undefined' %> </td>
-        <% elsif @exercise.user == current_user %>
+        <% elsif exercise.user == current_user %>
             <td><%= 'yourself' %></td>
         <% elsif exercise.user.first_name.nil?%>
             <td><%= link_to "User#{exercise.user.id}", user_path(exercise.user)%></td>
