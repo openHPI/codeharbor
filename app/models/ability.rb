@@ -12,7 +12,7 @@ class Ability
         can :export, Exercise
         can :add_to_cart, Exercise
         can :read, Exercise
-        can :edit, Exercise do |exercise|
+        can :manage, Exercise do |exercise|
           exercise.user == user
         end
 
