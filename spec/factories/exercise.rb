@@ -6,6 +6,8 @@ FactoryGirl.define do
   end
 
   factory :exercise_with_single_java_main_file, class: 'Exercise' do
+    title 'Some Exercise'
+  	description 'Very descriptive'
     after(:create) do |exercise|
        create(:single_java_main_file, exercise: exercise)
      end

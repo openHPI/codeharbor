@@ -15,7 +15,6 @@ RSpec.describe Exercise, type: :model do
         }
 
         it 'has single <p:description> tag which contains description' do
-          print(xml)
           descriptions = xml.xpath('p:task/p:description/text()')
           expect(descriptions.size()).to be 1
           expect(descriptions[0].content).to eq 'Very descriptive'
@@ -70,7 +69,6 @@ RSpec.describe Exercise, type: :model do
       }
 
       it 'has single /p:files/p:file tag' do
-        print(xml)
         files = xml.xpath('p:task/p:files/p:file')
         expect(files.size()).to be 1
       end
