@@ -18,7 +18,9 @@
           <td><%= collection.title %></td>
           <% if collection.exercises %>
             <% collection.exercises.each do |exercise| %>
-              <td><%= link_to exercise.title, exercise_path(exercise) %></td>
+              <%if exercise%>
+                <td><%= link_to exercise.title, exercise_path(exercise) %></td>
+              <% end %>
             <% end %>
           <% else%>
             <td> <%= 'No exercises added' %></td>
