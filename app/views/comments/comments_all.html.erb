@@ -14,7 +14,11 @@
   <tbody>
   <% @comments.each do |comment| %>
       <tr>
-        <td><%= link_to comment.exercise.title, exercise_path(comment.exercise) %></td>
+        <% if !comment.exercise %>
+            <td> <%= 'Exercise undefined' %> </td>
+        <% else %>
+          <td><%= link_to comment.exercise.title, exercise_path(comment.exercise) %></td>
+        <% end %>
         <td><%= comment.text %></td>
         <% if !comment.user %>
            <td> <%= 'User undefined' %> </td>
