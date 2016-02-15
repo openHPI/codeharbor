@@ -1,6 +1,8 @@
 require 'nokogiri'
 
 class Exercise < ActiveRecord::Base
+  validates :title, presence: true
+
   has_many :exercise_files
   has_many :tests
   has_and_belongs_to_many :labels
