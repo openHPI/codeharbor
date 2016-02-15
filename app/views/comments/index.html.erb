@@ -27,6 +27,8 @@
           <td><%= comment.text %></td>
           <% if !comment.user %>
              <td> <%= 'User undefined' %> </td>
+          <% elsif @exercise.user == current_user %>
+              <td><%= 'yourself' %></td>
           <% elsif comment.user.first_name.nil? || current_user.role === 'user'%>
               <td><%=  "User#{comment.user.id}"%></td>
           <% else %>
