@@ -28,7 +28,19 @@ class ExercisesController < ApplicationController
   end
 
   def duplicate
-    @exercise = Exercise.new(Exercise.find(params[:id]).attributes)
+    exercise = Exercise.find(params[:id])
+    @exercise = Exercise.new
+    @exercise.title = exercise.title
+    @exercise.public = exercise.public
+    exercise.descriptions.each do |d|
+      @exercise.descriptions << Description.new(d.attributes)
+    end
+    exercise.tests.each do |t|
+      @exercise.tests << Test.new(t.attributes)
+    end
+    exercise.exercise_files.each do |f|
+      @exercise.exercise_files << ExerciseFile.new(f.attributes)
+    end
     render 'new'
   end
 
