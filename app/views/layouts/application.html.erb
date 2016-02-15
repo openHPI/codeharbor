@@ -15,7 +15,9 @@
         <%= menu_group do %>
           <% if current_user %>
             <%= menu_item 'Exercises', exercises_path %>
-            <%= menu_item 'Collections', collections_path %>
+            <% unless current_user.role === 'user'%>
+              <%= menu_item 'Collections', collections_path %>
+            <% end %>
             <%= menu_divider %>
             <% if current_user.role === 'admin' %>
               <%= drop_down 'Admin Panel' do%>
