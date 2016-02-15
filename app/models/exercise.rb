@@ -13,6 +13,7 @@ class Exercise < ActiveRecord::Base
   belongs_to :user
   belongs_to :execution_environment
   has_many :descriptions
+  validates :descriptions, presence: true
 
   accepts_nested_attributes_for :descriptions, allow_destroy: true
 
