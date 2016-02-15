@@ -29,6 +29,8 @@ exercise1 = Exercise.create(title: "Hello World", description: "Schreibe ein Jav
 ExerciseFile.create(main: true, content: "public class HelloWorld{ public static void main String[] args) { } }", path: '', solution: false, filetype: 'java', exercise: exercise1)
 Test.create(content: "public class HelloWorld{ public static void main String[] args) {System.out.println('Hello World.'); } }", rating: 5, feedback_message: "Es wird noch nicht 'Hello World' am Bildschrim ausgegeben!", exercise: exercise1, testing_framework: test_framework)
 
+Description.create(text:"Schreibe ein Java Programm, das 'Hello World' am Bildschirm ausgibt.", language: 'de', exercise: exercise1)
+Description.create(text:"Write a Java program, which returns 'Hello World'.", language: 'en', exercise: exercise1)
 
 
 Rating.create(rating: 4, exercise: exercise1, user: user5)
@@ -42,6 +44,8 @@ comment2 = Comment.create(text: 'Looking forward to show this exercise to my stu
 exercise1.labels << l1
 exercise1.labels << l2
 exercise1.labels << l3
+
+exercise1.descriptions
 
 
 AccountLink.create(push_url: 'google.com/pushpush', account_name: 'account1000')
