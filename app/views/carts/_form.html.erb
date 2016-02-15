@@ -11,11 +11,23 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :user_id %><br>
-    <%= f.text_field :user_id %>
-  </div>
+  <% if @cart.persisted?%>
+    <dl class="dl-horizontal">
+      <dt>Exercises</dt>
+        <% if @cart.user === current_user %>
+            <% if @cart.exercises %>
+                <% @cart.exercises.each do |exercise| %>
+                    <dd><%= link_to exercise.title, exercise_path(exercise) %></dd>
+                    <dd><%= link_to 'Delete', nil, class:'btn btn-danger btn-xs' %></dd>
+                <% end %>
+            <% else%>
+                <dd> <%= 'No exercises added' %></dd>
+            <% end %>
+        <% end %>
+    </dl>
+  <% end %>
+
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit nil, class:'btn btn-primary' %>
   </div>
 <% end %>

@@ -1,27 +1,24 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Carts</h1>
+<h2>Your Cart <%= link_to 'New Cart', new_cart_path, class:'btn  btn-success' %></h2>
 
-<table>
-  <thead>
-    <tr>
-      <th>User</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
 
-  <tbody>
-    <% @carts.each do |cart| %>
-      <tr>
-        <td><%= cart.user %></td>
-        <td><%= link_to 'Show', cart %></td>
-        <td><%= link_to 'Edit', edit_cart_path(cart) %></td>
-        <td><%= link_to 'Destroy', cart, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<dl class="dl-horizontal">
+  <dt>Exercises</dt>
+  <% @carts.each do |cart| %>
+      <% if cart.user === current_user %>
+        <% if cart.exercises %>
+          <% cart.exercises.each do |exercise| %>
+            <dd><%= link_to exercise.title, exercise_path(exercise) %></dd>
+          <% end %>
+        <% else%>
+          <dd> <%= 'No exercises added' %></dd>
+        <% end %>
+      <% end %>
+      <dt>Actions</dt>
+      <dd><%= link_to 'Edit', edit_cart_path(cart), class:'btn btn-warning btn-xs' %> <%= link_to 'Destroy', cart, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-xs' %></dd>
+  <% end %>
+</dl>
+
 
 <br>
-
-<%= link_to 'New Cart', new_cart_path %>
