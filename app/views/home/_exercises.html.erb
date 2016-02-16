@@ -24,7 +24,7 @@
     <div class="panel-body">
 
       <div class="col-md-10">
-        <%= exercise.descriptions.first.text %>
+        <% unless exercise.descriptions.empty? %><%= exercise.descriptions.first.text %><% end %>
       </div>
 
       <div class="btn-group-vertical pull-right" role="group" aria-label="...">

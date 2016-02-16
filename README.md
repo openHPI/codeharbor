@@ -39,6 +39,19 @@ rails s -b 0
 
 Visit your browser at: `http://localhost:3001/`
 
+## demo data
+
+run `rake db:seed` to add some demo data.
+
+## initial admin-user
+
+To create an initial admin-user start the rails server and create a new account.
+Run following:
+```
+rails c
+>>> User.first.update(role: 'admin')
+```
+
 ## testing
 
 Run all tests with
