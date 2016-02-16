@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160215215407) do
+ActiveRecord::Schema.define(version: 20160216130947) do
 
   create_table "account_links", force: :cascade do |t|
     t.datetime "created_at",   null: false
@@ -107,11 +107,14 @@ ActiveRecord::Schema.define(version: 20160215215407) do
     t.text     "content"
     t.string   "path"
     t.boolean  "solution"
-    t.string   "filetype"
+    t.string   "file_extension"
     t.integer  "exercise_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.string   "file_name"
+    t.boolean  "visibility"
+    t.string   "name"
+    t.string   "purpose"
   end
 
   add_index "exercise_files", ["exercise_id"], name: "index_exercise_files_on_exercise_id"
@@ -172,15 +175,15 @@ ActiveRecord::Schema.define(version: 20160215215407) do
   end
 
   create_table "tests", force: :cascade do |t|
-    t.text     "content"
-    t.integer  "rating"
     t.string   "feedback_message"
     t.integer  "testing_framework_id"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
     t.integer  "exercise_id"
+    t.integer  "exercise_file_id"
   end
 
+  add_index "tests", ["exercise_file_id"], name: "index_tests_on_exercise_file_id"
   add_index "tests", ["exercise_id"], name: "index_tests_on_exercise_id"
   add_index "tests", ["testing_framework_id"], name: "index_tests_on_testing_framework_id"
 

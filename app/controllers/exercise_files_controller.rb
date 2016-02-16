@@ -69,6 +69,6 @@ class ExerciseFilesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def exercise_file_params
-      params.require(:exercise_file).permit(:main, :content, :path, :solution, :filetype, :exercise_id)
+      params.require(:exercise_file).permit(:main, :content, :path, :solution, :file_extension, :exercise_id, :purpose, :visibility, :name)
     end
 end

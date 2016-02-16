@@ -32,19 +32,21 @@
     <dt><em><%= 'Files' %>:</em> </dt>
     <br>
     <% @files.each do |file| %>
-      <dd>
-        <dt><%= 'Content: '%></dt>
-        <dd><div class="editor_readonly"><%= file.content %></div></dd>
-        <dt><%= 'Mainfile: '%></dt>
-        <dd><%= file.main %></dd>
-        <dt><%= 'Path: '%></dt>
-        <dd><%= file.path %></dd>
-        <dt><%= 'Filetype: '%></dt>
-        <dd><%= file.filetype %></dd>
-        <dt><%= 'Solution File: '%></dt>
-        <dd><%= file.solution %></dd>
-      </dd>
-      <br>
+      <% if file.purpose != 'test' %>
+        <dd>
+          <dt><%= 'Content: '%></dt>
+          <dd><div class="editor_readonly"><%= file.content %></div></dd>
+          <dt><%= 'Mainfile: '%></dt>
+          <dd><%= file.main %></dd>
+          <dt><%= 'Path: '%></dt>
+          <dd><%= file.path %></dd>
+          <dt><%= 'file_extension: '%></dt>
+          <dd><%= file.file_extension %></dd>
+          <dt><%= 'Solution File: '%></dt>
+          <dd><%= file.solution %></dd>
+        </dd>
+        <br>
+      <% end %>
   <% end %>
 </dl>
 <dl class="dl-horizontal">
@@ -53,7 +55,7 @@
     <% @tests.each do |test| %>
       <dd>
         <dt><%= 'Content: '%></dt>
-        <dd><div class="editor_readonly"><%= test.content %></div></dd>
+        <dd><div class="editor_readonly"><%= test.exercise_file.content %></div></dd>
         <dt><%= 'Feedback Message: '%></dt>
         <dd><%= test.feedback_message %></dd>
         <dt><%= 'Testing Framework: '%></dt>

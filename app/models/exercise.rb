@@ -130,7 +130,7 @@ class Exercise < ActiveRecord::Base
   end
 
   def file_permit(params)
-    params.permit(:main, :content, :path, :solution, :filetype)
+    params.permit(:main, :content, :path, :solution, :file_extension)
   end
 
   def test_permit(params)

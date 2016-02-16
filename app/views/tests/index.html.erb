@@ -16,7 +16,7 @@
   <tbody>
     <% @tests.each do |test| %>
       <tr>
-        <td><%= test.content %></td>
+        <td><%= test.exercise_file.content %></td>
         <td><%= test.rating %></td>
         <td><%= test.feedback_message %></td>
         <td><%= test.testing_framework %></td>

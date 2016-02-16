@@ -26,8 +26,9 @@ test_framework = TestingFramework.create(name: 'JUnit 4')
 test_framework2 = TestingFramework.create(name: 'Pytest')
 
 exercise1 = Exercise.create(title: "Hello World", maxrating: '10', public: true, user_id:user1.id)
-ExerciseFile.create(main: true, content: "public class HelloWorld{ public static void main String[] args) { } }", path: '', solution: false, filetype: 'java', exercise: exercise1)
-Test.create(content: "public class HelloWorld{ public static void main String[] args) {System.out.println('Hello World.'); } }", rating: 5, feedback_message: "Es wird noch nicht 'Hello World' am Bildschrim ausgegeben!", exercise: exercise1, testing_framework: test_framework)
+exercise1_main = ExerciseFile.create(main: true, content: "public class HelloWorld{ public static void main String[] args) { } }", path: '', purpose:'template', name:'Main', visibility: true, file_extension: 'java', exercise: exercise1)
+exercise1_test = ExerciseFile.create(main: false, content: "public class HelloWorld{ public static void main String[] args) {System.out.println('Hello World.'); } }", path: '', purpose:'test', name:'Test', visibility: true, file_extension: 'java', exercise: exercise1)
+Test.create(feedback_message: "Es wird noch nicht 'Hello World' am Bildschrim ausgegeben!", exercise_file: exercise1_test, exercise: exercise1, testing_framework: test_framework)
 
 Description.create(text:"Schreibe ein Java Programm, das 'Hello World' am Bildschirm ausgibt.", language: 'de', exercise: exercise1)
 Description.create(text:"Write a Java program, which returns and prints 'Hello World'.", language: 'en', exercise: exercise1)
@@ -51,9 +52,9 @@ exercise1.descriptions
 AccountLink.create(push_url: 'google.com/pushpush', account_name: 'account1000')
 
 
-
+=begin
 exercise2 = Exercise.create(title: "Java Einstieg ", maxrating: '10', public: true, user_id:user2.id)
-ExerciseFile.create(main: true, content: "public class HalloWelt {\n    // Hier haben sich zwei Fehler eingeschlichen\n    public static void main (String [] args){\n        System.out.println(Hallo Welt)\n    }\n}", path: '', solution: false, filetype: 'java', exercise: exercise2)
+ExerciseFile.create(main: true, content: "public class HalloWelt {\n    // Hier haben sich zwei Fehler eingeschlichen\n    public static void main (String [] args){\n        System.out.println(Hallo Welt)\n    }\n}", path: '', solution: false, file_extension: 'java', exercise: exercise2)
 Test.create(content: "import static org.junit.Assert.*;\nimport java.io.ByteArrayOutputStream;\nimport java.io.PrintStream;\nimport org.junit.AfterClass;\nimport org.junit.Before;\nimport org.junit.BeforeClass;\nimport org.junit.Test;\npublic class HalloWeltTest1 {\n    \n    private final static ByteArrayOutputStream outContent = new ByteArrayOutputStream();\n    private static PrintStream old;\n    @BeforeClass\n    public static void setUpStreams() {\n        old = System.out;\n        System.setOut(new PrintStream(outContent));\n    }\n    @AfterClass\n    public static void cleanUpStreams() {\n        System.setOut(old);\n    }\n    \n    @Before\n    public void resetOut(){\n        outContent.reset();\n    }\n    \n    @Test\n    public void testIfErrorFree(){\n        try{\n            HalloWelt.main(new String[] {});\n        }catch (Error e){\n            fail();\n        }\n    }\n    @Test\n    public void testSomething(){\n        assert(true);\n    }\n}", rating: 5, feedback_message: "Es existieren noch Fehler im Programm. Daher kann dieses noch nicht ausgeführt werden", exercise: exercise2, testing_framework: test_framework)
 Test.create(content: "import static org.junit.Assert.*;\nimport java.io.ByteArrayOutputStream;\nimport java.io.PrintStream;\nimport org.junit.AfterClass;\nimport org.junit.Before;\nimport org.junit.BeforeClass;\nimport org.junit.Test;\npublic class HalloWeltTest2 {\n    \n    private final static ByteArrayOutputStream outContent = new ByteArrayOutputStream();\n    private static PrintStream old;\n    @BeforeClass\n    public static void setUpStreams() {\n        old = System.out;\n        System.setOut(new PrintStream(outContent));\n    }\n    @AfterClass\n    public static void cleanUpStreams() {\n        System.setOut(old);\n    }\n    \n    @Before\n    public void resetOut(){\n        outContent.reset();\n    }\n    \n    @Test\n    public void checkForCorrectOutput(){\n        HalloWelt.main(new String[] {});\n        String separator = System.getProperty(""line.separator"");\n        assertEquals(""Hallo Welt""+separator, outContent.toString());\n    }\n    @Test\n    public void testSomething(){\n        assert(true);\n    }\n}", rating: 1, feedback_message: "Es wird ein falscher String ausgegeben, erwartet ist die Ausgabe\nHallo Welt", exercise: exercise2, testing_framework: test_framework)
 
@@ -72,7 +73,7 @@ exercise2.labels << l3
 
 
 exercise3 = Exercise.create(title: "Asterisk Pattern", maxrating: '10', public: true, user_id:user3.id)
-ExerciseFile.create(main: true, content: "public class AsteriksPattern{ public static void main String[] args) { } }", path: '', solution: false, filetype: 'java', exercise: exercise3)
+ExerciseFile.create(main: true, content: "public class AsteriksPattern{ public static void main String[] args) { } }", path: '', solution: false, file_extension: 'java', exercise: exercise3)
 
 
 Test.create(content: "public class AsteriksPattern {
@@ -105,7 +106,7 @@ exercise3.labels << l3
 
 
 exercise4 = Exercise.create(title: "factorial of given numbers", maxrating: '10', public: true, user_id:user4.id)
-ExerciseFile.create(main: true, content: "def fact(x): return", path: '', solution: false, filetype: 'python', exercise: exercise4)
+ExerciseFile.create(main: true, content: "def fact(x): return", path: '', solution: false, file_extension: 'python', exercise: exercise4)
 
 
 Test.create(content: "def fact(x):
@@ -128,14 +129,15 @@ Rating.create(rating: 5, exercise: exercise4, user: user5)
 exercise4.labels << l4
 exercise4.labels << l2
 exercise4.labels << l3
+=end
 
 ee1 = ExecutionEnvironment.create(language: 'Java', version: '8')
 ee2 = ExecutionEnvironment.create(language: 'Python', version: '2.7')
 
 exercise1.update(execution_environment: ee1)
-exercise2.update(execution_environment: ee1)
-exercise3.update(execution_environment: ee1)
-exercise4.update(execution_environment: ee2)
+#exercise2.update(execution_environment: ee1)
+#exercise3.update(execution_environment: ee1)
+#exercise4.update(execution_environment: ee2)
 
 
 
