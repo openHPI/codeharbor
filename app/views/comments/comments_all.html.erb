@@ -31,8 +31,10 @@
         <% end %>
         <td><%= comment.created_at %> </td>
         <td class="actions btn-group" role="group">
-          <%= link_to 'Edit', edit_exercise_comment_path(comment.exercise, comment), class:'btn btn-warning btn-xs' %>
-          <%= link_to 'X', exercise_comment_path(comment.exercise, comment), class:'btn btn-danger btn-xs', method: :delete, data: { confirm: 'Are you sure?' }  %>
+          <% if comment.exercise %>
+            <%= link_to 'Edit', edit_exercise_comment_path(comment.exercise, comment), class:'btn btn-warning btn-xs' %>
+            <%= link_to 'X', exercise_comment_path(comment.exercise, comment), class:'btn btn-danger btn-xs', method: :delete, data: { confirm: 'Are you sure?' }  %>
+          <% end %>
         </td>
       </tr>
   <% end %>
