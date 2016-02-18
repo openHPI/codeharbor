@@ -11,11 +11,15 @@
 </div>
 <div class="field">
   <%= f.label :path %><br>
-  <%= file.text_field :path %>
+  <%= file.text_field :path, size: 40 %>
 </div>
 <div class="field">
-  <%= f.label :solution %><br>
-  <%= file.check_box :solution %>
+  <%= f.label :purpose %><br>
+  <%= file.text_field :purpose %>
+</div>
+<div class="field">
+  <%= f.label :name %><br>
+  <%= file.text_field :name %>
 </div>
 <div class="field">
   <%= f.label :file_extension %><br>

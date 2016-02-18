@@ -87,9 +87,20 @@ class Exercise < ActiveRecord::Base
       id = array[:id]
       if id
         test = Test.find(id)
-        destroy ? test.destroy : test.update(test_permit(array))
+        if destroy
+          test.exercise_file.destroy
+          test.destroy
+        else
+          test.update(test_permit(array))
+          test.exercise_file.update(content: array[:content])
+        end
       else
-        tests << Test.create(test_permit(array)) unless destroy
+        unless destroy
+          exercise_file = ExerciseFile.create(content: array[:content], purpose: 'test')
+          test = Test.create(test_permit(array))
+          test.exercise_file = exercise_file
+          tests << test
+        end
       end
     end
   end
@@ -130,10 +141,10 @@ class Exercise < ActiveRecord::Base
   end
 
   def file_permit(params)
-    params.permit(:main, :content, :path, :solution, :file_extension)
+    params.permit(:main, :content, :path, :name, :file_extension)
   end
 
   def test_permit(params)
-    params.permit(:content, :feedback_message, :testing_framework_id)
+    params.permit(:feedback_message, :testing_framework_id)
   end
 end
