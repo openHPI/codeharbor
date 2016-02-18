@@ -108,14 +108,17 @@ class Exercise < ActiveRecord::Base
   def build_proforma_xml_for_exercise_file(builder, exercise_file)
     if exercise_file.main
       proforma_file_class = 'template'
+      comment = 'main'
     else
       proforma_file_class = 'internal'
+      comment = ''
     end
 
     builder.file(exercise_file.content,
       'filename' => exercise_file.full_file_name,
       'id' => exercise_file.id,
-      'class' => proforma_file_class
+      'class' => proforma_file_class,
+      'comment' => comment
     )
   end
 
@@ -124,7 +127,7 @@ class Exercise < ActiveRecord::Base
       xml.root('xmlns:p' => 'urn:proforma:task:v0.9.4') {
         p = xml['p']
         p.task {
-          p.description(self.description)
+          p.description(self.descriptions.first.text)
           p.send('grading-hints', 'max-rating' => self.maxrating.to_s)
           p.send('meta-data') {
             p.title(self.title)

@@ -91,9 +91,15 @@ RSpec.describe Exercise, type: :model do
       end
 
       it 'has attribute class="template" on <p:file>-tag because it is the main file' do
-        file_names = xml.xpath('p:task/p:files/p:file/@class')
-        expect(file_names.size).to be 1
-        expect(file_names.first.value).to eq 'template'
+        file_classes = xml.xpath('p:task/p:files/p:file/@class')
+        expect(file_classes.size).to be 1
+        expect(file_classes.first.value).to eq 'template'
+      end
+
+      it 'has attribute comment="main" on <p:file>-tag because it is the main file' do
+        file_comments = xml.xpath('p:task/p:files/p:file/@comment')
+        expect(file_comments.size).to be 1
+        expect(file_comments.first.value).to eq 'main'
       end
 
       it '<p:file> contains file contents as plain text ' do

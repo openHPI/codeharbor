@@ -7,7 +7,7 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 
-user1 = User.create(email: 'manfredAnderson@bhak1.de', password: 'pwd')
+user1 = User.create(email: 'manfredAnderson@bhak1.de', password: 'pwd', role: 'admin')
 user2 = User.create(email: 'j.maier@waldschule.de', password: 'pwd')
 user3 = User.create(email: 'denise.feler@gmx.de', password: 'pwd')
 user4 = User.create(email: 'theresa.zobel@aon.at', password: '1234')
@@ -26,8 +26,8 @@ test_framework = TestingFramework.create(name: 'JUnit 4')
 test_framework2 = TestingFramework.create(name: 'Pytest')
 
 exercise1 = Exercise.create(title: "Hello World", maxrating: '10', public: true, user_id:user1.id)
-exercise1_main = ExerciseFile.create(main: true, content: "public class HelloWorld{ public static void main String[] args) { } }", path: '', purpose:'template', name:'Main', visibility: true, file_extension: 'java', exercise: exercise1)
-exercise1_test = ExerciseFile.create(main: false, content: "public class HelloWorld{ public static void main String[] args) {System.out.println('Hello World.'); } }", path: '', purpose:'test', name:'Test', visibility: true, file_extension: 'java', exercise: exercise1)
+exercise1_main = ExerciseFile.create(main: true, content: "public class HelloWorld{ public static void main String[] args) { } }", path: '', purpose:'template', file_name:'Main', visibility: true, file_extension: 'java', exercise: exercise1)
+exercise1_test = ExerciseFile.create(main: false, content: "public class HelloWorld{ public static void main String[] args) {System.out.println('Hello World.'); } }", path: '', purpose:'test', file_name:'Test', visibility: true, file_extension: 'java', exercise: exercise1)
 Test.create(feedback_message: "Es wird noch nicht 'Hello World' am Bildschrim ausgegeben!", exercise_file: exercise1_test, exercise: exercise1, testing_framework: test_framework)
 
 Description.create(text:"Schreibe ein Java Programm, das 'Hello World' am Bildschirm ausgibt.", language: 'de', exercise: exercise1)
@@ -138,6 +138,3 @@ exercise1.update(execution_environment: ee1)
 #exercise2.update(execution_environment: ee1)
 #exercise3.update(execution_environment: ee1)
 #exercise4.update(execution_environment: ee2)
-
-
-
