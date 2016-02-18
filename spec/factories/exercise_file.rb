@@ -9,4 +9,16 @@ FactoryGirl.define do
     file_extension 'java'
     visibility true
   end
+
+
+  factory :junit_test_file, class: 'ExerciseFile' do
+  	main false
+    content "public class SingleJUnitTestFile { public static void main String[] args) { } }"
+    file_name 'SingleJUnitTestFile'
+    path ''
+    solution false
+    file_extension 'java'
+    visibility true
+  end
+
 end

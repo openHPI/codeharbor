@@ -112,4 +112,74 @@ RSpec.describe Exercise, type: :model do
 
   end
 
+  describe 'tests' do
+
+    context 'no tests' do
+      let(:xml) {
+        ::Nokogiri::XML(
+        FactoryGirl.create(:only_meta_data).to_proforma_xml
+        ).xpath('/root')[0]
+      }
+
+      it 'contains a single empty <p:tests>-tag' do
+        testsContainer = xml.xpath('p:task/p:tests')
+        expect(testsContainer.size()).to be 1
+        allTests = xml.xpath('p:task/*/p:test')
+        expect(allTests.size).to be 0
+      end
+
+    end
+
+    context 'single JUnit test file' do
+      let(:xml) {
+        doc = ::Nokogiri::XML(
+          FactoryGirl.create(:exercise_with_single_junit_test).to_proforma_xml
+        )
+        doc.collect_namespaces
+        return doc.xpath('/root')[0]
+      }
+
+      it 'has single <p:tests>/<p:test> -tag' do
+        print(xml)
+        tests = xml.xpath('p:task/p:tests/p:test')
+        expect(tests.size()).to be 1
+      end
+
+      it 'has single <p:tests>/<p:test> -tag' do
+        tests = xml.xpath('p:task/p:tests/p:test')
+        expect(tests.size()).to be 1
+      end
+
+      it '<p:test> contains <p:test-type>unittest</p:test-type>' do
+        test_types = xml.xpath('p:task/p:tests/p:test/p:test-type/text()')
+        expect(test_types.size()).to be 1
+        expect(test_types.first.content).to eq "unittest"
+      end
+
+      it '<p:test> contains single <p:test-configuration>/<p:filerefs>/<p:fileref> pointing to correct exercise file' do
+        refids = xml.xpath('p:task/p:tests/p:test/p:test-configuration/p:filerefs/p:fileref/@refid')
+        expect(refids.size()).to be 1
+        refid = refids.first.value
+        exercise_file = ExerciseFile.find(refid)
+        expect(exercise_file.file_name).to eq "SingleJUnitTestFile"
+      end
+
+      it '<p:fileref> points to a <p:file> that actually exists in markup' do
+        refids = xml.xpath('p:task/p:tests/p:test/p:test-configuration/p:filerefs/p:fileref/@refid')
+        expect(refids.size()).to be 1
+        filenames = xml.xpath("p:task/p:files/p:file[@id=#{refids.first.value}]/@filename")
+        expect(filenames.size()).to be 1
+        expect(filenames.first.value).to eq "SingleJUnitTestFile.java"
+      end
+
+      it '<p:test> contains single <p:test-configuration>/<u:unittest framework="JUnit">' do
+        frameworks = xml.xpath('p:task/p:tests/p:test/p:test-configuration/u:unittest/@framework')
+        expect(frameworks.size()).to be 1
+        expect(frameworks.first.value).to eq "JUnit"
+      end
+
+    end
+
+  end
+
 end

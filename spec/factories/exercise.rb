@@ -15,4 +15,12 @@ FactoryGirl.define do
     end
   end
 
+  factory :exercise_with_single_junit_test, class: 'Exercise' do
+    title 'Exercises with single JUnit Test'
+    after(:create) do |exercise|
+      create(:simple_description, exercise: exercise)
+      create(:single_junit_test, exercise: exercise)
+    end
+  end
+
 end

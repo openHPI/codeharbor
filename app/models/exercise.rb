@@ -114,7 +114,7 @@ class Exercise < ActiveRecord::Base
       comment = ''
     end
 
-    builder.file(exercise_file.content,
+    builder['p'].file(exercise_file.content,
       'filename' => exercise_file.full_file_name,
       'id' => exercise_file.id,
       'class' => proforma_file_class,
@@ -122,25 +122,45 @@ class Exercise < ActiveRecord::Base
     )
   end
 
+  def build_proforma_xml_for_test(builder, test)
+    builder['p'].test() {
+      builder['p'].send('test-type', 'unittest')
+      builder['p'].send('test-configuration') {
+        builder['p'].filerefs {
+          builder['p'].fileref('refid' => test.exercise_file.id.to_s)
+        }
+        builder['u'].unittest('framework' => test.testing_framework.name)
+      }
+    }
+  end
+
   def to_proforma_xml
     builder = Nokogiri::XML::Builder.new do |xml|
-      xml.root('xmlns:p' => 'urn:proforma:task:v0.9.4') {
-        p = xml['p']
-        p.task {
-          p.description(self.descriptions.first.text)
-          p.send('grading-hints', 'max-rating' => self.maxrating.to_s)
-          p.send('meta-data') {
-            p.title(self.title)
+      xml.root('xmlns:p' => 'urn:proforma:task:v0.9.4', 'xmlns:u' => 'urn:proforma:tests:unittest:v1') {
+        xml['p'].task {
+          xml['p'].description(self.descriptions.first.text)
+          xml['p'].send('grading-hints', 'max-rating' => self.maxrating.to_s)
+          xml['p'].send('meta-data') {
+            xml['p'].title(self.title)
           }
-          p.files {
-            self.exercise_files.all? { |file|
-              build_proforma_xml_for_exercise_file(p, file)
+          xml['p'].files {
+            self.exercise_files_with_test_files.all? { |file|
+              build_proforma_xml_for_exercise_file(xml, file)
+            }
+          }
+          xml['p'].tests {
+            self.tests.all? { |test|
+              build_proforma_xml_for_test(xml, test)
             }
           }
         }
       }
     end
     return builder.to_xml
+  end
+
+  def exercise_files_with_test_files
+    return self.exercise_files + self.tests.map { |test| test.exercise_file }
   end
 
   def file_permit(params)
