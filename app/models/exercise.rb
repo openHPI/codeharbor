@@ -130,13 +130,22 @@ class Exercise < ActiveRecord::Base
           builder['p'].fileref('refid' => test.exercise_file.id.to_s)
         }
         builder['u'].unittest('framework' => test.testing_framework.name)
+        builder['c'].send('feedback-message', test.feedback_message)
+      }
+    }
+  end
+
+  def build_proforma_xml_for_model_solution(builder, model_solution_file)
+    builder['p'].send('model-solution') {
+      builder['p'].filerefs {
+        builder['p'].fileref('refid' => model_solution_file.id.to_s)
       }
     }
   end
 
   def to_proforma_xml
     builder = Nokogiri::XML::Builder.new do |xml|
-      xml.root('xmlns:p' => 'urn:proforma:task:v0.9.4', 'xmlns:u' => 'urn:proforma:tests:unittest:v1') {
+      xml.root('xmlns:p' => 'urn:proforma:task:v0.9.4', 'xmlns:u' => 'urn:proforma:tests:unittest:v1', 'xmlns:c' => 'codeharbor') {
         xml['p'].task {
           xml['p'].description(self.descriptions.first.text)
           xml['p'].proglang(self.execution_environment.language, 'version' => self.execution_environment.version)
@@ -145,7 +154,7 @@ class Exercise < ActiveRecord::Base
             xml['p'].title(self.title)
           }
           xml['p'].files {
-            self.exercise_files_with_test_files.all? { |file|
+            self.exercise_files.all? { |file|
               build_proforma_xml_for_exercise_file(xml, file)
             }
           }
@@ -154,14 +163,19 @@ class Exercise < ActiveRecord::Base
               build_proforma_xml_for_test(xml, test)
             }
           }
+          xml['p'].send('model-solutions') {
+            self.model_solution_files.all? { |model_solution_file|
+              build_proforma_xml_for_model_solution(xml, model_solution_file)
+            }
+          }
         }
       }
     end
     return builder.to_xml
   end
 
-  def exercise_files_with_test_files
-    return self.exercise_files + self.tests.map { |test| test.exercise_file }
+  def model_solution_files
+    self.exercise_files.select { |file| file.solution }
   end
 
   def file_permit(params)

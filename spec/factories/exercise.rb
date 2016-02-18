@@ -15,7 +15,7 @@ FactoryGirl.define do
       exercise.execution_environment = create(:java_8_execution_environment)
       create(:single_java_main_file, exercise: exercise)
     end
-  end
+end
 
   factory :exercise_with_single_junit_test, class: 'Exercise' do
     title 'Exercises with single JUnit Test'
@@ -23,6 +23,15 @@ FactoryGirl.define do
       create(:simple_description, exercise: exercise)
       exercise.execution_environment = create(:java_8_execution_environment)
       create(:single_junit_test, exercise: exercise)
+    end
+  end
+
+  factory :exercise_with_single_model_solution, class: 'Exercise' do
+    title 'Exercises with single Model Solution'
+    after(:create) do |exercise|
+      create(:simple_description, exercise: exercise)
+      exercise.execution_environment = create(:java_8_execution_environment)
+      create(:model_solution_file, exercise: exercise)
     end
   end
 

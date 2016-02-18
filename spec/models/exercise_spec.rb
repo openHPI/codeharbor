@@ -152,13 +152,8 @@ RSpec.describe Exercise, type: :model do
         return doc.xpath('/root')[0]
       }
 
-      it 'has single <p:tests>/<p:test> -tag' do
+      it 'has single <p:tests>/<p:test> tag' do
         print(xml)
-        tests = xml.xpath('p:task/p:tests/p:test')
-        expect(tests.size()).to be 1
-      end
-
-      it 'has single <p:tests>/<p:test> -tag' do
         tests = xml.xpath('p:task/p:tests/p:test')
         expect(tests.size()).to be 1
       end
@@ -177,6 +172,12 @@ RSpec.describe Exercise, type: :model do
         expect(exercise_file.file_name).to eq "SingleJUnitTestFile"
       end
 
+      it '<p:test-configuration> contains single <c:feedback-message> with feedbackmessage' do
+        feedback_messages = xml.xpath('p:task/p:tests/p:test/p:test-configuration/c:feedback-message/text()')
+        expect(feedback_messages.size()).to be 1
+        expect(feedback_messages.first.content).to eq "Dude... seriously?"
+      end
+
       it '<p:fileref> points to a <p:file> that actually exists in markup' do
         refids = xml.xpath('p:task/p:tests/p:test/p:test-configuration/p:filerefs/p:fileref/@refid')
         expect(refids.size()).to be 1
@@ -189,6 +190,58 @@ RSpec.describe Exercise, type: :model do
         frameworks = xml.xpath('p:task/p:tests/p:test/p:test-configuration/u:unittest/@framework')
         expect(frameworks.size()).to be 1
         expect(frameworks.first.value).to eq "JUnit"
+      end
+
+    end
+
+    describe 'model solutions' do
+
+      context 'no model solutions' do
+        let(:xml) {
+          ::Nokogiri::XML(
+          FactoryGirl.create(:only_meta_data).to_proforma_xml
+          ).xpath('/root')[0]
+        }
+
+        it 'contains a single empty <p:model-solutions> tag' do
+          model_solutions_container = xml.xpath('p:task/p:model-solutions')
+          expect(model_solutions_container.size()).to be 1
+          all_model_solutions = xml.xpath('p:task/*/p:model-solution')
+          expect(all_model_solutions.size).to be 0
+        end
+
+      end
+
+      context 'single model solution file' do
+        let(:xml) {
+          doc = ::Nokogiri::XML(
+            FactoryGirl.create(:exercise_with_single_model_solution).to_proforma_xml
+          )
+          doc.collect_namespaces
+          return doc.xpath('/root')[0]
+        }
+
+        it 'has single <p:model-solutions>/<p:model-solution> tag' do
+          model_solutions = xml.xpath('p:task/p:model-solutions/p:model-solution')
+          expect(model_solutions.size()).to be 1
+        end
+
+        it '<p:model-solution> contains single <p:filerefs>/<p:fileref> pointing to correct exercise file' do
+          refids = xml.xpath('p:task/p:model-solutions/p:model-solution/p:filerefs/p:fileref/@refid')
+          expect(refids.size()).to be 1
+          refid = refids.first.value
+          exercise_file = ExerciseFile.find(refid)
+          expect(exercise_file.file_name).to eq "ModelSolutionFile"
+        end
+
+        it '<p:fileref> points to a <p:file> that actually exists in markup' do
+          refids = xml.xpath('p:task/p:model-solutions/p:model-solution/p:filerefs/p:fileref/@refid')
+          expect(refids.size()).to be 1
+          filenames = xml.xpath("p:task/p:files/p:file[@id=#{refids.first.value}]/@filename")
+          expect(filenames.size()).to be 1
+          expect(filenames.first.value).to eq "ModelSolutionFile.java"
+        end
+
       end
 
     end
