@@ -6,7 +6,7 @@ FactoryGirl.define do
     file_name 'Main'
     path ''
     solution false
-    filetype 'java'
+    file_extension 'java'
+    visibility true
   end
-
 end
