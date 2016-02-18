@@ -25,6 +25,13 @@
   </div>
 
   <div class="form-group">
+    <%= f.label :execution_environment, class:'control-label' %><br>
+    <div class="controls">
+    <%= f.collection_select :execution_environment_id, ExecutionEnvironment.all, :id, :language %>
+    </div>
+  </div>
+
+  <div class="form-group">
     <%= f.label :descriptions, class:'control-label' %><br>
     <%= f.nested_fields_for :descriptions do |description| %>
         <div class="controls" style="margin-top: 10px; margin-bottom: 10px">
