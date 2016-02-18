@@ -4,6 +4,7 @@ FactoryGirl.define do
     maxrating 10
     after(:create) do |exercise|
       create(:simple_description, exercise: exercise)
+      exercise.execution_environment = create(:java_8_execution_environment)
     end
   end
 
@@ -11,6 +12,7 @@ FactoryGirl.define do
     title 'Some Exercise'
     after(:create) do |exercise|
       create(:simple_description, exercise: exercise)
+      exercise.execution_environment = create(:java_8_execution_environment)
       create(:single_java_main_file, exercise: exercise)
     end
   end
@@ -19,6 +21,7 @@ FactoryGirl.define do
     title 'Exercises with single JUnit Test'
     after(:create) do |exercise|
       create(:simple_description, exercise: exercise)
+      exercise.execution_environment = create(:java_8_execution_environment)
       create(:single_junit_test, exercise: exercise)
     end
   end

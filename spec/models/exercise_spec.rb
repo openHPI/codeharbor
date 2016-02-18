@@ -37,6 +37,19 @@ RSpec.describe Exercise, type: :model do
           expect(titles[0].content).to eq 'Some Exercise'
         end
 
+        it 'has single tag <p:proglang version="1.8">java</p:proglang>' do
+          proglangs = xml.xpath('p:task/p:proglang')
+          expect(proglangs.size()).to be 1
+
+          proglang_text = proglangs.first.xpath('text()')
+          expect(proglang_text.size()).to be 1
+          expect(proglang_text.first.content).to eq 'java'
+
+          proglang_version = proglangs.first.xpath('@version')
+          expect(proglang_version.size()).to be 1
+          expect(proglang_version.first.value).to eq '1.8'
+        end
+
       end
 
     end

@@ -139,6 +139,7 @@ class Exercise < ActiveRecord::Base
       xml.root('xmlns:p' => 'urn:proforma:task:v0.9.4', 'xmlns:u' => 'urn:proforma:tests:unittest:v1') {
         xml['p'].task {
           xml['p'].description(self.descriptions.first.text)
+          xml['p'].proglang(self.execution_environment.language, 'version' => self.execution_environment.version)
           xml['p'].send('grading-hints', 'max-rating' => self.maxrating.to_s)
           xml['p'].send('meta-data') {
             xml['p'].title(self.title)
