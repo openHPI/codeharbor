@@ -111,6 +111,8 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (~> 1.2)
+    pg (0.18.4)
+    puma (2.15.3)
     rack (1.6.4)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -181,7 +183,6 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
-    sqlite3 (1.3.11)
     therubyracer (0.12.2)
       libv8 (~> 3.16.14.0)
       ref
@@ -225,19 +226,17 @@ DEPENDENCIES
   nested_form_fields
   nokogiri
   oauth2
+  pg
+  puma
   rails (= 4.2.4)
   rspec-rails (~> 3.0)
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   simplecov
   spring
-  sqlite3
   therubyracer
   turbolinks
   twitter-bootstrap-rails
   uglifier (>= 1.3.0)
   web-console (~> 2.0)
   will_paginate
-
-BUNDLED WITH
-   1.11.2
