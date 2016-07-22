@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20160216130947) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "account_links", force: :cascade do |t|
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
@@ -22,7 +25,7 @@ ActiveRecord::Schema.define(version: 20160216130947) do
     t.string   "oauth2_token"
   end
 
-  add_index "account_links", ["user_id"], name: "index_account_links_on_user_id"
+  add_index "account_links", ["user_id"], name: "index_account_links_on_user_id", using: :btree
 
   create_table "answers", force: :cascade do |t|
     t.integer  "comment_id"
@@ -32,16 +35,16 @@ ActiveRecord::Schema.define(version: 20160216130947) do
     t.text     "text"
   end
 
-  add_index "answers", ["comment_id"], name: "index_answers_on_comment_id"
-  add_index "answers", ["user_id"], name: "index_answers_on_user_id"
+  add_index "answers", ["comment_id"], name: "index_answers_on_comment_id", using: :btree
+  add_index "answers", ["user_id"], name: "index_answers_on_user_id", using: :btree
 
   create_table "assemblies_parts", id: false, force: :cascade do |t|
     t.integer "assembly_id"
     t.integer "part_id"
   end
 
-  add_index "assemblies_parts", ["assembly_id"], name: "index_assemblies_parts_on_assembly_id"
-  add_index "assemblies_parts", ["part_id"], name: "index_assemblies_parts_on_part_id"
+  add_index "assemblies_parts", ["assembly_id"], name: "index_assemblies_parts_on_assembly_id", using: :btree
+  add_index "assemblies_parts", ["part_id"], name: "index_assemblies_parts_on_part_id", using: :btree
 
   create_table "carts", force: :cascade do |t|
     t.integer  "user_id"
@@ -49,15 +52,15 @@ ActiveRecord::Schema.define(version: 20160216130947) do
     t.datetime "updated_at", null: false
   end
 
-  add_index "carts", ["user_id"], name: "index_carts_on_user_id"
+  add_index "carts", ["user_id"], name: "index_carts_on_user_id", using: :btree
 
   create_table "carts_exercises", force: :cascade do |t|
     t.integer "exercise_id"
     t.integer "cart_id"
   end
 
-  add_index "carts_exercises", ["cart_id"], name: "index_carts_exercises_on_cart_id"
-  add_index "carts_exercises", ["exercise_id"], name: "index_carts_exercises_on_exercise_id"
+  add_index "carts_exercises", ["cart_id"], name: "index_carts_exercises_on_cart_id", using: :btree
+  add_index "carts_exercises", ["exercise_id"], name: "index_carts_exercises_on_exercise_id", using: :btree
 
   create_table "collections", force: :cascade do |t|
     t.integer  "user_id"
@@ -66,15 +69,15 @@ ActiveRecord::Schema.define(version: 20160216130947) do
     t.string   "title"
   end
 
-  add_index "collections", ["user_id"], name: "index_collections_on_user_id"
+  add_index "collections", ["user_id"], name: "index_collections_on_user_id", using: :btree
 
   create_table "collections_exercises", force: :cascade do |t|
     t.integer "exercise_id"
     t.integer "collection_id"
   end
 
-  add_index "collections_exercises", ["collection_id"], name: "index_collections_exercises_on_collection_id"
-  add_index "collections_exercises", ["exercise_id"], name: "index_collections_exercises_on_exercise_id"
+  add_index "collections_exercises", ["collection_id"], name: "index_collections_exercises_on_collection_id", using: :btree
+  add_index "collections_exercises", ["exercise_id"], name: "index_collections_exercises_on_exercise_id", using: :btree
 
   create_table "comments", force: :cascade do |t|
     t.text     "text"
@@ -84,8 +87,8 @@ ActiveRecord::Schema.define(version: 20160216130947) do
     t.datetime "updated_at",  null: false
   end
 
-  add_index "comments", ["exercise_id"], name: "index_comments_on_exercise_id"
-  add_index "comments", ["user_id"], name: "index_comments_on_user_id"
+  add_index "comments", ["exercise_id"], name: "index_comments_on_exercise_id", using: :btree
+  add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
   create_table "descriptions", force: :cascade do |t|
     t.string  "text"
@@ -93,7 +96,7 @@ ActiveRecord::Schema.define(version: 20160216130947) do
     t.string  "language",    default: "EN"
   end
 
-  add_index "descriptions", ["exercise_id"], name: "index_descriptions_on_exercise_id"
+  add_index "descriptions", ["exercise_id"], name: "index_descriptions_on_exercise_id", using: :btree
 
   create_table "execution_environments", force: :cascade do |t|
     t.string   "language"
@@ -117,7 +120,7 @@ ActiveRecord::Schema.define(version: 20160216130947) do
     t.string   "purpose"
   end
 
-  add_index "exercise_files", ["exercise_id"], name: "index_exercise_files_on_exercise_id"
+  add_index "exercise_files", ["exercise_id"], name: "index_exercise_files_on_exercise_id", using: :btree
 
   create_table "exercises", force: :cascade do |t|
     t.string   "title"
@@ -130,16 +133,16 @@ ActiveRecord::Schema.define(version: 20160216130947) do
     t.integer  "execution_environment_id"
   end
 
-  add_index "exercises", ["execution_environment_id"], name: "index_exercises_on_execution_environment_id"
-  add_index "exercises", ["user_id"], name: "index_exercises_on_user_id"
+  add_index "exercises", ["execution_environment_id"], name: "index_exercises_on_execution_environment_id", using: :btree
+  add_index "exercises", ["user_id"], name: "index_exercises_on_user_id", using: :btree
 
   create_table "exercises_labels", id: false, force: :cascade do |t|
     t.integer "exercise_id"
     t.integer "label_id"
   end
 
-  add_index "exercises_labels", ["exercise_id"], name: "index_exercises_labels_on_exercise_id"
-  add_index "exercises_labels", ["label_id"], name: "index_exercises_labels_on_label_id"
+  add_index "exercises_labels", ["exercise_id"], name: "index_exercises_labels_on_exercise_id", using: :btree
+  add_index "exercises_labels", ["label_id"], name: "index_exercises_labels_on_label_id", using: :btree
 
   create_table "label_categories", force: :cascade do |t|
     t.string   "name"
@@ -155,7 +158,7 @@ ActiveRecord::Schema.define(version: 20160216130947) do
     t.string   "color"
   end
 
-  add_index "labels", ["label_category_id"], name: "index_labels_on_label_category_id"
+  add_index "labels", ["label_category_id"], name: "index_labels_on_label_category_id", using: :btree
 
   create_table "ratings", force: :cascade do |t|
     t.integer  "rating"
@@ -165,8 +168,8 @@ ActiveRecord::Schema.define(version: 20160216130947) do
     t.datetime "updated_at",  null: false
   end
 
-  add_index "ratings", ["exercise_id"], name: "index_ratings_on_exercise_id"
-  add_index "ratings", ["user_id"], name: "index_ratings_on_user_id"
+  add_index "ratings", ["exercise_id"], name: "index_ratings_on_exercise_id", using: :btree
+  add_index "ratings", ["user_id"], name: "index_ratings_on_user_id", using: :btree
 
   create_table "testing_frameworks", force: :cascade do |t|
     t.string   "name"
@@ -183,9 +186,9 @@ ActiveRecord::Schema.define(version: 20160216130947) do
     t.integer  "exercise_file_id"
   end
 
-  add_index "tests", ["exercise_file_id"], name: "index_tests_on_exercise_file_id"
-  add_index "tests", ["exercise_id"], name: "index_tests_on_exercise_id"
-  add_index "tests", ["testing_framework_id"], name: "index_tests_on_testing_framework_id"
+  add_index "tests", ["exercise_file_id"], name: "index_tests_on_exercise_file_id", using: :btree
+  add_index "tests", ["exercise_id"], name: "index_tests_on_exercise_id", using: :btree
+  add_index "tests", ["testing_framework_id"], name: "index_tests_on_testing_framework_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "first_name"

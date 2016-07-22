@@ -3,14 +3,14 @@ db:
     ports:
      - "5432:5432"
 web:
-    build: .
+    image: codeharbor_web
     ports:
         - "3000:3000"
     command:
-        "rails s -b 0.0.0.0"
+        "rspec"
     environment:
-        - RAILS_ENV=development
-        - RACK_ENV=development
+        - RAILS_ENV=test
+        - RACK_ENV=test
         - DATABASE_URL=postgres://postgres@db:5432/
     volumes:
         - ./:/codeharbor/
