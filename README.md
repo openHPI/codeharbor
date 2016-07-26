@@ -41,7 +41,8 @@ rails s -b 0
 Visit your browser at: `http://localhost:3001/`
 
 ## Docker for development
-Install docker, docker-compose on your system.  
+### For Linux
+Install docker and docker-compose on your system.  
 ### For Windows or Mac
 Install [Docker Toolbox](https://www.docker.com/products/docker-toolbox).  
 Run:
