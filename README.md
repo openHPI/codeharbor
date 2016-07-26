@@ -5,6 +5,7 @@
 <img src="https://travis-ci.org/openHPI/codeharbor.svg?branch=master" />
 <img src="https://codeclimate.com/github/openHPI/codeharbor/badges/gpa.svg" />
 <img src="https://codeclimate.com/github/openHPI/codeharbor/badges/coverage.svg" />
+[![Stories in Ready](https://badge.waffle.io/kirstin/codeharbor.svg?label=ready&title=Ready)](http://waffle.io/kirstin/codeharbor) 
 
 ## unix development
 
