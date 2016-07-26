@@ -40,6 +40,24 @@ rails s -b 0
 
 Visit your browser at: `http://localhost:3001/`
 
+## Docker for development
+Install docker, docker-compose on your system.  
+### For Windows or Mac
+Install [Docker Toolbox](https://www.docker.com/products/docker-toolbox).  
+Run:
+
+     docker-machine -D create --driver=virtualbox dev
+     docker-machine env dev --shell=<e.g.powershell, bash...>
+Run the command indicated by the env command.  
+
+### For all systems
+Change to the directory of the repository.  
+
+     docker-compose build
+     docker-compose up
+If running on Windows or Mac browse the ip that was displayed by the env command and the port 3000.  
+If on Linux browse: `http://localhost:3000/`.
+
 ## demo data
 
 run `rake db:seed` to add some demo data.
