@@ -55,6 +55,7 @@ Run the command indicated by the env command.
 Change to the directory of the repository.  
 
      docker-compose build
+     docker-compose run --rm web rake db:setup
      docker-compose up
 If running on Windows or Mac browse the ip that was displayed by the env command and the port 3000.  
 If on Linux browse: `http://localhost:3000/`.
@@ -81,3 +82,13 @@ rspec .
 or just one test (e.g. `rspec spec/controllers/exercises_controller_spec.rb`)
 
 You can find the coverage results in `coverage/index.html`
+
+If developing with docker:  
+
+     docker-compose -f docker-compose-test.yml run -d --rm web rake db:create db:migrate
+     docker-compose -f docker-compose-test.yml up
+Or for specific test:
+
+     docker-compose -f docker-compose-test.yml run -d web rspec spec/controllers/exercises_controller_spec.rb
+Use `docker logs <containername>`to access the results of your tests.  
+Logs will only be available after the execution finished.
