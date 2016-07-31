@@ -35,6 +35,9 @@ Rails.application.configure do
   # Checks for improperly declared sprockets dependencies.
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
+  
+  # Allow console from docker virtual machine host
+  config.web_console.whitelisted_ips = '192.168.99.0/16'
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
