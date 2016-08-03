@@ -48,7 +48,8 @@ Install [Docker Toolbox](https://www.docker.com/products/docker-toolbox).
 Run:
 
      docker-machine -D create --driver=virtualbox dev
-     docker-machine env dev --shell=<e.g.powershell, bash...>
+     docker-machine start dev
+     docker-machine env dev --shell=<e.g.powershell, cmd, bash...>
 Run the command indicated by the env command.  
 
 ### For all systems
