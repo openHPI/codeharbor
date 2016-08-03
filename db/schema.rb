@@ -200,4 +200,21 @@ ActiveRecord::Schema.define(version: 20160216130947) do
     t.string   "role",            default: "user"
   end
 
+  add_foreign_key "account_links", "users"
+  add_foreign_key "answers", "comments"
+  add_foreign_key "answers", "users"
+  add_foreign_key "carts", "users"
+  add_foreign_key "collections", "users"
+  add_foreign_key "comments", "exercises"
+  add_foreign_key "comments", "users"
+  add_foreign_key "descriptions", "exercises"
+  add_foreign_key "exercise_files", "exercises"
+  add_foreign_key "exercises", "execution_environments"
+  add_foreign_key "exercises", "users"
+  add_foreign_key "labels", "label_categories"
+  add_foreign_key "ratings", "exercises"
+  add_foreign_key "ratings", "users"
+  add_foreign_key "tests", "exercise_files"
+  add_foreign_key "tests", "exercises"
+  add_foreign_key "tests", "testing_frameworks"
 end
