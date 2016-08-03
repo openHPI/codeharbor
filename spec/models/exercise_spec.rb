@@ -264,11 +264,14 @@ RSpec.describe Exercise, type: :model do
       end
       
       it 'adds stuff' do
-        params = {:tests_attributes => {:content =>'this is some test', :feedback_message => 'not_working', :_destroy => false,
-            :testing_framework => {:name => 'pytest', :id => '12345678'}},
-          :exercise_files_attributes => {:main => 'false', :content => 'some new exercise', :path => 'some/path/', :purpose => 'a new purpose',
-            :file_name => 'awesome', :file_extension => '.py', :_destroy => false}, 
-          :descriptions_attributes => {:text => 'a new description', :language => 'de', :_destroy => false}}
+        params = ActionController::Parameters.new({
+          :tests_attributes => 
+            {"0" => {:content =>'this is some test', :feedback_message => 'not_working', :_destroy => false, :testing_framework => {:name => 'pytest', :id => '12345678'}}},
+          :exercise_files_attributes =>
+            {"0" => {:main => 'false', :content => 'some new exercise', :path => 'some/path/', :purpose => 'a new purpose', 
+              :file_name => 'awesome', :file_extension => '.py', :_destroy => false}}, 
+          :descriptions_attributes =>
+            {"0" => {:text => 'a new description', :language => 'de', :_destroy => false}}})
         exercise.add_attributes(params)
         tests = Test.where(exercise_id: exercise.id)
         files = ExerciseFile.where(exercise_id: exercise.id)
