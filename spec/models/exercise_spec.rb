@@ -182,7 +182,6 @@ RSpec.describe Exercise, type: :model do
         refids = xml.xpath('p:task/p:tests/p:test/p:test-configuration/p:filerefs/p:fileref/@refid')
         expect(refids.size()).to be 1
         filenames = xml.xpath("p:task/p:files/p:file[@id=#{refids.first.value}]/@filename")
-        puts "#{filenames}"
         expect(filenames.size()).to be 1
         expect(filenames.first.value).to eq "SingleJUnitTestFile.java"
       end
@@ -248,5 +247,36 @@ RSpec.describe Exercise, type: :model do
     end
 
   end
-
+  
+  describe 'test creation' do
+    context 'and adding description, tasks and tests' do
+      let(:exercise){FactoryGirl.create(:only_meta_data)}
+      
+      it 'does not add anything new' do
+        params = {:tests_attributes => nil, :exercise_files_attributes => nil, :descriptions_attributes => nil}
+        exercise.add_attributes(params)
+        tests = Test.where(exercise_id: exercise.id)
+        files = ExerciseFile.where(exercise_id: exercise.id)
+        descriptions = Description.where(exercise_id: exercise.id)
+        expect(tests.size()).to be 0
+        expect(files.size()).to be 0
+        expect(descriptions.size()).to be 1
+      end
+      
+      it 'adds stuff' do
+        params = {:tests_attributes => {:content =>'this is some test', :feedback_message => 'not_working', :_destroy => false,
+            :testing_framework => {:name => 'pytest', :id => '12345678'}},
+          :exercise_files_attributes => {:main => 'false', :content => 'some new exercise', :path => 'some/path/', :purpose => 'a new purpose',
+            :file_name => 'awesome', :file_extension => '.py', :_destroy => false}, 
+          :descriptions_attributes => {:text => 'a new description', :language => 'de', :_destroy => false}}
+        exercise.add_attributes(params)
+        tests = Test.where(exercise_id: exercise.id)
+        files = ExerciseFile.where(exercise_id: exercise.id)
+        descriptions = Description.where(exercise_id: exercise.id)
+        expect(tests.size()).to be 1
+        expect(files.size()).to be 1
+        expect(descriptions.size()).to be 2
+      end
+    end
+  end
 end

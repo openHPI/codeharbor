@@ -83,6 +83,7 @@ class Exercise < ActiveRecord::Base
 
   def add_tests(test_array)
     test_array.try(:each) do |key, array|
+      puts "WHAT is THIS++++ #{:_destroy}"
       destroy = array[:_destroy]
       id = array[:id]
       if id
