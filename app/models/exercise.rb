@@ -83,25 +83,25 @@ class Exercise < ActiveRecord::Base
 
   def add_tests(test_array)
     test_array.try(:each) do |key, array|
-      puts "WHAT is THIS++++ #{:_destroy}"
-      destroy = array[:_destroy]
+      puts "WHAT is THIS++++ #{key}=> #{array}"
+      #destroy = array[:_destroy]
       id = array[:id]
       if id
         test = Test.find(id)
-        if destroy
-          test.exercise_file.destroy
-          test.destroy
-        else
+        #if destroy
+          #test.exercise_file.destroy
+          #test.destroy
+        #else
           test.update(test_permit(array))
           test.exercise_file.update(content: array[:content])
-        end
+        #end
       else
-        unless destroy
+        #unless destroy
           exercise_file = ExerciseFile.create(content: array[:content], purpose: 'test')
           test = Test.create(test_permit(array))
           test.exercise_file = exercise_file
           tests << test
-        end
+        #end
       end
     end
   end

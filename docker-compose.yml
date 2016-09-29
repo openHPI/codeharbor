@@ -7,12 +7,12 @@ web:
     ports:
         - "3000:3000"
     command:
-        "rails s -b 0.0.0.0"
+        bash -c "rm /codeharbor/tmp/pids/server.pid && rails s -b 0.0.0.0"
     environment:
         - RAILS_ENV=development
         - RACK_ENV=development
         - DATABASE_URL=postgres://postgres@db:5432/
-    volumes:
-        - ./:/codeharbor/
+    #volumes:
+        #- ./:/codeharbor/
     links:
       - db
