@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160216130947) do
+ActiveRecord::Schema.define(version: 201609291333759) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,6 +105,16 @@ ActiveRecord::Schema.define(version: 20160216130947) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "exercise_authors", force: :cascade do |t|
+    t.integer  "exercise_id"
+    t.integer  "user_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "exercise_authors", ["exercise_id"], name: "index_exercise_authors_on_exercise_id", using: :btree
+  add_index "exercise_authors", ["user_id"], name: "index_exercise_authors_on_user_id", using: :btree
+
   create_table "exercise_files", force: :cascade do |t|
     t.boolean  "main"
     t.text     "content"
@@ -121,6 +131,16 @@ ActiveRecord::Schema.define(version: 20160216130947) do
   end
 
   add_index "exercise_files", ["exercise_id"], name: "index_exercise_files_on_exercise_id", using: :btree
+
+  create_table "exercise_group_access", force: :cascade do |t|
+    t.integer  "exercise_id"
+    t.integer  "group_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "exercise_group_access", ["exercise_id"], name: "index_exercise_group_access_on_exercise_id", using: :btree
+  add_index "exercise_group_access", ["group_id"], name: "index_exercise_group_access_on_group_id", using: :btree
 
   create_table "exercises", force: :cascade do |t|
     t.string   "title"
@@ -143,6 +163,13 @@ ActiveRecord::Schema.define(version: 20160216130947) do
 
   add_index "exercises_labels", ["exercise_id"], name: "index_exercises_labels_on_exercise_id", using: :btree
   add_index "exercises_labels", ["label_id"], name: "index_exercises_labels_on_label_id", using: :btree
+
+  create_table "groups", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "label_categories", force: :cascade do |t|
     t.string   "name"
@@ -190,6 +217,17 @@ ActiveRecord::Schema.define(version: 20160216130947) do
   add_index "tests", ["exercise_id"], name: "index_tests_on_exercise_id", using: :btree
   add_index "tests", ["testing_framework_id"], name: "index_tests_on_testing_framework_id", using: :btree
 
+  create_table "user_groups", force: :cascade do |t|
+    t.boolean  "is_admin",   default: false
+    t.integer  "user_id"
+    t.integer  "group_id"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  add_index "user_groups", ["group_id"], name: "index_user_groups_on_group_id", using: :btree
+  add_index "user_groups", ["user_id"], name: "index_user_groups_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"
@@ -200,21 +238,10 @@ ActiveRecord::Schema.define(version: 20160216130947) do
     t.string   "role",            default: "user"
   end
 
-  add_foreign_key "account_links", "users"
-  add_foreign_key "answers", "comments"
-  add_foreign_key "answers", "users"
-  add_foreign_key "carts", "users"
-  add_foreign_key "collections", "users"
-  add_foreign_key "comments", "exercises"
-  add_foreign_key "comments", "users"
-  add_foreign_key "descriptions", "exercises"
-  add_foreign_key "exercise_files", "exercises"
-  add_foreign_key "exercises", "execution_environments"
-  add_foreign_key "exercises", "users"
-  add_foreign_key "labels", "label_categories"
-  add_foreign_key "ratings", "exercises"
-  add_foreign_key "ratings", "users"
-  add_foreign_key "tests", "exercise_files"
-  add_foreign_key "tests", "exercises"
-  add_foreign_key "tests", "testing_frameworks"
+  add_foreign_key "exercise_authors", "exercises"
+  add_foreign_key "exercise_authors", "users"
+  add_foreign_key "exercise_group_access", "exercises"
+  add_foreign_key "exercise_group_access", "groups"
+  add_foreign_key "user_groups", "groups"
+  add_foreign_key "user_groups", "users"
 end
