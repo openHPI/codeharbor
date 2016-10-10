@@ -49,16 +49,16 @@
 
 
   <div class="form-group">
-    <%= f.label :public,  class: 'control-label' %>
+    <%= f.label :visibility,  class: 'control-label' %>
     <div class='radio'>
       <div class='col-md-2'>
-        <div style='margin-left: 20px'> <%= f.radio_button :public, true, value: true%>
-          <%= label :public, 'public '%>
+        <div style='margin-left: 20px'> <%= f.radio_button :private, true, value: true%>
+          <%= label :private, 'private '%>
         </div>
       </div>
       <div class='col-md-2'>
-        <div style='margin-left: 20px'> <%= f.radio_button :public, false, value: false%>
-          <%= label :public, 'private'%>
+        <div style='margin-left: 20px'> <%= f.radio_button :private, false, value: false%>
+          <%= label :private, 'public'%>
         </div>
       </div>
     </div>

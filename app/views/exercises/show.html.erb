@@ -12,7 +12,7 @@
       <dd><%= description.text %></dd>
   <% end %>
   <dt><%= 'Visibility' %>:</dt>
-  <dd><%= @exercise.public ? 'public' : 'private' %></dd>
+  <dd><%= @exercise.private ? 'private' : 'public' %></dd>
   <dt><%= 'Created by' %>:</dt>
   <% if !@exercise.user %>
       <dd><%= 'User undefined' %></dd>

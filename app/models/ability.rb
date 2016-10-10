@@ -5,38 +5,34 @@ class Ability
     if user
       if user.role == 'admin'
         can :manage, :all
-      elsif user.role == 'teacher'
-        can :show, Exercise
-        can :create, Exercise
-        can :duplicate, Exercise
-        can :export, Exercise
-        can :add_to_cart, Exercise
-        can :read, Exercise
-        can :manage, Exercise do |exercise|
-          exercise.user == user
-        end
-
-        can :show, Comment
-        can :create, Comment
-        can :read, Comment
-        can :edit, Comment do |comment|
-          comment.user == user
-        end
-
-        can :read, Test
-        can :read, ExerciseFile
-        can :create, Rating
-
-        can :manage, User do |_user|
-          _user == user
-        end
-      elsif user.role == 'user'
-        can :read, Exercise
-        can :read, Rating
-        can :read, Comment
-        can :manage, User do |_user|
-          _user == user
-        end
+      end
+      
+      #Exercise
+      can [:show, :create], Exercise
+      can [:manage], Exercise do |exercise|
+        ExerciseAuthor.where(user_id: user.id, exercise_id: exercise.id).any?
+      end
+      
+      can [:read, :add_to_cart, :export, :duplicate], Exercise do |exercise| 
+        exercise.can_access(user)
+      end
+      
+      #Comment
+      can [:show, :create, :read ], Comment
+      can [:edit], Comment do |comment|
+        comment.user == user
+      end
+      
+      #Rating
+      can [:read, :create], Rating
+      
+      # Groups
+      can [:create, :join], Group
+      can [:read, :members, :admins, :leave, :condition_for_changing_member_status], Group do |group|
+        user.groups.include? group
+      end
+      can [:update, :destroy, :invite_group_members, :add_administrator, :demote_administrator, :remove_group_member, :all_members_to_administrators], Group do |group|
+        UserGroup.where(user_id: user.id, group_id: group.id, is_admin: true).any?
       end
     end
     # Define abilities for the passed in user here. For example:
