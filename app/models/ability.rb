@@ -8,12 +8,12 @@ class Ability
       end
       
       #Exercise
-      can [:show, :create], Exercise
-      can [:manage], Exercise do |exercise|
+      can [:create], Exercise
+      can [:manage, :edit], Exercise do |exercise|
         ExerciseAuthor.where(user_id: user.id, exercise_id: exercise.id).any?
       end
       
-      can [:read, :add_to_cart, :export, :duplicate], Exercise do |exercise| 
+      can [:show, :read, :add_to_cart, :export, :duplicate], Exercise do |exercise| 
         exercise.can_access(user)
       end
       
