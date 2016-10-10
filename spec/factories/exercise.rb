@@ -2,6 +2,8 @@ FactoryGirl.define do
   factory :only_meta_data, class: 'Exercise' do
   	title 'Some Exercise'
     maxrating 10
+    private false
+    authors {[FactoryGirl.create(:user), FactoryGirl.create(:user)]}
     after(:create) do |exercise|
       create(:simple_description, exercise: exercise)
       exercise.execution_environment = create(:java_8_execution_environment)

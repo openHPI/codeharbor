@@ -8,6 +8,10 @@ class Exercise < ActiveRecord::Base
   has_and_belongs_to_many :labels
   has_many :comments
   has_many :ratings
+  has_many :exercise_authors
+  has_many :authors, through: :exercise_authors, source: :user
+  has_many :exercise_group_accesses
+  has_many :access, through: :exercise_group_accesses, source: :group
   #has_and_belongs_to_many :collections
   #has_and_belongs_to_many :carts
   belongs_to :user
@@ -33,6 +37,23 @@ class Exercise < ActiveRecord::Base
   	else
       return all
   	end
+  end
+  
+  def can_access(user)
+    if private
+      if not user.is_author?(self)
+        if not user.has_access_through_any_group?(self)
+          return false
+        else
+          return true
+        end
+      else
+        return true
+      end
+    else 
+      return true
+    end
+    return true
   end
 
   def avg_rating
