@@ -69,6 +69,11 @@ group :development do
   gem 'rack-mini-profiler'
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
+  
+  gem "capistrano", "~> 3.6"
+  gem 'capistrano3-puma'
+  gem 'capistrano-rails'
+  gem 'airbrussh', require: false
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'

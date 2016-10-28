@@ -1,6 +1,7 @@
 *.rbc
 capybara-*.html
 .rspec
+*.ppk
 /log
 /tmp
 /db/*.sqlite3
@@ -44,4 +45,6 @@ secrets.yml
 # simplecov
 coverage
 
-.idea/
+
+
+.ssh
