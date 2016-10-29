@@ -18,3 +18,5 @@ RUN gem install mime-types -v '2.99'
 RUN bundle install
 
 ADD . $APP_HOME
+RUN bundle exec rake assets:precompile
+CMD bundle exec rails s
