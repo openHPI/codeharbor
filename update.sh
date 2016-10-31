@@ -55,14 +55,18 @@ function start_new_container(){
   export CURRENT_CONTAINER=$NAME
   export CURRENT_PORT=$PORT
 }
+echo 'Check if a new version of the image is available'
+echo 'and start a new container with this image.'
+echo 'Once the new container is running, stop the old container.'
+echo '**************************************************'
 echo 'compare SHA of image before and after docker pull'
 OLD_SHA=$(docker images |grep $IMAGE | awk 'NR==1{print $3}')
-echo $OLD_SHA
+echo "Old SHA: $OLD_SHA"
 docker pull $IMAGE
 NEW_SHA=$(docker images |grep $IMAGE | awk 'NR==1{print $3}')
-echo $NEW_SHA
-if ["$OLD_SHA" != "$NEW_SHA"]; then
-  echo 'Image was updated'
+echo "New SHA: $NEW_SHA"
+if [ "$OLD_SHA" != "$NEW_SHA" ]; then
+  echo 'Image was updated, proceeding to start new container.'
   start_new_container
 fi
 exit 0
