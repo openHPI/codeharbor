@@ -12,11 +12,5 @@ web:
         - RAILS_ENV=development
         - RACK_ENV=development
         - DATABASE_URL=postgres://postgres@db:5432/
-        - SSH_AUTH_SOCK=/ssh-auth-sock
-    #volumes:
-        #- ./:/codeharbor/
-        #- $SSH_AUTH_SOCK:/tmp/ssh-agent # Forward local machine SSH key to docker
-    volumes_from:
-        - ssh-auth-sock
     links:
       - db
