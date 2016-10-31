@@ -25,7 +25,7 @@ function start_new_container(){
     PORT=3000
   fi
   echo 'migrate database and remove old version of container'
-  docker-compose run --rm web rake db:migrate
+  docker-compose -f docker/docker-compose.production.yml run --rm web rake db:migrate
   docker rm -f $NAME
   echo 'starting new container $NAME'
   docker run -d --link codeharbor_db_1:db -e RAILS_ENV='production' \
@@ -46,11 +46,11 @@ function start_new_container(){
     if [$COUNTER -eq 60]
     then
       echo 'Container did not start properly. Exiting'
-      return 1
+      exit 1
     fi
     sleep 1
   done
-  echo '$NAME started successfully. Stopping old container.'
+  echo "$NAME started successfully. Stopping old container."
   docker stop $CURRENT_CONTAINER
   export CURRENT_CONTAINER=$NAME
   export CURRENT_PORT=$PORT
@@ -65,6 +65,6 @@ if ["$OLD_SHA" != "$NEW_SHA"]; then
   echo 'Image was updated'
   start_new_container
 fi
-
+exit 0
 
 
