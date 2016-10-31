@@ -4,12 +4,12 @@ db:
      - "5432:5432"
     restart: always
 web:
-    image: codeharbor_web
-    name: web1
+    image: openhpidev/codeharbor
+    container_name: web1
     ports:
         - "3000:3000"
     command:
-        bash -c "rails s -b 127.0.0.1"
+        bash -c "rails s -b 0.0.0.0"
     restart: unless-stopped
     environment:
         - RAILS_ENV=production

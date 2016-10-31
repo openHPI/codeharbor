@@ -2,7 +2,7 @@
 IMAGE='openhpidev/codeharbor'
 C1='web1'
 C2='web2'
-ADR='127.0.0.1:$CURRENT_PORT'
+ADR='192.168.99.100:$CURRENT_PORT'
 
 function check_status(){
   RES=$(curl -Is $ADR | head -1)
@@ -55,12 +55,13 @@ function start_new_container(){
   export CURRENT_CONTAINER=$NAME
   export CURRENT_PORT=$PORT
 }
-# compare SHA of image before and after docker pull
+echo 'compare SHA of image before and after docker pull'
 OLD_SHA=$(docker images |grep $IMAGE | awk 'NR==1{print $3}')
+echo $OLD_SHA
 docker pull $IMAGE
 NEW_SHA=$(docker images |grep $IMAGE | awk 'NR==1{print $3}')
-if ["$OLD_SHA" != "$NEW_SHA"]
-then
+echo $NEW_SHA
+if ["$OLD_SHA" != "$NEW_SHA"]; then
   echo 'Image was updated'
   start_new_container
 fi
