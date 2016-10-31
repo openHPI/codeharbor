@@ -2,15 +2,16 @@
 IMAGE='openhpidev/codeharbor'
 C1='web1'
 C2='web2'
-ADR='192.168.99.100:$CURRENT_PORT'
+ADR="192.168.99.100"
 
 function check_status(){
-  RES=$(curl -Is $ADR | head -1)
+  RES=$(curl -Is $ADR:$CURRENT_PORT | head -1)
+  echo "$RES"
   if [ "$RES" == "HTTP/1.1 200 OK" ]
   then
-    return 1
-  else
     return 0
+  else
+    return 1
   fi
 }
 
@@ -25,7 +26,8 @@ function start_new_container(){
     PORT=3000
   fi
   echo 'migrate database and remove old version of container'
-  docker-compose -f docker/docker-compose.production.yml -p codeharbor run -d --rm web rake db:migrate
+  run=$(docker-compose -f docker/docker-compose.production.yml -p codeharbor run -d --rm web rake db:migrate)
+  docker stop $run
   docker rm -f $NAME
   echo "starting new container $NAME"
   docker run -d --link=codeharbor_db_1:db -e RAILS_ENV='production' \
@@ -37,10 +39,11 @@ function start_new_container(){
           bundle exec rails s -b 0.0.0.0
   # Stop old container once the new one is running
   COUNTER=0
-  echo "polling new container $NAME"
+  export CURRENT_PORT=$PORT
+  echo "polling new container $NAME at $ADR:$CURRENT_PORT"
   while [[ $COUNTER -lt 20 ]]; do
-    up=$(check_status)
-    if [[ $up -eq 1 ]]
+    up="$(check_status)"
+    if [[ $? -eq 0 ]]
     then
       break
     fi
@@ -55,7 +58,6 @@ function start_new_container(){
   echo "$NAME started successfully. Stopping old container."
   docker stop $CURRENT_CONTAINER
   export CURRENT_CONTAINER=$NAME
-  export CURRENT_PORT=$PORT
 }
 echo 'Check if a new version of the image is available'
 echo 'and start a new container with this image.'
@@ -67,7 +69,7 @@ echo "Old SHA: $OLD_SHA"
 docker pull $IMAGE
 NEW_SHA=$(docker images |grep $IMAGE | awk 'NR==1{print $3}')
 echo "New SHA: $NEW_SHA"
-if [ "$OLD_SHA" != "$NEW_SHA" ]; then
+if [ "$OLD_SHA" == "$NEW_SHA" ]; then
   echo 'Image was updated, proceeding to start new container.'
   start_new_container
 fi
