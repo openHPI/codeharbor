@@ -1,4 +1,5 @@
 #!/bin/bash
+
 IMAGE='openhpidev/codeharbor'
 C1='web1'
 C2='web2'
@@ -24,12 +25,12 @@ function start_new_container(){
     NAME=$C1
     PORT=3001
   fi
-  echo 'migrate database and remove old version of container'
+  #echo 'migrate database and remove old version of container'
   run=$(docker-compose -f docker/docker-compose.production.yml -p codeharbor run -d --rm web rake db:migrate)
   docker stop $run
   docker rm $run
   docker rm -f $NAME
-  echo "starting new container $NAME"
+  #echo "starting new container $NAME"
   docker run -d --link=codeharbor_db_1:db -e RAILS_ENV='production' \
           -e RACK_ENV='production' \
           -e DATABASE_URL='postgres://postgres@db:5432/' \
@@ -43,6 +44,7 @@ function start_new_container(){
   echo "polling new container $NAME at $ADR:$CURRENT_PORT"
   while [[ $COUNTER -lt 20 ]]; do
     up="$(check_status)"
+    sleep 1
     if [[ $? -eq 0 ]]
     then
       break
@@ -55,23 +57,25 @@ function start_new_container(){
       docker rm -f $NAME 
       exit 1
     fi
-    sleep 1
   done
   echo "$NAME started successfully. Stopping old container."
   docker stop $CURRENT_CONTAINER
   export CURRENT_CONTAINER=$NAME
 }
+
+
 echo 'Check if a new version of the image is available'
 echo 'and start a new container with this image.'
 echo 'Once the new container is running, stop the old container.'
 echo '**************************************************'
+
 echo 'compare SHA of image before and after docker pull'
-export CURRENT_CONTAINER=$(docker ps |grep $IMAGE | awk 'NR==1{print $7}')
+export CURRENT_CONTAINER=$(docker ps |grep $IMAGE | awk 'NR==1{print $NF}')
 OLD_SHA=$(docker images |grep $IMAGE | awk 'NR==1{print $3}')
-echo "Old SHA: $OLD_SHA"
+#echo "Old SHA: $OLD_SHA"
 docker pull $IMAGE
 NEW_SHA=$(docker images |grep $IMAGE | awk 'NR==1{print $3}')
-echo "New SHA: $NEW_SHA"
+#echo "New SHA: $NEW_SHA"
 if [ "$OLD_SHA" != "$NEW_SHA" ]; then
   echo 'Image was updated, proceeding to start new container.'
   start_new_container
