@@ -1,8 +1,8 @@
 #!/bin/bash
 USERNAME="codeharbor"
 HOST="10.210.0.51"
-C1='web1'
+IMAGE='openhpidev/codeharbor'
+
 scp docker/docker-compose.production.yml $USERNAME@$HOST:/home/codeharbor/docker-compose.yml
-ssh $USERNAME@$HOST docker-compose -f docker/docker-compose.production.yml -p codeharbor up -d
-ssh $USERNAME@$HOST export CURRENT_CONTAINER=$C1
-ssh $USERNAME@$HOST export CURRENT_PORT=3000
+scp update.sh $USERNAME@$HOST:/home/codeharbor/update.sh
+ssh $USERNAME@$HOST docker-compose -p codeharbor up -d

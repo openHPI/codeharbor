@@ -5,7 +5,7 @@ db:
     restart: always
 web:
     image: openhpidev/codeharbor
-    container_name: web1
+    container_name: web0
     ports:
         - "3000:3000"
     command:

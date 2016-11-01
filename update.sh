@@ -1,12 +1,11 @@
 #!/bin/bash
 IMAGE='openhpidev/codeharbor'
-C1='web1'
+C1='web0'
 C2='web2'
 ADR="192.168.99.100"
 
 function check_status(){
   RES=$(curl -Is $ADR:$CURRENT_PORT | head -1)
-  echo "$RES"
   if [ "$RES" == "HTTP/1.1 200 OK" ]
   then
     return 0
@@ -51,6 +50,8 @@ function start_new_container(){
     if [[ $COUNTER -eq 20 ]]
     then
       echo 'Container did not start properly. Exiting'
+      docker stop $NAME
+      docker rm -f $NAME 
       exit 1
     fi
     sleep 1
@@ -64,12 +65,13 @@ echo 'and start a new container with this image.'
 echo 'Once the new container is running, stop the old container.'
 echo '**************************************************'
 echo 'compare SHA of image before and after docker pull'
+export CURRENT_CONTAINER=$(docker ps |grep $IMAGE | awk 'NR==1{print $7}')
 OLD_SHA=$(docker images |grep $IMAGE | awk 'NR==1{print $3}')
 echo "Old SHA: $OLD_SHA"
 docker pull $IMAGE
 NEW_SHA=$(docker images |grep $IMAGE | awk 'NR==1{print $3}')
 echo "New SHA: $NEW_SHA"
-if [ "$OLD_SHA" == "$NEW_SHA" ]; then
+if [ "$OLD_SHA" != "$NEW_SHA" ]; then
   echo 'Image was updated, proceeding to start new container.'
   start_new_container
 fi
