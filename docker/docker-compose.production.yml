@@ -1,15 +1,15 @@
 db:
     image: postgres
     ports:
-     - "5432:5432"
+     - "5432"
     restart: always
 web:
     image: openhpidev/codeharbor
-    container_name: web0
+    container_name: web1
     ports:
-        - "3000:3000"
+        - "3001:3000"
     command:
-        bash -c "rails s -b 0.0.0.0"
+        bundle exec rails s
     restart: unless-stopped
     environment:
         - RAILS_ENV=production

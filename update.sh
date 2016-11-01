@@ -1,8 +1,8 @@
 #!/bin/bash
 IMAGE='openhpidev/codeharbor'
-C1='web0'
+C1='web1'
 C2='web2'
-ADR="192.168.99.100"
+ADR="127.0.0.1"
 
 function check_status(){
   RES=$(curl -Is $ADR:$CURRENT_PORT | head -1)
@@ -19,14 +19,15 @@ function start_new_container(){
   if [ "$CURRENT_CONTAINER" == "$C1" ]
   then
     NAME=$C2
-    PORT=3001
+    PORT=3002
   else
     NAME=$C1
-    PORT=3000
+    PORT=3001
   fi
   echo 'migrate database and remove old version of container'
   run=$(docker-compose -f docker/docker-compose.production.yml -p codeharbor run -d --rm web rake db:migrate)
   docker stop $run
+  docker rm $run
   docker rm -f $NAME
   echo "starting new container $NAME"
   docker run -d --link=codeharbor_db_1:db -e RAILS_ENV='production' \
@@ -35,7 +36,7 @@ function start_new_container(){
           --name $NAME \
           -p $PORT:3000 \
           --restart=unless-stopped openhpidev/codeharbor \
-          bundle exec rails s -b 0.0.0.0
+          bundle exec rails s
   # Stop old container once the new one is running
   COUNTER=0
   export CURRENT_PORT=$PORT
