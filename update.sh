@@ -26,7 +26,7 @@ function start_new_container(){
     PORT=3001
   fi
   #echo 'migrate database and remove old version of container'
-  run=$(docker-compose -f docker/docker-compose.production.yml -p codeharbor run -d --rm web rake db:migrate)
+  run=$(docker-compose -p codeharbor run -d --rm web rake db:migrate)
   docker stop $run
   docker rm $run
   docker rm -f $NAME
