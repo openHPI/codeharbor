@@ -23,7 +23,7 @@ Rails.application.configure do
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
   config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
-
+  
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
   # config.assets.css_compressor = :sass
@@ -78,6 +78,21 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
   
+  # set asset compression method for CSS
+  config.assets.css_compressor = :yui
+  
+  # set asset compression method for JS
+  config.assets.js_compressor = :uglifier
+  
+  # Don't fallback to assets pipeline if a precompiled asset is missed
+  #config.assets.compile = false
+  
+  # Generate digests for assets URLs. This is planned for deprecation.
+  #config.assets.digest = true
+  
+  # which to precompile
+  config.assets.precompile =  ['*.js', '*.css', '*.css.erb', '*.coffee', '*.scss']
+  
   # Run on subfolder in production environment.
-  config.relative_url_root = '/codeharbor'
+  #config.relative_url_root = '/codeharbor'
 end

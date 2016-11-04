@@ -34,6 +34,7 @@ function start_new_container(){
   docker run -d --link=codeharbor_db_1:db -e RAILS_ENV='production' \
           -e RACK_ENV='production' \
           -e DATABASE_URL='postgres://postgres@db:5432/' \
+          -e RAILS_SERVE_STATIC_FILES='true' \
           --name $NAME \
           -p $PORT:3000 \
           --restart=unless-stopped openhpidev/codeharbor \
