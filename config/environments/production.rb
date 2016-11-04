@@ -94,5 +94,5 @@ Rails.application.configure do
   config.assets.precompile =  ['*.js', '*.css', '*.css.erb', '*.coffee', '*.scss']
   
   # Run on subfolder in production environment.
-  #config.relative_url_root = '/codeharbor'
+  config.relative_url_root = '/codeharbor'
 end

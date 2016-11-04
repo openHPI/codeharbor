@@ -1,39 +1,45 @@
 Rails.application.routes.draw do
 
-  resources :execution_environments
-  resources :carts
-  resources :collections
-  get 'home/index'
 
-  controller :sessions do
-    get 'login' => :new
-    post 'login' => :create
-    delete 'logout' => :destroy
-  end
+  scope '/codeharbor' do
+    # You can have the root of your site routed with "root"
+    root 'home#index'
+    
+    resources :execution_environments
+    resources :carts
+    resources :collections
+    get 'home/index'
 
-  get 'sessions/create'
-  get 'sessions/destroy'
+    controller :sessions do
+      get 'login' => :new
+      post 'login' => :create
+      delete 'logout' => :destroy
+    end
 
-  get 'comments/comments_all'
-  get 'exercises/exercises_all'
+    get 'sessions/create'
+    get 'sessions/destroy'
 
-  get 'exercises/:id/duplicate', to: 'exercises#duplicate', as: 'duplicate_exercise'
-  post 'exercises/:id/add_to_cart', to: 'exercises#add_to_cart', as: 'add_to_cart'
+    get 'comments/comments_all'
+    get 'exercises/exercises_all'
 
-  resources :labels
-  resources :label_categories
-  resources :answers
-  resources :users do
-    resources :account_links
-  end
-  resources :tests
-  resources :exercise_files
-  resources :testing_frameworks
-  resources :exercises do
-    resources :comments
-    resources :ratings
-    member do
-      post :push_external
+    get 'pexercises/:id/duplicate', to: 'exercises#duplicate', as: 'duplicate_exercise'
+    post 'exercises/:id/add_to_cart', to: 'exercises#add_to_cart', as: 'add_to_cart'
+
+    resources :labels
+    resources :label_categories
+    resources :answers
+    resources :users do
+      resources :account_links
+    end
+    resources :tests
+    resources :exercise_files
+    resources :testing_frameworks
+    resources :exercises do
+      resources :comments
+      resources :ratings
+      member do
+        post :push_external
+      end
     end
   end
 
@@ -43,8 +49,7 @@ Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
-  # You can have the root of your site routed with "root"
-  root 'home#index'
+
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
