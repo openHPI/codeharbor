@@ -23,10 +23,6 @@ Rails.application.configure do
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
   config.serve_static_files = true
-  
-  # Compress JavaScripts and CSS.
-  config.assets.js_compressor = :uglifier
-  # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
@@ -79,10 +75,10 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
   
   # set asset compression method for CSS
-  config.assets.css_compressor = :yui
+  #config.assets.css_compressor = :yui
   
   # set asset compression method for JS
-  config.assets.js_compressor = :uglifier
+  #config.assets.js_compressor = :uglifier
   
   # Don't fallback to assets pipeline if a precompiled asset is missed
   #config.assets.compile = false
