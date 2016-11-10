@@ -93,5 +93,5 @@ Rails.application.configure do
   config.assets.initialize_on_precompile = true
   
   # Run on subfolder in production environment.
-  config.relative_url_root = '/public'
+  config.relative_url_root = '/codeharbor'
 end
