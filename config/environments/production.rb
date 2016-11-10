@@ -89,6 +89,9 @@ Rails.application.configure do
   # which to precompile
   config.assets.precompile =  ['*.js', '*.css', '*.css.erb', '*.coffee', '*.scss']
   
+  # use relative URL path while compiling, maybe?
+  config.assets.initialize_on_precompile = true
+  
   # Run on subfolder in production environment.
   config.relative_url_root = 'public'
 end
