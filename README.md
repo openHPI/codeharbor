@@ -86,10 +86,10 @@ You can find the coverage results in `coverage/index.html`
 
 If developing with docker:  
 
-     docker-compose -f docker-compose-test.yml run -d --rm web rake db:create db:migrate
-     docker-compose -f docker-compose-test.yml up
+     docker-compose -f docker/docker-compose-test.yml run -d --rm web rake db:create db:migrate
+     docker-compose -f docker/docker-compose-test.yml up
 Or for specific test:
 
-     docker-compose -f docker-compose-test.yml run -d web rspec spec/controllers/exercises_controller_spec.rb
+     docker-compose -f docker/docker-compose-test.yml run -d web rspec spec/controllers/exercises_controller_spec.rb
 Use `docker logs <containername>`to access the results of your tests.  
 Logs will only be available after the execution finished.
