@@ -67,8 +67,12 @@ run `rake db:seed` to add some demo data.
 
 ## initial admin-user
 
-To create an initial admin-user start the rails server and create a new account.
-Run following:
+To create an initial admin-user start the rails server and create a new account using the web interface.
+Connect to the container:
+```
+docker-compose exec web bash
+```
+There run the following:
 ```
 rails c
 >>> User.first.update(role: 'admin')
