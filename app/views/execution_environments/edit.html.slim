@@ -1,0 +1,6 @@
+h1
+  = t('execution.edit.header')
+= render 'form'
+= link_to t('execution.button.show'), @execution_environment
+|  \
+= link_to t('execution.button.back'), execution_environments_path

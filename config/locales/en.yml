@@ -20,4 +20,389 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+
+  error: "error "
+  sure: "Are you sure?"
+
+  account:
+    pushURL: "Push URL"
+    name: "Account Name"
+    token: "OAuth2 token"
+    button:
+      new: "New Account Link"
+      show: "Show TEST"
+      edit: "Edit"
+      destroy: "Destroy"
+      back: "Back"
+      create: "Create Account Link"
+
+    edit:
+      header: "Editing Account Link"
+    links:
+      header: "Listing Account Links"
+    new:
+      header: "New Account Link"
+    errorMessage: " prohibited this account_link from being saved:"
+
+  answers:
+    comment: "Comment"
+    user: "User"
+    button:
+      new: "New Answer"
+      show: "Show"
+      edit: "Edit"
+      destroy: "Destroy"
+      back: "Back"
+
+    new:
+      header: "New Answer"
+    listing:
+      header: "Listing Answers"
+    edit:
+      header: "Editing Answer"
+    errorMessage: "prohibited this answer from being saved:"
+
+  carts:
+    header: "Your Cart"
+    exercises: "Exercises"
+    noExercisesAdded: "No Exercise Added"
+    actions: "Actions"
+    button:
+      edit: "Edit"
+      destroy: "Destroy"
+      back: "Back"
+
+    new:
+      header: "New Cart"
+    edit:
+      button: "Edit"
+      header: "Editing Cart"
+    show:
+
+    form:
+      delete: "Delete"
+    errorMessage: "prohibited this cart from being saved:"
+
+  collections:
+    header: "Your Collections"
+    title: "Title"
+    exercises: "Exercises"
+    actions: "Actions"
+    button:
+      new: "New Collection"
+      show: "Show"
+      edit: "Edit"
+      destroy: "Destroy"
+      back: "Back"
+      create: "Create Collection"
+
+    edit:
+      header: "Editing"
+    new:
+      header: "New Collection"
+    show:
+      header: "Collection:"
+    errorMessage: "prohibited this collection from being saved:"
+    noExercisesAdded: "No Exercises Added"
+
+  comments:
+    header: "Comments for %{title}"
+    text: "Text"
+    exercise: "Exercise"
+    user: "User"
+    created_at: "Created at"
+    actions: "Actions"
+    button:
+      new: "New Comment"
+      edit: "Edit"
+      back: "Back"
+      delete: "Delete"
+      cancel: "Cancel"
+      save: "Save Comment"
+    search:
+      placeholder: "Search for comments"
+      button: "Search"
+
+    admin:
+      header: "Comments Administration"
+      deleteX: "X"
+      comment: "Comment"
+    edit:
+      header: "Editing Comment"
+    new:
+      header: "New Comment"
+    errorMessage: "prohibited this comment from being saved:"
+
+  execution:
+    header: "Listing Execution Environments"
+    version: "Version"
+    language: "Language"
+    button:
+      new: "New Execution Environment"
+      show: "Show"
+      edit: "Edit"
+      destroy: "Destroy"
+      back: "Back"
+      #submit:
+
+    new:
+      header: "New Execution Environment"
+    edit:
+      header: "Editing Execution Environment"
+    errorMessage: "prohibited this execution_environment from being saved:"
+
+  exFiles:
+    header: "Listing Exercise Files"
+    main: "Main"
+    content: "Content"
+    path: "Path"
+    solution: "Solution"
+    extention: "File extension"
+    exercise: "Exercise"
+    #exerciseID:
+    button:
+      new: "New Exercise File"
+      show: "Show"
+      edit: "edit"
+      destroy: "Destroy"
+      back: "Back"
+      #submit:
+
+    new:
+      header: "New Exercise File"
+    edit:
+      header: "Editing Exercise File"
+    errorMessage: "prohibited this exercise_file from being saved:"
+
+  exercises:
+    title: "Title"
+    created_by: "Created by"
+    created_at: "Created at"
+    visibility:
+      label: "Visibility"
+      private: "Private"
+      public: "Public"
+    files:
+      label: "Files"
+      content: "Content"
+      path: "Path: "
+      extension: "File extention: "
+      main: "Main"
+      purpose: "Purpose"
+      name: "Name"
+    tests:
+      label: "Tests"
+      content: "Content"
+      feedback: "Feedback Message"
+      framework: "Testing Framework"
+
+    all:
+      new: "New Exercise"
+      search: "Search"
+      placeholder: "Search for exercise or label"
+      ratings: "Ratings"
+      view: "View"
+      comments: "Show Comments"
+      duplicate: "Duplicate"
+      edit: "Edit"
+      delete: "Delete"
+
+    form:
+      environment: "Execution Environment"
+      descriptions:
+        label: "Descriptions"
+        remove: "Remove Description"
+        add: "Add Description"
+        language: "Language"
+      files:
+        add: "Add File"
+        remove: "Remove File"
+      tests:
+        add: "Add Test"
+        remove: "Remove Test"
+      create: "Create Exercise"
+      cancel: "Cancel"
+
+    admin:
+      header: "Exercise Administration"
+      new: "New Exercise"
+      accessibility: "Accessibility"
+      actions: "Actions"
+      show: "Show"
+      edit: "Edit"
+      deleteX: "X"
+
+    new:
+      header: "New Exercise"
+
+    show:
+      description: "Descritiption in "
+      files:
+        mainfile: "Mainfile"
+        solution: "Solution file"
+      export: "Export to ... "
+      submit: "Submit"
+      define_account_link: "Please define an account link first"
+      or: "or"
+      add_cart: "Add to cart"
+      edit: "Edit"
+      delete: "Delete"
+      back: "Back"
+
+    edit:
+      header: "Edit:"
+    undefined: "Exercise undefined"
+    errorMessage: "prohibited this project from being saved"
+
+  home:
+    header: "Welcome to Code Harbor"
+    subheader: "Your coding exercise repository"
+    login: "Login"
+    sign_up: "Sign Up"
+    search_exercise: "Search Exercise"
+    create_exercise: "Create Exercise"
+    update_profile: "Update Profile"
+
+  label_categories:
+    header: "Listing Label Categories"
+    name: "Name"
+    button:
+      new: "New Label Category"
+      show: "Show"
+      edit: "Edit"
+      destroy: "Destroy"
+      back: "Back"
+      #submit:
+
+    edit:
+      header: "Editing Label Category"
+    new:
+      header: "New Label Category"
+    errorMessage: "prohibited this label_category from being saved:"
+
+  labels:
+    header: "Listing Labels"
+    name: "Name"
+    category: "Label category"
+    #categoryID:
+    button:
+      new: "New Label"
+      show: "Show"
+      edit: "Edit"
+      destroy: "Destroy"
+      back: "Back"
+      #submit:
+
+    edit:
+      header: "Editing Label"
+    new:
+      header: "New Label"
+    errorMessage: "prohibited this label from being saved:"
+
+  layouts:
+    exercises: "Exercises"
+    collections: "Collections"
+    admin: "Admin Panel"
+    admin_nav:
+      user: "User Administration"
+      exercise: "Exercise Administration"
+      comments: "Comments Administration"
+    cart: "Cart"
+    logout: "Log out"
+
+   # ratings: will be added with implementation
+
+  sessions:
+    header: "Please Log In"
+    email:
+      label: "Email"
+      placeholder: "Email"
+    password:
+      label: "Password"
+      placeholder: "Password"
+    login: "Login"
+
+  framework:
+    header: "Listing Testing Frameworks"
+    name: "Name"
+    button:
+      new: "New Testing Framework"
+      show: "Show"
+      edit: "Edit"
+      destroy: "Destroy"
+      back: "Back"
+      #submit:
+
+    edit:
+      header: "Editing Testing Framework"
+    new:
+      header: "New Testing Framework"
+    errorMessage: "prohibited this testing framework from being saved:"
+
+  tests:
+    header: "Listing Tests"
+    content: "Content"
+    rating: "Rating"
+    feedback: "Feedback message"
+    framework: "Testing framework"
+    #frameworkID:
+    button:
+      new: "New Test"
+      show: "Show"
+      edit: "Edit"
+      destroy: "Destroy"
+      back: "Back"
+      #submit:
+
+    edit:
+      header: "Editing Test"
+    new:
+      header: "New test"
+    errorMessage: "prohibited this test from being saved:"
+
+
+  users:
+    first_name: "First name"
+    last_name: "Last name"
+    email: "Email"
+    role: "Role"
+    back: "Back"
+
+    new:
+      header: "New User"
+      password: "Password"
+      password_confirmation: "Password confirmation"
+
+    show:
+      account_links:
+        label: "Account Links"
+        add: "Add Account Link"
+        links: "Links"
+        actions: "Actions"
+        show: "Show"
+        edit: "Edit"
+        destroy: "Destroy"
+      edit: "Edit"
+      delete: "Delete Account"
+      back: "Back"
+
+    admin:
+      header: "User Administration"
+      new: "New User"
+      name: "Name"
+      actions: "Actions"
+      show: "Show"
+      edit: "Edit"
+      deleteX: "X"
+
+    edit:
+      header: "Editing User"
+
+    undefined: "User undefined"
+    yourself: "yourself"
+    errorMessage: "prohibited this user from being saved:"
+
+
+
+
+de:

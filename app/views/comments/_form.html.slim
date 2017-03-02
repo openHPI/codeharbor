@@ -1,0 +1,16 @@
+= form_for :comment, url: exercise_comments_path(@exercise) do |f|
+  - if @comment.errors.any?
+    #error_explanation
+      h2
+        = pluralize(@comment.errors.count, t('error'))
+        = t('comments.errorMessage')
+      ul
+        - @comment.errors.full_messages.each do |message|
+          li= message
+  .field
+    = f.label :text, t('comments.text')
+    br/
+    = f.text_area :text
+  .actions.btn-group role="group"
+    = f.submit t('comments.button.save'), class: 'btn btn-primary'
+    = link_to t('comments.button.cancel'), :back, class:'btn btn-danger'

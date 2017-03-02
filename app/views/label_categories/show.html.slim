@@ -1,0 +1,9 @@
+p#notice
+  = notice
+p
+  strong
+    = t('label_categories.name')
+  = @label_category.name
+= link_to t('label_categories.button.edit'), edit_label_category_path(@label_category)
+|  \
+= link_to t('label_categories.button.back'), label_categories_path

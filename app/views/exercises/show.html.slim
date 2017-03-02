@@ -1,0 +1,120 @@
+- model_class = Exercise
+.page-header
+  h1
+    = @exercise.title
+dl.dl-horizontal
+  dt
+    = t('exercises.title')
+    | :
+  dd
+    = @exercise.title
+  - @exercise.descriptions.each do |description|
+    dt
+      = t('exercises.show.description')
+      = description.language
+      | :
+    dd
+      = description.text
+  dt
+    = t('exercises.visibility.label')
+    | :
+  dd
+    = @exercise.private ? t('exercises.visibility.private') : t('exercises.visibility.public')
+  dt
+    = t('exercises.created_by')
+    | :
+  - if !@exercise.user
+    dd
+      = t('users.undefined')
+  - elsif @exercise.user == current_user
+    dd
+      = t('users.yourself')
+  - elsif @exercise.user.first_name.nil? || current_user.role === 'user'
+    dd
+      = "User#{@exercise.user.id}"
+  - else
+    dd
+      = @exercise.user.name
+  dt
+    = t('exercises.created_at')
+    | :
+  dd
+    = @exercise.created_at
+dl.dl-horizontal
+  dt
+    em
+      = t('exercises.files.label')
+      | :
+  br
+  - @files.each do |file|
+    - if file.purpose != 'test'
+      dd
+
+      dt
+        = t('exercises.files.content')
+      dd
+        .editor_readonly
+          = file.content
+      dt
+        = t('exercises.show.files.mainfile')
+      dd
+        = file.main
+      dt
+        = t('exercises.files.path')
+      dd
+        = file.path
+      dt
+        = t('exercises.files.extension')
+      dd
+        = file.file_extension
+      dt
+        = t('exercises.show.files.solution')
+      dd
+        = file.solution
+      br
+dl.dl-horizontal
+  dt
+    em
+      = t('exercises.tests.label')
+      | :
+  br
+  - @tests.each do |test|
+    dd
+
+    dt
+      = t('exercises.tests.content')
+    dd
+      .editor_readonly
+        = test.exercise_file.content
+    dt
+      = t('exercises.tests.feedback')
+    dd
+      = test.feedback_message
+    dt
+      = t('exercises.tests.framework')
+    dd
+      = test.testing_framework.name
+    br
+- if can? :export, Exercise
+  dl.dl-horizontal
+    dt
+      = t('exercises.show.export')
+    dd
+      = form_tag(push_external_exercise_path(@exercise), method: "post") do |f|
+        - if !current_user.account_links.empty?
+          = collection_select(:account_link, :id, AccountLink.all, :id, :account_name, {},  {class: 'btn btn-default dropdown-toggle'})
+          = button_tag t('exercises.show.submit'), class: 'btn btn-success btn-xs'
+        - else
+          = link_to t('exercises.show.define_account_link'), new_user_account_link_path(current_user)
+    dt = t('exercises.show.or')
+      br
+      br
+    dd
+    dt = t('exercises.show.add_cart')
+    dd
+      = button_to 'Add to cart', add_to_cart_path(@exercise), class: 'btn btn-primary btn-xs'
+.actions.btn-group[role="group"]
+  - if can? :edit, @exercise
+    = link_to t('exercises.show.edit'), edit_exercise_path(@exercise),  class: 'btn btn-warning'
+    = link_to t('exercises.show.delete'), exercise_path(@exercise), class:'btn btn-danger', method: :delete, data: { confirm: t('sure') }
+  = link_to t('exercises.show.back'), exercises_path,  class: 'btn btn-default'

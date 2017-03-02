@@ -1,0 +1,35 @@
+- @exercises.each do |exercise|
+  .panel.panel-default style=("margin-top: 40px")
+    .panel-heading
+      h3.panel-title
+        span= link_to exercise.title, exercise_path(exercise)
+        span.star-rating.pull-right
+          - [*1..5].each do |i|
+            - if can? :create, Rating
+              a data-method="post" href="/exercises/#{exercise.id}/ratings?rating[rating]=#{i}"
+            - if exercise.round_avg_rating >= i
+              span.fa.fa-star data-rating=i
+            - elsif (exercise.round_avg_rating + 0.5) >= i
+              span.fa.fa-star-half-o data-rating=i
+            - else
+              span.fa.fa-star-o data-rating=i
+          small
+            = exercise.ratings.count
+            = t('exercises.all.ratings')
+    .panel-body
+      .col-md-10
+        - unless exercise.descriptions.empty?
+          = exercise.descriptions.first.text
+      .btn-group-vertical.pull-right aria-label="..." role="group"
+        = link_to t('exercises.all.view'), exercise_path(exercise), class:'btn btn-default'
+        = link_to t('exercises.all.comments'), exercise_comments_path(exercise), class:'btn btn-default'
+        - if can? :create, exercise
+          = link_to t('exercises.all.duplicate'), duplicate_exercise_path(exercise), class:'btn btn-default'
+        - if can? :edit, exercise
+          = link_to t('exercises.all.edit'), edit_exercise_path(exercise), class:'btn btn-default'
+          = link_to t('exercises.all.delete'), exercise_path(exercise), class:'btn btn-default', method: :delete, data: { confirm: t('sure') }
+      .col-md-6 style=("margin-top: 60px")
+        - exercise.labels.each do |label|
+          .exerciseLabel style=("background-color: #{'#' + label.color.to_s}; color: white;")
+            = label.name
+= will_paginate @exercises

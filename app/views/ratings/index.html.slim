@@ -1,0 +1,31 @@
+p#notice
+  = notice
+h1
+  | Listing Ratings
+table.table
+  thead
+    tr
+      th
+        | Rating
+      th
+        | Exercise
+      th
+        | User
+      th
+        | Actions
+  tbody
+    - @ratings.each do |rating|
+      tr
+        td
+          = rating.rating
+        td
+          = link_to rating.exercise.title, exercise_path(rating.exercise)
+        td
+          = link_to rating.user.email, user_path(rating.user)
+        td
+          .actions.btn-group[role="group"]
+            = link_to 'Show', rating, class:'btn btn-default btn-xs'
+            = link_to 'Edit', edit_rating_path(rating), class:'btn btn-default btn-xs'
+            = link_to 'Destroy', rating, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-xs'
+br
+= link_to 'New Rating', new_rating_path, class:'btn btn-primary'

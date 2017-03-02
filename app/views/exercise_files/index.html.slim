@@ -1,0 +1,43 @@
+p#notice
+  = notice
+h1
+  = t('exFiles.header')
+table
+  thead
+    tr
+      th
+        = t('exFiles.main')
+      th
+        = t('exFiles.content')
+      th
+        = t('exFiles.path')
+      th
+        = t('exFiles.solution')
+      th
+        = t('exFiles.extention')
+      th
+        = t('exFiles.exercise')
+      th colspan="3"
+  tbody
+    - @exercise_files.each do |exercise_file|
+      tr
+        td
+          = exercise_file.main
+        td
+          = exercise_file.content
+        td
+          = exercise_file.path
+        td
+          = exercise_file.solution
+        td
+          = exercise_file.file_extension
+        td
+          = exercise_file.exercise
+        td
+          = link_to t('exFiles.button.new'), exercise_file
+        td
+          = link_to t('exFiles.button.edit'), edit_exercise_file_path(exercise_file)
+        td
+          = link_to t('exFiles.button.destroy'), exercise_file, method: :delete, data: { confirm: t('sure') }
+br
+= link_to t('exFiles.button.new'), new_exercise_file_path

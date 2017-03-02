@@ -1,0 +1,34 @@
+h1 =  t('comments.admin.header')
+table.table
+  thead
+    tr
+      th = t('comments.exercise')
+      th = t('comments.admin.comment')
+      th = t('comments.user')
+      th = t('comments.created_at')
+      th = t('comments.actions')
+  tbody
+    - @comments.each do |comment|
+      tr
+        - if !comment.exercise
+          td
+            = t('exercises.undefined')
+        - else
+          td= link_to comment.exercise.title, exercise_path(comment.exercise)
+        td= comment.text
+        - if !comment.user
+          td
+            = t('users.undefined')
+        - elsif comment.user == current_user
+          td= t('users.yourself')
+        - elsif comment.user.first_name.nil?
+          td= link_to "User# comment.user.id ", user_path(comment.user)
+        - else
+          td= link_to comment.user.name, user_path(comment.user)
+        td
+          = comment.created_at
+        td.actions.btn-group role="group"
+          - if comment.exercise
+            = link_to t('comments.button.edit'), edit_exercise_comment_path(comment.exercise, comment), class:'btn btn-warning btn-xs'
+            = link_to t('comments.admin.deleteX'), exercise_comment_path(comment.exercise, comment), class:'btn btn-danger btn-xs', method: :delete, data: { confirm: t('sure') }
+        br/

@@ -1,0 +1,67 @@
+.col-md-12
+  = form_for @exercise, html: { class: 'form-horizontal project' } do |f|
+    - if @exercise.errors.any?
+      #error_explanation.panel.panel-danger
+        .panel-heading
+          h3.panel-title
+            = pluralize(@exercise.errors.count, t('error'))
+            = t('exercises.errorMessage')
+        .panel-body
+          ul
+            - @exercise.errors.full_messages.each do |msg|
+              li
+                = msg
+    .form-group
+      = f.label :title, t('exercises.title'),class:'control-label'
+      br/
+      .controls
+        = f.text_field :title, class:'form-control'
+    .form-group
+      = f.label :execution_environment, t('exercises.form.environment'),class:'control-label'
+      br/
+      .controls
+        = f.collection_select :execution_environment_id, ExecutionEnvironment.all, :id, :language
+    .form-group
+      = f.label :descriptions, t('exercises.form.descriptions.label'),class:'control-label'
+      br/
+      = f.nested_fields_for :descriptions do |description|
+        .controls[style="margin-top: 10px; margin-bottom: 10px"]
+          = description.text_area :text, class:'form-control'
+          = description.remove_nested_fields_link t('exercises.form.descriptions.remove'), class:'btn btn-danger btn-xs'
+          .field
+            = f.label :language, t('exercises.form.descriptions.language')
+            br/
+            = description.collection_select :language, Description::LANGUAGES, :to_s, :to_s, include_blank: false
+      = f.add_nested_fields_link :descriptions, t('exercises.form.descriptions.add'), class:'btn btn-success'
+    .form-group
+      = f.label :visibility, t('exercises.visibility.label'), class: 'control-label'
+      .radio
+        .col-md-2
+          div[style="margin-left: 20px"]
+            = f.radio_button :private, true, value: true
+            = label :private, t('exercises.visibility.private')
+        .col-md-2
+          div[style="margin-left: 20px"]
+            = f.radio_button :private, false, value: false
+            = label :private, t('exercises.visibility.public')
+    h4
+      = t('exercises.files.label')+ ':'
+    = f.nested_fields_for :exercise_files do |file|
+      = render 'file_form', f: f, file: file
+      = file.remove_nested_fields_link t('exercises.form.files.remove'), class:'btn btn-danger btn-xs'
+      br/
+      br/
+    = f.add_nested_fields_link :exercise_files, t('exercises.form.files.add'), class:'btn btn-success', id: 'addFileButton'
+    h4
+      = t('exercises.tests.label')+ ':'
+    = f.nested_fields_for :tests do |test|
+      = render 'test_form', f: f, test: test
+      = test.remove_nested_fields_link t('exercises.form.tests.remove'), class:'btn btn-danger btn-xs'
+      br/
+      br/
+    = f.add_nested_fields_link :tests, t('exercises.form.tests.add'), class:'btn btn-success', id: 'addTestButton'
+    br/
+    br/
+    .actions.btn-group[role="group"]
+      = f.submit t('exercises.form.create'), class: 'btn btn-primary'
+      = link_to t('exercises.form.cancel'), :back, class: 'btn btn-danger'

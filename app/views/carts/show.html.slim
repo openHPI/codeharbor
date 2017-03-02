@@ -1,0 +1,7 @@
+p
+  strong
+    = t('carts.exercises')
+  = @cart.exercises
+= link_to t('carts.button.edit'), edit_cart_path(@cart)
+|  \
+= link_to t('carts.button.back'), carts_path

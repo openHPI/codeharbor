@@ -45,6 +45,6 @@ secrets.yml
 # simplecov
 coverage
 
-
+.idea
 
 .ssh

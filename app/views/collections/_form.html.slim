@@ -1,0 +1,16 @@
+= form_for(@collection) do |f|
+  - if @collection.errors.any?
+    #error_explanation
+      h2
+        = pluralize(@collection.errors.count, t('error'))
+        = t('collections.errorMessage')
+      ul
+        - @collection.errors.full_messages.each do |message|
+          li
+            = message
+  .field
+    = f.label :title, t('collections.title')
+    br
+    = f.text_field :title
+  .actions
+    = f.submit t('collections.button.create'), class:'btn btn-primary'

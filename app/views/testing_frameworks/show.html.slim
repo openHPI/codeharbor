@@ -1,0 +1,9 @@
+p#notice
+  = notice
+p
+  strong
+    = t('framework.name')
+  = @testing_framework.name
+= link_to t('framework.button.edit'), edit_testing_framework_path(@testing_framework)
+|  \
+= link_to t('framework.button.back'), testing_frameworks_path
