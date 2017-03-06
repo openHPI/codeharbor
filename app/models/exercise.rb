@@ -3,11 +3,11 @@ require 'nokogiri'
 class Exercise < ActiveRecord::Base
   validates :title, presence: true
 
-  has_many :exercise_files
-  has_many :tests
-  has_and_belongs_to_many :labels
-  has_many :comments
-  has_many :ratings
+  has_many :exercise_files, dependent: :destroy
+  has_many :tests, dependent: :destroy
+  has_and_belongs_to_many :labels, dependent: :destroy
+  has_many :comments, dependent: :destroy
+  has_many :ratings, dependent: :destroy
   has_many :exercise_authors
   has_many :authors, through: :exercise_authors, source: :user
   has_many :exercise_group_accesses
@@ -16,7 +16,7 @@ class Exercise < ActiveRecord::Base
   #has_and_belongs_to_many :carts
   belongs_to :user
   belongs_to :execution_environment
-  has_many :descriptions
+  has_many :descriptions, dependent: :destroy
   #validates :descriptions, presence: true
 
   accepts_nested_attributes_for :descriptions, allow_destroy: true
@@ -56,11 +56,12 @@ class Exercise < ActiveRecord::Base
     return true
   end
 
+
   def avg_rating
     if ratings.empty?
       return 0
     else
-      result = 1.0 * ratings.map(&:rating).inject(:+) / ratings.size
+      result = 1.0  * ratings.map(&:rating).inject(:+) / ratings.size
       return result.round(1)
     end
   end

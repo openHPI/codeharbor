@@ -1,7 +1,18 @@
 - model_class = Exercise
 .page-header
-  h1
-    = @exercise.title
+  h1 style=("align: left") = @exercise.title
+  span.star-rating style=("align: right")
+    - [*1..5].each do |i|
+      - if @exercise.round_avg_rating >= i
+        span.fa.fa-star data-rating=i
+      - elsif (@exercise.round_avg_rating + 0.5) >= i
+        span.fa.fa-star-half-o data-rating=i
+      - else
+        span.fa.fa-star-o data-rating=i
+    small
+      = link_to 'rate', new_exercise_rating_path(@exercise)
+
+
 dl.dl-horizontal
   dt
     = t('exercises.title')

@@ -1,11 +1,11 @@
 = form_for :rating, url: exercise_ratings_path(@exercise) do |f|
-  - if @exercise.errors.any?
+  - if @rating.errors.any?
     #error_explanation
       h2
         = pluralize(@rating.errors.count, "error")
         |  prohibited this rating from being saved:
       ul
-        - @exercise.errors.full_messages.each do |message|
+        - @rating.errors.full_messages.each do |message|
           li
             = message
   .field

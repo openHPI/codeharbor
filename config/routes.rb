@@ -22,7 +22,7 @@ Rails.application.routes.draw do
   get 'comments/comments_all'
   get 'exercises/exercises_all'
 
-  get 'pexercises/:id/duplicate', to: 'exercises#duplicate', as: 'duplicate_exercise'
+  get 'exercises/:id/duplicate', to: 'exercises#duplicate', as: 'duplicate_exercise'
   post 'exercises/:id/add_to_cart', to: 'exercises#add_to_cart', as: 'add_to_cart'
 
   resources :labels
