@@ -12,8 +12,8 @@ class Exercise < ActiveRecord::Base
   has_many :authors, through: :exercise_authors, source: :user
   has_many :exercise_group_accesses
   has_many :access, through: :exercise_group_accesses, source: :group
-  #has_and_belongs_to_many :collections
-  #has_and_belongs_to_many :carts
+  has_and_belongs_to_many :collections, dependent: :destroy
+  has_and_belongs_to_many :carts, dependent: :destroy
   belongs_to :user
   belongs_to :execution_environment
   has_many :descriptions, dependent: :destroy

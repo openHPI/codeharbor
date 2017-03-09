@@ -24,6 +24,7 @@ Rails.application.routes.draw do
 
   get 'exercises/:id/duplicate', to: 'exercises#duplicate', as: 'duplicate_exercise'
   post 'exercises/:id/add_to_cart', to: 'exercises#add_to_cart', as: 'add_to_cart'
+  post 'exercises/:id/add_to_collection', to: 'exercises#add_to_collection', as: 'add_to_collection'
 
   resources :labels
   resources :label_categories

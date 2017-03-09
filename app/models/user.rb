@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   validates :first_name, :last_name, presence: true
   has_secure_password
 
+  has_many :collections
   has_many :account_links
   has_many :exercises
   has_one :cart

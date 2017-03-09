@@ -103,6 +103,16 @@ class ExercisesController < ApplicationController
     end
   end
 
+  def add_to_collection
+    collection = Collection.find(params[:collection][:id]);
+    unless collection.exercises.find_by(id: @exercise.id)
+      collection.exercises << @exercise
+      redirect_to @exercise, alert: 'Exercise added to collection.'
+    else
+      redirect_to @exercise, alert: 'Exercise already in collection.'
+    end
+  end
+
   def exercises_all
     @exercises = Exercise.all
   end

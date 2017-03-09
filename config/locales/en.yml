@@ -245,6 +245,7 @@ en:
       define_account_link: "Please define an account link first"
       or: "or"
       add_cart: "Add to cart"
+      add_collection: "Add to collection"
       edit: "Edit"
       delete: "Delete"
       back: "Back"
