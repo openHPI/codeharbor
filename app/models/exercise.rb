@@ -17,6 +17,8 @@ class Exercise < ActiveRecord::Base
   belongs_to :user
   belongs_to :execution_environment
   has_many :descriptions, dependent: :destroy
+  has_many :origin_relations, :class_name => 'ExerciseRelation', :foreign_key => 'origin_id'
+  has_many :clone_relations, :class_name => 'ExerciseRelation', :foreign_key => 'origin_id'
   #validates :descriptions, presence: true
 
   accepts_nested_attributes_for :descriptions, allow_destroy: true

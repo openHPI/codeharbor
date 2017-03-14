@@ -13,9 +13,14 @@ user3 = User.create(email: 'denise.feler@gmx.de', password: 'pwd')
 user4 = User.create(email: 'theresa.zobel@aon.at', password: '1234')
 user5 = User.create(email: 'theresa.zobel@student.hpi.de', password: '1234')
 
+relation1 = Relation.create(name: 'Derivate')
+relation2 = Relation.create(name: 'Translate')
+relation3 = Relation.create(name: 'Port')
+
 category1 = LabelCategory.create(name: 'Languages')
 category2 = LabelCategory.create(name: 'Level')
 category3 = LabelCategory.create(name: 'Target Group')
+
 l1 = Label.create(name: 'Java', color: '006600', label_category: category1)
 l2 = Label.create(name: 'basic-users', color: 'DF0101', label_category: category2)
 l3 = Label.create(name: 'pupils', color: '3333CC', label_category: category3)

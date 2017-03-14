@@ -16,6 +16,13 @@ class ExercisesController < ApplicationController
   # GET /exercises/1
   # GET /exercises/1.json
   def show
+
+    exercise_relation = ExerciseRelation.find_by(clone_id: @exercise.id)
+    if exercise_relation
+      @exercise_relation = exercise_relation
+      @exercise_relation.origin = exercise_relation.origin
+      @exercise_relation.clone = exercise_relation.clone
+    end
     @files = ExerciseFile.where(exercise: @exercise)
     @tests = Test.where(exercise: @exercise)
 
@@ -25,13 +32,17 @@ class ExercisesController < ApplicationController
   def new
     @exercise = Exercise.new
     @exercise.descriptions << Description.new
+    @form_action
   end
+
 
   def duplicate
     exercise = Exercise.find(params[:id])
     @exercise = Exercise.new
-    @exercise.title = exercise.title
+    @exercise_relation = ExerciseRelation.new
     @exercise.private = exercise.private
+    @origin = exercise
+
     exercise.descriptions.each do |d|
       @exercise.descriptions << Description.new(d.attributes)
     end
@@ -41,19 +52,30 @@ class ExercisesController < ApplicationController
     exercise.exercise_files.each do |f|
       @exercise.exercise_files << ExerciseFile.new(f.attributes)
     end
-    render 'new'
+    render 'duplicate'
+
+
+
   end
 
   # GET /exercises/1/edit
   def edit
   end
 
+  def save_duplicate
+
+  end
   # POST /exercises
   # POST /exercises.json
   def create
     @exercise = Exercise.new(exercise_params)
     @exercise.add_attributes(params[:exercise])
     @exercise.user = current_user
+    @exercise_relation = ExerciseRelation.new
+    @exercise_relation.clone = @exercise
+    @exercise_relation.origin_id = params[:exercise][:origin_id]
+    @exercise_relation.relation_id = params[:exercise][:id]
+    @exercise_relation.save
     respond_to do |format|
       if @exercise.save
         format.html { redirect_to @exercise, notice: 'Exercise was successfully created.' }

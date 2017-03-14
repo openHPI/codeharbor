@@ -19,6 +19,17 @@ dl.dl-horizontal
     | :
   dd
     = @exercise.title
+  - if @exercise_relation
+    dt
+      = 'Parent:'
+    dd
+      = link_to @exercise_relation.origin.title, exercises_path(@exercise_relation.origin)
+  - if @exercise_relation
+    dt
+      = 'Relation'
+    dd
+      = @exercise_relation.relation.name
+
   - @exercise.descriptions.each do |description|
     dt
       = t('exercises.show.description')
@@ -31,6 +42,10 @@ dl.dl-horizontal
     | :
   dd
     = @exercise.private ? t('exercises.visibility.private') : t('exercises.visibility.public')
+  dt
+    = 'Execution Environment'
+  dd
+    = @exercise.execution_environment.language
   dt
     = t('exercises.created_by')
     | :
