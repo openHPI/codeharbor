@@ -2,7 +2,6 @@ require 'nokogiri'
 
 class Exercise < ActiveRecord::Base
   validates :title, presence: true
-  validates :relation, presence: true, if: :has_parent?
 
   has_many :exercise_files, dependent: :destroy
   has_many :tests, dependent: :destroy

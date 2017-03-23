@@ -1,6 +1,6 @@
 class Group < ActiveRecord::Base
 
-  has_many :user_groups
+  has_many :user_groups, dependent: :destroy
   has_many :users, through: :user_groups
   has_many :exercise_group_accesses
   has_many :exercises, through: :exercise_group_access
