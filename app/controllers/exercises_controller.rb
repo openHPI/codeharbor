@@ -53,9 +53,6 @@ class ExercisesController < ApplicationController
       @exercise.exercise_files << ExerciseFile.new(f.attributes)
     end
     render 'duplicate'
-
-
-
   end
 
   # GET /exercises/1/edit

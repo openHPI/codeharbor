@@ -200,10 +200,6 @@ class Exercise < ActiveRecord::Base
     return builder.to_xml
   end
 
-  def has_parent?
-
-  end
-
   def model_solution_files
     self.exercise_files.select { |file| file.solution }
   end
