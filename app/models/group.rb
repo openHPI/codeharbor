@@ -14,7 +14,7 @@ class Group < ActiveRecord::Base
   end
   
   def destroy
-    UserGroup.destroy_all(group_id: id)
+    #UserGroup.destroy_all(group_id: id)
     super
   end
 

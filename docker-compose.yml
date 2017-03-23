@@ -1,7 +1,7 @@
 db:
     image: postgres
     ports:
-     - "5432:5432"
+     - "54320:5432"
 web:
     build: .
     ports:
@@ -12,5 +12,7 @@ web:
         - RAILS_ENV=development
         - RACK_ENV=development
         - DATABASE_URL=postgres://postgres@db:5432/
+    volumes:
+        - .:/codeharbor
     links:
       - db

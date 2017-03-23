@@ -10,7 +10,7 @@
     dd
       = @group.description
     dt
-      = 'Admins:'
+      = 'Admins'
       | :
     - @group.admins.each do |admin|
       dd
@@ -31,7 +31,7 @@
             = link_to 'Delete', delete_from_group_path(group: @group, user: user), class:'btn btn-danger btn-xs'
         dt
     dd
-    - if current_user.role === 'admin'
+    - if @group.is_admin(current_user)
       dt
         = 'Pending Unsers'
         | :

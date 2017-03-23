@@ -70,11 +70,11 @@ class GroupsController < ApplicationController
 
   def request_access
     group = Group.find(params[:id])
+    flash[:notice] = "Your Access request has been sent."
     group.admins.each do |admin|
-      AccessRequest.send_access_request(current_user, admin, group).deliver_later
+      AccessRequest.send_access_request(current_user, admin, group).deliver
     end
     UserGroup.create(group: group, user: current_user)
-    flash[:notice] = "Your Access request has been sent."
     redirect_to groups_path
   end
 

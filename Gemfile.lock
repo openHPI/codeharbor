@@ -65,6 +65,7 @@ GEM
       puma (>= 2.6)
     codeclimate-test-reporter (0.4.8)
       simplecov (>= 0.7.1, < 1.0.0)
+    coderay (1.1.1)
     coffee-rails (4.1.0)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0, < 5.0)
@@ -113,6 +114,7 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
+    method_source (0.8.2)
     mime-types (2.99)
     mini_portile2 (2.0.0)
     minitest (5.8.3)
@@ -135,6 +137,13 @@ GEM
       multi_xml (~> 0.5)
       rack (~> 1.2)
     pg (0.18.4)
+    pry (0.10.4)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
+    pry-byebug (3.3.0)
+      byebug (~> 8.0)
+      pry (~> 0.10)
     puma (2.15.3)
     rack (1.6.4)
     rack-mini-profiler (0.10.1)
@@ -207,6 +216,7 @@ GEM
       actionpack (>= 3.1)
       railties (>= 3.1)
       slim (~> 3.0)
+    slop (3.6.0)
     spring (1.5.0)
     sprockets (3.5.2)
       concurrent-ruby (~> 1.0)
@@ -269,6 +279,7 @@ DEPENDENCIES
   nokogiri
   oauth2
   pg
+  pry-byebug
   puma
   rack-mini-profiler
   rails (= 4.2.4)
