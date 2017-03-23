@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+<h1>Hello <%= @admin.name %></h1>
+<p>
+  <%= @user.name %> asked to join your group " <%= @group.name %> <br/>
+  If you want to give your permission click on the link below. <br/>
+  Otherwise ignore this Email. <br/>
+  <br/>
+  <%= link_to 'Confirm Request',group_url(@group), class: 'btn btn-success' %>
+</p>
+</body>
+</html>

@@ -19,12 +19,15 @@ dl.dl-horizontal
     | :
   dd
     = @exercise.title
+
   - if @exercise_relation
     dt
       = 'Parent:'
     dd
-      = link_to @exercise_relation.origin.title, exercises_path(@exercise_relation.origin)
-  - if @exercise_relation
+      - if @exercise_relation.origin
+        = link_to @exercise_relation.origin.title, exercise_path(@exercise_relation.origin)
+      - else
+        = 'Parent was deleted'
     dt
       = 'Relation'
     dd

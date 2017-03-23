@@ -7,11 +7,11 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 
-user1 = User.create(email: 'manfredAnderson@bhak1.de', password: 'pwd', role: 'admin')
-user2 = User.create(email: 'j.maier@waldschule.de', password: 'pwd')
-user3 = User.create(email: 'denise.feler@gmx.de', password: 'pwd')
-user4 = User.create(email: 'theresa.zobel@aon.at', password: '1234')
-user5 = User.create(email: 'theresa.zobel@student.hpi.de', password: '1234')
+user1 = User.create(first_name: 'Manfred', last_name: 'Anderson', email: 'manfredAnderson@bhak1.de', password: 'pwd', role: 'admin')
+user2 = User.create(first_name: 'Johannes', last_name: 'Maier', email: 'j.maier@waldschule.de', password: 'pwd')
+user3 = User.create(first_name: 'Denise', last_name: 'Feler', email: 'denise.feler@gmx.de', password: 'pwd')
+user4 = User.create(first_name: 'Theresa', last_name: 'Zobel', email: 'theresa.zobel@aon.at', password: '1234')
+user5 = User.create(first_name: 'Theresa', last_name: 'Zobel', email: 'theresa.zobel@student.hpi.de', password: '1234')
 
 relation1 = Relation.create(name: 'Derivate')
 relation2 = Relation.create(name: 'Translate')

@@ -2,6 +2,7 @@ require 'nokogiri'
 
 class Exercise < ActiveRecord::Base
   validates :title, presence: true
+  validates :relation, presence: true, if: :has_parent?
 
   has_many :exercise_files, dependent: :destroy
   has_many :tests, dependent: :destroy
@@ -20,6 +21,7 @@ class Exercise < ActiveRecord::Base
   has_many :origin_relations, :class_name => 'ExerciseRelation', :foreign_key => 'origin_id'
   has_many :clone_relations, :class_name => 'ExerciseRelation', :foreign_key => 'origin_id'
   #validates :descriptions, presence: true
+
 
   accepts_nested_attributes_for :descriptions, allow_destroy: true
 
@@ -63,7 +65,7 @@ class Exercise < ActiveRecord::Base
     if ratings.empty?
       return 0
     else
-      result = 1.0  * ratings.map(&:rating).inject(:+) / ratings.size
+      result = 1.0 * ratings.map(&:rating).inject(:+) / ratings.size
       return result.round(1)
     end
   end
@@ -196,6 +198,10 @@ class Exercise < ActiveRecord::Base
       }
     end
     return builder.to_xml
+  end
+
+  def has_parent?
+
   end
 
   def model_solution_files

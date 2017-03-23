@@ -1,0 +1,44 @@
+h1
+  = 'Your Groups'
+  = link_to 'New Group', new_group_path, class:'btn btn-success'
+
+h3
+  = 'My Groups'
+table.table
+  thead
+    tr
+      th Name
+      th Description
+      th Role
+      th Actions
+
+  tbody
+    - @groups.each do |group|
+      - if group.users.include?(current_user)
+        tr
+          td = group.name
+          td = group.description
+          td = group.is_admin(current_user) ? 'Admin' : 'Member'
+          td.actions.btn-group[role="group"]
+            = link_to 'Show', group, class:'btn btn-default btn-xs'
+            - if group.is_admin(current_user)
+              = link_to 'Edit', edit_group_path(group), class:'btn btn-warning btn-xs'
+              = link_to 'Destroy', group, data: { confirm: 'Are you sure?' }, method: :delete, class:'btn btn-danger btn-xs'
+
+h3
+  = 'All Groups'
+table.table
+  thead
+    tr
+      th Name
+      th Description
+      th Actions
+
+  tbody
+    - @groups.each do |group|
+      - unless group.users.include?(current_user)
+        tr
+          td = group.name
+          td = group.description
+          td = link_to 'Request Memembership', request_access_path(group)
+br/

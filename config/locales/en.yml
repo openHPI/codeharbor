@@ -303,6 +303,7 @@ en:
   layouts:
     exercises: "Exercises"
     collections: "Collections"
+    groups: "Groups"
     admin: "Admin Panel"
     admin_nav:
       user: "User Administration"

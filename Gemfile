@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+#Private Data
+gem 'figaro'
 #Translate
 gem 'i18n'
 #Use slim format

@@ -12,8 +12,8 @@ html
         = menu_group do
           - if current_user
             = menu_item t('layouts.exercises'), exercises_path
-            - unless current_user.role === 'user'
-              = menu_item t('layouts.collections'), collections_path
+            = menu_item t('layouts.collections'), collections_path
+            = menu_item t('layouts.groups'), groups_path
             = menu_divider
             - if current_user.role === 'admin'
               = drop_down t('layouts.admin') do
