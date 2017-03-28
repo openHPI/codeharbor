@@ -12,13 +12,8 @@ class Group < ActiveRecord::Base
   def is_admin(user)
     UserGroup.find_by(group_id: id, user: user).is_admin
   end
-  
-  def destroy
-    #UserGroup.destroy_all(group_id: id)
-    super
-  end
 
-  def users
+  def members
     User.find(UserGroup.where(group_id: id, is_active: true).collect(&:user_id))
   end
 

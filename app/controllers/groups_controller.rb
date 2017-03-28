@@ -1,6 +1,10 @@
 class GroupsController < ApplicationController
+  load_and_authorize_resource
   before_action :set_group, only: [:show, :edit, :update, :destroy, :grant_access, :delete_from_group, :make_admin]
 
+  rescue_from CanCan::AccessDenied do |_exception|
+    redirect_to root_path, alert: 'You are not authorized to for this action.'
+  end
   # GET /groups
   # GET /groups.json
   def index

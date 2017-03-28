@@ -1,6 +1,10 @@
 class TestingFrameworksController < ApplicationController
+  load_and_authorize_resource
   before_action :set_testing_framework, only: [:show, :edit, :update, :destroy]
 
+  rescue_from CanCan::AccessDenied do |_exception|
+    redirect_to root_path, alert: 'You are not authorized for this action.'
+  end
   # GET /testing_frameworks
   # GET /testing_frameworks.json
   def index

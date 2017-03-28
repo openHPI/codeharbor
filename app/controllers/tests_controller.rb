@@ -1,6 +1,10 @@
 class TestsController < ApplicationController
+  load_and_authorize_resource
   before_action :set_test, only: [:show, :edit, :update, :destroy]
 
+  rescue_from CanCan::AccessDenied do |_exception|
+    redirect_to root_path, alert: 'You are not authorized for this action.'
+  end
   # GET /tests
   # GET /tests.json
   def index

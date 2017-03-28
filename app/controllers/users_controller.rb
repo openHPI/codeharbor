@@ -1,6 +1,11 @@
 class UsersController < ApplicationController
+  load_and_authorize_resource
+  skip_load_and_authorize_resource :only => [:new, :create]
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
+  rescue_from CanCan::AccessDenied do |_exception|
+    redirect_to root_path, alert: 'You are not authorized for this action.'
+  end
   # GET /users
   # GET /users.json
   def index

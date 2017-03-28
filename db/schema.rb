@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161010113847) do
+ActiveRecord::Schema.define(version: 20170309142359) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -142,6 +142,14 @@ ActiveRecord::Schema.define(version: 20161010113847) do
   add_index "exercise_group_accesses", ["exercise_id"], name: "index_exercise_group_accesses_on_exercise_id", using: :btree
   add_index "exercise_group_accesses", ["group_id"], name: "index_exercise_group_accesses_on_group_id", using: :btree
 
+  create_table "exercise_relations", force: :cascade do |t|
+    t.integer  "origin_id"
+    t.integer  "clone_id"
+    t.integer  "relation_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "exercises", force: :cascade do |t|
     t.string   "title"
     t.string   "description"
@@ -198,6 +206,12 @@ ActiveRecord::Schema.define(version: 20161010113847) do
   add_index "ratings", ["exercise_id"], name: "index_ratings_on_exercise_id", using: :btree
   add_index "ratings", ["user_id"], name: "index_ratings_on_user_id", using: :btree
 
+  create_table "relations", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "testing_frameworks", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
@@ -219,7 +233,7 @@ ActiveRecord::Schema.define(version: 20161010113847) do
 
   create_table "user_groups", force: :cascade do |t|
     t.boolean  "is_admin",   default: false
-    t.boolean  "is_active", default: false
+    t.boolean  "is_active",  default: false
     t.integer  "user_id"
     t.integer  "group_id"
     t.datetime "created_at",                 null: false

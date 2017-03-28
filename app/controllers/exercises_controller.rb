@@ -2,7 +2,7 @@ require 'oauth2'
 
 class ExercisesController < ApplicationController
   load_and_authorize_resource
-  before_action :set_exercise, only: [:show, :edit, :update, :destroy, :add_to_cart, :add_to_collection,:push_external]
+  before_action :set_exercise, only: [:show, :edit, :update, :destroy, :add_to_cart, :add_to_collection, :push_external]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized for this exercise.'
@@ -128,8 +128,7 @@ class ExercisesController < ApplicationController
       Cart.create(user: current_user)
     end
     cart = Cart.find_by(user: current_user)
-    unless cart.exercises.find_by(id: @exercise.id)
-      cart.exercises << @exercise
+    if cart.add_exercise(@exercise)
       redirect_to @exercise, notice: 'Exercise was successfully added to your cart.'
     else
       redirect_to @exercise, alert: 'Exercise already in your cart.'
@@ -138,9 +137,8 @@ class ExercisesController < ApplicationController
 
   def add_to_collection
     collection = Collection.find(params[:collection][:id])
-    collection_set = collection.exercises.to_set
-    if collection_set.add?(@exercise)
-      redirect_to @exercise, alert: 'Exercise added to collection.'
+    if collection.add_exercise(@exercise)
+      redirect_to @exercise, notice: 'Exercise added to collection.'
     else
       redirect_to @exercise, alert: 'Exercise already in collection.'
     end
@@ -163,13 +161,13 @@ class ExercisesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_exercise
-      @exercise = Exercise.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_exercise
+    @exercise = Exercise.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def exercise_params
-      params.require(:exercise).permit(:title, :description, :maxrating, :private, :execution_environment_id)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def exercise_params
+    params.require(:exercise).permit(:title, :description, :maxrating, :private, :execution_environment_id)
+  end
 end

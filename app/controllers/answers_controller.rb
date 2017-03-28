@@ -1,6 +1,10 @@
 class AnswersController < ApplicationController
+  load_and_authorize_resource
   before_action :set_answer, only: [:show, :edit, :update, :destroy]
 
+  rescue_from CanCan::AccessDenied do |_exception|
+    redirect_to root_path, alert: 'You are not authorized to answer.'
+  end
   # GET /answers
   # GET /answers.json
   def index

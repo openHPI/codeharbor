@@ -24,7 +24,7 @@
           - elsif comment.user == current_user
             td= t('users.yourself')
           - elsif comment.user.first_name.nil? || current_user.role === 'user'
-            td= "User# comment.user.id "
+            td= "User #{comment.user.id} "
           - else
             td= comment.user.name
           td

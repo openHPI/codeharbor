@@ -2,6 +2,44 @@ require 'rails_helper'
 require 'nokogiri'
 
 RSpec.describe User, type: :model do
+  describe 'cart count' do
+    let!(:user) {FactoryGirl.create(:user)}
+    let!(:exercise1) {FactoryGirl.create(:simple_exercise)}
+    let!(:exercise2) {FactoryGirl.create(:simple_exercise)}
+    let(:cart) {FactoryGirl.create(:cart, user: user, exercises: [exercise1])}
+
+
+    it 'return +1 when exercise is added' do
+      count = user.cart_count
+      cart.add_exercise(exercise1)
+      expect(user.cart_count).to be_eql(count + 1)
+    end
+    it 'return -1 when exercise is removed' do
+      cart.add_exercise(exercise2)
+      count = user.cart_count
+      cart.remove_exercise(exercise2)
+      expect(user.cart_count).to be_eql(count - 1)
+    end
+    it 'return 0 when cart got destroyed' do
+      cart.destroy
+      expect(user.cart_count).to be_eql(0)
+    end
+  end
+
+  describe 'is_author' do
+    let!(:user1) {FactoryGirl.create(:user)}
+    let!(:user2) {FactoryGirl.create(:user)}
+    let!(:exercise) {FactoryGirl.create(:exercise_with_author, authors: [user1])}
+
+    it 'returns true for author' do
+      expect(user1.is_author?(exercise)).to be true
+    end
+
+    it 'return false for not author' do
+      expect(user2.is_author?(exercise)).to be false
+    end
+  end
+
   describe 'handles Groups when destroyed' do
     let!(:user) { FactoryGirl.create(:user) }
     let(:second_user) { FactoryGirl.create(:user) }

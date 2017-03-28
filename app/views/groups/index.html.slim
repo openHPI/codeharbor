@@ -14,7 +14,7 @@ table.table
 
   tbody
     - @groups.each do |group|
-      - if group.users.include?(current_user)
+      - if group.members.include?(current_user)
         tr
           td = group.name
           td = group.description
@@ -24,6 +24,12 @@ table.table
             - if group.is_admin(current_user)
               = link_to 'Edit', edit_group_path(group), class:'btn btn-warning btn-xs'
               = link_to 'Destroy', group, data: { confirm: 'Are you sure?' }, method: :delete, class:'btn btn-danger btn-xs'
+      - if group.users.include?(current_user) && !group.members.include?(current_user)
+        tr
+          td = group.name
+          td = group.description
+          td
+          td = 'Wait to get accepted'
 
 h3
   = 'All Groups'
