@@ -149,7 +149,7 @@ dl.dl-horizontal
     dd
       = form_tag(add_to_collection_path(@exercise), method: "post") do |f|
         - if !current_user.collections.empty?
-          = collection_select(:collection, :id, Collection.all, :id, :title, {}, {class: 'btn btn-default dropdown-toggle'})
+          = collection_select(:collection, :id, Collection.where(user: current_user), :id, :title, {}, {class: 'btn btn-default dropdown-toggle'})
           = button_tag 'Add to Collection', class: 'btn btn-success btn-xs'
         - else
           = link_to ('Add Collection'), new_collection_path(current_user)

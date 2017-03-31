@@ -24,21 +24,18 @@ class CommentsController < ApplicationController
   # POST /comments
   # POST /comments.json
   def create
-    comment = @exercise.comments.find_by(user: current_user)
-    notice = 'Comment was successfully created.'
-    if comment
-      notice = 'Comment was successfully updated.'
-      comment.update(comment_params)
-    else
-      comment = Comment.new(comment_params)
-    end
-    comment.exercise = @exercise
-    comment.user = current_user
+    @comment = Comment.new(comment_params)
+    @comment.user = current_user
+    @comment.exercise = @exercise
 
-    if comment.save
-      redirect_to exercise_comments_path(@exercise), notice: notice
-    else
-      render :new
+    respond_to do |format|
+      if @collection.save
+        format.html { redirect_to exercise_comments_path(@exercise), notice: 'Comment was successfully created.' }
+        format.json { render :index, status: :created, location: @collection }
+      else
+        format.html { render :new }
+        format.json { render json: @collection.errors, status: :unprocessable_entity }
+      end
     end
   end
 

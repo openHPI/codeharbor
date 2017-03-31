@@ -25,6 +25,8 @@ Rails.application.routes.draw do
   get 'comments/comments_all'
   get 'exercises/exercises_all'
 
+  get 'my_cart', to: 'carts#my_cart', as: 'my_cart'
+
   get 'exercises/:id/duplicate', to: 'exercises#duplicate', as: 'duplicate_exercise'
   post 'exercises/:id/add_to_cart', to: 'exercises#add_to_cart', as: 'add_to_cart'
   post 'exercises/:id/add_to_collection', to: 'exercises#add_to_collection', as: 'add_to_collection'
@@ -34,6 +36,11 @@ Rails.application.routes.draw do
   get 'groups/:id/grant_access', to: 'groups#grant_access', as: 'grant_access'
   get 'groups/:id/delete_from_group', to: 'groups#delete_from_group', as: 'delete_from_group'
   get 'groups/:id/make_admin', to: 'groups#make_admin', as: 'make_admin'
+
+  get 'collections/:id/remove_exercise', to: 'collections#remove_exercise' ,as: 'remove_exercise_collection'
+  get 'carts/:id/remove_exercise', to: 'carts#remove_exercise' ,as: 'remove_exercise_cart'
+  get 'collections/:id/remove_all', to: 'collections#remove_all' ,as: 'remove_all_collection'
+  get 'carts/:id/remove_all', to: 'carts#remove_all' ,as: 'remove_all_cart'
 
   resources :labels
   resources :label_categories

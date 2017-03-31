@@ -46,8 +46,13 @@ class CartsController < ApplicationController
   # PATCH/PUT /carts/1.json
   def update
     respond_to do |format|
-      format.html { render :edit }
-      format.json { render json: @cart.errors, status: :unprocessable_entity }
+      if @cart.update(user: @user)
+        format.html { redirect_to carts_path, notice: 'Cart was successfully updated.' }
+        format.json { render :index, status: :ok, location: @cart }
+      else
+        format.html { render :edit }
+        format.json { render json: @collection.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -59,6 +64,29 @@ class CartsController < ApplicationController
       format.html { redirect_to carts_url, notice: 'Cart was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def remove_exercise
+    if @cart.remove_exercise(params[:exercise])
+      redirect_to @cart, notice: 'Exercise was successfully removed.'
+    else
+      redirect_to @cart, alert: 'You cannot remove this exercise.'
+    end
+  end
+
+  def remove_all
+    if @cart.remove_all
+      redirect_to @cart, notice: 'All Exercises were successfully removed'
+    else
+      redirect_to @cart, alert: 'You cannot remove all exercises'
+    end
+  end
+
+  def my_cart
+    unless @cart = Cart.find_by(user: current_user)
+      Cart.create(user: current_user)
+    end
+    redirect_to cart_path(@cart)
   end
 
   private

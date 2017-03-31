@@ -14,13 +14,13 @@ class Ability
       end
 
       #Cart
-      can [:new], Cart
+      can [:create], Cart
       can [:manage], Cart do |cart|
         cart.user == user
       end
 
       #Collection
-      can [:new]
+      can [:create], Collection
       can [:manage], Collection do |collection|
         collection.user == user
       end
@@ -50,6 +50,12 @@ class Ability
       end
       can [:update, :destroy, :make_admin, :grant_access, :delete_from_group], Group do |group|
         UserGroup.where(user_id: user.id, group_id: group.id, is_admin: true).any?
+      end
+
+      #User
+      can [:create], User
+      can [:show, :edit, :delete], User do |this_user|
+        this_user == user
       end
     end
     # Define abilities for the passed in user here. For example:

@@ -8,7 +8,7 @@ class Exercise < ActiveRecord::Base
   has_and_belongs_to_many :labels, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :ratings, dependent: :destroy
-  has_many :exercise_authors
+  has_many :exercise_authors, dependent: :destroy
   has_many :authors, through: :exercise_authors, source: :user
   has_many :exercise_group_accesses
   has_many :access, through: :exercise_group_accesses, source: :group

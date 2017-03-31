@@ -1,60 +1,59 @@
 require 'rails_helper'
 
-RSpec.describe "groups", type: :request do
+RSpec.describe "exercises", type: :request do
   context 'logged in' do
     before(:each) do
       @user = FactoryGirl.create(:user)
-      @group = FactoryGirl.create(:group, users: [@user])
-      UserGroup.set_is_admin(@group.id, @user.id, true)
-      @group_params = FactoryGirl.attributes_for(:group)
+      @exercise = FactoryGirl.create(:only_meta_data, authors: [@user])
+      @exercise_params = FactoryGirl.attributes_for(:only_meta_data)
       post_via_redirect login_path, :email => @user.email, :password => @user.password
     end
 
-    describe "GET /groups" do
+    describe "GET /exercises" do
       it "works! (now write some real specs)" do
-        get groups_path
+        get exercises_path
         expect(response).to have_http_status(200)
       end
     end
-    describe 'POST /groups' do
+    describe 'POST /exercises' do
       it 'has http 302' do
-        post groups_path,{group: @group_params}
+        post exercises_path,{exercise: @exercise_params}
         expect(response).to have_http_status(302)
       end
     end
-    describe 'GET /groups/new' do
+    describe 'GET /exercises/new' do
       it 'has http 200' do
-        get new_group_path
+        get new_exercise_path
         expect(response).to have_http_status(200)
       end
     end
-    describe 'GET /groups/:id/edit' do
+    describe 'GET /exercises/:id/edit' do
       it 'has http 200' do
-        get edit_group_path(@group)
+        get edit_exercise_path(@exercise)
         expect(response).to have_http_status(200)
       end
     end
-    describe 'GET /group/:id' do
+    describe 'GET /exercise/:id' do
       it 'has http 200' do
-        get group_path(@group)
+        get exercise_path(@exercise)
         expect(response).to have_http_status(200)
       end
     end
-    describe 'PATCH /group/:id' do
+    describe 'PATCH /exercise/:id' do
       it 'has http 302' do
-        patch group_path(@group, group: @group_params)
+        patch exercise_path(@exercise, exercise: @exercise_params)
         expect(response).to have_http_status(302)
       end
     end
-    describe 'PUT /group/:id' do
+    describe 'PUT /exercise/:id' do
       it 'has http 302' do
-        put group_path(@group, group: @group_params)
+        put exercise_path(@exercise, exercise: @exercise_params)
         expect(response).to have_http_status(302)
       end
     end
-    describe 'DELETE /group/:id' do
+    describe 'DELETE /exercise/:id' do
       it 'has http 302' do
-        delete group_path(@group)
+        delete exercise_path(@exercise)
         expect(response).to have_http_status(302)
       end
     end

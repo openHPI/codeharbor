@@ -18,12 +18,13 @@ table.table
             = collection.title
           td
             - if collection.exercises.empty?
-             = t('collections.noExercisesAdded')
+              = t('collections.noExercisesAdded')
             - else collection.exercises
               - collection.exercises.each do |exercise|
                 - if exercise
                   = link_to "#{exercise.title}, ", exercise_path(exercise)
           td
+            = link_to 'View', collection_path(collection), class: 'btn btn-default btn-xs'
             = link_to t('collections.button.edit'), edit_collection_path(collection), class:'btn btn-warning btn-xs'
             = link_to t('collections.button.destroy'), collection, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-xs'
 br

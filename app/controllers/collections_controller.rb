@@ -56,6 +56,24 @@ class CollectionsController < ApplicationController
     end
   end
 
+  def remove_exercise
+    collection = Collection.find(params[:id])
+    if collection.remove_exercise(params[:exercise])
+      redirect_to collection, notice: 'Exercise was successfully removed.'
+    else
+      redirect_to collection, alert: 'You cannot remove this exercise.'
+    end
+  end
+
+  def remove_all
+    collection = Collection.find(params[:id])
+    if collection.remove_all
+      redirect_to collection, notice: 'All Exercises were successfully removed'
+    else
+      redirect_to collection, alert: 'You cannot remove all exercises'
+    end
+  end
+
   # DELETE /collections/1
   # DELETE /collections/1.json
   def destroy

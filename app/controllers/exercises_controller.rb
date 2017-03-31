@@ -124,9 +124,6 @@ class ExercisesController < ApplicationController
   end
 
   def add_to_cart
-    unless current_user.cart
-      Cart.create(user: current_user)
-    end
     cart = Cart.find_by(user: current_user)
     if cart.add_exercise(@exercise)
       redirect_to @exercise, notice: 'Exercise was successfully added to your cart.'

@@ -1,6 +1,18 @@
-p
-  strong
-    = t('collections.show.header')
-  = @collection.title
+- model_class = Collection
+.page-header
+  h1
+    = @collection.title
+
+dl.dl-horizontal
+
+  dt
+    = 'Exercises:'
+
+  - @collection.exercises.each do |exercise|
+    dd
+      = link_to exercise.title, exercise
+      = link_to '-', remove_exercise_collection_path(exercise: exercise), class: 'btn btn-danger btn-xs'
+    dt
+  dd
 = link_to t('collections.button.edit'), edit_collection_path(@collection), class:'btn btn-warning'
 = link_to t('collections.button.back'), collections_path, class: 'btn btn-default'
