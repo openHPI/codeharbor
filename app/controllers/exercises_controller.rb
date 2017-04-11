@@ -32,6 +32,7 @@ class ExercisesController < ApplicationController
   def new
     @exercise = Exercise.new
     @exercise.descriptions << Description.new
+    @labels = []
     @form_action
   end
 
@@ -65,11 +66,20 @@ class ExercisesController < ApplicationController
     @exercise = Exercise.new(exercise_params)
     @exercise.add_attributes(params[:exercise])
     @exercise.user = current_user
+
     if params[:exercise][:origin_id]
       @exercise_relation = ExerciseRelation.new
       @exercise_relation.clone = @exercise
       @exercise_relation.origin_id = params[:exercise][:origin_id]
       @exercise_relation.relation_id = params[:exercise][:id]
+    end
+
+    params[:labels].each do |label|
+      @label = Label.find_by(name: label)
+      unless @label
+        @label = Label.create(name: label, color: '006600', label_category: nil)
+      end
+      @exercise.labels << @label
     end
 
     respond_to do |format|
@@ -121,6 +131,10 @@ class ExercisesController < ApplicationController
       format.html { redirect_to exercises_url, notice: 'Exercise was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def add_label
+    @labels << 1
   end
 
   def add_to_cart

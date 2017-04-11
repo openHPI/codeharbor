@@ -35,7 +35,7 @@ class Ability
       end
 
       #Comment
-      can [:show, :create, :read ], Comment
+      can [:show, :create, :read, :answer ], Comment
       can [:edit], Comment do |comment|
         comment.user == user
       end

@@ -10,7 +10,6 @@ class LabelsController < ApplicationController
   def index
     @labels = Label.all
   end
-
   # GET /labels/1
   # GET /labels/1.json
   def show
@@ -19,6 +18,14 @@ class LabelsController < ApplicationController
   # GET /labels/new
   def new
     @label = Label.new
+  end
+
+  def search
+    @labels = Label.order(:name)
+    respond_to do |format|
+      format.html
+      format.json { render json: @labels.where('name ilike ?', "%#{params[:term]}%") }
+    end
   end
 
   # GET /labels/1/edit

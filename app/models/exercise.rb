@@ -21,8 +21,12 @@ class Exercise < ActiveRecord::Base
   has_many :clone_relations, :class_name => 'ExerciseRelation', :foreign_key => 'origin_id'
   #validates :descriptions, presence: true
 
-
+  attr_reader :tag_tokens
   accepts_nested_attributes_for :descriptions, allow_destroy: true
+
+  def tag_tokens=(tokens)
+    self.tag_ids = Label.ids_from_tokens(tokens)
+  end
 
   def self.search(search)
   	if search

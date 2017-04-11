@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   get 'exercises/:id/duplicate', to: 'exercises#duplicate', as: 'duplicate_exercise'
   post 'exercises/:id/add_to_cart', to: 'exercises#add_to_cart', as: 'add_to_cart'
   post 'exercises/:id/add_to_collection', to: 'exercises#add_to_collection', as: 'add_to_collection'
+  get 'labels/autocomplete' => 'labels#autocomplete'
 
   get 'groups/:id/request_access', to: 'groups#request_access', as: 'request_access'
   get 'groups/:id/confirm_request', to: 'groups#confirm_request', as: 'confirm_request'
@@ -42,9 +43,11 @@ Rails.application.routes.draw do
   get 'collections/:id/remove_all', to: 'collections#remove_all' ,as: 'remove_all_collection'
   get 'carts/:id/remove_all', to: 'carts#remove_all' ,as: 'remove_all_cart'
 
-  resources :labels
+
+  resources :labels do
+    get :search, :on => :collection
+  end
   resources :label_categories
-  resources :answers
   resources :users do
     resources :account_links
   end
@@ -52,7 +55,10 @@ Rails.application.routes.draw do
   resources :exercise_files
   resources :testing_frameworks
   resources :exercises do
-    resources :comments
+    get :add_label, :on => :collection
+    resources :comments do
+      resources :answers
+    end
     resources :ratings
     member do
       post :push_external

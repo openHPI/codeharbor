@@ -29,7 +29,7 @@ class CommentsController < ApplicationController
     @comment.exercise = @exercise
 
     respond_to do |format|
-      if @collection.save
+      if @comment.save
         format.html { redirect_to exercise_comments_path(@exercise), notice: 'Comment was successfully created.' }
         format.json { render :index, status: :created, location: @collection }
       else
@@ -69,6 +69,10 @@ class CommentsController < ApplicationController
 
   def comments_all
     @comments = Comment.all
+  end
+
+  def answer
+    redirect_to new_exercises_comments_answers_path(@exercise, @comment)
   end
 
   private
