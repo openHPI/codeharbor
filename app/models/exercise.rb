@@ -24,11 +24,7 @@ class Exercise < ActiveRecord::Base
   attr_reader :tag_tokens
   accepts_nested_attributes_for :descriptions, allow_destroy: true
 
-  def tag_tokens=(tokens)
-    self.tag_ids = Label.ids_from_tokens(tokens)
-  end
-
-  def self.search(search)
+  def self.search_public(search)
   	if search
   		results = where('lower(title) LIKE ?', "%#{search.downcase}%")
       label = Label.find_by('lower(name) = ?', search.downcase)
@@ -42,8 +38,26 @@ class Exercise < ActiveRecord::Base
       end
       return results
   	else
-      return all
+      return where(private: false)
   	end
+  end
+
+  def self.search_private(search)
+    if search
+      results = where('lower(title) LIKE ?', "%#{search.downcase}%")
+      label = Label.find_by('lower(name) = ?', search.downcase)
+
+      if label
+        collection = Label.find_by('lower(name) = ?', search.downcase).exercises
+        results.each do |r|
+          collection << r unless collection.find_by(id: r.id)
+        end
+        return collection
+      end
+      return results
+    else
+      return where(private: true)
+    end
   end
   
   def can_access(user)

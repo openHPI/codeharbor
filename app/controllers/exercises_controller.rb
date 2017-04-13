@@ -10,7 +10,11 @@ class ExercisesController < ApplicationController
   # GET /exercises
   # GET /exercises.json
   def index
-    @exercises = Exercise.search(params[:search]).sort{ |y,x| x.avg_rating <=> y.avg_rating }.paginate(per_page: 5, page: params[:page])
+    if params[:private]
+      @exercises = Exercise.search_private(params[:search]).sort{ |y,x| x.avg_rating <=> y.avg_rating }.paginate(per_page: 5, page: params[:page])
+    else
+      @exercises = Exercise.search_public(params[:search]).sort{ |y,x| x.avg_rating <=> y.avg_rating }.paginate(per_page: 5, page: params[:page])
+    end
   end
 
   # GET /exercises/1
@@ -73,13 +77,14 @@ class ExercisesController < ApplicationController
       @exercise_relation.origin_id = params[:exercise][:origin_id]
       @exercise_relation.relation_id = params[:exercise][:id]
     end
-
-    params[:labels].each do |label|
-      @label = Label.find_by(name: label)
-      unless @label
-        @label = Label.create(name: label, color: '006600', label_category: nil)
+    if params[:labels]
+      params[:labels].each do |label|
+        @label = Label.find_by(name: label)
+        unless @label
+          @label = Label.create(name: label, color: '006600', label_category: nil)
+        end
+        @exercise.labels << @label
       end
-      @exercise.labels << @label
     end
 
     respond_to do |format|

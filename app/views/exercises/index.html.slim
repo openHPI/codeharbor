@@ -1,11 +1,21 @@
 = form_tag exercises_path, method: 'get' do
-  .col-md-6
-    .input-group
-      = text_field_tag :search, params[:search], class:'form-control', type:'text', placeholder: t('exercises.all.placeholder')
-      span.input-group-btn
-        = submit_tag t('exercises.all.search'), name: nil, class:'btn btn-default'
-  .col-md-6
-    - if can? :create, Exercise
-      = link_to t('exercises.all.new'), new_exercise_path, class:'btn btn-success pull-right'
-br
-= render 'home/exercises'
+  .search-container
+    .col-md-6
+      .input-group
+        = text_field_tag :search, params[:search], class:'form-control', type:'text', placeholder: t('exercises.all.placeholder')
+        span.input-group-btn
+          = submit_tag t('exercises.all.search'), name: nil, class:'btn btn-default'
+    .col-md-6
+      - if can? :create, Exercise
+        = link_to t('exercises.all.new'), new_exercise_path, class:'btn btn-success pull-right'
+    br/
+  .private-public
+    ul#menu
+      li
+        = link_to 'Private', exercises_path(private: true)
+      li
+        = link_to 'Public', exercises_path(private: false)
+  br/
+  = render 'home/exercises'
+
+

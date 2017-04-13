@@ -55,7 +55,9 @@ Rails.application.routes.draw do
   resources :exercise_files
   resources :testing_frameworks
   resources :exercises do
-    get :add_label, :on => :collection
+    collection do
+      get :add_label
+    end
     resources :comments do
       resources :answers
     end

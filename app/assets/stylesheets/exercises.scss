@@ -12,3 +12,22 @@
   position: relative;
   height: 300px;
 }
+
+.search-container {
+  padding-bottom: 25px;
+}
+
+.private-public {
+  ul#menu {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    li {
+      padding: 10px 70px 10px 70px;
+      background-color: #f5f5f5;
+      border: solid;
+      border-color: #dddddd;
+      border-radius: 3px;
+      display: inline;
+    }
+  }
+}
