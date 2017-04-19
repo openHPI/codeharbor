@@ -30,9 +30,22 @@ ul#menu {
       background-color: #f5f5f5;
       border: solid;
       border-color: #dddddd;
-      border-radius: 3px;
+    }
+
+    .left-nav {
+      border-bottom-left-radius: 3px;
+      border-top-left-radius: 3px;
+    }
+    .mid-nav {
+      border-right: none;
+      border-left: none;
+    }
+    .right-nav {
+      border-bottom-right-radius: 3px;
+      border-top-right-radius: 3px;
     }
     .selected {
+      border: solid;
       border-color: #7C7C7C;
     }
   }

@@ -19,12 +19,13 @@ $star_rating.on 'click', ->
 
 SetRatingStar()
 
-$ ->
+ready =->
   $(".change-hidden-field").click ->
     value = (this).id
     document.getElementById('option').value = value
-ready =->
-  $(document.getElementById(document.getElementById('option').value)).addClass('selected')
+
+  if option = document.getElementById('option')
+    $(document.getElementById(option.value)).addClass('selected')
 
 $(document).ready(ready)
 $(document).on('page:load', ready)

@@ -3,18 +3,13 @@ require 'oauth2'
 class ExercisesController < ApplicationController
   load_and_authorize_resource
   before_action :set_exercise, only: [:show, :edit, :update, :destroy, :add_to_cart, :add_to_collection, :push_external]
-
+  before_action :set_option, only: [:index]
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized for this exercise.'
   end
   # GET /exercises
   # GET /exercises.json
   def index
-    if params[:option]
-      @option = params[:option]
-    else
-      @option = 'mine'
-    end
     @exercises = Exercise.search(params[:search],@option,current_user).sort{ |y,x| x.avg_rating <=> y.avg_rating }.paginate(per_page: 5, page: params[:page])
   end
 
@@ -178,6 +173,13 @@ class ExercisesController < ApplicationController
   end
 
   private
+  def set_option
+    if params[:option]
+      @option = params[:option]
+    else
+      @option = 'mine'
+    end
+  end
   # Use callbacks to share common setup or constraints between actions.
   def set_exercise
     @exercise = Exercise.find(params[:id])
