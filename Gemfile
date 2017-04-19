@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+#Handle Group Access
+gem 'groupify'
 #Private Data
 gem 'figaro'
 #Translate

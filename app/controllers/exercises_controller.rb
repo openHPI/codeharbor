@@ -10,11 +10,12 @@ class ExercisesController < ApplicationController
   # GET /exercises
   # GET /exercises.json
   def index
-    if params[:private]
-      @exercises = Exercise.search_private(params[:search]).sort{ |y,x| x.avg_rating <=> y.avg_rating }.paginate(per_page: 5, page: params[:page])
+    if params[:option]
+      @option = params[:option]
     else
-      @exercises = Exercise.search_public(params[:search]).sort{ |y,x| x.avg_rating <=> y.avg_rating }.paginate(per_page: 5, page: params[:page])
+      @option = 'mine'
     end
+    @exercises = Exercise.search(params[:search],@option,current_user).sort{ |y,x| x.avg_rating <=> y.avg_rating }.paginate(per_page: 5, page: params[:page])
   end
 
   # GET /exercises/1

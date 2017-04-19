@@ -24,40 +24,52 @@ class Exercise < ActiveRecord::Base
   attr_reader :tag_tokens
   accepts_nested_attributes_for :descriptions, allow_destroy: true
 
-  def self.search_public(search)
-  	if search
-  		results = where('lower(title) LIKE ?', "%#{search.downcase}%")
-      label = Label.find_by('lower(name) = ?', search.downcase)
+  def self.search(search, option, user)
 
-      if label
-        collection = Label.find_by('lower(name) = ?', search.downcase).exercises
-        results.each do |r|
-          collection << r unless collection.find_by(id: r.id)
+    if option == 'private'
+      if search
+        results = where('lower(title) ilike ? AND private = ?', "%#{search.downcase}%", true)
+        label = Label.find_by('lower(name) = ?', search.downcase)
+
+        if label
+          collection = Label.find_by('lower(name) = ?', search.downcase).exercises
+          results.each do |r|
+            collection << r unless collection.find_by(id: r.id)
+          end
+          return collection
         end
-        return collection
+        return results
+      else
+        return where(private: true)
       end
-      return results
-  	else
-      return where(private: false)
-  	end
-  end
 
-  def self.search_private(search)
-    if search
-      results = where('lower(title) LIKE ?', "%#{search.downcase}%")
-      label = Label.find_by('lower(name) = ?', search.downcase)
+    elsif option == 'public'
+      if search
+        results = where('lower(title) ILIKE ? AND private = ?', "%#{search.downcase}%", false)
+        label = Label.find_by('lower(name) = ?', search.downcase)
 
-      if label
-        collection = Label.find_by('lower(name) = ?', search.downcase).exercises
-        results.each do |r|
-          collection << r unless collection.find_by(id: r.id)
+        if label
+          collection = Label.find_by('lower(name) = ?', search.downcase).exercises
+          results.each do |r|
+            collection << r unless collection.find_by(id: r.id)
+          end
+          return collection
         end
-        return collection
+        return results
+      else
+        return where(private: false)
       end
-      return results
+
     else
-      return where(private: true)
+      results = where(user:user)
+      authors = find(ExerciseAuthor.where(user: user).collect(&:exercise_id))
+      authors.each do |author|
+        results << author
+      end
+      return results
     end
+
+
   end
   
   def can_access(user)
