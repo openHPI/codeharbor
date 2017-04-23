@@ -1,0 +1,33 @@
+= form_for(@user) do |f|
+  - if @user.errors.any?
+    #error_explanation
+      h2
+        = pluralize(@user.errors.count, t('error'))
+        = t('users.errorMessage')
+      ul
+        - @user.errors.full_messages.each do |message|
+          li
+            = message
+  .field
+    = f.label :first_name, t('users.first_name')
+    br
+    = f.text_field :first_name
+  .field
+    = f.label :last_name, t('users.last_name')
+    br
+    = f.text_field :last_name
+  .field
+    = f.label :email, t('users.email')
+    br
+    = f.text_field :email
+  .field
+    = f.label :password, t('users.new.password')
+    br
+    = f.password_field :password
+  .field
+    = f.label :password_confirmation, t('users.new.password_confirmation')
+    br
+    = f.password_field :password_confirmation
+  .actions.btn-group[role="group"]
+    = f.submit nil, class:'btn btn-primary'
+    = link_to t('users.back'), :back, class:'btn btn-default'

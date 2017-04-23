@@ -1,0 +1,22 @@
+= form_for @group do |f|
+  - if @group.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@group.errors.count, "error")} prohibited this group from being saved:"
+      ul
+        - @group.errors.full_messages.each do |message|
+          li = message
+
+  .form-group
+    = f.label :name, t('exercises.title'), class: 'control-label'
+    br/
+    .controls
+      = f.text_field :name, class: 'form-control'
+  .form-group
+    = f.label :description, t('exercises.title'), class: 'control-label'
+    br/
+    .controls
+      = f.text_field :description, class: 'form-control'
+
+  .actions.btn-group[role="group"]
+    = f.submit t('exercises.form.create'), class: 'btn btn-primary'
+    = link_to t('exercises.form.cancel'), :back, class: 'btn btn-danger'

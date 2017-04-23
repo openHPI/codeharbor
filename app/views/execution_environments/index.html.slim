@@ -1,0 +1,18 @@
+p#notice= notice
+h1 = t('execution.header')
+table
+  thead
+    tr
+      th = t('execution.language')
+      th = t('execution.version')
+      th colspan="3"
+  tbody
+    - @execution_environments.each do |execution_environment|
+      tr
+        td= execution_environment.language
+        td= execution_environment.version
+        td= link_to t('execution.button.show'), execution_environment
+        td= link_to t('execution.button.edit'), edit_execution_environment_path(execution_environment)
+        td= link_to t('execution.button.destroy'), execution_environment, method: :delete, data: { confirm: t('sure') }
+br/
+= link_to t('execution.button.new'), new_execution_environment_path

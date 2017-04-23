@@ -1,0 +1,23 @@
+p#notice
+  = notice
+h1
+  = t('framework.header')
+table
+  thead
+    tr
+      th
+        = t('framework.name')
+      th[colspan="3"]
+  tbody
+    - @testing_frameworks.each do |testing_framework|
+      tr
+        td
+          = testing_framework.name
+        td
+          = link_to t('framework.button.show'), testing_framework
+        td
+          = link_to t('framework.button.edit'), edit_testing_framework_path(testing_framework)
+        td
+          = link_to t('framework.button.destroy'), testing_framework, method: :delete, data: { confirm: t('sure') }
+br
+= link_to t('framework.button.new'), new_testing_framework_path

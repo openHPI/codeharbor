@@ -219,6 +219,7 @@ ActiveRecord::Schema.define(version: 20161010113847) do
 
   create_table "user_groups", force: :cascade do |t|
     t.boolean  "is_admin",   default: false
+    t.boolean  "is_active", default: false
     t.integer  "user_id"
     t.integer  "group_id"
     t.datetime "created_at",                 null: false

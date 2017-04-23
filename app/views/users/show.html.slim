@@ -1,0 +1,51 @@
+- model_class = User
+.page-header
+  h1
+    = @user.name
+dl.dl-horizontal
+  dt
+    = t('users.first_name')
+    | :
+  dd
+    = @user.first_name
+  dt
+    = t('users.last_name')
+    | :
+  dd
+    = @user.last_name
+  dt
+    = t('users.email')
+    | :
+  dd
+    = @user.email
+  dt
+    = t('users.role')
+    | :
+  dd
+    = @user.role
+- unless @user.role === 'user'
+  dl.dl-horizontal
+    dt
+      = t('users.show.account_links.label')
+    dd
+      = link_to t('users.show.account_links.add'), new_user_account_link_path(@user), class:'btn btn-success btn-xs'
+    - @user.account_links.each do |account_link|
+      dd
+
+      dt[style="margin-top: 10px"]
+        = t('users.show.account_links.links')
+        | : 
+      dd[style="margin-top: 10px"]
+        = account_link.readable
+      dt[style="margin-top: 5px"]
+        = t('users.show.account_links.actions')
+        | : 
+      dd.actions.btn-group[role="group" style="margin-top: 5px; margin-left: 20px;"]
+        = link_to t('users.show.account_links.show'), user_account_link_path(account_link.user, account_link), class:'btn btn-default btn-xs'
+        = link_to t('users.show.account_links.edit'), edit_user_account_link_path(account_link.user, account_link), class:'btn btn-warning btn-xs'
+        = link_to t('users.show.account_links.destroy'), user_account_link_path(account_link.user, account_link), method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-xs'
+.actions.btn-group[role="group"]
+  - if can? :manage, @user
+    = link_to t('users.show.edit'), edit_user_path(@user), class:'btn btn-warning'
+    = link_to t('users.show.delete'), @user, method: :delete, data: { confirm: t('sure')}, class:'btn btn-danger'
+  = link_to t('users.show.back'), :back, class:'btn btn-default'

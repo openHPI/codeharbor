@@ -1,0 +1,29 @@
+p#notice
+  = notice
+p
+  strong
+    = t('exFiles.main')+ ':'
+  = @exercise_file.main
+p
+  strong
+    = t('exFiles.content')+ ':'
+  = @exercise_file.content
+p
+  strong
+    = t('exFiles.path') + ':'
+  = @exercise_file.path
+p
+  strong
+    = t('exFiles.solution') + ':'
+  = @exercise_file.solution
+p
+  strong
+    = t('exFiles.extention') + ':'
+  = @exercise_file.file_extension
+p
+  strong
+    = t('exFiles.exercise') + ':'
+  = @exercise_file.exercise
+= link_to t('exFiles.button.edit'), edit_exercise_file_path(@exercise_file)
+|  \
+= link_to t('exFiles.button.back'), exercise_files_path

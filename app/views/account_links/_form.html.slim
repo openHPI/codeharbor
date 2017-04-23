@@ -1,0 +1,24 @@
+= form_for([@user, @account_link]) do |f|
+  - if @account_link.errors.any?
+    #error_explanation
+      h2
+        = pluralize(@account_link.errors.count, t('error'))
+        = t('account.errorMessage')
+      ul
+        - @account_link.errors.full_messages.each do |message|
+          li
+            = message
+  .field
+    = f.label :push_url, t('account.pushURL')
+    br/
+    = f.text_field :push_url
+  .field
+    = f.label :account_name, t('account.name')
+    br/
+    = f.text_field :account_name
+  .field
+    = f.label :oauth2_token, t('account.token')
+    br/
+    = f.text_field :oauth2_token
+  .actions
+    = f.submit t('account.button.create'), class:'btn btn-primary'

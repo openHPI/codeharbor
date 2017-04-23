@@ -1,0 +1,27 @@
+p#notice
+  = notice
+h1
+  = t('labels.header')
+table
+  thead
+    tr
+      th
+        = t('labels.name')
+      th
+        = t('labels.category')
+      th[colspan="3"]
+  tbody
+    - @labels.each do |label|
+      tr
+        td
+          = label.name
+        td
+          = label.label_category
+        td
+          = link_to t('labels.button.show'), label
+        td
+          = link_to t('labels.button.edit'), edit_label_path(label)
+        td
+          = link_to t('labels.button.destroy'), label, method: :delete, data: { confirm: t('sure') }
+br/
+= link_to t('labels.button.new'), new_label_path

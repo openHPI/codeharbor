@@ -1,0 +1,20 @@
+= form_for(@execution_environment) do |f|
+  - if @execution_environment.errors.any?
+    #error_explanation
+      h2
+        = pluralize(@execution_environment.errors.count, t('error'))
+        = t('execution.errorMessage')
+      ul
+        - @execution_environment.errors.full_messages.each do |message|
+          li
+            = message
+  .field
+    = f.label :language, t('execution.language')
+    br
+    = f.text_field :language
+  .field
+    = f.label :version, t('execution.version')
+    br
+    = f.text_field :version
+  .actions
+    = f.submit

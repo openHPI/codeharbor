@@ -1,0 +1,15 @@
+table
+  thead
+    tr
+      th colspan="5"
+  tbody
+    - account_links.each do |account_link|
+      tr
+        td
+          = account_link.readable
+        td.btn.btn-default
+          = link_to t('account.button.show'), user_account_link_path(account_link.user, account_link)
+        td.btn.btn-default
+          = link_to t('account.button.edit', edit_user_account_link_path(account_link.user, account_link)
+        td.btn.btn-default
+          = link_to t('account.button.destroy'), user_account_link_path(account_link.user, account_link), method: :delete, data: { confirm: t('sure') }

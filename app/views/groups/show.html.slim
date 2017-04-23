@@ -1,0 +1,59 @@
+- model_class = Group
+- if @group.users.include?(current_user)
+  .page-header
+    h1
+      = @group.name
+  dl.dl-horizontal
+    dt
+      = 'Description'
+      | :
+    dd
+      = @group.description
+    dt
+      = 'Admins:'
+      | :
+    - @group.admins.each do |admin|
+      dd
+        = admin.email
+      dt
+
+    dd
+
+    dt
+      = 'Users:'
+
+    - @group.users.each do |user|
+      - unless @group.is_admin(user)
+        dd
+          = user.email
+          - if @group.is_admin(current_user)
+            = link_to 'Make Admin', make_admin_path(group: @group, user: user), class:'btn btn-success btn-xs'
+            = link_to 'Delete', delete_from_group_path(group: @group, user: user), class:'btn btn-danger btn-xs'
+        dt
+    dd
+    - if current_user.role === 'admin'
+      dt
+        = 'Pending Unsers'
+        | :
+
+      - @group.pending_users.each do |user|
+        dd
+          = user.email
+          = link_to 'Grant Access', grant_access_path(group: @group, user: user), class:'btn btn-success btn-xs'
+          = link_to 'Deny Access', delete_from_group_path(group: @group, user: user), class:'btn btn-danger btn-xs'
+        dt
+      dd
+  .actions.btn-group[role="group"]
+    - if @group.is_admin(current_user)
+      = link_to 'Edit', edit_group_path(@group), class: 'btn btn-warning'
+      = link_to 'Delete', group_path(@group), class:'btn btn-danger', method: :delete, data: { confirm: 'Are you sure?' }
+    = link_to 'Back', groups_path, class:'btn btn-default'
+
+- else
+  h1
+    = 'You need to request membership to view this group!'
+
+  = link_to 'Request Membership', request_access_path(@group)
+  | |
+  = link_to 'Back', groups_path
+
