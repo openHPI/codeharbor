@@ -26,13 +26,14 @@ class Ability
       end
 
       #Exercise
-      can [:create], Exercise
-      can [:manage, :edit], Exercise do |exercise|
-        ExerciseAuthor.where(user_id: user.id, exercise_id: exercise.id).any?
-      end
+      can [:create, :contribute], Exercise
       can [:show, :read, :add_to_cart, :add_to_collection, :export, :duplicate], Exercise do |exercise|
         exercise.can_access(user)
       end
+      can [:manage, :edit], Exercise do |exercise|
+        ExerciseAuthor.where(user_id: user.id, exercise_id: exercise.id).any?
+      end
+
 
       #Comment
       can [:show, :create, :read, :answer ], Comment
@@ -45,11 +46,11 @@ class Ability
 
       #Groups
       can [:create, :request_access], Group
-      can [:read, :members, :admins, :leave], Group do |group|
-        user.groups.include? group
+      can [:view, :read, :members, :admins, :leave], Group do |group|
+        user.in_group?(group, as: 'member')
       end
       can [:update, :destroy, :make_admin, :grant_access, :delete_from_group], Group do |group|
-        UserGroup.where(user_id: user.id, group_id: group.id, is_admin: true).any?
+        user.in_group?(group, as: 'admin')
       end
 
       #User

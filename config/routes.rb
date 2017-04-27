@@ -10,7 +10,9 @@ Rails.application.routes.draw do
   resources :execution_environments
   resources :carts
   resources :collections
-  resources :groups
+  resources :groups do
+    get :search, :on => :collection
+  end
   get 'home/index'
 
   controller :sessions do
@@ -64,6 +66,7 @@ Rails.application.routes.draw do
     resources :ratings
     member do
       post :push_external
+      get :contribute
     end
   end
 

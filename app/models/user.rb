@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+  groupify :group_member
+  groupify :named_group_member
+
   validates :email, presence: true, uniqueness: true
   validates :first_name, :last_name, presence: true
   has_secure_password
@@ -7,8 +10,8 @@ class User < ActiveRecord::Base
   has_many :account_links
   has_many :exercises
   has_one :cart, dependent: :destroy
-  has_many :user_groups, dependent: :destroy
-  has_many :groups, through: :user_groups
+  #has_many :group_memberships, dependent: :destroy
+  #has_many :groups, through: :user_groups
   has_many :exercise_authors, dependent: :destroy
   has_many :exercises, through: :exercise_authors
   
@@ -40,18 +43,24 @@ class User < ActiveRecord::Base
   def name
     "#{first_name} #{last_name}"
   end
-  
+
+
   def has_access_through_any_group?(exercise)
-    groups = Group.find(UserGroup.where(user_id: id).collect(&:group_id))
-    groups_with_access = Group.find(ExerciseGroupAccess.where(exercise_id: exercise.id).collect(&:group_id))
-    return (not (groups & groups_with_access).empty?)
+    #groups = Group.find(UserGroup.where(user_id: id).collect(&:group_id))
+    #groups_with_access = Group.find(ExerciseGroupAccess.where(exercise_id: exercise.id).collect(&:group_id))
+    #return (not (groups & groups_with_access).empty?)
+
+    self.shares_any_group?(exercise)
   end
   
   def handle_group_memberships
-    groups.each do |group|
-      if group.users.count > 1
-        if UserGroup.find_by(group: group, user: self).is_admin
-          if UserGroup.where(group: group, is_admin: true).count == 1
+
+    self.in_all_groups?(as: 'admin')
+
+    self.groups.each do |group|
+      if group.users.size > 1
+        if self.in_group?(group, as: 'admin')
+          if group.admins.size == 1
             return false
           end
         end

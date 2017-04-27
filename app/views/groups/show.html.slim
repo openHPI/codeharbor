@@ -1,5 +1,5 @@
 - model_class = Group
-- if @group.users.include?(current_user)
+- if can? :view, @group
   .page-header
     h1
       = @group.name
@@ -27,7 +27,7 @@
       - unless @group.is_admin(member)
         dd
           = member.email
-          - if @group.is_admin(current_user)
+          - if can? :edit, @group
             = link_to 'Make Admin', make_admin_path(group: @group, user: member), class: 'btn btn-success btn-xs'
             = link_to 'Delete', delete_from_group_path(group: @group, user: member), class: 'btn btn-danger btn-xs'
         dt
@@ -45,7 +45,7 @@
         dt
       dd
   .actions.btn-group[role="group"]
-    - if @group.is_admin(current_user)
+    - if can? :edit, @group
       = link_to 'Edit', edit_group_path(@group), class: 'btn btn-warning'
       = link_to 'Delete', group_path(@group), class: 'btn btn-danger', method: :delete, data: {confirm: 'Are you sure?'}
     = link_to 'Back', groups_path, class: 'btn btn-default'

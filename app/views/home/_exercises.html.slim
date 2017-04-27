@@ -19,13 +19,15 @@
         - unless exercise.descriptions.empty?
           = exercise.descriptions.first.text
       .btn-group-vertical.pull-right aria-label="..." role="group"
-        = link_to t('exercises.all.view'), exercise_path(exercise), class:'btn btn-default'
-        = link_to t('exercises.all.comments'), exercise_comments_path(exercise), class:'btn btn-default'
-        - if can? :create, exercise
+        - if can? :read, exercise
+          = link_to t('exercises.all.view'), exercise_path(exercise), class:'btn btn-default'
+          = link_to t('exercises.all.comments'), exercise_comments_path(exercise), class:'btn btn-default'
           = link_to t('exercises.all.duplicate'), duplicate_exercise_path(exercise), class:'btn btn-default'
         - if can? :edit, exercise
           = link_to t('exercises.all.edit'), edit_exercise_path(exercise), class:'btn btn-default'
           = link_to t('exercises.all.delete'), exercise_path(exercise), class:'btn btn-default', method: :delete, data: { confirm: t('sure') }
+        - if cannot? :edit, exercise
+          = link_to 'Contribute', contribute_exercise_path(exercise), class: 'btn btn-default'
       .col-md-6 style=("margin-top: 60px")
         - exercise.labels.each do |label|
           .exerciseLabel style=("background-color: #{'#' + label.color.to_s}; color: white;")

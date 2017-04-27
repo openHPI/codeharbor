@@ -1,6 +1,7 @@
 require 'nokogiri'
 
 class Exercise < ActiveRecord::Base
+  groupify :group_member
   validates :title, presence: true
 
   has_many :exercise_files, dependent: :destroy
@@ -10,8 +11,8 @@ class Exercise < ActiveRecord::Base
   has_many :ratings, dependent: :destroy
   has_many :exercise_authors, dependent: :destroy
   has_many :authors, through: :exercise_authors, source: :user
-  has_many :exercise_group_accesses
-  has_many :access, through: :exercise_group_accesses, source: :group
+  #has_many :exercise_group_accesses
+  #has_many :access, through: :exercise_group_accesses, source: :group
   has_and_belongs_to_many :collections, dependent: :destroy
   has_and_belongs_to_many :carts, dependent: :destroy
   belongs_to :user
@@ -86,7 +87,6 @@ class Exercise < ActiveRecord::Base
     else 
       return true
     end
-    return true
   end
 
 

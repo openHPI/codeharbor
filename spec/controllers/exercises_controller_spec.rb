@@ -28,7 +28,7 @@ RSpec.describe ExercisesController, type: :controller do
   # Exercise. As you add validations to Exercise, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    FactoryGirl.attributes_for(:only_meta_data)
+    FactoryGirl.attributes_for(:only_meta_data, user: user)
   }
 
   let(:invalid_attributes) {
@@ -44,8 +44,8 @@ RSpec.describe ExercisesController, type: :controller do
     {user_id: user.id}
   }
 
-  describe "GET #index" do
-    it "assigns all exercises as @exercises" do
+  describe "GET #index (My Exercises)" do
+    it "shows all Exercises of that user" do
       exercise = Exercise.create! valid_attributes
       get :index, {}, valid_session
       expect(assigns(:exercises)).to eq([exercise])

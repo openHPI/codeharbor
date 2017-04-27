@@ -1,6 +1,6 @@
 class GroupsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_group, only: [:show, :edit, :update, :destroy, :grant_access, :delete_from_group, :make_admin]
+  before_action :set_group, only: [:show, :edit, :update, :destroy, :request_access, :grant_access, :delete_from_group, :make_admin]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized to for this action.'
@@ -11,6 +11,13 @@ class GroupsController < ApplicationController
     @groups = Group.all
   end
 
+  def search
+    @groups = current_user.groups
+    respond_to do |format|
+      format.html
+      format.json { render json: @groups.where('name ilike ?', "%#{params[:term]}%") }
+    end
+  end
   # GET /groups/1
   # GET /groups/1.json
   def show
@@ -30,15 +37,16 @@ class GroupsController < ApplicationController
   def create
     @group = Group.new(group_params)
 
-    @user_group = UserGroup.new
-    @user_group.is_admin = true
-    @user_group.is_active = true
-    @user_group.group = @group
-    @user_group.user = current_user
-    @user_group.save
+    #@user_group = UserGroup.new
+    #@user_group.is_admin = true
+    #@user_group.is_active = true
+    #@user_group.group = @group
+    #@user_group.user = current_user
+    #@user_group.save
 
     respond_to do |format|
       if @group.save
+        @group.add(current_user, as: 'admin')
         format.html { redirect_to @group, notice: 'Group was successfully created.' }
         format.json { render :index, status: :created, location: @group }
       else
@@ -73,26 +81,32 @@ class GroupsController < ApplicationController
   end
 
   def request_access
-    group = Group.find(params[:id])
     flash[:notice] = "Your Access request has been sent."
-    group.admins.each do |admin|
-      AccessRequest.send_access_request(current_user, admin, group).deliver
+    @group.admins.each do |admin|
+      AccessRequest.send_access_request(current_user, admin, @group).deliver_later
     end
-    UserGroup.create(group: group, user: current_user)
+    @group.add_pending_user(current_user)
+    #Old: UserGroup.create(group: group, user: current_user)
     redirect_to groups_path
   end
 
   def grant_access
-    UserGroup.find_by(group: params[:group], user: params[:user]).update(is_active: true)
+    user = User.find(params[:user])
+    @group.grant_access(user)
+    # Old: UserGroup.find_by(group: params[:group], user: params[:user]).update(is_active: true)
     redirect_to @group, notice: 'Access granted.'
   end
 
   def delete_from_group
-    UserGroup.find_by(group: params[:group], user: params[:user]).destroy
+    # Old: UserGroup.find_by(group: params[:group], user: params[:user]).destroy
+    user = User.find(params[:user])
+    @group.users.delete(user)
     redirect_to @group, notice: 'User deleted.'
   end
 
   def make_admin
+    user = User.find(params[:user])
+    @group.make_admin(user)
     UserGroup.find_by(group: params[:group], user: params[:user]).update(is_admin: true)
     redirect_to @group, notice: 'Made user to admin.'
   end

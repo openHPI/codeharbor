@@ -14,17 +14,17 @@ table.table
 
   tbody
     - @groups.each do |group|
-      - if group.members.include?(current_user)
+      - if can? :view, group
         tr
           td = group.name
           td = group.description
           td = group.is_admin(current_user) ? 'Admin' : 'Member'
           td.actions.btn-group[role="group"]
             = link_to 'Show', group, class:'btn btn-default btn-xs'
-            - if group.is_admin(current_user)
+            - if can? :edit, @group
               = link_to 'Edit', edit_group_path(group), class:'btn btn-warning btn-xs'
               = link_to 'Destroy', group, data: { confirm: 'Are you sure?' }, method: :delete, class:'btn btn-danger btn-xs'
-      - if group.users.include?(current_user) && !group.members.include?(current_user)
+      - if group.pending_users.include?(current_user)
         tr
           td = group.name
           td = group.description

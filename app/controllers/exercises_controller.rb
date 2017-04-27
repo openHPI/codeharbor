@@ -2,7 +2,7 @@ require 'oauth2'
 
 class ExercisesController < ApplicationController
   load_and_authorize_resource
-  before_action :set_exercise, only: [:show, :edit, :update, :destroy, :add_to_cart, :add_to_collection, :push_external]
+  before_action :set_exercise, only: [:show, :edit, :update, :destroy, :add_to_cart, :add_to_collection, :push_external, :contribute]
   before_action :set_option, only: [:index]
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized for this exercise.'
@@ -53,7 +53,7 @@ class ExercisesController < ApplicationController
     exercise_origin.exercise_files.each do |f|
       @exercise.exercise_files << ExerciseFile.new(f.attributes)
     end
-    render 'duplicate'
+    @form_action
   end
 
   # GET /exercises/1/edit
@@ -66,45 +66,19 @@ class ExercisesController < ApplicationController
     @exercise = Exercise.new(exercise_params)
     @exercise.add_attributes(params[:exercise])
     @exercise.user = current_user
-
-    if params[:exercise][:origin_id]
-      @exercise_relation = ExerciseRelation.new
-      @exercise_relation.clone = @exercise
-      @exercise_relation.origin_id = params[:exercise][:origin_id]
-      @exercise_relation.relation_id = params[:exercise][:id]
-    end
-    if params[:labels]
-      params[:labels].each do |label|
-        @label = Label.find_by(name: label)
-        unless @label
-          @label = Label.create(name: label, color: '006600', label_category: nil)
-        end
-        @exercise.labels << @label
-      end
-    end
+    exercise_dependencies
 
     respond_to do |format|
-      if @exercise_relation
-        if @exercise_relation.save
-          if @exercise.save
-            format.html { redirect_to @exercise, notice: 'Exercise was successfully created.' }
-            format.json { render :show, status: :created, location: @exercise }
-          else
-            format.html { render :new }
-            format.json { render json: @exercise.errors, status: :unprocessable_entity }
-          end
-        else
-          format.html { redirect_to duplicate_exercise_path(@exercise_relation.origin) }
-          format.json { render json: @exercise.errors, status: :unprocessable_entity }
-        end
+      if @exercise.save
+        format.html { redirect_to @exercise, notice: 'Exercise was successfully created.' }
+        format.json { render :show, status: :created, location: @exercise }
       else
-        if @exercise.save
-          format.html { redirect_to @exercise, notice: 'Exercise was successfully created.' }
-          format.json { render :show, status: :created, location: @exercise }
-        else
+        if !@exercise_relation
           format.html { render :new }
-          format.json { render json: @exercise.errors, status: :unprocessable_entity }
+        else
+          format.html { redirect_to duplicate_exercise_path(@exercise_relation.origin)}
         end
+        format.json { render json: @exercise.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -113,6 +87,8 @@ class ExercisesController < ApplicationController
   # PATCH/PUT /exercises/1.json
   def update
     @exercise.add_attributes(params[:exercise])
+    exercise_dependencies
+
     respond_to do |format|
       if @exercise.update(exercise_params)
         format.html { redirect_to @exercise, notice: 'Exercise was successfully updated.' }
@@ -172,7 +148,41 @@ class ExercisesController < ApplicationController
     redirect_to @exercise, notice: ('Exercise pushed to ' + account_link.readable)
   end
 
+  def contribute
+    author = @exercise.user
+    AccessRequest.send_contribution_request(author, @exercise, current_user).deliver_later
+    redirect_to exercises_path, notice: "Your request has been sent."
+  end
+
   private
+
+  def exercise_dependencies
+    if params[:exercise][:origin_id]
+      @exercise_relation = ExerciseRelation.new
+      @exercise_relation.clone = @exercise
+      @exercise_relation.origin_id = params[:exercise][:origin_id]
+      @exercise_relation.relation_id = params[:exercise][:id]
+      @exercise_relation.save
+    end
+
+    if params[:labels]
+      params[:labels].each do |label|
+        label = Label.find_by(name: label)
+        unless label
+          label = Label.create(name: label, color: '006600', label_category: nil)
+        end
+        @exercise.labels << label
+      end
+    end
+
+    if params[:groups]
+      params[:groups].each do |group|
+        group = Group.find_by(name: group)
+        group.add(@exercise)
+      end
+    end
+  end
+
   def set_option
     if params[:option]
       @option = params[:option]
