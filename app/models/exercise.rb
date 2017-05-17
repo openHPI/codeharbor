@@ -19,7 +19,7 @@ class Exercise < ActiveRecord::Base
   belongs_to :execution_environment
   has_many :descriptions, dependent: :destroy
   has_many :origin_relations, :class_name => 'ExerciseRelation', :foreign_key => 'origin_id'
-  has_many :clone_relations, :class_name => 'ExerciseRelation', :foreign_key => 'origin_id'
+  has_many :clone_relations, :class_name => 'ExerciseRelation', :foreign_key => 'clone_id'
   #validates :descriptions, presence: true
 
   attr_reader :tag_tokens
@@ -33,7 +33,7 @@ class Exercise < ActiveRecord::Base
         label = Label.find_by('lower(name) = ?', search.downcase)
 
         if label
-          collection = Label.find_by('lower(name) = ?', search.downcase).exercises
+          collection = Label.find_by('lower(name) = ? AND private = ?', search.downcase, true).exercises
           results.each do |r|
             collection << r unless collection.find_by(id: r.id)
           end
@@ -50,7 +50,7 @@ class Exercise < ActiveRecord::Base
         label = Label.find_by('lower(name) = ?', search.downcase)
 
         if label
-          collection = Label.find_by('lower(name) = ?', search.downcase).exercises
+          collection = Label.find_by('lower(name) = ? AND private = ?', search.downcase, false).exercises
           results.each do |r|
             collection << r unless collection.find_by(id: r.id)
           end

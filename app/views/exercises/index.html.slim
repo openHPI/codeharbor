@@ -1,23 +1,24 @@
-= form_tag exercises_path, method: 'get' do
+= form_tag exercises_path, method: 'get', class: 'index' do
   = hidden_field_tag 'option', @option
-  .search-container
-    .col-md-6
-      .input-group
-        = text_field_tag :search, params[:search], class:'form-control', type:'text', placeholder: t('exercises.all.placeholder')
-        span.input-group-btn
-          = submit_tag t('exercises.all.search'), name: nil, class:'btn btn-default'
-    .col-md-6
+
+  .nav-container
+    .col-md-9
+      .btn-group[role="group"]
+        = button_tag 'My Exercises', type: 'button', class: 'btn btn-main change-hidden-field', id: 'mine'
+        = button_tag 'Private', type: 'button', class: 'btn btn-main change-hidden-field', id: 'private'
+        = button_tag 'Public', type: 'button', class: 'btn btn-main change-hidden-field', id: 'public'
+    .col-md-3
       - if can? :create, Exercise
-        = link_to t('exercises.all.new'), new_exercise_path, class:'btn btn-success pull-right'
+        = link_to new_exercise_path, class: 'btn btn-main pull-right nav-btn-exercise' do
+          i.fa.fa-plus style=("color: #008000")
+          = ' ' + t('exercises.all.new')
+  br
+  .search-container
+    .input-group
+      = text_field_tag :search, params[:search], class: 'form-control', type: 'text', placeholder: t('exercises.all.placeholder')
+      span.input-group-btn
+        = submit_tag t('exercises.all.search'), type: 'submit', name: nil, class: 'btn btn-default'
     br/
-  ul#menu
-    li
-      = button_tag 'My Exercises', class: 'change-hidden-field left-nav', id: 'mine'
-    li
-      = button_tag 'Private', class: 'change-hidden-field mid-nav', id: 'private'
-    li
-      = button_tag 'Public', class: 'change-hidden-field right-nav', id: 'public'
-  br/
   = render 'home/exercises'
 
 

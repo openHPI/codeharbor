@@ -1,14 +1,18 @@
 class GroupsController < ApplicationController
   load_and_authorize_resource
   before_action :set_group, only: [:show, :edit, :update, :destroy, :request_access, :grant_access, :delete_from_group, :make_admin]
-
+  before_action :set_option, only: [:index]
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized to for this action.'
   end
   # GET /groups
   # GET /groups.json
   def index
-    @groups = Group.all
+    if @option == 'mine'
+      @groups = current_user.groups.paginate(per_page: 5, page: params[:page])
+    else
+      @groups = Group.all.paginate(per_page: 5, page: params[:page])
+    end
   end
 
   def search
@@ -113,6 +117,14 @@ class GroupsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    def set_option
+      if params[:option]
+        @option = params[:option]
+      else
+        @option = 'mine'
+      end
+    end
+
     def set_group
       @group = Group.find(params[:id])
     end

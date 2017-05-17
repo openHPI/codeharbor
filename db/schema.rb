@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170419153822) do
+ActiveRecord::Schema.define(version: 20170428212440) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -209,6 +209,17 @@ ActiveRecord::Schema.define(version: 20170419153822) do
   end
 
   add_index "labels", ["label_category_id"], name: "index_labels_on_label_category_id", using: :btree
+
+  create_table "messages", force: :cascade do |t|
+    t.string   "text"
+    t.integer  "sender_id"
+    t.integer  "recipient_id"
+    t.string   "status"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.string   "param_type"
+    t.integer  "param_id"
+  end
 
   create_table "ratings", force: :cascade do |t|
     t.integer  "rating"

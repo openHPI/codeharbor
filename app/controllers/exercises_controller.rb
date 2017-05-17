@@ -34,6 +34,7 @@ class ExercisesController < ApplicationController
     @exercise.descriptions << Description.new
     @labels = []
     @form_action
+    @type = 'new'
   end
 
 
@@ -54,10 +55,12 @@ class ExercisesController < ApplicationController
       @exercise.exercise_files << ExerciseFile.new(f.attributes)
     end
     @form_action
+    @type = 'duplicate'
   end
 
   # GET /exercises/1/edit
   def edit
+    @type = 'edit'
   end
 
   # POST /exercises
@@ -151,6 +154,8 @@ class ExercisesController < ApplicationController
   def contribute
     author = @exercise.user
     AccessRequest.send_contribution_request(author, @exercise, current_user).deliver_later
+    text = "#{current_user.name} wants to contribute to your Exercise #{@exercise.title}."
+    Message.create(sender: current_user, recipient: author, param_type: 'exercise', param_id: @exercise.id, text: text)
     redirect_to exercises_path, notice: "Your request has been sent."
   end
 

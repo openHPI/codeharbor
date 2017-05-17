@@ -45,6 +45,8 @@ Rails.application.routes.draw do
   get 'collections/:id/remove_all', to: 'collections#remove_all' ,as: 'remove_all_collection'
   get 'carts/:id/remove_all', to: 'carts#remove_all' ,as: 'remove_all_cart'
 
+  post 'user/:id/messages/:id/add_author', to: 'messages#add_author', as: 'add_author'
+
 
   resources :labels do
     get :search, :on => :collection
@@ -52,6 +54,7 @@ Rails.application.routes.draw do
   resources :label_categories
   resources :users do
     resources :account_links
+    resources :messages
   end
   resources :tests
   resources :exercise_files

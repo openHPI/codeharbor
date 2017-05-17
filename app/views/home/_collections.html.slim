@@ -1,0 +1,34 @@
+- if @collections.empty?
+  .panel.panel-default style=("margin-top: 40px")
+    .panel-body
+      .col-md-10
+        h3 style=("color: #777777")
+          = 'You do not have collections yet'
+        br
+        p style=("color: #777777")
+          = 'You can create Collections and add exercises to it.'
+        br
+        br
+- @collections.each do |collection|
+  .panel.panel-default style=("margin-top: 20px")
+    .panel-heading
+      h3.panel-title
+        span= link_to collection.title, collection_path(collection)
+    .panel-body
+      .col-md-9
+        - if collection.exercises.empty?
+          = t('collections.noExercisesAdded')
+        - else collection.exercises
+          - collection.exercises.each do |exercise|
+            - if exercise
+              .btn-group
+                = link_to exercise.title, exercise_path(exercise), class: 'btn btn-default', style: "border-right: none"
+                = link_to remove_exercise_collection_path(exercise), class: 'btn btn-default', style: "border-left: none" do
+                  i.fa.fa-remove style=("color: gray")
+      .col-md-3
+        .btn-group.pull-right aria-label="..." role="group"
+          - if can? :edit, collection
+            = link_to 'View', collection_path(collection), class:'btn btn-default'
+            = link_to 'Edit', edit_collection_path(collection), class:'btn btn-default'
+            = link_to 'Delete', collection_path(collection), class:'btn btn-default', method: :delete, data: { confirm: t('sure') }
+= will_paginate @collections

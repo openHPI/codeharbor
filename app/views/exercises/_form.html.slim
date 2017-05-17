@@ -35,12 +35,18 @@
       = f.nested_fields_for :descriptions do |description|
         .controls[style="margin-top: 10px; margin-bottom: 10px"]
           = description.text_area :text, class:'form-control'
-          = description.remove_nested_fields_link t('exercises.form.descriptions.remove'), class:'btn btn-danger btn-xs'
           .field
             = f.label :language, t('exercises.form.descriptions.language')
             br/
             = description.collection_select :language, Description::LANGUAGES, :to_s, :to_s, include_blank: false
-      = f.add_nested_fields_link :descriptions, t('exercises.form.descriptions.add'), class:'btn btn-success'
+          = description.remove_nested_fields_link :text, class:'btn btn-main btn-xs' do
+            i.fa.fa-remove style=("color: #800000")
+            = ' ' + t('exercises.form.descriptions.remove')
+        br
+      = f.add_nested_fields_link :descriptions, ' ' , class: 'btn btn-main' do
+        i.fa.fa-plus style=("color: #008000")
+        = ' ' + t('exercises.form.descriptions.add')
+
     .form-group
       = f.label :visibility, t('exercises.visibility.label'), class: 'control-label'
       .radio
@@ -63,24 +69,45 @@
       br/
       .controls
         select[name = "labels[]" class = "my-tag form-control" multiple = "multiple" style="width: 300px;"]
-    h4
-      = t('exercises.files.label')+ ':'
-    = f.nested_fields_for :exercise_files do |file|
-      = render 'file_form', f: f, file: file
-      = file.remove_nested_fields_link t('exercises.form.files.remove'), class:'btn btn-danger btn-xs'
-      br/
-      br/
-    = f.add_nested_fields_link :exercise_files, t('exercises.form.files.add'), class:'btn btn-success', id: 'addFileButton'
-    h4
-      = t('exercises.tests.label')+ ':'
-    = f.nested_fields_for :tests do |test|
-      = render 'test_form', f: f, test: test
-      = test.remove_nested_fields_link t('exercises.form.tests.remove'), class:'btn btn-danger btn-xs'
-      br/
-      br/
-    = f.add_nested_fields_link :tests, t('exercises.form.tests.add'), class:'btn btn-success', id: 'addTestButton'
+    .form-group
+      h4
+        = t('exercises.files.label')+ ':'
+      = f.nested_fields_for :exercise_files do |file|
+        = render 'file_form', f: f, file: file
+        = file.remove_nested_fields_link :text, class:'btn btn-main btn-xs' do
+          i.fa.fa-remove style=("color: #800000")
+          = ' ' + t('exercises.form.files.remove')
+        br
+        br
+      = f.add_nested_fields_link :exercise_files, ' ', class:'btn btn-main', id: 'addFileButton' do
+        i.fa.fa-plus style=("color: #008000")
+        = ' ' + t('exercises.form.files.add')
+    .form-group
+      h4
+        = t('exercises.tests.label')+ ':'
+      = f.nested_fields_for :tests do |test|
+        = render 'test_form', f: f, test: test
+        = test.remove_nested_fields_link :text, class:'btn btn-main btn-xs' do
+          i.fa.fa-remove style=("color: #800000")
+          = ' ' + t('exercises.form.tests.remove')
+        br/
+        br/
+      = f.add_nested_fields_link :tests, ' ', class:'btn btn-main', id: 'addTestButton' do
+        i.fa.fa-plus style=("color: #008000")
+        = ' ' + t('exercises.form.tests.add')
     br/
-    br/
-    .actions.btn-group[role="group"]
-      = f.submit t('exercises.form.create'), class: 'btn btn-primary'
-      = link_to t('exercises.form.cancel'), :back, class: 'btn btn-danger'
+    .form-group
+      .actions.btn-group[role="group"]
+        = button_tag type: 'submit', class: 'btn btn-important' do
+          -if @type == 'new'
+            i.fa.fa-file-text-o style=("color: #008000")
+            = ' ' + t('exercises.form.create')
+          -elsif @type == 'edit'
+            i.fa.fa-edit style=("color: #008000")
+            = ' ' + 'Edit Exercise'
+          -else
+            i.fa.fa-files-o style=("color: #008000")
+            = ' ' + 'Duplicate Exercise'
+        = link_to :back, class: 'btn btn-important' do
+          i.fa.fa-remove style=("color: gray")
+          = ' ' + t('exercises.form.cancel')

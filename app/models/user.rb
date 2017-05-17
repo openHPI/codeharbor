@@ -14,6 +14,8 @@ class User < ActiveRecord::Base
   #has_many :groups, through: :user_groups
   has_many :exercise_authors, dependent: :destroy
   has_many :exercises, through: :exercise_authors
+  has_many :sent_messages, :class_name => 'Message', :foreign_key => 'sender_id'
+  has_many :received_messages, :class_name => 'Message', :foreign_key => 'recipient_id'
   
   before_destroy :handle_group_memberships, prepend: true
 

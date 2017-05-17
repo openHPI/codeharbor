@@ -1,30 +1,12 @@
-h2
-  = t('collections.header')
-  = link_to 'New Collection', new_collection_path, class:'btn btn-success'
-table.table
-  thead
-    tr
-      th
-        = t('collections.title')
-      th
-        = t('collections.exercises')
-      th colspan="2"
-        = t('collections.actions')
-  tbody
-    - @collections.each do |collection|
-      - if collection.user === current_user
-        tr
-          td
-            = collection.title
-          td
-            - if collection.exercises.empty?
-              = t('collections.noExercisesAdded')
-            - else collection.exercises
-              - collection.exercises.each do |exercise|
-                - if exercise
-                  = link_to "#{exercise.title}, ", exercise_path(exercise)
-          td
-            = link_to 'View', collection_path(collection), class: 'btn btn-default btn-xs'
-            = link_to t('collections.button.edit'), edit_collection_path(collection), class:'btn btn-warning btn-xs'
-            = link_to t('collections.button.destroy'), collection, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-xs'
-br
+.header
+  .col-md-9
+    .std-heading
+      i.fa.fa-briefcase style=("color: #444444")
+      = ' ' + 'Collections'
+  .col-md-3
+    - if can? :create, Group
+      = link_to new_collection_path, class: 'btn btn-main header-btn header-btn-collection pull-right' do
+        i.fa.fa-plus style=("color: #000080")
+        = ' ' + 'New Collection'
+= render 'home/collections'
+

@@ -23,48 +23,47 @@ ready =->
   $(".change-hidden-field").click ->
     value = (this).id
     document.getElementById('option').value = value
+    $(".index").submit()
 
   if option = document.getElementById('option')
     $(document.getElementById(option.value)).addClass('selected')
-    return
 
-  elem = document.getElementById('group-field')
-  if document.getElementById('exercise_private_false').checked == true
-    $(elem).hide()
+  if document.getElementById('group-field')
+    elem = document.getElementById('group-field')
+    if document.getElementById('exercise_private_false').checked == true
+      $(elem).hide()
 
-  $("#exercise_private_true").click ->
-    $(elem).show()
-    return
+    $("#exercise_private_true").click ->
+      $(elem).show()
 
-  $("#exercise_private_false").click ->
-    $(elem).hide()
-    return
+    $("#exercise_private_false").click ->
+      $(elem).hide()
 
-  $('.my-groups').select2
-    width: '100%'
-    createSearchChoice: (term, data) ->
-      if $(data).filter((->
-        @text.localeCompare(term) == 0
-      )).length == 0
-        return {
-          id: term
-          text: term
-        }
-      return
-    multiple: true
-    maximumSelectionSize: 5
-    formatSelectionTooBig: (limit) ->
-      'You can only add 5 topics'
-    ajax:
-      dataType: 'json'
-      url: '/groups/search.json'
-      processResults: (data) ->
-        { results: $.map(data, (obj) ->
-          {
-            id: obj.name
-            text: obj.name
+    $('.my-groups').select2
+      width: '100%'
+      createSearchChoice: (term, data) ->
+        if $(data).filter((->
+          @text.localeCompare(term) == 0
+        )).length == 0
+          return {
+            id: term
+            text: term
           }
-        ) }
-  return
+        return
+      multiple: true
+      maximumSelectionSize: 5
+      formatSelectionTooBig: (limit) ->
+        'You can only add 5 topics'
+      ajax:
+        dataType: 'json'
+        url: '/groups/search.json'
+        processResults: (data) ->
+          { results: $.map(data, (obj) ->
+            {
+              id: obj.name
+              text: obj.name
+            }
+          ) }
+    return
 $(document).ready(ready)
 $(document).on('page:load', ready)
