@@ -19,6 +19,61 @@ $star_rating.on 'click', ->
 
 SetRatingStar()
 
+loadSelect2 = ->
+
+  $('#select2-control').select2
+    tags: false
+    width: '20%'
+    multiple: false
+
+  $('.my-group2').select2
+    tags: true
+    width: '100%'
+    createSearchChoice: (term, data) ->
+      if $(data).filter((->
+        @text.localeCompare(term) == 0
+      )).length == 0
+        return {
+          id: term
+          text: term
+        }
+      return
+    multiple: false
+    maximumSelectionSize: 5
+    formatSelectionTooBig: (limit) ->
+      'You can only add 5 topics'
+    ajax:
+      dataType: 'json'
+      url: '/file_types/search.json'
+      processResults: (data) ->
+        { results: $.map(data, (obj) ->
+          {
+            id: obj.type
+            text: obj.type
+          }
+        ) }
+
+  $('#my-group2').select2
+    tags: true
+    width: '100%'
+    multiple: false
+
+  $('.my-group').select2
+    width: '100%'
+    createSearchChoice: (term, data) ->
+      if $(data).filter((->
+        @text.localeCompare(term) == 0
+      )).length == 0
+        return {
+          id: term
+          text: term
+        }
+      return
+    multiple: true
+    maximumSelectionSize: 5
+    formatSelectionTooBig: (limit) ->
+      'You can only add 5 topics'
+
 ready =->
   $(".change-hidden-field").click ->
     value = (this).id
@@ -39,31 +94,10 @@ ready =->
     $("#exercise_private_false").click ->
       $(elem).hide()
 
-    $('.my-groups').select2
-      width: '100%'
-      createSearchChoice: (term, data) ->
-        if $(data).filter((->
-          @text.localeCompare(term) == 0
-        )).length == 0
-          return {
-            id: term
-            text: term
-          }
-        return
-      multiple: true
-      maximumSelectionSize: 5
-      formatSelectionTooBig: (limit) ->
-        'You can only add 5 topics'
-      ajax:
-        dataType: 'json'
-        url: '/groups/search.json'
-        processResults: (data) ->
-          { results: $.map(data, (obj) ->
-            {
-              id: obj.name
-              text: obj.name
-            }
-          ) }
-    return
+  $(document).on "fields_added.nested_form_fields", (event, param) ->
+    loadSelect2()
+
+  loadSelect2()
+
 $(document).ready(ready)
 $(document).on('page:load', ready)

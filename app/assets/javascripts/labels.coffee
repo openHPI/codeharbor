@@ -1,6 +1,17 @@
 ready = ->
   $('.my-tag').select2
     tags: true
+    multiple: true
+    minimumInputLength: 1
+    createTag: (params) ->
+      term = $.trim(params.term)
+      if term == ''
+        return null
+      {
+        id: term
+        text: term
+        newTag: true
+      }
     width: '100%'
     tokenSeparators: [
       ','
@@ -15,20 +26,10 @@ ready = ->
           text: term
         }
       return
-    multiple: true
-    maximumSelectionSize: 5
+    maximumSelectionLength: 5
     formatSelectionTooBig: (limit) ->
-      'You can only add 5 topics'
-    ajax:
-      dataType: 'json'
-      url: '/labels/search.json'
-      processResults: (data) ->
-        { results: $.map(data, (obj) ->
-          {
-            id: obj.name
-            text: obj.name
-          }
-        ) }
+      'You can only add 5 labels'
+      tags: false
   return
 
 $(document).ready ready

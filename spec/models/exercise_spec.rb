@@ -100,7 +100,7 @@ RSpec.describe Exercise, type: :model do
       it 'has attribute filename on <p:file>-tag with name and extension' do
         file_names = xml.xpath('p:task/p:files/p:file/@filename')
         expect(file_names.size).to be 1
-        expect(file_names.first.value).to eq 'Main.java'
+        expect(file_names.first.value).to eq 'Main'
       end
 
       it 'has attribute class="template" on <p:file>-tag because it is the main file' do
@@ -169,7 +169,7 @@ RSpec.describe Exercise, type: :model do
         expect(refids.size()).to be 1
         refid = refids.first.value
         exercise_file = ExerciseFile.find(refid)
-        expect(exercise_file.file_name).to eq "SingleJUnitTestFile"
+        expect(exercise_file.name).to eq "SingleJUnitTestFile"
       end
 
       it '<p:test-configuration> contains single <c:feedback-message> with feedbackmessage' do
@@ -231,7 +231,7 @@ RSpec.describe Exercise, type: :model do
           expect(refids.size()).to be 1
           refid = refids.first.value
           exercise_file = ExerciseFile.find(refid)
-          expect(exercise_file.file_name).to eq "ModelSolutionFile"
+          expect(exercise_file.name).to eq "ModelSolutionFile"
         end
 
         it '<p:fileref> points to a <p:file> that actually exists in markup' do
@@ -239,7 +239,7 @@ RSpec.describe Exercise, type: :model do
           expect(refids.size()).to be 1
           filenames = xml.xpath("p:task/p:files/p:file[@id=#{refids.first.value}]/@filename")
           expect(filenames.size()).to be 1
-          expect(filenames.first.value).to eq "ModelSolutionFile.java"
+          expect(filenames.first.value).to eq "ModelSolutionFile"
         end
 
       end
@@ -269,7 +269,7 @@ RSpec.describe Exercise, type: :model do
             {"0" => {:content =>'this is some test', :feedback_message => 'not_working', :_destroy => false, :testing_framework => {:name => 'pytest', :id => '12345678'}}},
           :exercise_files_attributes =>
             {"0" => {:main => 'false', :content => 'some new exercise', :path => 'some/path/', :purpose => 'a new purpose', 
-              :file_name => 'awesome', :file_extension => '.py', :_destroy => false}}, 
+              :name => 'awesome', :file_extension => '.py', :_destroy => false}},
           :descriptions_attributes =>
             {"0" => {:text => 'a new description', :language => 'de', :_destroy => false}}})
         exercise.add_attributes(params)

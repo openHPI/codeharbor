@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170428212440) do
+ActiveRecord::Schema.define(version: 20170531114910) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,21 +116,23 @@ ActiveRecord::Schema.define(version: 20170428212440) do
   add_index "exercise_authors", ["user_id"], name: "index_exercise_authors_on_user_id", using: :btree
 
   create_table "exercise_files", force: :cascade do |t|
-    t.boolean  "main"
     t.text     "content"
     t.string   "path"
     t.boolean  "solution"
-    t.string   "file_extension"
     t.integer  "exercise_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.string   "file_name"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
     t.boolean  "visibility"
     t.string   "name"
     t.string   "purpose"
+    t.string   "role"
+    t.boolean  "hidden"
+    t.boolean  "read_only"
+    t.integer  "file_type_id"
   end
 
   add_index "exercise_files", ["exercise_id"], name: "index_exercise_files_on_exercise_id", using: :btree
+  add_index "exercise_files", ["file_type_id"], name: "index_exercise_files_on_file_type_id", using: :btree
 
   create_table "exercise_group_accesses", force: :cascade do |t|
     t.integer  "exercise_id"
@@ -171,6 +173,12 @@ ActiveRecord::Schema.define(version: 20170428212440) do
 
   add_index "exercises_labels", ["exercise_id"], name: "index_exercises_labels_on_exercise_id", using: :btree
   add_index "exercises_labels", ["label_id"], name: "index_exercises_labels_on_label_id", using: :btree
+
+  create_table "file_types", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "group_memberships", force: :cascade do |t|
     t.integer  "member_id",       null: false
@@ -290,6 +298,7 @@ ActiveRecord::Schema.define(version: 20170428212440) do
   add_foreign_key "exercise_authors", "exercises"
   add_foreign_key "exercise_authors", "users"
   add_foreign_key "exercise_files", "exercises"
+  add_foreign_key "exercise_files", "file_types"
   add_foreign_key "exercise_group_accesses", "exercises"
   add_foreign_key "exercise_group_accesses", "groups"
   add_foreign_key "exercises", "execution_environments"

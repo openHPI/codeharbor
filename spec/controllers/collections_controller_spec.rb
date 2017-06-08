@@ -39,7 +39,7 @@ RSpec.describe CollectionsController, type: :controller do
   }
 
   describe "GET #index" do
-    it "assigns all collections as @collections" do
+    xit "assigns all collections as @collections" do
       collection = Collection.create! valid_attributes
       get :index, {}, valid_session
       expect(assigns(:collections)).to eq([collection])

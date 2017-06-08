@@ -32,18 +32,18 @@ class ExercisesController < ApplicationController
   def new
     @exercise = Exercise.new
     @exercise.descriptions << Description.new
-    @labels = []
     @form_action
-    @type = 'new'
   end
 
 
   def duplicate
+
     exercise_origin = Exercise.find(params[:id])
     @exercise = Exercise.new
     @exercise_relation = ExerciseRelation.new
     @exercise.private = exercise_origin.private
-    @origin = exercise_origin
+    @exercise_relation.origin = exercise_origin
+    @exercise.errors[:base] = params[:errors].inspect if params[:errors]
 
     exercise_origin.descriptions.each do |d|
       @exercise.descriptions << Description.new(d.attributes)
@@ -55,12 +55,10 @@ class ExercisesController < ApplicationController
       @exercise.exercise_files << ExerciseFile.new(f.attributes)
     end
     @form_action
-    @type = 'duplicate'
   end
 
   # GET /exercises/1/edit
   def edit
-    @type = 'edit'
   end
 
   # POST /exercises
@@ -79,7 +77,8 @@ class ExercisesController < ApplicationController
         if !@exercise_relation
           format.html { render :new }
         else
-          format.html { redirect_to duplicate_exercise_path(@exercise_relation.origin)}
+          puts(@exercise.errors.inspect)
+          format.html { render :duplicate}
         end
         format.json { render json: @exercise.errors, status: :unprocessable_entity }
       end
@@ -90,8 +89,6 @@ class ExercisesController < ApplicationController
   # PATCH/PUT /exercises/1.json
   def update
     @exercise.add_attributes(params[:exercise])
-    exercise_dependencies
-
     respond_to do |format|
       if @exercise.update(exercise_params)
         format.html { redirect_to @exercise, notice: 'Exercise was successfully updated.' }
@@ -111,10 +108,6 @@ class ExercisesController < ApplicationController
       format.html { redirect_to exercises_url, notice: 'Exercise was successfully destroyed.' }
       format.json { head :no_content }
     end
-  end
-
-  def add_label
-    @labels << 1
   end
 
   def add_to_cart
@@ -162,32 +155,23 @@ class ExercisesController < ApplicationController
   private
 
   def exercise_dependencies
-    if params[:exercise][:origin_id]
+    if params[:exercise][:exercise_relation]
       @exercise_relation = ExerciseRelation.new
       @exercise_relation.clone = @exercise
-      @exercise_relation.origin_id = params[:exercise][:origin_id]
-      @exercise_relation.relation_id = params[:exercise][:id]
+      @exercise_relation.origin_id = params[:exercise][:exercise_relation][:origin_id]
+      @exercise_relation.relation_id = params[:exercise][:exercise_relation][:relation_id]
       @exercise_relation.save
     end
 
-    if params[:labels]
-      params[:labels].each do |label|
-        label = Label.find_by(name: label)
-        unless label
-          label = Label.create(name: label, color: '006600', label_category: nil)
-        end
-        @exercise.labels << label
-      end
-    end
-
-    if params[:groups]
-      params[:groups].each do |group|
-        group = Group.find_by(name: group)
+    if params[:exercise][:groups]
+      params[:exercise][:groups].delete_at(0)
+      params[:exercise][:groups].each do |array|
+        group = Group.find(array)
         group.add(@exercise)
       end
     end
-  end
 
+  end
   def set_option
     if params[:option]
       @option = params[:option]

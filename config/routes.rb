@@ -57,6 +57,9 @@ Rails.application.routes.draw do
     resources :messages
   end
   resources :tests
+  resources :file_types do
+    get :search, :on => :collection
+  end
   resources :exercise_files
   resources :testing_frameworks
   resources :exercises do
