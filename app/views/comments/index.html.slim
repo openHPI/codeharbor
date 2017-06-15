@@ -1,0 +1,38 @@
+= form_tag exercise_comments_path(@exercise), method: 'get' do
+  h1
+    = t('comments.header', title: @exercise.title)
+    - if can? :create, Comment
+      = link_to t('comments.button.new'), new_exercise_comment_path(@exercise), class:'btn btn-success'
+  .input-group.col-md-6 style=("margin-top: 40px; margin-bottom: 20px")
+    = text_field_tag :search, params[:search], class:"form-control", type:"text", placeholder: t('comments.search.placeholder')
+    span.input-group-btn
+      = submit_tag "Search", name: t('comments.search.button'), class:"btn btn-default"
+  table.table
+    thead
+      tr
+        th = t('comments.text')
+        th = t('comments.user')
+        th = t('comments.created_at')
+        th = t('comments.actions')
+    tbody
+      - @comments.each do |comment|
+        tr
+          td= comment.text
+          - if !comment.user
+            td
+              = t('users.undefined')
+          - elsif comment.user == current_user
+            td= t('users.yourself')
+          - elsif comment.user.first_name.nil? || current_user.role === 'user'
+            td= "User# comment.user.id "
+          - else
+            td= comment.user.name
+          td
+            = comment.created_at
+          td
+            .actions.btn-group role="group"
+              - if can? :edit, comment
+                = link_to t('comments.button.edit'), edit_exercise_comment_path(@exercise, comment), class:'btn btn-warning btn-xs'
+                = link_to t('comments.button.delete'), exercise_comment_path(@exercise, comment), class:'btn btn-danger btn-xs', method: :delete, data: { confirm: t('sure') }
+  br/
+  = link_to t('comments.button.back'), exercises_path, class:'btn btn-default'

@@ -2,12 +2,15 @@ Rails.application.routes.draw do
 
 
 
+  resources :relations
+  resources :exercise_relations
   # You can have the root of your site routed with "root"
   root 'home#index'
   
   resources :execution_environments
   resources :carts
   resources :collections
+  resources :groups
   get 'home/index'
 
   controller :sessions do
@@ -22,8 +25,15 @@ Rails.application.routes.draw do
   get 'comments/comments_all'
   get 'exercises/exercises_all'
 
-  get 'pexercises/:id/duplicate', to: 'exercises#duplicate', as: 'duplicate_exercise'
+  get 'exercises/:id/duplicate', to: 'exercises#duplicate', as: 'duplicate_exercise'
   post 'exercises/:id/add_to_cart', to: 'exercises#add_to_cart', as: 'add_to_cart'
+  post 'exercises/:id/add_to_collection', to: 'exercises#add_to_collection', as: 'add_to_collection'
+
+  get 'groups/:id/request_access', to: 'groups#request_access', as: 'request_access'
+  get 'groups/:id/confirm_request', to: 'groups#confirm_request', as: 'confirm_request'
+  get 'groups/:id/grant_access', to: 'groups#grant_access', as: 'grant_access'
+  get 'groups/:id/delete_from_group', to: 'groups#delete_from_group', as: 'delete_from_group'
+  get 'groups/:id/make_admin', to: 'groups#make_admin', as: 'make_admin'
 
   resources :labels
   resources :label_categories

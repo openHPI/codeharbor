@@ -1,0 +1,32 @@
+h1
+  = t('users.admin.header')
+  = link_to t('users.admin.new'), new_user_path, class:'btn btn-success'
+table.table
+  thead
+    tr
+      th
+        = t('users.admin.name')
+      th
+        = t('users.email')
+      th
+        = t('users.role')
+      th
+        = t('users.admin.actions')
+  tbody
+    - @users.each do |user|
+      tr
+        - if user.first_name.nil?
+          td
+            = link_to "User#{user.id}", user_path(user)
+        - else
+          td
+            = link_to user.name, user_path(user)
+        td
+          = user.email
+        td
+          = user.role
+        td.actions.btn-group[role="group"]
+          = link_to t('users.admin.show'), user, class:'btn btn-default btn-xs'
+          = link_to t('users.admin.edit'), edit_user_path(user), class:'btn btn-warning btn-xs'
+          = link_to t('users.admin.deleteX'), user, method: :delete, data: { confirm: t('sure') }, class:'btn btn-danger btn-xs'
+br

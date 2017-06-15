@@ -1,0 +1,27 @@
+.field
+  = f.label :main, t('exercises.files.main')
+  br/
+  = file.check_box :main
+.field
+  = f.label :content, t('exercises.files.content')
+  br/
+  .edit
+    .editor
+      = file.text_area :content
+    = file.text_area :content, class:'hidden'
+.field
+  = f.label :path, t('exercises.files.path')
+  br/
+  = file.text_field :path, size: 40
+.field
+  = f.label :purpose, t('exercises.files.purpose')
+  br/
+  = file.text_field :purpose
+.field
+  = f.label :name, t('exercises.files.name')
+  br/
+  = file.text_field :file_name
+.field
+  = f.label :file_extension, t('exercises.files.extension')
+  br/
+  = file.text_field :file_extension

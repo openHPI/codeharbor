@@ -2,6 +2,7 @@ class CreateUserGroups < ActiveRecord::Migration
   def change
     create_table :user_groups do |t|
       t.boolean :is_admin, default: false
+      t.boolean :is_active, default: false
       t.references :user, index: true
       t.references :group, index: true
 

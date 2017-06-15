@@ -1,0 +1,15 @@
+.field
+  = f.label :content, t('exercises.tests.content')
+  br/
+  .edit
+    .editor
+      = test.text_area :content
+    = test.text_area :content, class:'hidden'
+.field
+  = f.label :feedback_message, t('exercises.tests.feedback')
+  br/
+  = test.text_field :feedback_message, size:80
+.field
+  = f.label :testing_framework, t('exercises.tests.framework')
+  br/
+  = test.collection_select :testing_framework_id, TestingFramework.all, :id, :name

@@ -1,0 +1,37 @@
+doctype html
+html
+  head
+    meta content=("text/html; charset=UTF-8") http-equiv="Content-Type" /
+    title CodeHarbor
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+  body
+    nav.navbar.navbar-default.navbar-fixed-top.navbar-offset
+      = nav_bar fixed: :top, brand: 'Code Harbor', responsive: true do
+        = menu_group do
+          - if current_user
+            = menu_item t('layouts.exercises'), exercises_path
+            = menu_item t('layouts.collections'), collections_path
+            = menu_item t('layouts.groups'), groups_path
+            = menu_divider
+            - if current_user.role === 'admin'
+              = drop_down t('layouts.admin') do
+                = menu_item t('layouts.admin_nav.user'), users_path
+                = menu_item t('layouts.admin_nav.exercise'), exercises_exercises_all_path
+                = menu_item t('layouts.admin_nav.comments'), comments_comments_all_path
+        = menu_group pull: :right do
+          - if current_user
+            = menu_item t('layouts.cart')+' (' + current_user.cart_count.to_s + ')', carts_path
+            = menu_item current_user.email, user_path(current_user)
+            = menu_item t('layouts.logout'),  logout_path, method: :delete
+    .container style=("margin-top: 100px")
+      - if flash[:alert]
+        p.flash-error
+          font color="red" = flash[:alert]
+      - if flash[:notice]
+        p.flash-notice
+          font color="green" = flash[:notice]
+      .col-md-12
+        = yield
+    = yield :modals

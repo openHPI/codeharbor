@@ -1,0 +1,21 @@
+h2
+  = t('carts.header')
+dl.dl-horizontal
+  dt
+    = t('carts.exercises')
+  - @carts.each do |cart|
+    - if cart.user === current_user
+      - if cart.exercises
+        - cart.exercises.each do |exercise|
+          - if exercise
+            dd
+              = link_to exercise.title, exercise_path(exercise)
+      - else
+        dd
+          = t('carts.noExercisesAdded')
+    dt
+      = t('carts.actions')
+    dd
+      = link_to t('carts.button.edit'), edit_cart_path(cart), class:'btn btn-warning btn-xs'
+      = link_to t('carts.button.destroy'), cart, method: :delete, data: { confirm: t('sure') }, class:'btn btn-danger btn-xs'
+br/

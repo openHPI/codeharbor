@@ -3,21 +3,24 @@ require 'nokogiri'
 class Exercise < ActiveRecord::Base
   validates :title, presence: true
 
-  has_many :exercise_files
-  has_many :tests
-  has_and_belongs_to_many :labels
-  has_many :comments
-  has_many :ratings
+  has_many :exercise_files, dependent: :destroy
+  has_many :tests, dependent: :destroy
+  has_and_belongs_to_many :labels, dependent: :destroy
+  has_many :comments, dependent: :destroy
+  has_many :ratings, dependent: :destroy
   has_many :exercise_authors
   has_many :authors, through: :exercise_authors, source: :user
   has_many :exercise_group_accesses
   has_many :access, through: :exercise_group_accesses, source: :group
-  #has_and_belongs_to_many :collections
-  #has_and_belongs_to_many :carts
+  has_and_belongs_to_many :collections, dependent: :destroy
+  has_and_belongs_to_many :carts, dependent: :destroy
   belongs_to :user
   belongs_to :execution_environment
-  has_many :descriptions
+  has_many :descriptions, dependent: :destroy
+  has_many :origin_relations, :class_name => 'ExerciseRelation', :foreign_key => 'origin_id'
+  has_many :clone_relations, :class_name => 'ExerciseRelation', :foreign_key => 'origin_id'
   #validates :descriptions, presence: true
+
 
   accepts_nested_attributes_for :descriptions, allow_destroy: true
 
@@ -55,6 +58,7 @@ class Exercise < ActiveRecord::Base
     end
     return true
   end
+
 
   def avg_rating
     if ratings.empty?

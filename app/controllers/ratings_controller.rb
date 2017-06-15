@@ -42,7 +42,7 @@ class RatingsController < ApplicationController
     rating.user = current_user
 
     if rating.save
-      redirect_to exercises_path, notice: notice
+      redirect_to @exercise, notice: notice
     else
       render :new
     end

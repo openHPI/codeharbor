@@ -1,0 +1,10 @@
+p#notice= notice
+p
+  strong = t('execution.language')+':'
+  = @execution_environment.language
+p
+  strong = t('execution.version')+':'
+  = @execution_environment.version
+= link_to t('execution.button.edit'), edit_execution_environment_path(@execution_environment)
+| \
+= link_to t('execution.button.back'), execution_environments_path

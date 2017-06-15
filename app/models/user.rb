@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   validates :first_name, :last_name, presence: true
   has_secure_password
 
+  has_many :collections
   has_many :account_links
   has_many :exercises
   has_one :cart
@@ -25,6 +26,15 @@ class User < ActiveRecord::Base
   def is_author?(exercise)
     exercise_authors = User.find(ExerciseAuthor.where(exercise_id: exercise.id).collect(&:user_id))
     return exercise_authors.include? self
+  end
+
+  def last_group_admin?
+    Group.find(UserGroup.where(user: self, is_admin: true).collect(&:group_id)).each do |group|
+      if group.admins.size == 1 && group.users.size > 1
+        return true
+      end
+    end
+    return false
   end
 
   def name

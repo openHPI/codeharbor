@@ -1,0 +1,7 @@
+p
+  strong
+    = t('collections.show.header')
+  = @collection.title
+= link_to t('collections.button.edit'), edit_collection_path(@collection), class:'btn btn-warning'
+|  \
+= link_to t('collections.button.back'), collections_path

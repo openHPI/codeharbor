@@ -1,0 +1,6 @@
+p#notice
+  = notice
+h1 = t('account.links.header')
+= render partial: "all", locals: {account_links: @account_links}
+br
+= link_to t('account.button.new'), new_user_account_link_path(@user)

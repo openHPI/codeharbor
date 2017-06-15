@@ -2,7 +2,7 @@ require 'oauth2'
 
 class ExercisesController < ApplicationController
   load_and_authorize_resource
-  before_action :set_exercise, only: [:show, :edit, :update, :destroy, :add_to_cart,:push_external]
+  before_action :set_exercise, only: [:show, :edit, :update, :destroy, :add_to_cart, :add_to_collection,:push_external]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized for this exercise.'
@@ -16,6 +16,13 @@ class ExercisesController < ApplicationController
   # GET /exercises/1
   # GET /exercises/1.json
   def show
+
+    exercise_relation = ExerciseRelation.find_by(clone_id: @exercise.id)
+    if exercise_relation
+      @exercise_relation = exercise_relation
+      @exercise_relation.origin = exercise_relation.origin
+      @exercise_relation.clone = exercise_relation.clone
+    end
     @files = ExerciseFile.where(exercise: @exercise)
     @tests = Test.where(exercise: @exercise)
 
@@ -25,23 +32,27 @@ class ExercisesController < ApplicationController
   def new
     @exercise = Exercise.new
     @exercise.descriptions << Description.new
+    @form_action
   end
 
+
   def duplicate
-    exercise = Exercise.find(params[:id])
+    exercise_origin = Exercise.find(params[:id])
     @exercise = Exercise.new
-    @exercise.title = exercise.title
-    @exercise.private = exercise.private
-    exercise.descriptions.each do |d|
+    @exercise_relation = ExerciseRelation.new
+    @exercise.private = exercise_origin.private
+    @origin = exercise_origin
+
+    exercise_origin.descriptions.each do |d|
       @exercise.descriptions << Description.new(d.attributes)
     end
-    exercise.tests.each do |t|
+    exercise_origin.tests.each do |t|
       @exercise.tests << Test.new(t.attributes)
     end
-    exercise.exercise_files.each do |f|
+    exercise_origin.exercise_files.each do |f|
       @exercise.exercise_files << ExerciseFile.new(f.attributes)
     end
-    render 'new'
+    render 'duplicate'
   end
 
   # GET /exercises/1/edit
@@ -54,13 +65,35 @@ class ExercisesController < ApplicationController
     @exercise = Exercise.new(exercise_params)
     @exercise.add_attributes(params[:exercise])
     @exercise.user = current_user
+    if params[:exercise][:origin_id]
+      @exercise_relation = ExerciseRelation.new
+      @exercise_relation.clone = @exercise
+      @exercise_relation.origin_id = params[:exercise][:origin_id]
+      @exercise_relation.relation_id = params[:exercise][:id]
+    end
+
     respond_to do |format|
-      if @exercise.save
-        format.html { redirect_to @exercise, notice: 'Exercise was successfully created.' }
-        format.json { render :show, status: :created, location: @exercise }
+      if @exercise_relation
+        if @exercise_relation.save
+          if @exercise.save
+            format.html { redirect_to @exercise, notice: 'Exercise was successfully created.' }
+            format.json { render :show, status: :created, location: @exercise }
+          else
+            format.html { render :new }
+            format.json { render json: @exercise.errors, status: :unprocessable_entity }
+          end
+        else
+          format.html { redirect_to duplicate_exercise_path(@exercise_relation.origin) }
+          format.json { render json: @exercise.errors, status: :unprocessable_entity }
+        end
       else
-        format.html { render :new }
-        format.json { render json: @exercise.errors, status: :unprocessable_entity }
+        if @exercise.save
+          format.html { redirect_to @exercise, notice: 'Exercise was successfully created.' }
+          format.json { render :show, status: :created, location: @exercise }
+        else
+          format.html { render :new }
+          format.json { render json: @exercise.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -100,6 +133,16 @@ class ExercisesController < ApplicationController
       redirect_to @exercise, notice: 'Exercise was successfully added to your cart.'
     else
       redirect_to @exercise, alert: 'Exercise already in your cart.'
+    end
+  end
+
+  def add_to_collection
+    collection = Collection.find(params[:collection][:id])
+    collection_set = collection.exercises.to_set
+    if collection_set.add?(@exercise)
+      redirect_to @exercise, alert: 'Exercise added to collection.'
+    else
+      redirect_to @exercise, alert: 'Exercise already in collection.'
     end
   end
 

@@ -25,13 +25,21 @@ RSpec.describe User, type: :model do
     it 'deletes the user when user is one of many admins' do
       UserGroup.set_is_admin(many_members_group.id, user.id, true)
       UserGroup.set_is_admin(many_members_group.id, second_user.id, true)
+      UserGroup.set_is_active(many_members_group.id, user.id, true)
+      UserGroup.set_is_active(many_members_group.id, second_user.id, true)
       group_count = Group.all.count
+      #require 'pry'
+      #binding.pry
+      #user.destroy
       expect(user.destroy).to be_truthy
       expect(Group.all.count).to eql(group_count)
     end
     
     it 'does not delete the user when user is last admin and there are other members in group ' do
       UserGroup.set_is_admin(many_members_group.id, user.id, true)
+      UserGroup.set_is_active(many_members_group.id, user.id, true)
+      UserGroup.set_is_active(many_members_group.id, second_user.id, true)
+      UserGroup.set_is_active(many_members_group.id, third_user.id, true)
       group_count = Group.all.count
       user_count = described_class.count
       expect(user.destroy).to be_falsey

@@ -1,0 +1,41 @@
+h1
+  = t('exercises.admin.header')
+  = link_to 'New Exercise', new_exercise_path, class:'btn btn-success'
+table.table
+  thead
+    tr
+      th
+        = t('exercises.title')
+      th
+        = t('exercises.created_by')
+      th
+        = t('exercises.created_at')
+      th
+        = t('exercises.admin.accessibility')
+      th
+        = t('exercises.admin.actions')
+  tbody
+    - @exercises.each do |exercise|
+      tr
+        td
+          = link_to exercise.title, exercise
+        - if !exercise.user
+          td
+            = t('users.undefined')
+        - elsif exercise.user == current_user
+          td
+            = t('users.yourself')
+        - elsif exercise.user.first_name.nil?
+          td
+            = link_to "User#{exercise.user.id}", user_path(exercise.user)
+        - else
+          td
+            = link_to exercise.user.name, user_path(exercise.user)
+        td
+          = exercise.created_at
+        td
+          = exercise.private ? t('exercises.visibility.private') : t('exercises.visibility.public')
+        td.actions.btn-group[role="group"]
+          = link_to t('exercises.admin.show'), exercise, class:'btn btn-default btn-xs'
+          = link_to t('exercises.admin.edit'), edit_exercise_path(exercise), class:'btn btn-warning btn-xs'
+          = link_to t('exercises.admin.deleteX'), exercise_path(exercise), class:'btn btn-danger btn-xs', method: :delete, data: { confirm: t('sure') }
