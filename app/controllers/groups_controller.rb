@@ -40,7 +40,7 @@ class GroupsController < ApplicationController
   # POST /groups.json
   def create
     @group = Group.new(group_params)
-    
+
     respond_to do |format|
       if @group.save
         @group.add(current_user, as: 'admin')
