@@ -20,8 +20,6 @@ class ExercisesController < ApplicationController
     exercise_relation = ExerciseRelation.find_by(clone_id: @exercise.id)
     if exercise_relation
       @exercise_relation = exercise_relation
-      @exercise_relation.origin = exercise_relation.origin
-      @exercise_relation.clone = exercise_relation.clone
     end
     @files = ExerciseFile.where(exercise: @exercise)
     @tests = Test.where(exercise: @exercise)
@@ -38,9 +36,10 @@ class ExercisesController < ApplicationController
 
   def duplicate
 
-    exercise_origin = Exercise.find(params[:id])
     @exercise = Exercise.new
     @exercise_relation = ExerciseRelation.new
+
+    exercise_origin = Exercise.find(params[:id])
     @exercise.private = exercise_origin.private
     @exercise_relation.origin = exercise_origin
     @exercise.errors[:base] = params[:errors].inspect if params[:errors]

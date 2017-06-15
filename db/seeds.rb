@@ -59,6 +59,8 @@ exercise1.descriptions
 AccountLink.create(push_url: 'google.com/pushpush', account_name: 'account1000')
 
 
+
+
 =begin
 exercise2 = Exercise.create(title: "Java Einstieg ", maxrating: '10', private: false, user_id:user2.id)
 ExerciseFile.create(main: true, content: "public class HalloWelt {\n    // Hier haben sich zwei Fehler eingeschlichen\n    public static void main (String [] args){\n        System.out.println(Hallo Welt)\n    }\n}", path: '', solution: false, file_extension: 'java', exercise: exercise2)
@@ -142,6 +144,11 @@ ee1 = ExecutionEnvironment.create(language: 'Java', version: '8')
 ee2 = ExecutionEnvironment.create(language: 'Python', version: '2.7')
 
 exercise1.update(execution_environment: ee1)
+
+#Exercises from codeocean
+
+java1 = Exercise.create(title: PLATZHALTER , max_rating: 10, private: false, user_id: user1.id )
+
 #exercise2.update(execution_environment: ee1)
 #exercise3.update(execution_environment: ee1)
 #exercise4.update(execution_environment: ee2)

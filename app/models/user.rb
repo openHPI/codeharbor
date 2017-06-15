@@ -33,13 +33,14 @@ class User < ActiveRecord::Base
     return exercise_authors.include? self
   end
 
+
   def last_group_admin?
-    Group.find(UserGroup.where(user: self, is_admin: true).collect(&:group_id)).each do |group|
-      if group.admins.size == 1 && group.users.size > 1
-        return true
-      end
-    end
-    return false
+   # Group.find(UserGroup.where(user: self, is_admin: true).collect(&:group_id)).each do |group|
+    #  if group.admins.size == 1 && group.users.size > 1
+     #   return true
+     # end
+   # end
+   # return false
   end
 
   def name

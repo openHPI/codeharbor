@@ -20,6 +20,14 @@ div[style="margin-left: 10px;"]
     br/
     = file.select :role, ExerciseFile::ROLES, {}, class: 'form-control'
   .field
+    = f.label :hidden, 'Hidden'
+    br/
+    = file.check_box :hidden
+  .field
+    = f.label :read_only, 'Read only'
+    br/
+    = file.check_box :read_only
+  .field
     = f.label :content, t('exercises.files.content')
     br/
     .edit
