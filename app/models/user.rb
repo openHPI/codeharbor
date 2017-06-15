@@ -10,8 +10,6 @@ class User < ActiveRecord::Base
   has_many :account_links
   has_many :exercises
   has_one :cart, dependent: :destroy
-  #has_many :group_memberships, dependent: :destroy
-  #has_many :groups, through: :user_groups
   has_many :exercise_authors, dependent: :destroy
   has_many :exercises, through: :exercise_authors
   has_many :sent_messages, :class_name => 'Message', :foreign_key => 'sender_id'
@@ -34,25 +32,12 @@ class User < ActiveRecord::Base
   end
 
 
-  def last_group_admin?
-   # Group.find(UserGroup.where(user: self, is_admin: true).collect(&:group_id)).each do |group|
-    #  if group.admins.size == 1 && group.users.size > 1
-     #   return true
-     # end
-   # end
-   # return false
-  end
-
   def name
     "#{first_name} #{last_name}"
   end
 
 
   def has_access_through_any_group?(exercise)
-    #groups = Group.find(UserGroup.where(user_id: id).collect(&:group_id))
-    #groups_with_access = Group.find(ExerciseGroupAccess.where(exercise_id: exercise.id).collect(&:group_id))
-    #return (not (groups & groups_with_access).empty?)
-
     self.shares_any_group?(exercise)
   end
   

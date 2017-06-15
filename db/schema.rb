@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170531114910) do
+ActiveRecord::Schema.define(version: 20170615144649) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -259,6 +259,7 @@ ActiveRecord::Schema.define(version: 20170531114910) do
     t.datetime "updated_at",           null: false
     t.integer  "exercise_id"
     t.integer  "exercise_file_id"
+    t.float    "score"
   end
 
   add_index "tests", ["exercise_file_id"], name: "index_tests_on_exercise_file_id", using: :btree
@@ -285,6 +286,7 @@ ActiveRecord::Schema.define(version: 20170531114910) do
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
     t.string   "role",            default: "user"
+    t.boolean  "deleted"
   end
 
   add_foreign_key "account_links", "users"

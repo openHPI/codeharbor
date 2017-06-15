@@ -40,14 +40,7 @@ class GroupsController < ApplicationController
   # POST /groups.json
   def create
     @group = Group.new(group_params)
-
-    #@user_group = UserGroup.new
-    #@user_group.is_admin = true
-    #@user_group.is_active = true
-    #@user_group.group = @group
-    #@user_group.user = current_user
-    #@user_group.save
-
+    
     respond_to do |format|
       if @group.save
         @group.add(current_user, as: 'admin')
@@ -90,19 +83,16 @@ class GroupsController < ApplicationController
       AccessRequest.send_access_request(current_user, admin, @group).deliver_now
     end
     @group.add_pending_user(current_user)
-    #Old: UserGroup.create(group: group, user: current_user)
     redirect_to groups_path
   end
 
   def grant_access
     user = User.find(params[:user])
     @group.grant_access(user)
-    # Old: UserGroup.find_by(group: params[:group], user: params[:user]).update(is_active: true)
     redirect_to @group, notice: 'Access granted.'
   end
 
   def delete_from_group
-    # Old: UserGroup.find_by(group: params[:group], user: params[:user]).destroy
     user = User.find(params[:user])
     @group.users.delete(user)
     redirect_to @group, notice: 'User deleted.'

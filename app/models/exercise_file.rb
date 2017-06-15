@@ -16,4 +16,6 @@ class ExerciseFile < ActiveRecord::Base
       'User-defined Test'
   ]
 
+  ROLES.freeze
+
 end
