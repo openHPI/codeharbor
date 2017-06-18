@@ -2,6 +2,44 @@ require 'rails_helper'
 require 'nokogiri'
 
 RSpec.describe User, type: :model do
+  describe 'cart count' do
+    let!(:user) {FactoryGirl.create(:user)}
+    let!(:exercise1) {FactoryGirl.create(:simple_exercise)}
+    let!(:exercise2) {FactoryGirl.create(:simple_exercise)}
+    let(:cart) {FactoryGirl.create(:cart, user: user, exercises: [exercise1])}
+
+
+    it 'return +1 when exercise is added' do
+      count = user.cart_count
+      cart.add_exercise(exercise1)
+      expect(user.cart_count).to be_eql(count + 1)
+    end
+    it 'return -1 when exercise is removed' do
+      cart.add_exercise(exercise2)
+      count = user.cart_count
+      cart.remove_exercise(exercise2)
+      expect(user.cart_count).to be_eql(count - 1)
+    end
+    it 'return 0 when cart got destroyed' do
+      cart.destroy
+      expect(user.cart_count).to be_eql(0)
+    end
+  end
+
+  describe 'is_author' do
+    let!(:user1) {FactoryGirl.create(:user)}
+    let!(:user2) {FactoryGirl.create(:user)}
+    let!(:exercise) {FactoryGirl.create(:exercise_with_author, authors: [user1])}
+
+    it 'returns true for author' do
+      expect(user1.is_author?(exercise)).to be true
+    end
+
+    it 'return false for not author' do
+      expect(user2.is_author?(exercise)).to be false
+    end
+  end
+
   describe 'handles Groups when destroyed' do
     let!(:user) { FactoryGirl.create(:user) }
     let(:second_user) { FactoryGirl.create(:user) }
@@ -16,17 +54,23 @@ RSpec.describe User, type: :model do
     end
     
     it 'deletes the user and group when user is last member' do
-      UserGroup.set_is_admin(one_member_group.id, user.id, true)
+      #UserGroup.set_is_admin(one_member_group.id, user.id, true)
+      one_member_group.make_admin(user)
       group_count = Group.all.count
       expect(user.destroy).to be_truthy
       expect(Group.all.count).to eql(group_count - 1)
     end
     
     it 'deletes the user when user is one of many admins' do
-      UserGroup.set_is_admin(many_members_group.id, user.id, true)
-      UserGroup.set_is_admin(many_members_group.id, second_user.id, true)
-      UserGroup.set_is_active(many_members_group.id, user.id, true)
-      UserGroup.set_is_active(many_members_group.id, second_user.id, true)
+      #UserGroup.set_is_admin(many_members_group.id, user.id, true)
+      #UserGroup.set_is_admin(many_members_group.id, second_user.id, true)
+      #UserGroup.set_is_active(many_members_group.id, user.id, true)
+      #UserGroup.set_is_active(many_members_group.id, second_user.id, true)
+
+      many_members_group.make_admin(user)
+      many_members_group.make_admin(second_user)
+
+
       group_count = Group.all.count
       #require 'pry'
       #binding.pry
@@ -36,10 +80,15 @@ RSpec.describe User, type: :model do
     end
     
     it 'does not delete the user when user is last admin and there are other members in group ' do
-      UserGroup.set_is_admin(many_members_group.id, user.id, true)
-      UserGroup.set_is_active(many_members_group.id, user.id, true)
-      UserGroup.set_is_active(many_members_group.id, second_user.id, true)
-      UserGroup.set_is_active(many_members_group.id, third_user.id, true)
+      #UserGroup.set_is_admin(many_members_group.id, user.id, true)
+      #UserGroup.set_is_active(many_members_group.id, user.id, true)
+      #UserGroup.set_is_active(many_members_group.id, second_user.id, true)
+      #UserGroup.set_is_active(many_members_group.id, third_user.id, true)
+
+      many_members_group.make_admin(user)
+      many_members_group.grant_access(second_user)
+      many_members_group.grant_access(third_user)
+
       group_count = Group.all.count
       user_count = described_class.count
       expect(user.destroy).to be_falsey
@@ -94,8 +143,10 @@ RSpec.describe User, type: :model do
     let!(:group4) { FactoryGirl.create(:group, users: [user], name: 'A') }
 
     before(:each) do
-      UserGroup.set_is_admin(group1.id, user.id, true)
-      UserGroup.set_is_admin(group2.id, user.id, true)
+      #UserGroup.set_is_admin(group1.id, user.id, true)
+      #UserGroup.set_is_admin(group2.id, user.id, true)
+      group1.make_admin(user)
+      group2.make_admin(user)
     end
 
     it 'returns all groups' do
@@ -113,7 +164,7 @@ RSpec.describe User, type: :model do
     let!(:group) { FactoryGirl.create(:group, users: [user]) }
     let!(:exercise) {FactoryGirl.create(:only_meta_data, private: false, authors: [user])}
     let!(:exercise2) {FactoryGirl.create(:only_meta_data, private: true, authors: [user])}
-    let!(:exercise3) {FactoryGirl.create(:only_meta_data, private: true, authors: [user2], access: [group])}
+    let!(:exercise3) {FactoryGirl.create(:only_meta_data, private: true, authors: [user2], groups: [group])}
     
     it 'allows access to a public exercise to all users' do
       expect(exercise.can_access(user2)).to eql true

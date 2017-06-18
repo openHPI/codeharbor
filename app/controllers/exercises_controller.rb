@@ -2,15 +2,15 @@ require 'oauth2'
 
 class ExercisesController < ApplicationController
   load_and_authorize_resource
-  before_action :set_exercise, only: [:show, :edit, :update, :destroy, :add_to_cart, :add_to_collection,:push_external]
-
+  before_action :set_exercise, only: [:show, :edit, :update, :destroy, :add_to_cart, :add_to_collection, :push_external, :contribute]
+  before_action :set_option, only: [:index]
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized for this exercise.'
   end
   # GET /exercises
   # GET /exercises.json
   def index
-    @exercises = Exercise.search(params[:search]).sort{ |y,x| x.avg_rating <=> y.avg_rating }.paginate(per_page: 5, page: params[:page])
+    @exercises = Exercise.search(params[:search],@option,current_user).sort{ |y,x| x.avg_rating <=> y.avg_rating }.paginate(per_page: 5, page: params[:page])
   end
 
   # GET /exercises/1
@@ -20,8 +20,6 @@ class ExercisesController < ApplicationController
     exercise_relation = ExerciseRelation.find_by(clone_id: @exercise.id)
     if exercise_relation
       @exercise_relation = exercise_relation
-      @exercise_relation.origin = exercise_relation.origin
-      @exercise_relation.clone = exercise_relation.clone
     end
     @files = ExerciseFile.where(exercise: @exercise)
     @tests = Test.where(exercise: @exercise)
@@ -37,11 +35,14 @@ class ExercisesController < ApplicationController
 
 
   def duplicate
-    exercise_origin = Exercise.find(params[:id])
+
     @exercise = Exercise.new
     @exercise_relation = ExerciseRelation.new
+
+    exercise_origin = Exercise.find(params[:id])
     @exercise.private = exercise_origin.private
-    @origin = exercise_origin
+    @exercise_relation.origin = exercise_origin
+    @exercise.errors[:base] = params[:errors].inspect if params[:errors]
 
     exercise_origin.descriptions.each do |d|
       @exercise.descriptions << Description.new(d.attributes)
@@ -52,7 +53,7 @@ class ExercisesController < ApplicationController
     exercise_origin.exercise_files.each do |f|
       @exercise.exercise_files << ExerciseFile.new(f.attributes)
     end
-    render 'duplicate'
+    @form_action
   end
 
   # GET /exercises/1/edit
@@ -65,35 +66,20 @@ class ExercisesController < ApplicationController
     @exercise = Exercise.new(exercise_params)
     @exercise.add_attributes(params[:exercise])
     @exercise.user = current_user
-    if params[:exercise][:origin_id]
-      @exercise_relation = ExerciseRelation.new
-      @exercise_relation.clone = @exercise
-      @exercise_relation.origin_id = params[:exercise][:origin_id]
-      @exercise_relation.relation_id = params[:exercise][:id]
-    end
+    exercise_dependencies
 
     respond_to do |format|
-      if @exercise_relation
-        if @exercise_relation.save
-          if @exercise.save
-            format.html { redirect_to @exercise, notice: 'Exercise was successfully created.' }
-            format.json { render :show, status: :created, location: @exercise }
-          else
-            format.html { render :new }
-            format.json { render json: @exercise.errors, status: :unprocessable_entity }
-          end
-        else
-          format.html { redirect_to duplicate_exercise_path(@exercise_relation.origin) }
-          format.json { render json: @exercise.errors, status: :unprocessable_entity }
-        end
+      if @exercise.save
+        format.html { redirect_to @exercise, notice: 'Exercise was successfully created.' }
+        format.json { render :show, status: :created, location: @exercise }
       else
-        if @exercise.save
-          format.html { redirect_to @exercise, notice: 'Exercise was successfully created.' }
-          format.json { render :show, status: :created, location: @exercise }
-        else
+        if !@exercise_relation
           format.html { render :new }
-          format.json { render json: @exercise.errors, status: :unprocessable_entity }
+        else
+          puts(@exercise.errors.inspect)
+          format.html { render :duplicate}
         end
+        format.json { render json: @exercise.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -124,12 +110,8 @@ class ExercisesController < ApplicationController
   end
 
   def add_to_cart
-    unless current_user.cart
-      Cart.create(user: current_user)
-    end
     cart = Cart.find_by(user: current_user)
-    unless cart.exercises.find_by(id: @exercise.id)
-      cart.exercises << @exercise
+    if cart.add_exercise(@exercise)
       redirect_to @exercise, notice: 'Exercise was successfully added to your cart.'
     else
       redirect_to @exercise, alert: 'Exercise already in your cart.'
@@ -138,9 +120,8 @@ class ExercisesController < ApplicationController
 
   def add_to_collection
     collection = Collection.find(params[:collection][:id])
-    collection_set = collection.exercises.to_set
-    if collection_set.add?(@exercise)
-      redirect_to @exercise, alert: 'Exercise added to collection.'
+    if collection.add_exercise(@exercise)
+      redirect_to @exercise, notice: 'Exercise added to collection.'
     else
       redirect_to @exercise, alert: 'Exercise already in collection.'
     end
@@ -162,14 +143,48 @@ class ExercisesController < ApplicationController
     redirect_to @exercise, notice: ('Exercise pushed to ' + account_link.readable)
   end
 
+  def contribute
+    author = @exercise.user
+    AccessRequest.send_contribution_request(author, @exercise, current_user).deliver_later
+    text = "#{current_user.name} wants to contribute to your Exercise #{@exercise.title}."
+    Message.create(sender: current_user, recipient: author, param_type: 'exercise', param_id: @exercise.id, text: text)
+    redirect_to exercises_path, notice: "Your request has been sent."
+  end
+
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_exercise
-      @exercise = Exercise.find(params[:id])
+
+  def exercise_dependencies
+    if params[:exercise][:exercise_relation]
+      @exercise_relation = ExerciseRelation.new
+      @exercise_relation.clone = @exercise
+      @exercise_relation.origin_id = params[:exercise][:exercise_relation][:origin_id]
+      @exercise_relation.relation_id = params[:exercise][:exercise_relation][:relation_id]
+      @exercise_relation.save
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def exercise_params
-      params.require(:exercise).permit(:title, :description, :maxrating, :private, :execution_environment_id)
+    if params[:exercise][:groups]
+      params[:exercise][:groups].delete_at(0)
+      params[:exercise][:groups].each do |array|
+        group = Group.find(array)
+        group.add(@exercise)
+      end
     end
+
+  end
+  def set_option
+    if params[:option]
+      @option = params[:option]
+    else
+      @option = 'mine'
+    end
+  end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_exercise
+    @exercise = Exercise.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def exercise_params
+    params.require(:exercise).permit(:title, :description, :maxrating, :private, :execution_environment_id)
+  end
 end

@@ -1,7 +1,4 @@
 .login_form
-  - if flash[:alert]
-    p#notice
-      = flash[:alert]
   h3[style="margin-bottom: 20px"]
     = t('sessions.header')
   = form_tag do

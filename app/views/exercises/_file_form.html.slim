@@ -1,27 +1,36 @@
-.field
-  = f.label :main, t('exercises.files.main')
-  br/
-  = file.check_box :main
-.field
-  = f.label :content, t('exercises.files.content')
-  br/
-  .edit
-    .editor
-      = file.text_area :content
-    = file.text_area :content, class:'hidden'
-.field
-  = f.label :path, t('exercises.files.path')
-  br/
-  = file.text_field :path, size: 40
-.field
-  = f.label :purpose, t('exercises.files.purpose')
-  br/
-  = file.text_field :purpose
-.field
-  = f.label :name, t('exercises.files.name')
-  br/
-  = file.text_field :file_name
-.field
-  = f.label :file_extension, t('exercises.files.extension')
-  br/
-  = file.text_field :file_extension
+div[style="margin-left: 10px;"]
+  .field
+    = f.label :name, t('exercises.files.name')
+    br/
+    = file.text_field :name, class: 'form-control'
+  .field
+    = f.label :path, t('exercises.files.path')
+    br/
+    = file.text_field :path, size: 40, class: 'form-control'
+  .field
+    = f.label :purpose, t('exercises.files.purpose')
+    br/
+    = file.text_field :purpose, class: 'form-control'
+  .field
+    = f.label :file_types_id, t('exercises.files.extension')
+    br/
+    = file.select :file_type_id, FileType.all.collect {|a| [a.name, a.name]}, {}, {class: 'form-control', id: 'my-group2'}
+  .field
+    = f.label :role, 'Role'
+    br/
+    = file.select :role, ExerciseFile::ROLES, {}, class: 'form-control'
+  .field
+    = f.label :hidden, 'Hidden'
+    br/
+    = file.check_box :hidden
+  .field
+    = f.label :read_only, 'Read only'
+    br/
+    = file.check_box :read_only
+  .field
+    = f.label :content, t('exercises.files.content')
+    br/
+    .edit
+      .editor
+        = file.text_area :content
+      = file.text_area :content, class:'hidden form-control'

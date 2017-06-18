@@ -1,160 +1,178 @@
 - model_class = Exercise
-.page-header
-  h1 style=("align: left") = @exercise.title
-  span.star-rating style=("align: right")
-    - [*1..5].each do |i|
-      - if @exercise.round_avg_rating >= i
-        span.fa.fa-star data-rating=i
-      - elsif (@exercise.round_avg_rating + 0.5) >= i
-        span.fa.fa-star-half-o data-rating=i
-      - else
-        span.fa.fa-star-o data-rating=i
-    small
+.header style=("clear: both")
+  .col-md-9
+    .std-heading
+      i.i.fa.fa-file-text-o style=("color: #008000")
+      = ' ' + @exercise.title
+  .col-md-3
+    span.star-rating
+      - [*1..5].each do |i|
+        - if @exercise.round_avg_rating >= i
+          span.fa.fa-star data-rating=i
+        - elsif (@exercise.round_avg_rating + 0.5) >= i
+          span.fa.fa-star-half-o data-rating=i
+        - else
+          span.fa.fa-star-o data-rating=i
+      small
       = link_to 'rate', new_exercise_rating_path(@exercise)
+  br
 
-
-dl.dl-horizontal
-  dt
-    = t('exercises.title')
-    | :
-  dd
-    = @exercise.title
+table.vertical-table
+  tr
+    th
+      = t('exercises.title')
+      | :
+    td
+      = @exercise.title
 
   - if @exercise_relation
-    dt
-      = 'Parent:'
-    dd
-      - if @exercise_relation.origin
-        = link_to @exercise_relation.origin.title, exercise_path(@exercise_relation.origin)
-      - else
-        = 'Parent was deleted'
-    dt
-      = 'Relation'
-    dd
-      = @exercise_relation.relation.name
+    tr
+      th
+        = 'Parent:'
+      td
+        - if @exercise_relation.origin
+          = link_to @exercise_relation.origin.title, exercise_path(@exercise_relation.origin)
+        - else
+          = 'Parent was deleted'
+    tr
+      th
+        = 'Relation'
+      td
+        = @exercise_relation.relation.name
 
   - @exercise.descriptions.each do |description|
-    dt
-      = t('exercises.show.description')
-      = description.language
+    tr
+      th
+        = t('exercises.show.description')
+        = description.language
+        | :
+      td
+        = description.text
+  tr
+    th
+      = t('exercises.visibility.label')
       | :
-    dd
-      = description.text
-  dt
-    = t('exercises.visibility.label')
-    | :
-  dd
-    = @exercise.private ? t('exercises.visibility.private') : t('exercises.visibility.public')
-  dt
-    = 'Execution Environment'
-  dd
-    = @exercise.execution_environment.language
-  dt
-    = t('exercises.created_by')
-    | :
-  - if !@exercise.user
-    dd
-      = t('users.undefined')
-  - elsif @exercise.user == current_user
-    dd
-      = t('users.yourself')
-  - elsif @exercise.user.first_name.nil? || current_user.role === 'user'
-    dd
-      = "User#{@exercise.user.id}"
-  - else
-    dd
-      = @exercise.user.name
-  dt
-    = t('exercises.created_at')
-    | :
-  dd
-    = @exercise.created_at
-dl.dl-horizontal
-  dt
-    em
-      = t('exercises.files.label')
+    td
+      = @exercise.private ? t('exercises.visibility.private') : t('exercises.visibility.public')
+  tr
+    th
+      = 'Execution Environment'
+    td
+      = @exercise.execution_environment.language
+  tr
+    th
+      = t('exercises.created_by')
       | :
-  br
-  - @files.each do |file|
-    - if file.purpose != 'test'
-      dd
-
-      dt
-        = t('exercises.files.content')
-      dd
-        .editor_readonly
-          = file.content
-      dt
-        = t('exercises.show.files.mainfile')
-      dd
-        = file.main
-      dt
-        = t('exercises.files.path')
-      dd
-        = file.path
-      dt
-        = t('exercises.files.extension')
-      dd
-        = file.file_extension
-      dt
-        = t('exercises.show.files.solution')
-      dd
-        = file.solution
-      br
-dl.dl-horizontal
-  dt
-    em
-      = t('exercises.tests.label')
+    - if !@exercise.user
+      td
+        = t('users.undefined')
+    - elsif @exercise.user == current_user
+      td
+        = t('users.yourself')
+    - elsif @exercise.user.first_name.nil? || current_user.role === 'user'
+      td
+        = "User#{@exercise.user.id}"
+    - else
+      td
+        = @exercise.user.name
+  tr
+    th
+      = t('exercises.created_at')
       | :
-  br
-  - @tests.each do |test|
-    dd
-
-    dt
-      = t('exercises.tests.content')
-    dd
-      .editor_readonly
-        = test.exercise_file.content
-    dt
-      = t('exercises.tests.feedback')
-    dd
-      = test.feedback_message
-    dt
-      = t('exercises.tests.framework')
-    dd
-      = test.testing_framework.name
-    br
-- if can? :export, Exercise
-  dl.dl-horizontal
-    dt
-      = t('exercises.show.export')
-    dd
-      = form_tag(push_external_exercise_path(@exercise), method: "post") do |f|
-        - if !current_user.account_links.empty?
-          = collection_select(:account_link, :id, AccountLink.all, :id, :account_name, {},  {class: 'btn btn-default dropdown-toggle'})
-          = button_tag t('exercises.show.submit'), class: 'btn btn-success btn-xs'
-        - else
-          = link_to t('exercises.show.define_account_link'), new_user_account_link_path(current_user)
-    dt = t('exercises.show.or')
-      br
-      br
-    dd
-    dt = t('exercises.show.add_cart')
-    dd
-      = button_to 'Add to cart', add_to_cart_path(@exercise), class: 'btn btn-primary btn-xs'
-      br/
-      br/
-    dt
-      = t('exercises.show.add_collection')
-    dd
-      = form_tag(add_to_collection_path(@exercise), method: "post") do |f|
+    td
+      = @exercise.created_at
+  tr
+    th
+      em
+        = t('exercises.files.label')
+        | :
+    td
+      table.vertical-table
+        - @files.each do |file|
+          - if file.purpose != 'test'
+            tr
+              td colspan=2
+                .editor_readonly
+                  = file.content
+            tr
+              th
+                = 'Name'
+              td
+                = file.name
+            tr
+              th
+                = t('exercises.files.path')
+              td
+                = file.path
+            tr
+              th
+                = t('exercises.files.extension')
+              td
+                = file.file_type.name
+            tr
+              th
+                = 'Role'
+              td
+                = file.role
+            tr
+              th
+                = t('exercises.show.files.solution')
+              td
+                = file.solution
+            br
+  tr
+    th
+      em
+        = t('exercises.tests.label')
+        | :
+    td
+      table.vertical-table
+        - @tests.each do |test|
+          tr
+            td colspan=2
+              .editor_readonly
+                = test.exercise_file.content
+          tr
+            th
+              = t('exercises.tests.feedback')
+            td
+              = test.feedback_message
+          tr
+            th
+              = t('exercises.tests.framework')
+            td
+              = test.testing_framework.name
+  - if can? :export, Exercise
+    tr
+      th
+        = t('exercises.show.export')
+      td
+        = form_tag(push_external_exercise_path(@exercise), method: "post") do |f|
+          - if !current_user.account_links.empty?
+            = collection_select(:account_link, :id, AccountLink.all, :id, :account_name, {},  {class: 'btn btn-default dropdown-toggle'})
+            = button_tag t('exercises.show.submit'), class: 'btn btn-success btn-xs'
+          - else
+            = link_to t('exercises.show.define_account_link'), new_user_account_link_path(current_user)
+    tr
+      th = t('exercises.show.add_cart')
+      td
+        = link_to 'Add to cart', add_to_cart_path(@exercise), class: 'btn btn-main'
+    tr
+      th
+        = t('exercises.show.add_collection')
+      td
         - if !current_user.collections.empty?
-          = collection_select(:collection, :id, Collection.all, :id, :title, {}, {class: 'btn btn-default dropdown-toggle'})
-          = button_tag 'Add to Collection', class: 'btn btn-success btn-xs'
+          .btn-group[role="group"]
+            = collection_select(:collection, :id, Collection.where(user: current_user), :id, :title, {}, {class: 'btn btn-default dropdown-toggle'})
+            = button_tag 'Add to Collection', class: 'btn btn-main btn-sm'
         - else
-          = link_to ('Add Collection'), new_collection_path(current_user)
+          = link_to 'Add Collection', new_collection_path(current_user)
 .actions.btn-group[role="group"]
   - if can? :edit, @exercise
-    = link_to t('exercises.show.edit'), edit_exercise_path(@exercise),  class: 'btn btn-warning'
-    = link_to t('exercises.show.delete'), exercise_path(@exercise), class:'btn btn-danger', method: :delete, data: { confirm: t('sure') }
-  = link_to t('exercises.show.back'), exercises_path,  class: 'btn btn-default'
+    = link_to edit_exercise_path(@exercise),  class: 'btn btn-important' do
+      i.fa.fa-edit style=("color: #008000")
+      = ' ' + t('exercises.show.edit')
+    = link_to exercise_path(@exercise), class:'btn btn-important', method: :delete, data: { confirm: t('sure') } do
+      i.fa.fa-trash style=("color: #800000")
+      = ' ' + t('exercises.show.delete')
+  = link_to t('exercises.show.back'), exercises_path,  class: 'btn btn-important'

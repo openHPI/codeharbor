@@ -1,10 +1,14 @@
 class CollectionsController < ApplicationController
+  load_and_authorize_resource
   before_action :set_collection, only: [:show, :edit, :update, :destroy]
 
+  rescue_from CanCan::AccessDenied do |_exception|
+    redirect_to root_path, alert: 'You are not authorized to for this action.'
+  end
   # GET /collections
   # GET /collections.json
   def index
-    @collections = Collection.all
+    @collections = Collection.where(user: current_user).paginate(per_page: 5, page: params[:page])
   end
 
   # GET /collections/1
@@ -49,6 +53,24 @@ class CollectionsController < ApplicationController
         format.html { render :edit }
         format.json { render json: @collection.errors, status: :unprocessable_entity }
       end
+    end
+  end
+
+  def remove_exercise
+    collection = Collection.find(params[:id])
+    if collection.remove_exercise(params[:exercise])
+      redirect_to collection, notice: 'Exercise was successfully removed.'
+    else
+      redirect_to collection, alert: 'You cannot remove this exercise.'
+    end
+  end
+
+  def remove_all
+    collection = Collection.find(params[:id])
+    if collection.remove_all
+      redirect_to collection, notice: 'All Exercises were successfully removed'
+    else
+      redirect_to collection, alert: 'You cannot remove all exercises'
     end
   end
 

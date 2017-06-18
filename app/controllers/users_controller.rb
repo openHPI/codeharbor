@@ -1,6 +1,11 @@
 class UsersController < ApplicationController
+  load_and_authorize_resource
+  skip_load_and_authorize_resource :only => [:new, :create]
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
+  rescue_from CanCan::AccessDenied do |_exception|
+    redirect_to root_path, alert: 'You are not authorized for this action.'
+  end
   # GET /users
   # GET /users.json
   def index
@@ -25,6 +30,7 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     @user = User.new(user_params)
+    Cart.create(user: @user)
 
     respond_to do |format|
       if @user.save
@@ -54,15 +60,12 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-    if @user.last_group_admin?
-      respond_to do |format|
-        format.html { redirect_to users_url, alert: 'User is only admin of a group with members.' }
-        format.json { head :no_content }
-      end
-    else
-      @user.destroy
-      respond_to do |format|
+    respond_to do |format|
+      if @user.destroy
         format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
+        format.json { head :no_content }
+      else
+        format.html { redirect_to users_url, alert: 'User is only admin of a group with members.' }
         format.json { head :no_content }
       end
     end

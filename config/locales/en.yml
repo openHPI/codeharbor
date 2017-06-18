@@ -185,8 +185,8 @@ en:
     files:
       label: "Files"
       content: "Content"
-      path: "Path: "
-      extension: "File extention: "
+      path: "Path"
+      extension: "File Type"
       main: "Main"
       purpose: "Purpose"
       name: "Name"

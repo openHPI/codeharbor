@@ -6,10 +6,11 @@ div[style="text-align: center"]
       = t('home.subheader')
 div[style="text-align: center; margin-top: 50px"]
   - if current_user.nil?
-    = link_to t('home.login'), login_path, class:'btn btn-primary'
-    = link_to t('home.sign_up'), new_user_path, class:'btn  btn-success'
+    = link_to t('home.login'), login_path, class:'btn btn-main'
+    = link_to t('home.sign_up'), new_user_path, class:'btn btn-main'
   - else
-    = link_to t('home.search_exercise'), exercises_path, class:'btn btn-primary'
-    - if can? :create, Exercise
-      = link_to t('home.create_exercise'), new_exercise_path, class:'btn btn-success'
-    = link_to t('home.update_profile'), edit_user_path(current_user), class:'btn btn-warning'
+    .btn-group[role="group"]
+      = link_to t('home.search_exercise'), exercises_path, class:'btn btn-main'
+      - if can? :create, Exercise
+        = link_to t('home.create_exercise'), new_exercise_path, class:'btn btn-main'
+      = link_to t('home.update_profile'), edit_user_path(current_user), class:'btn btn-main'

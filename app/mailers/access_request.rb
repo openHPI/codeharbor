@@ -6,4 +6,11 @@ class AccessRequest < ApplicationMailer
     @group = group
     mail(to: @admin.email, subject: "#{user.name} wants to access your Group '#{group.name}'")
   end
+
+  def send_contribution_request(author, exercise, user)
+    @author = author
+    @exercise = exercise
+    @user = user
+    mail(to: @author.email, subject: "#{user.name} wants to contribute to your Exercise '#{exercise.title}'")
+  end
 end

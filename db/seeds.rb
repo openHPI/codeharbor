@@ -12,6 +12,8 @@ user2 = User.create(first_name: 'Johannes', last_name: 'Maier', email: 'j.maier@
 user3 = User.create(first_name: 'Denise', last_name: 'Feler', email: 'denise.feler@gmx.de', password: 'pwd')
 user4 = User.create(first_name: 'Theresa', last_name: 'Zobel', email: 'theresa.zobel@aon.at', password: '1234')
 user5 = User.create(first_name: 'Theresa', last_name: 'Zobel', email: 'theresa.zobel@student.hpi.de', password: '1234')
+user6 = User.create(first_name: 'Adrian', last_name: 'Steppat', email: 'adrian.steppat@student.hpi.de', password: 'harbor', role: 'admin')
+user7 = User.create(first_name: 'Adrian', last_name: 'Steppat', email: 'adrian.steppat@web.de', password: 'harbor')
 
 relation1 = Relation.create(name: 'Derivate')
 relation2 = Relation.create(name: 'Translate')
@@ -55,6 +57,8 @@ exercise1.descriptions
 
 
 AccountLink.create(push_url: 'google.com/pushpush', account_name: 'account1000')
+
+
 
 
 =begin
@@ -140,6 +144,11 @@ ee1 = ExecutionEnvironment.create(language: 'Java', version: '8')
 ee2 = ExecutionEnvironment.create(language: 'Python', version: '2.7')
 
 exercise1.update(execution_environment: ee1)
+
+#Exercises from codeocean
+
+java1 = Exercise.create(title: PLATZHALTER , max_rating: 10, private: false, user_id: user1.id )
+
 #exercise2.update(execution_environment: ee1)
 #exercise3.update(execution_environment: ee1)
 #exercise4.update(execution_environment: ee2)

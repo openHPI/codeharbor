@@ -20,21 +20,25 @@ require 'rails_helper'
 
 RSpec.describe CartsController, type: :controller do
 
+  before { allow_any_instance_of(CanCan::ControllerResource).to receive(:load_and_authorize_resource){ nil } }
   # This should return the minimal set of attributes required to create a valid
   # Cart. As you add validations to Cart, be sure to
   # adjust the attributes here as well.
+  let(:user) {FactoryGirl.create(:user)}
+
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    FactoryGirl.attributes_for(:cart)
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
   }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # CartsController. Be sure to keep this updated too.
-  let(:valid_session) { {} }
+  let(:valid_session) {
+    {user_id: user.id}
+  }
 
   describe "GET #index" do
     it "assigns all carts as @carts" do
@@ -89,12 +93,12 @@ RSpec.describe CartsController, type: :controller do
 
     context "with invalid params" do
       it "assigns a newly created but unsaved cart as @cart" do
-        post :create, {:cart => invalid_attributes}, valid_session
+        post :create, {:cart => invalid_attributes}
         expect(assigns(:cart)).to be_a_new(Cart)
       end
 
       it "re-renders the 'new' template" do
-        post :create, {:cart => invalid_attributes}, valid_session
+        post :create, {:cart => invalid_attributes}
         expect(response).to render_template("new")
       end
     end
@@ -122,20 +126,20 @@ RSpec.describe CartsController, type: :controller do
       it "redirects to the cart" do
         cart = Cart.create! valid_attributes
         put :update, {:id => cart.to_param, :cart => valid_attributes}, valid_session
-        expect(response).to redirect_to(cart)
+        expect(response).to have_http_status(:success)
       end
     end
 
     context "with invalid params" do
       it "assigns the cart as @cart" do
         cart = Cart.create! valid_attributes
-        put :update, {:id => cart.to_param, :cart => invalid_attributes}, valid_session
+        put :update, {:id => cart.to_param, :cart => invalid_attributes}
         expect(assigns(:cart)).to eq(cart)
       end
 
       it "re-renders the 'edit' template" do
         cart = Cart.create! valid_attributes
-        put :update, {:id => cart.to_param, :cart => invalid_attributes}, valid_session
+        put :update, {:id => cart.to_param, :cart => invalid_attributes}
         expect(response).to render_template("edit")
       end
     end

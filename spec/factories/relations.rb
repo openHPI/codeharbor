@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :relation do
-    name ""
+    name "TEST RELATION"
   end
 
 end

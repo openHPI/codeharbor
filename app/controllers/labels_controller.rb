@@ -1,12 +1,15 @@
 class LabelsController < ApplicationController
+
   before_action :set_label, only: [:show, :edit, :update, :destroy]
 
+  rescue_from CanCan::AccessDenied do |_exception|
+    redirect_to root_path, alert: 'You are not authorized for this action.'
+  end
   # GET /labels
   # GET /labels.json
   def index
     @labels = Label.all
   end
-
   # GET /labels/1
   # GET /labels/1.json
   def show
@@ -15,6 +18,14 @@ class LabelsController < ApplicationController
   # GET /labels/new
   def new
     @label = Label.new
+  end
+
+  def search
+    @labels = Label.order(:name)
+    respond_to do |format|
+      format.html
+      format.json { render json: @labels.where('name ilike ?', "%#{params[:term]}%") }
+    end
   end
 
   # GET /labels/1/edit

@@ -6,33 +6,57 @@ class Ability
       if user.role == 'admin'
         can :manage, :all
       end
-      
+
+      #Answer
+      can [:new], Answer
+      can [:manage], Answer do |answer|
+        answer.user == user
+      end
+
+      #Cart
+      can [:create], Cart
+      can [:manage], Cart do |cart|
+        cart.user == user
+      end
+
+      #Collection
+      can [:create], Collection
+      can [:manage], Collection do |collection|
+        collection.user == user
+      end
+
       #Exercise
-      can [:create], Exercise
+      can [:create, :contribute], Exercise
+      can [:show, :read, :add_to_cart, :add_to_collection, :export, :duplicate], Exercise do |exercise|
+        exercise.can_access(user)
+      end
       can [:manage, :edit], Exercise do |exercise|
         ExerciseAuthor.where(user_id: user.id, exercise_id: exercise.id).any?
       end
-      
-      can [:show, :read, :add_to_cart, :export, :duplicate], Exercise do |exercise| 
-        exercise.can_access(user)
-      end
-      
+
+
       #Comment
-      can [:show, :create, :read ], Comment
+      can [:show, :create, :read, :answer ], Comment
       can [:edit], Comment do |comment|
         comment.user == user
       end
-      
+
       #Rating
       can [:read, :create], Rating
-      
-      # Groups
-      can [:create, :join], Group
-      can [:read, :members, :admins, :leave, :condition_for_changing_member_status], Group do |group|
-        user.groups.include? group
+
+      #Groups
+      can [:create, :request_access], Group
+      can [:view, :read, :members, :admins, :leave], Group do |group|
+        user.in_group?(group, as: 'member')
       end
-      can [:update, :destroy, :invite_group_members, :add_administrator, :demote_administrator, :remove_group_member, :all_members_to_administrators], Group do |group|
-        UserGroup.where(user_id: user.id, group_id: group.id, is_admin: true).any?
+      can [:update, :destroy, :make_admin, :grant_access, :delete_from_group], Group do |group|
+        user.in_group?(group, as: 'admin')
+      end
+
+      #User
+      can [:create], User
+      can [:show, :edit, :delete], User do |this_user|
+        this_user == user
       end
     end
     # Define abilities for the passed in user here. For example:

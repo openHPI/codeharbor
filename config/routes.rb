@@ -10,7 +10,9 @@ Rails.application.routes.draw do
   resources :execution_environments
   resources :carts
   resources :collections
-  resources :groups
+  resources :groups do
+    get :search, :on => :collection
+  end
   get 'home/index'
 
   controller :sessions do
@@ -25,9 +27,12 @@ Rails.application.routes.draw do
   get 'comments/comments_all'
   get 'exercises/exercises_all'
 
+  get 'my_cart', to: 'carts#my_cart', as: 'my_cart'
+
   get 'exercises/:id/duplicate', to: 'exercises#duplicate', as: 'duplicate_exercise'
   post 'exercises/:id/add_to_cart', to: 'exercises#add_to_cart', as: 'add_to_cart'
   post 'exercises/:id/add_to_collection', to: 'exercises#add_to_collection', as: 'add_to_collection'
+  get 'labels/autocomplete' => 'labels#autocomplete'
 
   get 'groups/:id/request_access', to: 'groups#request_access', as: 'request_access'
   get 'groups/:id/confirm_request', to: 'groups#confirm_request', as: 'confirm_request'
@@ -35,20 +40,39 @@ Rails.application.routes.draw do
   get 'groups/:id/delete_from_group', to: 'groups#delete_from_group', as: 'delete_from_group'
   get 'groups/:id/make_admin', to: 'groups#make_admin', as: 'make_admin'
 
-  resources :labels
+  get 'collections/:id/remove_exercise', to: 'collections#remove_exercise' ,as: 'remove_exercise_collection'
+  get 'carts/:id/remove_exercise', to: 'carts#remove_exercise' ,as: 'remove_exercise_cart'
+  get 'collections/:id/remove_all', to: 'collections#remove_all' ,as: 'remove_all_collection'
+  get 'carts/:id/remove_all', to: 'carts#remove_all' ,as: 'remove_all_cart'
+
+  post 'user/:id/messages/:id/add_author', to: 'messages#add_author', as: 'add_author'
+
+
+  resources :labels do
+    get :search, :on => :collection
+  end
   resources :label_categories
-  resources :answers
   resources :users do
     resources :account_links
+    resources :messages
   end
   resources :tests
+  resources :file_types do
+    get :search, :on => :collection
+  end
   resources :exercise_files
   resources :testing_frameworks
   resources :exercises do
-    resources :comments
+    collection do
+      get :add_label
+    end
+    resources :comments do
+      resources :answers
+    end
     resources :ratings
     member do
       post :push_external
+      get :contribute
     end
   end
 

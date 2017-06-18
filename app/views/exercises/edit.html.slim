@@ -1,4 +1,6 @@
-.page-header
-  h1 = t('exercises.edit.header')
-    = @exercise.title
+.header
+  .std-heading
+    i.fa.fa-file-text-o style=("color: #008000")
+    = ' ' + t('exercises.edit.header')
+    = ' ' + @exercise.title
 = render 'form'

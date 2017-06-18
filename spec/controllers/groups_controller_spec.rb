@@ -20,24 +20,29 @@ require 'rails_helper'
 
 RSpec.describe GroupsController, type: :controller do
 
+  before { allow_any_instance_of(CanCan::ControllerResource).to receive(:load_and_authorize_resource){ nil } }
   # This should return the minimal set of attributes required to create a valid
   # Group. As you add validations to Group, be sure to
   # adjust the attributes here as well.
+  let!(:user) {FactoryGirl.create(:user)}
+
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    FactoryGirl.attributes_for(:group, users: [user])
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {name: ''}
   }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # GroupsController. Be sure to keep this updated too.
-  let(:valid_session) { {} }
+  let(:valid_session) {
+    {user_id: FactoryGirl.create(:user).id}
+  }
 
   describe "GET #index" do
-    it "assigns all groups as @groups" do
+    xit "assigns all groups as @groups" do
       group = Group.create! valid_attributes
       get :index, {}, valid_session
       expect(assigns(:groups)).to eq([group])

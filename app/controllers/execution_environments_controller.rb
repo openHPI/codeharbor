@@ -1,6 +1,10 @@
 class ExecutionEnvironmentsController < ApplicationController
+  load_and_authorize_resource
   before_action :set_execution_environment, only: [:show, :edit, :update, :destroy]
 
+  rescue_from CanCan::AccessDenied do |_exception|
+    redirect_to root_path, alert: 'You are not authorized to for this action.'
+  end
   # GET /execution_environments
   # GET /execution_environments.json
   def index

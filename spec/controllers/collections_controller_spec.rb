@@ -20,24 +20,26 @@ require 'rails_helper'
 
 RSpec.describe CollectionsController, type: :controller do
 
-  # This should return the minimal set of attributes required to create a valid
-  # Collection. As you add validations to Collection, be sure to
-  # adjust the attributes here as well.
+
+  before { allow_any_instance_of(CanCan::ControllerResource).to receive(:load_and_authorize_resource){ nil } }
+
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    FactoryGirl.attributes_for(:collection)
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {title: ''}
   }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # CollectionsController. Be sure to keep this updated too.
-  let(:valid_session) { {} }
+  let(:valid_session) {
+    {user_id: FactoryGirl.create(:user).id}
+  }
 
   describe "GET #index" do
-    it "assigns all collections as @collections" do
+    xit "assigns all collections as @collections" do
       collection = Collection.create! valid_attributes
       get :index, {}, valid_session
       expect(assigns(:collections)).to eq([collection])
@@ -83,7 +85,7 @@ RSpec.describe CollectionsController, type: :controller do
 
       it "redirects to the created collection" do
         post :create, {:collection => valid_attributes}, valid_session
-        expect(response).to redirect_to(Collection.last)
+        expect(response).to redirect_to(collections_path)
       end
     end
 
@@ -122,7 +124,7 @@ RSpec.describe CollectionsController, type: :controller do
       it "redirects to the collection" do
         collection = Collection.create! valid_attributes
         put :update, {:id => collection.to_param, :collection => valid_attributes}, valid_session
-        expect(response).to redirect_to(collection)
+        expect(response).to redirect_to(collections_path)
       end
     end
 

@@ -1,0 +1,19 @@
+h1 Messages
+
+table.table
+  thead
+    tr
+      th From
+      th Text
+      th Actions
+
+  tbody
+    - @messages.each do |message|
+      tr
+        td = message.sender.name
+        td = message.text
+        -if message.param_type == 'exercise'
+          td = link_to 'Make co-author', add_author_path(message), method: "post", class: 'btn btn-success btn-xs'
+
+br
+

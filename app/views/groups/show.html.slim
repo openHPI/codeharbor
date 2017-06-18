@@ -1,8 +1,9 @@
 - model_class = Group
-- if @group.users.include?(current_user)
+- if can? :view, @group
   .page-header
     h1
       = @group.name
+
   dl.dl-horizontal
     dt
       = 'Description'
@@ -22,13 +23,13 @@
     dt
       = 'Users:'
 
-    - @group.users.each do |user|
-      - unless @group.is_admin(user)
+    - @group.members.each do |member|
+      - unless @group.is_admin(member)
         dd
-          = user.email
-          - if @group.is_admin(current_user)
-            = link_to 'Make Admin', make_admin_path(group: @group, user: user), class:'btn btn-success btn-xs'
-            = link_to 'Delete', delete_from_group_path(group: @group, user: user), class:'btn btn-danger btn-xs'
+          = member.email
+          - if can? :edit, @group
+            = link_to 'Make Admin', make_admin_path(group: @group, user: member), class: 'btn btn-success btn-xs'
+            = link_to 'Delete', delete_from_group_path(group: @group, user: member), class: 'btn btn-danger btn-xs'
         dt
     dd
     - if @group.is_admin(current_user)
@@ -39,15 +40,15 @@
       - @group.pending_users.each do |user|
         dd
           = user.email
-          = link_to 'Grant Access', grant_access_path(group: @group, user: user), class:'btn btn-success btn-xs'
-          = link_to 'Deny Access', delete_from_group_path(group: @group, user: user), class:'btn btn-danger btn-xs'
+          = link_to 'Grant Access', grant_access_path(group: @group, user: user), class: 'btn btn-success btn-xs'
+          = link_to 'Deny Access', delete_from_group_path(group: @group, user: user), class: 'btn btn-danger btn-xs'
         dt
       dd
   .actions.btn-group[role="group"]
-    - if @group.is_admin(current_user)
+    - if can? :edit, @group
       = link_to 'Edit', edit_group_path(@group), class: 'btn btn-warning'
-      = link_to 'Delete', group_path(@group), class:'btn btn-danger', method: :delete, data: { confirm: 'Are you sure?' }
-    = link_to 'Back', groups_path, class:'btn btn-default'
+      = link_to 'Delete', group_path(@group), class: 'btn btn-danger', method: :delete, data: {confirm: 'Are you sure?'}
+    = link_to 'Back', groups_path, class: 'btn btn-default'
 
 - else
   h1
@@ -56,4 +57,3 @@
   = link_to 'Request Membership', request_access_path(@group)
   | |
   = link_to 'Back', groups_path
-

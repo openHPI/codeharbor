@@ -8,12 +8,18 @@ html
     = csrf_meta_tags
   body
     nav.navbar.navbar-default.navbar-fixed-top.navbar-offset
-      = nav_bar fixed: :top, brand: 'Code Harbor', responsive: true do
+      = nav_bar fixed: :top, brand: 'CodeHarbor', responsive: true do
         = menu_group do
           - if current_user
-            = menu_item t('layouts.exercises'), exercises_path
-            = menu_item t('layouts.collections'), collections_path
-            = menu_item t('layouts.groups'), groups_path
+            = menu_item exercises_path  do
+              i.fa.fa-file-text-o style=("color: #008000")
+              = ' ' + t('layouts.exercises')
+            = menu_item collections_path do
+              i.fa.fa-briefcase style=("color: #000080")
+              = ' ' + t('layouts.collections')
+            = menu_item groups_path do
+              i.fa.fa-group style=("color: #800000")
+              = ' ' + t('layouts.groups')
             = menu_divider
             - if current_user.role === 'admin'
               = drop_down t('layouts.admin') do
@@ -22,8 +28,10 @@ html
                 = menu_item t('layouts.admin_nav.comments'), comments_comments_all_path
         = menu_group pull: :right do
           - if current_user
-            = menu_item t('layouts.cart')+' (' + current_user.cart_count.to_s + ')', carts_path
-            = menu_item current_user.email, user_path(current_user)
+            = menu_item t('layouts.cart')+' (' + current_user.cart_count.to_s + ')', my_cart_path
+            = drop_down current_user.email
+              = menu_item 'Profile', user_path(current_user)
+              = menu_item 'Messages', user_messages_path(current_user)
             = menu_item t('layouts.logout'),  logout_path, method: :delete
     .container style=("margin-top: 100px")
       - if flash[:alert]

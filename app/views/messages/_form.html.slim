@@ -1,0 +1,11 @@
+= simple_form_for(@message) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :text
+    = f.association :sender
+    = f.association :recipient
+    = f.input :status
+
+  .form-actions
+    = f.button :submit

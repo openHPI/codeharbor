@@ -1,21 +1,28 @@
 h2
   = t('carts.header')
-dl.dl-horizontal
-  dt
-    = t('carts.exercises')
-  - @carts.each do |cart|
-    - if cart.user === current_user
-      - if cart.exercises
-        - cart.exercises.each do |exercise|
-          - if exercise
-            dd
-              = link_to exercise.title, exercise_path(exercise)
-      - else
-        dd
-          = t('carts.noExercisesAdded')
-    dt
-      = t('carts.actions')
-    dd
-      = link_to t('carts.button.edit'), edit_cart_path(cart), class:'btn btn-warning btn-xs'
-      = link_to t('carts.button.destroy'), cart, method: :delete, data: { confirm: t('sure') }, class:'btn btn-danger btn-xs'
-br/
+table.table
+  thead
+    tr
+      th
+        = 'User'
+      th
+        = 'Exercises'
+      th colspan="2"
+        = t('carts.actions')
+  tbody
+    - @carts.each do |cart|
+      tr
+        td
+          = cart.user.name
+        td
+          - if cart.exercises.empty?
+            = t('carts.noExercisesAdded')
+          - else cart.exercises
+            - cart.exercises.each do |exercise|
+              - if exercise
+                = link_to "#{exercise.title}, ", exercise_path(exercise)
+        td
+          = link_to 'View', cart_path(cart), class: 'btn btn-default btn-xs'
+          = link_to t('carts.button.edit'), edit_cart_path(cart), class:'btn btn-warning btn-xs'
+          = link_to t('carts.button.destroy'), cart, method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-xs'
+br

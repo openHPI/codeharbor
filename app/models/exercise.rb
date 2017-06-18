@@ -1,45 +1,74 @@
 require 'nokogiri'
 
 class Exercise < ActiveRecord::Base
+  groupify :group_member
   validates :title, presence: true
 
   has_many :exercise_files, dependent: :destroy
   has_many :tests, dependent: :destroy
-  has_and_belongs_to_many :labels, dependent: :destroy
+  has_and_belongs_to_many :labels
   has_many :comments, dependent: :destroy
   has_many :ratings, dependent: :destroy
-  has_many :exercise_authors
+  has_many :exercise_authors, dependent: :destroy
   has_many :authors, through: :exercise_authors, source: :user
-  has_many :exercise_group_accesses
-  has_many :access, through: :exercise_group_accesses, source: :group
   has_and_belongs_to_many :collections, dependent: :destroy
   has_and_belongs_to_many :carts, dependent: :destroy
   belongs_to :user
   belongs_to :execution_environment
   has_many :descriptions, dependent: :destroy
   has_many :origin_relations, :class_name => 'ExerciseRelation', :foreign_key => 'origin_id'
-  has_many :clone_relations, :class_name => 'ExerciseRelation', :foreign_key => 'origin_id'
+  has_many :clone_relations, :class_name => 'ExerciseRelation', :foreign_key => 'clone_id', dependent: :destroy
   #validates :descriptions, presence: true
 
-
+  attr_reader :tag_tokens
   accepts_nested_attributes_for :descriptions, allow_destroy: true
 
-  def self.search(search)
-  	if search
-  		results = where('lower(title) LIKE ?', "%#{search.downcase}%")
-      label = Label.find_by('lower(name) = ?', search.downcase)
+  def self.search(search, option, user)
 
-      if label
-        collection = Label.find_by('lower(name) = ?', search.downcase).exercises
-        results.each do |r|
-          collection << r unless collection.find_by(id: r.id)
+    if option == 'private'
+      if search
+        results = where('lower(title) ilike ? AND private = ?', "%#{search.downcase}%", true)
+        label = Label.find_by('lower(name) = ?', search.downcase)
+
+        if label
+          collection = Label.find_by('lower(name) = ? AND private = ?', search.downcase, true).exercises
+          results.each do |r|
+            collection << r unless collection.find_by(id: r.id)
+          end
+          return collection
         end
-        return collection
+        return results
+      else
+        return where(private: true)
+      end
+
+    elsif option == 'public'
+      if search
+        results = where('lower(title) ILIKE ? AND private = ?', "%#{search.downcase}%", false)
+        label = Label.find_by('lower(name) = ?', search.downcase)
+
+        if label
+          collection = Label.find_by('lower(name) = ? AND private = ?', search.downcase, false).exercises
+          results.each do |r|
+            collection << r unless collection.find_by(id: r.id)
+          end
+          return collection
+        end
+        return results
+      else
+        return where(private: false)
+      end
+
+    else
+      results = where(user:user)
+      authors = find(ExerciseAuthor.where(user: user).collect(&:exercise_id))
+      authors.each do |author|
+        results << author
       end
       return results
-  	else
-      return all
-  	end
+    end
+
+
   end
   
   def can_access(user)
@@ -56,7 +85,6 @@ class Exercise < ActiveRecord::Base
     else 
       return true
     end
-    return true
   end
 
 
@@ -74,9 +102,24 @@ class Exercise < ActiveRecord::Base
   end
 
   def add_attributes(params)
+    add_labels(params[:labels])
     add_tests(params[:tests_attributes])
     add_files(params[:exercise_files_attributes])
     add_descriptions(params[:descriptions_attributes])
+  end
+
+  def add_labels(labels_array)
+
+    if labels_array
+      labels_array.delete_at(0)
+    end
+    labels_array.try(:each) do |array|
+      label = Label.find_by(name: array)
+      unless label
+        label = Label.create(name: array, color: '006600', label_category: nil)
+      end
+      labels << label
+    end
   end
 
   def add_descriptions(description_array)
@@ -97,6 +140,13 @@ class Exercise < ActiveRecord::Base
     file_array.try(:each) do |key, array|
       destroy = array[:_destroy]
       id = array[:id]
+
+      file_type = FileType.find_by(name: array[:file_type_id])
+      unless file_type
+        file_type = FileType.create(name: array[:file_type_id])
+      end
+      array[:file_type_id] = file_type.id
+
       if id
         file = ExerciseFile.find(id)
         destroy ? file.destroy : file.update(file_permit(array))
@@ -131,7 +181,7 @@ class Exercise < ActiveRecord::Base
   end
 
   def build_proforma_xml_for_exercise_file(builder, exercise_file)
-    if exercise_file.main
+    if exercise_file.role == 'Main File'
       proforma_file_class = 'template'
       comment = 'main'
     else
@@ -204,7 +254,7 @@ class Exercise < ActiveRecord::Base
   end
 
   def file_permit(params)
-    params.permit(:main, :content, :path, :name, :file_extension)
+    params.permit(:role, :content, :path, :name, :hidden, :read_only, :file_type_id)
   end
 
   def test_permit(params)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161010113847) do
+ActiveRecord::Schema.define(version: 20170615144649) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,21 +116,23 @@ ActiveRecord::Schema.define(version: 20161010113847) do
   add_index "exercise_authors", ["user_id"], name: "index_exercise_authors_on_user_id", using: :btree
 
   create_table "exercise_files", force: :cascade do |t|
-    t.boolean  "main"
     t.text     "content"
     t.string   "path"
     t.boolean  "solution"
-    t.string   "file_extension"
     t.integer  "exercise_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
-    t.string   "file_name"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
     t.boolean  "visibility"
     t.string   "name"
     t.string   "purpose"
+    t.string   "role"
+    t.boolean  "hidden"
+    t.boolean  "read_only"
+    t.integer  "file_type_id"
   end
 
   add_index "exercise_files", ["exercise_id"], name: "index_exercise_files_on_exercise_id", using: :btree
+  add_index "exercise_files", ["file_type_id"], name: "index_exercise_files_on_file_type_id", using: :btree
 
   create_table "exercise_group_accesses", force: :cascade do |t|
     t.integer  "exercise_id"
@@ -141,6 +143,14 @@ ActiveRecord::Schema.define(version: 20161010113847) do
 
   add_index "exercise_group_accesses", ["exercise_id"], name: "index_exercise_group_accesses_on_exercise_id", using: :btree
   add_index "exercise_group_accesses", ["group_id"], name: "index_exercise_group_accesses_on_group_id", using: :btree
+
+  create_table "exercise_relations", force: :cascade do |t|
+    t.integer  "origin_id"
+    t.integer  "clone_id"
+    t.integer  "relation_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "exercises", force: :cascade do |t|
     t.string   "title"
@@ -163,6 +173,27 @@ ActiveRecord::Schema.define(version: 20161010113847) do
 
   add_index "exercises_labels", ["exercise_id"], name: "index_exercises_labels_on_exercise_id", using: :btree
   add_index "exercises_labels", ["label_id"], name: "index_exercises_labels_on_label_id", using: :btree
+
+  create_table "file_types", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "group_memberships", force: :cascade do |t|
+    t.integer  "member_id",       null: false
+    t.string   "member_type",     null: false
+    t.integer  "group_id"
+    t.string   "group_type"
+    t.string   "group_name"
+    t.string   "membership_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "group_memberships", ["group_name"], name: "index_group_memberships_on_group_name", using: :btree
+  add_index "group_memberships", ["group_type", "group_id"], name: "index_group_memberships_on_group_type_and_group_id", using: :btree
+  add_index "group_memberships", ["member_type", "member_id"], name: "index_group_memberships_on_member_type_and_member_id", using: :btree
 
   create_table "groups", force: :cascade do |t|
     t.string   "name"
@@ -187,6 +218,17 @@ ActiveRecord::Schema.define(version: 20161010113847) do
 
   add_index "labels", ["label_category_id"], name: "index_labels_on_label_category_id", using: :btree
 
+  create_table "messages", force: :cascade do |t|
+    t.string   "text"
+    t.integer  "sender_id"
+    t.integer  "recipient_id"
+    t.string   "status"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.string   "param_type"
+    t.integer  "param_id"
+  end
+
   create_table "ratings", force: :cascade do |t|
     t.integer  "rating"
     t.integer  "exercise_id"
@@ -197,6 +239,12 @@ ActiveRecord::Schema.define(version: 20161010113847) do
 
   add_index "ratings", ["exercise_id"], name: "index_ratings_on_exercise_id", using: :btree
   add_index "ratings", ["user_id"], name: "index_ratings_on_user_id", using: :btree
+
+  create_table "relations", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "testing_frameworks", force: :cascade do |t|
     t.string   "name"
@@ -211,6 +259,7 @@ ActiveRecord::Schema.define(version: 20161010113847) do
     t.datetime "updated_at",           null: false
     t.integer  "exercise_id"
     t.integer  "exercise_file_id"
+    t.float    "score"
   end
 
   add_index "tests", ["exercise_file_id"], name: "index_tests_on_exercise_file_id", using: :btree
@@ -219,7 +268,7 @@ ActiveRecord::Schema.define(version: 20161010113847) do
 
   create_table "user_groups", force: :cascade do |t|
     t.boolean  "is_admin",   default: false
-    t.boolean  "is_active", default: false
+    t.boolean  "is_active",  default: false
     t.integer  "user_id"
     t.integer  "group_id"
     t.datetime "created_at",                 null: false
@@ -237,6 +286,7 @@ ActiveRecord::Schema.define(version: 20161010113847) do
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
     t.string   "role",            default: "user"
+    t.boolean  "deleted"
   end
 
   add_foreign_key "account_links", "users"
@@ -250,6 +300,7 @@ ActiveRecord::Schema.define(version: 20161010113847) do
   add_foreign_key "exercise_authors", "exercises"
   add_foreign_key "exercise_authors", "users"
   add_foreign_key "exercise_files", "exercises"
+  add_foreign_key "exercise_files", "file_types"
   add_foreign_key "exercise_group_accesses", "exercises"
   add_foreign_key "exercise_group_accesses", "groups"
   add_foreign_key "exercises", "execution_environments"

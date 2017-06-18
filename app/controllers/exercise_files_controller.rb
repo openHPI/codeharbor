@@ -1,6 +1,10 @@
 class ExerciseFilesController < ApplicationController
+  load_and_authorize_resource
   before_action :set_exercise_file, only: [:show, :edit, :update, :destroy]
 
+  rescue_from CanCan::AccessDenied do |_exception|
+    redirect_to root_path, alert: 'You are not authorized to for this action.'
+  end
   # GET /exercise_files
   # GET /exercise_files.json
   def index

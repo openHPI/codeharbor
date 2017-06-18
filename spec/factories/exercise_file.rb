@@ -1,32 +1,30 @@
 FactoryGirl.define do
 
   factory :single_java_main_file, class: 'ExerciseFile' do
-  	main true
     content "public class AsteriksPattern{ public static void main String[] args) { } }"
-    file_name 'Main'
+    name 'Main'
     path ''
     solution false
-    file_extension 'java'
+    file_type {FactoryGirl.create(:file_type)}
     visibility true
+    role 'Main File'
   end
 
   factory :junit_test_file, class: 'ExerciseFile' do
-  	main false
     content "public class SingleJUnitTestFile { public static void main String[] args) { } }"
-    file_name 'SingleJUnitTestFile'
+    name 'SingleJUnitTestFile'
     path ''
     solution false
-    file_extension 'java'
+    file_type {FactoryGirl.create(:file_type)}
     visibility true
   end
 
   factory :model_solution_file, class: 'ExerciseFile' do
-  	main false
     content "public class ModelSolutionFile { public static void main String[] args) { } }"
-    file_name 'ModelSolutionFile'
+    name 'ModelSolutionFile'
     path ''
     solution true
-    file_extension 'java'
+    file_type {FactoryGirl.create(:file_type)}
     visibility false
   end
 
