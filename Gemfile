@@ -18,6 +18,7 @@ gem 'pg', platform: :ruby
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
+gem 'yui-compressor'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.1.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
@@ -82,6 +83,8 @@ group :development do
   gem "capistrano", "~> 3.6"
   gem 'capistrano3-puma'
   gem 'capistrano-rails'
+  gem 'capistrano-rvm'
+  gem 'capistrano-upload-config'
   gem 'airbrussh', require: false
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
