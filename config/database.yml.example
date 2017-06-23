@@ -3,8 +3,6 @@ default: &default
   pool: 5
   timeout: 5000
   encoding: UTF8
-  username:
-  password:
 
 development:
   <<: *default
@@ -20,3 +18,6 @@ test: &TEST
 production:
   <<: *default
   database: codeharbor
+  host: CHANGEME
+  username: CHANGEME
+  password: CHANGEME
