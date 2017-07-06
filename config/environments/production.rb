@@ -43,13 +43,14 @@ Rails.application.configure do
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
   config.log_level = :debug
-
+  
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
 
   # Use a different logger for distributed setups.
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
   # config.logger = Logger.new(STDOUT)
+  config.logger = Logger.new('log/production.log')
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
