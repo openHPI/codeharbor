@@ -1,5 +1,8 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
+  
+  ### !!! Important: remove this line before this goes anywhere near productive !!!
+  config.consider_all_requests_local = true
 
   # Code is not reloaded between requests.
   config.cache_classes = true
