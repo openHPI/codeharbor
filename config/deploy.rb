@@ -3,6 +3,7 @@ set :config_example_suffix, '.example'
 set :deploy_to, '/home/codeharbor'
 set :keep_releases, 3
 set :linked_files, %w(config/action_mailer.yml config/database.yml)
+set :linked_dirs, %w{log tmp/backup tmp/pids tmp/cache tmp/sockets}
 set :log_level, :info
 set :puma_threads, [0, 16]
 set :repo_url, 'git@github.com:openHPI/codeharbor.git'
