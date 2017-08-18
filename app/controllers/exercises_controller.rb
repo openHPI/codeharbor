@@ -64,12 +64,12 @@ class ExercisesController < ApplicationController
   # POST /exercises.json
   def create
     @exercise = Exercise.new(exercise_params)
-    @exercise.add_attributes(params[:exercise])
     @exercise.user = current_user
     exercise_dependencies
 
     respond_to do |format|
       if @exercise.save
+        @exercise.add_attributes(params[:exercise])
         format.html { redirect_to @exercise, notice: 'Exercise was successfully created.' }
         format.json { render :show, status: :created, location: @exercise }
       else
@@ -162,13 +162,13 @@ class ExercisesController < ApplicationController
       @exercise_relation.save
     end
 
-    if params[:exercise][:groups]
-      params[:exercise][:groups].delete_at(0)
-      params[:exercise][:groups].each do |array|
-        group = Group.find(array)
-        group.add(@exercise)
-      end
-    end
+    ##if params[:exercise][:groups]
+      #params[:exercise][:groups].delete_at(0)
+      #params[:exercise][:groups].each do |array|
+       # group = Group.find(array)
+        #group.add(@exercise)
+      #end
+   ## end
 
   end
   def set_option

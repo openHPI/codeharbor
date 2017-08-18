@@ -32,9 +32,12 @@ l4 = Label.create(name: 'Python', color: 'FFA500', label_category: category1)
 test_framework = TestingFramework.create(name: 'JUnit 4')
 test_framework2 = TestingFramework.create(name: 'Pytest')
 
+java_file = FileType.create(name: 'Java Main File')
+python_file = FileType.create(name: 'Python File')
+
 exercise1 = Exercise.create(title: "Hello World", maxrating: '10', private: false, user_id:user1.id)
-exercise1_main = ExerciseFile.create(main: true, content: "public class HelloWorld{ public static void main String[] args) { } }", path: '', purpose:'template', file_name:'Main', visibility: true, file_extension: 'java', exercise: exercise1)
-exercise1_test = ExerciseFile.create(main: false, content: "public class HelloWorld{ public static void main String[] args) {System.out.println('Hello World.'); } }", path: '', purpose:'test', file_name:'Test', visibility: true, file_extension: 'java', exercise: exercise1)
+exercise1_main = ExerciseFile.create(content: "public class HelloWorld{ public static void main String[] args) { } }", path: '', purpose:'template', file_name:'Main', visibility: true, role: 'Main File', hidden: false, read_only: false, file_type: java_file, exercise: exercise1)
+exercise1_test = ExerciseFile.create(content: "public class HelloWorld{ public static void main String[] args) {System.out.println('Hello World.'); } }", path: '', purpose:'test', file_name:'Test', visibility: true, role: 'Main File', hidden: false, read_only: false, file_type: java_file, exercise: exercise1)
 Test.create(feedback_message: "Es wird noch nicht 'Hello World' am Bildschrim ausgegeben!", exercise_file: exercise1_test, exercise: exercise1, testing_framework: test_framework)
 
 Description.create(text:"Schreibe ein Java Programm, das 'Hello World' am Bildschirm ausgibt.", language: 'de', exercise: exercise1)
@@ -144,10 +147,6 @@ ee1 = ExecutionEnvironment.create(language: 'Java', version: '8')
 ee2 = ExecutionEnvironment.create(language: 'Python', version: '2.7')
 
 exercise1.update(execution_environment: ee1)
-
-#Exercises from codeocean
-
-java1 = Exercise.create(title: PLATZHALTER , max_rating: 10, private: false, user_id: user1.id )
 
 #exercise2.update(execution_environment: ee1)
 #exercise3.update(execution_environment: ee1)

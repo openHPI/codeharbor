@@ -2,10 +2,8 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-$star_rating = $('.star-rating .fa')
-
 SetRatingStar = ->
-  $star_rating.each ->
+  $(".star-rating").each ->
     if parseInt($star_rating.siblings('input.rating-value').val()) >= parseInt($(this).data('rating'))
       console.log 'rating1'
       $(this).removeClass('fa-star-o').addClass('fa-star')
@@ -13,11 +11,18 @@ SetRatingStar = ->
       console.log 'rating2'
       $(this).removeClass('fa-star').addClass('fa-star-o')
 
-$star_rating.on 'click', ->
-  $star_rating.siblings('input.rating-value').val $(this).data('rating')
-  SetRatingStar()
+validateForm = (e) ->
+  title = document.getElementById('exercise_title')
+  if title.value == ''
+    if $('#error').length
 
-SetRatingStar()
+    else
+      title.style.borderColor = "red"
+      $("<p id='error' style='color: red'>Title cant't be blank</p>").insertAfter(title)
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
+    e.preventDefault()
+    false
+
 
 loadSelect2 = ->
 
@@ -98,6 +103,17 @@ ready =->
     loadSelect2()
 
   loadSelect2()
+
+  $('#new_exercise').on('submit', validateForm)
+
+  $(".star-rating").click ->
+    alert "Hello"
+    $star_rating.siblings('input.rating-value').val $(this).data('rating')
+    SetRatingStar()
+
+
+
+
 
 $(document).ready(ready)
 $(document).on('page:load', ready)

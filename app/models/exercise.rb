@@ -22,6 +22,9 @@ class Exercise < ActiveRecord::Base
 
   attr_reader :tag_tokens
   accepts_nested_attributes_for :descriptions, allow_destroy: true
+  accepts_nested_attributes_for :exercise_files, allow_destroy: true
+  accepts_nested_attributes_for :tests, allow_destroy: true
+
 
   def self.search(search, option, user)
 
@@ -31,7 +34,7 @@ class Exercise < ActiveRecord::Base
         label = Label.find_by('lower(name) = ?', search.downcase)
 
         if label
-          collection = Label.find_by('lower(name) = ? AND private = ?', search.downcase, true).exercises
+          collection = Label.find_by('lower(name) = ?', search.downcase).exercises.where(private: true)
           results.each do |r|
             collection << r unless collection.find_by(id: r.id)
           end
@@ -48,7 +51,7 @@ class Exercise < ActiveRecord::Base
         label = Label.find_by('lower(name) = ?', search.downcase)
 
         if label
-          collection = Label.find_by('lower(name) = ? AND private = ?', search.downcase, false).exercises
+          collection = Label.find_by('lower(name) = ?', search.downcase).exercises.where(private: false)
           results.each do |r|
             collection << r unless collection.find_by(id: r.id)
           end
@@ -67,8 +70,6 @@ class Exercise < ActiveRecord::Base
       end
       return results
     end
-
-
   end
   
   def can_access(user)
@@ -103,6 +104,7 @@ class Exercise < ActiveRecord::Base
 
   def add_attributes(params)
     add_labels(params[:labels])
+    add_groups(params[:groups])
     add_tests(params[:tests_attributes])
     add_files(params[:exercise_files_attributes])
     add_descriptions(params[:descriptions_attributes])
@@ -112,13 +114,30 @@ class Exercise < ActiveRecord::Base
 
     if labels_array
       labels_array.delete_at(0)
+      labels.clear
     end
+
     labels_array.try(:each) do |array|
+
       label = Label.find_by(name: array)
       unless label
         label = Label.create(name: array, color: '006600', label_category: nil)
       end
       labels << label
+    end
+  end
+
+  def add_groups(groups_array)
+
+    if groups_array
+      groups_array.delete_at(0)
+      groups.clear
+    end
+
+    groups_array.try(:each) do |array|
+      group = Group.find(array)
+      groups << group
+
     end
   end
 
