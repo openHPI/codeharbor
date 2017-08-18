@@ -58,6 +58,10 @@ class ExercisesController < ApplicationController
 
   # GET /exercises/1/edit
   def edit
+    exercise_relation = ExerciseRelation.find_by(clone_id: params[:id])
+    if exercise_relation
+      @exercise_relation = exercise_relation
+    end
   end
 
   # POST /exercises
@@ -87,9 +91,10 @@ class ExercisesController < ApplicationController
   # PATCH/PUT /exercises/1
   # PATCH/PUT /exercises/1.json
   def update
-    @exercise.add_attributes(params[:exercise])
+    exercise_dependencies
     respond_to do |format|
       if @exercise.update(exercise_params)
+        @exercise.add_attributes(params[:exercise])
         format.html { redirect_to @exercise, notice: 'Exercise was successfully updated.' }
         format.json { render :show, status: :ok, location: @exercise }
       else
@@ -161,15 +166,6 @@ class ExercisesController < ApplicationController
       @exercise_relation.relation_id = params[:exercise][:exercise_relation][:relation_id]
       @exercise_relation.save
     end
-
-    ##if params[:exercise][:groups]
-      #params[:exercise][:groups].delete_at(0)
-      #params[:exercise][:groups].each do |array|
-       # group = Group.find(array)
-        #group.add(@exercise)
-      #end
-   ## end
-
   end
   def set_option
     if params[:option]

@@ -104,7 +104,7 @@ ready =->
 
   loadSelect2()
 
-  $('#new_exercise').on('submit', validateForm)
+  $('.exercise-validation').on('submit', validateForm)
 
   $(".star-rating").click ->
     alert "Hello"
