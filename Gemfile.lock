@@ -99,6 +99,8 @@ GEM
       thor (~> 0.14)
     font-awesome-rails (4.7.0.2)
       railties (>= 3.2, < 5.2)
+    font-awesome-sass (4.7.0)
+      sass (>= 3.2)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
     groupify (0.8.0)
@@ -292,6 +294,7 @@ DEPENDENCIES
   factory_girl_rails (~> 4.0)
   figaro
   font-awesome-rails
+  font-awesome-sass
   groupify
   i18n
   jbuilder (~> 2.0)

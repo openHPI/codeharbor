@@ -60,6 +60,7 @@ gem 'select2-rails', '~> 4.0', '>= 4.0.3'
 
 gem 'oauth2'
 gem 'nokogiri'
+gem 'font-awesome-sass'
 gem 'font-awesome-rails'
 
 # Use Unicorn as the app server
