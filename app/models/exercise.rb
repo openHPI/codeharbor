@@ -103,11 +103,23 @@ class Exercise < ActiveRecord::Base
   end
 
   def add_attributes(params)
+    if params[:exercise_relation]
+      add_relation(params[:exercise_relation])
+    end
     add_labels(params[:labels])
     add_groups(params[:groups])
     add_tests(params[:tests_attributes])
     add_files(params[:exercise_files_attributes])
     add_descriptions(params[:descriptions_attributes])
+  end
+
+  def add_relation(relation_array)
+    relation = ExerciseRelation.find_by(clone: self)
+    if !relation
+      ExerciseRelation.create(origin_id: relation_array[:origin_id], relation_id: relation_array[:relation_id], clone: self)
+    else
+      relation.update(origin_id: relation_array[:origin_id], relation_id: relation_array[:relation_id], clone: self)
+    end
   end
 
   def add_labels(labels_array)

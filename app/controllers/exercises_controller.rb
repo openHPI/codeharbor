@@ -69,7 +69,8 @@ class ExercisesController < ApplicationController
   def create
     @exercise = Exercise.new(exercise_params)
     @exercise.user = current_user
-    exercise_dependencies
+    clone = false
+    clone = true if params[:exercise][:exercise_relation]
 
     respond_to do |format|
       if @exercise.save
@@ -77,11 +78,11 @@ class ExercisesController < ApplicationController
         format.html { redirect_to @exercise, notice: 'Exercise was successfully created.' }
         format.json { render :show, status: :created, location: @exercise }
       else
-        if !@exercise_relation
+        if !clone
           format.html { render :new }
         else
           puts(@exercise.errors.inspect)
-          format.html { render :duplicate}
+          format.html { redirect_to duplicate_exercise_path(params[:exercise][:exercise_relation][:origin_id])}
         end
         format.json { render json: @exercise.errors, status: :unprocessable_entity }
       end
@@ -91,14 +92,13 @@ class ExercisesController < ApplicationController
   # PATCH/PUT /exercises/1
   # PATCH/PUT /exercises/1.json
   def update
-    exercise_dependencies
     respond_to do |format|
       if @exercise.update(exercise_params)
         @exercise.add_attributes(params[:exercise])
         format.html { redirect_to @exercise, notice: 'Exercise was successfully updated.' }
         format.json { render :show, status: :ok, location: @exercise }
       else
-        format.html { render :edit }
+        format.html { render edit_exercise_path(@exercise) }
         format.json { render json: @exercise.errors, status: :unprocessable_entity }
       end
     end
@@ -158,15 +158,15 @@ class ExercisesController < ApplicationController
 
   private
 
-  def exercise_dependencies
-    if params[:exercise][:exercise_relation]
-      @exercise_relation = ExerciseRelation.new
-      @exercise_relation.clone = @exercise
-      @exercise_relation.origin_id = params[:exercise][:exercise_relation][:origin_id]
-      @exercise_relation.relation_id = params[:exercise][:exercise_relation][:relation_id]
-      @exercise_relation.save
-    end
-  end
+  #def exercise_dependencies
+    #if params[:exercise][:exercise_relation]
+     # @exercise_relation = ExerciseRelation.new
+      #@exercise_relation.clone = @exercise
+     # @exercise_relation.origin_id = params[:exercise][:exercise_relation][:origin_id]
+      #@exercise_relation.relation_id = params[:exercise][:exercise_relation][:relation_id]
+      #@exercise_relation.save
+    #end
+  #end
   def set_option
     if params[:option]
       @option = params[:option]

@@ -19,7 +19,7 @@
         br/
         = f.fields_for :exercise_relation do |relation|
           .controls
-            = relation.collection_select :relation_id, Relation.all, :id, :name, {}, {class: 'form-control'}
+            = relation.collection_select :relation_id, Relation.all, :id, :name, {selected: @exercise_relation.relation_id}, {class: 'form-control'}
     .form-group
       = f.label :title, t('exercises.title'),class:'control-label'
       br/
