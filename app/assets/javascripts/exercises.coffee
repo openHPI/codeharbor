@@ -18,47 +18,20 @@ validateForm = (e) ->
 
     else
       title.style.borderColor = "red"
-      $("<p id='error' style='color: red'>Title cant't be blank</p>").insertAfter(title)
+      $("<p id='error' style='color: red'>Title can't be blank</p>").insertAfter(title)
     document.body.scrollTop = document.documentElement.scrollTop = 0;
     e.preventDefault()
     false
 
 
 loadSelect2 = ->
-
+  console.log("Load call")
   $('#select2-control').select2
     tags: false
     width: '20%'
     multiple: false
 
-  $('.my-group2').select2
-    tags: true
-    width: '100%'
-    createSearchChoice: (term, data) ->
-      if $(data).filter((->
-        @text.localeCompare(term) == 0
-      )).length == 0
-        return {
-          id: term
-          text: term
-        }
-      return
-    multiple: false
-    maximumSelectionSize: 5
-    formatSelectionTooBig: (limit) ->
-      'You can only add 5 topics'
-    ajax:
-      dataType: 'json'
-      url: '/file_types/search.json'
-      processResults: (data) ->
-        { results: $.map(data, (obj) ->
-          {
-            id: obj.type
-            text: obj.type
-          }
-        ) }
-
-  $('#my-group2').select2
+  $('.file_type').select2
     tags: true
     width: '100%'
     multiple: false
@@ -80,6 +53,7 @@ loadSelect2 = ->
       'You can only add 5 topics'
 
 ready =->
+  console.log("Ready Call")
   $(".change-hidden-field").click ->
     value = (this).id
     document.getElementById('option').value = value

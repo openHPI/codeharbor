@@ -156,7 +156,7 @@ table.vertical-table
     tr
       th = t('exercises.show.add_cart')
       td
-        = link_to 'Add to cart', add_to_cart_path(@exercise), class: 'btn btn-main'
+        = link_to 'Add to cart', add_to_cart_path(@exercise), method: "post", class: 'btn btn-main'
     tr
       th
         = t('exercises.show.add_collection')

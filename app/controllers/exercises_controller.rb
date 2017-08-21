@@ -98,7 +98,7 @@ class ExercisesController < ApplicationController
         format.html { redirect_to @exercise, notice: 'Exercise was successfully updated.' }
         format.json { render :show, status: :ok, location: @exercise }
       else
-        format.html { render edit_exercise_path(@exercise) }
+        format.html { render :edit }
         format.json { render json: @exercise.errors, status: :unprocessable_entity }
       end
     end
