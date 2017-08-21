@@ -5,6 +5,7 @@
  *= require_self
  *= require jquery-ui/datepicker
  *= require select2
+ *= require font-awesome
  *= require select2-bootstrap
  *= require_tree .
  @import *
