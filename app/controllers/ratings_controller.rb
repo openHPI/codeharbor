@@ -40,11 +40,15 @@ class RatingsController < ApplicationController
     end
     rating.exercise = @exercise
     rating.user = current_user
+    flash[:notice] = notice
 
-    if rating.save
-      redirect_to @exercise, notice: notice
-    else
-      render :new
+    respond_to do |format|
+      if rating.save
+        overall_rating = @exercise.round_avg_rating
+        format.json { render json: {overall_rating: overall_rating, user_rating: rating} }
+      else
+        format.json {render :layout => false, notice: "An Error occured"}
+      end
     end
   end
 

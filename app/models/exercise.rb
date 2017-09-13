@@ -90,7 +90,7 @@ class Exercise < ActiveRecord::Base
 
   def avg_rating
     if ratings.empty?
-      return 0
+      return 0.0
     else
       result = 1.0 * ratings.map(&:rating).inject(:+) / ratings.size
       return result.round(1)

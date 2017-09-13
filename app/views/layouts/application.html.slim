@@ -34,12 +34,16 @@ html
               = menu_item 'Messages', user_messages_path(current_user)
             = menu_item t('layouts.logout'),  logout_path, method: :delete
     .container style=("margin-top: 100px")
-      - if flash[:alert]
-        p.flash-error
-          font color="red" = flash[:alert]
-      - if flash[:notice]
-        p.flash-notice
-          font color="green" = flash[:notice]
+      #flash-message
+        - flash.each do |name, msg|
+          - if msg == alert
+            div#flash-error.alert.alert-danger
+              = flash[:alert]
+          - elsif msg == notice
+            div#flash-notice.alert.alert-success
+              = flash[:notice]
+          - else
+            = content_tag :div, msg, :id => "flash_#{name}"
       .col-md-12
         = yield
     = yield :modals
