@@ -69,8 +69,7 @@ Rails.application.routes.draw do
     resources :comments do
       resources :answers
     end
-    resources :ratings do
-    end
+    resources :ratings
     member do
       post :push_external
       get :contribute

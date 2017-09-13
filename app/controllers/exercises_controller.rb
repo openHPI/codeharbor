@@ -139,7 +139,7 @@ class ExercisesController < ApplicationController
   end
 
   def push_external
-    account_link = AccountLink.find(params[:account_link]);
+    account_link = AccountLink.find(params[:account_link])
     oauth2Client = OAuth2::Client.new('client_id', 'client_secret', :site => account_link.push_url)
     oauth2_token = account_link[:oauth2_token]
     token = OAuth2::AccessToken.from_hash(oauth2Client, :access_token => oauth2_token)

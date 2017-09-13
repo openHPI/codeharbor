@@ -184,7 +184,7 @@ RSpec.describe ExercisesController, type: :controller do
     it "adds exercise to collection" do
       exercise = Exercise.create! valid_attributes
       expect {
-        post :add_to_collection, {:id => exercise.to_param, collection: {id: collection.id}}, valid_session
+        post :add_to_collection, {:id => exercise.to_param, collection: collection.id}, valid_session
       }.to change(collection.exercises, :count).by(+1)
     end
   end
