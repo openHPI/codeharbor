@@ -20,7 +20,6 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-
   error: "error "
   sure: "Are you sure?"
 
@@ -206,6 +205,23 @@ en:
       duplicate: "Duplicate"
       edit: "Edit"
       delete: "Delete"
+
+    search:
+      advanced: "Advanced"
+      order: "Order By"
+      rating: "Rating"
+      created_at: "Created At"
+      stars: "Stars"
+      all_stars: "All Stars"
+      unrated_only: "Unrated Only"
+      languages: "Languages"
+      proglanguages: "Programming Languages"
+      created: "Created"
+      all_time: "All Time"
+      today: "Today"
+      last_week: "Last Week"
+      last_month: "Last Month"
+      all_languages: "All Languages"
 
     form:
       environment: "Execution Environment"
@@ -403,8 +419,3 @@ en:
     undefined: "User undefined"
     yourself: "yourself"
     errorMessage: "prohibited this user from being saved:"
-
-
-
-
-de:
