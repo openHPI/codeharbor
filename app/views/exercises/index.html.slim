@@ -18,6 +18,42 @@
       = text_field_tag :search, params[:search], class: 'form-control', type: 'text', placeholder: t('exercises.all.placeholder')
       span.input-group-btn
         = submit_tag t('exercises.all.search'), type: 'submit', name: nil, class: 'btn btn-default'
+        = button_tag type: 'button', id: 'advanced', class: 'btn btn-default' do
+          small
+            = "Advanced "
+          i.caret
+    .dropdown-content
+      = hidden_field_tag 'window', @dropdown
+      = fields_for "settings" do |advanced|
+        .order.section
+          p
+            b = "Order by"
+          .btn-group[role="group"]
+            = advanced.hidden_field_tag 'order_param', @order
+            = button_tag "Rating", type: 'button', id: 'order_rating', class: 'btn btn-default'
+            = button_tag "Created At", type: 'button', id: 'order_created', class: 'btn btn-default'
+        .stars.section
+          p
+            b = "Stars"
+          div.form-group
+            = advanced.select "stars", options_for_select({"All Stars" => "", "5" => "5", "4+" => "4", "3+" => "3", "2+" => "2", "unrated only" => "0"}, selected: @stars), {}, class: 'form-control'
+        .proglanguages.section
+          p
+            b = "Programming Languages"
+          span.form-group
+            = advanced.select "proglanguage", options_for_select(ExecutionEnvironment.all.collect{|l| [l.language, l.language]}, selected: @proglanguages), {}, {multiple: true, class: 'form-control language-box'}
+
+        .languages.section
+          p
+            b = "Languages"
+          = advanced.select "language", options_for_select(Description::LANGUAGES, @languages), {}, {multiple: true, class: 'form-control language-box'}
+        .other.section
+          p
+            b = "Created"
+          span.form-group
+            = advanced.select "created", options_for_select({"All Time" => "0", "today" => "1", "last week" => "7", "last month" => "30"}, selected: @created), {}, class: 'form-control'
+      .clear style=("clear: both")
+
     br/
   = render 'home/exercises'
 

@@ -3,14 +3,18 @@ require 'oauth2'
 class ExercisesController < ApplicationController
   load_and_authorize_resource
   before_action :set_exercise, only: [:show, :edit, :update, :destroy, :add_to_cart, :add_to_collection, :push_external, :contribute]
-  before_action :set_option, only: [:index]
+  before_action :set_search, only: [:index]
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized for this exercise.'
   end
   # GET /exercises
   # GET /exercises.json
   def index
-    @exercises = Exercise.search(params[:search],@option,current_user).sort{ |y,x| x.avg_rating <=> y.avg_rating }.paginate(per_page: 5, page: params[:page])
+    if @order == 'order_created'
+      @exercises = Exercise.search(params[:search],params[:settings],@option,current_user).sort{ |y,x| x.created_at <=> y.created_at }.paginate(per_page: 5, page: params[:page])
+    else
+      @exercises = Exercise.search(params[:search],params[:settings],@option,current_user).sort{ |y,x| x.avg_rating <=> y.avg_rating }.paginate(per_page: 5, page: params[:page])
+    end
   end
 
   # GET /exercises/1
@@ -64,6 +68,7 @@ class ExercisesController < ApplicationController
   # POST /exercises.json
   def create
     @exercise = Exercise.new(exercise_params)
+    @exercise.avg_rating = 0.0
     @exercise.add_attributes(params[:exercise])
     @exercise.user = current_user
     exercise_dependencies
@@ -171,12 +176,47 @@ class ExercisesController < ApplicationController
     end
 
   end
-  def set_option
+
+  def set_search
     if params[:option]
       @option = params[:option]
     else
       @option = 'mine'
     end
+
+    if params[:order_param]
+      @order = params[:order_param]
+    else
+      @order = 'order_rating'
+    end
+
+    if params[:window]
+      @dropdown = params[:window]
+    else
+      @dropdown = false
+    end
+
+    if params[:settings]
+      @stars = params[:settings][:stars]
+    else
+      @stars = ""
+    end
+
+    if params[:settings]
+      @languages = params[:settings][:language]
+    end
+
+    if params[:settings]
+      @proglanguages = params[:settings][:proglanguage]
+    end
+
+    if params[:settings]
+      @created = params[:settings][:created]
+    else
+      @created = "0"
+    end
+
+
   end
   # Use callbacks to share common setup or constraints between actions.
   def set_exercise

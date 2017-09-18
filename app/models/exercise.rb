@@ -23,51 +23,76 @@ class Exercise < ActiveRecord::Base
   attr_reader :tag_tokens
   accepts_nested_attributes_for :descriptions, allow_destroy: true
 
-  def self.search(search, option, user)
+  scope :rating, -> (min, max) {where('avg_rating >= ? AND avg_rating <= ?', min, max)}
+  scope :timespan, -> (days) {(days != 0) ? where('DATE(created_at) >= ?', Date.today-days) : where(nil)}
+  scope :title_like, -> (title) {(!title.blank?) ? where('lower(title) ilike ?',"%#{title.downcase}%") : where(nil)}
+  scope :mine, -> (user) {where('user_id = ? OR (id in (select exercise_id from exercise_authors where user_id = ?))', user.id, user.id)}
+  scope :languages, -> (languages) {(!languages.blank?) ? where('(select count(language) from descriptions where exercises.id = descriptions.exercise_id AND descriptions.language in (?)) = ? ', languages, languages.length) : where(nil)}
+  scope :proglanguage, -> (prog) {(!prog.blank?) ? where('execution_environment_id IN (?)', prog) : where(nil)}
 
-    if option == 'private'
-      if search
-        results = where('lower(title) ilike ? AND private = ?', "%#{search.downcase}%", true)
-        label = Label.find_by('lower(name) = ?', search.downcase)
+  def self.search(search, settings, option, user)
 
-        if label
-          collection = Label.find_by('lower(name) = ? AND private = ?', search.downcase, true).exercises
-          results.each do |r|
-            collection << r unless collection.find_by(id: r.id)
-          end
-          return collection
-        end
-        return results
-      else
-        return where(private: true)
+    priv = false
+    priv = true if option == 'private'
+    stars = 0
+    intervall = 0
+    max_rating = 5
+
+    if settings
+      stars = settings[:stars]
+      stars = 0 if settings[:stars] == ''
+      intervall = settings[:created].to_i
+      max_rating = 0 if settings[:stars] == '0'
+      if settings[:language]
+        languages = settings[:language]
+        languages.delete_at(0) if languages[0].blank?
       end
-
-    elsif option == 'public'
-      if search
-        results = where('lower(title) ILIKE ? AND private = ?', "%#{search.downcase}%", false)
-        label = Label.find_by('lower(name) = ?', search.downcase)
-
-        if label
-          collection = Label.find_by('lower(name) = ? AND private = ?', search.downcase, false).exercises
-          results.each do |r|
-            collection << r unless collection.find_by(id: r.id)
-          end
-          return collection
-        end
-        return results
-      else
-        return where(private: false)
+      if settings[:proglanguage]
+        proglanguages = settings[:proglanguage]
+        proglanguages.delete_at(0) if proglanguages[0].blank?
+        proglanguages = proglanguages.collect{|x| ExecutionEnvironment.find_by(language: x).id}
       end
-
-    else
-      results = where(user:user)
-      authors = find(ExerciseAuthor.where(user: user).collect(&:exercise_id))
-      authors.each do |author|
-        results << author
-      end
-      return results
     end
 
+    puts "#{intervall}"
+    puts languages
+
+    if option == 'private' || option == 'public'
+      if search
+        results = languages(languages).proglanguage(proglanguages).where(private: priv).title_like(search).rating(stars, max_rating).timespan(intervall)
+        label = Label.find_by('lower(name) = ?', search.downcase)
+
+        if label
+          collection = Label.find_by('lower(name) = ?', search.downcase).exercises.languages(languages).proglanguage(proglanguages).where(private: priv).rating(stars, max_rating).timespan(intervall)
+
+          results.each do |r|
+            collection << r unless collection.find_by(id: r.id)
+          end
+          return collection
+        end
+        return results
+      else
+        return languages(languages).proglanguage(proglanguages).where(private: priv).rating(stars, max_rating).timespan(intervall)
+      end
+    else
+      if search
+        results = languages(languages).proglanguage(proglanguages).mine(user).title_like(search).rating(stars, max_rating).timespan(intervall)
+        label = Label.find_by('lower(name) = ?', search.downcase)
+
+        if label
+          collection = Label.find_by('lower(name) = ?', search.downcase).exercises.languages(languages).proglanguage(proglanguages).mine(user).rating(stars, max_rating).timespan(intervall)
+
+          results.each do |r|
+            collection << r unless collection.find_by(id: r.id)
+          end
+          return collection
+        end
+
+        return results
+      else
+        return languages(languages).proglanguage(proglanguages).mine(user).rating(stars, max_rating).timespan(intervall)
+      end
+    end
 
   end
   
@@ -88,12 +113,12 @@ class Exercise < ActiveRecord::Base
   end
 
 
-  def avg_rating
+  def update_avg_rating
     if ratings.empty?
-      return 0
+      avg_rating = 0.0
     else
       result = 1.0 * ratings.map(&:rating).inject(:+) / ratings.size
-      return result.round(1)
+      avg_rating = result.round(1)
     end
   end
 

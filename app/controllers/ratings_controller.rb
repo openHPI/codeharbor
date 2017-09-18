@@ -2,13 +2,14 @@ class RatingsController < ApplicationController
   load_and_authorize_resource
   before_action :set_exercise
   before_action :set_rating, only: [:show, :edit, :update, :destroy]
+  after_action :update_avg_rating, only: [:create, :update, :destroy]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized to rate.'
   end
 
   # GET /ratings
-  # GET /ratings.json
+  # GET /ratings.jso
   def index
     @ratings = Rating.all
   end
@@ -74,7 +75,19 @@ class RatingsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_rating
+  def update_avg_rating
+    if @exercise.ratings.empty?
+      avg_rating = 0.0
+    else
+      result = 1.0 * @exercise.ratings.map(&:rating).inject(:+) / @exercise.ratings.size
+      avg_rating = result.round(1)
+    end
+
+    @exercise.update(avg_rating: avg_rating)
+
+  end
+
+  def set_rating
       @rating = Rating.find(params[:id])
     end
 
