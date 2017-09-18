@@ -69,8 +69,13 @@ class ExercisesController < ApplicationController
   def create
     @exercise = Exercise.new(exercise_params)
     @exercise.user = current_user
-    clone = false
-    clone = true if params[:exercise][:exercise_relation]
+
+    if params[:exercise][:exercise_relation]
+      clone = true
+    else
+      clone = false
+    end
+
 
     respond_to do |format|
       if @exercise.save
@@ -158,15 +163,6 @@ class ExercisesController < ApplicationController
 
   private
 
-  #def exercise_dependencies
-    #if params[:exercise][:exercise_relation]
-     # @exercise_relation = ExerciseRelation.new
-      #@exercise_relation.clone = @exercise
-     # @exercise_relation.origin_id = params[:exercise][:exercise_relation][:origin_id]
-      #@exercise_relation.relation_id = params[:exercise][:exercise_relation][:relation_id]
-      #@exercise_relation.save
-    #end
-  #end
   def set_option
     if params[:option]
       @option = params[:option]

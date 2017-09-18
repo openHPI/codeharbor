@@ -25,7 +25,6 @@ validateForm = (e) ->
 
 
 loadSelect2 = ->
-  console.log("Load call")
   $('#select2-control').select2
     tags: false
     width: '20%'
@@ -53,7 +52,6 @@ loadSelect2 = ->
       'You can only add 5 topics'
 
 ready =->
-  console.log("Ready Call")
   $(".change-hidden-field").click ->
     value = (this).id
     document.getElementById('option').value = value
@@ -81,7 +79,6 @@ ready =->
   $('.exercise-validation').on('submit', validateForm)
 
   $(".star-rating").click ->
-    alert "Hello"
     $star_rating.siblings('input.rating-value').val $(this).data('rating')
     SetRatingStar()
 
