@@ -236,16 +236,18 @@ en:
       header: "New Exercise"
 
     show:
-      description: "Descritiption in "
+      description: "Description in "
       files:
         mainfile: "Mainfile"
         solution: "Solution file"
-      export: "Export to ... "
+      export: "Export"
+      export_to: "Export to"
       submit: "Submit"
       define_account_link: "Please define an account link first"
-      or: "or"
-      add_cart: "Add to cart"
-      add_collection: "Add to collection"
+      add_to_cart: "Add to cart"
+      add_to_collection: "Add to collection"
+      add_collection: "Add Collection"
+      download_xml: "Download XML"
       edit: "Edit"
       delete: "Delete"
       back: "Back"
@@ -403,8 +405,3 @@ en:
     undefined: "User undefined"
     yourself: "yourself"
     errorMessage: "prohibited this user from being saved:"
-
-
-
-
-de:

@@ -159,10 +159,10 @@ table.vertical-table
               = test.testing_framework.name
 
 .actions.btn-group[role="group"]
-  = link_to 'Add to cart', add_to_cart_path(@exercise), class: 'btn btn-important'
+  = link_to t('exercises.show.add_to_cart'), add_to_cart_path(@exercise), class: 'btn btn-important'
   .dropup.btn-group
     = button_tag class: 'btn btn-important dropdown-toggle',  data: {toggle: 'dropdown'} do
-      = 'Add to Collection '
+      = t('exercises.show.add_to_collection') + ' '
       span.caret
     ul.scrollable.dropdown-menu[role="menu"]
       - if !current_user.collections.empty?
@@ -171,13 +171,16 @@ table.vertical-table
             = link_to collection.title, add_to_collection_path(collection: collection), method: 'post', class: 'dropdown-item'
       - else
         li
-          = link_to 'Add Collection', new_collection_path(current_user)
+          = link_to t('exercises.show.add_collection'), new_collection_path(current_user)
   - if can? :export, Exercise
     .dropup.btn-group
       = button_tag class: 'btn btn-important dropdown-toggle', data: {toggle: 'dropdown'} do
-        = 'Export '
+        = t('exercises.show.export') + ' '
         span.caret
       ul.scrollable.dropdown-menu[role="menu"]
+        li = link_to t('.download_xml'), download_exercise_exercise_url(@exercise)
+        li.divider
+        li.dropdown-header = t('.export_to') + ': '
         - if !current_user.account_links.empty?
           - current_user.account_links.each do |acc_link|
             li

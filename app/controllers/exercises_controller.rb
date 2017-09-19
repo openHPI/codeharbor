@@ -150,6 +150,22 @@ class ExercisesController < ApplicationController
     redirect_to @exercise, notice: ('Exercise pushed to ' + account_link.readable)
   end
 
+  def download_exercise
+    xsd = Nokogiri::XML::Schema(File.read('app/assets/taskxml.xsd'))
+    doc = Nokogiri::XML(@exercise.to_proforma_xml)
+
+    errors = xsd.validate(doc)
+
+    if errors.any?
+      errors.each do |error|
+        puts error.message
+      end
+      redirect_to @exercise, alert: ('An error occurred. Please contact an admin!')
+    else
+      send_data doc, filename: "#{@exercise.title}.xml", type: "application/xml"
+    end
+  end
+
   def contribute
     author = @exercise.user
     AccessRequest.send_contribution_request(author, @exercise, current_user).deliver_later

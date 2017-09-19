@@ -73,6 +73,7 @@ Rails.application.routes.draw do
     member do
       post :push_external
       get :contribute
+      get :download_exercise
     end
   end
 
