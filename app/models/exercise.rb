@@ -264,18 +264,9 @@ class Exercise < ActiveRecord::Base
         }
 
         xml['p'].tests {
-
-          if self.tests.any?
-            self.tests.each_with_index { |test, index|
-              build_proforma_xml_for_test(xml, test, index)
-            }
-          else ##Placeholder test if there aren't any
-            xml['p'].test('id' => 't0') {
-              xml['p'].title('')
-              xml['p'].send('test-type', '')
-              xml['p'].send('test-configuration')
-            }
-          end
+          self.tests.each_with_index { |test, index|
+            build_proforma_xml_for_test(xml, test, index)
+          }
         }
         #xml['p'].send('grading-hints', 'max-rating' => self.maxrating.to_s)
 
