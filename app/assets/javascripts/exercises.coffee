@@ -170,6 +170,16 @@ ready =->
         alert("error:" + c);
     })
 
+  $('.toggle').on 'click', ->
+    $($(this).parent().next()).toggle()
+    if $(this).hasClass('fa-caret-down')
+      console.log  "Caret Down"
+      $(this).removeClass('fa-caret-down').addClass('fa-caret-up')
+    else
+      console.log  "Caret Up"
+      $(this).removeClass('fa-caret-up').addClass('fa-caret-down')
+
+
 $(document).ready(ready)
 $(document).on('page:load', ready)
 

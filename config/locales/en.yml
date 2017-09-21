@@ -208,6 +208,8 @@ en:
       delete: "Delete"
 
     form:
+      basic_info: "Basic Informations"
+      visibility_labels: "Visibility & Labels"
       environment: "Execution Environment"
       descriptions:
         label: "Descriptions"
@@ -404,7 +406,3 @@ en:
     yourself: "yourself"
     errorMessage: "prohibited this user from being saved:"
 
-
-
-
-de:

@@ -58,9 +58,6 @@ exercise1.descriptions
 
 AccountLink.create(push_url: 'google.com/pushpush', account_name: 'account1000')
 
-
-
-
 =begin
 exercise2 = Exercise.create(title: "Java Einstieg ", maxrating: '10', private: false, user_id:user2.id)
 ExerciseFile.create(main: true, content: "public class HalloWelt {\n    // Hier haben sich zwei Fehler eingeschlichen\n    public static void main (String [] args){\n        System.out.println(Hallo Welt)\n    }\n}", path: '', solution: false, file_extension: 'java', exercise: exercise2)

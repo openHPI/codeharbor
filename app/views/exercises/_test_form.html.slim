@@ -1,16 +1,15 @@
 div[style="margin-left: 10px;"]
   .field
-    = f.label :content, t('exercises.tests.content')
-    br/
+    = f.label :content, t('exercises.tests.content'), class:'form-label'
     .edit
       .editor
         = test.text_area :content
       = test.text_area :content, class:'hidden'
   .field
-    = f.label :feedback_message, t('exercises.tests.feedback')
+    = f.label :feedback_message, t('exercises.tests.feedback'), class:'form-label'
     br/
     = test.text_area :feedback_message, class: 'form-control'
   .field
-    = f.label :testing_framework, t('exercises.tests.framework')
+    = f.label :testing_framework, t('exercises.tests.framework'), class:'form-label'
     br/
     = test.collection_select :testing_framework_id, TestingFramework.all, :id, :name, {}, {class: 'form-control'}

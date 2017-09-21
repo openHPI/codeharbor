@@ -1,35 +1,29 @@
 div[style="margin-left: 10px;"]
-  .field
-    = f.label :name, t('exercises.files.name')
-    br/
+  .field-element
+    = f.label :name, t('exercises.files.name'), class:'form-label'
     = file.text_field :name, class: 'form-control'
-  .field
-    = f.label :path, t('exercises.files.path')
-    br/
+  .field-element
+    = f.label :path, t('exercises.files.path'), class:'form-label'
     = file.text_field :path, size: 40, class: 'form-control'
-  .field
-    = f.label :purpose, t('exercises.files.purpose')
-    br/
+  .field-element
+    = f.label :purpose, t('exercises.files.purpose'), class:'form-label'
     = file.text_field :purpose, class: 'form-control'
-  .field
-    = f.label :file_types_id, t('exercises.files.extension')
-    br/
+  .field-element
+    = f.label :file_types_id, t('exercises.files.extension'), class:'form-label'
     = file.select :file_type_id, FileType.all.collect {|a| [a.name, a.name]}, {}, {class: 'form-control', id: 'my-group2'}
-  .field
-    = f.label :role, 'Role'
-    br/
+  .field-element
+    = f.label :role, 'Role', class:'form-label'
     = file.select :role, ExerciseFile::ROLES, {}, class: 'form-control'
-  .field
-    = f.label :hidden, 'Hidden'
-    br/
+  .field-element
+    = f.label :hidden, 'Hidden', class:'form-label'
+    br
     = file.check_box :hidden
-  .field
-    = f.label :read_only, 'Read only'
-    br/
+  .field-element
+    = f.label :read_only, 'Read only', class:'form-label'
+    br
     = file.check_box :read_only
-  .field
-    = f.label :content, t('exercises.files.content')
-    br/
+  .field-element
+    = f.label :content, t('exercises.files.content'), class: 'form-label'
     .edit
       .editor
         = file.text_area :content
