@@ -181,12 +181,95 @@ class Exercise < ActiveRecord::Base
     end
   end
 
+  def import_xml(doc)
+
+    self.title = doc.xpath('/p:task/p:meta-data/p:title/text()')
+
+    self.execution_environment = ExecutionEnvironment.find_by(language: doc.xpath("/p:task/p:proglang/text()").to_s, version: doc.xpath("/p:task/p:proglang/@version").first.value.to_s)
+    self.private = false
+    self.avg_rating = 0.0
+
+    add_descriptions_xml(doc)
+    add_files_xml(doc)
+    add_tests_xml(doc)
+  end
+
+  def add_descriptions_xml(xml)
+    description = Description.create(text: xml.xpath("/p:task/p:description/text()"), language: xml.xpath("/p:task/@lang").first.value)
+    descriptions << description
+  end
+
+  def add_files_xml(xml)
+    files = xml.xpath('/p:task/p:files/p:file')
+    files.each_with_index { |file, id|
+      id = id+1
+      purpose = file.xpath('/p:task/p:files/p:file['+id.to_s+']/@class').first.value == 'template' ? '' : 'test'
+
+      name = file.xpath("/p:task/p:files/p:file["+id.to_s+"]/@filename").first
+      if name
+        filename = name.value
+      else
+        filename = ''
+      end
+
+      comment = file.xpath("/p:task/p:files/p:file["+id.to_s+"]/@comment").first
+      if comment
+        if comment.value == 'main'
+          role = 'Main File'
+        else
+          role = 'Regular File'
+        end
+      else
+        role = 'Regular File'
+      end
+
+      content = file.xpath("/p:task/p:files/p:file["+id.to_s+"]").text
+
+      unless purpose  == 'test'
+        exercise_file = ExerciseFile.create(content: content, name: filename, purpose: purpose,
+          file_type_id: 1, role: role, hidden: false, read_only: false )
+        exercise_files << exercise_file
+      end
+    }
+  end
+
+  def add_tests_xml(xml)
+    exercise_tests = xml.xpath('/p:task/p:tests/p:test')
+    exercise_tests.each_with_index { |test, id|
+      id = id+1
+      testtype = xml.xpath('/p:task/p:tests/p:test['+id.to_s+']/p:test-type/text()').to_s
+      if  testtype == 'unittest'
+
+        framework_name = xml.xpath('/p:task/p:tests/p:test['+id.to_s+']/p:test-configuration/p:unit-test/@framework').first
+        if framework_name
+          framework = TestingFramework.find_by(name: framework_name)
+        else
+          framework = TestingFramework.find(1)
+        end
+
+        exercise_test = Test.create(testing_framework: framework,
+                                    feedback_message: xml.xpath('/p:task/p:tests/p:test['+id.to_s+']/p:test-configuration/c:feedback-message/text()'))
+
+        ref = xml.xpath('/p:task/p:tests/p:test['+id.to_s+']/p:test-configuration/p:filerefs/p:fileref[1]/@refid').first
+        if ref
+          index = ref.value
+          content = xml.xpath('p:task/p:files/p:file[@id="'+index+'"]').text
+
+          file = ExerciseFile.create(content: content  , purpose: 'test')
+          exercise_test.exercise_file = file
+        end
+
+        tests << exercise_test
+      end
+    }
+  end
+
   def build_proforma_xml_for_exercise_file(builder, exercise_file)
     if exercise_file.role == 'Main File'
       proforma_file_class = 'template'
       comment = 'main'
     elsif exercise_file.purpose == 'test'
-      proforma_file_class = 'template'
+      proforma_file_class = 'internal'
       comment = 'test-file'
     else
       proforma_file_class = 'internal'
@@ -244,7 +327,7 @@ class Exercise < ActiveRecord::Base
 
           ### Set Placeholder file for placeholder solution-file and tests if there aren't any
           if self.model_solution_files.blank? || self.tests.blank?
-            xml['p'].file('', 'id' => '0', 'class' => 'template')
+            xml['p'].file('', 'id' => '0', 'class' => 'internal')
           end
         }
 

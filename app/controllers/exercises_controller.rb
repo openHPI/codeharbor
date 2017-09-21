@@ -166,12 +166,40 @@ class ExercisesController < ApplicationController
     end
   end
 
+  def import_exercise
+
+    xsd = Nokogiri::XML::Schema(File.read('app/assets/taskxml.xsd'))
+    doc = Nokogiri::XML(params[:xml])
+
+    errors = xsd.validate(doc)
+
+    if errors.any?
+      errors.each do |error|
+        puts error.message
+      end
+      flash[:alert] = "Your xml file is not valid"
+      render :nothing => true, :status => 200
+    else
+      @exercise = Exercise.new
+      @exercise.user = current_user
+      @exercise.import_xml(doc)
+
+      if @exercise.save
+        flash[:notice] = 'Exercise successfully imported!'
+        redirect_to edit_exercise_path(@exercise.id)
+      else
+        flash[:alert] = "Cannot import your xml file"
+        redirect_to exercises_path
+      end
+    end
+  end
+
   def contribute
     author = @exercise.user
     AccessRequest.send_contribution_request(author, @exercise, current_user).deliver_later
     text = "#{current_user.name} wants to contribute to your Exercise #{@exercise.title}."
     Message.create(sender: current_user, recipient: author, param_type: 'exercise', param_id: @exercise.id, text: text)
-    redirect_to exercises_path, notice: "Your request has been sent."
+      redirect_to exercises_path, notice: "Your request has been sent."
   end
 
   private

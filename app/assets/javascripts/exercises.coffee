@@ -170,6 +170,38 @@ ready =->
         alert("error:" + c);
     })
 
+  $('#xml-import').on 'click', (e) ->
+    e.stopPropagation()
+    return
+
+  $('#xml').on 'change', ->
+    fullPath = document.getElementById('xml').value
+    if fullPath
+      startIndex = if fullPath.indexOf('\\') >= 0 then fullPath.lastIndexOf('\\') else fullPath.lastIndexOf('/')
+      filename = fullPath.substring(startIndex)
+      if filename.indexOf('\\') == 0 or filename.indexOf('/') == 0
+        filename = filename.substring(1)
+      document.getElementById('xml-label').innerHTML = filename
+
+  #$('#import-button').on 'click', ->
+   # file_data = $('#xml').prop('files')[0]
+    # Getting the properties of file from file field
+   # form_data = new FormData
+    # Creating object of FormData class
+   # form_data.append 'file', file_data
+    # Appending parameter named file with properties of file_field to form_data
+    # form_data.append 'user_id', 123
+    # Adding extra parameters to form_data
+   # $.ajax
+    #  url: window.location.pathname + '/import_exercise'
+     # dataType: 'script'
+     # cache: false
+     # contentType: false
+     # processData: false
+     # data: form_data
+     # type: 'post'
+   # return
+
 $(document).ready(ready)
 $(document).on('page:load', ready)
 

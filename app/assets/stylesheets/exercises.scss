@@ -123,3 +123,26 @@ $exercise-color: #008000;
   font-size:1.25em;
   cursor: pointer;
 }
+
+.inputfile {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: - 1;
+}
+
+#xml-import {
+  min-width: 180px;
+  width: auto;
+  padding: 5px 10px 5px 10px;
+}
+
+#import-button {
+  background-color: #d3d3d3;
+}
+
+#import-button:hover {
+  background-color: #d0d0d0;
+}
