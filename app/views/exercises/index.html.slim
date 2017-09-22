@@ -21,7 +21,7 @@
         = button_tag type: 'button', id: 'advanced', class: 'btn btn-default' do
           small
             = t('exercises.search.advanced') + ' '
-          i.caret
+          span.fa.fa-caret-down#drop style="color:#333333"
     .dropdown-content
       = hidden_field_tag 'window', @dropdown
       = fields_for 'settings' do |advanced|

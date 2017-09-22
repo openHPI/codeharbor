@@ -54,9 +54,6 @@ class Exercise < ActiveRecord::Base
       end
     end
 
-    puts "#{intervall}"
-    puts languages
-
     if option == 'private' || option == 'public'
       if search
         results = languages(languages).proglanguage(proglanguages).where(private: priv).title_like(search).rating(stars, max_rating).timespan(intervall)

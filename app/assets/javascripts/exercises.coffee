@@ -118,10 +118,13 @@ ready =->
       $(search).css("border-bottom-left-radius", "4px")
       $("#advanced").css("border-bottom-right-radius", "4px")
       document.getElementById('window').value = false
+      $('#drop').removeClass('fa-caret-up').addClass('fa-caret-down')
     else
       $(search).css("border-bottom-left-radius","0px")
       $("#advanced").css("border-bottom-right-radius", "0px")
       document.getElementById('window').value = true
+      $('#drop').removeClass('fa-caret-down').addClass('fa-caret-up')
+
 
   if order = document.getElementById('order_param')
     $(document.getElementById(order.value)).addClass('active')
