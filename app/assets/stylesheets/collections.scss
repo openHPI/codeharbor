@@ -3,11 +3,17 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 $collection-color: #000080;
 
-
-.header-btn-collection {
+.fa-folder-open {
+  color: $collection-color
+}
+.collection-content {
+  width: 60%;
+  margin-bottom: 40px;
+}
+.nav-container .nav-btn-collection {
+  padding: 9px 15px;
   border-color: $collection-color;
 }
-
 
 .inner-panel {
   margin-top: 25px;

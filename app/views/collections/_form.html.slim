@@ -8,9 +8,16 @@
         - @collection.errors.full_messages.each do |message|
           li
             = message
-  .field
-    = f.label :title, t('collections.title')
+  .field-element.form-group
+    = f.label :title, t('collections.title'), class: 'form-label'
+    = f.text_field :title, class: 'form-control'
     br
-    = f.text_field :title
-  .actions
-    = f.submit t('collections.button.create'), class:'btn btn-primary'
+    br
+  .form-group
+    .actions.btn-group[role="group"]
+      = button_tag type: 'submit', class: 'btn btn-important' do
+        i.fa.fa-folder-open
+        = ' ' + t('collections.button.create')
+      = link_to :back, class: 'btn btn-important' do
+        i.fa.fa-remove
+        = ' ' + t('exercises.form.cancel')

@@ -188,9 +188,9 @@ table.vertical-table
 
   - if can? :edit, @exercise
     = link_to edit_exercise_path(@exercise),  class: 'btn btn-important' do
-      i.fa.fa-edit style=("color: #008000")
+      i.fa.fa-edit
       = ' ' + t('exercises.show.edit')
     = link_to exercise_path(@exercise), class:'btn btn-important', method: :delete, data: { confirm: t('sure') } do
-      i.fa.fa-trash style=("color: #800000")
+      i.fa.fa-trash
       = ' ' + t('exercises.show.delete')
   = link_to t('exercises.show.back'), exercises_path,  class: 'btn btn-important'

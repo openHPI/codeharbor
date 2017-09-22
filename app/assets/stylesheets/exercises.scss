@@ -2,7 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-$exercise-color: #008000;
+$exercise-color: #006600;
 
 .editor {
   position: relative;
@@ -30,6 +30,10 @@ $exercise-color: #008000;
     padding: 9px 15px;
     border-color: $exercise-color;
   }
+}
+
+.fa-file-text-o {
+  color: $exercise-color;
 }
 .exercise-content {
   display: inline-block;
@@ -128,14 +132,8 @@ $exercise-color: #008000;
   cursor: pointer;
 }
 
-.field-element {
-  margin-bottom: 15px;
-  padding-left: 10px;
-}
-
-fieldset.form-group {
-  margin-bottom: 0px;
-  border: none;
+.toggle {
+  cursor: pointer;
 }
 
 legend {
@@ -143,9 +141,7 @@ legend {
   margin-bottom: 20px;
   border:none;
 }
-.toggle {
-  cursor: pointer;
-}
+
 .number {
   background-color: $exercise-color;
   color: #fff;
@@ -160,13 +156,6 @@ legend {
   border-radius: 100%;
 }
 
-.form-label {
-  color: #555555;
-  font-size: 14px;
-  font-weight: bold;
-  width: 28%;
-  text-align: left;
-}
 .input-group {
   width: 100%;
 }
@@ -218,9 +207,6 @@ legend {
   border-bottom-right-radius: 4px;
 }
 
-.form-content {
-  margin-bottom: 40px;
-}
 input[type="radio"] {
   display: none;
 }

@@ -58,10 +58,18 @@ class CollectionsController < ApplicationController
 
   def remove_exercise
     collection = Collection.find(params[:id])
-    if collection.remove_exercise(params[:exercise])
-      redirect_to collection, notice: 'Exercise was successfully removed.'
-    else
-      redirect_to collection, alert: 'You cannot remove this exercise.'
+    respond_to do |format|
+      if collection.remove_exercise(params[:exercise])
+        notice = 'Exercise was successfully removed.'
+        format.html {redirect_to collection, notice: notice }
+        flash[:notice] = notice
+        format.js
+      else
+        alert = 'You cannot remove this exercise.'
+        format.html {redirect_to collection, alert: alert}
+        flash[:alert] = alert
+        format.js
+      end
     end
   end
 
@@ -72,6 +80,9 @@ class CollectionsController < ApplicationController
     else
       redirect_to collection, alert: 'You cannot remove all exercises'
     end
+  end
+
+  def download_all
   end
 
   # DELETE /collections/1

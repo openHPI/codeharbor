@@ -82,6 +82,10 @@ class CartsController < ApplicationController
     end
   end
 
+  def download_all
+
+  end
+
   def my_cart
     unless @cart = Cart.find_by(user: current_user)
       Cart.create(user: current_user)

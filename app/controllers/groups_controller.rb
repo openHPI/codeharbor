@@ -101,7 +101,6 @@ class GroupsController < ApplicationController
   def make_admin
     user = User.find(params[:user])
     @group.make_admin(user)
-    UserGroup.find_by(group: params[:group], user: params[:user]).update(is_admin: true)
     redirect_to @group, notice: 'Made user to admin.'
   end
 

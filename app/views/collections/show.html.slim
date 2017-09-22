@@ -1,18 +1,41 @@
 - model_class = Collection
-.page-header
-  h1
-    = @collection.title
-
-dl.dl-horizontal
-
-  dt
-    = 'Exercises:'
-
-  - @collection.exercises.each do |exercise|
-    dd
-      = link_to exercise.title, exercise
-      = link_to '-', remove_exercise_collection_path(exercise: exercise), class: 'btn btn-danger btn-xs'
-    dt
-  dd
-= link_to t('collections.button.edit'), edit_collection_path(@collection), class:'btn btn-warning'
-= link_to t('collections.button.back'), collections_path, class: 'btn btn-default'
+.header
+  .std-heading
+    i.fa.fa-folder-open
+    = ' ' + @collection.title
+.collection-content
+  table.table
+    thead
+      tr
+        th
+          = t('carts.exercises')
+        th
+          = ''
+    tbody
+      - if @collection.exercises.empty?
+        tr
+          td
+            = t('carts.noExercisesAdded')
+          td
+            = ''
+      - else
+        - @collection.exercises.each do |exercise|
+          tr
+            td
+              = link_to exercise.title, exercise_path(exercise), class: 'btn btn-default'
+            td
+              = link_to remove_exercise_collection_path(@collection, exercise: exercise), class: 'pull-right' do
+                i.fa.fa-remove style=("color: #800000; font-size: 20px;")
+br
+.actions.btn-group[role="group"]
+  = link_to 'Export all', download_all_collection_path(@collection), class: 'btn btn-important'
+  = link_to remove_all_collection_path(@collection), class: 'btn btn-important' do
+    i.fa.fa-remove style=("color: #800000")
+    = ' ' + 'Remove All'
+  = link_to edit_collection_path(@collection), class:'btn btn-important' do
+    i.fa.fa-edit
+    = ' ' + t('collections.button.edit')
+  = link_to collection_path(@collection), class:'btn btn-important', method: :delete, data: { confirm: t('sure') } do
+    i.fa.fa-trash
+    = ' ' + 'Delete'
+  = link_to t('collections.button.back'), collections_path, class: 'btn btn-important'

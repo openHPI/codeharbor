@@ -105,6 +105,25 @@ en:
     errorMessage: "prohibited this collection from being saved:"
     noExercisesAdded: "No Exercises Added"
 
+  groups:
+      header: "Your Groups"
+      title: "Title"
+      actions: "Actions"
+      button:
+        new: "New Group"
+        show: "Show"
+        edit: "Edit"
+        destroy: "Destroy"
+        back: "Back"
+        create: "Create Group"
+
+      edit:
+        header: "Editing"
+      new:
+        header: "New Group"
+      errorMessage: "prohibited this group from being saved:"
+      noExercisesAdded: "No Exercises Added"
+
   comments:
     header: "Comments for %{title}"
     text: "Text"

@@ -1,4 +1,5 @@
-h1
-  = t('collections.new.header')
+.header
+  .std-heading
+    i.fa.fa-folder-open
+    = ' ' + t('collections.new.header')
 = render 'form'
-= link_to t('collections.button.back'), :back, class: 'btn btn-default'

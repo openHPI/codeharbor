@@ -183,7 +183,6 @@ ready =->
 $(document).ready(ready)
 $(document).on('page:load', ready)
 
-jQuery(document).ready ->
 # All non-GET requests will add the authenticity token
 # if not already present in the data packet
 

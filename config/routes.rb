@@ -8,8 +8,16 @@ Rails.application.routes.draw do
   root 'home#index'
   
   resources :execution_environments
-  resources :carts
-  resources :collections
+  resources :carts do
+    member do
+      get :download_all
+    end
+  end
+  resources :collections do
+    member do
+      get :download_all
+    end
+  end
   resources :groups do
     get :search, :on => :collection
   end
