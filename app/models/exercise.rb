@@ -187,6 +187,7 @@ class Exercise < ActiveRecord::Base
 
     self.execution_environment = ExecutionEnvironment.find_by(language: doc.xpath("/p:task/p:proglang/text()").to_s, version: doc.xpath("/p:task/p:proglang/@version").first.value.to_s)
     self.private = false
+    self.avg_rating = 0.0
 
     add_descriptions_xml(doc)
     add_files_xml(doc)
