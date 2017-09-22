@@ -1,5 +1,9 @@
-h1 Editing group
+.header
+  .std-heading
+    i.fa.fa-file-text-o style=("color: #008000")
+    = ' ' + t('exercises.edit.header')
+    = ' ' + @group.name
 
-== render 'form'
+= render 'form'
 
 

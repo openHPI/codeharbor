@@ -1,13 +1,21 @@
 .login_form
-  h3[style="margin-bottom: 20px"]
-    = t('sessions.header')
+  .header
+    .std-heading
+      i.fa.fa-sign-in style="color:black"
+      = ' ' + t('sessions.header')
   = form_tag do
-    .input-group.col-md-6
-      span#basic-addon1.input-group-addon
-        = label_tag :email, t('sessions.email.label')+': ', style:'width: 100px'
+    .form-group.field-element
+      = label_tag :email, t('sessions.email.label'), class: 'form-label', style:'width: 100px'
       = text_field_tag :email, params[:email], type:'text', class:'form-control', placeholder:t('sessions.email.placeholder')
-    .input-group.col-md-6
-      span#basic-addon1.input-group-addon
-        = label_tag :password, t('sessions.password.label')+': ', style:'width: 100px'
+    .form-group.field-element
+      = label_tag :password, t('sessions.password.label'), class: 'form-label', style:'width: 100px'
       = password_field_tag :password, params[:password], type:'text', class:'form-control', placeholder:t('sessions.password.placeholder')
-    = submit_tag t('sessions.login'), class:'btn btn-default', style:'margin-top: 20px'
+    br
+
+    .btn-group[role="group"]
+      = button_tag type: 'submit', class:'btn btn-important' do
+        i.fa.fa-sign-in
+        = ' ' + t('sessions.login')
+      = link_to :back, class: 'btn btn-important' do
+        i.fa.fa-remove style=("color: gray")
+        = ' Back'

@@ -56,6 +56,7 @@ $exercise-color: #008000;
   border-left: 1px gray solid;
   float: right;
 }
+
 .description {
   width: 90%;
   height: 80px;
@@ -63,13 +64,16 @@ $exercise-color: #008000;
   word-wrap: break-word;
   overflow: auto;
 }
+
 .labels {
   margin-top: 20px;
   float: left;
 }
 
+.fa-star, .fa-star-o, .fa-star-half-o {
+  color: #B79A00;
+}
 .number-rating {
-
   border: 2px #B79A00 solid;
   border-radius: 4px;
   font-size: 0.8em;

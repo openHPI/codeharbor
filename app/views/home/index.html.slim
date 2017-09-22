@@ -6,8 +6,13 @@ div[style="text-align: center"]
       = t('home.subheader')
 div[style="text-align: center; margin-top: 50px"]
   - if current_user.nil?
-    = link_to t('home.login'), login_path, class:'btn btn-main'
-    = link_to t('home.sign_up'), new_user_path, class:'btn btn-main'
+    .btn-group[role="group"]
+      = link_to login_path, class:'btn btn-important' do
+        i.fa.fa-sign-in
+        = ' ' + t('home.login')
+      = link_to new_user_path, class:'btn btn-important' do
+        i.fa.fa-user
+        = ' ' + t('home.sign_up')
   - else
     .btn-group[role="group"]
       = link_to t('home.search_exercise'), exercises_path, class:'btn btn-main'

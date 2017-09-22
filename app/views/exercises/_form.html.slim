@@ -15,7 +15,7 @@
       legend
         span.number = '1'
         = t('exercises.form.basic_info') + ' '
-        span.fa.fa-caret-down.toggle style="color:black"
+        span.fa.fa-caret-down.toggle
       .form-content
         - if @exercise_relation.present?
           = f.fields_for :exercise_relation do |exercise_relation|
@@ -53,7 +53,7 @@
       legend
         span.number = '2'
         = t('exercises.form.visbility_labels') + ' '
-        span.fa.fa-caret-down.toggle style="color:black"
+        span.fa.fa-caret-down.toggle
       .form-content
         .field-element
           = f.label :visibility, t('exercises.visibility.label'), class: 'form-label'
@@ -72,7 +72,7 @@
       legend
         span.number = '3'
         = t('exercises.files.label') + ' '
-        span.fa.fa-caret-down.toggle style="color:black"
+        span.fa.fa-caret-down.toggle
       .form-content
         .field-element
           = f.nested_fields_for :exercise_files, style: 'margin-left: 10px' do |file|
@@ -90,7 +90,7 @@
       legend
         span.number = '4'
         = t('exercises.tests.label') + ' '
-        span.fa.fa-caret-down.toggle style="color:black"
+        span.fa.fa-caret-down.toggle
       .form-content
         .field-element
           = f.nested_fields_for :tests, style: 'margin-left: 10px' do |test|
