@@ -44,6 +44,7 @@ class RatingsController < ApplicationController
 
     respond_to do |format|
       if rating.save
+        update_avg_rating
         overall_rating = @exercise.round_avg_rating
         format.json { render json: {overall_rating: overall_rating, user_rating: rating} }
       else
@@ -78,7 +79,7 @@ class RatingsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_rating
+  def set_rating
       @rating = Rating.find(params[:id])
     end
 

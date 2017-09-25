@@ -14,7 +14,7 @@ div[style="margin-left: 10px;"]
   .field
     = f.label :file_types_id, t('exercises.files.extension')
     br/
-    = file.select :file_type_id, FileType.all.collect {|a| [a.name, a.name]}, {}, {class: 'form-control', id: 'my-group2'}
+    = file.select :file_type_id, FileType.all.collect {|a| [a.name, a.name]}, {}, {class: 'form-control file_type'}
   .field
     = f.label :role, 'Role'
     br/

@@ -1,5 +1,5 @@
 .col-md-12
-  = simple_form_for @exercise, html: { class: 'form-horizontal project' } do |f|
+  = simple_form_for @exercise, html: { class: 'form-horizontal project exercise-validation' } do |f|
     - if @exercise.errors.any?
       #error_explanation.panel.panel-danger
         .panel-heading
@@ -19,7 +19,7 @@
         br/
         = f.fields_for :exercise_relation do |relation|
           .controls
-            = relation.collection_select :relation_id, Relation.all, :id, :name, {}, {class: 'form-control'}
+            = relation.collection_select :relation_id, Relation.all, :id, :name, {selected: @exercise_relation.relation_id}, {class: 'form-control'}
     .form-group
       = f.label :title, t('exercises.title'),class:'control-label'
       br/
@@ -63,12 +63,12 @@
       = f.label :groups, 'Groups', class: 'control-label'
       br/
       .controls
-        = f.select :groups, Group.all.collect{|g| [g.name, g.id]}, {}, {class: "my-group form-control", multiple: "multiple", style: "width: 300px;"}
+        = f.select :groups, options_for_select(Group.all.collect{|g| [g.name, g.id]}, @exercise.groups.pluck(:id)), {}, {class: "my-group form-control", multiple: "multiple", style: "width: 300px;"}
     .form-group
       =f.label :labels, 'Labels', class: 'control-label'
       br/
       .controls
-        = f.select :labels, Label.all.collect{|l| [l.name, l.name]}, {}, {class: "my-tag form-control", multiple: "multiple", style: "width: 300px;"}
+        = f.select :labels, options_for_select(Label.all.collect{|l| [l.name, l.name]}, @exercise.labels.pluck(:name)), {}, {class: "my-tag form-control", multiple: "multiple", style: "width: 300px;"}
     .form-group
       h4
         = t('exercises.files.label')+ ':'
