@@ -25,6 +25,13 @@ class ExercisesController < ApplicationController
     if exercise_relation
       @exercise_relation = exercise_relation
     end
+    if @exercise.ratings
+      user_rating = @exercise.ratings.find_by(user: current_user)
+      if user_rating
+        @user_rating = user_rating.rating
+      end
+    end
+
     @files = ExerciseFile.where(exercise: @exercise)
     @tests = Test.where(exercise: @exercise)
 
@@ -124,7 +131,7 @@ class ExercisesController < ApplicationController
   end
 
   def add_to_collection
-    collection = Collection.find(params[:collection][:id])
+    collection = Collection.find(params[:collection])
     if collection.add_exercise(@exercise)
       redirect_to @exercise, notice: 'Exercise added to collection.'
     else
@@ -137,7 +144,7 @@ class ExercisesController < ApplicationController
   end
 
   def push_external
-    account_link = AccountLink.find(params[:account_link][:id]);
+    account_link = AccountLink.find(params[:account_link])
     oauth2Client = OAuth2::Client.new('client_id', 'client_secret', :site => account_link.push_url)
     oauth2_token = account_link[:oauth2_token]
     token = OAuth2::AccessToken.from_hash(oauth2Client, :access_token => oauth2_token)

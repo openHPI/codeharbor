@@ -19,3 +19,4 @@ test: &TEST
 
 production:
   <<: *default
+  database: codeharbor

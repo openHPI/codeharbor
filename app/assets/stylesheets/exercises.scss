@@ -31,6 +31,98 @@ $exercise-color: #008000;
     border-color: $exercise-color;
   }
 }
+.exercise-content {
+  display: inline-block;
+  width: 80%;
+  height: 120px;
+  float: left;
+}
+
+.exercise-buttons {
+  display: inline-block;
+  width: 20%;
+  float: right;
+}
+
+.rating-panel {
+  font-size: 8px;
+  width: 18%;
+  height: 100%;
+  display: inline-block;
+  word-wrap: break-word;
+  overflow: auto;
+  padding-left: 10px;
+  margin-left: 10px;
+  border-left: 1px gray solid;
+  float: right;
+}
+.description {
+  width: 90%;
+  height: 80px;
+  display: block;
+  word-wrap: break-word;
+  overflow: auto;
+}
+.labels {
+  margin-top: 20px;
+  float: left;
+}
+
+.number-rating {
+
+  border: 2px #B79A00 solid;
+  border-radius: 4px;
+  font-size: 0.8em;
+  padding: 1px 2px 1px 2px;
+  margin-right: 2px;
+  margin-top: -6px;
+  line-height: 20px;
+  color: #B79A00;
+}
+
+.popup-rating {
+  width: 120px;
+  height: 40px;
+  display: none;
+  background-color: white;
+  position: absolute;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 2;
+  padding: 2px 2px 2px 5px;
+  margin-left: -45px;
+  border: 2px grey solid;
+  border-radius: 4px;
+
+  .rating {
+    z-index: 1;
+  }
+}
+
+#rate {
+  margin-left: 10px;
+  font-size: 0.85em;
+}
+
+.rating-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.rating-dropdown:hover .popup-rating {
+  display: block;
+}
+
+.scrollable {
+  height: auto;
+  max-height: 120px;
+  overflow-x: hidden;
+}
+
+.star-rating {
+  line-height:32px;
+  font-size:1.25em;
+  cursor: pointer;
+}
 
 .dropdown-content {
   display: none;
