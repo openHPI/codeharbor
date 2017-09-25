@@ -26,7 +26,7 @@ class AccountLinksController < ApplicationController
   # POST /account_links.json
   def create
     @account_link = AccountLink.new(account_link_params)
-    @account_link.user = @user;
+    @account_link.user = @user
     respond_to do |format|
       if @account_link.save
         format.html { redirect_to @account_link.user, notice: 'Account link was successfully created.' }

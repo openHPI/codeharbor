@@ -5,16 +5,31 @@
       i.i.fa.fa-file-text-o style=("color: #008000")
       = ' ' + @exercise.title
   .col-md-3
-    span.star-rating
+    span.star-rating.pull-right style=("font-size: 2.0em")
       - [*1..5].each do |i|
         - if @exercise.round_avg_rating >= i
-          span.fa.fa-star data-rating=i
+          span.fa.fa-star.overall-rating data-rating=i
         - elsif (@exercise.round_avg_rating + 0.5) >= i
-          span.fa.fa-star-half-o data-rating=i
+          span.fa.fa-star-half-o.overall-rating data-rating=i
         - else
-          span.fa.fa-star-o data-rating=i
+          span.fa.fa-star-o.overall-rating data-rating=i
       small
-      = link_to 'rate', new_exercise_rating_path(@exercise)
+        .rating-dropdown
+          span.btn.btn-xs#rate
+            = 'Rate '
+            span.caret
+          .popup-rating
+            .rating
+              - if @user_rating
+                - [*1..5].each do |i|
+                  - if @user_rating >= i
+                    span.fa.fa-star data-rating=i
+                  - else
+                    span.fa.fa-star-o data-rating=i
+              - else
+                - [*1..5].each do |i|
+                  span.fa.fa-star-o data-rating=i
+
   br
 
 table.vertical-table
@@ -142,32 +157,35 @@ table.vertical-table
               = t('exercises.tests.framework')
             td
               = test.testing_framework.name
-  - if can? :export, Exercise
-    tr
-      th
-        = t('exercises.show.export')
-      td
-        = form_tag(push_external_exercise_path(@exercise), method: "post") do |f|
-          - if !current_user.account_links.empty?
-            = collection_select(:account_link, :id, AccountLink.all, :id, :account_name, {},  {class: 'btn btn-default dropdown-toggle'})
-            = button_tag t('exercises.show.submit'), class: 'btn btn-success btn-xs'
-          - else
-            = link_to t('exercises.show.define_account_link'), new_user_account_link_path(current_user)
-    tr
-      th = t('exercises.show.add_cart')
-      td
-        = link_to 'Add to cart', add_to_cart_path(@exercise), method: "post", class: 'btn btn-main'
-    tr
-      th
-        = t('exercises.show.add_collection')
-      td
-        - if !current_user.collections.empty?
-          .btn-group[role="group"]
-            = collection_select(:collection, :id, Collection.where(user: current_user), :id, :title, {}, {class: 'btn btn-default dropdown-toggle'})
-            = button_tag 'Add to Collection', class: 'btn btn-main btn-sm'
-        - else
-          = link_to 'Add Collection', new_collection_path(current_user)
+
 .actions.btn-group[role="group"]
+  = link_to 'Add to cart', add_to_cart_path(@exercise), class: 'btn btn-important'
+  .dropup.btn-group
+    = button_tag class: 'btn btn-important dropdown-toggle',  data: {toggle: 'dropdown'} do
+      = 'Add to Collection '
+      span.caret
+    ul.scrollable.dropdown-menu[role="menu"]
+      - if !current_user.collections.empty?
+        - current_user.collections.each do |collection|
+          li
+            = link_to collection.title, add_to_collection_path(collection: collection), method: 'post', class: 'dropdown-item'
+      - else
+        li
+          = link_to 'Add Collection', new_collection_path(current_user)
+  - if can? :export, Exercise
+    .dropup.btn-group
+      = button_tag class: 'btn btn-important dropdown-toggle', data: {toggle: 'dropdown'} do
+        = 'Export '
+        span.caret
+      ul.scrollable.dropdown-menu[role="menu"]
+        - if !current_user.account_links.empty?
+          - current_user.account_links.each do |acc_link|
+            li
+              = link_to acc_link.account_name, push_external_exercise_path(account_link: acc_link), method: 'post', class: 'dropdown-item'
+        - else
+          li
+            = link_to t('exercises.show.define_account_link'), new_user_account_link_path(current_user)
+
   - if can? :edit, @exercise
     = link_to edit_exercise_path(@exercise),  class: 'btn btn-important' do
       i.fa.fa-edit style=("color: #008000")

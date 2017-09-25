@@ -3,14 +3,18 @@ require 'oauth2'
 class ExercisesController < ApplicationController
   load_and_authorize_resource
   before_action :set_exercise, only: [:show, :edit, :update, :destroy, :add_to_cart, :add_to_collection, :push_external, :contribute]
-  before_action :set_option, only: [:index]
+  before_action :set_search, only: [:index]
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized for this exercise.'
   end
   # GET /exercises
   # GET /exercises.json
   def index
-    @exercises = Exercise.search(params[:search],@option,current_user).sort{ |y,x| x.avg_rating <=> y.avg_rating }.paginate(per_page: 5, page: params[:page])
+    if @order == 'order_created'
+      @exercises = Exercise.search(params[:search],params[:settings],@option,current_user).sort{ |y,x| x.created_at <=> y.created_at }.paginate(per_page: 5, page: params[:page])
+    else
+      @exercises = Exercise.search(params[:search],params[:settings],@option,current_user).sort{ |y,x| x.avg_rating <=> y.avg_rating }.paginate(per_page: 5, page: params[:page])
+    end
   end
 
   # GET /exercises/1
@@ -21,6 +25,13 @@ class ExercisesController < ApplicationController
     if exercise_relation
       @exercise_relation = exercise_relation
     end
+    if @exercise.ratings
+      user_rating = @exercise.ratings.find_by(user: current_user)
+      if user_rating
+        @user_rating = user_rating.rating
+      end
+    end
+
     @files = ExerciseFile.where(exercise: @exercise)
     @tests = Test.where(exercise: @exercise)
 
@@ -68,8 +79,9 @@ class ExercisesController < ApplicationController
   # POST /exercises.json
   def create
     @exercise = Exercise.new(exercise_params)
+    @exercise.avg_rating = 0.0
+    @exercise.add_attributes(params[:exercise])
     @exercise.user = current_user
-
 
     respond_to do |format|
       if @exercise.save
@@ -123,7 +135,7 @@ class ExercisesController < ApplicationController
   end
 
   def add_to_collection
-    collection = Collection.find(params[:collection][:id])
+    collection = Collection.find(params[:collection])
     if collection.add_exercise(@exercise)
       redirect_to @exercise, notice: 'Exercise added to collection.'
     else
@@ -136,7 +148,7 @@ class ExercisesController < ApplicationController
   end
 
   def push_external
-    account_link = AccountLink.find(params[:account_link][:id]);
+    account_link = AccountLink.find(params[:account_link])
     oauth2Client = OAuth2::Client.new('client_id', 'client_secret', :site => account_link.push_url)
     oauth2_token = account_link[:oauth2_token]
     token = OAuth2::AccessToken.from_hash(oauth2Client, :access_token => oauth2_token)
@@ -163,6 +175,40 @@ class ExercisesController < ApplicationController
     else
       @option = 'mine'
     end
+
+    if params[:order_param]
+      @order = params[:order_param]
+    else
+      @order = 'order_rating'
+    end
+
+    if params[:window]
+      @dropdown = params[:window]
+    else
+      @dropdown = false
+    end
+
+    if params[:settings]
+      @stars = params[:settings][:stars]
+    else
+      @stars = ""
+    end
+
+    if params[:settings]
+      @languages = params[:settings][:language]
+    end
+
+    if params[:settings]
+      @proglanguages = params[:settings][:proglanguage]
+    end
+
+    if params[:settings]
+      @created = params[:settings][:created]
+    else
+      @created = "0"
+    end
+
+
   end
   # Use callbacks to share common setup or constraints between actions.
   def set_exercise

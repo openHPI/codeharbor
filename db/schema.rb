@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170615144649) do
+ActiveRecord::Schema.define(version: 20170915124400) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -161,6 +161,7 @@ ActiveRecord::Schema.define(version: 20170615144649) do
     t.datetime "updated_at",               null: false
     t.integer  "user_id"
     t.integer  "execution_environment_id"
+    t.float    "avg_rating"
   end
 
   add_index "exercises", ["execution_environment_id"], name: "index_exercises_on_execution_environment_id", using: :btree
