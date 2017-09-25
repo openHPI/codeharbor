@@ -106,7 +106,6 @@ ready =->
   loadSelect2()
 
   if document.getElementById('window')
-    console.log("aloha")
     if document.getElementById('window').value == "true"
       console.log("show dropdown")
       $('.dropdown-content').show()

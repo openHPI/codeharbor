@@ -9,7 +9,7 @@ class RatingsController < ApplicationController
   end
 
   # GET /ratings
-  # GET /ratings.jso
+  # GET /ratings.json
   def index
     @ratings = Rating.all
   end
