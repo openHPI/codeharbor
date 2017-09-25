@@ -260,6 +260,7 @@ class Exercise < ActiveRecord::Base
         end
 
         tests << exercise_test
+        exercise_files << file
       end
     }
   end
@@ -310,9 +311,17 @@ class Exercise < ActiveRecord::Base
 
   def to_proforma_xml
     builder = Nokogiri::XML::Builder.new do |xml|
-      xml['p'].task('xmlns:p' => 'urn:proforma:task:v1.1', 'lang' => descriptions.first.language, 'uuid' => SecureRandom.uuid,
+      description = descriptions.first
+      if description
+        language = description.language
+        text = description.text
+      else
+        language = ''
+        text = ''
+      end
+      xml['p'].task('xmlns:p' => 'urn:proforma:task:v1.1', 'lang' => language, 'uuid' => SecureRandom.uuid,
                     'xmlns:u' => 'urn:proforma:tests:unittest:v1.1', 'xmlns:c' => 'codeharbor'){
-        xml['p'].description(self.descriptions.first.text)
+        xml['p'].description(text)
         xml['p'].proglang(self.execution_environment.language, 'version' => self.execution_environment.version)
         xml['p'].send('submission-restrictions') {
           xml['p'].send('files-restriction') {

@@ -14,5 +14,7 @@ dl.dl-horizontal
       = link_to '-', remove_exercise_collection_path(exercise: exercise), class: 'btn btn-danger btn-xs'
     dt
   dd
-= link_to t('collections.button.edit'), edit_collection_path(@collection), class:'btn btn-warning'
-= link_to t('collections.button.back'), collections_path, class: 'btn btn-default'
+.btn-group
+  = link_to "Download Collection", download_all_collection_path(@collection), class: 'btn btn-important'
+  = link_to t('collections.button.edit'), edit_collection_path(@collection), class:'btn btn-important'
+  = link_to t('collections.button.back'), collections_path, class: 'btn btn-important'

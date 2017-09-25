@@ -1,6 +1,6 @@
 class CollectionsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_collection, only: [:show, :edit, :update, :destroy]
+  before_action :set_collection, only: [:show, :edit, :update, :destroy, :remove_exercise, :remove_all, :download_all]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized to for this action.'
@@ -57,21 +57,37 @@ class CollectionsController < ApplicationController
   end
 
   def remove_exercise
-    collection = Collection.find(params[:id])
-    if collection.remove_exercise(params[:exercise])
-      redirect_to collection, notice: 'Exercise was successfully removed.'
+    if @collection.remove_exercise(params[:exercise])
+      redirect_to @collection, notice: 'Exercise was successfully removed.'
     else
-      redirect_to collection, alert: 'You cannot remove this exercise.'
+      redirect_to @collection, alert: 'You cannot remove this exercise.'
     end
   end
 
   def remove_all
-    collection = Collection.find(params[:id])
-    if collection.remove_all
-      redirect_to collection, notice: 'All Exercises were successfully removed'
+    if @collection.remove_all
+      redirect_to @collection, notice: 'All Exercises were successfully removed'
     else
-      redirect_to collection, alert: 'You cannot remove all exercises'
+      redirect_to @collection, alert: 'You cannot remove all exercises'
     end
+  end
+
+  def download_all
+    filename = "#{@collection.title}.zip"
+
+    #This is the tricky part
+    #Initialize the temp file as a zip file
+
+    stringio = Zip::OutputStream.write_buffer do |zio|
+      @collection.exercises.each do |exercise|
+        zio.put_next_entry("#{exercise.title}.xml")
+        zio.write exercise.to_proforma_xml
+      end
+    end
+    binary_data = stringio.string
+
+    send_data(binary_data, :type => 'application/zip', :filename => filename)
+
   end
 
   # DELETE /collections/1

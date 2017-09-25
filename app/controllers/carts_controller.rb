@@ -1,6 +1,6 @@
 class CartsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_cart, only: [:show, :edit, :update, :destroy]
+  before_action :set_cart, only: [:show, :edit, :update, :destroy, :remove_exercise, :remove_all, :download_all]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized for this action.'
@@ -80,6 +80,23 @@ class CartsController < ApplicationController
     else
       redirect_to @cart, alert: 'You cannot remove all exercises'
     end
+  end
+
+  def download_all
+    filename = 'cart_exercises.zip'
+
+    #This is the tricky part
+    #Initialize the temp file as a zip file
+
+    stringio = Zip::OutputStream.write_buffer do |zio|
+      @cart.exercises.each do |exercise|
+        zio.put_next_entry("#{exercise.title}.xml")
+        zio.write exercise.to_proforma_xml
+      end
+    end
+    binary_data = stringio.string
+
+    send_data(binary_data, :type => 'application/zip', :filename => filename)
   end
 
   def my_cart

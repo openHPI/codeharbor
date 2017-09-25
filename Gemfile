@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+#Create Zip files
+gem 'rubyzip'
 #Handle Group Access
 gem 'groupify'
 #Private Data

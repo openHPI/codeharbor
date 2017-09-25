@@ -23,5 +23,7 @@ table.table
           td
             = link_to '-', remove_exercise_cart_path(@cart, exercise: exercise), class: 'btn btn-danger btn-xs'
 br
-= link_to 'Remove All', remove_all_cart_path(@cart), class: 'btn btn_danger'
+.btn-group
+  = link_to 'Download All', download_all_cart_path(@cart), class: 'btn btn-important'
+  = link_to 'Remove All', remove_all_cart_path(@cart), class: 'btn btn-important'
 
