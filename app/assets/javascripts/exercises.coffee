@@ -2,15 +2,6 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-SetRatingStar = ->
-  $(".star-rating").each ->
-    if parseInt($star_rating.siblings('input.rating-value').val()) >= parseInt($(this).data('rating'))
-      console.log 'rating1'
-      $(this).removeClass('fa-star-o').addClass('fa-star')
-    else
-      console.log 'rating2'
-      $(this).removeClass('fa-star').addClass('fa-star-o')
-
 validateForm = (e) ->
   title = document.getElementById('exercise_title')
   if title.value == ''
@@ -78,9 +69,6 @@ ready =->
 
   $('.exercise-validation').on('submit', validateForm)
 
-  $(".star-rating").click ->
-    $star_rating.siblings('input.rating-value').val $(this).data('rating')
-    SetRatingStar()
 
 
 

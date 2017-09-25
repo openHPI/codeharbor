@@ -70,12 +70,6 @@ class ExercisesController < ApplicationController
     @exercise = Exercise.new(exercise_params)
     @exercise.user = current_user
 
-    if params[:exercise][:exercise_relation]
-      clone = true
-    else
-      clone = false
-    end
-
 
     respond_to do |format|
       if @exercise.save
@@ -83,7 +77,7 @@ class ExercisesController < ApplicationController
         format.html { redirect_to @exercise, notice: 'Exercise was successfully created.' }
         format.json { render :show, status: :created, location: @exercise }
       else
-        if !clone
+        if !params[:exercise][:exercise_relation] #Exercise Relation is set if form is for duplicate exercise, otherwise it's not.
           format.html { render :new }
         else
           puts(@exercise.errors.inspect)
