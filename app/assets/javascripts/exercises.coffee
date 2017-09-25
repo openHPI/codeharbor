@@ -58,6 +58,12 @@ loadSelect2 = ->
     width: '100%'
     multiple: false
 
+  $('.language-box').select2
+    width: '100%'
+    multiple: true
+    innerHeight: 0.5
+    placeholder: "All Languages"
+
   $('.my-group').select2
     width: '100%'
     createSearchChoice: (term, data) ->
@@ -98,6 +104,39 @@ ready =->
     loadSelect2()
 
   loadSelect2()
+
+  if document.getElementById('window')
+    if document.getElementById('window').value == "true"
+      console.log("show dropdown")
+      $('.dropdown-content').show()
+
+  $('#advanced').click ->
+    $('.dropdown-content').toggle()
+    search = $('#search')
+    if document.getElementById('window').value == "true"
+      $(search).css("border-bottom-left-radius", "4px")
+      $("#advanced").css("border-bottom-right-radius", "4px")
+      document.getElementById('window').value = false
+      $('#drop').removeClass('fa-caret-up').addClass('fa-caret-down')
+    else
+      $(search).css("border-bottom-left-radius","0px")
+      $("#advanced").css("border-bottom-right-radius", "0px")
+      document.getElementById('window').value = true
+      $('#drop').removeClass('fa-caret-down').addClass('fa-caret-up')
+
+
+  if order = document.getElementById('order_param')
+    $(document.getElementById(order.value)).addClass('active')
+
+  $('#order_rating').click ->
+    $('#order_rating').addClass('active')
+    $('#order_created').removeClass('active')
+    document.getElementById('order_param').value = 'order_rating'
+
+  $('#order_created').click ->
+    $('#order_created').addClass('active')
+    $('#order_rating').removeClass('active')
+    document.getElementById('order_param').value = 'order_created'
 
 $(document).ready(ready)
 $(document).on('page:load', ready)
