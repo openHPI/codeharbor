@@ -169,7 +169,7 @@ class ExercisesController < ApplicationController
 
   private
 
-  def set_option
+  def set_search
     if params[:option]
       @option = params[:option]
     else
