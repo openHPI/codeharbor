@@ -111,12 +111,12 @@ class Exercise < ActiveRecord::Base
   end
 
 
-  def update_avg_rating
+  def avg_rating
     if ratings.empty?
-      avg_rating = 0.0
+      0.0
     else
-      result = 1.0 * ratings.map(&:rating).inject(:+) / ratings.size
-      avg_rating = result.round(1)
+      result = 1.0 * ratings.avg(:rating)
+      result.round(1)
     end
   end
 
