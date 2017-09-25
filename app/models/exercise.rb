@@ -22,6 +22,8 @@ class Exercise < ActiveRecord::Base
 
   attr_reader :tag_tokens
   accepts_nested_attributes_for :descriptions, allow_destroy: true
+  accepts_nested_attributes_for :exercise_files, allow_destroy: true
+  accepts_nested_attributes_for :tests, allow_destroy: true
 
   scope :rating, -> (min, max) {where('avg_rating >= ? AND avg_rating <= ?', min, max)}
   scope :timespan, -> (days) {(days != 0) ? where('DATE(created_at) >= ?', Date.today-days) : where(nil)}
@@ -90,7 +92,6 @@ class Exercise < ActiveRecord::Base
         return languages(languages).proglanguage(proglanguages).mine(user).rating(stars, max_rating).timespan(intervall)
       end
     end
-
   end
   
   def can_access(user)
@@ -124,23 +125,53 @@ class Exercise < ActiveRecord::Base
   end
 
   def add_attributes(params)
+    if params[:exercise_relation]
+      add_relation(params[:exercise_relation])
+    end
     add_labels(params[:labels])
+    add_groups(params[:groups])
     add_tests(params[:tests_attributes])
     add_files(params[:exercise_files_attributes])
     add_descriptions(params[:descriptions_attributes])
+  end
+
+  def add_relation(relation_array)
+    relation = ExerciseRelation.find_by(clone: self)
+    if !relation
+      ExerciseRelation.create(origin_id: relation_array[:origin_id], relation_id: relation_array[:relation_id], clone: self)
+    else
+      relation.update(origin_id: relation_array[:origin_id], relation_id: relation_array[:relation_id], clone: self)
+    end
   end
 
   def add_labels(labels_array)
 
     if labels_array
       labels_array.delete_at(0)
+      labels.clear
     end
+
     labels_array.try(:each) do |array|
+
       label = Label.find_by(name: array)
       unless label
         label = Label.create(name: array, color: '006600', label_category: nil)
       end
       labels << label
+    end
+  end
+
+  def add_groups(groups_array)
+
+    if groups_array
+      groups_array.delete_at(0)
+      groups.clear
+    end
+
+    groups_array.try(:each) do |array|
+      group = Group.find(array)
+      groups << group
+
     end
   end
 

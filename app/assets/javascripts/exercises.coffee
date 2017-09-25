@@ -2,56 +2,29 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-$star_rating = $('.star-rating .fa')
+validateForm = (e) ->
+  title = document.getElementById('exercise_title')
+  if title.value == ''
+    if $('#error').length
 
-SetRatingStar = ->
-  $star_rating.each ->
-    if parseInt($star_rating.siblings('input.rating-value').val()) >= parseInt($(this).data('rating'))
-      console.log 'rating1'
-      $(this).removeClass('fa-star-o').addClass('fa-star')
     else
-      console.log 'rating2'
-      $(this).removeClass('fa-star').addClass('fa-star-o')
+      title.style.borderColor = "red"
+      $("<p id='error' style='color: red'>Title can't be blank</p>").insertAfter(title)
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
+    e.preventDefault()
+    false
 
-$star_rating.on 'click', ->
-  $star_rating.siblings('input.rating-value').val $(this).data('rating')
-  SetRatingStar()
-
-SetRatingStar()
 
 loadSelect2 = ->
-
   $('#select2-control').select2
     tags: false
     width: '20%'
     multiple: false
 
-  $('.my-group2').select2
+  $('.file_type').select2
     tags: true
     width: '100%'
-    createSearchChoice: (term, data) ->
-      if $(data).filter((->
-        @text.localeCompare(term) == 0
-      )).length == 0
-        return {
-          id: term
-          text: term
-        }
-      return
     multiple: false
-    maximumSelectionSize: 5
-    formatSelectionTooBig: (limit) ->
-      'You can only add 5 topics'
-    ajax:
-      dataType: 'json'
-      url: '/file_types/search.json'
-      processResults: (data) ->
-        { results: $.map(data, (obj) ->
-          {
-            id: obj.type
-            text: obj.type
-          }
-        ) }
 
   $('#my-group2').select2
     tags: true
@@ -209,10 +182,7 @@ ready =->
     $('#order_rating').removeClass('active')
     document.getElementById('order_param').value = 'order_created'
 
+  $('.exercise-validation').on('submit', validateForm)
+
 $(document).ready(ready)
 $(document).on('page:load', ready)
-
-jQuery(document).ready ->
-# All non-GET requests will add the authenticity token
-# if not already present in the data packet
-
