@@ -159,7 +159,7 @@ table.vertical-table
               = test.testing_framework.name
 
 .actions.btn-group[role="group"]
-  = link_to 'Add to cart', add_to_cart_path(@exercise), class: 'btn btn-important'
+  = link_to 'Add to cart', add_to_cart_path(@exercise), method: 'post', class: 'btn btn-important'
   .dropup.btn-group
     = button_tag class: 'btn btn-important dropdown-toggle',  data: {toggle: 'dropdown'} do
       = 'Add to Collection '

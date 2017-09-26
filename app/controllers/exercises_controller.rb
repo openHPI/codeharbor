@@ -79,7 +79,6 @@ class ExercisesController < ApplicationController
   # POST /exercises.json
   def create
     @exercise = Exercise.new(exercise_params)
-    @exercise.avg_rating = 0.0
     @exercise.add_attributes(params[:exercise])
     @exercise.user = current_user
 
@@ -191,7 +190,7 @@ class ExercisesController < ApplicationController
     if params[:settings]
       @stars = params[:settings][:stars]
     else
-      @stars = ""
+      @stars = "0"
     end
 
     if params[:settings]
