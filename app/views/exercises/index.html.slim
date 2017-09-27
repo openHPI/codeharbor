@@ -36,7 +36,7 @@
           p
             b = t('exercises.search.stars')
           div.form-group
-            = advanced.select 'stars', options_for_select({t('exercises.search.all_stars') => "", "5" => "5", "4+" => "4", "3+" => "3", "2+" => "2", t('exercises.search.unrated_only') => "0"}, selected: @stars), {}, class: 'form-control'
+            = advanced.select 'stars', options_for_select({t('exercises.search.all_stars') => "0", "5" => "5", "4+" => "4", "3+" => "3", "2+" => "2", t('exercises.search.unrated_only') => ""}, selected: @stars), {}, class: 'form-control'
         .proglanguages.section
           p
             b = t('exercises.search.proglanguages')
