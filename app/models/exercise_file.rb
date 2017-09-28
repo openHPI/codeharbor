@@ -3,10 +3,10 @@ class ExerciseFile < ActiveRecord::Base
   belongs_to :file_type
   has_many :tests, dependent: :destroy
 
-  def full_file_name
-    "#{self.name}"
+  accepts_nested_attributes_for :tests
 
-    # Old full_file_name: "#{self.file_name}.#{self.file_extension}"
+  def full_file_name
+    "#{self.path}/#{self.name}#{self.file_type.file_extension}"
   end
 
   ROLES = [

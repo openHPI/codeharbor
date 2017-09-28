@@ -26,32 +26,10 @@ loadSelect2 = ->
     width: '20%'
     multiple: false
 
-  $('.my-group2').select2
-    tags: true
+  $('.file-type').select2
+    tags: false
     width: '100%'
-    createSearchChoice: (term, data) ->
-      if $(data).filter((->
-        @text.localeCompare(term) == 0
-      )).length == 0
-        return {
-          id: term
-          text: term
-        }
-      return
     multiple: false
-    maximumSelectionSize: 5
-    formatSelectionTooBig: (limit) ->
-      'You can only add 5 topics'
-    ajax:
-      dataType: 'json'
-      url: '/file_types/search.json'
-      processResults: (data) ->
-        { results: $.map(data, (obj) ->
-          {
-            id: obj.type
-            text: obj.type
-          }
-        ) }
 
   $('#my-group2').select2
     tags: true

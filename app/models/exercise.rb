@@ -115,10 +115,12 @@ class Exercise < ActiveRecord::Base
     end
     labels_array.try(:each) do |array|
       label = Label.find_by(name: array)
-      unless label
-        label = Label.create(name: array, color: '006600', label_category: nil)
+      if label
+        labels << label
+      else
+        labels.new(name: array, color: '006600', label_category: nil)
       end
-      labels << label
+
     end
   end
 
@@ -131,7 +133,7 @@ class Exercise < ActiveRecord::Base
         description = Description.find(id)
         destroy ? description.destroy : description.update(text: array[:text], language: array[:language])
       else
-        descriptions << Description.create(text: array[:text], language: array[:language]) unless destroy
+        descriptions.new(text: array[:text], language: array[:language]) unless destroy
       end
     end
   end
@@ -141,17 +143,12 @@ class Exercise < ActiveRecord::Base
       destroy = array[:_destroy]
       id = array[:id]
 
-      file_type = FileType.find_by(name: array[:file_type_id])
-      unless file_type
-        file_type = FileType.create(name: array[:file_type_id])
-      end
-      array[:file_type_id] = file_type.id
-
+      file_type = FileType.find(array[:file_type_id])
       if id
         file = ExerciseFile.find(id)
         destroy ? file.destroy : file.update(file_permit(array))
       else
-        exercise_files << ExerciseFile.create(file_permit(array)) unless destroy
+        exercise_files.new(file_permit(array)) unless destroy
       end
     end
   end
@@ -171,11 +168,10 @@ class Exercise < ActiveRecord::Base
         end
       else
         unless destroy
-          exercise_file = ExerciseFile.create(content: array[:content], purpose: 'test')
-          test = Test.create(test_permit(array))
-          test.exercise_file = exercise_file
+          file = ExerciseFile.new(content: array[:content], name: array[:name], path: array[:path], file_type_id: array[:file_type_id], purpose: 'test' )
+          test = Test.new(test_permit(array))
+          test.exercise_file =  file
           tests << test
-          exercise_files << exercise_file
         end
       end
     end
@@ -185,93 +181,151 @@ class Exercise < ActiveRecord::Base
 
     self.title = doc.xpath('/p:task/p:meta-data/p:title/text()')
 
-    self.execution_environment = ExecutionEnvironment.find_by(language: doc.xpath("/p:task/p:proglang/text()").to_s, version: doc.xpath("/p:task/p:proglang/@version").first.value.to_s)
+    prog_language = doc.xpath('/p:task/p:proglang/text()').to_s
+    version = doc.xpath('/p:task/p:proglang/@version').first.value
+    exec_environment = ExecutionEnvironment.where('language = ? AND version = ?', prog_language, version).take
+    unless exec_environment
+      exec_environment = ExecutionEnvironment.find(1)
+    end
+    self.execution_environment = exec_environment
     self.private = false
-    self.avg_rating = 0.0
+    descriptions.new(text: doc.xpath('/p:task/p:description/text()'), language: doc.xpath('/p:task/@lang').first.value)
 
-    add_descriptions_xml(doc)
     add_files_xml(doc)
     add_tests_xml(doc)
   end
 
-  def add_descriptions_xml(xml)
-    description = Description.create(text: xml.xpath("/p:task/p:description/text()"), language: xml.xpath("/p:task/@lang").first.value)
-    descriptions << description
-  end
-
   def add_files_xml(xml)
-    files = xml.xpath('/p:task/p:files/p:file')
-    files.each_with_index { |file, id|
-      id = id+1
-      purpose = file.xpath('/p:task/p:files/p:file['+id.to_s+']/@class').first.value == 'template' ? '' : 'test'
-
-      name = file.xpath("/p:task/p:files/p:file["+id.to_s+"]/@filename").first
-      if name
-        filename = name.value
-      else
-        filename = ''
-      end
-
-      comment = file.xpath("/p:task/p:files/p:file["+id.to_s+"]/@comment").first
-      if comment
-        if comment.value == 'main'
-          role = 'Main File'
+    xml.xpath('/p:task/p:files/p:file').each do |file|
+      role = determine_file_role_from_proforma_file(xml, file)
+      unless role === 'Test'
+        filename_attribute = file.xpath('@filename').first
+        if filename_attribute
+          filename = filename_attribute.value
+          if filename.include? '/'
+            path_name_split = filename.split (/\/(?=[^\/]*$)/)
+            path = path_name_split.first
+            name_with_type = path_name_split.second
+          else
+            path = ''
+            name_with_type = filename
+          end
+          if name_with_type.include? '.'
+            name_type_split = name_with_type.split('.')
+            name = name_type_split.first
+            type = name_type_split.second
+          else
+            name = name_with_type
+            type = ''
+          end
         else
-          role = 'Regular File'
+          path = ''
+          name = ''
+          type = ''
         end
-      else
-        role = 'Regular File'
-      end
 
-      content = file.xpath("/p:task/p:files/p:file["+id.to_s+"]").text
+        file_class = file.xpath('@class').first.value
+        content = file.xpath('text()').first
 
-      unless purpose  == 'test'
-        exercise_file = ExerciseFile.create(content: content, name: filename, purpose: purpose,
-          file_type_id: 1, role: role, hidden: false, read_only: false )
-        exercise_files << exercise_file
+        file = ExerciseFile.new(
+            content: content,
+            name: name,
+            path: path,
+            purpose: '',
+            file_type: FileType.find_by(file_extension: ".#{type}"),
+            role: role,
+            hidden: file_class == 'internal',
+            read_only: false
+        )
+        exercise_files << file
       end
-    }
+    end
   end
 
   def add_tests_xml(xml)
-    exercise_tests = xml.xpath('/p:task/p:tests/p:test')
-    exercise_tests.each_with_index { |test, id|
-      id = id+1
-      testtype = xml.xpath('/p:task/p:tests/p:test['+id.to_s+']/p:test-type/text()').to_s
+    xml.xpath('/p:task/p:tests/p:test').each do |test|
+      testtype = test.xpath('p:test-type/text()').to_s
       if  testtype == 'unittest'
 
-        framework_name = xml.xpath('/p:task/p:tests/p:test['+id.to_s+']/p:test-configuration/p:unit-test/@framework').first
+        framework_name = test.xpath('p:test-configuration/p:unit-test/@framework').first
         if framework_name
           framework = TestingFramework.find_by(name: framework_name)
         else
           framework = TestingFramework.find(1)
         end
 
-        exercise_test = Test.create(testing_framework: framework,
-                                    feedback_message: xml.xpath('/p:task/p:tests/p:test['+id.to_s+']/p:test-configuration/c:feedback-message/text()'))
+        exercise_test = Test.new(testing_framework: framework,
+                                    feedback_message: test.xpath('p:test-configuration/c:feedback-message/text()'))
 
-        ref = xml.xpath('/p:task/p:tests/p:test['+id.to_s+']/p:test-configuration/p:filerefs/p:fileref[1]/@refid').first
+        ref = test.xpath('p:test-configuration/p:filerefs/p:fileref[1]/@refid').first
         if ref
           index = ref.value
-          content = xml.xpath('p:task/p:files/p:file[@id="'+index+'"]').text
+          file = xml.xpath('p:task/p:files/p:file[@id="'+index+'"]').first
 
-          file = ExerciseFile.create(content: content  , purpose: 'test')
+          filename_attribute = file.xpath('@filename').first
+          if filename_attribute
+            filename = filename_attribute.value
+            if filename.include? '/'
+              path_name_split = filename.split (/\/(?=[^\/]*$)/)
+              path = path_name_split.first
+              name_with_type = path_name_split.second
+            else
+              path = ''
+              name_with_type = filename
+            end
+            if name_with_type.include? '.'
+              name_type_split = name_with_type.split('.')
+              name = name_type_split.first
+              type = name_type_split.second
+            else
+              name = name_with_type
+              type = ''
+            end
+          else
+            path = ''
+            name = ''
+            type = ''
+          end
+
+          file_class = file.xpath('@class').first.value
+          content = file.xpath('text()').first
+          file = ExerciseFile.new(content: content,
+                                    name: name,
+                                    path: path,
+                                    purpose: 'test',
+                                    file_type: FileType.find_by(file_extension: ".#{type}"),
+                                    hidden: file_class == 'internal',
+                                    read_only: false
+          )
           exercise_test.exercise_file = file
         end
 
         tests << exercise_test
-        exercise_files << file
       end
-    }
+    end
+  end
+
+  def determine_file_role_from_proforma_file(xml, file)
+    file_id = file.xpath('@id').first.value
+    file_class = file.xpath('@class').first.value
+    comment = file.xpath('@comment').first.try(:value)
+    is_referenced_by_test = xml.xpath("//p:test/p:test-configuration/p:filerefs/p:fileref[@refid='#{file_id}']")
+    is_referenced_by_model_solution = xml.xpath("//p:model-solution/p:filerefs/p:fileref[@refid='#{file_id}']")
+    if !is_referenced_by_test.empty? && (file_class == 'internal')
+      return 'Test'
+    elsif !is_referenced_by_model_solution.empty? && (file_class == 'internal')
+      return 'Reference Implementation'
+    elsif (file_class == 'template') && (comment == 'main')
+      return 'Main File'
+    elsif (file_class == 'internal') && (comment == 'main')
+    end
+    return 'Regular File'
   end
 
   def build_proforma_xml_for_exercise_file(builder, exercise_file)
     if exercise_file.role == 'Main File'
       proforma_file_class = 'template'
       comment = 'main'
-    elsif exercise_file.purpose == 'test'
-      proforma_file_class = 'internal'
-      comment = 'test-file'
     else
       proforma_file_class = 'internal'
       comment = ''
@@ -333,9 +387,12 @@ class Exercise < ActiveRecord::Base
           self.exercise_files.all? { |file|
             build_proforma_xml_for_exercise_file(xml, file)
           }
+          self.tests.all? { |test|
+            build_proforma_xml_for_exercise_file(xml, test.exercise_file)
+          }
 
           ### Set Placeholder file for placeholder solution-file and tests if there aren't any
-          if self.model_solution_files.blank? || self.tests.blank?
+          if self.model_solution_files.blank?
             xml['p'].file('', 'id' => '0', 'class' => 'internal')
           end
         }
@@ -371,7 +428,7 @@ class Exercise < ActiveRecord::Base
   end
 
   def model_solution_files
-    self.exercise_files.select { |file| file.solution }
+    self.exercise_files.where(role: 'Reference Implementation')
   end
 
   def file_permit(params)

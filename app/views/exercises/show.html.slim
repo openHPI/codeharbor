@@ -123,17 +123,12 @@ table.vertical-table
               th
                 = t('exercises.files.extension')
               td
-                = file.file_type.name
+                = file.file_type.name_with_extension
             tr
               th
                 = 'Role'
               td
                 = file.role
-            tr
-              th
-                = t('exercises.show.files.solution')
-              td
-                = file.solution
             br
   tr
     th
@@ -147,6 +142,21 @@ table.vertical-table
             td colspan=2
               .editor_readonly
                 = test.exercise_file.content
+          tr
+            th
+              = 'Name'
+            td
+              = test.name
+            tr
+              th
+                = t('exercises.files.path')
+              td
+                = test.path
+            tr
+              th
+                = t('exercises.files.extension')
+              td
+                = test.file_type.name_with_extension
           tr
             th
               = t('exercises.tests.feedback')
