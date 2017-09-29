@@ -2,23 +2,6 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-$star_rating = $('.star-rating .fa')
-
-SetRatingStar = ->
-  $star_rating.each ->
-    if parseInt($star_rating.siblings('input.rating-value').val()) >= parseInt($(this).data('rating'))
-      console.log 'rating1'
-      $(this).removeClass('fa-star-o').addClass('fa-star')
-    else
-      console.log 'rating2'
-      $(this).removeClass('fa-star').addClass('fa-star-o')
-
-$star_rating.on 'click', ->
-  $star_rating.siblings('input.rating-value').val $(this).data('rating')
-  SetRatingStar()
-
-SetRatingStar()
-
 loadSelect2 = ->
 
   $('#select2-control').select2
@@ -148,7 +131,6 @@ ready =->
       dataType: 'json',
       success: (response) ->
         rating = response.user_rating.rating
-        console.log('user rating' +rating)
         USERRATING = rating
         stars = $('.rating span').filter (->
           $(this).attr("data-rating") <= rating
@@ -156,7 +138,6 @@ ready =->
         $(stars).removeClass("fa-star-o").addClass("fa-star")
 
         overallrating = response.overall_rating
-        console.log('overall rating' + overallrating)
         $('.starrating span.fa.fa-star[data-rating=1]').attr("color", "red")
         for num in [1,2,3,4,5]
           do (num) ->
@@ -173,16 +154,28 @@ ready =->
   $('.toggle').on 'click', ->
     $($(this).parent().next()).toggle()
     if $(this).hasClass('fa-caret-down')
-      console.log  "Caret Down"
       $(this).removeClass('fa-caret-down').addClass('fa-caret-up')
     else
-      console.log  "Caret Up"
       $(this).removeClass('fa-caret-up').addClass('fa-caret-down')
 
+  $('.comment-button').on 'click', ->
+    exercise_id = this.getAttribute("data-exercise")
+    caret = $(this).children('.fa')
+    comment_box = $(".comment-box[data-exercise=#{exercise_id}]")
 
+    if $(caret).hasClass('fa-caret-down')
+      $(caret).removeClass('fa-caret-down').addClass('fa-caret-up')
+      $(comment_box).show()
+      $.ajax({
+        type: 'GET',
+        url: window.location.pathname + '/' + exercise_id + "/load_comments"
+        dataType: 'script'
+      })
+    else
+      $(caret).removeClass('fa-caret-up').addClass('fa-caret-down')
+      $(comment_box).hide()
 $(document).ready(ready)
 $(document).on('page:load', ready)
-
 # All non-GET requests will add the authenticity token
 # if not already present in the data packet
 

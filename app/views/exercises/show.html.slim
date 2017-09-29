@@ -98,6 +98,20 @@ table.vertical-table
       = @exercise.created_at
   tr
     th
+      = "Labels"
+      | :
+    td
+      - @exercise.labels.each do |label|
+        = '#' + label.name + ' '
+  tr
+    th
+      = "Groups"
+      | :
+    td
+      - @exercise.groups.each do |group|
+        = link_to group.name, group_path(group)
+  tr
+    th
       em
         = t('exercises.files.label')
         | :

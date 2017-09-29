@@ -6,11 +6,8 @@ div[style="margin-left: 10px;"]
     = f.label :path, t('exercises.files.path'), class:'form-label'
     = file.text_field :path, size: 40, class: 'form-control'
   .field-element
-    = f.label :purpose, t('exercises.files.purpose'), class:'form-label'
-    = file.text_field :purpose, class: 'form-control'
-  .field-element
     = f.label :file_types_id, t('exercises.files.extension'), class:'form-label'
-    = file.select :file_type_id, FileType.all.collect {|a| [a.name, a.name]}, {}, {class: 'form-control', id: 'my-group2'}
+    = file.collection_select :file_type_id, FileType.all, :id, :name_with_extension, {}, {class: 'file-type'}
   .field-element
     = f.label :role, 'Role', class:'form-label'
     = file.select :role, ExerciseFile::ROLES, {}, class: 'form-control'

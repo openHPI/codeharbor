@@ -160,11 +160,6 @@ legend {
   width: 100%;
 }
 
-.input-group > label {
-  width: 28%;
-  text-align: center !important;
-}
-
 .form-description > .top-label {
   background-color: #eeeeee;
   border: #CCCCCC 1px solid;
@@ -212,4 +207,19 @@ input[type="radio"] {
 }
 input[type="radio"]:checked+label {
   background-color: #eeeeee;
+}
+
+.comment-box {
+  display: none;
+  width: 100%;
+  position: relative;
+}
+
+.write-comment {
+  padding: 20px;
+}
+
+.comment-body {
+  padding-left: 20px;
+  padding-right: 20px;
 }

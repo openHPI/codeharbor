@@ -86,6 +86,11 @@ class GroupsController < ApplicationController
     redirect_to groups_path
   end
 
+  def remove_exercise
+    exercise = Exercise.find(params[:exercise])
+    @group.exercises.delete(exercise)
+    redirect_to @group, notice: 'Exercise successfully removed'
+  end
   def grant_access
     user = User.find(params[:user])
     @group.grant_access(user)

@@ -20,6 +20,9 @@ Rails.application.routes.draw do
   end
   resources :groups do
     get :search, :on => :collection
+    member do
+      get :remove_exercise
+    end
   end
   get 'home/index'
 
@@ -73,6 +76,7 @@ Rails.application.routes.draw do
   resources :exercises do
     collection do
       get :add_label
+      post :create_comment
     end
     resources :comments do
       resources :answers
@@ -81,6 +85,7 @@ Rails.application.routes.draw do
     member do
       post :push_external
       get :contribute
+      get :load_comments
     end
   end
 

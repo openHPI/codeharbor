@@ -50,6 +50,15 @@
                 = link_to delete_from_group_path(group: @group, user: user), class: 'btn btn-default btn-xs' do
                   i.fa.fa-remove style=("color:#800000")
                   = ' ' + 'Deny Access'
+    tr
+      th = 'Exercises'
+      td
+        - @group.exercises.each do |exercise|
+          .table-list
+            .btn-group
+              = link_to exercise.title, exercise_path(exercise), class: 'btn btn-default', style: "border-right: none"
+              = link_to remove_exercise_group_path(exercise: exercise), class: 'btn btn-default', style: "border-left: none; margin-right: 5px;"  do
+                i.fa.fa-remove style=("color:gray;")
 
   br
   .actions.btn-group[role="group"]
