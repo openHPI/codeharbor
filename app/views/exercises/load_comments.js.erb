@@ -1,3 +1,0 @@
-id = <%= @exercise.id %>
-commentBox =  $(".comment-box[data-exercise=" + id +"] > .comment-body")
-$(commentBox).html("<%= escape_javascript(render :partial => 'exercises/exercise_comments', :object => @comments) %>");

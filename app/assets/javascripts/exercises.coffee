@@ -160,20 +160,30 @@ ready =->
 
   $('.comment-button').on 'click', ->
     exercise_id = this.getAttribute("data-exercise")
+    if exercise_id
+      url = window.location.pathname + '/' + exercise_id + "/comments"
+      comment_box = $(".comment-box[data-exercise=#{exercise_id}]")
+    else
+      url = window.location.pathname + "/comments"
+      comment_box = $(".comment-box")
     caret = $(this).children('.fa')
-    comment_box = $(".comment-box[data-exercise=#{exercise_id}]")
 
     if $(caret).hasClass('fa-caret-down')
       $(caret).removeClass('fa-caret-down').addClass('fa-caret-up')
-      $(comment_box).show()
       $.ajax({
         type: 'GET',
-        url: window.location.pathname + '/' + exercise_id + "/load_comments"
+        url: url
         dataType: 'script'
+        success: ->
+          $(comment_box).show()
+          anchor = document.getElementById('page_end')
+          if anchor
+            anchor.scrollIntoView(false)
       })
     else
       $(caret).removeClass('fa-caret-up').addClass('fa-caret-down')
       $(comment_box).hide()
+
 $(document).ready(ready)
 $(document).on('page:load', ready)
 # All non-GET requests will add the authenticity token

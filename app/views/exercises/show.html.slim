@@ -173,6 +173,9 @@ table.vertical-table
               = test.testing_framework.name
 
 .actions.btn-group[role="group"]
+  = button_tag type: 'button', class: 'btn btn-important comment-button' do
+    = t('exercises.all.comments') + ' '
+    span.fa.fa-caret-down
   = link_to 'Add to cart', add_to_cart_path(@exercise), class: 'btn btn-important'
   .dropup.btn-group
     = button_tag class: 'btn btn-important dropdown-toggle',  data: {toggle: 'dropdown'} do
@@ -208,3 +211,14 @@ table.vertical-table
       i.fa.fa-trash
       = ' ' + t('exercises.show.delete')
   = link_to t('exercises.show.back'), exercises_path,  class: 'btn btn-important'
+
+div class=("comment-box with-borders") data-exercise=@exercise.id
+  = form_for :comment, url: exercise_comments_path(@exercise), remote: true do |f|
+    .write-comment
+      .input-group
+        = f.label_tag 'new_comment_label', 'New Comment', class: 'input-group-addon'
+        = f.text_field :text, class: 'form-control'
+        span.input-group-btn
+          = f.submit class: 'btn btn-default'
+  .comment-body
+#page_end

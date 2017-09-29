@@ -138,29 +138,6 @@ class ExercisesController < ApplicationController
     @exercises = Exercise.all
   end
 
-  def create_comment
-    @comment = Comment.new
-    @comment.user = current_user
-    @comment.exercise_id = params[:exercise_id]
-    @comment.text = params[:text]
-
-    respond_to do |format|
-      if @comment.save
-        format.js {render :load_comments_exercises_url}
-      else
-        flash[:alert] = "An error ocurred while creating your comment."
-        format.js {render :nothing => true, :status => 200}
-      end
-    end
-  end
-
-  def load_comments
-    @comments = Comment.where(exercise: @exercise).order('created_at DESC')
-    respond_to do |format|
-      format.js
-    end
-  end
-
   def push_external
     account_link = AccountLink.find(params[:account_link])
     oauth2Client = OAuth2::Client.new('client_id', 'client_secret', :site => account_link.push_url)

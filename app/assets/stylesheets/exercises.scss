@@ -214,6 +214,11 @@ input[type="radio"]:checked+label {
   width: 100%;
   position: relative;
 }
+.with-borders {
+  margin-top: 10px;
+  border: 1px #dddddd solid;
+  border-radius: 4px;
+}
 
 .write-comment {
   padding: 20px;

@@ -10,6 +10,11 @@
 
   .comment-user {
     font-weight: bold;
+
+    .created-at {
+      font-weight: normal;
+      color: #7C7C7C;
+    }
   }
   .comment-text {
     margin-top: 8px;
@@ -17,3 +22,10 @@
   }
 }
 
+.refresh, .refresh:active, .refresh:hover, .refresh:link, .refresh:visited  {
+  text-decoration: none;
+  color: #444444;
+  margin-bottom: 10px;
+  display: block;
+  padding: 5px;
+}
