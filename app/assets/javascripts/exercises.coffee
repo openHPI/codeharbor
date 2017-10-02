@@ -20,9 +20,9 @@ loadSelect2 = ->
     tags: false
     width: '20%'
     multiple: false
-
-  $('.file_type').select2
-    tags: true
+    
+  $('.file-type').select2
+    tags: false
     width: '100%'
     multiple: false
 
@@ -149,6 +149,19 @@ ready =->
         alert("error:" + c);
     })
 
+  $('#xml-import').on 'click', (e) ->
+    e.stopPropagation()
+    return
+
+  $('#xml').on 'change', ->
+    fullPath = document.getElementById('xml').value
+    if fullPath
+      startIndex = if fullPath.indexOf('\\') >= 0 then fullPath.lastIndexOf('\\') else fullPath.lastIndexOf('/')
+      filename = fullPath.substring(startIndex)
+      if filename.indexOf('\\') == 0 or filename.indexOf('/') == 0
+        filename = filename.substring(1)
+      document.getElementById('xml-label').innerHTML = filename
+
   if document.getElementById('window')
     if document.getElementById('window').value == "true"
       console.log("show dropdown")
@@ -167,7 +180,6 @@ ready =->
       $("#advanced").css("border-bottom-right-radius", "0px")
       document.getElementById('window').value = true
       $('#drop').removeClass('fa-caret-down').addClass('fa-caret-up')
-
 
   if order = document.getElementById('order_param')
     $(document.getElementById(order.value)).addClass('active')

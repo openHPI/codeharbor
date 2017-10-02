@@ -1,6 +1,8 @@
+require 'zip'
+
 class CollectionsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_collection, only: [:show, :edit, :update, :destroy]
+  before_action :set_collection, only: [:show, :edit, :update, :destroy, :remove_exercise, :remove_all, :download_all]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized to for this action.'
@@ -33,7 +35,7 @@ class CollectionsController < ApplicationController
 
     respond_to do |format|
       if @collection.save
-        format.html { redirect_to collections_path, notice: 'Collection was successfully created.' }
+        format.html { redirect_to collections_path, notice: t('controllers.collections.created')}
         format.json { render :index, status: :created, location: @collection }
       else
         format.html { render :new }
@@ -47,7 +49,7 @@ class CollectionsController < ApplicationController
   def update
     respond_to do |format|
       if @collection.update(collection_params)
-        format.html { redirect_to collections_path, notice: 'Collection was successfully updated.' }
+        format.html { redirect_to collections_path, notice: t('controllers.collections.updated')}
         format.json { render :index, status: :ok, location: @collection }
       else
         format.html { render :edit }
@@ -57,21 +59,37 @@ class CollectionsController < ApplicationController
   end
 
   def remove_exercise
-    collection = Collection.find(params[:id])
-    if collection.remove_exercise(params[:exercise])
-      redirect_to collection, notice: 'Exercise was successfully removed.'
+    if @collection.remove_exercise(params[:exercise])
+      redirect_to @collection, notice: t('controllers.collections.remove_exercise_success')
     else
-      redirect_to collection, alert: 'You cannot remove this exercise.'
+      redirect_to @collection, alert: t('controllers.collections.remove_exercise_fail')
     end
   end
 
   def remove_all
-    collection = Collection.find(params[:id])
-    if collection.remove_all
-      redirect_to collection, notice: 'All Exercises were successfully removed'
+    if @collection.remove_all
+      redirect_to @collection, notice: t('controllers.collections.remove_all_success')
     else
-      redirect_to collection, alert: 'You cannot remove all exercises'
+      redirect_to @collection, alert: t('controllers.collections.remove_all_fail')
     end
+  end
+
+  def download_all
+    filename = "#{@collection.title}.zip"
+
+    #This is the tricky part
+    #Initialize the temp file as a zip file
+
+    stringio = Zip::OutputStream.write_buffer do |zio|
+      @collection.exercises.each do |exercise|
+        zio.put_next_entry("#{exercise.title}.xml")
+        zio.write exercise.to_proforma_xml
+      end
+    end
+    binary_data = stringio.string
+
+    send_data(binary_data, :type => 'application/zip', :filename => filename)
+
   end
 
   # DELETE /collections/1
@@ -79,7 +97,7 @@ class CollectionsController < ApplicationController
   def destroy
     @collection.destroy
     respond_to do |format|
-      format.html { redirect_to collections_url, notice: 'Collection was successfully destroyed.' }
+      format.html { redirect_to collections_url, notice: t('controllers.collections.destroyed')}
       format.json { head :no_content }
     end
   end

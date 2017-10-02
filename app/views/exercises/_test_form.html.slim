@@ -1,11 +1,16 @@
 div[style="margin-left: 10px;"]
   .field
-    = f.label :content, t('exercises.tests.content')
+    = f.label :name, t('exercises.files.name')
     br/
-    .edit
-      .editor
-        = test.text_area :content
-      = test.text_area :content, class:'hidden'
+    = test.text_field :name, class: 'form-control'
+  .field
+    = f.label :path, t('exercises.files.path')
+    br/
+    = test.text_field :path, size: 40, class: 'form-control'
+  .field
+    = f.label :file_type_id, t('exercises.files.extension')
+    br/
+    = test.collection_select :file_type_id, FileType.all, :id, :name_with_extension, {}, {class: 'file-type'}
   .field
     = f.label :feedback_message, t('exercises.tests.feedback')
     br/
@@ -14,3 +19,10 @@ div[style="margin-left: 10px;"]
     = f.label :testing_framework, t('exercises.tests.framework')
     br/
     = test.collection_select :testing_framework_id, TestingFramework.all, :id, :name, {}, {class: 'form-control'}
+  .field
+    = f.label :content, t('exercises.tests.content')
+    br/
+    .edit
+      .editor
+        = test.text_area :content
+      = test.text_area :content, class: 'hidden'

@@ -15,6 +15,8 @@ class Collection < ActiveRecord::Base
   end
 
   def remove_all
-    self.exercises.delete.all
+    self.exercises.each do |exercise|
+      self.exercises.delete(exercise)
+    end
   end
 end

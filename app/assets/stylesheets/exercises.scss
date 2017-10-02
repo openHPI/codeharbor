@@ -124,6 +124,29 @@ $exercise-color: #008000;
   cursor: pointer;
 }
 
+.inputfile {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: - 1;
+}
+
+#xml-import {
+  min-width: 180px;
+  width: auto;
+  padding: 5px 10px 5px 10px;
+}
+
+#import-button {
+  background-color: #d3d3d3;
+}
+
+#import-button:hover {
+  background-color: #d0d0d0;
+}
+
 .dropdown-content {
   display: none;
   width: 100%;
@@ -135,7 +158,6 @@ $exercise-color: #008000;
   border-bottom-left-radius: 4px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
-
 
 .section {
   float: left;

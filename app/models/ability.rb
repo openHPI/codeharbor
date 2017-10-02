@@ -27,7 +27,7 @@ class Ability
 
       #Exercise
       can [:create, :contribute], Exercise
-      can [:show, :read, :add_to_cart, :add_to_collection, :export, :duplicate], Exercise do |exercise|
+      can [:show, :read, :add_to_cart, :add_to_collection, :export, :duplicate, :download_exercise], Exercise do |exercise|
         exercise.can_access(user)
       end
       can [:manage, :edit], Exercise do |exercise|
