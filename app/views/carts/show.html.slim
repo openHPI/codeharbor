@@ -26,7 +26,7 @@ table.table
             = link_to remove_exercise_cart_path(@cart, exercise: exercise), class: 'btn btn-default btn-xs' do
               i.fa.fa-remove style=("color: #800000")
 br
-.actions.btn-group[role="group"]
+.btn-group[role="group"]
   = link_to t('carts.show.download_all'), download_all_cart_path(@cart), class: 'btn btn-important'
   = link_to remove_all_cart_path(@cart), class: 'btn btn-important' do
     i.fa.fa-trash style=("color: #800000")

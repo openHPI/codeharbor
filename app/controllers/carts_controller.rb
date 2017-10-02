@@ -99,9 +99,6 @@ class CartsController < ApplicationController
     binary_data = stringio.string
 
     send_data(binary_data, :type => 'application/zip', :filename => filename)
-  end
-
-  def download_all
 
   end
 

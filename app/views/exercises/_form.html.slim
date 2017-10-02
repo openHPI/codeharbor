@@ -64,10 +64,11 @@
             = label_tag 'exercise_private_true', t('exercises.visibility.private'), class: 'radio-right'
         .field-element#group-field
           = f.label :groups, 'Groups', class: 'form-label'
-          = f.select :groups, Group.all.collect{|g| [g.name, g.id]}, {}, {class: "my-group form-control", multiple: "multiple", style: "width: 300px;"}
+          = f.select :groups, options_for_select(Group.all.collect{ |g| [g.name, g.id] }, @exercise.groups.pluck(:id)), {}, {class: "my-group form-control", multiple: "multiple", style: "width: 300px;"}
         .field-element
           = f.label :labels, 'Labels', class: 'form-label'
-          = f.select :labels, Label.all.collect{|l| [l.name, l.name]}, {}, {class: "my-tag form-control", multiple: "multiple", style: "width: 300px;"}
+          = f.select :labels, options_for_select(Label.all.collect{ |l| [l.name, l.name] }, @exercise.labels.pluck(:name)), {}, {class: "my-tag form-control", multiple: "multiple", style: "width: 300px;"}
+
     fieldset.form-group
       legend
         span.number = '3'
