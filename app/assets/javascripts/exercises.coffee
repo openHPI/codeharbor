@@ -20,7 +20,6 @@ loadSelect2 = ->
     tags: false
     width: '20%'
     multiple: false
-
   $('.file-type').select2
     tags: false
     width: '100%'

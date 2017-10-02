@@ -383,7 +383,8 @@ class Exercise < ActiveRecord::Base
     return I18n.t('models.exercise.role.regular')
   end
 
-  def build_proforma_xml_for_exercise_file(builder, exercise_file)
+
+  def build_proforma_xml_for_exercise_file(xml, exercise_file)
     if exercise_file.role == 'Main File'
       proforma_file_class = 'template'
       comment = 'main'
@@ -392,7 +393,7 @@ class Exercise < ActiveRecord::Base
       comment = ''
     end
 
-    builder['p'].file(exercise_file.content,
+    xml['p'].file(exercise_file.content,
       'filename' => exercise_file.full_file_name,
       'id' => exercise_file.id,
       'class' => proforma_file_class,
@@ -417,8 +418,9 @@ class Exercise < ActiveRecord::Base
 
 
 
-  def build_proforma_xml_for_model_solution(builder, model_solution_file, index)
-    proforma = builder['p']
+
+  def build_proforma_xml_for_model_solution(xml, model_solution_file, index)
+    proforma = xml['p']
     proforma.send('model-solution', 'id' => 'm' + index.to_s) {
       proforma.filerefs {
         proforma.fileref('refid' => model_solution_file.id.to_s)
