@@ -11,7 +11,7 @@
       .comment-user
         = comment.user.name
         .pull-right.created-at
-          = 'Created at: ' + comment.created_at.to_s
+          = 'Created at: ' + comment.created
       .comment-text data-exercise=@exercise.id data-comment=comment.id
         = comment.text
         .actions.btn-group.pull-right role="group"
