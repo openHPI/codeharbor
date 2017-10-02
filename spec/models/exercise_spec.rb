@@ -101,7 +101,7 @@ RSpec.describe Exercise, type: :model do
       it 'has attribute filename on <p:file>-tag with name and extension' do
         file_names = xml.xpath('p:files/p:file/@filename')
         expect(file_names.size).to be 1
-        expect(file_names.first.value).to eq 'Main'
+        expect(file_names.first.value).to eq 'Main.java'
       end
 
       it 'has attribute class="template" on <p:file>-tag because it is the main file' do
@@ -240,7 +240,7 @@ RSpec.describe Exercise, type: :model do
           expect(refids.size()).to be 1
           filenames = xml.xpath("p:files/p:file[@id=#{refids.first.value}]/@filename")
           expect(filenames.size()).to be 1
-          expect(filenames.first.value).to eq "ModelSolutionFile"
+          expect(filenames.first.value).to eq "ModelSolutionFile.java"
         end
 
       end
@@ -252,7 +252,8 @@ RSpec.describe Exercise, type: :model do
   describe 'test creation' do
     context 'and adding description, tasks and tests' do
       let(:exercise){FactoryGirl.create(:only_meta_data)}
-      
+      let(:file_type){FactoryGirl.create(:file_type)}
+
       it 'does not add anything new' do
         params = {:tests_attributes => nil, :exercise_files_attributes => nil, :descriptions_attributes => nil}
         exercise.add_attributes(params)
@@ -265,20 +266,24 @@ RSpec.describe Exercise, type: :model do
       end
       
       it 'adds stuff' do
+
         params = ActionController::Parameters.new({
           :tests_attributes => 
-            {"0" => {:content =>'this is some test', :feedback_message => 'not_working', :_destroy => false, :testing_framework => {:name => 'pytest', :id => '12345678'}}},
+            {"0" => {name: 'test', file_type_id: file_type.id , :content =>'this is some test', :feedback_message => 'not_working', :_destroy => false, :testing_framework => {:name => 'pytest', :id => '12345678'}}},
           :exercise_files_attributes =>
-            {"0" => {:main => 'false', :content => 'some new exercise', :path => 'some/path/', :purpose => 'a new purpose', 
-              :name => 'awesome', :file_extension => '.py', :_destroy => false}},
+            {"0" => {:role => 'Main File', :content => 'some new exercise', :path => 'some/path/', :purpose => 'a new purpose',
+              :name => 'awesome', :file_type_id => file_type.id, :_destroy => false}},
           :descriptions_attributes =>
             {"0" => {:text => 'a new description', :language => 'de', :_destroy => false}}})
         exercise.add_attributes(params)
+        exercise.save
         tests = Test.where(exercise_id: exercise.id)
+        test = tests[0]
         files = ExerciseFile.where(exercise_id: exercise.id)
         descriptions = Description.where(exercise_id: exercise.id)
         expect(tests.size()).to be 1
-        expect(files.size()).to be 2 #Actual File and test file
+        expect(files.size()).to be 1 #Only actual file
+        expect(test.exercise_file).to be_truthy
         expect(descriptions.size()).to be 2
       end
     end

@@ -23,7 +23,7 @@ FactoryGirl.define do
     content "public class ModelSolutionFile { public static void main String[] args) { } }"
     name 'ModelSolutionFile'
     path ''
-    solution true
+    role 'Reference Implementation'
     file_type {FactoryGirl.create(:file_type)}
     visibility false
   end

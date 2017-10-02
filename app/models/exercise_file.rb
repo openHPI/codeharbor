@@ -6,7 +6,10 @@ class ExerciseFile < ActiveRecord::Base
   accepts_nested_attributes_for :tests
 
   def full_file_name
-    "#{self.path}/#{self.name}#{self.file_type.file_extension}"
+    filename = ''
+    filename += "#{self.path}/" unless self.path.blank?
+    filename += "#{self.name}#{self.file_type.file_extension}"
+    return filename
   end
 
   ROLES = [
