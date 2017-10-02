@@ -22,53 +22,84 @@ class Exercise < ActiveRecord::Base
 
   attr_reader :tag_tokens
   accepts_nested_attributes_for :descriptions, allow_destroy: true
+  accepts_nested_attributes_for :exercise_files, allow_destroy: true
+  accepts_nested_attributes_for :tests, allow_destroy: true
 
-  def self.search(search, option, user)
+  scope :timespan, -> (days) {(days != 0) ? where('DATE(created_at) >= ?', Date.today-days) : where(nil)}
+  scope :title_like, -> (title) {(!title.blank?) ? where('lower(title) ilike ?',"%#{title.downcase}%") : where(nil)}
+  scope :mine, -> (user) {where('user_id = ? OR (id in (select exercise_id from exercise_authors where user_id = ?))', user.id, user.id)}
+  scope :languages, -> (languages) {(!languages.blank?) ? where('(select count(language) from descriptions where exercises.id = descriptions.exercise_id AND descriptions.language in (?)) = ? ', languages, languages.length) : where(nil)}
+  scope :proglanguage, -> (prog) {(!prog.blank?) ? where('execution_environment_id IN (?)', prog) : where(nil)}
 
-    if option == 'private'
-      if search
-        results = where('lower(title) ilike ? AND private = ?', "%#{search.downcase}%", true)
-        label = Label.find_by('lower(name) = ?', search.downcase)
-
-        if label
-          collection = Label.find_by('lower(name) = ? AND private = ?', search.downcase, true).exercises
-          results.each do |r|
-            collection << r unless collection.find_by(id: r.id)
-          end
-          return collection
-        end
-        return results
+  def self.rating(stars)
+    if !stars.blank?
+      if stars != '0'
+        where('avg_rating >= ?', stars)
       else
-        return where(private: true)
+        where('avg_rating >= ? OR avg_rating IS NULL', stars)
       end
-
-    elsif option == 'public'
-      if search
-        results = where('lower(title) ILIKE ? AND private = ?', "%#{search.downcase}%", false)
-        label = Label.find_by('lower(name) = ?', search.downcase)
-
-        if label
-          collection = Label.find_by('lower(name) = ? AND private = ?', search.downcase, false).exercises
-          results.each do |r|
-            collection << r unless collection.find_by(id: r.id)
-          end
-          return collection
-        end
-        return results
-      else
-        return where(private: false)
-      end
-
     else
-      results = where(user:user)
-      authors = find(ExerciseAuthor.where(user: user).collect(&:exercise_id))
-      authors.each do |author|
-        results << author
+      where('avg_rating IS NULL')
+    end
+  end
+
+  def self.search(search, settings, option, user)
+
+    priv = false
+    priv = true if option == 'private'
+    stars = '0'
+    intervall = 0
+
+    if settings
+      stars = settings[:stars]
+      intervall = settings[:created].to_i
+      if settings[:language]
+        languages = settings[:language]
+        languages.delete_at(0) if languages[0].blank?
       end
-      return results
+      if settings[:proglanguage]
+        proglanguages = settings[:proglanguage]
+        proglanguages.delete_at(0) if proglanguages[0].blank?
+        proglanguages = proglanguages.collect{|x| ExecutionEnvironment.find_by(language: x).id}
+      end
     end
 
+    if option == 'private' || option == 'public'
+      if search
+        results = joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS avg_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).where(private: priv).title_like(search).timespan(intervall)
+        label = Label.find_by('lower(name) = ?', search.downcase)
 
+        if label
+          collection = Label.find_by('lower(name) = ?', search.downcase).exercises.joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS avg_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).where(private: priv).timespan(intervall)
+
+          results.each do |r|
+            collection << r unless collection.find_by(id: r.id)
+          end
+          return collection
+        end
+        return results
+      else
+        return joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS avg_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).where(private: priv).timespan(intervall)
+      end
+    else
+      if search
+        results = joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS avg_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).mine(user).title_like(search).timespan(intervall)
+        label = Label.find_by('lower(name) = ?', search.downcase)
+
+        if label
+          collection = Label.find_by('lower(name) = ?', search.downcase).exercises.joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS avg_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).mine(user).timespan(intervall)
+
+          results.each do |r|
+            collection << r unless collection.find_by(id: r.id)
+          end
+          return collection
+        end
+
+        return results
+      else
+        return joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS avg_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).mine(user).timespan(intervall)
+      end
+    end
   end
   
   def can_access(user)
@@ -90,10 +121,10 @@ class Exercise < ActiveRecord::Base
 
   def avg_rating
     if ratings.empty?
-      return 0.0
+      0.0
     else
-      result = 1.0 * ratings.map(&:rating).inject(:+) / ratings.size
-      return result.round(1)
+      result = 1.0 * ratings.average(:rating)
+      result.round(1)
     end
   end
 
@@ -102,24 +133,54 @@ class Exercise < ActiveRecord::Base
   end
 
   def add_attributes(params)
+    if params[:exercise_relation]
+      add_relation(params[:exercise_relation])
+    end
     add_labels(params[:labels])
+    add_groups(params[:groups])
     add_tests(params[:tests_attributes])
     add_files(params[:exercise_files_attributes])
     add_descriptions(params[:descriptions_attributes])
+  end
+
+  def add_relation(relation_array)
+    relation = ExerciseRelation.find_by(clone: self)
+    if !relation
+      ExerciseRelation.create(origin_id: relation_array[:origin_id], relation_id: relation_array[:relation_id], clone: self)
+    else
+      relation.update(origin_id: relation_array[:origin_id], relation_id: relation_array[:relation_id], clone: self)
+    end
   end
 
   def add_labels(labels_array)
 
     if labels_array
       labels_array.delete_at(0)
+      labels.clear
     end
+
     labels_array.try(:each) do |array|
+
       label = Label.find_by(name: array)
       if label
         labels << label
       else
         labels.new(name: array, color: '006600', label_category: nil)
       end
+
+    end
+  end
+
+  def add_groups(groups_array)
+
+    if groups_array
+      groups_array.delete_at(0)
+      groups.clear
+    end
+
+    groups_array.try(:each) do |array|
+      group = Group.find(array)
+      groups << group
 
     end
   end

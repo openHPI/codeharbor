@@ -10,6 +10,7 @@ div[style="margin-left: 10px;"]
   .field
     = f.label :file_type_id, t('exercises.files.extension')
     br/
+    
     = file.collection_select :file_type_id, FileType.all, :id, :name_with_extension, {}, {class: 'file-type'}
   .field
     = f.label :role, 'Role'

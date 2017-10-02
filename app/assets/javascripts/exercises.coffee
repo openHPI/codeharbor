@@ -2,30 +2,25 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-$star_rating = $('.star-rating .fa')
+validateForm = (e) ->
+  title = document.getElementById('exercise_title')
+  if title.value == ''
+    if $('#error').length
 
-SetRatingStar = ->
-  $star_rating.each ->
-    if parseInt($star_rating.siblings('input.rating-value').val()) >= parseInt($(this).data('rating'))
-      console.log 'rating1'
-      $(this).removeClass('fa-star-o').addClass('fa-star')
     else
-      console.log 'rating2'
-      $(this).removeClass('fa-star').addClass('fa-star-o')
+      title.style.borderColor = "red"
+      $("<p id='error' style='color: red'>Title can't be blank</p>").insertAfter(title)
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
+    e.preventDefault()
+    false
 
-$star_rating.on 'click', ->
-  $star_rating.siblings('input.rating-value').val $(this).data('rating')
-  SetRatingStar()
-
-SetRatingStar()
 
 loadSelect2 = ->
-
   $('#select2-control').select2
     tags: false
     width: '20%'
     multiple: false
-
+    
   $('.file-type').select2
     tags: false
     width: '100%'
@@ -35,6 +30,12 @@ loadSelect2 = ->
     tags: true
     width: '100%'
     multiple: false
+
+  $('.language-box').select2
+    width: '100%'
+    multiple: true
+    innerHeight: 0.5
+    placeholder: "All Languages"
 
   $('.my-group').select2
     width: '100%'
@@ -161,29 +162,39 @@ ready =->
         filename = filename.substring(1)
       document.getElementById('xml-label').innerHTML = filename
 
-  #$('#import-button').on 'click', ->
-   # file_data = $('#xml').prop('files')[0]
-    # Getting the properties of file from file field
-   # form_data = new FormData
-    # Creating object of FormData class
-   # form_data.append 'file', file_data
-    # Appending parameter named file with properties of file_field to form_data
-    # form_data.append 'user_id', 123
-    # Adding extra parameters to form_data
-   # $.ajax
-    #  url: window.location.pathname + '/import_exercise'
-     # dataType: 'script'
-     # cache: false
-     # contentType: false
-     # processData: false
-     # data: form_data
-     # type: 'post'
-   # return
+  if document.getElementById('window')
+    if document.getElementById('window').value == "true"
+      console.log("show dropdown")
+      $('.dropdown-content').show()
+
+  $('#advanced').click ->
+    $('.dropdown-content').toggle()
+    search = $('#search')
+    if document.getElementById('window').value == "true"
+      $(search).css("border-bottom-left-radius", "4px")
+      $("#advanced").css("border-bottom-right-radius", "4px")
+      document.getElementById('window').value = false
+      $('#drop').removeClass('fa-caret-up').addClass('fa-caret-down')
+    else
+      $(search).css("border-bottom-left-radius","0px")
+      $("#advanced").css("border-bottom-right-radius", "0px")
+      document.getElementById('window').value = true
+      $('#drop').removeClass('fa-caret-down').addClass('fa-caret-up')
+
+  if order = document.getElementById('order_param')
+    $(document.getElementById(order.value)).addClass('active')
+
+  $('#order_rating').click ->
+    $('#order_rating').addClass('active')
+    $('#order_created').removeClass('active')
+    document.getElementById('order_param').value = 'order_rating'
+
+  $('#order_created').click ->
+    $('#order_created').addClass('active')
+    $('#order_rating').removeClass('active')
+    document.getElementById('order_param').value = 'order_created'
+
+  $('.exercise-validation').on('submit', validateForm)
 
 $(document).ready(ready)
 $(document).on('page:load', ready)
-
-jQuery(document).ready ->
-# All non-GET requests will add the authenticity token
-# if not already present in the data packet
-

@@ -27,6 +27,42 @@
       = text_field_tag :search, params[:search], class: 'form-control', type: 'text', placeholder: t('exercises.all.placeholder')
       span.input-group-btn
         = submit_tag t('exercises.all.search'), type: 'submit', name: nil, class: 'btn btn-default'
+        = button_tag type: 'button', id: 'advanced', class: 'btn btn-default' do
+          small
+            = t('exercises.search.advanced') + ' '
+          span.fa.fa-caret-down#drop style="color:#333333"
+    .dropdown-content
+      = hidden_field_tag 'window', @dropdown
+      = fields_for 'settings' do |advanced|
+        .order.section
+          p
+            b = t('exercises.search.order')
+          .btn-group[role="group"]
+            = advanced.hidden_field_tag 'order_param', @order
+            = button_tag t('exercises.search.rating'), type: 'button', id: 'order_rating', class: 'btn btn-default'
+            = button_tag t('exercises.search.created_at'), type: 'button', id: 'order_created', class: 'btn btn-default'
+        .stars.section
+          p
+            b = t('exercises.search.stars')
+          div.form-group
+            = advanced.select 'stars', options_for_select({t('exercises.search.all_stars') => "0", "5" => "5", "4+" => "4", "3+" => "3", "2+" => "2", t('exercises.search.unrated_only') => ""}, selected: @stars), {}, class: 'form-control'
+        .proglanguages.section
+          p
+            b = t('exercises.search.proglanguages')
+          span.form-group
+            = advanced.select 'proglanguage', options_for_select(ExecutionEnvironment.all.collect{|l| [l.language, l.language]}, selected: @proglanguages), {}, {multiple: true, class: 'form-control language-box'}
+
+        .languages.section
+          p
+            b = t('exercises.search.languages')
+          = advanced.select 'language', options_for_select(Description::LANGUAGES, @languages), {}, {multiple: true, class: 'form-control language-box'}
+        .other.section
+          p
+            b = t('exercises.search.created')
+          span.form-group
+            = advanced.select 'created', options_for_select({t('exercises.search.all_time') => "0", t('exercises.search.today') => "1", t('exercises.search.last_week') => "7", t('exercises.search.last_month') => "30"}, selected: @created), {}, class: 'form-control'
+      .clear style=("clear: both")
+
     br/
   = render 'home/exercises'
 
