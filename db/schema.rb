@@ -161,6 +161,7 @@ ActiveRecord::Schema.define(version: 20170915124400) do
     t.datetime "updated_at",               null: false
     t.integer  "user_id"
     t.integer  "execution_environment_id"
+    t.float    "avg_rating"
   end
 
   add_index "exercises", ["execution_environment_id"], name: "index_exercises_on_execution_environment_id", using: :btree

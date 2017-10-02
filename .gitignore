@@ -53,3 +53,4 @@ coverage
 /config/application.yml
 database.production.yml
 config/action_mailer.production.yml
+config/database.yml

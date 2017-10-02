@@ -1,15 +1,27 @@
 - if @exercises.empty?
-  .panel.panel-default style=("margin-top: 40px")
-    .panel-body
-      .col-md-10
-        h3 style=("color: #777777")
-          = 'You do not have exercises yet'
-        br
-        p style=("color: #777777")
-          = 'Search exercises buy clicking on private or public or add your own exercise.'
-        br
-        br
-- @exercises.each_with_index do |exercise|
+  - if current_user.exercises.empty? && (@option == 'mine')
+    .panel.panel-default style=("margin-top: 40px")
+      .panel-body
+        .col-md-10
+          h3 style=("color: #777777")
+            = t('exercises.search.no_exercises')
+          br
+          p style=("color: #777777")
+            = t('exercises.search.no_exercises_description')
+          br
+          br
+  - else
+    .panel.panel-default style=("margin-top: 40px")
+      .panel-body
+        .col-md-10
+          h3 style=("color: #777777")
+            = t('exercises.search.no_results')
+          br
+          p style=("color: #777777")
+            = t('exercises.search.no_results_description')
+          br
+          br
+- @exercises.each do |exercise|
   .panel.panel-default style=("margin-top: 20px")
     .panel-heading
       h3.panel-title
@@ -61,4 +73,3 @@
               = f.submit class: 'btn btn-default'
       .comment-body
 = will_paginate @exercises
-
