@@ -20,6 +20,50 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+
+  controllers:
+    carts:
+      created: 'Cart was successfully created.'
+      updated: 'Cart was successfully updated.'
+      destroyed: 'Cart was successfully destroyed.'
+      remove_exercise_success: 'Exercise was successfully removed.'
+      remove_exercise_fail: "You cannot remove this exercise."
+      remove_all_success: 'All Exercises were successfully removed'
+      remove_all_fail: 'You cannot remove all exercises'
+      zip: 'cart_exercises.zip'
+
+    collections:
+      created: 'Collection was successfully created.'
+      updated: 'Collection was successfully updated.'
+      destroyed: 'Collection was successfully destroyed.'
+      remove_exercise_success: 'Exercise was successfully removed.'
+      remove_exercise_fail: "You cannot remove this exercise."
+      remove_all_success: 'All Exercises were successfully removed'
+      remove_all_fail: 'You cannot remove all exercises'
+
+    exercise:
+      created: 'Exercise was successfully created.'
+      updated: 'Exercise was successfully updated.'
+      destroyed: 'Exercise was successfully destroyed.'
+      add_to_cart_success: 'Exercise was successfully added to your cart.'
+      add_to_cart_fail: "Exercise already is in your cart."
+      add_to_collection_success: 'Exercise was successfully added to collection.'
+      add_to_collection_fail: "Exercise already is in collection."
+      download_error: "An error occurred. Please contact an admin!"
+      xml_not_valid: "Your xml file is not valid"
+      import_success: 'Exercise was successfully imported.'
+      import_fail: "Cannot import your xml file"
+      contribute: "%{user} wants to contribute to your Exercise %{exercise}."
+      contribute_notice: "Your access request has been sent."
+
+  models:
+    exercise:
+      role:
+        test: 'Test'
+        reference: 'Reference Implementation'
+        main: 'Main File'
+        regular: 'Regular File'
+
   error: "error "
   sure: "Are you sure?"
 
@@ -77,7 +121,8 @@ en:
       button: "Edit"
       header: "Editing Cart"
     show:
-
+      download_all: "Download All"
+      remove_all: "Remove All"
     form:
       delete: "Delete"
     errorMessage: "prohibited this cart from being saved:"
@@ -101,6 +146,8 @@ en:
       header: "New Collection"
     show:
       header: "Collection:"
+      download_all: "Download All"
+      remove_all: "Remove All"
     errorMessage: "prohibited this collection from being saved:"
     noExercisesAdded: "No Exercises Added"
 

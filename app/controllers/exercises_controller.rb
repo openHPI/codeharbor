@@ -85,7 +85,7 @@ class ExercisesController < ApplicationController
     respond_to do |format|
       if @exercise.save
         @exercise.add_attributes(params[:exercise])
-        format.html { redirect_to @exercise, notice: 'Exercise was successfully created.' }
+        format.html { redirect_to @exercise, notice: t('controllers.exercise.created') }
         format.json { render :show, status: :created, location: @exercise }
       else
         if !params[:exercise][:exercise_relation] #Exercise Relation is set if form is for duplicate exercise, otherwise it's not.
@@ -105,7 +105,7 @@ class ExercisesController < ApplicationController
     respond_to do |format|
       if @exercise.update(exercise_params)
         @exercise.add_attributes(params[:exercise])
-        format.html { redirect_to @exercise, notice: 'Exercise was successfully updated.' }
+        format.html { redirect_to @exercise, notice: t('controllers.exercise.updated')  }
         format.json { render :show, status: :ok, location: @exercise }
       else
         format.html { render :edit }
@@ -119,7 +119,7 @@ class ExercisesController < ApplicationController
   def destroy
     @exercise.destroy
     respond_to do |format|
-      format.html { redirect_to exercises_url, notice: 'Exercise was successfully destroyed.' }
+      format.html { redirect_to exercises_url, notice: t('controllers.exercise.destroyed') }
       format.json { head :no_content }
     end
   end
@@ -127,18 +127,18 @@ class ExercisesController < ApplicationController
   def add_to_cart
     cart = Cart.find_by(user: current_user)
     if cart.add_exercise(@exercise)
-      redirect_to @exercise, notice: 'Exercise was successfully added to your cart.'
+      redirect_to @exercise, notice: t('controllers.exercise.add_to_cart_success')
     else
-      redirect_to @exercise, alert: 'Exercise already in your cart.'
+      redirect_to @exercise, alert: t('controllers.exercise.add_to_cart_fail')
     end
   end
 
   def add_to_collection
     collection = Collection.find(params[:collection])
     if collection.add_exercise(@exercise)
-      redirect_to @exercise, notice: 'Exercise added to collection.'
+      redirect_to @exercise, notice: t('controllers.exercise.add_to_collection_success')
     else
-      redirect_to @exercise, alert: 'Exercise already in collection.'
+      redirect_to @exercise, alert: t('controllers.exercise.add_to_collection_fail')
     end
   end
 
@@ -168,7 +168,7 @@ class ExercisesController < ApplicationController
       errors.each do |error|
         puts error.message
       end
-      redirect_to @exercise, alert: ('An error occurred. Please contact an admin!')
+      redirect_to @exercise, alert: t('controllers.exercise.download_error')
     else
       send_data doc, filename: "#{@exercise.title}.xml", type: "application/xml"
     end
@@ -185,7 +185,7 @@ class ExercisesController < ApplicationController
       errors.each do |error|
         puts error.message
       end
-      flash[:alert] = "Your xml file is not valid"
+      flash[:alert] = t('controllers.exercise.xml_not_valid')
       render :nothing => true, :status => 200
     else
       @exercise = Exercise.new
@@ -193,10 +193,10 @@ class ExercisesController < ApplicationController
       @exercise.import_xml(doc)
 
       if @exercise.save
-        flash[:notice] = 'Exercise successfully imported!'
+        flash[:notice] = t('controllers.exercise.import_success')
         redirect_to edit_exercise_path(@exercise.id)
       else
-        flash[:alert] = "Cannot import your xml file"
+        flash[:alert] = t('controllers.exercise.import_fail')
         redirect_to exercises_path
       end
     end
@@ -205,9 +205,9 @@ class ExercisesController < ApplicationController
   def contribute
     author = @exercise.user
     AccessRequest.send_contribution_request(author, @exercise, current_user).deliver_later
-    text = "#{current_user.name} wants to contribute to your Exercise #{@exercise.title}."
+    text = t('controllers.exercise.contribute', user: current_user.name, exercise: @exercise.title)
     Message.create(sender: current_user, recipient: author, param_type: 'exercise', param_id: @exercise.id, text: text)
-      redirect_to exercises_path, notice: "Your request has been sent."
+      redirect_to exercises_path, notice: t('controllers.exercise.contribute_notice')
   end
 
   private

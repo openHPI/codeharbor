@@ -373,14 +373,14 @@ class Exercise < ActiveRecord::Base
     is_referenced_by_test = xml.xpath("//p:test/p:test-configuration/p:filerefs/p:fileref[@refid='#{file_id}']")
     is_referenced_by_model_solution = xml.xpath("//p:model-solution/p:filerefs/p:fileref[@refid='#{file_id}']")
     if !is_referenced_by_test.empty? && (file_class == 'internal')
-      return 'Test'
+      return I18n.t('models.exercise.role.test')
     elsif !is_referenced_by_model_solution.empty? && (file_class == 'internal')
-      return 'Reference Implementation'
+      return I18n.t('models.exercise.role.reference')
     elsif (file_class == 'template') && (comment == 'main')
-      return 'Main File'
+      return I18n.t('models.exercise.role.main')
     elsif (file_class == 'internal') && (comment == 'main')
     end
-    return 'Regular File'
+    return I18n.t('models.exercise.role.regular')
   end
 
   def build_proforma_xml_for_exercise_file(builder, exercise_file)
@@ -400,16 +400,17 @@ class Exercise < ActiveRecord::Base
     )
   end
 
-  def build_proforma_xml_for_test(builder, test, index)
-    builder['p'].test('id' => 't' + index.to_s) {
-      builder['p'].title('')
-      builder['p'].send('test-type', 'unittest')
-      builder['p'].send('test-configuration') {
-        builder['p'].filerefs {
-          builder['p'].fileref('refid' => test.exercise_file.id.to_s)
+  def build_proforma_xml_for_test(xml, test, index)
+    proforma = xml['p']
+    proforma.test('id' => 't' + index.to_s) {
+      proforma.title('')
+      proforma.send('test-type', 'unittest')
+      proforma.send('test-configuration') {
+        proforma.filerefs {
+          proforma.fileref('refid' => test.exercise_file.id.to_s)
         }
-        builder['u'].unittest('framework' => test.testing_framework.name, 'version' => '')
-        builder['c'].send('feedback-message', test.feedback_message)
+        xml['u'].unittest('framework' => test.testing_framework.name, 'version' => '')
+        xml['c'].send('feedback-message', test.feedback_message)
       }
     }
   end
@@ -417,15 +418,17 @@ class Exercise < ActiveRecord::Base
 
 
   def build_proforma_xml_for_model_solution(builder, model_solution_file, index)
-    builder['p'].send('model-solution', 'id' => 'm' + index.to_s) {
-      builder['p'].filerefs {
-        builder['p'].fileref('refid' => model_solution_file.id.to_s)
+    proforma = builder['p']
+    proforma.send('model-solution', 'id' => 'm' + index.to_s) {
+      proforma.filerefs {
+        proforma.fileref('refid' => model_solution_file.id.to_s)
       }
     }
   end
 
   def to_proforma_xml
     builder = Nokogiri::XML::Builder.new do |xml|
+      proforma = xml['p']
       description = descriptions.first
       if description
         language = description.language
@@ -434,16 +437,16 @@ class Exercise < ActiveRecord::Base
         language = ''
         text = ''
       end
-      xml['p'].task('xmlns:p' => 'urn:proforma:task:v1.1', 'lang' => language, 'uuid' => SecureRandom.uuid,
+      proforma.task('xmlns:p' => 'urn:proforma:task:v1.1', 'lang' => language, 'uuid' => SecureRandom.uuid,
                     'xmlns:u' => 'urn:proforma:tests:unittest:v1.1', 'xmlns:c' => 'codeharbor'){
-        xml['p'].description(text)
-        xml['p'].proglang(self.execution_environment.language, 'version' => self.execution_environment.version)
-        xml['p'].send('submission-restrictions') {
-          xml['p'].send('files-restriction') {
-            xml['p'].send('optional', 'filename' => '')
+        proforma.description(text)
+        proforma.proglang(self.execution_environment.language, 'version' => self.execution_environment.version)
+        proforma.send('submission-restrictions') {
+          proforma.send('files-restriction') {
+            proforma.send('optional', 'filename' => '')
           }
         }
-        xml['p'].files {
+        proforma.files {
 
           self.exercise_files.all? { |file|
             build_proforma_xml_for_exercise_file(xml, file)
@@ -454,34 +457,34 @@ class Exercise < ActiveRecord::Base
 
           ### Set Placeholder file for placeholder solution-file and tests if there aren't any
           if self.model_solution_files.blank?
-            xml['p'].file('', 'id' => '0', 'class' => 'internal')
+            proforma.file('', 'id' => '0', 'class' => 'internal')
           end
         }
 
-        xml['p'].send('model-solutions') {
+        proforma.send('model-solutions') {
 
           if self.model_solution_files.any?
             self.model_solution_files.each_with_index { |model_solution_file, index|
               build_proforma_xml_for_model_solution(xml, model_solution_file, index)
             }
           else ##Placeholder solution_file if there aren't any
-            xml['p'].send('model-solution', 'id' => 'm0') {
-              xml['p'].filerefs {
-                xml['p'].fileref('refid' => '0')
+            proforma.send('model-solution', 'id' => 'm0') {
+              proforma.filerefs {
+                proforma.fileref('refid' => '0')
               }
             }
           end
         }
 
-        xml['p'].tests {
+        proforma.tests {
           self.tests.each_with_index { |test, index|
-            build_proforma_xml_for_test(xml, test, index)
+            build_proforma_xml_for_test(proforma, test, index)
           }
         }
         #xml['p'].send('grading-hints', 'max-rating' => self.maxrating.to_s)
 
-        xml['p'].send('meta-data') {
-          xml['p'].title(self.title)
+        proforma.send('meta-data') {
+          proforma.title(self.title)
         }
       }
     end
