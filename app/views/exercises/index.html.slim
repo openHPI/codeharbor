@@ -9,9 +9,18 @@
         = button_tag 'Public', type: 'button', class: 'btn btn-main change-hidden-field', id: 'public'
     .col-md-3
       - if can? :create, Exercise
-        = link_to new_exercise_path, class: 'btn btn-main pull-right nav-btn-exercise' do
-          i.fa.fa-plus style=("color: #006600")
-          = ' ' + t('exercises.all.new')
+        .btn-group.pull-right
+          = link_to new_exercise_path, class: 'btn btn-main nav-btn-exercise' do
+            i.fa.fa-plus style=("color: #008000")
+            = ' ' + t('exercises.all.new')
+          = button_tag type: 'button', data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}, class: 'btn btn-main nav-btn-exercise dropdown-toggle dropdown-toggle split' do
+            span.caret
+          .dropdown-menu#xml-import
+              = file_field_tag 'xml', form: 'create-xml', accept: '.xml', class: 'inputfile'
+              .btn-group style="display:inline-flex"
+                = label_tag 'xml', 'choose file', form: 'create-xml', id: 'xml-label', class: 'btn btn-default'
+                = submit_tag 'Import', form: 'create-xml', id: 'import-button', class: 'btn btn-default'
+
   br
   .search-container
     .input-group
@@ -36,7 +45,7 @@
           p
             b = t('exercises.search.stars')
           div.form-group
-            = advanced.select 'stars', options_for_select({t('exercises.search.all_stars') => "", "5" => "5", "4+" => "4", "3+" => "3", "2+" => "2", t('exercises.search.unrated_only') => "0"}, selected: @stars), {}, class: 'form-control'
+            = advanced.select 'stars', options_for_select({t('exercises.search.all_stars') => "0", "5" => "5", "4+" => "4", "3+" => "3", "2+" => "2", t('exercises.search.unrated_only') => ""}, selected: @stars), {}, class: 'form-control'
         .proglanguages.section
           p
             b = t('exercises.search.proglanguages')
@@ -55,6 +64,6 @@
       .clear style=("clear: both")
 
     br/
-
 = render 'exercises'
 
+= form_tag import_exercise_exercises_path, id: 'create-xml', multipart: true

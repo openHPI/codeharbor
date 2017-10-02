@@ -22,7 +22,7 @@ loadSelect2 = ->
     multiple: false
 
   $('.file-type').select2
-    tags: true
+    tags: false
     width: '100%'
     multiple: false
 
@@ -146,6 +146,19 @@ ready =->
       error: (a, b, c) ->
         alert("error:" + c);
     })
+
+  $('#xml-import').on 'click', (e) ->
+    e.stopPropagation()
+    return
+
+  $('#xml').on 'change', ->
+    fullPath = document.getElementById('xml').value
+    if fullPath
+      startIndex = if fullPath.indexOf('\\') >= 0 then fullPath.lastIndexOf('\\') else fullPath.lastIndexOf('/')
+      filename = fullPath.substring(startIndex)
+      if filename.indexOf('\\') == 0 or filename.indexOf('/') == 0
+        filename = filename.substring(1)
+      document.getElementById('xml-label').innerHTML = filename
 
   $('.toggle').on 'click', ->
     $($(this).parent().next()).toggle()

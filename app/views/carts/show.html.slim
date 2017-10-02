@@ -27,10 +27,10 @@ table.table
               i.fa.fa-remove style=("color: #800000")
 br
 .actions.btn-group[role="group"]
-  = link_to 'Export all', download_all_cart_path(@cart), class: 'btn btn-important'
+  = link_to t('carts.show.download_all'), download_all_cart_path(@cart), class: 'btn btn-important'
   = link_to remove_all_cart_path(@cart), class: 'btn btn-important' do
     i.fa.fa-trash style=("color: #800000")
-    = ' ' + 'Remove All'
+    = ' ' + t('carts.show.remove_all')
 
 
 
