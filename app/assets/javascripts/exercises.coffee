@@ -21,7 +21,7 @@ loadSelect2 = ->
     width: '20%'
     multiple: false
 
-  $('.file_type').select2
+  $('.file-type').select2
     tags: true
     width: '100%'
     multiple: false
