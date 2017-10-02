@@ -1,13 +1,13 @@
 div[style="margin-left: 10px;"]
   .field-element
     = f.label :name, t('exercises.files.name'), class: 'form-label'
-    = file.text_field :name, class: 'form-control'
+    = test.text_field :name, class: 'form-control'
   .field-element
     = f.label :path, t('exercises.files.path'), class: 'form-label'
-    = file.text_field :path, size: 40, class: 'form-control'
+    = test.text_field :path, size: 40, class: 'form-control'
   .field-element
     = f.label :file_types_id, t('exercises.files.extension'), class: 'form-label'
-    = file.collection_select :file_type_id, FileType.all, :id, :name_with_extension, {}, {class: 'file-type'}
+    = test.collection_select :file_type_id, FileType.all, :id, :name_with_extension, {}, {class: 'form-control file-type'}
   .field-element
     = f.label :feedback_message, t('exercises.tests.feedback'), class:'form-label'
     = test.text_area :feedback_message, class: 'form-control'

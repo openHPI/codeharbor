@@ -10,7 +10,7 @@ RSpec.describe 'Carts', type: :request do
     describe 'GET /carts' do
       it 'has http 200' do
         get carts_path
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(302)
       end
     end
     describe 'POST /carts' do
@@ -28,7 +28,7 @@ RSpec.describe 'Carts', type: :request do
     describe 'GET /carts/:id/edit' do
       it 'has http 200' do
         get edit_cart_path(@cart)
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(302)
       end
     end
     describe 'GET /cart/:id' do
@@ -40,13 +40,13 @@ RSpec.describe 'Carts', type: :request do
     describe 'PATCH /cart/:id' do
       it 'has http 200' do
         patch cart_path(@cart)
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(302)
       end
     end
     describe 'PUT /cart/:id' do
       it 'has http 200' do
         put cart_path(@cart)
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(302)
       end
     end
     describe 'DELETE /cart/:id' do
