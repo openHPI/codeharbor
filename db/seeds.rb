@@ -65,3 +65,4 @@ ee1 = ExecutionEnvironment.create(language: 'Java', version: '8')
 ee2 = ExecutionEnvironment.create(language: 'Python', version: '2.7')
 
 exercise1.update(execution_environment: ee1)
+

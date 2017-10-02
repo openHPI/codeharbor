@@ -15,6 +15,7 @@ validateForm = (e) ->
     false
 
 loadSelect2 = ->
+
   $('#select2-control').select2
     tags: false
     width: '20%'

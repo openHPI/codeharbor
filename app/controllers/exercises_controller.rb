@@ -79,13 +79,11 @@ class ExercisesController < ApplicationController
   # POST /exercises.json
   def create
     @exercise = Exercise.new(exercise_params)
-    @exercise.avg_rating = 0.0
     @exercise.add_attributes(params[:exercise])
     @exercise.user = current_user
 
     respond_to do |format|
       if @exercise.save
-        @exercise.add_attributes(params[:exercise])
         format.html { redirect_to @exercise, notice: 'Exercise was successfully created.' }
         format.json { render :show, status: :created, location: @exercise }
       else
@@ -103,9 +101,9 @@ class ExercisesController < ApplicationController
   # PATCH/PUT /exercises/1
   # PATCH/PUT /exercises/1.json
   def update
+    @exercise.add_attributes(params[:exercise])
     respond_to do |format|
       if @exercise.update(exercise_params)
-        @exercise.add_attributes(params[:exercise])
         format.html { redirect_to @exercise, notice: 'Exercise was successfully updated.' }
         format.json { render :show, status: :ok, location: @exercise }
       else
@@ -191,7 +189,7 @@ class ExercisesController < ApplicationController
     if params[:settings]
       @stars = params[:settings][:stars]
     else
-      @stars = ""
+      @stars = "0"
     end
 
     if params[:settings]
