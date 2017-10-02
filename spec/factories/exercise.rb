@@ -45,5 +45,4 @@ FactoryGirl.define do
       create(:model_solution_file, exercise: exercise)
     end
   end
-
 end

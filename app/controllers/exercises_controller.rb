@@ -3,14 +3,18 @@ require 'oauth2'
 class ExercisesController < ApplicationController
   load_and_authorize_resource
   before_action :set_exercise, only: [:show, :edit, :update, :destroy, :add_to_cart, :add_to_collection, :push_external, :contribute]
-  before_action :set_option, only: [:index]
+  before_action :set_search, only: [:index]
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized for this exercise.'
   end
   # GET /exercises
   # GET /exercises.json
   def index
-    @exercises = Exercise.search(params[:search],@option,current_user).sort{ |y,x| x.avg_rating <=> y.avg_rating }.paginate(per_page: 5, page: params[:page])
+    if @order == 'order_created'
+      @exercises = Exercise.search(params[:search],params[:settings],@option,current_user).sort{ |y,x| x.created_at <=> y.created_at }.paginate(per_page: 5, page: params[:page])
+    else
+      @exercises = Exercise.search(params[:search],params[:settings],@option,current_user).sort{ |y,x| x.avg_rating <=> y.avg_rating }.paginate(per_page: 5, page: params[:page])
+    end
   end
 
   # GET /exercises/1
@@ -65,6 +69,10 @@ class ExercisesController < ApplicationController
 
   # GET /exercises/1/edit
   def edit
+    exercise_relation = ExerciseRelation.find_by(clone_id: params[:id])
+    if exercise_relation
+      @exercise_relation = exercise_relation
+    end
   end
 
   # POST /exercises
@@ -73,18 +81,18 @@ class ExercisesController < ApplicationController
     @exercise = Exercise.new(exercise_params)
     @exercise.add_attributes(params[:exercise])
     @exercise.user = current_user
-    exercise_dependencies
 
     respond_to do |format|
       if @exercise.save
+        @exercise.add_attributes(params[:exercise])
         format.html { redirect_to @exercise, notice: 'Exercise was successfully created.' }
         format.json { render :show, status: :created, location: @exercise }
       else
-        if !@exercise_relation
+        if !params[:exercise][:exercise_relation] #Exercise Relation is set if form is for duplicate exercise, otherwise it's not.
           format.html { render :new }
         else
           puts(@exercise.errors.inspect)
-          format.html { render :duplicate}
+          format.html { redirect_to duplicate_exercise_path(params[:exercise][:exercise_relation][:origin_id])}
         end
         format.json { render json: @exercise.errors, status: :unprocessable_entity }
       end
@@ -94,9 +102,9 @@ class ExercisesController < ApplicationController
   # PATCH/PUT /exercises/1
   # PATCH/PUT /exercises/1.json
   def update
-    @exercise.add_attributes(params[:exercise])
     respond_to do |format|
       if @exercise.update(exercise_params)
+        @exercise.add_attributes(params[:exercise])
         format.html { redirect_to @exercise, notice: 'Exercise was successfully updated.' }
         format.json { render :show, status: :ok, location: @exercise }
       else
@@ -204,30 +212,46 @@ class ExercisesController < ApplicationController
 
   private
 
-  def exercise_dependencies
-    if params[:exercise][:exercise_relation]
-      @exercise_relation = ExerciseRelation.new
-      @exercise_relation.clone = @exercise
-      @exercise_relation.origin_id = params[:exercise][:exercise_relation][:origin_id]
-      @exercise_relation.relation_id = params[:exercise][:exercise_relation][:relation_id]
-      @exercise_relation.save
-    end
-
-    if params[:exercise][:groups]
-      params[:exercise][:groups].delete_at(0)
-      params[:exercise][:groups].each do |array|
-        group = Group.find(array)
-        group.add(@exercise)
-      end
-    end
-
-  end
-  def set_option
+  def set_search
     if params[:option]
       @option = params[:option]
     else
       @option = 'mine'
     end
+
+    if params[:order_param]
+      @order = params[:order_param]
+    else
+      @order = 'order_rating'
+    end
+
+    if params[:window]
+      @dropdown = params[:window]
+    else
+      @dropdown = false
+    end
+
+    if params[:settings]
+      @stars = params[:settings][:stars]
+    else
+      @stars = "0"
+    end
+
+    if params[:settings]
+      @languages = params[:settings][:language]
+    end
+
+    if params[:settings]
+      @proglanguages = params[:settings][:proglanguage]
+    end
+
+    if params[:settings]
+      @created = params[:settings][:created]
+    else
+      @created = "0"
+    end
+
+
   end
   # Use callbacks to share common setup or constraints between actions.
   def set_exercise

@@ -78,7 +78,7 @@ class RatingsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_rating
+  def set_rating
       @rating = Rating.find(params[:id])
     end
 
