@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-
-
   resources :relations
   resources :exercise_relations
   # You can have the root of your site routed with "root"
@@ -20,6 +18,9 @@ Rails.application.routes.draw do
   end
   resources :groups do
     get :search, :on => :collection
+    member do
+      get :remove_exercise
+    end
   end
   get 'home/index'
 
@@ -77,6 +78,9 @@ Rails.application.routes.draw do
     end
     resources :comments do
       resources :answers
+      collection do
+        get :load_comments
+      end
     end
     resources :ratings
     member do

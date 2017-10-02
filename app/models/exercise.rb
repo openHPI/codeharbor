@@ -383,6 +383,7 @@ class Exercise < ActiveRecord::Base
     return I18n.t('models.exercise.role.regular')
   end
 
+
   def build_proforma_xml_for_exercise_file(xml, exercise_file)
     if exercise_file.role == 'Main File'
       proforma_file_class = 'template'
@@ -414,6 +415,7 @@ class Exercise < ActiveRecord::Base
       }
     }
   end
+
 
 
 

@@ -8,26 +8,26 @@
         - @user.errors.full_messages.each do |message|
           li
             = message
-  .field
-    = f.label :first_name, t('users.first_name')
-    br
-    = f.text_field :first_name
-  .field
-    = f.label :last_name, t('users.last_name')
-    br
-    = f.text_field :last_name
-  .field
-    = f.label :email, t('users.email')
-    br
-    = f.text_field :email
-  .field
-    = f.label :password, t('users.new.password')
-    br
-    = f.password_field :password
-  .field
-    = f.label :password_confirmation, t('users.new.password_confirmation')
-    br
-    = f.password_field :password_confirmation
+  .field-element
+    = f.label :first_name, t('users.first_name'), class: 'form-label'
+    = f.text_field :first_name, class: 'form-control'
+  .field-element
+    = f.label :last_name, t('users.last_name'), class: 'form-label'
+    = f.text_field :last_name, class: 'form-control'
+  .field-element
+    = f.label :email, t('users.email'), class: 'form-label'
+    = f.text_field :email, class: 'form-control'
+  .field-element
+    = f.label :password, t('users.new.password'), class: 'form-label'
+    = f.password_field :password, class: 'form-control'
+  .field-element
+    = f.label :password_confirmation, t('users.new.password_confirmation'), class: 'form-label'
+    = f.password_field :password_confirmation, class: 'form-control'
+  br
   .actions.btn-group[role="group"]
-    = f.submit nil, class:'btn btn-primary'
-    = link_to t('users.back'), :back, class:'btn btn-default'
+    = button_tag type:'submit', class:'btn btn-important' do
+      i.fa.fa-user
+      = ' ' + "Save User"
+    = link_to :back, class:'btn btn-important'
+      i.fa.fa-remove style=("color: gray")
+      = ' ' + t('users.back')

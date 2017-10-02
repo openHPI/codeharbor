@@ -23,7 +23,7 @@
             - if exercise
               .btn-group
                 = link_to exercise.title, exercise_path(exercise), class: 'btn btn-default', style: "border-right: none"
-                = link_to remove_exercise_collection_path(collection, exercise: exercise), class: 'btn btn-default', style: "border-left: none" do
+                = link_to remove_exercise_collection_path(collection, exercise: exercise), class: 'btn btn-default', style: "border-left: none; margin-right: 5px;" do
                   i.fa.fa-remove style=("color: gray")
       .col-md-3
         .btn-group.pull-right aria-label="..." role="group"

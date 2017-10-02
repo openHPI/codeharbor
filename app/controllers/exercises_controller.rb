@@ -84,7 +84,6 @@ class ExercisesController < ApplicationController
 
     respond_to do |format|
       if @exercise.save
-        @exercise.add_attributes(params[:exercise])
         format.html { redirect_to @exercise, notice: t('controllers.exercise.created') }
         format.json { render :show, status: :created, location: @exercise }
       else
@@ -102,9 +101,9 @@ class ExercisesController < ApplicationController
   # PATCH/PUT /exercises/1
   # PATCH/PUT /exercises/1.json
   def update
+    @exercise.add_attributes(params[:exercise])
     respond_to do |format|
       if @exercise.update(exercise_params)
-        @exercise.add_attributes(params[:exercise])
         format.html { redirect_to @exercise, notice: t('controllers.exercise.updated')  }
         format.json { render :show, status: :ok, location: @exercise }
       else

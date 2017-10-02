@@ -12,13 +12,13 @@ html
         = menu_group do
           - if current_user
             = menu_item exercises_path  do
-              i.fa.fa-file-text-o style=("color: #008000")
+              i.fa.fa-file-text-o style=("color: #006600")
               = ' ' + t('layouts.exercises')
             = menu_item collections_path do
-              i.fa.fa-briefcase style=("color: #000080")
+              i.fa.fa-folder-open style=("color: #000066")
               = ' ' + t('layouts.collections')
             = menu_item groups_path do
-              i.fa.fa-group style=("color: #800000")
+              i.fa.fa-group style=("color: #660000")
               = ' ' + t('layouts.groups')
             = menu_divider
             - if current_user.role === 'admin'
@@ -28,7 +28,9 @@ html
                 = menu_item t('layouts.admin_nav.comments'), comments_comments_all_path
         = menu_group pull: :right do
           - if current_user
-            = menu_item t('layouts.cart')+' (' + current_user.cart_count.to_s + ')', my_cart_path
+            = menu_item my_cart_path do
+              i.fa.fa-shopping-cart
+              = ' ' + t('layouts.cart')+' (' + current_user.cart_count.to_s + ')'
             = drop_down current_user.email
               = menu_item 'Profile', user_path(current_user)
               = menu_item 'Messages', user_messages_path(current_user)

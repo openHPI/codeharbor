@@ -1,59 +1,79 @@
 - model_class = Group
 - if can? :view, @group
-  .page-header
-    h1
-      = @group.name
+  .header
+    .std-heading
+      i.fa.fa-group
+      = ' ' + @group.name
+  table.vertical-table
+    tr
+      th = 'Description'
+      td = @group.description
+    tr
+      th = 'Admins'
+      td
+        - @group.admins.each do |admin|
+          .table-list
+            = admin.email
 
-  dl.dl-horizontal
-    dt
-      = 'Description'
-      | :
-    dd
-      = @group.description
-    dt
-      = 'Admins'
-      | :
-    - @group.admins.each do |admin|
-      dd
-        = admin.email
-      dt
+    tr
+      th = 'Users:'
 
-    dd
+      td
+        - @group.members.each do |member|
+          - unless @group.is_admin(member)
+            .table-list
+              = member.email
+              = ' '
+              - if can? :edit, @group
+                .btn-group.pull-right
+                  = link_to make_admin_path(group: @group, user: member), class: 'btn btn-default btn-xs' do
+                    i.fa.fa-plus style=("color:#008000")
+                    = ' ' + 'Make Admin'
+                  = link_to delete_from_group_path(group: @group, user: member), class: 'btn btn-default btn-xs' do
+                    i.fa.fa-remove style=("color:#800000")
+                    = ' ' + 'Delete'
 
-    dt
-      = 'Users:'
 
-    - @group.members.each do |member|
-      - unless @group.is_admin(member)
-        dd
-          = member.email
-          - if can? :edit, @group
-            = link_to 'Make Admin', make_admin_path(group: @group, user: member), class: 'btn btn-success btn-xs'
-            = link_to 'Delete', delete_from_group_path(group: @group, user: member), class: 'btn btn-danger btn-xs'
-        dt
-    dd
+
     - if @group.is_admin(current_user)
-      dt
-        = 'Pending Unsers'
-        | :
+      tr
+        th = 'Pending Unsers'
+        td
+          - @group.pending_users.each do |user|
+            .table-list
+              = user.email
+              = ' '
+              .btn-group.pull-right
+                = link_to grant_access_path(group: @group, user: user), class: 'btn btn-default btn-xs' do
+                  i.fa.fa-plus style=("color:#008000")
+                  = ' ' + 'Grant Access'
+                = link_to delete_from_group_path(group: @group, user: user), class: 'btn btn-default btn-xs' do
+                  i.fa.fa-remove style=("color:#800000")
+                  = ' ' + 'Deny Access'
+    tr
+      th = 'Exercises'
+      td
+        - @group.exercises.each do |exercise|
+          .table-list
+            .btn-group
+              = link_to exercise.title, exercise_path(exercise), class: 'btn btn-default', style: "border-right: none"
+              = link_to remove_exercise_group_path(exercise: exercise), class: 'btn btn-default', style: "border-left: none; margin-right: 5px;"  do
+                i.fa.fa-remove style=("color:gray;")
 
-      - @group.pending_users.each do |user|
-        dd
-          = user.email
-          = link_to 'Grant Access', grant_access_path(group: @group, user: user), class: 'btn btn-success btn-xs'
-          = link_to 'Deny Access', delete_from_group_path(group: @group, user: user), class: 'btn btn-danger btn-xs'
-        dt
-      dd
+  br
   .actions.btn-group[role="group"]
     - if can? :edit, @group
-      = link_to 'Edit', edit_group_path(@group), class: 'btn btn-warning'
-      = link_to 'Delete', group_path(@group), class: 'btn btn-danger', method: :delete, data: {confirm: 'Are you sure?'}
-    = link_to 'Back', groups_path, class: 'btn btn-default'
+      = link_to edit_group_path(@group), class: 'btn btn-important' do
+        i.fa.fa-edit
+        = ' ' + 'Edit'
+      = link_to group_path(@group), class: 'btn btn-important', method: :delete, data: {confirm: 'Are you sure?'} do
+        i.fa.fa-trash style=("color:#800000")
+        = ' ' + 'Delete'
+    = link_to 'Back', groups_path, class: 'btn btn-important'
 
 - else
   h1
     = 'You need to request membership to view this group!'
-
-  = link_to 'Request Membership', request_access_path(@group)
-  | |
-  = link_to 'Back', groups_path
+  .actions.btn-group[role="group"]
+    = link_to 'Request Membership', request_access_path(@group), class: 'btn btn-important'
+    = link_to 'Back', groups_path, class: 'btn btn-important'

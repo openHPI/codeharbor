@@ -1,6 +1,6 @@
-h1
-  = t('collections.edit.header')
+.header
+  .std-heading
+    i.fa.fa-folder-open style=("color: #000080")
+    = ' ' + t('exercises.edit.header')
+    = ' ' + @collection.title
 = render 'form'
-= link_to t('collections.button.show'), @collection
-|  \
-= link_to t('collections.button.back'), collections_path

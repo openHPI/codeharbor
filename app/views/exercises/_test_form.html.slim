@@ -1,28 +1,22 @@
 div[style="margin-left: 10px;"]
-  .field
-    = f.label :name, t('exercises.files.name')
-    br/
+  .field-element
+    = f.label :name, t('exercises.files.name'), class: 'form-label'
     = test.text_field :name, class: 'form-control'
-  .field
-    = f.label :path, t('exercises.files.path')
-    br/
+  .field-element
+    = f.label :path, t('exercises.files.path'), class: 'form-label'
     = test.text_field :path, size: 40, class: 'form-control'
-  .field
-    = f.label :file_type_id, t('exercises.files.extension')
-    br/
+  .field-element
+    = f.label :file_types_id, t('exercises.files.extension'), class: 'form-label'
     = test.collection_select :file_type_id, FileType.all, :id, :name_with_extension, {}, {class: 'file-type'}
-  .field
-    = f.label :feedback_message, t('exercises.tests.feedback')
-    br/
+  .field-element
+    = f.label :feedback_message, t('exercises.tests.feedback'), class:'form-label'
     = test.text_area :feedback_message, class: 'form-control'
-  .field
-    = f.label :testing_framework, t('exercises.tests.framework')
-    br/
+  .field-element
+    = f.label :testing_framework, t('exercises.tests.framework'), class:'form-label'
     = test.collection_select :testing_framework_id, TestingFramework.all, :id, :name, {}, {class: 'form-control'}
-  .field
-    = f.label :content, t('exercises.tests.content')
-    br/
+  .field-element
+    = f.label :content, t('exercises.tests.content'), class:'form-label'
     .edit
       .editor
         = test.text_area :content
-      = test.text_area :content, class: 'hidden'
+      = test.text_area :content, class:'hidden'

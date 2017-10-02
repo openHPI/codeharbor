@@ -14,13 +14,12 @@ validateForm = (e) ->
     e.preventDefault()
     false
 
-
 loadSelect2 = ->
+
   $('#select2-control').select2
     tags: false
     width: '20%'
     multiple: false
-    
   $('.file-type').select2
     tags: false
     width: '100%'
@@ -127,7 +126,6 @@ ready =->
       dataType: 'json',
       success: (response) ->
         rating = response.user_rating.rating
-        console.log('user rating' +rating)
         USERRATING = rating
         stars = $('.rating span').filter (->
           $(this).attr("data-rating") <= rating
@@ -135,7 +133,6 @@ ready =->
         $(stars).removeClass("fa-star-o").addClass("fa-star")
 
         overallrating = response.overall_rating
-        console.log('overall rating' + overallrating)
         $('.starrating span.fa.fa-star[data-rating=1]').attr("color", "red")
         for num in [1,2,3,4,5]
           do (num) ->
@@ -161,6 +158,39 @@ ready =->
       if filename.indexOf('\\') == 0 or filename.indexOf('/') == 0
         filename = filename.substring(1)
       document.getElementById('xml-label').innerHTML = filename
+
+  $('.toggle').on 'click', ->
+    $($(this).parent().next()).toggle()
+    if $(this).hasClass('fa-caret-down')
+      $(this).removeClass('fa-caret-down').addClass('fa-caret-up')
+    else
+      $(this).removeClass('fa-caret-up').addClass('fa-caret-down')
+
+  $('.comment-button').on 'click', ->
+    exercise_id = this.getAttribute("data-exercise")
+    if exercise_id
+      url = window.location.pathname + '/' + exercise_id + "/comments"
+      comment_box = $(".comment-box[data-exercise=#{exercise_id}]")
+    else
+      url = window.location.pathname + "/comments"
+      comment_box = $(".comment-box")
+    caret = $(this).children('.fa')
+
+    if $(caret).hasClass('fa-caret-down')
+      $(caret).removeClass('fa-caret-down').addClass('fa-caret-up')
+      $.ajax({
+        type: 'GET',
+        url: url
+        dataType: 'script'
+        success: ->
+          $(comment_box).show()
+          anchor = document.getElementById('page_end')
+          if anchor
+            anchor.scrollIntoView(false)
+      })
+    else
+      $(caret).removeClass('fa-caret-up').addClass('fa-caret-down')
+      $(comment_box).hide()
 
   if document.getElementById('window')
     if document.getElementById('window').value == "true"

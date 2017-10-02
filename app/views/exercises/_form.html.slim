@@ -11,93 +11,104 @@
             - @exercise.errors.full_messages.each do |msg|
               li
                 = msg
-    - if @exercise_relation.present?
-      = f.fields_for :exercise_relation do |exercise_relation|
-        = exercise_relation.hidden_field :origin_id, :value => @exercise_relation.origin.id
-      .form-group
-        = f.label :relation, 'Relation'
-        br/
-        = f.fields_for :exercise_relation do |relation|
-          .controls
-            = relation.collection_select :relation_id, Relation.all, :id, :name, {selected: @exercise_relation.relation_id}, {class: 'form-control'}
-    .form-group
-      = f.label :title, t('exercises.title'),class:'control-label'
-      br/
-      .controls
-        = f.text_field :title, class:'form-control'
-    .form-group
-      = f.label :execution_environment, t('exercises.form.environment'),class:'control-label'
-      br/
-      .controls
-        = f.collection_select :execution_environment_id, ExecutionEnvironment.all, :id, :language, {}, {class: 'form-control'}
-    .form-group
-      = f.label :descriptions, t('exercises.form.descriptions.label'),class:'control-label'
-      br/
-      = f.nested_fields_for :descriptions do |description|
-        .controls[style="margin-bottom: 10px"]
-          = description.text_area :text, class:'form-control'
-          .field
-            = f.label :language, t('exercises.form.descriptions.language')
+    fieldset.form-group
+      legend
+        span.number = '1'
+        = t('exercises.form.basic_info') + ' '
+        span.fa.fa-caret-down.toggle
+      .form-content
+        - if @exercise_relation.present?
+          = f.fields_for :exercise_relation do |exercise_relation|
+            = exercise_relation.hidden_field :origin_id, :value => @exercise_relation.origin.id
+          .field-element
+            = f.label :relation, 'Relation', class:'form-label'
             br/
-            = description.collection_select :language, Description::LANGUAGES, :to_s, :to_s, include_blank: false, class: 'form-control'
-          = description.remove_nested_fields_link :text, class:'btn btn-main btn-xs' do
-            i.fa.fa-remove style=("color: #800000")
-            = ' ' + t('exercises.form.descriptions.remove')
-        br
-      = f.add_nested_fields_link :descriptions, ' ' , class: 'btn btn-main' do
-        i.fa.fa-plus style=("color: #008000")
-        = ' ' + t('exercises.form.descriptions.add')
+            = f.fields_for :exercise_relation do |relation|
+              .controls
+                = relation.collection_select :relation_id, Relation.all, :id, :name, {}, {class: 'form-control'}
+        .field-element
+          = f.label :title, t('exercises.title'), class:'form-label'
+          = f.text_field :title, class:'form-control'
+        .field-element
+          = f.label :execution_environment, t('exercises.form.environment'), class:'form-label'
+          = f.collection_select :execution_environment_id, ExecutionEnvironment.all, :id, :language, {}, {class: 'form-control'}
 
-    .form-group
-      = f.label :visibility, t('exercises.visibility.label'), class: 'control-label'
-      .radio
-        .col-md-2
-          div[style="margin-left: 20px"]
+        .field-element
+          = f.nested_fields_for :descriptions do |description|
+            .form-description
+              .top-label
+                = f.label :language, class: 'form-label' do
+                  = "Description in "
+                  = ' '
+                  = description.collection_select :language, Description::LANGUAGES, :to_s, :to_s, include_blank: false, class: 'form-control'
+                = description.remove_nested_fields_link :text, class:'btn btn-default btn-xs pull-right' do
+                  i.fa.fa-remove style=("color: #800000")
+                  = ' ' + t('exercises.form.descriptions.remove')
+              = description.text_area :text, class:'form-control'
+
+          = f.add_nested_fields_link :descriptions, ' ' , class: 'btn btn-main' do
+            i.fa.fa-plus style=("color: #008000")
+            = ' ' + t('exercises.form.descriptions.add')
+    fieldset.form-group
+      legend
+        span.number = '2'
+        = t('exercises.form.visbility_labels') + ' '
+        span.fa.fa-caret-down.toggle
+      .form-content
+        .field-element
+          = f.label :visibility, t('exercises.visibility.label'), class: 'form-label'
+          .radio-switch
             = f.radio_button :private, false, value: false, checked: true
-            = label :private, t('exercises.visibility.public')
-        .col-md-2
-          div[style="margin-left: 20px"]
+            = label_tag 'exercise_private_false', t('exercises.visibility.public'), class: 'radio-left'
             = f.radio_button :private, true, value: true
-            = label :private, t('exercises.visibility.private')
-    .form-group#group-field
-      = f.label :groups, 'Groups', class: 'control-label'
-      br/
-      .controls
-        = f.select :groups, options_for_select(Group.all.collect{|g| [g.name, g.id]}, @exercise.groups.pluck(:id)), {}, {class: "my-group form-control", multiple: "multiple", style: "width: 300px;"}
-    .form-group
-      =f.label :labels, 'Labels', class: 'control-label'
-      br/
-      .controls
-        = f.select :labels, options_for_select(Label.all.collect{|l| [l.name, l.name]}, @exercise.labels.pluck(:name)), {}, {class: "my-tag form-control", multiple: "multiple", style: "width: 300px;"}
-    .form-group
-      h4
-        = t('exercises.files.label')+ ':'
-      = f.nested_fields_for :exercise_files, style: 'margin-left: 20px' do |file|
-        = render 'file_form', f: f, file: file
-        = file.remove_nested_fields_link :text, class:'btn btn-main btn-xs' do
-          i.fa.fa-remove style=("color: #800000")
-          = ' ' + t('exercises.form.files.remove')
-        hr
-      = f.add_nested_fields_link :exercise_files, ' ', class:'btn btn-main', id: 'addFileButton' do
-        i.fa.fa-plus style=("color: #008000")
-        = ' ' + t('exercises.form.files.add')
-    .form-group
-      h4
-        = t('exercises.tests.label')+ ':'
-      = f.nested_fields_for :tests do |test|
-        = render 'test_form', f: f, test: test
-        = test.remove_nested_fields_link :text, class:'btn btn-main btn-xs' do
-          i.fa.fa-remove style=("color: #800000")
-          = ' ' + t('exercises.form.tests.remove')
-        hr
-      = f.add_nested_fields_link :tests, ' ', class:'btn btn-main', id: 'addTestButton' do
-        i.fa.fa-plus style=("color: #008000")
-        = ' ' + t('exercises.form.tests.add')
-    br/
+            = label_tag 'exercise_private_true', t('exercises.visibility.private'), class: 'radio-right'
+        .field-element#group-field
+          = f.label :groups, 'Groups', class: 'form-label'
+          = f.select :groups, options_for_select(Group.all.collect{ |g| [g.name, g.id] }, @exercise.groups.pluck(:id)), {}, {class: "my-group form-control", multiple: "multiple", style: "width: 300px;"}
+        .field-element
+          = f.label :labels, 'Labels', class: 'form-label'
+          = f.select :labels, options_for_select(Label.all.collect{ |l| [l.name, l.name] }, @exercise.labels.pluck(:name)), {}, {class: "my-tag form-control", multiple: "multiple", style: "width: 300px;"}
+
+    fieldset.form-group
+      legend
+        span.number = '3'
+        = t('exercises.files.label') + ' '
+        span.fa.fa-caret-down.toggle
+      .form-content
+        .field-element
+          = f.nested_fields_for :exercise_files, style: 'margin-left: 10px' do |file|
+            = render 'file_form', f: f, file: file
+            .field-element
+              = file.remove_nested_fields_link :text, class:'btn btn-main btn-xs' do
+                i.fa.fa-remove style=("color: #800000")
+                = ' ' + t('exercises.form.files.remove')
+            hr style="color:black"
+          .field-element
+            = f.add_nested_fields_link :exercise_files, ' ', class:'btn btn-main', id: 'addFileButton' do
+              i.fa.fa-plus style=("color: #008000")
+              = ' ' + t('exercises.form.files.add')
+    fieldset.form-group
+      legend
+        span.number = '4'
+        = t('exercises.tests.label') + ' '
+        span.fa.fa-caret-down.toggle
+      .form-content
+        .field-element
+          = f.nested_fields_for :tests, style: 'margin-left: 10px' do |test|
+            = render 'test_form', f: f, test: test
+            .field-element
+              = test.remove_nested_fields_link :text, class:'btn btn-main btn-xs' do
+                i.fa.fa-remove style=("color: #800000")
+                = ' ' + t('exercises.form.tests.remove')
+            hr style="color:black"
+          .field-element
+            = f.add_nested_fields_link :tests, ' ', class:'btn btn-main', id: 'addTestButton' do
+              i.fa.fa-plus style=("color: #008000")
+              = ' ' + t('exercises.form.tests.add')
     .form-group
       .actions.btn-group[role="group"]
         = button_tag type: 'submit', class: 'btn btn-important' do
-          i.fa.fa-file-text-o style=("color: #008000")
+          i.fa.fa-file-text-o
           = ' ' + 'Save Exercise'
         = link_to :back, class: 'btn btn-important' do
           i.fa.fa-remove style=("color: gray")

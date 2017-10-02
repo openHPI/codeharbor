@@ -47,6 +47,9 @@ table.vertical-table {
   }
 }
 
+.fa-trash {
+  color: #800000;
+}
 .std-heading {
   margin: 0px;
   font-size: 30px;
@@ -76,4 +79,30 @@ table.vertical-table {
     border-color: #7C7C7C;
     background-color: #eeeeee;
   }
+}
+
+.form-content {
+  margin-bottom: 40px;
+}
+
+.form-label {
+  color: #555555;
+  font-size: 14px;
+  font-weight: bold;
+  width: 28%;
+  text-align: left;
+}
+
+.field-element {
+  margin-bottom: 15px;
+  padding-left: 10px;
+}
+
+fieldset.form-group {
+  margin-bottom: 0px;
+  border: none;
+}
+
+.table-list {
+  display:block;
 }

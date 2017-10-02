@@ -1,5 +1,9 @@
-h1 Editing group
+.header
+  .std-heading
+    i.fa.fa-group
+    = ' ' + t('exercises.edit.header')
+    = ' ' + @group.name
 
-== render 'form'
+= render 'form'
 
 

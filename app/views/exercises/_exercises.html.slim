@@ -59,5 +59,17 @@
         - if cannot? :edit, exercise
           = link_to 'Contribute', contribute_exercise_path(exercise), class: 'btn btn-default'
     .panel-footer
-      = link_to t('exercises.all.comments'), exercise_comments_path(exercise)
+      = button_tag type: 'button', class: 'btn comment-button', data: {exercise: exercise.id} do
+        = t('exercises.all.comments') + ' '
+        span.fa.fa-caret-down
+
+    div class=("comment-box") data-exercise=exercise.id
+      = form_for :comment, url: exercise_comments_path(exercise), remote: true do |f|
+        .write-comment
+          .input-group
+            = f.label_tag 'new_comment_label', 'New Comment', class: 'input-group-addon'
+            = f.text_field :text, class: 'form-control'
+            span.input-group-btn
+              = f.submit class: 'btn btn-default'
+      .comment-body
 = will_paginate @exercises
