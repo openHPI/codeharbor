@@ -4,43 +4,33 @@ class Test < ActiveRecord::Base
   belongs_to :exercise_file
 
   def content
-    if exercise_file
-      return exercise_file.content
-    else
-      return ''
-    end
+    content = ''
+    content = exercise_file.content if exercise_file
+    return content
   end
 
   def name
-    if exercise_file
-      return exercise_file.name
-    else
-      return ''
-    end
+    name = ''
+    name = exercise_file.name if exercise_file
+    return name
   end
 
   def path
-    if exercise_file
-      return exercise_file.path
-    else
-      return ''
-    end
+    path = ''
+    path = exercise_file.path if exercise_file
+    return path
   end
 
   def file_type_id
-    if exercise_file
-      return exercise_file.file_type_id
-    else
-      return ''
-    end
+    id = ''
+    id = exercise_file.file_type_id if exercise_file
+    return id
   end
 
   def file_type
-    if exercise_file
-      return exercise_file.file_type
-    else
-      return ''
-    end
+    file_type = ''
+    file_type = exercise_file.file_type if exercise_file
+    return file_type
   end
 
 end

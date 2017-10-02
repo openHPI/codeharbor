@@ -66,6 +66,7 @@ en:
 
   error: "error "
   sure: "Are you sure?"
+  time_ago: "%{time} ago"
 
   account:
     pushURL: "Push URL"

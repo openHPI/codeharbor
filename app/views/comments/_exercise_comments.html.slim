@@ -11,7 +11,8 @@
       .comment-user
         = comment.user.name
         .pull-right.created-at
-          = 'Created at: ' + comment.created
+          = 'Created at: '
+          = t('time_ago', time: time_ago_in_words(comment.created_at))
       .comment-text data-exercise=@exercise.id data-comment=comment.id
         = comment.text
         .actions.btn-group.pull-right role="group"
