@@ -7,6 +7,7 @@
   }
 }
 
+
 table.vertical-table {
   border-collapse: separate;
   margin-bottom: 30px;
@@ -51,7 +52,7 @@ table.vertical-table {
   color: #800000;
 }
 .std-heading {
-  margin: 0px;
+  margin: 0px 0px 0px 20px;
   font-size: 30px;
   height: 40px;
   width: 200px;
@@ -59,7 +60,6 @@ table.vertical-table {
   padding-top: 5px;
   padding-bottom: 5px;
   padding-right: 50%;
-  margin-bottom: 20px;
   display: inline;
 }
 

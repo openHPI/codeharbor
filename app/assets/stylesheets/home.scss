@@ -1,3 +1,58 @@
 // Place all the styles related to the Home controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#myCarousel {
+  position: absolute;
+  z-index: 1;
+}
+
+.background-transparent {
+  width: 100%;
+  padding: 2px;
+  background: #ffffff;
+  background: rgba(255,255,255,.8);
+  margin-bottom: 10px;
+}
+
+.background-transparent p{
+  font-size: 21px;
+  color: black;
+  text-shadow: none;
+  padding-bottom: 5px;
+}
+
+.background-transparent h1{
+  font-size: 32px;
+  color: black;
+  text-shadow: none;
+}
+
+.carousel-caption {
+  left: 0 !important;
+  right: 0 !important;
+}
+
+.feature {
+  margin-bottom: 50px;
+}
+
+.homepage {
+  margin-top: 450px;
+  color: #444444;
+}
+
+.index-flash > #flash-message {
+
+}
+
+.copyright {
+  color: white;
+  position: absolute;
+  right: 20px;
+  bottom: 16px;
+
+  a {
+    color: white;
+  }
+}

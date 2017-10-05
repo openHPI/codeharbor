@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     get :search, :on => :collection
     member do
       get :remove_exercise
+      get :leave
     end
   end
   get 'home/index'

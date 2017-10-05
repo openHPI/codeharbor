@@ -30,14 +30,14 @@ class Ability
       can [:show, :read, :add_to_cart, :add_to_collection, :export, :duplicate, :download_exercise], Exercise do |exercise|
         exercise.can_access(user)
       end
-      can [:manage, :edit], Exercise do |exercise|
-        ExerciseAuthor.where(user_id: user.id, exercise_id: exercise.id).any?
+      can [:manage], Exercise do |exercise|
+        ExerciseAuthor.where(user_id: user.id, exercise_id: exercise.id).any? || exercise.user == user
       end
 
 
       #Comment
       can [:show, :create, :read, :answer ], Comment
-      can [:edit], Comment do |comment|
+      can [:manage], Comment do |comment|
         comment.user == user
       end
 
@@ -49,7 +49,7 @@ class Ability
       can [:view, :read, :members, :admins, :leave], Group do |group|
         user.in_group?(group, as: 'member')
       end
-      can [:update, :destroy, :make_admin, :grant_access, :delete_from_group], Group do |group|
+      can [:manage], Group do |group|
         user.in_group?(group, as: 'admin')
       end
 

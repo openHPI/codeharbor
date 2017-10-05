@@ -13,7 +13,7 @@
   .panel.panel-default style=("margin-top: 20px")
     .panel-heading
       h3.panel-title
-        span= link_to collection.title, collection_path(collection)
+        span= collection.title
     .panel-body
       .col-md-9
         - if collection.exercises.empty?

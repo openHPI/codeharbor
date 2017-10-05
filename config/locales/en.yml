@@ -355,6 +355,50 @@ en:
     create_exercise: "Create Exercise"
     update_profile: "Update Profile"
 
+    banner1:
+      header: "Your exercise repository"
+      paragraph: "Search, rate and create exercises."
+    banner2:
+      header: "Discuss and group exercises"
+      paragraph: "Discuss exercises with others and group them in a collection."
+    banner3:
+      header: "Share ProFormA Exercises"
+      paragraph: "Download any exercise as XML validated against the ProFormA XML-Schema."
+    marketing:
+      mooc:
+        header_html: "CodeHarbor for \n MOOCs"
+        paragraph: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+      universities:
+        header_html: "CodeHarbor for \n Universities"
+        paragraph: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+      schools:
+        header_html: "CodeHarbor for \n Schools"
+        paragraph: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+    feature:
+      exercises:
+        header: "Search, discuss and create Exercises"
+        paragraph: "With CodeHarbor you can create exercises based on the ProFormA XML-Schema.
+                    If you have the XML-file of an exercise you can also import an exercise,
+                    provided they comply with the Schema. Once created you can discuss your exercise,
+                    but you can also search, rate and discuss other exercises, that are public.
+                    All exercises can be exported as XML-files or directly to CodeOcean."
+      collections:
+        header: "Collect exercises in collections and cart"
+        paragraph: "While browsing other exercises you can add exercises you like to your cart or
+                    create collections of exercises to group them. You can schare collections with
+                    others or export collections and carts as zip archives of exercises."
+      groups:
+        header: "Create Groups of Users and restrict exercise access to that group"
+        paragraph: "If you decide that you do not want to share your exercise with everybody
+                    you can make it private and only allow access for users who belong to a Group.
+                    You can allow access to as many groups as your want and also add public exercises to a group."
+
+    sign_in:
+      header: "Become a member"
+      paragraph_html: "If you want to join our community %{href1} or %{href2} if you are already a member."
+      link1: "sign up now"
+      link2: "login"
+
   label_categories:
     header: "Listing Label Categories"
     name: "Name"
@@ -371,6 +415,7 @@ en:
     new:
       header: "New Label Category"
     errorMessage: "prohibited this label_category from being saved:"
+
 
   labels:
     header: "Listing Labels"

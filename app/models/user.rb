@@ -18,6 +18,15 @@ class User < ActiveRecord::Base
   before_destroy :handle_group_memberships, prepend: true
 
 
+  def last_admin? (group)
+    if self.in_group?(group, as: 'admin')
+      if group.admins.size == 1
+        true
+      end
+    end
+    false
+  end
+
   def cart_count
     if cart
       return cart.exercises.size

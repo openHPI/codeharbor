@@ -77,6 +77,15 @@ class GroupsController < ApplicationController
     end
   end
 
+  def leave
+    last_admin = current_user.last_admin?(@group)
+    if last_admin
+      redirect_to @group, alert: "You have to name somebody else admin first"
+    else
+      @group.users.delete(current_user)
+      redirect_to groups_path, notice: "You successfully left the group"
+    end
+  end
   def request_access
     flash[:notice] = "Your Access request has been sent."
     @group.admins.each do |admin|

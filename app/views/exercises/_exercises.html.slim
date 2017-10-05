@@ -25,10 +25,11 @@
   .panel.panel-default style=("margin-top: 20px")
     .panel-heading
       h3.panel-title
-        span= link_to exercise.title, exercise_path(exercise)
+        span
+          = exercise.title
         span.star-rating.pull-right
           small.number-rating
-            = exercise.avg_rating
+            = exercise.average_rating
           - [*1..5].each do |i|
             - if exercise.round_avg_rating >= i
               span.fa.fa-star data-rating=i
@@ -59,7 +60,7 @@
         - if cannot? :edit, exercise
           = link_to 'Contribute', contribute_exercise_path(exercise), class: 'btn btn-default'
     .panel-footer
-      = button_tag type: 'button', class: 'btn comment-button', data: {exercise: exercise.id} do
+      = button_tag type: 'button', class: 'btn no-border comment-button', data: {exercise: exercise.id} do
         = t('exercises.all.comments') + ' '
         span.fa.fa-caret-down
 
