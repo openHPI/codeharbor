@@ -37,7 +37,7 @@ RSpec.describe "groups", type: :request do
     describe 'GET /group/:id' do
       it 'has http 302' do
         get group_path(@group)
-        expect(response).to have_http_status(302)
+        expect(response).to have_http_status(200)
       end
     end
     describe 'PATCH /group/:id' do

@@ -15,7 +15,7 @@ class Ability
 
       #Cart
       can [:create], Cart
-      can [:my_cart, :show, :remove_all, :download_all], Cart do |cart|
+      can [:my_cart, :show, :remove_all, :download_all, :remove_exercise], Cart do |cart|
         cart.user == user
       end
 
