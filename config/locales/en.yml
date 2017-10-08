@@ -458,7 +458,7 @@ en:
       imprint: "Imprint"
       about:
         header: "About Codeharbor"
-        paragraph: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmoinolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+        paragraph: "CodeHarbor allows to share, rate, and discuss auto-gradeable programming exercises with colleagues. Re-use existing exercises, clone exercises and adjust them to your needs. Translate them to another human language or port them to another programming language. Always keep full control with whom you share."
 
       more:
         header: "More Information"
