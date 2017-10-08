@@ -367,21 +367,23 @@ en:
     marketing:
       mooc:
         header_html: "CodeHarbor for \n MOOCs"
-        paragraph: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+        paragraph: "You're developing and running MOOCs that include auto-graded programming exercises?"
       universities:
         header_html: "CodeHarbor for \n Universities"
-        paragraph: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+        paragraph: "You're teaching large programming classes at a university and use an auto-grader for assessment?"
       schools:
         header_html: "CodeHarbor for \n Schools"
-        paragraph: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+        paragraph: "You're teaching programming at school and need auto-gradeable programming exercises?
+      dojos:
+        header_html: "CodeHarbor for \n informal learning "
+        paragraph: "You're conducting workshops or similar and are looking for auto-gradeable programming exercises?"
     feature:
       exercises:
         header: "Search, discuss and create Exercises"
-        paragraph: "With CodeHarbor you can create exercises based on the ProFormA XML-Schema.
-                    If you have the XML-file of an exercise you can also import an exercise,
-                    provided they comply with the Schema. Once created you can discuss your exercise,
-                    but you can also search, rate and discuss other exercises, that are public.
-                    All exercises can be exported as XML-files or directly to CodeOcean."
+        paragraph: "CodeHarbor allows to share, rate, and discuss auto-gradeable programming exercises with colleagues. 
+                    Re-use existing exercises, clone exercises and adjust them to your needs. 
+                    Translate them to another human language or port them to another programming language. 
+                    Always keep full control with whom you share."
       collections:
         header: "Collect exercises in collections and cart"
         paragraph: "While browsing other exercises you can add exercises you like to your cart or
