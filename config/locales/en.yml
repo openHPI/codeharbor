@@ -373,7 +373,7 @@ en:
         paragraph: "You're teaching large programming classes at a university and use an auto-grader for assessment?"
       schools:
         header_html: "CodeHarbor for \n Schools"
-        paragraph: "You're teaching programming at school and need auto-gradeable programming exercises?
+        paragraph: "You're teaching programming at school and need auto-gradeable programming exercises?"
       dojos:
         header_html: "CodeHarbor for \n informal learning "
         paragraph: "You're conducting workshops or similar and are looking for auto-gradeable programming exercises?"
