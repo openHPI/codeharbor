@@ -14,6 +14,9 @@ Rails.application.routes.draw do
   resources :collections do
     member do
       get :download_all
+      post :share
+      get :view_shared
+      post :save_shared
     end
   end
   resources :groups do
@@ -21,6 +24,7 @@ Rails.application.routes.draw do
     member do
       get :remove_exercise
       get :leave
+      get :deny_access
     end
   end
   get 'home/index'
@@ -58,14 +62,16 @@ Rails.application.routes.draw do
 
   post 'user/:id/messages/:id/add_author', to: 'messages#add_author', as: 'add_author'
 
-
   resources :labels do
     get :search, :on => :collection
   end
   resources :label_categories
   resources :users do
     resources :account_links
-    resources :messages
+    resources :messages do
+      get :delete, :on => :member
+      get :reply, :on => :collection
+    end
   end
   resources :tests
   resources :file_types do
@@ -86,6 +92,8 @@ Rails.application.routes.draw do
     end
     resources :ratings
     member do
+      get :add_author
+      get :decline_author
       post :push_external
       get :contribute
       get :download_exercise

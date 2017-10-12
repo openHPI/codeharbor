@@ -72,4 +72,8 @@ class User < ActiveRecord::Base
       [group.admins.include?(self) ? 0 : 1, group.name]
     end
   end
+
+  def unread_messages_count
+    Message.where(recipient: self, recipient_status: 'u').count.to_s
+  end
 end

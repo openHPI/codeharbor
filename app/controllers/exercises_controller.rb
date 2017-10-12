@@ -5,7 +5,7 @@ class ExercisesController < ApplicationController
   before_action :set_exercise, only: [:show, :edit, :update, :destroy, :add_to_cart, :add_to_collection, :push_external, :contribute]
   before_action :set_search, only: [:index]
   rescue_from CanCan::AccessDenied do |_exception|
-    redirect_to root_path, alert: 'You are not authorized for this exercise.'
+    redirect_to root_path, alert: t('controllers.exercise.authorization')
   end
   # GET /exercises
   # GET /exercises.json
@@ -205,8 +205,25 @@ class ExercisesController < ApplicationController
     author = @exercise.user
     AccessRequest.send_contribution_request(author, @exercise, current_user).deliver_later
     text = t('controllers.exercise.contribute', user: current_user.name, exercise: @exercise.title)
-    Message.create(sender: current_user, recipient: author, param_type: 'exercise', param_id: @exercise.id, text: text)
-      redirect_to exercises_path, notice: t('controllers.exercise.contribute_notice')
+    Message.create(sender: current_user, recipient: author, param_type: 'exercise', param_id: @exercise.id, text: text, sender_status: 'd')
+    redirect_to exercises_path, notice: t('controllers.exercise.contribute_notice')
+  end
+
+  def add_author
+    user = User.find(params[:user])
+    ExerciseAuthor.create(user: user, exercise: @exercise)
+    text = t('controllers.exercise.add_author_text', user: current_user.name, exercise: @exercise.title)
+    Message.create(sender: current_user, recipient: user, param_type: 'exercise_accepted', param_id: @exercise.id, text: text, sender_status: 'd')
+    Message.where(sender: user, recipient:current_user, param_type: 'exercise', param_id: @exercise.id).delete_all
+    redirect_to user_messages_path(current_user), notice: t('controllers.exercise.add_author_notice')
+  end
+
+  def decline_author
+    user = User.find(params[:user])
+    text = t('controllers.exercise.decline_author_text', user: current_user.name, exercise: @exercise.title)
+    Message.create(sender: current_user, recipient: user, param_type: 'exercise_declined', text: text, sender_status: 'd')
+    Message.where(sender: user, recipient:current_user, param_type: 'exercise', param_id: @exercise.id).delete_all
+    redirect_to user_messages_path(current_user), notice: t('controllers.exercise.decline_author_')
   end
 
   private

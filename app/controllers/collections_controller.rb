@@ -2,10 +2,10 @@ require 'zip'
 
 class CollectionsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_collection, only: [:show, :edit, :update, :destroy, :remove_exercise, :remove_all, :download_all]
+  before_action :set_collection, only: [:show, :edit, :update, :destroy, :remove_exercise, :remove_all, :download_all, :share, :view_shared, :save_shared]
 
   rescue_from CanCan::AccessDenied do |_exception|
-    redirect_to root_path, alert: 'You are not authorized to for this action.'
+    redirect_to root_path, alert: t('controllers.collections.authorization')
   end
   # GET /collections
   # GET /collections.json
@@ -35,7 +35,7 @@ class CollectionsController < ApplicationController
 
     respond_to do |format|
       if @collection.save
-        format.html { redirect_to collections_path, notice: t('controllers.collections.created')}
+        format.html { redirect_to collections_path(@collection), notice: t('controllers.collections.created')}
         format.json { render :index, status: :created, location: @collection }
       else
         format.html { render :new }
@@ -92,6 +92,35 @@ class CollectionsController < ApplicationController
 
   end
 
+  def share
+    user = User.find_by(email: params[:user])
+    text =  t('controllers.collections.share.text', user: current_user.name, collection: @collection.title)
+    message = Message.new(sender: current_user, recipient: user, param_type: 'collection', param_id: @collection.id, text: text)
+    if message.save
+      redirect_to collection_path(@collection), notice: t('controllers.collections.share.notice')
+    else
+      redirect_to collection_path(@collection), alert: t('controllers.collections.share.alert')
+    end
+  end
+
+  def view_shared
+    @user = User.find(params[:user])
+    render :show
+  end
+
+  def save_shared
+    collection = @collection.dup
+    collection.user = current_user
+    @collection.exercises.each do |e|
+      collection.exercises << e
+    end
+
+    if collection.save
+      redirect_to collection_path(collection), notice:  t('controllers.collections.save_shared.notice')
+    else
+      redirect_to users_messages_path, alert:  t('controllers.collections.save_shared.alert')
+    end
+  end
   # DELETE /collections/1
   # DELETE /collections/1.json
   def destroy

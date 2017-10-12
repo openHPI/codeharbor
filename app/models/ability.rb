@@ -20,7 +20,7 @@ class Ability
       end
 
       #Collection
-      can [:create], Collection
+      can [:create, :view_shared, :save_shared, :show], Collection
       can [:manage], Collection do |collection|
         collection.user == user
       end
@@ -57,6 +57,15 @@ class Ability
       can [:create], User
       can [:show, :edit, :delete], User do |this_user|
         this_user == user
+      end
+
+      #Message
+      can [:create], Message
+      can [:show, :reply, :delete, :add_author], Message do |message|
+        message.recipient == user
+      end
+      can [:show, :delete], Message do |message|
+        message.sender == user
       end
     end
     # Define abilities for the passed in user here. For example:

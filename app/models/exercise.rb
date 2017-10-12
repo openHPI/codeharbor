@@ -132,6 +132,10 @@ class Exercise < ActiveRecord::Base
     (avg_rating*2).round / 2.0
   end
 
+  def rating_star(avg)
+    avg*2.round / 2
+  end
+
   def add_attributes(params)
     if params[:exercise_relation]
       add_relation(params[:exercise_relation])

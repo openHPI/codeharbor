@@ -4,6 +4,15 @@
     i.fa.fa-folder-open
     = ' ' + @collection.title
 .collection-content
+  - if @user
+    label.form-label
+      = t('collections.show.shared_by')
+      = ': '
+    = @user.name
+    p style="margin-top: 10px"
+      = t('collections.show.hint')
+    br
+
   table.table
     thead
       tr
@@ -22,21 +31,46 @@
         - @collection.exercises.each do |exercise|
           tr
             td
-              = link_to exercise.title, exercise_path(exercise), class: 'btn btn-default'
+              - if can? :read, exercise
+                = link_to exercise.title, exercise_path(exercise), class: 'btn btn-default'
+              - else
+                = link_to exercise.title, exercise_path(exercise), class: 'btn btn-default disabled'
             td
+              - if cannot? :read, exercise
+                span.fa.fa-lock.lock
+                = ' '
+                = link_to t('collections.show.contribute'), contribute_exercise_path(exercise), class: 'btn btn-default'
               = link_to remove_exercise_collection_path(@collection, exercise: exercise), class: 'pull-right' do
                 i.fa.fa-remove style=("color: #800000; font-size: 20px;")
 br
 .actions.btn-group[role="group"]
-  = link_to 'Export all', download_all_collection_path(@collection), class: 'btn btn-important'
-  = link_to remove_all_collection_path(@collection), class: 'btn btn-important' do
-    i.fa.fa-remove style=("color: #800000")
-    = ' ' + 'Remove All'
-  = link_to edit_collection_path(@collection), class:'btn btn-important' do
-    i.fa.fa-edit
-    = ' ' + t('collections.button.edit')
-  = link_to collection_path(@collection), class:'btn btn-important', method: :delete, data: { confirm: t('sure') } do
-    i.fa.fa-trash
-    = ' ' + 'Delete'
-    
-  = link_to t('collections.button.back'), collections_path, class: 'btn btn-important'
+  - if @user
+    = link_to t('collections.show.save'), save_shared_collection_path(@collection), method: 'post', class: 'btn btn-important'
+    = link_to t('collections.button.back'), user_messages_path(current_user), class: 'btn btn-important'
+  - else
+    .btn-group
+      = button_tag type: 'button', data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}, class: 'btn btn-important nav-btn-exercise dropdown-toggle dropdown-toggle split' do
+        = t('collections.show.share') + ' '
+        span.caret
+      .dropdown-menu#share-menu
+        .dropdown-header style="padding-left: 2px;"
+          = t('collections.show.type')
+          | :
+        .input-group
+          = text_field_tag 'user', nil, form: 'share', class: 'form-control'
+          .input-group-btn
+            = submit_tag t('collections.show.share'), form: 'share', class: 'btn btn-default'
+    = link_to t('collections.show.export_all'), download_all_collection_path(@collection), class: 'btn btn-important'
+    = link_to remove_all_collection_path(@collection), class: 'btn btn-important' do
+      i.fa.fa-remove style=("color: #800000")
+      = ' ' + t('collections.show.remove_all')
+    = link_to edit_collection_path(@collection), class:'btn btn-important' do
+      i.fa.fa-edit
+      = ' ' + t('collections.button.edit')
+    = link_to collection_path(@collection), class:'btn btn-important', method: :delete, data: { confirm: t('sure') } do
+      i.fa.fa-trash
+      = ' ' + t('collections.show.delete')
+
+    = link_to t('collections.button.back'), collections_path, class: 'btn btn-important'
+
+= form_tag share_collection_path, id: 'share'

@@ -32,8 +32,17 @@ l4 = Label.create(name: 'Python', color: 'FFA500', label_category: category1)
 test_framework = TestingFramework.create(name: 'JUnit 4')
 test_framework2 = TestingFramework.create(name: 'Pytest')
 
-java_file = FileType.create(name: 'Java Main File')
-python_file = FileType.create(name: 'Python File')
+java_file = FileType.create(name: 'Java', file_extension: '.java')
+python_file = FileType.create(name: 'Python', file_extension: '.py')
+ruby_file = FileType.create(name: 'Ruby', file_extension: '.rb')
+sql_file = FileType.create(name: 'SQL', file_extension: '.sql')
+text_file = FileType.create(name: 'Plain Text', file_extension: '.txt')
+javascript_file = FileType.create(name: 'JavaScript', file_extension: '.js')
+coffeescript_file = FileType.create(name: 'CoffeeScript', file_extension: '.coffee')
+html_file = FileType.create(name: 'HTML', file_extension: '.html')
+css_file = FileType.create(name: 'CSS', file_extension: '.css')
+json_file = FileType.create(name: 'JSON', file_extension: '.json')
+xml_file = FileType.create(name: 'XML', file_extension: '.xml')
 
 exercise1 = Exercise.create(title: "Hello World", maxrating: '10', private: false, user_id:user1.id)
 exercise1_main = ExerciseFile.create(content: "public class HelloWorld{ public static void main String[] args) { } }", path: '', purpose:'template', visibility: true, role: 'Main File', hidden: false, read_only: false, file_type: java_file, exercise: exercise1)
@@ -55,9 +64,6 @@ comment2 = Comment.create(text: 'Looking forward to show this exercise to my stu
 exercise1.labels << l1
 exercise1.labels << l2
 exercise1.labels << l3
-
-exercise1.descriptions
-
 
 AccountLink.create(push_url: 'google.com/pushpush', account_name: 'account1000')
 

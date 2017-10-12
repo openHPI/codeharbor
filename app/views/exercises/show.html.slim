@@ -224,7 +224,7 @@ table.vertical-table
     = link_to exercise_path(@exercise), class:'btn btn-important', method: :delete, data: { confirm: t('sure') } do
       i.fa.fa-trash
       = ' ' + t('exercises.show.delete')
-  = link_to t('exercises.show.back'), exercises_path,  class: 'btn btn-important'
+  = link_to t('exercises.show.back'), :back,  class: 'btn btn-important'
 
 div class=("comment-box with-borders") data-exercise=@exercise.id
   = form_for :comment, url: exercise_comments_path(@exercise), remote: true do |f|
