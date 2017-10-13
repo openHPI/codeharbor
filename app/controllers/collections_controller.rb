@@ -10,7 +10,7 @@ class CollectionsController < ApplicationController
   # GET /collections
   # GET /collections.json
   def index
-    @collections = Collection.where(user: current_user).paginate(per_page: 5, page: params[:page])
+    @collections = Collection.includes(:collections_users).where(:collections_users => { :user => current_user}).distinct.paginate(per_page: 5, page: params[:page])
   end
 
   # GET /collections/1
@@ -31,7 +31,7 @@ class CollectionsController < ApplicationController
   # POST /collections.json
   def create
     @collection = Collection.new(collection_params)
-    @collection.user = current_user
+    @collection.users << current_user
 
     respond_to do |format|
       if @collection.save
@@ -109,14 +109,10 @@ class CollectionsController < ApplicationController
   end
 
   def save_shared
-    collection = @collection.dup
-    collection.user = current_user
-    @collection.exercises.each do |e|
-      collection.exercises << e
-    end
+    @collection.users << current_user
 
-    if collection.save
-      redirect_to collection_path(collection), notice:  t('controllers.collections.save_shared.notice')
+    if @collection.save
+      redirect_to collection_path(@collection), notice:  t('controllers.collections.save_shared.notice')
     else
       redirect_to users_messages_path, alert:  t('controllers.collections.save_shared.alert')
     end

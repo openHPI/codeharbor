@@ -22,7 +22,7 @@ class Ability
       #Collection
       can [:create, :view_shared, :save_shared, :show], Collection
       can [:manage], Collection do |collection|
-        collection.user == user
+        collection.users.include?(user)
       end
 
       #Exercise

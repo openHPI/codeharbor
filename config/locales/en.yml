@@ -47,7 +47,7 @@ en:
         notice: "Your collection has been sent."
         alert: "Something went wrong."
       save_shared:
-        notice: "You saved the shared collection."
+        notice: "You can now collaborate to collection."
         alert: "Something went wrong."
 
     exercise:
@@ -199,6 +199,7 @@ en:
       type: "Type in the users email address"
       contribute: 'Contribute'
       save: 'Save Collection'
+      collaborate: "Collaborate"
       export_all: 'Export all'
       remove_all: 'Remove All'
       delete: 'Delete'

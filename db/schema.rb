@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171013135244) do
+ActiveRecord::Schema.define(version: 20171013145925) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,13 +63,10 @@ ActiveRecord::Schema.define(version: 20171013135244) do
   add_index "carts_exercises", ["exercise_id"], name: "index_carts_exercises_on_exercise_id", using: :btree
 
   create_table "collections", force: :cascade do |t|
-    t.integer  "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "title"
   end
-
-  add_index "collections", ["user_id"], name: "index_collections_on_user_id", using: :btree
 
   create_table "collections_exercises", force: :cascade do |t|
     t.integer "exercise_id"
@@ -78,6 +75,13 @@ ActiveRecord::Schema.define(version: 20171013135244) do
 
   add_index "collections_exercises", ["collection_id"], name: "index_collections_exercises_on_collection_id", using: :btree
   add_index "collections_exercises", ["exercise_id"], name: "index_collections_exercises_on_exercise_id", using: :btree
+
+  create_table "collections_users", force: :cascade do |t|
+    t.integer "collection_id"
+    t.integer "user_id"
+  end
+
+  add_index "collections_users", ["collection_id"], name: "index_collections_users_on_collection_id", using: :btree
 
   create_table "comments", force: :cascade do |t|
     t.text     "text"
@@ -316,7 +320,6 @@ ActiveRecord::Schema.define(version: 20171013135244) do
   add_foreign_key "answers", "comments"
   add_foreign_key "answers", "users"
   add_foreign_key "carts", "users"
-  add_foreign_key "collections", "users"
   add_foreign_key "comments", "exercises"
   add_foreign_key "comments", "users"
   add_foreign_key "descriptions", "exercises"

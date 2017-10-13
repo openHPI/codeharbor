@@ -45,7 +45,7 @@
 br
 .actions.btn-group[role="group"]
   - if @user
-    = link_to t('collections.show.save'), save_shared_collection_path(@collection), method: 'post', class: 'btn btn-important'
+    = link_to t('collections.show.collaborate'), save_shared_collection_path(@collection), method: 'post', class: 'btn btn-important'
     = link_to t('collections.button.back'), user_messages_path(current_user), class: 'btn btn-important'
   - else
     .btn-group
