@@ -4,7 +4,8 @@ Rails.application.routes.draw do
   resources :exercise_relations
   # You can have the root of your site routed with "root"
   root 'home#index'
-  
+
+  resources :licenses
   resources :execution_environments
   resources :carts do
     member do
@@ -92,6 +93,7 @@ Rails.application.routes.draw do
     end
     resources :ratings
     member do
+      post :report
       get :add_author
       get :decline_author
       post :push_external

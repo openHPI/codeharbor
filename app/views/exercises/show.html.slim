@@ -16,7 +16,7 @@
       small
         .rating-dropdown
           span.btn.btn-xs#rate
-            = 'Rate '
+            = t('exercises.rate')+ ' '
             span.caret
           .popup-rating
             .rating
@@ -32,6 +32,10 @@
 
   br
 
+legend
+  span.number = '1'
+  = t('exercises.form.basic_info') + ' '
+  span.fa.fa-caret-down.toggle
 table.vertical-table
   tr
     th
@@ -43,37 +47,39 @@ table.vertical-table
   - if @exercise_relation
     tr
       th
-        = 'Parent:'
+        = t('exercises.parent')
+        | :
       td
         - if @exercise_relation.origin
           = link_to @exercise_relation.origin.title, exercise_path(@exercise_relation.origin)
         - else
-          = 'Parent was deleted'
+          = t('exercises.parent_deleted')
     tr
       th
-        = 'Relation'
+        = t('exercises.relation')
+        | :
       td
         = @exercise_relation.relation.name
 
   - @exercise.descriptions.each do |description|
     tr
       th
-        = t('exercises.show.description')
+        = t('exercises.description_in') + ' '
         = description.language
         | :
       td
         = description.text
   tr
     th
-      = t('exercises.visibility.label')
-      | :
-    td
-      = @exercise.private ? t('exercises.visibility.private') : t('exercises.visibility.public')
-  tr
-    th
-      = 'Execution Environment'
+      = t('exercises.execution_environment')
     td
       = @exercise.execution_environment.language
+  tr
+    th
+      = t('exercises.created_at')
+      | :
+    td
+      = @exercise.created_at
   tr
     th
       = t('exercises.created_by')
@@ -90,97 +96,132 @@ table.vertical-table
     - else
       td
         = @exercise.user.name
+legend
+  span.number = '2'
+  = t('exercises.form.additional_info') + ' '
+  span.fa.fa-caret-down.toggle
+table.vertical-table
   tr
     th
-      = t('exercises.created_at')
+      = t('exercises.visibility.label')
       | :
     td
-      = @exercise.created_at
+      = @exercise.private ? t('exercises.visibility.private') : t('exercises.visibility.public')
   tr
     th
-      = "Labels"
+      = t('exercises.labels')
       | :
     td
       - @exercise.labels.each do |label|
         = '#' + label.name + ' '
   tr
     th
-      = "Groups"
+      = t('exercises.groups')
       | :
     td
       - @exercise.groups.each do |group|
         = link_to group.name, group_path(group)
   tr
     th
-      em
-        = t('exercises.files.label')
-        | :
+      = t('exercises.license')
+      | :
     td
-      table.vertical-table
-        - @files.each do |file|
-          - if file.purpose != 'test'
-            tr
-              td colspan=2
-                .editor_readonly
-                  = file.content
-            tr
-              th
-                = 'Name'
-              td
-                = file.name
-            tr
-              th
-                = t('exercises.files.path')
-              td
-                = file.path
-            tr
-              th
-                = t('exercises.files.extension')
-              td
-                = file.file_type.name_with_extension
-            tr
-              th
-                = 'Role'
-              td
-                = file.role
-            br
+      = @exercise.license.name
+      = ': '
+      = link_to @exercise.license.link, @exercise.license.link
   tr
     th
-      em
-        = t('exercises.tests.label')
-        | :
+      = t('exercises.impact')
+      | :
     td
-      table.vertical-table
-        - @tests.each do |test|
-          tr
-            td colspan=2
-              .editor_readonly
-                = test.exercise_file.content
-          tr
-            th
-              = 'Name'
-            td
-              = test.name
-            tr
-              th
-                = t('exercises.files.path')
-              td
-                = test.path
-            tr
-              th
-                = t('exercises.files.extension')
-              td
-                = test.file_type.name_with_extension
-          tr
-            th
-              = t('exercises.tests.feedback')
-            td
-              = test.feedback_message
-          tr
-            th
-              = t('exercises.tests.framework')
-            td
-              = test.testing_framework.name
+      p.impact
+        = t('exercises.downloads')
+        = ':'
+        = @exercise.downloads.to_s
+      p.impact
+        = t('exercises.in_carts')
+        = ':'
+        = @exercise.in_carts
+      p.impact
+        = t('exercises.in_collections')
+        = ':'
+        = @exercise.in_collections
+
+legend
+  span.number = '3'
+  = t('exercises.files.label') + ' '
+  span.fa.fa-caret-down.toggle
+
+table.vertical-table
+  - if @files.empty?
+    p style="margin-left: 10px;"
+      = t('exercises.show.no_files')
+  - @files.each do |file|
+    - if file.purpose != 'test'
+      tr
+        td colspan=2
+          .editor_readonly
+            = file.content
+      tr
+        th
+          = t('exercises.files.name')
+        td
+          = file.name
+      tr
+        th
+          = t('exercises.files.path')
+        td
+          = file.path
+      tr
+        th
+          = t('exercises.files.extension')
+        td
+          = file.file_type.name_with_extension
+      tr
+        th
+          = t('exercises.files.role')
+        td
+          = file.role
+
+legend
+  span.number = '4'
+  = t('exercises.tests.label') + ' '
+  span.fa.fa-caret-down.toggle
+
+table.vertical-table
+  - if @tests.empty?
+    p style="margin-left: 10px;"
+      = t('exercises.show.no_tests')
+  - @tests.each do |test|
+    tr
+      td colspan=2
+        .editor_readonly
+          = test.exercise_file.content
+    tr
+      th
+        = t('exercises.files.name')
+      td
+        = test.name
+      tr
+        th
+          = t('exercises.files.path')
+        td
+          = test.path
+      tr
+        th
+          = t('exercises.files.extension')
+        td
+          = test.file_type.name_with_extension
+    tr
+      th
+        = t('exercises.tests.feedback')
+      td
+        = test.feedback_message
+    tr
+      th
+        = t('exercises.tests.framework')
+      td
+        = test.testing_framework.name
 
 .actions.btn-group[role="group"]
 
@@ -224,6 +265,19 @@ table.vertical-table
     = link_to exercise_path(@exercise), class:'btn btn-important', method: :delete, data: { confirm: t('sure') } do
       i.fa.fa-trash
       = ' ' + t('exercises.show.delete')
+  - if can? :report, @exercise
+    .btn-group
+      = button_tag type: 'button', data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}, class: 'btn btn-important nav-btn-exercise dropdown-toggle dropdown-toggle split' do
+        = t('exercises.show.report')+ ' '
+        span.caret
+      .dropdown-menu#share-menu
+        .dropdown-header style="padding-left: 2px;"
+          = t('exercises.show.report_message')
+          | :
+          .input-group
+            = text_field_tag 'text', nil, form: 'report', class: 'form-control'
+            .input-group-btn
+              = submit_tag t('exercises.show.submit'), form: 'report', class: 'btn btn-default'
   = link_to t('exercises.show.back'), :back,  class: 'btn btn-important'
 
 div class=("comment-box with-borders") data-exercise=@exercise.id
@@ -235,4 +289,7 @@ div class=("comment-box with-borders") data-exercise=@exercise.id
         span.input-group-btn
           = f.submit class: 'btn btn-default'
   .comment-body
+
+= form_tag report_exercise_path(@exercise), id: 'report'
+
 #page_end style="margin-top: 20px"

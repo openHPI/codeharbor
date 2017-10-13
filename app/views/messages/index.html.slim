@@ -28,13 +28,16 @@ br
           span.fa.fa-folder-open
         - elsif message.param_type == 'group' || message.param_type == 'group_accepted' || message.param_type == 'group_declined'
           span.fa.fa-group
+        - elsif message.param_type == 'report'
+          span.fa.fa-cog
         - else
           span.fa.fa-envelope
       .message-right
         .message-user
           - if @option == 'inbox'
             =  t('message.index.from')
-            = ': ' + message.sender.name
+            = ': '
+            = message.sender ? message.sender.name : "Admin"
           - else
             = t('message.index.to')
             = ': '
@@ -63,7 +66,7 @@ br
                 = link_to deny_access_group_path(message.param_id, user: message.sender.id), class: 'btn btn-default btn-xs' do
                   i.fa.fa-remove style=("color:#800000")
                   = ' ' + t('message.index.deny_access')
-              - if message.param_type == 'exercise_accepted'
+              - if message.param_type == 'exercise_accepted' || message.param_type == 'report'
                 = link_to t('message.index.view'), exercise_path(message.param_id), class: 'btn btn-default btn-xs'
               - if message.param_type == 'group_accepted'
                 = link_to t('message.index.view'), group_path(message.param_id), class: 'btn btn-default btn-xs'

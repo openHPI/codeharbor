@@ -69,6 +69,8 @@ en:
       add_author_notice: "User was added as co-author."
       decline_author_text: "%{user} declined your contribution request to his exercise: %{exercise}."
       decline_author_notice: "Users contribution request was declined."
+      report_alert: "You already reported this exercise."
+      report_notice: "You successfully reported this exercise."
 
     group:
       authorization: "You are not authorized to for this action."
@@ -295,14 +297,29 @@ en:
     errorMessage: "prohibited this exercise_file from being saved:"
 
   exercises:
+
     title: "Title"
+    rate: "Rate"
+    description_in: "Description in"
+    parent: "Parent"
+    parent_deleted: "Parent was deleted"
+    relation: "Relation"
     created_by: "Created by"
     created_at: "Created at"
+    execution_environment: "Execution environment"
     visibility:
       label: "Visibility"
       private: "Private"
       public: "Public"
+    labels: "Labels"
+    groups: "Groups"
+    impact: "Impact"
+    license: "License"
+    downloads: "Downloads"
+    in_carts: "In Carts"
+    in_collections: "In Collections"
     files:
+      role: "Role"
       label: "Files"
       content: "Content"
       path: "Path"
@@ -327,6 +344,7 @@ en:
       edit: "Edit"
       delete: "Delete"
 
+
     search:
       advanced: "Advanced"
       order: "Order By"
@@ -349,8 +367,8 @@ en:
       no_results_description: "Try different options by clicking on Advanced."
 
     form:
-      basic_info: "Basic Informations"
-      visibility_labels: "Visibility & Labels"
+      basic_info: "Basic Information"
+      additional_info: "Additional Information"
       environment: "Execution Environment"
       descriptions:
         label: "Descriptions"
@@ -363,7 +381,7 @@ en:
       tests:
         add: "Add Test"
         remove: "Remove Test"
-      create: "Create Exercise"
+      save: "Save Exercise"
       cancel: "Cancel"
 
     admin:
@@ -379,7 +397,8 @@ en:
       header: "New Exercise"
 
     show:
-      description: "Description in "
+      no_files: "No files included"
+      no_tests: "No tests included"
       files:
         mainfile: "Mainfile"
         solution: "Solution file"
@@ -394,6 +413,9 @@ en:
       edit: "Edit"
       delete: "Delete"
       back: "Back"
+      report: "Report"
+      report_message: "Report message"
+      submit: "Submit"
 
     edit:
       header: "Edit:"

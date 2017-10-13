@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171010132359) do
+ActiveRecord::Schema.define(version: 20171013135244) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -161,12 +161,12 @@ ActiveRecord::Schema.define(version: 20171010132359) do
     t.datetime "updated_at",                           null: false
     t.integer  "user_id"
     t.integer  "execution_environment_id"
-    t.integer  "report_id"
     t.integer  "downloads",                default: 0
+    t.integer  "license_id"
   end
 
   add_index "exercises", ["execution_environment_id"], name: "index_exercises_on_execution_environment_id", using: :btree
-  add_index "exercises", ["report_id"], name: "index_exercises_on_report_id", using: :btree
+  add_index "exercises", ["license_id"], name: "index_exercises_on_license_id", using: :btree
   add_index "exercises", ["user_id"], name: "index_exercises_on_user_id", using: :btree
 
   create_table "exercises_labels", id: false, force: :cascade do |t|
@@ -327,7 +327,7 @@ ActiveRecord::Schema.define(version: 20171010132359) do
   add_foreign_key "exercise_group_accesses", "exercises"
   add_foreign_key "exercise_group_accesses", "groups"
   add_foreign_key "exercises", "execution_environments"
-  add_foreign_key "exercises", "reports"
+  add_foreign_key "exercises", "licenses"
   add_foreign_key "exercises", "users"
   add_foreign_key "labels", "label_categories"
   add_foreign_key "ratings", "exercises"

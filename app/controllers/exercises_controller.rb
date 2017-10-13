@@ -169,6 +169,8 @@ class ExercisesController < ApplicationController
       end
       redirect_to @exercise, alert: t('controllers.exercise.download_error')
     else
+      downloads_new = @exercise.downloads+1
+      @exercise.update(downloads: downloads_new)
       send_data doc, filename: "#{@exercise.title}.xml", type: "application/xml"
     end
   end
@@ -223,9 +225,25 @@ class ExercisesController < ApplicationController
     text = t('controllers.exercise.decline_author_text', user: current_user.name, exercise: @exercise.title)
     Message.create(sender: current_user, recipient: user, param_type: 'exercise_declined', text: text, sender_status: 'd')
     Message.where(sender: user, recipient:current_user, param_type: 'exercise', param_id: @exercise.id).delete_all
-    redirect_to user_messages_path(current_user), notice: t('controllers.exercise.decline_author_')
+    redirect_to user_messages_path(current_user), notice: t('controllers.exercise.decline_author_notice')
   end
 
+  def report
+    report = Report.find_by(user: current_user, exercise: @exercise)
+    if report
+      redirect_to exercise_path(@exercise), alert: t('controllers.exercise.report_alert')
+    else
+      Report.create(user: current_user, exercise: @exercise, text: params[:text])
+      if @exercise.reports == 1
+        Message.create(recipient: @exercise.user, param_type: 'report', param_id: @exercise.id, text: text, sender_status: 'd')
+        @exercise.exercise_authors.each do |author|
+          Message.create(recipient: author, param_type: 'report', param_id: @exercise.id, text: text, sender_status: 'd')
+        end
+        #Insert message for "Revision Board" here
+      end
+      redirect_to exercise_path(@exercise), notice: t('controllers.exercise.report_notice')
+    end
+  end
   private
 
   def set_search

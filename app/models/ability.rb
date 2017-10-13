@@ -27,12 +27,16 @@ class Ability
 
       #Exercise
       can [:create, :contribute], Exercise
-      can [:show, :read, :add_to_cart, :add_to_collection, :export, :duplicate, :download_exercise], Exercise do |exercise|
+      can [:show, :read, :add_to_cart, :add_to_collection, :export, :duplicate, :download_exercise, :report], Exercise do |exercise|
         exercise.can_access(user)
       end
       can [:manage], Exercise do |exercise|
         ExerciseAuthor.where(user_id: user.id, exercise_id: exercise.id).any? || exercise.user == user
       end
+      cannot [:report], Exercise do |exercise|
+        ExerciseAuthor.where(user_id: user.id, exercise_id: exercise.id).any? || exercise.user == user
+      end
+
 
 
       #Comment

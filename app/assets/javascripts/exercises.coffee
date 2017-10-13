@@ -226,5 +226,16 @@ ready =->
 
   $('.exercise-validation').on('submit', validateForm)
 
+  #Set link for license
+  if select = document.getElementById('exercise_license')
+    option = select.getElementsByTagName('option')[select.selectedIndex]
+    link = option.getAttribute("data-link")
+    $('.link').html("<p>Link: <a href='#{link}'>#{link}</a></p>")
+
+  $('.select select').on 'change', ->
+    option = this.getElementsByTagName('option')[this.selectedIndex]
+    link = option.getAttribute("data-link")
+    $('.link').html("<p>Link: <a href='#{link}'>#{link}</a></p>")
+
 $(document).ready(ready)
 $(document).on('page:load', ready)
