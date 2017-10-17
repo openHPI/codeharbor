@@ -23,7 +23,7 @@ RSpec.describe ExercisesController, type: :controller do
   before { allow_any_instance_of(CanCan::ControllerResource).to receive(:load_and_authorize_resource){ nil } }
   let!(:user) {FactoryGirl.create(:user)}
   let!(:cart) {FactoryGirl.create(:cart, user: user, exercises: [])}
-  let!(:collection) {FactoryGirl.create(:collection, user: user, exercises: [])}
+  let!(:collection) {FactoryGirl.create(:collection, users: [user], exercises: [])}
   # This should return the minimal set of attributes required to create a valid
   # Exercise. As you add validations to Exercise, be sure to
   # adjust the attributes here as well.

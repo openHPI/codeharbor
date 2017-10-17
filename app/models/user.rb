@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   has_secure_password
 
   has_and_belongs_to_many :collections, dependent: :destroy
+  has_many :reports, dependent: :destroy
   has_many :account_links
   has_many :exercises
   has_one :cart, dependent: :destroy
@@ -14,7 +15,7 @@ class User < ActiveRecord::Base
   has_many :exercises, through: :exercise_authors
   has_many :sent_messages, :class_name => 'Message', :foreign_key => 'sender_id'
   has_many :received_messages, :class_name => 'Message', :foreign_key => 'recipient_id'
-  
+
   before_destroy :handle_group_memberships, prepend: true
 
 
@@ -45,6 +46,11 @@ class User < ActiveRecord::Base
     "#{first_name} #{last_name}"
   end
 
+  def handle_destroy
+    handle_collection_membership
+    handle_exercises
+  end
+
 
   def has_access_through_any_group?(exercise)
     self.shares_any_group?(exercise)
@@ -65,12 +71,26 @@ class User < ActiveRecord::Base
         group.destroy
       end
     end
+
+    handle_destroy
   end
   
   def groups_sorted_by_admin_state_and_name(groups_to_sort = groups)
     groups_to_sort.sort_by do |group|
       [group.admins.include?(self) ? 0 : 1, group.name]
     end
+  end
+
+  def handle_collection_membership
+    self.collections.each do |collection|
+      if collection.users.size == 1
+        collection.delete
+      end
+    end
+  end
+
+  def handle_exercises
+    Exercise.where(user: self).update_all(user_id: nil)
   end
 
   def unread_messages_count

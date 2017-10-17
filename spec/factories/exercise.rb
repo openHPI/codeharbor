@@ -14,6 +14,7 @@ FactoryGirl.define do
     private false
     authors {[FactoryGirl.create(:user), FactoryGirl.create(:user)]}
     execution_environment {FactoryGirl.create(:java_8_execution_environment)}
+    license {FactoryGirl.create(:license)}
     after(:create) do |exercise|
       create(:simple_description, exercise: exercise)
     end
@@ -22,6 +23,7 @@ FactoryGirl.define do
   factory :exercise_with_single_java_main_file, class: 'Exercise' do
     title 'Some Exercise'
     execution_environment { FactoryGirl.create(:java_8_execution_environment) }
+    license {FactoryGirl.create(:license)}
     after(:create) do |exercise|
       create(:simple_description, exercise: exercise)
       create(:single_java_main_file, exercise: exercise)
@@ -31,6 +33,7 @@ FactoryGirl.define do
   factory :exercise_with_single_junit_test, class: 'Exercise' do
     title 'Exercises with single JUnit Test'
     execution_environment { FactoryGirl.create(:java_8_execution_environment) }
+    license {FactoryGirl.create(:license)}
     after(:create) do |exercise|
       create(:simple_description, exercise: exercise)
       create(:single_junit_test, exercise: exercise)
@@ -40,6 +43,7 @@ FactoryGirl.define do
   factory :exercise_with_single_model_solution, class: 'Exercise' do
     title 'Exercises with single Model Solution'
     execution_environment { FactoryGirl.create(:java_8_execution_environment) }
+    license {FactoryGirl.create(:license)}
     after(:create) do |exercise|
       create(:simple_description, exercise: exercise)
       create(:model_solution_file, exercise: exercise)

@@ -4,7 +4,7 @@ RSpec.describe "Collections", type: :request do
   context 'logged in' do
     before(:each) do
       @user = FactoryGirl.create(:user)
-      @collection = FactoryGirl.create(:collection, title: 'Some Collection', user: @user, exercises: [])
+      @collection = FactoryGirl.create(:collection, title: 'Some Collection', users: [@user], exercises: [])
       @collection_params = FactoryGirl.attributes_for(:collection)
       post_via_redirect login_path, :email => @user.email, :password => @user.password
     end

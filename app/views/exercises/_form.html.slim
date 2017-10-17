@@ -74,7 +74,6 @@
             .select
               = f.select :license_id, options_for_select(License.all.collect{ |l| [l.name, l.id, {'data-link'=> l.link}] }),{:prompt => true, :selected => 1}, class: 'form-control'
             .link
-              = link_to
     fieldset.form-group
       legend
         span.number = '3'

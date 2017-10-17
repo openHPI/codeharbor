@@ -35,7 +35,7 @@ class CollectionsController < ApplicationController
 
     respond_to do |format|
       if @collection.save
-        format.html { redirect_to collections_path(@collection), notice: t('controllers.collections.created')}
+        format.html { redirect_to collections_path, notice: t('controllers.collections.created')}
         format.json { render :index, status: :created, location: @collection }
       else
         format.html { render :new }

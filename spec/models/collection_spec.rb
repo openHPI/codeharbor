@@ -6,8 +6,8 @@ RSpec.describe Collection, type: :model do
     let!(:user) {FactoryGirl.create(:user)}
     let!(:exercise1) {FactoryGirl.create(:simple_exercise)}
     let!(:exercise2) {FactoryGirl.create(:simple_exercise)}
-    let(:collection_with_one_exercise) {FactoryGirl.create(:collection, user: user, exercises: [exercise1] )}
-    let(:collection_with_two_exercises) {FactoryGirl.create(:collection, user: user, exercises: [exercise1, exercise2] )}
+    let(:collection_with_one_exercise) {FactoryGirl.create(:collection, users: [user], exercises: [exercise1] )}
+    let(:collection_with_two_exercises) {FactoryGirl.create(:collection, users: [user], exercises: [exercise1, exercise2] )}
 
     it 'should add when not in collection already' do
       collection = collection_with_one_exercise
@@ -26,7 +26,7 @@ RSpec.describe Collection, type: :model do
   describe 'Destroy:' do
     let!(:user) {FactoryGirl.create(:user)}
     let!(:exercise) {FactoryGirl.create(:simple_exercise)}
-    let!(:collection) {FactoryGirl.create(:collection, user: user, exercises: [exercise])}
+    let!(:collection) {FactoryGirl.create(:collection, users: [user], exercises: [exercise])}
 
     it 'delete exercise off collection when removing in collection' do
       exercises_count = Exercise.all.count
