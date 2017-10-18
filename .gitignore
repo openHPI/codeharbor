@@ -47,4 +47,6 @@ coverage
 # Ignore application configuration
 config/application.yml
 config/action_mailer.yml
+config/action_mailer.production.yml
 config/database.yml
+config/database.production.yml
