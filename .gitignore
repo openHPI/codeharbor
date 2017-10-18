@@ -45,7 +45,6 @@ coverage
 .ssh
 
 # Ignore application configuration
-./config/application.yml
-./config/database-production.yml
-./config/action_mailer.yml
-./config/database.yml
+config/application.yml
+config/action_mailer.yml
+config/database.yml
