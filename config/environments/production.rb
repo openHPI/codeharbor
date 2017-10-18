@@ -96,6 +96,8 @@ Rails.application.configure do
   # use relative URL path while compiling, maybe?
   config.assets.initialize_on_precompile = true
   
+  Rails.application.routes.default_url_options[:host] = 'https://tools.openhpi.de'
+  
   # Run on subfolder in production environment.
   config.relative_url_root = '/codeharbor'
 end
