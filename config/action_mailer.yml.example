@@ -1,21 +1,24 @@
 default: &default
   default_options:
-    from: sender@host.com
-  delivery_method: :smtp
+    from: no-reply@example.com
+  smtp_settings:
+    address: 127.0.0.1
+  sendmail_settings:
+    host: localhost
+  delivery_method: :sendmail
 
 development:
   <<: *default
-  default_url_options:
-    host: localhost
 
 production:
   <<: *default
-  default_url_options:
-    host: CHANGEME
-  delivery_method: :sendmail
+  delivery_method: :smtp
+  smtp_settings:
+    address: 192.168.0.1
 
 test:
   <<: *default
   default_url_options:
     host: localhost
     port: 3000
+  delivery_method: :test
