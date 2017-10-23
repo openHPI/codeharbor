@@ -34,7 +34,8 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to sessions_create_path(user_params), notice: 'User was successfully created.' }
+        UserMailer.registration_confirmation(@user).deliver_later
+        format.html { redirect_to home_index_path, notice: 'Please confirm your email address to continue.' }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
@@ -70,6 +71,7 @@ class UsersController < ApplicationController
       end
     end
   end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

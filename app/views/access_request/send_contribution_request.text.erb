@@ -3,4 +3,4 @@ Hello <%= @author.name %>
 <%= @user.name %> asked to contribute to your Exercise "<%= @exercise.title %>".
 If you want to make him a co-author or suggest Membership to a group click the link below.
 Otherwise ignore this Email.
-<%= link_to 'Confirm Request', users_url(@author), class: 'btn btn-success' %>
+<%= sessions_email_link_url(user: @author) %>

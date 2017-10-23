@@ -80,7 +80,7 @@ class GroupsController < ApplicationController
   def request_access
     flash[:notice] = "Your Access request has been sent."
     @group.admins.each do |admin|
-      AccessRequest.send_access_request(current_user, admin, @group).deliver_now
+      AccessRequest.send_access_request(current_user, admin, @group).deliver_later
     end
     @group.add_pending_user(current_user)
     redirect_to groups_path

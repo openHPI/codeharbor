@@ -23,6 +23,8 @@ Rails.application.routes.draw do
     end
   end
   get 'home/index'
+  get 'home/confirm_email'
+  get 'home/email_link'
 
   controller :sessions do
     get 'login' => :new
@@ -32,6 +34,7 @@ Rails.application.routes.draw do
 
   get 'sessions/create'
   get 'sessions/destroy'
+  get 'sessions/email_link'
 
   get 'comments/comments_all'
   get 'exercises/exercises_all'

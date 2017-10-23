@@ -16,6 +16,7 @@ class User < ActiveRecord::Base
   has_many :received_messages, :class_name => 'Message', :foreign_key => 'recipient_id'
   
   before_destroy :handle_group_memberships, prepend: true
+  before_create :confirmation_token
 
 
   def cart_count
@@ -61,6 +62,19 @@ class User < ActiveRecord::Base
   def groups_sorted_by_admin_state_and_name(groups_to_sort = groups)
     groups_to_sort.sort_by do |group|
       [group.admins.include?(self) ? 0 : 1, group.name]
+    end
+  end
+
+  def email_activate
+    self.email_confirmed = true
+    self.confirm_token = nil
+    save!(:validate => false)
+  end
+
+  private
+  def confirmation_token
+    if self.confirm_token.blank?
+      self.confirm_token = SecureRandom.urlsafe_base64.to_s
     end
   end
 end
