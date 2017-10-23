@@ -388,12 +388,11 @@ en:
         header: "Create exercise collections"
         paragraph: "Create collections of your favorite exercises for your future needs.
                     Share collections with colleagues and peers.
-                    Export them to your favorite grader or download them as XML."
+                    Export them to your favorite auto-grader or download them as XML."
       groups:
-        header: "Create Groups of Users and restrict exercise access to that group"
-        paragraph: "If you decide that you do not want to share your exercise with everybody
-                    you can make it private and only allow access for users who belong to a Group.
-                    You can allow access to as many groups as your want and also add public exercises to a group."
+        header: "Create user-groups and share exercises with your group."
+        paragraph: "If you decide not to share your exercises with everybody,
+                    declare it private and only allow access to selected groups or users."
 
     sign_in:
       header: "Become a member"
