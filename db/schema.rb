@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180426114612) do
+ActiveRecord::Schema.define(version: 20180525134311) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -304,9 +304,9 @@ ActiveRecord::Schema.define(version: 20180426114612) do
     t.string   "last_name"
     t.string   "email"
     t.string   "password_digest"
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
-    t.string   "role",                default: "user"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.string   "role",                   default: "user"
     t.boolean  "deleted"
     t.string   "avatar_file_name"
     t.string   "avatar_content_type"
@@ -314,6 +314,10 @@ ActiveRecord::Schema.define(version: 20180426114612) do
     t.datetime "avatar_updated_at"
     t.string   "username"
     t.text     "description"
+    t.boolean  "email_confirmed",        default: false
+    t.string   "confirm_token"
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
   end
 
   add_foreign_key "account_links", "users"

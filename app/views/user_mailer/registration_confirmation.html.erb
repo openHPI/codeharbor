@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  <style type="text/css">
+
+  </style>
+</head>
+<body>
+<h1>Hello <%= @user.name %></h1>
+
+  Thanks for registering! To confirm your registration click the link below. <br/>
+
+  <br/>
+  <%= link_to 'Confirm Email', confirm_email_home_index_url(confirm_token: @user.confirm_token) %>
+</br>
+</body>
+</html>

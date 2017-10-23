@@ -9,10 +9,10 @@ class User < ApplicationRecord
   validates :first_name, :last_name, presence: true
   has_secure_password
 
-  has_and_belongs_to_many :external_account_links, class_name: "AccountLink"
+  has_and_belongs_to_many :external_account_links, class_name: "AccountLink", dependent: :destroy
   has_and_belongs_to_many :collections, dependent: :destroy
   has_many :reports, dependent: :destroy
-  has_many :account_links, foreign_key: "user_id", class_name: "AccountLink"
+  has_many :account_links, foreign_key: "user_id", class_name: "AccountLink", dependent: :destroy
   has_many :exercises
   has_one :cart, dependent: :destroy
   has_many :exercise_authors, dependent: :destroy
@@ -25,7 +25,8 @@ class User < ApplicationRecord
 
   default_scope { where(deleted: [nil, false]) }
 
-  before_destroy :handle_destroy, prepend: true
+  before_create :confirmation_token
+  #before_destroy :handle_destroy, prepend: true
 
   def soft_delete
     destroy = handle_destroy
@@ -34,15 +35,6 @@ class User < ApplicationRecord
       new_email = Digest::MD5.hexdigest email
       update(first_name: 'deleted', last_name: 'user', email: new_email, deleted: true)
     end
-  end
-
-  def last_admin? (group)
-    if self.in_group?(group, as: 'admin')
-      if group.admins.size == 1
-        true
-      end
-    end
-    false
   end
 
   def last_admin? (group)
@@ -74,12 +66,15 @@ class User < ApplicationRecord
 
   def handle_destroy
     destroy = handle_group_memberships
+    puts destroy
     if destroy == false
-      throw :abort
+      false
     else
       handle_collection_membership
       handle_exercises
       handle_messages
+      puts 'All handled'
+      true
     end
   end
 
@@ -90,6 +85,7 @@ class User < ApplicationRecord
   
   def handle_group_memberships
 
+    puts 'Handle group'
     self.in_all_groups?(as: 'admin')
 
     self.groups.each do |group|
@@ -135,7 +131,42 @@ class User < ApplicationRecord
       false
     end
   end
+
   def unread_messages_count
     Message.where(recipient: self, recipient_status: 'u').count.to_s
   end
+
+  def email_activate
+    self.email_confirmed = true
+    self.confirm_token = nil
+    save!(:validate => false)
+  end
+
+  def generate_password_token!
+    self.reset_password_token = generate_token
+    self.reset_password_sent_at = Time.now.utc
+    save!
+  end
+
+  def password_token_valid?
+    (self.reset_password_sent_at + 4.hours) > Time.now.utc
+  end
+
+  def reset_password!(password, password_confirmation)
+    self.reset_password_token = nil
+    self.password = password
+    self.password_confirmation = password_confirmation
+    save
+  end
+
+  private
+    def confirmation_token
+      if self.confirm_token.blank?
+        self.confirm_token = SecureRandom.urlsafe_base64.to_s
+      end
+    end
+
+    def generate_token
+      SecureRandom.hex(10)
+    end
 end

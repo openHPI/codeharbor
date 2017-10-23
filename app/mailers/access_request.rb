@@ -14,3 +14,4 @@ class AccessRequest < ApplicationMailer
     mail(to: @author.email, subject: "#{user.name} wants to contribute to your Exercise '#{exercise.title}'")
   end
 end
+

@@ -40,7 +40,18 @@ Rails.application.routes.draw do
       get :groups_all
     end
   end
-  get 'home/index'
+
+  resources :home do
+    collection do
+      get :index
+      get :reset_password
+      get :confirm_email
+      get :email_link
+      get :forgot_password
+      get :resend_confirmation
+      post :send_confirmation
+    end
+  end
 
   controller :sessions do
     get 'login' => :new
@@ -52,6 +63,7 @@ Rails.application.routes.draw do
 
   get 'sessions/create'
   get 'sessions/destroy'
+  get 'sessions/email_link'
 
   get 'comments/comments_all'
   get 'exercises/exercises_all'
@@ -79,6 +91,9 @@ Rails.application.routes.draw do
   post 'user/:id/messages/:id/add_author', to: 'messages#add_author', as: 'add_author'
 
   get 'exercise_files/:id/download_attachment', to: 'exercise_files#download_attachment', as: 'download_attachment'
+
+  post 'passwords/forgot', to: 'passwords#forgot'
+  post 'passwords/reset', to: 'passwords#reset'
 
   resources :labels do
     get :search, :on => :collection

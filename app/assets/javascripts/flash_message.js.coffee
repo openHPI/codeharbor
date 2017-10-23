@@ -2,7 +2,7 @@ show_ajax_message = (msg, type) ->
   cls = 'alert-success' if type == 'notice'
   cls = 'alert-danger' if type == 'alert'
   $("#flash-message").html "<div id='flash-#{type}' class='alert #{cls}' style='margin-top:30px; margin-bottom: -20px;'>#{msg}</div>"
-  $("#flash-#{type}").delay(3000).slideUp 'medium'
+  $("#flash-#{type}").delay(6000).slideUp 'medium'
 
 $(document).ajaxComplete (event, request) ->
   msg = request.getResponseHeader("X-Message")

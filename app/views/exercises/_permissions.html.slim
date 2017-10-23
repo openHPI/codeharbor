@@ -11,8 +11,6 @@
       div style="display:inline-block"
         span.fa-stack.crossed-out
           i.fa.fa-stack-1x.fa-pencil.fa-2x
-  //= f.label :read_only, 'Read only', class:'form-label'
-  //= file.check_box :read_only
   .radio-switch
     = file.radio_button :hidden, false, value: false, checked: true
     = file.label :hidden_false, data: {toggle: 'tooltip', placement: 'bottom'}, title: 'visible', class: 'radio-left small-radio' do

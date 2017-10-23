@@ -34,7 +34,8 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to sessions_create_path(user_params), notice: t('controllers.user.created')}
+        UserMailer.registration_confirmation(@user).deliver_now
+        format.html { redirect_to home_index_path, notice: 'Please confirm your email address to continue.' }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }

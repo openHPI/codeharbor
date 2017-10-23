@@ -3,15 +3,25 @@
     .std-heading
       i.fa.fa-sign-in style="color:#444444"
       = ' ' + t('sessions.header')
-  = form_tag do
+  = form_tag '/login', method: 'post' do
+    - if @messages_redirect
+      = hidden_field_tag 'redirect', @messages_redirect
     .form-group.field-element
       = label_tag :email, t('sessions.email.label'), class: 'form-label', style:'width: 100px'
       = text_field_tag :email, params[:email], type:'text', class:'form-control', placeholder:t('sessions.email.placeholder')
     .form-group.field-element
       = label_tag :password, t('sessions.password.label'), class: 'form-label', style:'width: 100px'
       = password_field_tag :password, params[:password], type:'text', class:'form-control', placeholder:t('sessions.password.placeholder')
+    .form-group.field-element
+      span
+        = "Forgot Password? "
+        = link_to "Reset", forgot_password_home_index_path, class: 'classic-link'
+      span style="margin: 0 6px;"
+        = "|"
+      span
+        = "Did not receive confirmation? "
+        = link_to "Resend", resend_confirmation_home_index_path, class: 'classic-link'
     br
-
     .btn-group[role="group"]
       = button_tag type: 'submit', class:'btn btn-important' do
         i.fa.fa-sign-in
