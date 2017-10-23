@@ -359,36 +359,36 @@ en:
       header: "Your exercise repository"
       paragraph: "Search, rate and create exercises."
     banner2:
-      header: "Discuss and group exercises"
-      paragraph: "Discuss exercises with others and group them in a collection."
+      header: "Collaborate on exercises"
+      paragraph: "Improve your exercises by discussing them with your peers."
     banner3:
-      header: "Share ProFormA Exercises"
-      paragraph: "Download any exercise as XML validated against the ProFormA XML-Schema."
+      header: "Share auto-gradeable exercises"
+      paragraph: "Many auto-graders are supported."
     marketing:
       mooc:
         header_html: "CodeHarbor for \n MOOCs"
         paragraph: "You're developing and running MOOCs that include auto-graded programming exercises?"
       universities:
         header_html: "CodeHarbor for \n Universities"
-        paragraph: "You're teaching large programming classes at a university and use an auto-grader for assessment?"
+        paragraph: "You're teaching large programming classes at university and use auto-graders for assessment?"
       schools:
         header_html: "CodeHarbor for \n Schools"
         paragraph: "You're teaching programming at school and need auto-gradeable programming exercises?"
       dojos:
         header_html: "CodeHarbor for \n informal learning "
-        paragraph: "You're conducting workshops or similar and are looking for auto-gradeable programming exercises?"
+        paragraph: "You're conducting workshops and are looking for auto-gradeable programming exercises?"
     feature:
       exercises:
-        header: "Search, discuss and create Exercises"
-        paragraph: "CodeHarbor allows to share, rate, and discuss auto-gradeable programming exercises with colleagues. 
+        header: "Search, discuss and create exercises"
+        paragraph: "CodeHarbor allows to share, rate, and discuss auto-gradeable programming exercises with colleagues and peers. 
                     Re-use existing exercises, clone exercises and adjust them to your needs. 
-                    Translate them to another human language or port them to another programming language. 
-                    Always keep full control with whom you share."
+                    Translate exercises to other human languages or port them to other programming languages. 
+                    You always keep full control with whom you share."
       collections:
-        header: "Collect exercises in collections and cart"
-        paragraph: "While browsing other exercises you can add exercises you like to your cart or
-                    create collections of exercises to group them. You can schare collections with
-                    others or export collections and carts as zip archives of exercises."
+        header: "Create exercise collections"
+        paragraph: "Create collections of your favorite exercises for your future needs.
+                    Share collections with colleagues and peers.
+                    Export them to your favorite grader or download them as XML."
       groups:
         header: "Create Groups of Users and restrict exercise access to that group"
         paragraph: "If you decide that you do not want to share your exercise with everybody
