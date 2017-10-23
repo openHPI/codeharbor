@@ -69,6 +69,7 @@
       = link_to group_path(@group), class: 'btn btn-important', method: :delete, data: {confirm: 'Are you sure?'} do
         i.fa.fa-trash style=("color:#800000")
         = ' ' + 'Delete'
+    = link_to "Leave Group", leave_group_path(@group), class: 'btn btn-important', data: {confirm: 'Are you sure?'}
     = link_to 'Back', groups_path, class: 'btn btn-important'
 
 - else

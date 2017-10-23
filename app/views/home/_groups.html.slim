@@ -13,7 +13,7 @@
   .panel.panel-default style=("margin-top: 20px")
     .panel-heading
       h3.panel-title
-        span= link_to group.name, group_path(group)
+        span= group.name
         span.pull-right
           - unless @option == 'all'
             = group.is_admin(current_user) ? 'Admin' : 'Member'

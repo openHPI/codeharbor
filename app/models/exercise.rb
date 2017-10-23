@@ -34,12 +34,12 @@ class Exercise < ActiveRecord::Base
   def self.rating(stars)
     if !stars.blank?
       if stars != '0'
-        where('avg_rating >= ?', stars)
+        where('average_rating >= ?', stars)
       else
-        where('avg_rating >= ? OR avg_rating IS NULL', stars)
+        where('average_rating >= ? OR average_rating IS NULL', stars)
       end
     else
-      where('avg_rating IS NULL')
+      where('average_rating IS NULL')
     end
   end
 
@@ -66,11 +66,11 @@ class Exercise < ActiveRecord::Base
 
     if option == 'private' || option == 'public'
       if search
-        results = joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS avg_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).where(private: priv).title_like(search).timespan(intervall)
+        results = joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS average_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).where(private: priv).title_like(search).timespan(intervall).select('exercises.*, coalesce(average_rating, 0) AS average_rating')
         label = Label.find_by('lower(name) = ?', search.downcase)
 
         if label
-          collection = Label.find_by('lower(name) = ?', search.downcase).exercises.joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS avg_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).where(private: priv).timespan(intervall)
+          collection = Label.find_by('lower(name) = ?', search.downcase).exercises.joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS average_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).where(private: priv).timespan(intervall).select('exercises.*, coalesce(average_rating, 0) AS average_rating')
 
           results.each do |r|
             collection << r unless collection.find_by(id: r.id)
@@ -79,15 +79,15 @@ class Exercise < ActiveRecord::Base
         end
         return results
       else
-        return joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS avg_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).where(private: priv).timespan(intervall)
+        return joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS average_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).where(private: priv).timespan(intervall).select('exercises.*, coalesce(average_rating, 0) AS average_rating')
       end
     else
       if search
-        results = joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS avg_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).mine(user).title_like(search).timespan(intervall)
+        results = joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS average_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).mine(user).title_like(search).timespan(intervall).select('exercises.*, coalesce(average_rating, 0) AS average_rating')
         label = Label.find_by('lower(name) = ?', search.downcase)
 
         if label
-          collection = Label.find_by('lower(name) = ?', search.downcase).exercises.joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS avg_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).mine(user).timespan(intervall)
+          collection = Label.find_by('lower(name) = ?', search.downcase).exercises.joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS average_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).mine(user).timespan(intervall).select('exercises.*, coalesce(average_rating, 0) AS average_rating')
 
           results.each do |r|
             collection << r unless collection.find_by(id: r.id)
@@ -97,7 +97,7 @@ class Exercise < ActiveRecord::Base
 
         return results
       else
-        return joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS avg_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).mine(user).timespan(intervall)
+        return joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS average_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).mine(user).timespan(intervall).select('exercises.*, coalesce(average_rating, 0) AS average_rating')
       end
     end
   end

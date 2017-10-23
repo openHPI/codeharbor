@@ -13,7 +13,7 @@ class ExercisesController < ApplicationController
     if @order == 'order_created'
       @exercises = Exercise.search(params[:search],params[:settings],@option,current_user).sort{ |y,x| x.created_at <=> y.created_at }.paginate(per_page: 5, page: params[:page])
     else
-      @exercises = Exercise.search(params[:search],params[:settings],@option,current_user).sort{ |y,x| x.avg_rating <=> y.avg_rating }.paginate(per_page: 5, page: params[:page])
+      @exercises = Exercise.search(params[:search],params[:settings],@option,current_user).sort{ |y,x| x.average_rating <=> y.average_rating }.paginate(per_page: 5, page: params[:page])
     end
   end
 

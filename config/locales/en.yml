@@ -355,6 +355,55 @@ en:
     create_exercise: "Create Exercise"
     update_profile: "Update Profile"
 
+    banner1:
+      header: "Your exercise repository"
+      paragraph: "Search, rate and create exercises."
+    banner2:
+      header: "Collaborate on exercises"
+      paragraph: "Improve your exercises by discussing them with your peers."
+    banner3:
+      header: "Share auto-gradeable exercises"
+      paragraph: "Many auto-graders are supported."
+    marketing:
+      mooc:
+        header_html: "CodeHarbor for \n MOOCs"
+        paragraph: "You're developing and running MOOCs that include auto-graded programming exercises?"
+      universities:
+        header_html: "CodeHarbor for \n Universities"
+        paragraph: "You're teaching large programming classes at university and use auto-graders for assessment?"
+      schools:
+        header_html: "CodeHarbor for \n Schools"
+        paragraph: "You're teaching programming at school and need auto-gradeable programming exercises?"
+      dojos:
+        header_html: "CodeHarbor for \n informal learning "
+        paragraph: "You're conducting workshops and are looking for auto-gradeable programming exercises?"
+    feature:
+      exercises:
+        header: "Search, discuss and create exercises"
+        paragraph: "CodeHarbor allows to share, rate, and discuss auto-gradeable programming exercises with colleagues and peers. 
+                    Re-use existing exercises, clone exercises and adjust them to your needs. 
+                    Translate exercises to other human languages or port them to other programming languages. 
+                    You always keep full control with whom you share."
+      collections:
+        header: "Create exercise collections"
+        paragraph: "Create collections of your favorite exercises for your future needs.
+                    Share collections with colleagues and peers.
+                    Export them to your favorite auto-grader or download them as XML."
+      groups:
+        header: "Create user-groups and share exercises with your group."
+        paragraph: "If you decide not to share your exercises with everybody,
+                    declare it private and only allow access to selected groups or users."
+
+    sign_in:
+      header: "Become a member"
+      paragraph_html: "If you want to join our community %{href1} or %{href2} if you are already a member."
+      link1: "sign up now"
+      link2: "login"
+
+  about:
+    header: "About CodeHarbor"
+    paragraph: ""
+
   label_categories:
     header: "Listing Label Categories"
     name: "Name"
@@ -371,6 +420,7 @@ en:
     new:
       header: "New Label Category"
     errorMessage: "prohibited this label_category from being saved:"
+
 
   labels:
     header: "Listing Labels"
@@ -402,6 +452,17 @@ en:
       comments: "Comments Administration"
     cart: "Cart"
     logout: "Log out"
+
+    footer:
+      imprint: "Imprint"
+      about:
+        header: "About Codeharbor"
+        paragraph: "CodeHarbor allows to share, rate, and discuss auto-gradeable programming exercises with colleagues. Re-use existing exercises, clone exercises and adjust them to your needs. Translate them to another human language or port them to another programming language. Always keep full control with whom you share."
+
+      more:
+        header: "More Information"
+        link: "About Codeharbor"
+
 
    # ratings: will be added with implementation
 

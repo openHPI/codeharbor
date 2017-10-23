@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     get :search, :on => :collection
     member do
       get :remove_exercise
+      get :leave
     end
   end
   get 'home/index'
@@ -37,6 +38,7 @@ Rails.application.routes.draw do
   get 'exercises/exercises_all'
 
   get 'my_cart', to: 'carts#my_cart', as: 'my_cart'
+  get 'about', to: 'home#about', as: 'about'
 
   get 'exercises/:id/duplicate', to: 'exercises#duplicate', as: 'duplicate_exercise'
   post 'exercises/:id/add_to_cart', to: 'exercises#add_to_cart', as: 'add_to_cart'
