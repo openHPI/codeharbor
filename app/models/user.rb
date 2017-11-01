@@ -49,6 +49,7 @@ class User < ActiveRecord::Base
   def handle_destroy
     handle_collection_membership
     handle_exercises
+    handle_messages
   end
 
 
@@ -91,6 +92,10 @@ class User < ActiveRecord::Base
 
   def handle_exercises
     Exercise.where(user: self).update_all(user_id: nil)
+  end
+
+  def handle_messages
+    Message.where(sender: self, param_type: ['exercise', 'group', 'collection']).destroy_all
   end
 
   def unread_messages_count
