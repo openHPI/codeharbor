@@ -1,3 +1,5 @@
+require 'digest'
+
 class User < ActiveRecord::Base
   groupify :group_member
   groupify :named_group_member
@@ -16,8 +18,16 @@ class User < ActiveRecord::Base
   has_many :sent_messages, :class_name => 'Message', :foreign_key => 'sender_id'
   has_many :received_messages, :class_name => 'Message', :foreign_key => 'recipient_id'
 
-  before_destroy :handle_group_memberships, prepend: true
+  before_destroy :handle_destroy, prepend: true
 
+  def soft_delete
+    destroy = handle_destroy
+    if destroy
+      email = self.email
+      new_email = Digest::MD5.hexdigest email
+      update(first_name: 'deleted', last_name: 'user', email: new_email, deleted: true)
+    end
+  end
 
   def last_admin? (group)
     if self.in_group?(group, as: 'admin')
@@ -47,9 +57,14 @@ class User < ActiveRecord::Base
   end
 
   def handle_destroy
-    handle_collection_membership
-    handle_exercises
-    handle_messages
+    destroy = handle_group_memberships
+    if destroy == false
+      return false
+    else
+      handle_collection_membership
+      handle_exercises
+      handle_messages
+    end
   end
 
 
@@ -72,8 +87,6 @@ class User < ActiveRecord::Base
         group.destroy
       end
     end
-
-    handle_destroy
   end
   
   def groups_sorted_by_admin_state_and_name(groups_to_sort = groups)
