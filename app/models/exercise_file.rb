@@ -2,6 +2,8 @@ class ExerciseFile < ActiveRecord::Base
   belongs_to :exercise
   belongs_to :file_type
   has_many :tests, dependent: :destroy
+  has_attached_file :attachment
+  do_not_validate_attachment_file_type :attachment
 
   accepts_nested_attributes_for :tests
 

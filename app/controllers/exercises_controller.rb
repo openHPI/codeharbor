@@ -2,7 +2,7 @@ require 'oauth2'
 
 class ExercisesController < ApplicationController
   load_and_authorize_resource
-  before_action :set_exercise, only: [:show, :edit, :update, :destroy, :add_to_cart, :add_to_collection, :push_external, :contribute]
+  before_action :set_exercise, only: [:show, :edit, :update, :destroy, :add_to_cart, :add_to_collection, :push_external, :contribute, :download_exercise]
   before_action :set_search, only: [:index]
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.exercise.authorization')
@@ -123,6 +123,21 @@ class ExercisesController < ApplicationController
     end
   end
 
+  def handle_file_uploads
+    params[:exercise][:files_attributes].try(:each) do |index, file_attributes|
+      if file_attributes[:content].respond_to?(:read)
+        file_params = params[:exercise][:files_attributes][index]
+        if FileType.find_by(id: file_attributes[:file_type_id]).try(:binary?)
+          file_params[:content] = nil
+          file_params[:native_file] = file_attributes[:content]
+        else
+          file_params[:content] = file_attributes[:content].read
+        end
+      end
+    end
+  end
+  private :handle_file_uploads
+
   def add_to_cart
     cart = Cart.find_by(user: current_user)
     if cart.add_exercise(@exercise)
@@ -158,48 +173,79 @@ class ExercisesController < ApplicationController
   end
 
   def download_exercise
+
+    filename = "#{@exercise.title}.zip"
     xsd = Nokogiri::XML::Schema(File.read('app/assets/taskxml.xsd'))
-    doc = Nokogiri::XML(@exercise.to_proforma_xml)
+    xml = @exercise.to_proforma_xml
+    doc = Nokogiri::XML(xml)
 
     errors = xsd.validate(doc)
-
     if errors.any?
       errors.each do |error|
         puts error.message
       end
       redirect_to @exercise, alert: t('controllers.exercise.download_error')
     else
+
+      stringio = Zip::OutputStream.write_buffer do |zio|
+        zio.put_next_entry('task.xml')
+        zio.write xml
+        @exercise.exercise_files.each do |file|
+          zio.put_next_entry(file.attachment.original_filename)
+          zio.write Paperclip.io_adapters.for(file.attachment).read
+        end
+      end
+      binary_data = stringio.string
       downloads_new = @exercise.downloads+1
       @exercise.update(downloads: downloads_new)
-      send_data doc, filename: "#{@exercise.title}.xml", type: "application/xml"
+      send_data(binary_data, :type => 'application/zip', :filename => filename)
     end
   end
 
   def import_exercise
 
-    xsd = Nokogiri::XML::Schema(File.read('app/assets/taskxml.xsd'))
-    doc = Nokogiri::XML(params[:xml])
+    uploaded_io = params[:file_upload]
+    if uploaded_io
+      Zip::File.open(uploaded_io.path) do |zip_file|
 
-    errors = xsd.validate(doc)
+        xml = zip_file.glob("task.xml").first
 
-    if errors.any?
-      errors.each do |error|
-        puts error.message
+        if xml.nil?
+          flash[:alert] = "task.xml file is required!"
+          redirect_to exercises_path
+        end
+
+        xml = xml.get_input_stream.read
+
+        xsd = Nokogiri::XML::Schema(File.read('app/assets/taskxml.xsd'))
+        doc = Nokogiri::XML(xml)
+
+        errors = xsd.validate(doc)
+
+        if errors.any?
+          errors.each do |error|
+            puts error.message
+          end
+          flash[:alert] = t('controllers.exercise.xml_not_valid')
+          redirect_to exercises_path
+        else
+          @exercise = Exercise.new
+          @exercise.user = current_user
+          @exercise.title = uploaded_io.original_filename
+          @exercise.from_proforma(doc, zip_file)
+
+          if @exercise.save
+            flash[:notice] = t('controllers.exercise.import_success')
+            redirect_to edit_exercise_path(@exercise.id)
+          else
+            flash[:alert] = t('controllers.exercise.import_fail')
+            redirect_to exercises_path
+          end
+        end
       end
-      flash[:alert] = t('controllers.exercise.xml_not_valid')
-      render :nothing => true, :status => 200
     else
-      @exercise = Exercise.new
-      @exercise.user = current_user
-      @exercise.import_xml(doc)
-
-      if @exercise.save
-        flash[:notice] = t('controllers.exercise.import_success')
-        redirect_to edit_exercise_path(@exercise.id)
-      else
-        flash[:alert] = t('controllers.exercise.import_fail')
-        redirect_to exercises_path
-      end
+      flash[:alert] = "You need to choose a file."
+      redirect_to exercises_path
     end
   end
 

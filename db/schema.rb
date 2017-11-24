@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171013145925) do
+ActiveRecord::Schema.define(version: 20171115182308) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -124,8 +124,8 @@ ActiveRecord::Schema.define(version: 20171013145925) do
     t.string   "path"
     t.boolean  "solution"
     t.integer  "exercise_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
     t.boolean  "visibility"
     t.string   "name"
     t.string   "purpose"
@@ -133,6 +133,10 @@ ActiveRecord::Schema.define(version: 20171013145925) do
     t.boolean  "hidden"
     t.boolean  "read_only"
     t.integer  "file_type_id"
+    t.string   "attachment_file_name"
+    t.string   "attachment_content_type"
+    t.integer  "attachment_file_size"
+    t.datetime "attachment_updated_at"
   end
 
   add_index "exercise_files", ["exercise_id"], name: "index_exercise_files_on_exercise_id", using: :btree
@@ -314,6 +318,8 @@ ActiveRecord::Schema.define(version: 20171013145925) do
     t.datetime "updated_at",                       null: false
     t.string   "role",            default: "user"
     t.boolean  "deleted"
+    t.boolean  "email_confirmed", default: false
+    t.string   "confirm_token"
   end
 
   add_foreign_key "account_links", "users"

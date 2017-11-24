@@ -24,8 +24,13 @@ class Test < ActiveRecord::Base
   end
 
   def file_type
-    file_type = ''
+    file_type = nil
     file_type = exercise_file.file_type if exercise_file
+  end
+
+  def attachment
+    attachment = nil
+    attachment = exercise_file.attachment if exercise_file
   end
 
 end

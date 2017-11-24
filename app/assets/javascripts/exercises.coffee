@@ -150,14 +150,14 @@ ready =->
     e.stopPropagation()
     return
 
-  $('#xml').on 'change', ->
-    fullPath = document.getElementById('xml').value
+  $('#file_upload').on 'change', ->
+    fullPath = document.getElementById('file_upload').value
     if fullPath
       startIndex = if fullPath.indexOf('\\') >= 0 then fullPath.lastIndexOf('\\') else fullPath.lastIndexOf('/')
       filename = fullPath.substring(startIndex)
       if filename.indexOf('\\') == 0 or filename.indexOf('/') == 0
         filename = filename.substring(1)
-      document.getElementById('xml-label').innerHTML = filename
+      document.getElementById('file-label').innerHTML = filename
 
   $('.toggle').on 'click', ->
     $($(this).parent().next()).toggle()

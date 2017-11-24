@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'zip'
 
 class Exercise < ActiveRecord::Base
   groupify :group_member
@@ -235,7 +236,7 @@ class Exercise < ActiveRecord::Base
         end
       else
         unless destroy
-          file = ExerciseFile.new(content: array[:content], name: array[:name], path: array[:path], file_type_id: array[:file_type_id], purpose: 'test' )
+          file = ExerciseFile.new(content: array[:content], attachment: array[:attachment], name: array[:name], path: array[:path], file_type_id: array[:file_type_id], purpose: 'test' )
           test = Test.new(test_permit(array))
           test.exercise_file =  file
           tests << test
@@ -244,9 +245,9 @@ class Exercise < ActiveRecord::Base
     end
   end
 
-  def import_xml(doc)
+  def from_proforma(doc, zip)
 
-    self.title = doc.xpath('/p:task/p:meta-data/p:title/text()')
+    #self.title = doc.xpath('/p:task/p:meta-data/p:title/text()')
 
     prog_language = doc.xpath('/p:task/p:proglang/text()').to_s
     version = doc.xpath('/p:task/p:proglang/@version').first.value
@@ -256,19 +257,27 @@ class Exercise < ActiveRecord::Base
     end
     self.execution_environment = exec_environment
     self.private = false
+    self.license = 1
     descriptions.new(text: doc.xpath('/p:task/p:description/text()'), language: doc.xpath('/p:task/@lang').first.value)
 
-    add_files_xml(doc)
-    add_tests_xml(doc)
+    add_files_xml(doc, zip)
+    add_tests_xml(doc, zip)
   end
 
-  def add_files_xml(xml)
+  def add_files_xml(xml, zip)
     xml.xpath('/p:task/p:files/p:file').each do |file|
       role = determine_file_role_from_proforma_file(xml, file)
       unless role === 'Test'
+        attachment = nil
         filename_attribute = file.xpath('@filename').first
         if filename_attribute
           filename = filename_attribute.value
+
+          attach = zip.glob(filename).first
+          if attach
+            attachment = attach
+          end
+
           if filename.include? '/'
             path_name_split = filename.split (/\/(?=[^\/]*$)/)
             path = path_name_split.first
@@ -296,6 +305,7 @@ class Exercise < ActiveRecord::Base
 
         file = ExerciseFile.new(
             content: content,
+            attachment: attachment,
             name: name,
             path: path,
             purpose: '',
@@ -309,7 +319,7 @@ class Exercise < ActiveRecord::Base
     end
   end
 
-  def add_tests_xml(xml)
+  def add_tests_xml(xml, zip)
     xml.xpath('/p:task/p:tests/p:test').each do |test|
       testtype = test.xpath('p:test-type/text()').to_s
       if  testtype == 'unittest'
@@ -328,10 +338,16 @@ class Exercise < ActiveRecord::Base
         if ref
           index = ref.value
           file = xml.xpath('p:task/p:files/p:file[@id="'+index+'"]').first
-
+          attachment = nil
           filename_attribute = file.xpath('@filename').first
           if filename_attribute
             filename = filename_attribute.value
+
+            attach = zip.glob(filename).first
+            if attach
+              attachment = attach
+            end
+
             if filename.include? '/'
               path_name_split = filename.split (/\/(?=[^\/]*$)/)
               path = path_name_split.first
@@ -356,13 +372,15 @@ class Exercise < ActiveRecord::Base
 
           file_class = file.xpath('@class').first.value
           content = file.xpath('text()').first
-          file = ExerciseFile.new(content: content,
-                                    name: name,
-                                    path: path,
-                                    purpose: 'test',
-                                    file_type: FileType.find_by(file_extension: ".#{type}"),
-                                    hidden: file_class == 'internal',
-                                    read_only: false
+          file = ExerciseFile.new(
+              content: content,
+              attachment: attachment,
+              name: name,
+              path: path,
+              purpose: 'test',
+              file_type: FileType.find_by(file_extension: ".#{type}"),
+              hidden: file_class == 'internal',
+              read_only: false
           )
           exercise_test.exercise_file = file
         end
@@ -447,7 +465,9 @@ class Exercise < ActiveRecord::Base
       end
       proforma.task('xmlns:p' => 'urn:proforma:task:v1.1', 'lang' => language, 'uuid' => SecureRandom.uuid,
                     'xmlns:u' => 'urn:proforma:tests:unittest:v1.1', 'xmlns:c' => 'codeharbor'){
-        proforma.description(text)
+        proforma.description {
+          proforma.cdata(text)
+        }
         proforma.proglang(self.execution_environment.language, 'version' => self.execution_environment.version)
         proforma.send('submission-restrictions') {
           proforma.send('files-restriction') {
@@ -458,9 +478,6 @@ class Exercise < ActiveRecord::Base
 
           self.exercise_files.all? { |file|
             build_proforma_xml_for_exercise_file(xml, file)
-          }
-          self.tests.all? { |test|
-            build_proforma_xml_for_exercise_file(xml, test.exercise_file)
           }
 
           ### Set Placeholder file for placeholder solution-file and tests if there aren't any
@@ -499,12 +516,29 @@ class Exercise < ActiveRecord::Base
     return builder.to_xml
   end
 
+  def to_proforma_zip
+    folder = "Users/me/Desktop/stuff_to_zip"
+    input_filenames = ['image.jpg', 'description.txt', 'stats.csv']
+
+    zipfile_name = "/Users/me/Desktop/archive.zip"
+
+    Zip::File.open(zipfile_name, Zip::File::CREATE) do |zipfile|
+      input_filenames.each do |filename|
+        # Two arguments:
+        # - The name of the file as it will appear in the archive
+        # - The original file, including the path to find it
+        zipfile.add(filename, File.join(folder, filename))
+      end
+      zipfile.get_output_stream("myFile") { |f| f.write "myFile contains just this" }
+    end
+  end
+
   def model_solution_files
     self.exercise_files.where(role: 'Reference Implementation')
   end
 
   def file_permit(params)
-    params.permit(:role, :content, :path, :name, :hidden, :read_only, :file_type_id)
+    params.permit(:role, :content, :path, :name, :hidden, :read_only, :file_type_id, :attachment)
   end
 
   def test_permit(params)

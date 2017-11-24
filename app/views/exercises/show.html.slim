@@ -151,17 +151,24 @@ legend
   span.number = '3'
   = t('exercises.files.label') + ' '
   span.fa.fa-caret-down.toggle
-
-table.vertical-table
-  - if @files.empty?
-    p style="margin-left: 10px;"
-      = t('exercises.show.no_files')
-  - @files.each do |file|
+- if @files.empty?
+  p style="margin-left: 10px;"
+    = t('exercises.show.no_files')
+- @files.each do |file|
+  table.vertical-table
     - if file.purpose != 'test'
-      tr
-        td colspan=2
-          .editor_readonly
-            = file.content
+      - if !file.attachment.present?
+        tr
+          td colspan=2
+            .editor_readonly
+              = file.content
+      - else
+        tr
+          th
+            = "Attachment: "
+          td
+            = link_to file.attachment.original_filename, download_attachment_path(file)
+
       tr
         th
           = t('exercises.files.name')
@@ -188,15 +195,23 @@ legend
   = t('exercises.tests.label') + ' '
   span.fa.fa-caret-down.toggle
 
-table.vertical-table
-  - if @tests.empty?
-    p style="margin-left: 10px;"
-      = t('exercises.show.no_tests')
-  - @tests.each do |test|
-    tr
-      td colspan=2
-        .editor_readonly
-          = test.exercise_file.content
+
+- if @tests.empty?
+  p style="margin-left: 10px;"
+    = t('exercises.show.no_tests')
+- @tests.each do |test|
+  table.vertical-table
+    - if !test.attachment.present?
+      tr
+        td colspan=2
+          .editor_readonly
+            = test.content
+    - else
+      tr
+        th
+          = "Attachment: "
+        td
+          = link_to test.attachment.original_filename, download_attachment_path(test.exercise_file)
     tr
       th
         = t('exercises.files.name')
@@ -211,7 +226,7 @@ table.vertical-table
         th
           = t('exercises.files.extension')
         td
-          = test.file_type.name_with_extension
+          = test.file_type.name_with_extension if test.file_type
     tr
       th
         = t('exercises.tests.feedback')

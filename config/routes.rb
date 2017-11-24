@@ -63,6 +63,8 @@ Rails.application.routes.draw do
 
   post 'user/:id/messages/:id/add_author', to: 'messages#add_author', as: 'add_author'
 
+  get 'exercise_files/:id/download_attachment', to: 'exercise_files#download_attachment', as: 'download_attachment'
+
   resources :labels do
     get :search, :on => :collection
   end
