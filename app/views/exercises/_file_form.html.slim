@@ -21,6 +21,7 @@ div[style="margin-left: 10px;"]
     = file.check_box :read_only
   .field-element
     = f.label :content, t('exercises.files.content'), class: 'form-label', style: 'margin-bottom: 15px'
+    = file.hidden_field :file_input, value: file.object.attachment.exists?
     - if file.object.attachment.exists?
       a.btn.btn-main.btn-xs.toggle-input data={text_initial: "Upload file", text_toggled: "Back"} href='#'
         = "Back"
