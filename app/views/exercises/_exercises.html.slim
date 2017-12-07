@@ -29,11 +29,11 @@
           = exercise.title
         span.star-rating.pull-right
           small.number-rating
-            = exercise.average_rating
+            = exercise.average_rating.round(1)
           - [*1..5].each do |i|
-            - if exercise.round_avg_rating >= i
+            - if exercise.rating_star(exercise.average_rating.round(1)) >= i
               span.fa.fa-star data-rating=i
-            - elsif (exercise.round_avg_rating + 0.5) >= i
+            - elsif (exercise.rating_star(exercise.average_rating.round(1)) + 0.5) >= i
               span.fa.fa-star-half-o data-rating=i
             - else
               span.fa.fa-star-o data-rating=i

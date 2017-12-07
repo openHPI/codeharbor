@@ -23,6 +23,7 @@ en:
 
   controllers:
     carts:
+      authorization: 'You are not authorized for this action.'
       created: 'Cart was successfully created.'
       updated: 'Cart was successfully updated.'
       destroyed: 'Cart was successfully destroyed.'
@@ -33,6 +34,7 @@ en:
       zip: 'cart_exercises.zip'
 
     collections:
+      authorization: "You are not authorized to for this action."
       created: 'Collection was successfully created.'
       updated: 'Collection was successfully updated.'
       destroyed: 'Collection was successfully destroyed.'
@@ -40,8 +42,16 @@ en:
       remove_exercise_fail: "You cannot remove this exercise."
       remove_all_success: 'All Exercises were successfully removed'
       remove_all_fail: 'You cannot remove all exercises'
+      share:
+        text: "%{user} sent you his Collection %{collection}."
+        notice: "Your collection has been sent."
+        alert: "Something went wrong."
+      save_shared:
+        notice: "You can now collaborate to collection."
+        alert: "Something went wrong."
 
     exercise:
+      authorization: 'You are not authorized for this exercise.'
       created: 'Exercise was successfully created.'
       updated: 'Exercise was successfully updated.'
       destroyed: 'Exercise was successfully destroyed.'
@@ -55,6 +65,43 @@ en:
       import_fail: "Cannot import your xml file"
       contribute: "%{user} wants to contribute to your Exercise %{exercise}."
       contribute_notice: "Your access request has been sent."
+      add_author_text: "%{user} made you co-author of his exercise: %{exercise}."
+      add_author_notice: "User was added as co-author."
+      decline_author_text: "%{user} declined your contribution request to his exercise: %{exercise}."
+      decline_author_notice: "Users contribution request was declined."
+      report_alert: "You already reported this exercise."
+      report_notice: "You successfully reported this exercise."
+
+    group:
+      authorization: "You are not authorized to for this action."
+      created: "Group was successfully created."
+      updated: "Group was successfully updated."
+      destroyed: "Group was successfully destroyed."
+      leave:
+        alert: "You have to name somebody else admin first"
+        notice: "You successfully left the group"
+      request_access:
+        notice: "Your Access request has been sent."
+        text: "%{user} wants to access your group: %{group}."
+      grant_access:
+        text: "%{user} accepted you to his group: %{group}."
+        notice: "Access granted."
+      deny_access:
+        text: "%{user} did not accept you to his group: %{group}."
+        notice: "User declined."
+      remove_exercise_notice: "Exercise successfully removed"
+      delete_from_group_notice: "User deleted from group."
+      make_admin_notice: "Made user to admin."
+
+    message:
+      authorization: "You are not authorized to for this action."
+      created: 'Message was successfully sent.'
+      updated: 'Message was successfully updated.'
+      destroyed: 'Message was successfully destroyed.'
+      deleted_notice: "Message was successfully deleted."
+      deleted_alert:  "An error occured while deleting the message."
+
+
 
   models:
     exercise:
@@ -146,6 +193,16 @@ en:
     new:
       header: "New Collection"
     show:
+      shared_by: "Shared by"
+      hint: "Hint: For exercises marked with a lock you have to request access first before you can view them."
+      share: "Share Collection"
+      type: "Type in the users email address"
+      contribute: 'Contribute'
+      save: 'Save Collection'
+      collaborate: "Collaborate"
+      export_all: 'Export all'
+      remove_all: 'Remove All'
+      delete: 'Delete'
       header: "Collection:"
       download_all: "Download All"
       remove_all: "Remove All"
@@ -241,14 +298,29 @@ en:
     errorMessage: "prohibited this exercise_file from being saved:"
 
   exercises:
+
     title: "Title"
+    rate: "Rate"
+    description_in: "Description in"
+    parent: "Parent"
+    parent_deleted: "Parent was deleted"
+    relation: "Relation"
     created_by: "Created by"
     created_at: "Created at"
+    execution_environment: "Execution environment"
     visibility:
       label: "Visibility"
       private: "Private"
       public: "Public"
+    labels: "Labels"
+    groups: "Groups"
+    impact: "Impact"
+    license: "License"
+    downloads: "Downloads"
+    in_carts: "In Carts"
+    in_collections: "In Collections"
     files:
+      role: "Role"
       label: "Files"
       content: "Content"
       path: "Path"
@@ -295,8 +367,8 @@ en:
       no_results_description: "Try different options by clicking on Advanced."
 
     form:
-      basic_info: "Basic Informations"
-      visibility_labels: "Visibility & Labels"
+      basic_info: "Basic Information"
+      additional_info: "Additional Information"
       environment: "Execution Environment"
       descriptions:
         label: "Descriptions"
@@ -309,7 +381,7 @@ en:
       tests:
         add: "Add Test"
         remove: "Remove Test"
-      create: "Create Exercise"
+      save: "Save Exercise"
       cancel: "Cancel"
 
     admin:
@@ -325,7 +397,8 @@ en:
       header: "New Exercise"
 
     show:
-      description: "Description in "
+      no_files: "No files included"
+      no_tests: "No tests included"
       files:
         mainfile: "Mainfile"
         solution: "Solution file"
@@ -340,6 +413,9 @@ en:
       edit: "Edit"
       delete: "Delete"
       back: "Back"
+      report: "Report"
+      report_message: "Report message"
+      submit: "Submit"
 
     edit:
       header: "Edit:"
@@ -420,7 +496,6 @@ en:
     new:
       header: "New Label Category"
     errorMessage: "prohibited this label_category from being saved:"
-
 
   labels:
     header: "Listing Labels"
@@ -555,3 +630,23 @@ en:
     undefined: "User undefined"
     yourself: "yourself"
     errorMessage: "prohibited this user from being saved:"
+  message:
+    index:
+      inbox: 'Inbox'
+      sent: "Sent"
+      new: "New Message"
+      no_messages: "You do not have any messages."
+      view: "View"
+      make_co_author: "Make co-author"
+      deny_access: "Deny access"
+      grant_access: "Grant access"
+      save_collection: "Save collection"
+      from: "From"
+      to: "To"
+      reply: "Reply"
+      unknown: "unknown"
+      delete: "Delete"
+    reply_to: "Reply to"
+    send_message: "Send Message"
+    recipient: "Recipient"
+

@@ -1,0 +1,19 @@
+p#notice= notice
+h1 = "File Types"
+table
+  thead
+    tr
+      th = "Name"
+      th = "File_extension"
+      th colspan="3"
+  tbody
+    - @file_types.each do |file_type|
+      tr
+        td= file_type.name
+        td= file_type.file_extension
+        td = link_to 'Show', file_type
+        td = link_to 'Edit', edit_file_type_path(file_type)
+        td = link_to 'Destroy', file_type, data: {confirm: 'Are you sure?'}, method: :delete
+br
+
+= link_to 'New File type', new_file_type_path

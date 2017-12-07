@@ -5,7 +5,7 @@ class CartsController < ApplicationController
   before_action :set_cart, only: [:show, :edit, :update, :destroy, :remove_exercise, :remove_all, :download_all]
 
   rescue_from CanCan::AccessDenied do |_exception|
-    redirect_to root_path, alert: 'You are not authorized for this action.'
+    redirect_to root_path, alert: t('controllers.carts.authorization')
   end
   # GET /carts
   # GET /carts.json

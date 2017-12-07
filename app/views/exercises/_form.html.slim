@@ -21,7 +21,7 @@
           = f.fields_for :exercise_relation do |exercise_relation|
             = exercise_relation.hidden_field :origin_id, :value => @exercise_relation.origin.id
           .field-element
-            = f.label :relation, 'Relation', class:'form-label'
+            = f.label :relation, t('exercises.relation'), class:'form-label'
             br/
             = f.fields_for :exercise_relation do |relation|
               .controls
@@ -38,7 +38,7 @@
             .form-description
               .top-label
                 = f.label :language, class: 'form-label' do
-                  = "Description in "
+                  = t('exercises.description_in')
                   = ' '
                   = description.collection_select :language, Description::LANGUAGES, :to_s, :to_s, include_blank: false, class: 'form-control'
                 = description.remove_nested_fields_link :text, class:'btn btn-default btn-xs pull-right' do
@@ -52,7 +52,7 @@
     fieldset.form-group
       legend
         span.number = '2'
-        = t('exercises.form.visbility_labels') + ' '
+        = t('exercises.form.additional_info') + ' '
         span.fa.fa-caret-down.toggle
       .form-content
         .field-element
@@ -63,12 +63,17 @@
             = f.radio_button :private, true, value: true
             = label_tag 'exercise_private_true', t('exercises.visibility.private'), class: 'radio-right'
         .field-element#group-field
-          = f.label :groups, 'Groups', class: 'form-label'
+          = f.label :groups, t('exercises.groups'), class: 'form-label'
           = f.select :groups, options_for_select(Group.all.collect{ |g| [g.name, g.id] }, @exercise.groups.pluck(:id)), {}, {class: "my-group form-control", multiple: "multiple", style: "width: 300px;"}
         .field-element
-          = f.label :labels, 'Labels', class: 'form-label'
+          = f.label :labels, t('exercises.labels'), class: 'form-label'
           = f.select :labels, options_for_select(Label.all.collect{ |l| [l.name, l.name] }, @exercise.labels.pluck(:name)), {}, {class: "my-tag form-control", multiple: "multiple", style: "width: 300px;"}
-
+        .field-element
+          = f.label :license, t('exercises.license'), class: 'form-label'
+          .license
+            .select
+              = f.select :license_id, options_for_select(License.all.collect{ |l| [l.name, l.id, {'data-link'=> l.link}] }),{:prompt => true, :selected => 1}, class: 'form-control'
+            .link
     fieldset.form-group
       legend
         span.number = '3'
@@ -109,7 +114,7 @@
       .actions.btn-group[role="group"]
         = button_tag type: 'submit', class: 'btn btn-important' do
           i.fa.fa-file-text-o
-          = ' ' + 'Save Exercise'
+          = ' ' + t('exercises.form.save')
         = link_to :back, class: 'btn btn-important' do
           i.fa.fa-remove style=("color: gray")
           = ' ' + t('exercises.form.cancel')

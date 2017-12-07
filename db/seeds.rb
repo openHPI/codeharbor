@@ -15,6 +15,9 @@ user5 = User.create(first_name: 'Theresa', last_name: 'Zobel', email: 'theresa.z
 user6 = User.create(first_name: 'Adrian', last_name: 'Steppat', email: 'adrian.steppat@student.hpi.de', password: 'harbor', role: 'admin')
 user7 = User.create(first_name: 'Adrian', last_name: 'Steppat', email: 'adrian.steppat@web.de', password: 'harbor')
 
+license1 = License.create(name: 'MIT License', link: 'https://opensource.org/licenses/MIT')
+license2 = License.create(name: 'Creative Common Attribution', link: 'https://creativecommons.org/licenses/by/4.0/')
+
 relation1 = Relation.create(name: 'Derivate')
 relation2 = Relation.create(name: 'Translate')
 relation3 = Relation.create(name: 'Port')
@@ -55,7 +58,7 @@ svg_file = FileType.create(name: 'SVG', file_extension: '.svg')
 webm_file = FileType.create(name: 'WebM', file_extension: '.webm')
 xml_file = FileType.create(name: 'XML', file_extension: '.xml')
 
-exercise1 = Exercise.create(title: "Hello World", maxrating: '10', private: false, user_id:user1.id)
+exercise1 = Exercise.create(title: "Hello World", maxrating: '10', private: false, user_id:user1.id, license: license1)
 exercise1_main = ExerciseFile.create(content: "public class HelloWorld{ public static void main String[] args) { } }", path: '', purpose:'template', visibility: true, role: 'Main File', hidden: false, read_only: false, file_type: java_file, exercise: exercise1)
 exercise1_test = ExerciseFile.create(content: "public class HelloWorld{ public static void main String[] args) {System.out.println('Hello World.'); } }", path: '', purpose:'test', visibility: true, role: 'Main File', hidden: false, read_only: false, file_type: java_file, exercise: exercise1)
 Test.create(feedback_message: "Es wird noch nicht 'Hello World' am Bildschrim ausgegeben!", exercise_file: exercise1_test, exercise: exercise1, testing_framework: test_framework)
