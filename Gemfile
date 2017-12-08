@@ -60,7 +60,7 @@ gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) support
 gem 'jquery-ui-rails'
 gem 'select2-rails', '~> 4.0', '>= 4.0.3'
 
-gem 'oauth2'
+gem 'oauth2', '~> 1.1.0'
 gem 'nokogiri'
 gem 'font-awesome-rails'
 

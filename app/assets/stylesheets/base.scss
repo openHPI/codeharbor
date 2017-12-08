@@ -11,6 +11,20 @@ html, body {
   padding-bottom: 120px;
   /* must be same height as the footer */
 }
+.menu-number {
+  background-color: #aa0000;
+  color: #fff;
+  height: 15px;
+  width: 15px;
+  display: inline-block;
+  font-size: 0.8em;
+  margin-right: 4px;
+  line-height: 16px;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.2);
+  border-radius: 100%;
+}
+
 
 #footer {
   padding-top: 10px;
@@ -97,6 +111,7 @@ table.vertical-table {
   padding-top: 5px;
   padding-bottom: 5px;
   padding-right: 50%;
+  margin-bottom: 20px;
   display: inline;
 }
 
@@ -115,6 +130,26 @@ table.vertical-table {
   .selected:hover {
     border-color: #7C7C7C;
     background-color: #eeeeee;
+  }
+
+  a {
+    padding: 10px 70px 10px 70px;
+    background-color: #f5f5f5;
+    border: 2px #dddddd solid;
+    display: inline-block;
+  }
+  a:hover, a:focus {
+    background-color: #f0f0f0;
+    color: black;
+    text-decoration: none;
+  }
+
+  .nav-btn {
+    padding: 9px 15px;
+    border-color: #888888;
+  }
+  .nav-btn:hover, .nav-btn:focus {
+    border-color: #888888;
   }
 }
 

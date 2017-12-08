@@ -4,7 +4,8 @@ Rails.application.routes.draw do
   resources :exercise_relations
   # You can have the root of your site routed with "root"
   root 'home#index'
-  
+
+  resources :licenses
   resources :execution_environments
   resources :carts do
     member do
@@ -14,6 +15,9 @@ Rails.application.routes.draw do
   resources :collections do
     member do
       get :download_all
+      post :share
+      get :view_shared
+      post :save_shared
     end
   end
   resources :groups do
@@ -21,6 +25,7 @@ Rails.application.routes.draw do
     member do
       get :remove_exercise
       get :leave
+      get :deny_access
     end
   end
   get 'home/index'
@@ -30,6 +35,8 @@ Rails.application.routes.draw do
     post 'login' => :create
     delete 'logout' => :destroy
   end
+
+  post 'import_proforma_xml' => 'exercises#import_proforma_xml'
 
   get 'sessions/create'
   get 'sessions/destroy'
@@ -58,14 +65,16 @@ Rails.application.routes.draw do
 
   post 'user/:id/messages/:id/add_author', to: 'messages#add_author', as: 'add_author'
 
-
   resources :labels do
     get :search, :on => :collection
   end
   resources :label_categories
   resources :users do
     resources :account_links
-    resources :messages
+    resources :messages do
+      get :delete, :on => :member
+      get :reply, :on => :collection
+    end
   end
   resources :tests
   resources :file_types do
@@ -86,6 +95,9 @@ Rails.application.routes.draw do
     end
     resources :ratings
     member do
+      post :report
+      get :add_author
+      get :decline_author
       post :push_external
       get :contribute
       get :download_exercise

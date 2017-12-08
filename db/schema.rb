@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170928094505) do
-#ActiveRecord::Schema.define(version: 20170925160814) do
+ActiveRecord::Schema.define(version: 20171013141845) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,13 +63,10 @@ ActiveRecord::Schema.define(version: 20170928094505) do
   add_index "carts_exercises", ["exercise_id"], name: "index_carts_exercises_on_exercise_id", using: :btree
 
   create_table "collections", force: :cascade do |t|
-    t.integer  "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "title"
   end
-
-  add_index "collections", ["user_id"], name: "index_collections_on_user_id", using: :btree
 
   create_table "collections_exercises", force: :cascade do |t|
     t.integer "exercise_id"
@@ -79,6 +75,14 @@ ActiveRecord::Schema.define(version: 20170928094505) do
 
   add_index "collections_exercises", ["collection_id"], name: "index_collections_exercises_on_collection_id", using: :btree
   add_index "collections_exercises", ["exercise_id"], name: "index_collections_exercises_on_exercise_id", using: :btree
+
+  create_table "collections_users", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "collection_id"
+  end
+
+  add_index "collections_users", ["collection_id"], name: "index_collections_users_on_collection_id", using: :btree
+  add_index "collections_users", ["user_id"], name: "index_collections_users_on_user_id", using: :btree
 
   create_table "comments", force: :cascade do |t|
     t.text     "text"
@@ -158,13 +162,16 @@ ActiveRecord::Schema.define(version: 20170928094505) do
     t.string   "description"
     t.integer  "maxrating"
     t.boolean  "private"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
     t.integer  "user_id"
     t.integer  "execution_environment_id"
+    t.integer  "downloads",                default: 0
+    t.integer  "license_id"
   end
 
   add_index "exercises", ["execution_environment_id"], name: "index_exercises_on_execution_environment_id", using: :btree
+  add_index "exercises", ["license_id"], name: "index_exercises_on_license_id", using: :btree
   add_index "exercises", ["user_id"], name: "index_exercises_on_user_id", using: :btree
 
   create_table "exercises_labels", id: false, force: :cascade do |t|
@@ -220,15 +227,23 @@ ActiveRecord::Schema.define(version: 20170928094505) do
 
   add_index "labels", ["label_category_id"], name: "index_labels_on_label_category_id", using: :btree
 
+  create_table "licenses", force: :cascade do |t|
+    t.string   "name"
+    t.string   "link"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "messages", force: :cascade do |t|
     t.string   "text"
     t.integer  "sender_id"
     t.integer  "recipient_id"
-    t.string   "status"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.string   "param_type"
     t.integer  "param_id"
+    t.string   "sender_status",    default: "s"
+    t.string   "recipient_status", default: "u"
   end
 
   create_table "ratings", force: :cascade do |t|
@@ -247,6 +262,17 @@ ActiveRecord::Schema.define(version: 20170928094505) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "reports", force: :cascade do |t|
+    t.integer  "exercise_id"
+    t.integer  "user_id"
+    t.text     "text"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "reports", ["exercise_id"], name: "index_reports_on_exercise_id", using: :btree
+  add_index "reports", ["user_id"], name: "index_reports_on_user_id", using: :btree
 
   create_table "testing_frameworks", force: :cascade do |t|
     t.string   "name"
@@ -295,7 +321,6 @@ ActiveRecord::Schema.define(version: 20170928094505) do
   add_foreign_key "answers", "comments"
   add_foreign_key "answers", "users"
   add_foreign_key "carts", "users"
-  add_foreign_key "collections", "users"
   add_foreign_key "comments", "exercises"
   add_foreign_key "comments", "users"
   add_foreign_key "descriptions", "exercises"
@@ -306,10 +331,13 @@ ActiveRecord::Schema.define(version: 20170928094505) do
   add_foreign_key "exercise_group_accesses", "exercises"
   add_foreign_key "exercise_group_accesses", "groups"
   add_foreign_key "exercises", "execution_environments"
+  add_foreign_key "exercises", "licenses"
   add_foreign_key "exercises", "users"
   add_foreign_key "labels", "label_categories"
   add_foreign_key "ratings", "exercises"
   add_foreign_key "ratings", "users"
+  add_foreign_key "reports", "exercises"
+  add_foreign_key "reports", "users"
   add_foreign_key "tests", "exercise_files"
   add_foreign_key "tests", "exercises"
   add_foreign_key "tests", "testing_frameworks"

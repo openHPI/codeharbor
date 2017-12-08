@@ -47,7 +47,7 @@
                 = link_to grant_access_path(group: @group, user: user), class: 'btn btn-default btn-xs' do
                   i.fa.fa-plus style=("color:#008000")
                   = ' ' + 'Grant Access'
-                = link_to delete_from_group_path(group: @group, user: user), class: 'btn btn-default btn-xs' do
+                = link_to deny_access_group_path(group: @group, user: user), class: 'btn btn-default btn-xs' do
                   i.fa.fa-remove style=("color:#800000")
                   = ' ' + 'Deny Access'
     tr
@@ -70,11 +70,11 @@
         i.fa.fa-trash style=("color:#800000")
         = ' ' + 'Delete'
     = link_to "Leave Group", leave_group_path(@group), class: 'btn btn-important', data: {confirm: 'Are you sure?'}
-    = link_to 'Back', groups_path, class: 'btn btn-important'
+    = link_to 'Back', :back, class: 'btn btn-important'
 
 - else
   h1
     = 'You need to request membership to view this group!'
   .actions.btn-group[role="group"]
     = link_to 'Request Membership', request_access_path(@group), class: 'btn btn-important'
-    = link_to 'Back', groups_path, class: 'btn btn-important'
+    = link_to 'Back', :back, class: 'btn btn-important'

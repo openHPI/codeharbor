@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   rescue_from CanCan::AccessDenied do |_exception|
-    redirect_to root_path, alert: 'You are not authorized for this action.'
+    redirect_to root_path, alert: t('controllers.user.authorization')
   end
   # GET /users
   # GET /users.json
@@ -34,7 +34,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to sessions_create_path(user_params), notice: 'User was successfully created.' }
+        format.html { redirect_to sessions_create_path(user_params), notice: t('controllers.user.created')}
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
@@ -48,7 +48,7 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
+        format.html { redirect_to @user, notice: t('controllers.user.updated') }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
@@ -61,11 +61,11 @@ class UsersController < ApplicationController
   # DELETE /users/1.json
   def destroy
     respond_to do |format|
-      if @user.destroy
-        format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
+      if @user.soft_delete
+        format.html { redirect_to users_url, notice: t('controllers.user.destroyed') }
         format.json { head :no_content }
       else
-        format.html { redirect_to users_url, alert: 'User is only admin of a group with members.' }
+        format.html { redirect_to users_url, alert: t('controllers.user.last_admin') }
         format.json { head :no_content }
       end
     end

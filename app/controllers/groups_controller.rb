@@ -3,7 +3,7 @@ class GroupsController < ApplicationController
   before_action :set_group, only: [:show, :edit, :update, :destroy, :request_access, :grant_access, :delete_from_group, :make_admin]
   before_action :set_option, only: [:index]
   rescue_from CanCan::AccessDenied do |_exception|
-    redirect_to root_path, alert: 'You are not authorized to for this action.'
+    redirect_to root_path, alert: t('controllers.group.authorization')
   end
   # GET /groups
   # GET /groups.json
@@ -44,7 +44,7 @@ class GroupsController < ApplicationController
     respond_to do |format|
       if @group.save
         @group.add(current_user, as: 'admin')
-        format.html { redirect_to @group, notice: 'Group was successfully created.' }
+        format.html { redirect_to @group, notice: t('controllers.group.created') }
         format.json { render :index, status: :created, location: @group }
       else
         format.html { render :new }
@@ -58,7 +58,7 @@ class GroupsController < ApplicationController
   def update
     respond_to do |format|
       if @group.update(group_params)
-        format.html { redirect_to @group, notice: 'Group was successfully updated.' }
+        format.html { redirect_to @group, notice: t('controllers.group.updated') }
         format.json { render :index, status: :ok, location: @group }
       else
         format.html { render :edit }
@@ -72,7 +72,7 @@ class GroupsController < ApplicationController
   def destroy
     @group.destroy
     respond_to do |format|
-      format.html { redirect_to groups_url, notice: 'Group was successfully destroyed.' }
+      format.html { redirect_to groups_url, notice: t('controllers.group.destroyed') }
       format.json { head :no_content }
     end
   end
@@ -80,15 +80,16 @@ class GroupsController < ApplicationController
   def leave
     last_admin = current_user.last_admin?(@group)
     if last_admin
-      redirect_to @group, alert: "You have to name somebody else admin first"
+      redirect_to @group, alert: t('controllers.group.leave.alert')
     else
       @group.users.delete(current_user)
-      redirect_to groups_path, notice: "You successfully left the group"
+      redirect_to groups_path, notice: t('controllers.group.leave.notice')
     end
   end
   def request_access
-    flash[:notice] = "Your Access request has been sent."
+    flash[:notice] = t('controllers.group.request_access.notice')
     @group.admins.each do |admin|
+      Message.create(sender: current_user, recipient: admin, text: t('controllers.group.request_access.text', user: current_user.name, group: @group.name), param_type: 'group', param_id: @group.id, sender_status: 'd')
       AccessRequest.send_access_request(current_user, admin, @group).deliver_now
     end
     @group.add_pending_user(current_user)
@@ -98,24 +99,34 @@ class GroupsController < ApplicationController
   def remove_exercise
     exercise = Exercise.find(params[:exercise])
     @group.exercises.delete(exercise)
-    redirect_to @group, notice: 'Exercise successfully removed'
+    redirect_to @group, notice: t('controllers.group.remove_exercise_notice')
   end
   def grant_access
     user = User.find(params[:user])
     @group.grant_access(user)
-    redirect_to @group, notice: 'Access granted.'
+    Message.create(sender: current_user, recipient: user, text: t('controllers.group.grant_access.text', user: current_user.name, group: @group.name), param_type: 'group_accepted', param_id: @group.id, sender_status: 'd')
+    Message.where(sender: user, recipient:current_user, param_type: 'group', param_id: @group.id).delete_all
+    redirect_to @group, notice: t('controllers.group.grant_access.notice')
   end
 
   def delete_from_group
     user = User.find(params[:user])
     @group.users.delete(user)
-    redirect_to @group, notice: 'User deleted.'
+    redirect_to @group, notice: t('controllers.group.delete_from_group_notice')
+  end
+
+  def deny_access
+    user = User.find(params[:user])
+    @group.users.delete(user)
+    Message.create(sender: current_user, recipient: user, text: t('controllers.group.deny_access.text', user: current_user.name, group: @group.name), param_type: 'group_declined', sender_status: 'd')
+    Message.where(sender: user, recipient:current_user, param_type: 'group', param_id: @group.id).delete_all
+    redirect_to @group, notice: t('controllers.group.deny_access.notice')
   end
 
   def make_admin
     user = User.find(params[:user])
     @group.make_admin(user)
-    redirect_to @group, notice: 'Made user to admin.'
+    redirect_to @group, notice: t('controllers.group.make_admin_notice')
   end
 
   private

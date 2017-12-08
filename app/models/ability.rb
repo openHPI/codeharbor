@@ -20,19 +20,23 @@ class Ability
       end
 
       #Collection
-      can [:create], Collection
+      can [:create, :view_shared, :save_shared, :show], Collection
       can [:manage], Collection do |collection|
-        collection.user == user
+        collection.users.include?(user)
       end
 
       #Exercise
       can [:create, :contribute], Exercise
-      can [:show, :read, :add_to_cart, :add_to_collection, :export, :duplicate, :download_exercise], Exercise do |exercise|
+      can [:show, :read, :add_to_cart, :add_to_collection, :export, :duplicate, :download_exercise, :report], Exercise do |exercise|
         exercise.can_access(user)
       end
       can [:manage], Exercise do |exercise|
         ExerciseAuthor.where(user_id: user.id, exercise_id: exercise.id).any? || exercise.user == user
       end
+      cannot [:report], Exercise do |exercise|
+        ExerciseAuthor.where(user_id: user.id, exercise_id: exercise.id).any? || exercise.user == user
+      end
+
 
 
       #Comment
@@ -57,6 +61,15 @@ class Ability
       can [:create], User
       can [:show, :edit, :delete], User do |this_user|
         this_user == user
+      end
+
+      #Message
+      can [:create], Message
+      can [:show, :reply, :delete, :add_author], Message do |message|
+        message.recipient == user
+      end
+      can [:show, :delete], Message do |message|
+        message.sender == user
       end
     end
     # Define abilities for the passed in user here. For example:

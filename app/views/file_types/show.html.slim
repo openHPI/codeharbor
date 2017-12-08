@@ -1,0 +1,10 @@
+p#notice= notice
+p
+  strong = "Name"+':'
+  = @file_type.name
+p
+  strong = "File_extension"+':'
+  = @file_type.file_extension
+= link_to t('execution.button.edit'), edit_file_type_path(@file_type)
+| \
+= link_to t('execution.button.back'), file_types_path

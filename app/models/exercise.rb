@@ -9,12 +9,14 @@ class Exercise < ActiveRecord::Base
   has_and_belongs_to_many :labels
   has_many :comments, dependent: :destroy
   has_many :ratings, dependent: :destroy
+  has_many :reports, dependent: :destroy
   has_many :exercise_authors, dependent: :destroy
   has_many :authors, through: :exercise_authors, source: :user
   has_and_belongs_to_many :collections, dependent: :destroy
   has_and_belongs_to_many :carts, dependent: :destroy
   belongs_to :user
   belongs_to :execution_environment
+  belongs_to :license
   has_many :descriptions, dependent: :destroy
   has_many :origin_relations, :class_name => 'ExerciseRelation', :foreign_key => 'origin_id'
   has_many :clone_relations, :class_name => 'ExerciseRelation', :foreign_key => 'clone_id', dependent: :destroy
@@ -27,9 +29,12 @@ class Exercise < ActiveRecord::Base
 
   scope :timespan, -> (days) {(days != 0) ? where('DATE(created_at) >= ?', Date.today-days) : where(nil)}
   scope :title_like, -> (title) {(!title.blank?) ? where('lower(title) ilike ?',"%#{title.downcase}%") : where(nil)}
-  scope :mine, -> (user) {where('user_id = ? OR (id in (select exercise_id from exercise_authors where user_id = ?))', user.id, user.id)}
+  scope :mine, -> (user) {(!user.nil?) ? where('user_id = ? OR (id in (select exercise_id from exercise_authors where user_id = ?))', user.id, user.id) : where(nil)}
+  scope :visibility, -> (priv) {(!priv.nil?) ? where(private: priv) : where(nil)}
   scope :languages, -> (languages) {(!languages.blank?) ? where('(select count(language) from descriptions where exercises.id = descriptions.exercise_id AND descriptions.language in (?)) = ? ', languages, languages.length) : where(nil)}
   scope :proglanguage, -> (prog) {(!prog.blank?) ? where('execution_environment_id IN (?)', prog) : where(nil)}
+  scope :not_deleted, -> {where('(select count(*) from reports where exercises.id = reports.exercise_id) < 3')}
+  scope :search_query, -> (stars, languages, proglanguages, priv, user, search, intervall) {joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS average_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').mine(user).visibility(priv).rating(stars).languages(languages).proglanguage(proglanguages).title_like(search).timespan(intervall).not_deleted.select('exercises.*, coalesce(average_rating, 0) AS average_rating')}
 
   def self.rating(stars)
     if !stars.blank?
@@ -43,10 +48,18 @@ class Exercise < ActiveRecord::Base
     end
   end
 
-  def self.search(search, settings, option, user)
+  def self.search(search, settings, option, user_param)
 
-    priv = false
-    priv = true if option == 'private'
+    if option == 'private'
+      priv = true
+      user = nil
+    elsif option == 'public'
+      priv = false
+      user = nil
+    else
+      priv = nil
+      user = user_param
+    end
     stars = '0'
     intervall = 0
 
@@ -64,41 +77,21 @@ class Exercise < ActiveRecord::Base
       end
     end
 
-    if option == 'private' || option == 'public'
-      if search
-        results = joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS average_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).where(private: priv).title_like(search).timespan(intervall).select('exercises.*, coalesce(average_rating, 0) AS average_rating')
-        label = Label.find_by('lower(name) = ?', search.downcase)
+    if search
+      results = search_query(stars, languages, proglanguages, priv, user, search, intervall)
+      label = Label.find_by('lower(name) = ?', search.downcase)
 
-        if label
-          collection = Label.find_by('lower(name) = ?', search.downcase).exercises.joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS average_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).where(private: priv).timespan(intervall).select('exercises.*, coalesce(average_rating, 0) AS average_rating')
+      if label
+        collection = Label.find_by('lower(name) = ?', search.downcase).exercises.search_query(stars, languages, proglanguages, priv, user, search, intervall)
 
-          results.each do |r|
-            collection << r unless collection.find_by(id: r.id)
-          end
-          return collection
+        results.each do |r|
+          collection << r unless collection.find_by(id: r.id)
         end
-        return results
-      else
-        return joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS average_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).where(private: priv).timespan(intervall).select('exercises.*, coalesce(average_rating, 0) AS average_rating')
+        return collection
       end
+      return results
     else
-      if search
-        results = joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS average_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).mine(user).title_like(search).timespan(intervall).select('exercises.*, coalesce(average_rating, 0) AS average_rating')
-        label = Label.find_by('lower(name) = ?', search.downcase)
-
-        if label
-          collection = Label.find_by('lower(name) = ?', search.downcase).exercises.joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS average_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).mine(user).timespan(intervall).select('exercises.*, coalesce(average_rating, 0) AS average_rating')
-
-          results.each do |r|
-            collection << r unless collection.find_by(id: r.id)
-          end
-          return collection
-        end
-
-        return results
-      else
-        return joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS average_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').rating(stars).languages(languages).proglanguage(proglanguages).mine(user).timespan(intervall).select('exercises.*, coalesce(average_rating, 0) AS average_rating')
-      end
+      return search_query(stars, languages, proglanguages, priv, user, search, intervall)
     end
   end
   
@@ -130,6 +123,18 @@ class Exercise < ActiveRecord::Base
 
   def round_avg_rating
     (avg_rating*2).round / 2.0
+  end
+
+  def rating_star(avg)
+    avg*2.round / 2
+  end
+
+  def in_carts
+    self.carts.count.to_s
+  end
+
+  def in_collections
+    self.collections.count.to_s
   end
 
   def add_attributes(params)
@@ -251,6 +256,7 @@ class Exercise < ActiveRecord::Base
     self.execution_environment = exec_environment
     self.private = false
     descriptions.new(text: doc.xpath('/p:task/p:description/text()'), language: doc.xpath('/p:task/@lang').first.value)
+    self.license_id = 1
 
     add_files_xml(doc)
     add_tests_xml(doc)
@@ -274,15 +280,19 @@ class Exercise < ActiveRecord::Base
           if name_with_type.include? '.'
             name_type_split = name_with_type.split('.')
             name = name_type_split.first
-            type = name_type_split.second
+            type = File_type.find_by(file_extension: ".#{name_type_split.second}")
           else
             name = name_with_type
-            type = ''
+            if name == "Makefile"
+              type = FileType.find_by(name: 'Makefile')
+            else
+              type = FileType.find_by(name: 'Unknown')
+            end
           end
         else
           path = ''
           name = ''
-          type = ''
+          type = FileType.find_by(name: 'Unknown')
         end
 
         file_class = file.xpath('@class').first.value
@@ -293,7 +303,7 @@ class Exercise < ActiveRecord::Base
             name: name,
             path: path,
             purpose: '',
-            file_type: FileType.find_by(file_extension: ".#{type}"),
+            file_type: type,
             role: role,
             hidden: file_class == 'internal',
             read_only: false

@@ -4,9 +4,9 @@
   .nav-container
     .col-md-9
       .btn-group[role="group"]
-        = button_tag 'My Exercises', type: 'button', class: 'btn btn-main change-hidden-field', id: 'mine'
-        = button_tag 'Private', type: 'button', class: 'btn btn-main change-hidden-field', id: 'private'
-        = button_tag 'Public', type: 'button', class: 'btn btn-main change-hidden-field', id: 'public'
+        = button_tag t('exercises.menu_button.mine'), type: 'button', class: 'btn btn-main change-hidden-field', id: 'mine'
+        = button_tag t('exercises.menu_button.private'), type: 'button', class: 'btn btn-main change-hidden-field', id: 'private'
+        = button_tag t('exercises.menu_button.public'), type: 'button', class: 'btn btn-main change-hidden-field', id: 'public'
     .col-md-3
       - if can? :create, Exercise
         .btn-group.pull-right
@@ -15,7 +15,10 @@
             = ' ' + t('exercises.all.new')
           = button_tag type: 'button', data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}, class: 'btn btn-main nav-btn-exercise dropdown-toggle dropdown-toggle split' do
             span.caret
-          .dropdown-menu#xml-import
+          ul.dropdown-menu#xml-import
+            li.dropdown-header style="padding-left: 2px;"
+              = t('exercises.import_xml')
+            li
               = file_field_tag 'xml', form: 'create-xml', accept: '.xml', class: 'inputfile'
               .btn-group style="display:inline-flex"
                 = label_tag 'xml', 'choose file', form: 'create-xml', id: 'xml-label', class: 'btn btn-default'

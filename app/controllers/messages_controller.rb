@@ -1,11 +1,25 @@
 class MessagesController < ApplicationController
 
-  before_action :set_message, only: [:show, :edit, :update, :destroy, :add_author]
+  before_action :set_user
+  before_action :set_message, only: [:show, :edit, :update, :destroy, :add_author, :delete]
+  before_action :set_option, only: [:index]
+
+  rescue_from CanCan::AccessDenied do |_exception|
+    redirect_to root_path, alert: t('controllers.message.authorization')
+  end
 
   # GET /messages
   # GET /messages.json
   def index
-    @messages = Message.where(recipient: current_user).order(created_at: :desc)
+    if @option == 'inbox'
+      @messages = Message.where(recipient: current_user).where('recipient_status != ?', 'd').order(created_at: :desc).paginate(per_page: 5, page: params[:page])
+      @messages.each do |message|
+        message.recipient_status = 'r'
+        message.save
+      end
+    else
+      @messages = Message.where(sender: current_user).where('sender_status != ?', 'd').order(created_at: :desc).paginate(per_page: 5, page: params[:page])
+    end
   end
 
   # GET /messages/1
@@ -26,10 +40,17 @@ class MessagesController < ApplicationController
   # POST /messages.json
   def create
     @message = Message.new(message_params)
+    @message.recipient_status = 'u'
+    @message.sender = current_user
+    if params[:message][:recipient]
+      @message.recipient = User.find_by(email: params[:message][:recipient])
+    else
+      @message.recipient = User.find(params[:message][:recipient_hidden])
+    end
 
     respond_to do |format|
       if @message.save
-        format.html { redirect_to @message, notice: 'Message was successfully created.' }
+        format.html { redirect_to user_messages_path(@user), notice: t('controllers.message.created') }
         format.json { render :show, status: :created, location: @message }
       else
         format.html { render :new }
@@ -43,7 +64,7 @@ class MessagesController < ApplicationController
   def update
     respond_to do |format|
       if @message.update(message_params)
-        format.html { redirect_to @message, notice: 'Message was successfully updated.' }
+        format.html { redirect_to @message, notice: t('controllers.message.updated') }
         format.json { render :show, status: :ok, location: @message }
       else
         format.html { render :edit }
@@ -54,30 +75,59 @@ class MessagesController < ApplicationController
 
   # DELETE /messages/1
   # DELETE /messages/1.json
+  def delete
+    if @message.sender == current_user
+      @message.sender_status = 'd'
+      @message.delete if @message.recipient_status == 'd'
+    else
+      @message.recipient_status = 'd'
+      @message.delete if @message.sender_status == 'd'
+    end
+
+    option = params[:option]
+
+    if @message.save
+       redirect_to user_messages_path(@user, option: option), notice: t('controllers.message.deleted_notice')
+    else
+      redirect_to user_messages_path(@user, option: option), alert: t('controllers.message.deleted_alert')
+    end
+  end
+
   def destroy
     @message.destroy
     respond_to do |format|
-      format.html { redirect_to messages_url, notice: 'Message was successfully destroyed.' }
+      format.html { redirect_to user_messages_path, notice: t('controllers.message.destroyed') }
       format.json { head :no_content }
     end
   end
 
-  def add_author
-    user = @message.sender
-    exercise = Exercise.find(@message.param_id)
-    ExerciseAuthor.create(user: user, exercise: exercise)
-    @message.delete
-    redirect_to user_messages_path(current_user), notice: 'User was added as co-author'
+  def reply
+    @recipient = User.find(params[:recipient])
+    @message = Message.new
+    render :reply
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
+    def set_option
+      if params[:option]
+        @option = params[:option]
+      else
+        @option = 'inbox'
+      end
+    end
+
     def set_message
       @message = Message.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+    def set_user
+      @user = User.find(params[:user_id])
+    end
+
+
+  # Never trust parameters from the scary internet, only allow the white list through.
     def message_params
-      params.require(:message).permit(:text, :sender_id, :recipient_id, :status)
+      params.require(:message).permit(:text, :sender_id, :recipient_id, :sender_status, :recipient_status)
     end
 end
