@@ -71,6 +71,13 @@ en:
       decline_author_notice: "Users contribution request was declined."
       report_alert: "You already reported this exercise."
       report_notice: "You successfully reported this exercise."
+      push_external_notice: "Exercise pushed to %{account_link}"
+      import_proforma_xml:
+        success: "SUCCESS"
+        invalid: "Invalid exercise"
+        no_header: "No Authorization header"
+        no_token: "No token in Authorization header"
+        unknown_token: "Unknown OAuth2 token"
 
     group:
       authorization: "You are not authorized to for this action."
@@ -101,6 +108,24 @@ en:
       deleted_notice: "Message was successfully deleted."
       deleted_alert:  "An error occured while deleting the message."
 
+    file_type:
+      authorization: "You are not authorized to for this action."
+      created: "File type was successfully created."
+      updated: "File type was successfully updated."
+      destroyed: "File type was successfully destroyed."
+
+    license:
+      authorization: "You are not authorized to for this action."
+      created: "License was successfully created."
+      updated: "License was successfully updated."
+      destroyed: "License was successfully destroyed."
+
+    user:
+      authorization: "You are not authorized to for this action."
+      created: "User was successfully created."
+      updated: "User was successfully updated."
+      destroyed: "User was successfully destroyed."
+      last_admin: "User is only admin of a group with members."
 
 
   models:
@@ -299,6 +324,11 @@ en:
 
   exercises:
 
+    menu_button:
+      mine: "My Exercises"
+      public: "Public"
+      private: "Private"
+    import_xml: "Import XML-File"
     title: "Title"
     rate: "Rate"
     description_in: "Description in"

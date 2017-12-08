@@ -152,15 +152,8 @@ class ExercisesController < ApplicationController
     oauth2Client = OAuth2::Client.new('client_id', 'client_secret', :site => account_link.push_url)
     oauth2_token = account_link[:oauth2_token]
     token = OAuth2::AccessToken.from_hash(oauth2Client, :access_token => oauth2_token)
-    logger.fatal('@exercise.to_proforma_xml')
-    logger.fatal(@exercise.to_proforma_xml)
-    logger.fatal('@exercise.to_proforma_xml')
-    logger.fatal(oauth2_token)
-    logger.fatal(account_link.push_url)
-    logger.fatal(token.inspect)
-
     token.post(account_link.push_url, {body: @exercise.to_proforma_xml})
-    redirect_to @exercise, notice: ('Exercise pushed to ' + account_link.readable)
+    redirect_to @exercise, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
   end
 
   def download_exercise
@@ -182,11 +175,8 @@ class ExercisesController < ApplicationController
   end
 
   def import_proforma_xml
-    logger.fatal("HI")
     begin
-      logger.fatal("HELLO")
       user = user_for_oauth2_request()
-      logger.fatal(user.inspect)
       exercise = Exercise.new
       request_body = request.body.read
       doc = Nokogiri::XML(request_body)
@@ -195,10 +185,10 @@ class ExercisesController < ApplicationController
       exercise.user = user
       saved = exercise.save
       if saved
-        render :text => 'SUCCESS', :status => 200
+        render :text => t('controllers.exercise.import_proforma_xml.success'), :status => 200
       else
         logger.info(exercise.errors.full_messages)
-        render :text => 'Invalid exercise', :status => 400
+        render :text => t('controllers.exercise.import_proforma_xml.invalid'), :status => 400
       end
     rescue => error
       if error.class == Hash
@@ -213,17 +203,17 @@ class ExercisesController < ApplicationController
   def user_for_oauth2_request
     authorizationHeader = request.headers['Authorization']
     if authorizationHeader == nil
-      raise ({status: 401, message: 'No Authorization header'})
+      raise ({status: 401, message: t('controllers.exercise.import_proforma_xml.no_header')})
     end
 
     oauth2Token = authorizationHeader.split(' ')[1]
     if oauth2Token == nil || oauth2Token.size == 0
-      raise ({status: 401, message: 'No token in Authorization header'})
+      raise ({status: 401, message: t('controllers.exercise.import_proforma_xml.no_token')})
     end
 
     user = user_by_code_harbor_token(oauth2Token)
     if user == nil
-      raise ({status: 401, message: 'Unknown OAuth2 token'})
+      raise ({status: 401, message: t('controllers.exercise.import_proforma_xml.unknown_token')})
     end
 
     return user
@@ -232,7 +222,6 @@ class ExercisesController < ApplicationController
 
   def user_by_code_harbor_token(oauth2Token)
     link = AccountLink.where(:oauth2_token => oauth2Token)[0]
-    logger.fatal("Before Error")
     if link != nil
       return link.user
     end

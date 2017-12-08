@@ -1,6 +1,10 @@
 class LicensesController < ApplicationController
+  load_and_authorize_resource
   before_action :set_license, only: [:show, :edit, :update, :destroy]
 
+  rescue_from CanCan::AccessDenied do |_exception|
+    redirect_to root_path, alert: t('controllers.license.authorization')
+  end
   # GET /licenses
   # GET /licenses.json
   def index

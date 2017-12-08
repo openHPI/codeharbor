@@ -1,5 +1,10 @@
 class FileTypesController < ApplicationController
+  load_and_authorize_resource
   before_action :set_file_type, only: [:show, :edit, :update, :destroy]
+
+  rescue_from CanCan::AccessDenied do |_exception|
+    redirect_to root_path, alert: t('controllers.file_type.authorization')
+  end
 
   def search
     @file_types = FileType.all
@@ -35,7 +40,7 @@ class FileTypesController < ApplicationController
 
     respond_to do |format|
       if @file_type.save
-        format.html { redirect_to @file_type, notice: 'File type was successfully created.' }
+        format.html { redirect_to @file_type, notice: t('controllers.file_type.created')}
         format.json { render :show, status: :created, location: @file_type }
       else
         format.html { render :new }
@@ -49,7 +54,7 @@ class FileTypesController < ApplicationController
   def update
     respond_to do |format|
       if @file_type.update(file_type_params)
-        format.html { redirect_to @file_type, notice: 'File type was successfully updated.' }
+        format.html { redirect_to @file_type, notice: t('controllers.file_type.updated') }
         format.json { render :show, status: :ok, location: @file_type }
       else
         format.html { render :edit }
@@ -63,7 +68,7 @@ class FileTypesController < ApplicationController
   def destroy
     @file_type.destroy
     respond_to do |format|
-      format.html { redirect_to file_types_url, notice: 'File type was successfully destroyed.' }
+      format.html { redirect_to file_types_url, notice: t('controllers.file_type.destroyed')}
       format.json { head :no_content }
     end
   end
