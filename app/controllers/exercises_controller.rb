@@ -162,6 +162,10 @@ class ExercisesController < ApplicationController
 
     errors = xsd.validate(doc)
 
+    title = @exercise.title
+    title = title.tr('.,:*|"<>/\\', '')
+    title = title.gsub /[ (){}\[\]]/, '_'
+
     if errors.any?
       errors.each do |error|
         puts error.message
@@ -170,7 +174,7 @@ class ExercisesController < ApplicationController
     else
       downloads_new = @exercise.downloads+1
       @exercise.update(downloads: downloads_new)
-      send_data doc, filename: "#{@exercise.title}.xml", type: "application/xml"
+      send_data doc, filename: "#{title}.xml", type: "application/xml"
     end
   end
 

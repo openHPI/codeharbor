@@ -62,7 +62,7 @@
             = label_tag 'exercise_private_false', t('exercises.visibility.public'), class: 'radio-left'
             = f.radio_button :private, true, value: true
             = label_tag 'exercise_private_true', t('exercises.visibility.private'), class: 'radio-right'
-        .field-element#group-field
+        .field-element
           = f.label :groups, t('exercises.groups'), class: 'form-label'
           = f.select :groups, options_for_select(Group.all.collect{ |g| [g.name, g.id] }, @exercise.groups.pluck(:id)), {}, {class: "my-group form-control", multiple: "multiple", style: "width: 300px;"}
         .field-element

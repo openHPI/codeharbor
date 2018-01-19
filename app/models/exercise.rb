@@ -404,12 +404,14 @@ class Exercise < ActiveRecord::Base
       comment = ''
     end
 
-    xml['p'].file(exercise_file.content,
+    xml['p'].file(
       'filename' => exercise_file.full_file_name,
       'id' => exercise_file.id,
       'class' => proforma_file_class,
       'comment' => comment
-    )
+    ) {
+      xml.cdata(exercise_file.content)
+    }
   end
 
   def build_proforma_xml_for_test(xml, test, index)
@@ -422,7 +424,9 @@ class Exercise < ActiveRecord::Base
           proforma.fileref('refid' => test.exercise_file.id.to_s)
         }
         xml['u'].unittest('framework' => test.testing_framework.name, 'version' => '')
-        xml['c'].send('feedback-message', test.feedback_message)
+        xml['c'].send('feedback-message') {
+          xml.cdata(test.feedback_message)
+        }
       }
     }
   end
@@ -440,7 +444,7 @@ class Exercise < ActiveRecord::Base
   end
 
   def to_proforma_xml
-    builder = Nokogiri::XML::Builder.new do |xml|
+    builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
       proforma = xml['p']
       description = descriptions.first
       if description
@@ -452,7 +456,9 @@ class Exercise < ActiveRecord::Base
       end
       proforma.task('xmlns:p' => 'urn:proforma:task:v1.1', 'lang' => language, 'uuid' => SecureRandom.uuid,
                     'xmlns:u' => 'urn:proforma:tests:unittest:v1.1', 'xmlns:c' => 'codeharbor'){
-        proforma.description(text)
+        proforma.description {
+          proforma.cdata(text)
+        }
         proforma.proglang(self.execution_environment.language, 'version' => self.execution_environment.version)
         proforma.send('submission-restrictions') {
           proforma.send('files-restriction') {

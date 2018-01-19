@@ -59,7 +59,7 @@ class Ability
 
       #User
       can [:create], User
-      can [:show, :edit, :delete], User do |this_user|
+      can [:show, :edit, :delete, :manage_accountlinks], User do |this_user|
         this_user == user
       end
 

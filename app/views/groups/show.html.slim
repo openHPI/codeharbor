@@ -6,17 +6,17 @@
       = ' ' + @group.name
   table.vertical-table
     tr
-      th = 'Description'
+      th = t('groups.show.description')
       td = @group.description
     tr
-      th = 'Admins'
+      th = t('groups.show.admins')
       td
         - @group.admins.each do |admin|
           .table-list
             = admin.email
 
     tr
-      th = 'Users:'
+      th = t('groups.show.users')
 
       td
         - @group.members.each do |member|
@@ -28,16 +28,16 @@
                 .btn-group.pull-right
                   = link_to make_admin_path(group: @group, user: member), class: 'btn btn-default btn-xs' do
                     i.fa.fa-plus style=("color:#008000")
-                    = ' ' + 'Make Admin'
+                    = ' ' + t('groups.button.make_admin')
                   = link_to delete_from_group_path(group: @group, user: member), class: 'btn btn-default btn-xs' do
                     i.fa.fa-remove style=("color:#800000")
-                    = ' ' + 'Delete'
+                    = ' ' + t('groups.button.delete')
 
 
 
     - if @group.is_admin(current_user)
       tr
-        th = 'Pending Unsers'
+        th = t('groups.show.pending')
         td
           - @group.pending_users.each do |user|
             .table-list
@@ -46,12 +46,12 @@
               .btn-group.pull-right
                 = link_to grant_access_path(group: @group, user: user), class: 'btn btn-default btn-xs' do
                   i.fa.fa-plus style=("color:#008000")
-                  = ' ' + 'Grant Access'
+                  = ' ' + t('groups.button.grant')
                 = link_to deny_access_group_path(group: @group, user: user), class: 'btn btn-default btn-xs' do
                   i.fa.fa-remove style=("color:#800000")
-                  = ' ' + 'Deny Access'
+                  = ' ' + t('message.index.deny_access')
     tr
-      th = 'Exercises'
+      th = t('groups.show.exercises')
       td
         - @group.exercises.each do |exercise|
           .table-list
@@ -65,16 +65,16 @@
     - if can? :edit, @group
       = link_to edit_group_path(@group), class: 'btn btn-important' do
         i.fa.fa-edit
-        = ' ' + 'Edit'
+        = ' ' + t('groups.button.edit')
       = link_to group_path(@group), class: 'btn btn-important', method: :delete, data: {confirm: 'Are you sure?'} do
         i.fa.fa-trash style=("color:#800000")
-        = ' ' + 'Delete'
-    = link_to "Leave Group", leave_group_path(@group), class: 'btn btn-important', data: {confirm: 'Are you sure?'}
-    = link_to 'Back', :back, class: 'btn btn-important'
+        = ' ' + t('groups.button.delete')
+    = link_to t('groups.button.leave'), leave_group_path(@group), class: 'btn btn-important', data: {confirm: 'Are you sure?'}
+    = link_to t('groups.button.back'), :back, class: 'btn btn-important'
 
 - else
   h1
-    = 'You need to request membership to view this group!'
+    = t('groups.authorization_error')
   .actions.btn-group[role="group"]
-    = link_to 'Request Membership', request_access_path(@group), class: 'btn btn-important'
-    = link_to 'Back', :back, class: 'btn btn-important'
+    = link_to t('groups.button.request'), request_access_path(@group), class: 'btn btn-important'
+    = link_to t('groups.button.back'), :back, class: 'btn btn-important'
