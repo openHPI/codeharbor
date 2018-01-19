@@ -280,7 +280,7 @@ class Exercise < ActiveRecord::Base
           if name_with_type.include? '.'
             name_type_split = name_with_type.split('.')
             name = name_type_split.first
-            type = File_type.find_by(file_extension: ".#{name_type_split.second}")
+            type = FileType.find_by(file_extension: ".#{name_type_split.second}")
           else
             name = name_with_type
             if name == "Makefile"
@@ -319,8 +319,9 @@ class Exercise < ActiveRecord::Base
       if  testtype == 'unittest'
 
         framework_name = test.xpath('p:test-configuration/p:unit-test/@framework').first
+        framework_version = test.xpath('p:test-configuration/p:unit-test/@version').first
         if framework_name
-          framework = TestingFramework.find_by(name: framework_name)
+          framework = TestingFramework.find_by(name: framework_name + ' ' + framework_version)
         else
           framework = TestingFramework.find(1)
         end
