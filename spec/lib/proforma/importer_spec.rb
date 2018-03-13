@@ -14,8 +14,8 @@ describe Proforma::Importer do
 
   describe 'import exercise' do
 
-    let!(:testing_framework) {FactoryGirl.create(:junit_testing_framework, id: 1)}
-    let!(:license) {FactoryGirl.create(:license, id: 1)}
+    let!(:testing_framework) {FactoryGirl.create(:junit_testing_framework, name: 'JUnit 4')}
+    let!(:license) {FactoryGirl.create(:license, name: 'MIT License')}
 
     let(:imported_exercise) {
       imported_exercise = Exercise.new

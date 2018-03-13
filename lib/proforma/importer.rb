@@ -8,12 +8,12 @@ module Proforma
       version = doc.xpath('/p:task/p:proglang/@version').first.value
       exec_environment = ExecutionEnvironment.where('language = ? AND version = ?', prog_language, version).take
       unless exec_environment
-        exec_environment = ExecutionEnvironment.find(1)
+        exec_environment = ExecutionEnvironment.find_by(language: 'java') #Default Execution Environment for Test seeds, please change in Production!
       end
       @exercise.execution_environment = exec_environment
       @exercise.private = false
       @exercise.descriptions.new(text: doc.xpath('/p:task/p:description').text, language: doc.xpath('/p:task/@lang').first.value)
-      @exercise.license_id = 1
+      @exercise.license = License.find_by(name: 'MIT License') #Default License for Test seeds, please change in Production!
       add_files_xml(doc)
 
       return @exercise
@@ -50,7 +50,7 @@ module Proforma
           if framework_name
             framework = TestingFramework.find_by(name: framework_name + ' ' + framework_version)
           else
-            framework = TestingFramework.find(1)
+            framework = TestingFramework.find_by(name: 'JUnit 4') #Default Testing Framework for Test seeds, please change in Production!
           end
           exercise_test = Test.new(testing_framework: framework,
                                    feedback_message: test.xpath('p:test-configuration/c:feedback-message').text)
