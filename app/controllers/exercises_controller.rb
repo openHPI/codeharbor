@@ -45,6 +45,8 @@ class ExercisesController < ApplicationController
   def new
     @exercise = Exercise.new
     @exercise.descriptions << Description.new
+    @license_default = 1
+    @license_hidden = false
     @form_action
   end
 
@@ -58,6 +60,8 @@ class ExercisesController < ApplicationController
     @exercise.private = exercise_origin.private
     @exercise_relation.origin = exercise_origin
     @exercise.errors[:base] = params[:errors].inspect if params[:errors]
+    @license_default = @exercise_relation.origin.license_id
+    @license_hidden = true
 
     exercise_origin.descriptions.each do |d|
       @exercise.descriptions << Description.new(d.attributes)
@@ -77,15 +81,20 @@ class ExercisesController < ApplicationController
     if exercise_relation
       @exercise_relation = exercise_relation
     end
+    @license_default = @exercise.license_id
+    @license_hidden = false
+    if @exercise.downloads > 0
+      @license_hidden = true
+    end
   end
 
   # POST /exercises
   # POST /exercises.json
   def create
     @exercise = Exercise.new(exercise_params)
+    puts ExerciseRelation.find_by(clone: @exercise).nil?
     @exercise.add_attributes(params[:exercise])
     @exercise.user = current_user
-
     respond_to do |format|
       if @exercise.save
         format.html { redirect_to @exercise, notice: t('controllers.exercise.created') }
@@ -359,6 +368,6 @@ class ExercisesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def exercise_params
-    params.require(:exercise).permit(:title, :description, :maxrating, :private, :execution_environment_id, :license_id)
+    params.require(:exercise).permit(:title, :description, :maxrating, :private, :execution_environment_id)
   end
 end

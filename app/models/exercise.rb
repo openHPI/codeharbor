@@ -141,6 +141,7 @@ class Exercise < ActiveRecord::Base
     if params[:exercise_relation]
       add_relation(params[:exercise_relation])
     end
+    add_license(params[:license_id])
     add_labels(params[:labels])
     add_groups(params[:groups])
     add_tests(params[:tests_attributes])
@@ -154,6 +155,16 @@ class Exercise < ActiveRecord::Base
       ExerciseRelation.create(origin_id: relation_array[:origin_id], relation_id: relation_array[:relation_id], clone: self)
     else
       relation.update(origin_id: relation_array[:origin_id], relation_id: relation_array[:relation_id], clone: self)
+    end
+  end
+
+  def add_license(license_id)
+    relation = ExerciseRelation.find_by(clone: self)
+    if relation
+      self.license_id = relation.origin.license_id
+    end
+    if self.downloads == 0 && relation.nil?
+      self.license_id = license_id
     end
   end
 
