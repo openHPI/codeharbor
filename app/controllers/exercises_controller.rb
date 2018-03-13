@@ -1,4 +1,6 @@
 require 'oauth2'
+require 'proforma/importer'
+require 'proforma/xml_generator'
 
 class ExercisesController < ApplicationController
   load_and_authorize_resource :except => [:import_proforma_xml]
@@ -152,13 +154,17 @@ class ExercisesController < ApplicationController
     oauth2Client = OAuth2::Client.new('client_id', 'client_secret', :site => account_link.push_url)
     oauth2_token = account_link[:oauth2_token]
     token = OAuth2::AccessToken.from_hash(oauth2Client, :access_token => oauth2_token)
-    token.post(account_link.push_url, {body: @exercise.to_proforma_xml})
+    xml_generator = Proforma::XmlGenerator.new
+    xml_document = xml_generator.generate_xml(@exercise)
+    token.post(account_link.push_url, {body: xml_document})
     redirect_to @exercise, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
   end
 
   def download_exercise
     xsd = Nokogiri::XML::Schema(File.read('app/assets/taskxml.xsd'))
-    doc = Nokogiri::XML(@exercise.to_proforma_xml)
+    xml_generator = Proforma::XmlGenerator.new
+    xml_document = xml_generator.generate_xml(@exercise)
+    doc = Nokogiri::XML(xml_document)
 
     errors = xsd.validate(doc)
 
@@ -184,8 +190,8 @@ class ExercisesController < ApplicationController
       exercise = Exercise.new
       request_body = request.body.read
       doc = Nokogiri::XML(request_body)
-      logger.fatal(doc.inspect)
-      exercise.import_xml(doc)
+      importer = Proforma::Importer.new
+      exercise = importer.from_proforma_xml(exercise, doc)
       exercise.user = user
       saved = exercise.save
       if saved
@@ -246,13 +252,15 @@ class ExercisesController < ApplicationController
       flash[:alert] = t('controllers.exercise.xml_not_valid')
       render :nothing => true, :status => 200
     else
-      @exercise = Exercise.new
-      @exercise.user = current_user
-      @exercise.import_xml(doc)
+      exercise = Exercise.new
+      importer = Proforma::Importer.new
+      exercise = importer.from_proforma_xml(exercise, doc)
+      exercise.user = current_user
+      saved = exercise.save
 
-      if @exercise.save
+      if saved
         flash[:notice] = t('controllers.exercise.import_success')
-        redirect_to edit_exercise_path(@exercise.id)
+        redirect_to edit_exercise_path(exercise.id)
       else
         flash[:alert] = t('controllers.exercise.import_fail')
         redirect_to exercises_path

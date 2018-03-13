@@ -1,4 +1,5 @@
 require 'zip'
+require 'proforma/xml_generator'
 
 class CartsController < ApplicationController
   load_and_authorize_resource
@@ -93,7 +94,8 @@ class CartsController < ApplicationController
     stringio = Zip::OutputStream.write_buffer do |zio|
       @cart.exercises.each do |exercise|
         zio.put_next_entry("#{exercise.title}.xml")
-        zio.write exercise.to_proforma_xml
+        xml_generator = Proforma::XmlGenerator.new
+        zio.write xml_generator.generate_xml(exercise)
       end
     end
     binary_data = stringio.string

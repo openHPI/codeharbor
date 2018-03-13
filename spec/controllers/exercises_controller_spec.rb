@@ -28,7 +28,7 @@ RSpec.describe ExercisesController, type: :controller do
   # Exercise. As you add validations to Exercise, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    FactoryGirl.attributes_for(:only_meta_data, user: user)
+    FactoryGirl.attributes_for(:only_meta_data, user: user).merge(:descriptions_attributes => {"0"=>FactoryGirl.attributes_for(:simple_description)})
   }
 
   let(:invalid_attributes) {
