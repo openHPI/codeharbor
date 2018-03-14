@@ -49,6 +49,12 @@
           = f.add_nested_fields_link :descriptions, ' ' , class: 'btn btn-main' do
             i.fa.fa-plus style=("color: #008000")
             = ' ' + t('exercises.form.descriptions.add')
+        .field-element
+          .form-description
+            .top-label
+              = f.label :instruction, class: 'form-label' do
+                = t('exercises.instructions')
+            = f.text_area :instruction, class: 'form-control'
     fieldset.form-group
       legend
         span.number = '2'

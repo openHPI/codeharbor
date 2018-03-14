@@ -71,7 +71,14 @@ table.vertical-table
         = description.text
   tr
     th
+      = t('exercises.instructions')
+      | :
+    td
+      = @exercise.instruction
+  tr
+    th
       = t('exercises.execution_environment')
+      | :
     td
       = @exercise.execution_environment.language
   tr

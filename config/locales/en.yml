@@ -351,6 +351,7 @@ en:
     title: "Title"
     rate: "Rate"
     description_in: "Description in"
+    instructions: "Instructions"
     parent: "Parent"
     parent_deleted: "Parent was deleted"
     relation: "Relation"

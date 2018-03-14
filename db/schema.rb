@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180314103015) do
+ActiveRecord::Schema.define(version: 20180314123634) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -159,7 +159,7 @@ ActiveRecord::Schema.define(version: 20180314103015) do
 
   create_table "exercises", force: :cascade do |t|
     t.string   "title"
-    t.string   "description"
+    t.string   "instruction"
     t.integer  "maxrating"
     t.boolean  "private"
     t.datetime "created_at",                           null: false
@@ -168,6 +168,7 @@ ActiveRecord::Schema.define(version: 20180314103015) do
     t.integer  "execution_environment_id"
     t.integer  "downloads",                default: 0
     t.integer  "license_id"
+    t.boolean  "deleted"
   end
 
   add_index "exercises", ["execution_environment_id"], name: "index_exercises_on_execution_environment_id", using: :btree
