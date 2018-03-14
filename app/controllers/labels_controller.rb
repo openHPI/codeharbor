@@ -8,7 +8,7 @@ class LabelsController < ApplicationController
   # GET /labels
   # GET /labels.json
   def index
-    @labels = Label.all
+    @labels = Label.all.paginate(per_page: 10, page: params[:page])
   end
   # GET /labels/1
   # GET /labels/1.json

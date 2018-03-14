@@ -14,6 +14,9 @@ class CollectionsController < ApplicationController
     @collections = Collection.includes(:collections_users).where(:collections_users => { :user => current_user}).distinct.paginate(per_page: 5, page: params[:page])
   end
 
+  def collections_all
+    @collections = Collection.all.paginate(per_page: 10, page: params[:page])
+  end
   # GET /collections/1
   # GET /collections/1.json
   def show

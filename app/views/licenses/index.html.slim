@@ -1,28 +1,23 @@
-h1 Listing licenses
-
-table
+p#notice= notice
+h1
+  = t('licenses.header')
+  = ' '
+  = link_to t('licenses.new'), new_license_path, class: 'btn btn-success'
+table.table
   thead
     tr
+      th = t('licenses.name')
+      th = t('licenses.link')
       th
-        = "Name"
-      th
-        = "Link"
-      th
-        = "Actions"
-
+        = t('exercises.admin.actions')
   tbody
     - @licenses.each do |license|
       tr
-        td style="width:30%"
-          = license.name
-        td style="width:30%"
-          = link_to license.link, license.link
-        td style="width:30%"
-          .btn-group
-            = link_to 'Show', license
-            = link_to 'Edit', edit_license_path(license)
-            = link_to 'Destroy', license, data: { confirm: 'Are you sure?' }, method: :delete
+        td= license.name
+        td= license.link
+        td.actions.btn-group[role="group"]
+          = link_to t('licenses.show'), license, class: 'btn btn-default btn-xs'
+          = link_to t('licenses.edit'), edit_license_path(license), class: 'btn btn-warning btn-xs'
+          = link_to t('licenses.destroy'), license, class: 'btn btn-danger btn-xs', method: :delete, data: {confirm: t('sure')}
 
-br
-
-= link_to 'New License', new_license_path
+= will_paginate @licenses

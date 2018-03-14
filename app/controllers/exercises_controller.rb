@@ -155,7 +155,7 @@ class ExercisesController < ApplicationController
   end
 
   def exercises_all
-    @exercises = Exercise.all
+    @exercises = Exercise.all.paginate(per_page: 10, page: params[:page])
   end
 
   def push_external

@@ -1,5 +1,6 @@
 h1
   = t('users.admin.header')
+  = ' '
   = link_to t('users.admin.new'), new_user_path, class:'btn btn-success'
 table.table
   thead
@@ -30,3 +31,5 @@ table.table
           = link_to t('users.admin.edit'), edit_user_path(user), class:'btn btn-warning btn-xs'
           = link_to t('users.admin.deleteX'), user, method: :delete, data: { confirm: t('sure') }, class:'btn btn-danger btn-xs'
 br
+
+= will_paginate @users

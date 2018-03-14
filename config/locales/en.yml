@@ -212,7 +212,8 @@ en:
       destroy: "Destroy"
       back: "Back"
       create: "Create Collection"
-
+    admin:
+      header: "Collection Administration"
     edit:
       header: "Editing"
     new:
@@ -238,6 +239,7 @@ en:
       header: "Your Groups"
       title: "Title"
       actions: "Actions"
+      name: "Name"
 
       button:
         new: "New Group"
@@ -263,6 +265,8 @@ en:
         users: "Users"
         pending: "Pending users"
         exercises: "Exercises"
+      admin:
+        header: "Group Administration"
 
       authorization_error: "You need to request membership to view this group!"
       errorMessage: "prohibited this group from being saved."
@@ -467,6 +471,15 @@ en:
     undefined: "Exercise undefined"
     errorMessage: "prohibited this project from being saved"
 
+  file_types:
+    header: "File Types"
+    new: "New File Type"
+    show: "Show"
+    edit: "Edit"
+    destroy: "Destroy"
+    name: "Name"
+    file_extension: "File Extension"
+
   home:
     header: "Welcome to Code Harbor"
     subheader: "Your coding exercise repository"
@@ -570,6 +583,13 @@ en:
       user: "User Administration"
       exercise: "Exercise Administration"
       comments: "Comments Administration"
+      collections: "Collections Administration"
+      groups: "Groups Administration"
+      file_types: "File Types Administration"
+      execution_environments: "Execution Environments Administration"
+      testing_framework: "Testing Frameworks Administration"
+      lables: "Lables Administration"
+      license: "License Administration"
     cart: "Cart"
     logout: "Log out"
 
@@ -586,6 +606,15 @@ en:
 
    # ratings: will be added with implementation
 
+  licenses:
+    header: "Licenses"
+    new: "New License"
+    show: "Show"
+    edit: "Edit"
+    destroy: "Destroy"
+    name: "Name"
+    link: "Link"
+
   sessions:
     header: "Please Log In"
     email:
@@ -599,6 +628,7 @@ en:
   framework:
     header: "Listing Testing Frameworks"
     name: "Name"
+    version: "Version"
     button:
       new: "New Testing Framework"
       show: "Show"

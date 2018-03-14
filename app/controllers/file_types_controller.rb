@@ -16,7 +16,7 @@ class FileTypesController < ApplicationController
   # GET /file_types
   # GET /file_types.json
   def index
-    @file_types = FileType.all
+    @file_types = FileType.all.paginate(per_page: 10, page: params[:page])
   end
 
   # GET /file_types/1

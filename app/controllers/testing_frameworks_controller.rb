@@ -8,7 +8,7 @@ class TestingFrameworksController < ApplicationController
   # GET /testing_frameworks
   # GET /testing_frameworks.json
   def index
-    @testing_frameworks = TestingFramework.all
+    @testing_frameworks = TestingFramework.all.paginate(per_page: 10, page: params[:page])
   end
 
   # GET /testing_frameworks/1

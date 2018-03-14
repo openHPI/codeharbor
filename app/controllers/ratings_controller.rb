@@ -30,6 +30,14 @@ class RatingsController < ApplicationController
   # POST /ratings
   # POST /ratings.json
   def create
+    if @exercise.user == current_user
+      flash[:alert] = "You cannot rate your own exercise."
+      overall_rating = @exercise.round_avg_rating
+      respond_to do |format|
+        format.json { render json: {overall_rating: overall_rating, user_rating: overall_rating} }
+      end
+      return
+    end
     rating = @exercise.ratings.find_by(user: current_user)
     notice = 'Rating was successfully created.'
     if rating

@@ -19,6 +19,9 @@ Rails.application.routes.draw do
       get :view_shared
       post :save_shared
     end
+    collection do
+      get :collections_all
+    end
   end
   resources :groups do
     get :search, :on => :collection
@@ -26,6 +29,9 @@ Rails.application.routes.draw do
       get :remove_exercise
       get :leave
       get :deny_access
+    end
+    collection do
+      get :groups_all
     end
   end
   get 'home/index'
