@@ -27,6 +27,8 @@ class Exercise < ActiveRecord::Base
   accepts_nested_attributes_for :exercise_files, allow_destroy: true
   accepts_nested_attributes_for :tests, allow_destroy: true
 
+  default_scope { where(deleted: [nil, false]) }
+
   scope :timespan, -> (days) {(days != 0) ? where('DATE(created_at) >= ?', Date.today-days) : where(nil)}
   scope :title_like, -> (title) {(!title.blank?) ? where('lower(title) ilike ?',"%#{title.downcase}%") : where(nil)}
   scope :mine, -> (user) {(!user.nil?) ? where('user_id = ? OR (id in (select exercise_id from exercise_authors where user_id = ?))', user.id, user.id) : where(nil)}
@@ -152,7 +154,7 @@ class Exercise < ActiveRecord::Base
   def add_relation(relation_array)
     relation = ExerciseRelation.find_by(clone: self)
     if !relation
-      ExerciseRelation.create(origin_id: relation_array[:origin_id], relation_id: relation_array[:relation_id], clone: self)
+      ExerciseRelation.new(origin_id: relation_array[:origin_id], relation_id: relation_array[:relation_id], clone: self)
     else
       relation.update(origin_id: relation_array[:origin_id], relation_id: relation_array[:relation_id], clone: self)
     end
@@ -252,6 +254,17 @@ class Exercise < ActiveRecord::Base
         end
       end
     end
+  end
+
+  def delete_dependencies
+    groups.delete_all
+    carts.delete_all
+    collections.delete_all
+  end
+
+  def soft_delete
+    self.delete_dependencies
+    update(deleted: true)
   end
 
   def file_permit(params)

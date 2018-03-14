@@ -92,7 +92,6 @@ class ExercisesController < ApplicationController
   # POST /exercises.json
   def create
     @exercise = Exercise.new(exercise_params)
-    puts ExerciseRelation.find_by(clone: @exercise).nil?
     @exercise.add_attributes(params[:exercise])
     @exercise.user = current_user
     respond_to do |format|
@@ -129,7 +128,7 @@ class ExercisesController < ApplicationController
   # DELETE /exercises/1
   # DELETE /exercises/1.json
   def destroy
-    @exercise.destroy
+    @exercise.soft_delete
     respond_to do |format|
       format.html { redirect_to exercises_url, notice: t('controllers.exercise.destroyed') }
       format.json { head :no_content }
@@ -137,7 +136,7 @@ class ExercisesController < ApplicationController
   end
 
   def add_to_cart
-    cart = Cart.find_by(user: current_user)
+    cart = Cart.find_cart_of(current_user)
     if cart.add_exercise(@exercise)
       redirect_to @exercise, notice: t('controllers.exercise.add_to_cart_success')
     else

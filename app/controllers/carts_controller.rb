@@ -105,9 +105,7 @@ class CartsController < ApplicationController
   end
 
   def my_cart
-    unless @cart = Cart.find_by(user: current_user)
-      Cart.create(user: current_user)
-    end
+    @cart = Cart.find_cart_of(current_user)
     redirect_to cart_path(@cart)
   end
 
