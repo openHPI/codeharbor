@@ -94,6 +94,7 @@ class ExercisesController < ApplicationController
     @exercise = Exercise.new(exercise_params)
     @exercise.add_attributes(params[:exercise])
     @exercise.user = current_user
+
     respond_to do |format|
       if @exercise.save
         format.html { redirect_to @exercise, notice: t('controllers.exercise.created') }
