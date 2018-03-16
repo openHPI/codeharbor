@@ -69,7 +69,14 @@ exercise1.tests << test
 
 description1 = Description.create(text:"Schreibe ein Java Programm, das 'Hello World' am Bildschirm ausgibt.", language: 'de')
 description2 = Description.create(text:"Write a Java program, which returns and prints 'Hello World'.", language: 'en')
+exercise1.descriptions << description1
+exercise1.descriptions << description2
 
+ee1 = ExecutionEnvironment.create(language: 'Java', version: '8')
+ee2 = ExecutionEnvironment.create(language: 'Python', version: '2.7')
+
+exercise1.execution_environment = ee1
+exercise1.save
 
 Rating.create(rating: 4, exercise: exercise1, user: user5)
 Rating.create(rating: 2, exercise: exercise1, user: user2)
@@ -83,13 +90,6 @@ exercise1.labels << l1
 exercise1.labels << l2
 exercise1.labels << l3
 
-exercise1.descriptions << description1
-exercise1.descriptions << description2
-
 AccountLink.create(push_url: 'google.com/pushpush', account_name: 'account1000')
 
-ee1 = ExecutionEnvironment.create(language: 'Java', version: '8')
-ee2 = ExecutionEnvironment.create(language: 'Python', version: '2.7')
 
-exercise1.execution_environment = ee1
-exercise1.save

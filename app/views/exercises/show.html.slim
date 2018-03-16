@@ -235,6 +235,9 @@ table.vertical-table
   = button_tag type: 'button', class: 'btn btn-important comment-button' do
     = t('exercises.all.comments') + ' '
     span.fa.fa-caret-down
+  = button_tag type: 'button', class: 'btn btn-important related-button' do
+    = "Show Related Exercises" + ' '
+    span.fa.fa-caret-down
   = link_to t('exercises.show.add_to_cart'), add_to_cart_path(@exercise), method: 'post', class: 'btn btn-important'
   .dropup.btn-group
     = button_tag class: 'btn btn-important dropdown-toggle',  data: {toggle: 'dropdown'} do
@@ -286,6 +289,16 @@ table.vertical-table
             .input-group-btn
               = submit_tag t('exercises.show.submit'), form: 'report', class: 'btn btn-default'
   = link_to t('exercises.show.back'), :back,  class: 'btn btn-important'
+
+div class=("related-box with-borders") data-exercise=@exercise.id
+
+  .slide-left.inactive
+    = button_tag do
+      i.fa.fa-caret-left
+  .content
+  .slide-right.inactive
+    = button_tag do
+      i.fa.fa-caret-right
 
 div class=("comment-box with-borders") data-exercise=@exercise.id
   = form_for :comment, url: exercise_comments_path(@exercise), remote: true do |f|

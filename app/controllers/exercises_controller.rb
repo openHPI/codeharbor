@@ -158,6 +158,13 @@ class ExercisesController < ApplicationController
     @exercises = Exercise.all.paginate(per_page: 10, page: params[:page])
   end
 
+  def related_exercises
+    @related_exercises = Exercise.find(ExerciseRelation.where(origin_id: @exercise.id).collect(&:clone_id))
+    respond_to do |format|
+      format.html {render :index}
+      format.js{ render 'load_related_exercises.js.erb' }
+    end
+  end
   def push_external
     account_link = AccountLink.find(params[:account_link])
     oauth2Client = OAuth2::Client.new('client_id', 'client_secret', :site => account_link.push_url)
@@ -358,7 +365,6 @@ class ExercisesController < ApplicationController
     else
       @created = "0"
     end
-
 
   end
   # Use callbacks to share common setup or constraints between actions.

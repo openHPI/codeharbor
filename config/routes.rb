@@ -101,6 +101,7 @@ Rails.application.routes.draw do
     end
     resources :ratings
     member do
+      get :related_exercises
       post :report
       get :add_author
       get :decline_author

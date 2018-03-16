@@ -44,12 +44,19 @@
     .panel-body
       .exercise-content
         .description
-          - unless exercise.descriptions.empty?
+          - if exercise.descriptions.first.text == ''
+            span style=("color: gray")
+              = "No Description"
+          - else
             = exercise.descriptions.first.text
         .labels
-          - exercise.labels.each do |label|
-            .exerciseLabel style=("background-color: #{'#' + label.color.to_s}; color: white;")
-              = label.name
+          - if exercise.labels.empty?
+            span style=("color: gray")
+              = "No Labels"
+          - else
+            - exercise.labels.each do |label|
+              .exerciseLabel style=("background-color: #{'#' + label.color.to_s}; color: white;")
+                = label.name
       .exercise-buttons.btn-group-vertical.pull-right aria-label="..." role="group"
         - if can? :read, exercise
           = link_to t('exercises.all.view'), exercise_path(exercise), class:'btn btn-default'
@@ -62,7 +69,23 @@
     .panel-footer
       = button_tag type: 'button', class: 'btn no-border comment-button', data: {exercise: exercise.id} do
         = t('exercises.all.comments') + ' '
-        span.fa.fa-caret-down
+        span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
+        span.fa.fa-caret-down.my-caret
+      = ' '
+      = button_tag type: 'button', class: 'btn no-border related-button', data: {exercise: exercise.id} do
+        = "Show Related Exercises" + ' '
+        span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
+        span.fa.fa-caret-down.my-caret
+
+    div class=("related-box with-borders") data-exercise=exercise.id
+
+      .slide-left.inactive
+        = button_tag do
+          i.fa.fa-caret-left
+      .content
+      .slide-right.inactive
+        = button_tag do
+          i.fa.fa-caret-right
 
     div class=("comment-box") data-exercise=exercise.id
       = form_for :comment, url: exercise_comments_path(exercise), remote: true do |f|

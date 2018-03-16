@@ -259,6 +259,7 @@ class Exercise < ActiveRecord::Base
     groups.delete_all
     carts.delete_all
     collections.delete_all
+    clone_relations.delete_all
   end
 
   def soft_delete
