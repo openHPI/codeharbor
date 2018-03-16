@@ -20,12 +20,14 @@ class Exercise < ActiveRecord::Base
   has_many :descriptions, dependent: :destroy
   has_many :origin_relations, :class_name => 'ExerciseRelation', :foreign_key => 'origin_id'
   has_many :clone_relations, :class_name => 'ExerciseRelation', :foreign_key => 'clone_id', dependent: :destroy
-  #validates :descriptions, presence: true
+  validates :descriptions, presence: true
 
   attr_reader :tag_tokens
   accepts_nested_attributes_for :descriptions, allow_destroy: true
   accepts_nested_attributes_for :exercise_files, allow_destroy: true
   accepts_nested_attributes_for :tests, allow_destroy: true
+
+  default_scope { where(deleted: [nil, false]) }
 
   scope :timespan, -> (days) {(days != 0) ? where('DATE(created_at) >= ?', Date.today-days) : where(nil)}
   scope :title_like, -> (title) {(!title.blank?) ? where('lower(title) ilike ?',"%#{title.downcase}%") : where(nil)}
@@ -141,6 +143,7 @@ class Exercise < ActiveRecord::Base
     if params[:exercise_relation]
       add_relation(params[:exercise_relation])
     end
+    add_license(params)
     add_labels(params[:labels])
     add_groups(params[:groups])
     add_tests(params[:tests_attributes])
@@ -151,9 +154,18 @@ class Exercise < ActiveRecord::Base
   def add_relation(relation_array)
     relation = ExerciseRelation.find_by(clone: self)
     if !relation
-      ExerciseRelation.create(origin_id: relation_array[:origin_id], relation_id: relation_array[:relation_id], clone: self)
+      clone_relations.new(origin_id: relation_array[:origin_id], relation_id: relation_array[:relation_id])
     else
-      relation.update(origin_id: relation_array[:origin_id], relation_id: relation_array[:relation_id], clone: self)
+      relation.update(relation_id: relation_array[:relation_id])
+    end
+  end
+
+  def add_license(params)
+    if params[:exercise_relation]
+      self.license_id = Exercise.find(params[:exercise_relation][:origin_id]).license_id
+    end
+    if self.downloads == 0 && params[:exercise_relation].nil?
+      self.license_id = params[:license_id]
     end
   end
 
@@ -243,268 +255,16 @@ class Exercise < ActiveRecord::Base
     end
   end
 
-  def import_xml(doc)
-
-    self.title = doc.xpath('/p:task/p:meta-data/p:title/text()')
-
-    prog_language = doc.xpath('/p:task/p:proglang/text()').to_s
-    version = doc.xpath('/p:task/p:proglang/@version').first.value
-    exec_environment = ExecutionEnvironment.where('language = ? AND version = ?', prog_language, version).take
-    unless exec_environment
-      exec_environment = ExecutionEnvironment.find(1)
-    end
-    self.execution_environment = exec_environment
-    self.private = false
-    descriptions.new(text: doc.xpath('/p:task/p:description/text()'), language: doc.xpath('/p:task/@lang').first.value)
-    self.license_id = 1
-
-    add_files_xml(doc)
-    add_tests_xml(doc)
+  def delete_dependencies
+    groups.delete_all
+    carts.delete_all
+    collections.delete_all
+    clone_relations.delete_all
   end
 
-  def add_files_xml(xml)
-    xml.xpath('/p:task/p:files/p:file').each do |file|
-      role = determine_file_role_from_proforma_file(xml, file)
-      unless role === 'Test'
-        filename_attribute = file.xpath('@filename').first
-        if filename_attribute
-          filename = filename_attribute.value
-          if filename.include? '/'
-            path_name_split = filename.split (/\/(?=[^\/]*$)/)
-            path = path_name_split.first
-            name_with_type = path_name_split.second
-          else
-            path = ''
-            name_with_type = filename
-          end
-          if name_with_type.include? '.'
-            name_type_split = name_with_type.split('.')
-            name = name_type_split.first
-            type = File_type.find_by(file_extension: ".#{name_type_split.second}")
-          else
-            name = name_with_type
-            if name == "Makefile"
-              type = FileType.find_by(name: 'Makefile')
-            else
-              type = FileType.find_by(name: 'Unknown')
-            end
-          end
-        else
-          path = ''
-          name = ''
-          type = FileType.find_by(name: 'Unknown')
-        end
-
-        file_class = file.xpath('@class').first.value
-        content = file.xpath('text()').first
-
-        file = ExerciseFile.new(
-            content: content,
-            name: name,
-            path: path,
-            purpose: '',
-            file_type: type,
-            role: role,
-            hidden: file_class == 'internal',
-            read_only: false
-        )
-        exercise_files << file
-      end
-    end
-  end
-
-  def add_tests_xml(xml)
-    xml.xpath('/p:task/p:tests/p:test').each do |test|
-      testtype = test.xpath('p:test-type/text()').to_s
-      if  testtype == 'unittest'
-
-        framework_name = test.xpath('p:test-configuration/p:unit-test/@framework').first
-        if framework_name
-          framework = TestingFramework.find_by(name: framework_name)
-        else
-          framework = TestingFramework.find(1)
-        end
-
-        exercise_test = Test.new(testing_framework: framework,
-                                    feedback_message: test.xpath('p:test-configuration/c:feedback-message/text()'))
-
-        ref = test.xpath('p:test-configuration/p:filerefs/p:fileref[1]/@refid').first
-        if ref
-          index = ref.value
-          file = xml.xpath('p:task/p:files/p:file[@id="'+index+'"]').first
-
-          filename_attribute = file.xpath('@filename').first
-          if filename_attribute
-            filename = filename_attribute.value
-            if filename.include? '/'
-              path_name_split = filename.split (/\/(?=[^\/]*$)/)
-              path = path_name_split.first
-              name_with_type = path_name_split.second
-            else
-              path = ''
-              name_with_type = filename
-            end
-            if name_with_type.include? '.'
-              name_type_split = name_with_type.split('.')
-              name = name_type_split.first
-              type = name_type_split.second
-            else
-              name = name_with_type
-              type = ''
-            end
-          else
-            path = ''
-            name = ''
-            type = ''
-          end
-
-          file_class = file.xpath('@class').first.value
-          content = file.xpath('text()').first
-          file = ExerciseFile.new(content: content,
-                                    name: name,
-                                    path: path,
-                                    purpose: 'test',
-                                    file_type: FileType.find_by(file_extension: ".#{type}"),
-                                    hidden: file_class == 'internal',
-                                    read_only: false
-          )
-          exercise_test.exercise_file = file
-        end
-
-        tests << exercise_test
-      end
-    end
-  end
-
-  def determine_file_role_from_proforma_file(xml, file)
-    file_id = file.xpath('@id').first.value
-    file_class = file.xpath('@class').first.value
-    comment = file.xpath('@comment').first.try(:value)
-    is_referenced_by_test = xml.xpath("//p:test/p:test-configuration/p:filerefs/p:fileref[@refid='#{file_id}']")
-    is_referenced_by_model_solution = xml.xpath("//p:model-solution/p:filerefs/p:fileref[@refid='#{file_id}']")
-    if !is_referenced_by_test.empty? && (file_class == 'internal')
-      return I18n.t('models.exercise.role.test')
-    elsif !is_referenced_by_model_solution.empty? && (file_class == 'internal')
-      return I18n.t('models.exercise.role.reference')
-    elsif (file_class == 'template') && (comment == 'main')
-      return I18n.t('models.exercise.role.main')
-    elsif (file_class == 'internal') && (comment == 'main')
-    end
-    return I18n.t('models.exercise.role.regular')
-  end
-
-
-  def build_proforma_xml_for_exercise_file(xml, exercise_file)
-    if exercise_file.role == 'Main File'
-      proforma_file_class = 'template'
-      comment = 'main'
-    else
-      proforma_file_class = 'internal'
-      comment = ''
-    end
-
-    xml['p'].file(exercise_file.content,
-      'filename' => exercise_file.full_file_name,
-      'id' => exercise_file.id,
-      'class' => proforma_file_class,
-      'comment' => comment
-    )
-  end
-
-  def build_proforma_xml_for_test(xml, test, index)
-    proforma = xml['p']
-    proforma.test('id' => 't' + index.to_s) {
-      proforma.title('')
-      proforma.send('test-type', 'unittest')
-      proforma.send('test-configuration') {
-        proforma.filerefs {
-          proforma.fileref('refid' => test.exercise_file.id.to_s)
-        }
-        xml['u'].unittest('framework' => test.testing_framework.name, 'version' => '')
-        xml['c'].send('feedback-message', test.feedback_message)
-      }
-    }
-  end
-
-
-
-
-  def build_proforma_xml_for_model_solution(xml, model_solution_file, index)
-    proforma = xml['p']
-    proforma.send('model-solution', 'id' => 'm' + index.to_s) {
-      proforma.filerefs {
-        proforma.fileref('refid' => model_solution_file.id.to_s)
-      }
-    }
-  end
-
-  def to_proforma_xml
-    builder = Nokogiri::XML::Builder.new do |xml|
-      proforma = xml['p']
-      description = descriptions.first
-      if description
-        language = description.language
-        text = description.text
-      else
-        language = ''
-        text = ''
-      end
-      proforma.task('xmlns:p' => 'urn:proforma:task:v1.1', 'lang' => language, 'uuid' => SecureRandom.uuid,
-                    'xmlns:u' => 'urn:proforma:tests:unittest:v1.1', 'xmlns:c' => 'codeharbor'){
-        proforma.description(text)
-        proforma.proglang(self.execution_environment.language, 'version' => self.execution_environment.version)
-        proforma.send('submission-restrictions') {
-          proforma.send('files-restriction') {
-            proforma.send('optional', 'filename' => '')
-          }
-        }
-        proforma.files {
-
-          self.exercise_files.all? { |file|
-            build_proforma_xml_for_exercise_file(xml, file)
-          }
-          self.tests.all? { |test|
-            build_proforma_xml_for_exercise_file(xml, test.exercise_file)
-          }
-
-          ### Set Placeholder file for placeholder solution-file and tests if there aren't any
-          if self.model_solution_files.blank?
-            proforma.file('', 'id' => '0', 'class' => 'internal')
-          end
-        }
-
-        proforma.send('model-solutions') {
-
-          if self.model_solution_files.any?
-            self.model_solution_files.each_with_index { |model_solution_file, index|
-              build_proforma_xml_for_model_solution(xml, model_solution_file, index)
-            }
-          else ##Placeholder solution_file if there aren't any
-            proforma.send('model-solution', 'id' => 'm0') {
-              proforma.filerefs {
-                proforma.fileref('refid' => '0')
-              }
-            }
-          end
-        }
-
-        proforma.tests {
-          self.tests.each_with_index { |test, index|
-            build_proforma_xml_for_test(proforma, test, index)
-          }
-        }
-        #xml['p'].send('grading-hints', 'max-rating' => self.maxrating.to_s)
-
-        proforma.send('meta-data') {
-          proforma.title(self.title)
-        }
-      }
-    end
-    return builder.to_xml
-  end
-
-  def model_solution_files
-    self.exercise_files.where(role: 'Reference Implementation')
+  def soft_delete
+    self.delete_dependencies
+    update(deleted: true)
   end
 
   def file_permit(params)

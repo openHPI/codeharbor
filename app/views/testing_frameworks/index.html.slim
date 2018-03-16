@@ -1,23 +1,23 @@
-p#notice
-  = notice
+p#notice= notice
 h1
   = t('framework.header')
-table
+  = ' '
+  = link_to t('framework.button.new'), new_testing_framework_path, class: 'btn btn-success'
+table.table
   thead
     tr
+      th = t('framework.name')
+      th = t('framework.version')
       th
-        = t('framework.name')
-      th[colspan="3"]
+        = t('exercises.admin.actions')
   tbody
     - @testing_frameworks.each do |testing_framework|
       tr
-        td
-          = testing_framework.name
-        td
-          = link_to t('framework.button.show'), testing_framework
-        td
-          = link_to t('framework.button.edit'), edit_testing_framework_path(testing_framework)
-        td
-          = link_to t('framework.button.destroy'), testing_framework, method: :delete, data: { confirm: t('sure') }
-br
-= link_to t('framework.button.new'), new_testing_framework_path
+        td= testing_framework.name
+        td= testing_framework.version
+        td.actions.btn-group[role="group"]
+          = link_to t('framework.button.show'), testing_framework, class: 'btn btn-default btn-xs'
+          = link_to t('framework.button.edit'), edit_testing_framework_path(testing_framework), class: 'btn btn-warning btn-xs'
+          = link_to t('framework.button.destroy'), testing_framework, class: 'btn btn-danger btn-xs', method: :delete, data: {confirm: t('sure')}
+
+= will_paginate @testing_frameworks

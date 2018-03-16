@@ -158,7 +158,7 @@ en:
       header: "Listing Account Links"
     new:
       header: "New Account Link"
-    errorMessage: " prohibited this account_link from being saved:"
+    errorMessage: " prohibited this account_link from being saved."
 
   answers:
     comment: "Comment"
@@ -176,7 +176,7 @@ en:
       header: "Listing Answers"
     edit:
       header: "Editing Answer"
-    errorMessage: "prohibited this answer from being saved:"
+    errorMessage: "prohibited this answer from being saved."
 
   carts:
     header: "Your Cart"
@@ -198,7 +198,7 @@ en:
       remove_all: "Remove All"
     form:
       delete: "Delete"
-    errorMessage: "prohibited this cart from being saved:"
+    errorMessage: "prohibited this cart from being saved."
 
   collections:
     header: "Your Collections"
@@ -212,7 +212,8 @@ en:
       destroy: "Destroy"
       back: "Back"
       create: "Create Collection"
-
+    admin:
+      header: "Collection Administration"
     edit:
       header: "Editing"
     new:
@@ -231,26 +232,44 @@ en:
       header: "Collection:"
       download_all: "Download All"
       remove_all: "Remove All"
-    errorMessage: "prohibited this collection from being saved:"
+    errorMessage: "prohibited this collection from being saved."
     noExercisesAdded: "No Exercises Added"
 
   groups:
       header: "Your Groups"
       title: "Title"
       actions: "Actions"
+      name: "Name"
+
       button:
         new: "New Group"
         show: "Show"
         edit: "Edit"
         destroy: "Destroy"
+        delete: "Delete"
         back: "Back"
         create: "Create Group"
+        leave: "Leave Group"
+        request: "Request Membership"
+        grant: "Grant Access"
+        deny: "Deny Access"
+        make_admin: "Make Admin"
 
       edit:
         header: "Editing"
       new:
         header: "New Group"
-      errorMessage: "prohibited this group from being saved:"
+      show:
+        description: "Description"
+        admins: "Admins"
+        users: "Users"
+        pending: "Pending users"
+        exercises: "Exercises"
+      admin:
+        header: "Group Administration"
+
+      authorization_error: "You need to request membership to view this group!"
+      errorMessage: "prohibited this group from being saved."
       noExercisesAdded: "No Exercises Added"
 
   comments:
@@ -279,7 +298,7 @@ en:
       header: "Editing Comment"
     new:
       header: "New Comment"
-    errorMessage: "prohibited this comment from being saved:"
+    errorMessage: "prohibited this comment from being saved."
 
   execution:
     header: "Listing Execution Environments"
@@ -297,7 +316,7 @@ en:
       header: "New Execution Environment"
     edit:
       header: "Editing Execution Environment"
-    errorMessage: "prohibited this execution_environment from being saved:"
+    errorMessage: "prohibited this execution_environment from being saved."
 
   exFiles:
     header: "Listing Exercise Files"
@@ -332,12 +351,13 @@ en:
     title: "Title"
     rate: "Rate"
     description_in: "Description in"
+    instructions: "Instructions"
     parent: "Parent"
     parent_deleted: "Parent was deleted"
     relation: "Relation"
     created_by: "Created by"
     created_at: "Created at"
-    execution_environment: "Execution environment"
+    execution_environment: "Programming language"
     visibility:
       label: "Visibility"
       private: "Private"
@@ -364,12 +384,16 @@ en:
       feedback: "Feedback Message"
       framework: "Testing Framework"
 
+    defaults:
+      no_description: "No Description"
+      no_labels: "No Labels"
     all:
       new: "New Exercise"
       search: "Search"
       placeholder: "Search for exercise or label"
       ratings: "Ratings"
       view: "View"
+      related_exercises: "Show Related Exercises"
       comments: "Show Comments"
       duplicate: "Duplicate"
       edit: "Edit"
@@ -399,7 +423,7 @@ en:
     form:
       basic_info: "Basic Information"
       additional_info: "Additional Information"
-      environment: "Execution Environment"
+      environment: "Programming language"
       descriptions:
         label: "Descriptions"
         remove: "Remove Description"
@@ -451,6 +475,15 @@ en:
       header: "Edit:"
     undefined: "Exercise undefined"
     errorMessage: "prohibited this project from being saved"
+
+  file_types:
+    header: "File Types"
+    new: "New File Type"
+    show: "Show"
+    edit: "Edit"
+    destroy: "Destroy"
+    name: "Name"
+    file_extension: "File Extension"
 
   home:
     header: "Welcome to Code Harbor"
@@ -525,7 +558,7 @@ en:
       header: "Editing Label Category"
     new:
       header: "New Label Category"
-    errorMessage: "prohibited this label_category from being saved:"
+    errorMessage: "prohibited this label_category from being saved."
 
   labels:
     header: "Listing Labels"
@@ -544,7 +577,7 @@ en:
       header: "Editing Label"
     new:
       header: "New Label"
-    errorMessage: "prohibited this label from being saved:"
+    errorMessage: "prohibited this label from being saved."
 
   layouts:
     exercises: "Exercises"
@@ -555,6 +588,13 @@ en:
       user: "User Administration"
       exercise: "Exercise Administration"
       comments: "Comments Administration"
+      collections: "Collections Administration"
+      groups: "Groups Administration"
+      file_types: "File Types Administration"
+      execution_environments: "Execution Environments Administration"
+      testing_framework: "Testing Frameworks Administration"
+      lables: "Lables Administration"
+      license: "License Administration"
     cart: "Cart"
     logout: "Log out"
 
@@ -571,6 +611,15 @@ en:
 
    # ratings: will be added with implementation
 
+  licenses:
+    header: "Licenses"
+    new: "New License"
+    show: "Show"
+    edit: "Edit"
+    destroy: "Destroy"
+    name: "Name"
+    link: "Link"
+
   sessions:
     header: "Please Log In"
     email:
@@ -584,6 +633,7 @@ en:
   framework:
     header: "Listing Testing Frameworks"
     name: "Name"
+    version: "Version"
     button:
       new: "New Testing Framework"
       show: "Show"
@@ -596,7 +646,7 @@ en:
       header: "Editing Testing Framework"
     new:
       header: "New Testing Framework"
-    errorMessage: "prohibited this testing framework from being saved:"
+    errorMessage: "prohibited this testing framework from being saved."
 
   tests:
     header: "Listing Tests"
@@ -617,7 +667,7 @@ en:
       header: "Editing Test"
     new:
       header: "New test"
-    errorMessage: "prohibited this test from being saved:"
+    errorMessage: "prohibited this test from being saved."
 
 
   users:
@@ -659,7 +709,7 @@ en:
 
     undefined: "User undefined"
     yourself: "yourself"
-    errorMessage: "prohibited this user from being saved:"
+    errorMessage: "prohibited this user from being saved."
   message:
     index:
       inbox: 'Inbox'

@@ -1,4 +1,5 @@
 require 'zip'
+require 'proforma/xml_generator'
 
 class CollectionsController < ApplicationController
   load_and_authorize_resource
@@ -13,6 +14,9 @@ class CollectionsController < ApplicationController
     @collections = Collection.includes(:collections_users).where(:collections_users => { :user => current_user}).distinct.paginate(per_page: 5, page: params[:page])
   end
 
+  def collections_all
+    @collections = Collection.all.paginate(per_page: 10, page: params[:page])
+  end
   # GET /collections/1
   # GET /collections/1.json
   def show
@@ -83,7 +87,8 @@ class CollectionsController < ApplicationController
     stringio = Zip::OutputStream.write_buffer do |zio|
       @collection.exercises.each do |exercise|
         zio.put_next_entry("#{exercise.title}.xml")
-        zio.write exercise.to_proforma_xml
+        xml_generator = Proforma::XmlGenerator.new
+        zio.write xml_generator.generate_xml(exercise)
       end
     end
     binary_data = stringio.string

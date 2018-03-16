@@ -1,0 +1,42 @@
+h1
+  = t('groups.admin.header')
+  = ' '
+  = link_to t('groups.button.new'), new_group_path, class:'btn btn-success'
+table.table
+  thead
+    tr
+      th
+        = t('groups.name')
+      th
+        = t('groups.show.admins')
+      th
+        = t('exercises.created_at')
+      th
+        = t('exercises.admin.actions')
+  tbody
+    - @groups.each do |group|
+      tr
+        td
+          = link_to group.name, group
+        - if group.admins.empty?
+          td
+            = t('users.undefined')
+        - else
+          td
+            - group.admins.each do |admin|
+              - if admin == current_user
+                = t('users.yourself')
+              - elsif admin.first_name.nil?
+                = link_to "user#{admin.id}", user_path(admin)
+              - else
+                = link_to admin.name, user_path(admin)
+              - unless admin == group.admins.last
+                = ', '
+        td
+          = group.created_at
+        td.actions.btn-group[role="group"]
+          = link_to t('exercises.admin.show'), group, class:'btn btn-default btn-xs'
+          = link_to t('exercises.admin.edit'), edit_group_path(group), class:'btn btn-warning btn-xs'
+          = link_to t('exercises.admin.deleteX'), group_path(group), class:'btn btn-danger btn-xs', method: :delete, data: { confirm: t('sure') }
+
+= will_paginate @groups

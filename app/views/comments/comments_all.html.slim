@@ -31,4 +31,5 @@ table.table
           - if comment.exercise
             = link_to t('comments.button.edit'), edit_exercise_comment_path(comment.exercise, comment), class:'btn btn-warning btn-xs'
             = link_to t('comments.admin.deleteX'), exercise_comment_path(comment.exercise, comment), class:'btn btn-danger btn-xs', method: :delete, data: { confirm: t('sure') }
-        br/
+
+= will_paginate @comments

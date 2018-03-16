@@ -1,4 +1,6 @@
 require 'oauth2'
+require 'proforma/importer'
+require 'proforma/xml_generator'
 
 class ExercisesController < ApplicationController
   load_and_authorize_resource :except => [:import_proforma_xml]
@@ -43,6 +45,8 @@ class ExercisesController < ApplicationController
   def new
     @exercise = Exercise.new
     @exercise.descriptions << Description.new
+    @license_default = 1
+    @license_hidden = false
     @form_action
   end
 
@@ -56,6 +60,8 @@ class ExercisesController < ApplicationController
     @exercise.private = exercise_origin.private
     @exercise_relation.origin = exercise_origin
     @exercise.errors[:base] = params[:errors].inspect if params[:errors]
+    @license_default = @exercise_relation.origin.license_id
+    @license_hidden = true
 
     exercise_origin.descriptions.each do |d|
       @exercise.descriptions << Description.new(d.attributes)
@@ -74,6 +80,11 @@ class ExercisesController < ApplicationController
     exercise_relation = ExerciseRelation.find_by(clone_id: params[:id])
     if exercise_relation
       @exercise_relation = exercise_relation
+    end
+    @license_default = @exercise.license_id
+    @license_hidden = false
+    if @exercise.downloads > 0
+      @license_hidden = true
     end
   end
 
@@ -118,7 +129,7 @@ class ExercisesController < ApplicationController
   # DELETE /exercises/1
   # DELETE /exercises/1.json
   def destroy
-    @exercise.destroy
+    @exercise.soft_delete
     respond_to do |format|
       format.html { redirect_to exercises_url, notice: t('controllers.exercise.destroyed') }
       format.json { head :no_content }
@@ -126,7 +137,7 @@ class ExercisesController < ApplicationController
   end
 
   def add_to_cart
-    cart = Cart.find_by(user: current_user)
+    cart = Cart.find_cart_of(current_user)
     if cart.add_exercise(@exercise)
       redirect_to @exercise, notice: t('controllers.exercise.add_to_cart_success')
     else
@@ -144,23 +155,38 @@ class ExercisesController < ApplicationController
   end
 
   def exercises_all
-    @exercises = Exercise.all
+    @exercises = Exercise.all.paginate(per_page: 10, page: params[:page])
   end
 
+  def related_exercises
+    @related_exercises = Exercise.find(ExerciseRelation.where(origin_id: @exercise.id).collect(&:clone_id))
+    respond_to do |format|
+      format.html {render :index}
+      format.js{ render 'load_related_exercises.js.erb' }
+    end
+  end
   def push_external
     account_link = AccountLink.find(params[:account_link])
     oauth2Client = OAuth2::Client.new('client_id', 'client_secret', :site => account_link.push_url)
     oauth2_token = account_link[:oauth2_token]
     token = OAuth2::AccessToken.from_hash(oauth2Client, :access_token => oauth2_token)
-    token.post(account_link.push_url, {body: @exercise.to_proforma_xml})
+    xml_generator = Proforma::XmlGenerator.new
+    xml_document = xml_generator.generate_xml(@exercise)
+    token.post(account_link.push_url, {body: xml_document})
     redirect_to @exercise, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
   end
 
   def download_exercise
     xsd = Nokogiri::XML::Schema(File.read('app/assets/taskxml.xsd'))
-    doc = Nokogiri::XML(@exercise.to_proforma_xml)
+    xml_generator = Proforma::XmlGenerator.new
+    xml_document = xml_generator.generate_xml(@exercise)
+    doc = Nokogiri::XML(xml_document)
 
     errors = xsd.validate(doc)
+
+    title = @exercise.title
+    title = title.tr('.,:*|"<>/\\', '')
+    title = title.gsub /[ (){}\[\]]/, '_'
 
     if errors.any?
       errors.each do |error|
@@ -170,7 +196,7 @@ class ExercisesController < ApplicationController
     else
       downloads_new = @exercise.downloads+1
       @exercise.update(downloads: downloads_new)
-      send_data doc, filename: "#{@exercise.title}.xml", type: "application/xml"
+      send_data doc, filename: "#{title}.xml", type: "application/xml"
     end
   end
 
@@ -180,8 +206,8 @@ class ExercisesController < ApplicationController
       exercise = Exercise.new
       request_body = request.body.read
       doc = Nokogiri::XML(request_body)
-      logger.fatal(doc.inspect)
-      exercise.import_xml(doc)
+      importer = Proforma::Importer.new
+      exercise = importer.from_proforma_xml(exercise, doc)
       exercise.user = user
       saved = exercise.save
       if saved
@@ -242,13 +268,15 @@ class ExercisesController < ApplicationController
       flash[:alert] = t('controllers.exercise.xml_not_valid')
       render :nothing => true, :status => 200
     else
-      @exercise = Exercise.new
-      @exercise.user = current_user
-      @exercise.import_xml(doc)
+      exercise = Exercise.new
+      importer = Proforma::Importer.new
+      exercise = importer.from_proforma_xml(exercise, doc)
+      exercise.user = current_user
+      saved = exercise.save
 
-      if @exercise.save
+      if saved
         flash[:notice] = t('controllers.exercise.import_success')
-        redirect_to edit_exercise_path(@exercise.id)
+        redirect_to edit_exercise_path(exercise.id)
       else
         flash[:alert] = t('controllers.exercise.import_fail')
         redirect_to exercises_path
@@ -338,7 +366,6 @@ class ExercisesController < ApplicationController
       @created = "0"
     end
 
-
   end
   # Use callbacks to share common setup or constraints between actions.
   def set_exercise
@@ -347,6 +374,6 @@ class ExercisesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def exercise_params
-    params.require(:exercise).permit(:title, :description, :maxrating, :private, :execution_environment_id, :license_id)
+    params.require(:exercise).permit(:title, :instruction, :maxrating, :private, :execution_environment_id)
   end
 end

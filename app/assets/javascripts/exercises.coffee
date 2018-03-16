@@ -53,6 +53,9 @@ loadSelect2 = ->
       'You can only add 5 topics'
 
 ready =->
+
+  $('[data-toggle="tooltip"]').tooltip();
+
   $(".change-hidden-field").click ->
     value = (this).id
     document.getElementById('option').value = value
@@ -174,7 +177,8 @@ ready =->
     else
       url = window.location.pathname + "/comments"
       comment_box = $(".comment-box")
-    caret = $(this).children('.fa')
+    caret = $(this).children('.my-caret')
+    icon = $(this).children('.wait')
 
     if $(caret).hasClass('fa-caret-down')
       $(caret).removeClass('fa-caret-down').addClass('fa-caret-up')
@@ -182,19 +186,95 @@ ready =->
         type: 'GET',
         url: url
         dataType: 'script'
+        beforeSend: ->
+          console.log(icon)
+          $(icon).show()
         success: ->
           $(comment_box).show()
           anchor = document.getElementById('page_end')
           if anchor
             anchor.scrollIntoView(false)
+        complete: ->
+          console.log("After")
+          $(icon).hide()
       })
     else
       $(caret).removeClass('fa-caret-up').addClass('fa-caret-down')
       $(comment_box).hide()
 
+  $('.related-button').on 'click', ->
+    exercise_id = this.getAttribute("data-exercise")
+    if exercise_id
+      url = window.location.pathname + '/' + exercise_id + "/related_exercises"
+      related_box = $(".related-box[data-exercise=#{exercise_id}]")
+    else
+      url = window.location.pathname + "/related_exercises"
+      related_box = $(".related-box")
+    caret = $(this).children('.my-caret')
+    icon = $(this).children('.wait')
+
+    if $(caret).hasClass('fa-caret-down')
+      $.ajax({
+        type: 'GET',
+        url: url
+        dataType: 'script'
+        beforeSend: ->
+          $(icon).show()
+        success: ->
+          related_exercises = $(related_box).find('.related-exercises')
+          shown_elements = $(related_exercises).slice(0,3)
+          if $(related_exercises).size() > 3
+            $(related_box).find('.slide-right').removeClass('inactive').addClass('active')
+          $(shown_elements).addClass('displayed')
+          $(related_exercises).not(shown_elements).addClass('not-displayed')
+          $(caret).removeClass('fa-caret-down').addClass('fa-caret-up')
+          $(related_box).show()
+          anchor = document.getElementById('page_end')
+          if anchor
+            anchor.scrollIntoView(false)
+        complete: ->
+          $(icon).hide()
+      })
+    else
+      $(caret).removeClass('fa-caret-up').addClass('fa-caret-down')
+      $(related_box).hide()
+
+  $('.slide-right').on 'click', ->
+    if $(this).hasClass('inactive')
+      return
+    related_exercises = $(this).siblings('.content').children()
+    last_shown_element = $(related_exercises).filter('.displayed').last()
+    console.log(last_shown_element)
+    index = $(related_exercises).index(last_shown_element)
+    shown_elements = $(related_exercises).slice(index+1)
+    if shown_elements.size() > 3
+      $(this).siblings('.slide-left').removeClass('inactive').addClass('active')
+      shown_elements = $(related_exercises).slice(index+1, index+4)
+      $(shown_elements).removeClass('not-displayed').addClass('displayed')
+      $(related_exercises).not(shown_elements).removeClass('displayed').addClass('not-displayed')
+    else
+      $(this).siblings('.slide-left').removeClass('inactive').addClass('active')
+      $(this).removeClass('active').addClass('inactive')
+      $(shown_elements).removeClass('not-displayed').addClass('displayed')
+      $(related_exercises).not(shown_elements).removeClass('displayed').addClass('not-displayed')
+
+  $('.slide-left').on 'click', ->
+    if $(this).hasClass('inactive')
+      return
+    related_exercises = $(this).siblings('.content').children()
+    first_shown_element = $(related_exercises).filter('.displayed').first()
+    index = $(related_exercises).index(first_shown_element)
+    shown_elements = $(related_exercises).slice(index-3, index)
+    $(shown_elements).removeClass('not-displayed').addClass('displayed')
+    $(related_exercises).not(shown_elements).removeClass('displayed').addClass('not-displayed')
+    if index = 3
+      $(this).removeClass('active').addClass('inactive')
+    $(this).siblings('.slide-right').removeClass('inactive').addClass('active')
+
+
+
   if document.getElementById('window')
     if document.getElementById('window').value == "true"
-      console.log("show dropdown")
       $('.dropdown-content').show()
 
   $('#advanced').click ->

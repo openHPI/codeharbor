@@ -58,14 +58,25 @@ svg_file = FileType.create(name: 'SVG', file_extension: '.svg')
 webm_file = FileType.create(name: 'WebM', file_extension: '.webm')
 xml_file = FileType.create(name: 'XML', file_extension: '.xml')
 
-exercise1 = Exercise.create(title: "Hello World", maxrating: '10', private: false, user_id:user1.id, license: license1)
-exercise1_main = ExerciseFile.create(content: "public class HelloWorld{ public static void main String[] args) { } }", path: '', purpose:'template', visibility: true, role: 'Main File', hidden: false, read_only: false, file_type: java_file, exercise: exercise1)
+exercise1 = Exercise.new(title: "Hello World", maxrating: '10', private: false, user_id:user1.id, license: license1)
+
+exercise1_main = ExerciseFile.create(content: "public class HelloWorld{ public static void main String[] args) { } }", path: '', purpose:'template', visibility: true, role: 'Main File', hidden: false, read_only: false, file_type: java_file)
+exercise1.exercise_files << exercise1_main
+
 exercise1_test = ExerciseFile.create(content: "public class HelloWorld{ public static void main String[] args) {System.out.println('Hello World.'); } }", path: '', purpose:'test', visibility: true, role: 'Main File', hidden: false, read_only: false, file_type: java_file, exercise: exercise1)
-Test.create(feedback_message: "Es wird noch nicht 'Hello World' am Bildschrim ausgegeben!", exercise_file: exercise1_test, exercise: exercise1, testing_framework: test_framework)
+test = Test.create(feedback_message: "Es wird noch nicht 'Hello World' am Bildschrim ausgegeben!", exercise_file: exercise1_test, testing_framework: test_framework)
+exercise1.tests << test
 
-Description.create(text:"Schreibe ein Java Programm, das 'Hello World' am Bildschirm ausgibt.", language: 'de', exercise: exercise1)
-Description.create(text:"Write a Java program, which returns and prints 'Hello World'.", language: 'en', exercise: exercise1)
+description1 = Description.create(text:"Schreibe ein Java Programm, das 'Hello World' am Bildschirm ausgibt.", language: 'de')
+description2 = Description.create(text:"Write a Java program, which returns and prints 'Hello World'.", language: 'en')
+exercise1.descriptions << description1
+exercise1.descriptions << description2
 
+ee1 = ExecutionEnvironment.create(language: 'Java', version: '8')
+ee2 = ExecutionEnvironment.create(language: 'Python', version: '2.7')
+
+exercise1.execution_environment = ee1
+exercise1.save
 
 Rating.create(rating: 4, exercise: exercise1, user: user5)
 Rating.create(rating: 2, exercise: exercise1, user: user2)
@@ -79,13 +90,6 @@ exercise1.labels << l1
 exercise1.labels << l2
 exercise1.labels << l3
 
-exercise1.descriptions
-
-
 AccountLink.create(push_url: 'google.com/pushpush', account_name: 'account1000')
 
-ee1 = ExecutionEnvironment.create(language: 'Java', version: '8')
-ee2 = ExecutionEnvironment.create(language: 'Python', version: '2.7')
-
-exercise1.update(execution_environment: ee1)
 

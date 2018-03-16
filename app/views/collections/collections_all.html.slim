@@ -1,0 +1,42 @@
+h1
+  = t('collections.admin.header')
+  = ' '
+  = link_to t('collections.button.new'), new_collection_path, class:'btn btn-success'
+table.table
+  thead
+    tr
+      th
+        = t('collections.title')
+      th
+        = t('exercises.created_by')
+      th
+        = t('exercises.created_at')
+      th
+        = t('exercises.admin.actions')
+  tbody
+    - @collections.each do |collection|
+      tr
+        td
+          = link_to collection.title, collection
+        - if collection.users.empty?
+          td
+            = t('users.undefined')
+        - else
+          td
+            - collection.users.each do |user|
+              - if user == current_user
+                = t('users.yourself')
+              - elsif user.first_name.nil?
+                = link_to "User#{user.id}", user_path(user)
+              - else
+                = link_to user.name, user_path(user)
+              - unless user == collection.users.last
+                = ', '
+        td
+          = collection.created_at
+        td.actions.btn-group[role="group"]
+          = link_to t('exercises.admin.show'), collection, class:'btn btn-default btn-xs'
+          = link_to t('exercises.admin.edit'), edit_collection_path(collection), class:'btn btn-warning btn-xs'
+          = link_to t('exercises.admin.deleteX'), collection_path(collection), class:'btn btn-danger btn-xs', method: :delete, data: { confirm: t('sure') }
+
+= will_paginate @collections

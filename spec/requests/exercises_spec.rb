@@ -5,7 +5,7 @@ RSpec.describe "exercises", type: :request do
     before(:each) do
       @user = FactoryGirl.create(:user)
       @exercise = FactoryGirl.create(:only_meta_data, authors: [@user])
-      @exercise_params = FactoryGirl.attributes_for(:only_meta_data)
+      @exercise_params = FactoryGirl.attributes_for(:only_meta_data).merge(:descriptions_attributes => {"0"=>FactoryGirl.attributes_for(:simple_description)})
       post_via_redirect login_path, :email => @user.email, :password => @user.password
     end
 

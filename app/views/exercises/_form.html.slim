@@ -49,6 +49,12 @@
           = f.add_nested_fields_link :descriptions, ' ' , class: 'btn btn-main' do
             i.fa.fa-plus style=("color: #008000")
             = ' ' + t('exercises.form.descriptions.add')
+        .field-element
+          .form-description
+            .top-label
+              = f.label :instruction, class: 'form-label' do
+                = t('exercises.instructions')
+            = f.text_area :instruction, class: 'form-control'
     fieldset.form-group
       legend
         span.number = '2'
@@ -62,7 +68,7 @@
             = label_tag 'exercise_private_false', t('exercises.visibility.public'), class: 'radio-left'
             = f.radio_button :private, true, value: true
             = label_tag 'exercise_private_true', t('exercises.visibility.private'), class: 'radio-right'
-        .field-element#group-field
+        .field-element
           = f.label :groups, t('exercises.groups'), class: 'form-label'
           = f.select :groups, options_for_select(Group.all.collect{ |g| [g.name, g.id] }, @exercise.groups.pluck(:id)), {}, {class: "my-group form-control", multiple: "multiple", style: "width: 300px;"}
         .field-element
@@ -72,7 +78,7 @@
           = f.label :license, t('exercises.license'), class: 'form-label'
           .license
             .select
-              = f.select :license_id, options_for_select(License.all.collect{ |l| [l.name, l.id, {'data-link'=> l.link}] }),{:prompt => true, :selected => 1}, class: 'form-control'
+              = f.select :license_id, options_for_select(License.all.collect{ |l| [l.name, l.id, {'data-link'=> l.link}] }, @license_default), {}, {class: 'form-control', disabled: @license_hidden}
             .link
     fieldset.form-group
       legend

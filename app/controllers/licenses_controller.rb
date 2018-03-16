@@ -8,7 +8,7 @@ class LicensesController < ApplicationController
   # GET /licenses
   # GET /licenses.json
   def index
-    @licenses = License.all
+    @licenses = License.all.paginate(per_page: 10, page: params[:page])
   end
 
   # GET /licenses/1

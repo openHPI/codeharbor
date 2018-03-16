@@ -84,7 +84,7 @@ class CommentsController < ApplicationController
   end
 
   def comments_all
-    @comments = Comment.all
+    @comments = Comment.all.paginate(per_page: 10, page: params[:page])
   end
 
   def answer

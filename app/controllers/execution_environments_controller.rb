@@ -8,7 +8,7 @@ class ExecutionEnvironmentsController < ApplicationController
   # GET /execution_environments
   # GET /execution_environments.json
   def index
-    @execution_environments = ExecutionEnvironment.all
+    @execution_environments = ExecutionEnvironment.all.paginate(per_page: 10, page: params[:page])
   end
 
   # GET /execution_environments/1

@@ -146,11 +146,11 @@ RSpec.describe UsersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    it 'does not destroys the requested user but soft deletes it' do
+    it 'soft deletes user' do
       user = User.create! valid_attributes
       expect {
         delete :destroy, {:id => user.to_param}, valid_session
-      }.to change(User, :count).by(0)
+      }.to change(User, :count).by(-1)
     end
 
     it 'redirects to the users list' do
