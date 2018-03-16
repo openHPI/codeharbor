@@ -384,12 +384,16 @@ en:
       feedback: "Feedback Message"
       framework: "Testing Framework"
 
+    defaults:
+      no_description: "No Description"
+      no_labels: "No Labels"
     all:
       new: "New Exercise"
       search: "Search"
       placeholder: "Search for exercise or label"
       ratings: "Ratings"
       view: "View"
+      related_exercises: "Show Related Exercises"
       comments: "Show Comments"
       duplicate: "Duplicate"
       edit: "Edit"

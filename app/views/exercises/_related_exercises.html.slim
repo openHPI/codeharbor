@@ -11,7 +11,7 @@
         .small-description
           - if exercise.descriptions.first.text == ''
             span style=("color: gray")
-              = "No Description"
+              = t('exercises.defaults.no_description')
           - else
             = exercise.descriptions.first.text
         span.star-rating

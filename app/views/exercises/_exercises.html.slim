@@ -46,13 +46,13 @@
         .description
           - if exercise.descriptions.first.text == ''
             span style=("color: gray")
-              = "No Description"
+              = t('exercises.defaults.no_description')
           - else
             = exercise.descriptions.first.text
         .labels
           - if exercise.labels.empty?
             span style=("color: gray")
-              = "No Labels"
+              = t('exercises.defaults.no_labels')
           - else
             - exercise.labels.each do |label|
               .exerciseLabel style=("background-color: #{'#' + label.color.to_s}; color: white;")
@@ -73,7 +73,7 @@
         span.fa.fa-caret-down.my-caret
       = ' '
       = button_tag type: 'button', class: 'btn no-border related-button', data: {exercise: exercise.id} do
-        = "Show Related Exercises" + ' '
+        = t('exercises.all.related_exercises') + ' '
         span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
         span.fa.fa-caret-down.my-caret
 
