@@ -1,6 +1,6 @@
 require 'digest'
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   groupify :group_member
   groupify :named_group_member
 
@@ -70,7 +70,7 @@ class User < ActiveRecord::Base
   def handle_destroy
     destroy = handle_group_memberships
     if destroy == false
-      return false
+      throw :abort
     else
       handle_collection_membership
       handle_exercises

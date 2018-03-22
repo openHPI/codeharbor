@@ -39,7 +39,7 @@ RSpec.describe LicensesController, type: :controller do
   describe "GET #index" do
     it "assigns all licenses as @licenses" do
       license = License.create! valid_attributes
-      get :index, {}, valid_session
+      get :index, params: {}, session: valid_session
       expect(assigns(:licenses)).to eq([license])
     end
   end
@@ -47,14 +47,14 @@ RSpec.describe LicensesController, type: :controller do
   describe "GET #show" do
     it "assigns the requested license as @license" do
       license = License.create! valid_attributes
-      get :show, {:id => license.to_param}, valid_session
+      get :show, params: {:id => license.to_param}, session: valid_session
       expect(assigns(:license)).to eq(license)
     end
   end
 
   describe "GET #new" do
     it "assigns a new license as @license" do
-      get :new, {}, valid_session
+      get :new, params: {}, session: valid_session
       expect(assigns(:license)).to be_a_new(License)
     end
   end
@@ -62,7 +62,7 @@ RSpec.describe LicensesController, type: :controller do
   describe "GET #edit" do
     it "assigns the requested license as @license" do
       license = License.create! valid_attributes
-      get :edit, {:id => license.to_param}, valid_session
+      get :edit, params: {:id => license.to_param}, session: valid_session
       expect(assigns(:license)).to eq(license)
     end
   end
@@ -71,30 +71,30 @@ RSpec.describe LicensesController, type: :controller do
     context "with valid params" do
       it "creates a new License" do
         expect {
-          post :create, {:license => valid_attributes}, valid_session
+          post :create, params: {:license => valid_attributes}, session: valid_session
         }.to change(License, :count).by(1)
       end
 
       it "assigns a newly created license as @license" do
-        post :create, {:license => valid_attributes}, valid_session
+        post :create, params: {:license => valid_attributes}, session: valid_session
         expect(assigns(:license)).to be_a(License)
         expect(assigns(:license)).to be_persisted
       end
 
       it "redirects to the created license" do
-        post :create, {:license => valid_attributes}, valid_session
+        post :create, params: {:license => valid_attributes}, session: valid_session
         expect(response).to redirect_to(License.last)
       end
     end
 
     context "with invalid params" do
       it "assigns a newly created but unsaved license as @license" do
-        post :create, {:license => invalid_attributes}, valid_session
+        post :create, params: {:license => invalid_attributes}, session: valid_session
         expect(assigns(:license)).to be_a_new(License)
       end
 
       it "re-renders the 'new' template" do
-        post :create, {:license => invalid_attributes}, valid_session
+        post :create, params: {:license => invalid_attributes}, session: valid_session
         expect(response).to render_template("new")
       end
     end
@@ -108,20 +108,20 @@ RSpec.describe LicensesController, type: :controller do
 
       it "updates the requested license" do
         license = License.create! valid_attributes
-        put :update, {:id => license.to_param, :license => new_attributes}, valid_session
+        put :update, params: {:id => license.to_param, :license => new_attributes}, session: valid_session
         license.reload
         skip("Add assertions for updated state")
       end
 
       it "assigns the requested license as @license" do
         license = License.create! valid_attributes
-        put :update, {:id => license.to_param, :license => valid_attributes}, valid_session
+        put :update, params: {:id => license.to_param, :license => valid_attributes}, session: valid_session
         expect(assigns(:license)).to eq(license)
       end
 
       it "redirects to the license" do
         license = License.create! valid_attributes
-        put :update, {:id => license.to_param, :license => valid_attributes}, valid_session
+        put :update, params: {:id => license.to_param, :license => valid_attributes}, session: valid_session
         expect(response).to redirect_to(license)
       end
     end
@@ -129,13 +129,13 @@ RSpec.describe LicensesController, type: :controller do
     context "with invalid params" do
       it "assigns the license as @license" do
         license = License.create! valid_attributes
-        put :update, {:id => license.to_param, :license => invalid_attributes}, valid_session
+        put :update, params: {:id => license.to_param, :license => invalid_attributes}, session: valid_session
         expect(assigns(:license)).to eq(license)
       end
 
       it "re-renders the 'edit' template" do
         license = License.create! valid_attributes
-        put :update, {:id => license.to_param, :license => invalid_attributes}, valid_session
+        put :update, params: {:id => license.to_param, :license => invalid_attributes}, session: valid_session
         expect(response).to render_template("edit")
       end
     end
@@ -145,13 +145,13 @@ RSpec.describe LicensesController, type: :controller do
     it "destroys the requested license" do
       license = License.create! valid_attributes
       expect {
-        delete :destroy, {:id => license.to_param}, valid_session
+        delete :destroy, params: {:id => license.to_param}, session: valid_session
       }.to change(License, :count).by(-1)
     end
 
     it "redirects to the licenses list" do
       license = License.create! valid_attributes
-      delete :destroy, {:id => license.to_param}, valid_session
+      delete :destroy, params: {:id => license.to_param}, session: valid_session
       expect(response).to redirect_to(licenses_url)
     end
   end

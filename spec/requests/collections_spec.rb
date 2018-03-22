@@ -3,10 +3,11 @@ require 'rails_helper'
 RSpec.describe "Collections", type: :request do
   context 'logged in' do
     before(:each) do
-      @user = FactoryGirl.create(:user)
-      @collection = FactoryGirl.create(:collection, title: 'Some Collection', users: [@user], exercises: [])
-      @collection_params = FactoryGirl.attributes_for(:collection)
-      post_via_redirect login_path, :email => @user.email, :password => @user.password
+      @user = FactoryBot.create(:user)
+      @collection = FactoryBot.create(:collection, title: 'Some Collection', users: [@user], exercises: [])
+      @collection_params = FactoryBot.attributes_for(:collection)
+      post login_path, params: {:email => @user.email, :password => @user.password}
+      follow_redirect!
     end
 
     describe "GET /collections" do
@@ -17,7 +18,7 @@ RSpec.describe "Collections", type: :request do
     end
     describe 'POST /collections' do
       it 'has http 302' do
-        post collections_path,{collection: @collection_params}
+        post collections_path, params: {collection: @collection_params}
         expect(response).to have_http_status(302)
       end
     end

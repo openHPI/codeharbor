@@ -1,3 +1,3 @@
-class Relation < ActiveRecord::Base
+class Relation < ApplicationRecord
   validates :name, presence: true
 end

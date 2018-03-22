@@ -3,8 +3,9 @@ require 'rails_helper'
 RSpec.describe "ExecutionEnvironments", type: :request do
   context 'logged in' do
     before(:each) do
-      @user = FactoryGirl.create(:user)
-      post_via_redirect login_path, :email => @user.email, :password => @user.password
+      @user = FactoryBot.create(:user)
+      post login_path, params: {:email => @user.email, :password => @user.password}
+      follow_redirect!
     end
 
     describe "GET /execution_environments" do

@@ -3,11 +3,11 @@ require 'rails_helper'
 RSpec.describe Collection, type: :model do
   #pending "add some examples to (or delete) #{__FILE__}"
   describe 'Add Exercise' do
-    let!(:user) {FactoryGirl.create(:user)}
-    let!(:exercise1) {FactoryGirl.create(:simple_exercise)}
-    let!(:exercise2) {FactoryGirl.create(:simple_exercise)}
-    let(:collection_with_one_exercise) {FactoryGirl.create(:collection, users: [user], exercises: [exercise1] )}
-    let(:collection_with_two_exercises) {FactoryGirl.create(:collection, users: [user], exercises: [exercise1, exercise2] )}
+    let!(:user) {FactoryBot.create(:user)}
+    let!(:exercise1) {FactoryBot.create(:simple_exercise)}
+    let!(:exercise2) {FactoryBot.create(:simple_exercise)}
+    let(:collection_with_one_exercise) {FactoryBot.create(:collection, users: [user], exercises: [exercise1] )}
+    let(:collection_with_two_exercises) {FactoryBot.create(:collection, users: [user], exercises: [exercise1, exercise2] )}
 
     it 'should add when not in collection already' do
       collection = collection_with_one_exercise
@@ -24,9 +24,9 @@ RSpec.describe Collection, type: :model do
     end
   end
   describe 'Destroy:' do
-    let!(:user) {FactoryGirl.create(:user)}
-    let!(:exercise) {FactoryGirl.create(:simple_exercise)}
-    let!(:collection) {FactoryGirl.create(:collection, users: [user], exercises: [exercise])}
+    let!(:user) {FactoryBot.create(:user)}
+    let!(:exercise) {FactoryBot.create(:simple_exercise)}
+    let!(:collection) {FactoryBot.create(:collection, users: [user], exercises: [exercise])}
 
     it 'delete exercise off collection when removing in collection' do
       exercises_count = Exercise.all.count
@@ -60,11 +60,11 @@ RSpec.describe Collection, type: :model do
   end
   describe 'factories' do
     it 'has valid factory' do
-      expect(FactoryGirl.build_stubbed(:collection)).to be_valid
+      expect(FactoryBot.build_stubbed(:collection)).to be_valid
     end
 
     it 'requires title' do
-      expect(FactoryGirl.build_stubbed(:collection, title: '')).not_to be_valid
+      expect(FactoryBot.build_stubbed(:collection, title: '')).not_to be_valid
     end
   end
 end

@@ -11,11 +11,11 @@ gem 'i18n'
 #Use slim format
 gem 'slim-rails'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.4'
+gem 'rails', '5.0'
 # Use sqlite3 as the database for Active Record
 #gem 'sqlite3'
 # Use postgres as the database for Active Record
-gem 'pg', platform: :ruby
+gem 'pg', '~> 0.20'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -70,14 +70,15 @@ gem 'font-awesome-rails'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-gem 'better_errors' #!!!Important!!! move this to the development group before codeharbor goes really productive!!!Important!!! 
+gem 'better_errors' #!!!Important!!! move this to the development group before codeharbor goes really productive!!!Important!!!
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem 'pry-byebug'
-  gem 'rspec-rails', '~> 3.0'
-  gem "factory_girl_rails", "~> 4.0"
+  gem 'rspec-rails'
+  gem "factory_bot_rails"
+  gem 'rails-controller-testing'
 end
 
 group :development do
@@ -97,6 +98,6 @@ group :development do
 end
 
 group :test do
-  gem "codeclimate-test-reporter", require: nil
-  gem 'simplecov', :require => false
+  gem "simplecov"
+  gem "codeclimate-test-reporter", "~> 1.0.0"
 end

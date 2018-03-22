@@ -1,6 +1,6 @@
 require 'nokogiri'
 
-class Exercise < ActiveRecord::Base
+class Exercise < ApplicationRecord
   groupify :group_member
   validates :title, presence: true
 

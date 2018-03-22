@@ -1,4 +1,4 @@
-class Comment < ActiveRecord::Base
+class Comment < ApplicationRecord
   validates :text, presence: true
 
   belongs_to :exercise

@@ -5,7 +5,7 @@ module ControllerHelpers
   end
 
   def login_user
-    @user = FactoryGirl.create(:user)
+    @user = FactoryBot.create(:user)
     login_with(@user)
   end
 

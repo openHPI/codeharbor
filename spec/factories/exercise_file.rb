@@ -1,11 +1,11 @@
-FactoryGirl.define do
+FactoryBot.define do
 
   factory :single_java_main_file, class: 'ExerciseFile' do
     content "public class AsteriksPattern{ public static void main String[] args) { } }"
     name 'Main'
     path ''
     solution false
-    file_type {FactoryGirl.create(:java_file_type)}
+    file_type {FactoryBot.create(:java_file_type)}
     visibility true
     role 'Main File'
   end
@@ -15,7 +15,7 @@ FactoryGirl.define do
     name 'SingleJUnitTestFile'
     path ''
     solution false
-    file_type {FactoryGirl.create(:java_file_type)}
+    file_type {FactoryBot.create(:java_file_type)}
     visibility true
   end
 
@@ -24,7 +24,7 @@ FactoryGirl.define do
     name 'ModelSolutionFile'
     path ''
     role 'Reference Implementation'
-    file_type {FactoryGirl.create(:java_file_type)}
+    file_type {FactoryBot.create(:java_file_type)}
     visibility false
   end
 
@@ -33,7 +33,7 @@ FactoryGirl.define do
     name 'explanation'
     path ''
     role 'Regular File'
-    file_type {FactoryGirl.create(:txt_file_type)}
+    file_type {FactoryBot.create(:txt_file_type)}
   end
 
   factory :codeharbor_main_file, class: 'ExerciseFile' do
@@ -41,7 +41,7 @@ FactoryGirl.define do
     name 'hello_world'
     path 'source/main'
     role 'Main File'
-    file_type {FactoryGirl.create(:java_file_type)}
+    file_type {FactoryBot.create(:java_file_type)}
   end
 
   factory :codeharbor_solution_file, class: 'ExerciseFile' do
@@ -50,7 +50,7 @@ FactoryGirl.define do
     path ''
     role 'Reference Implementation'
     hidden true
-    file_type {FactoryGirl.create(:java_file_type)}
+    file_type {FactoryBot.create(:java_file_type)}
   end
 
   factory :codeharbor_user_test_file, class: 'ExerciseFile' do
@@ -58,7 +58,7 @@ FactoryGirl.define do
     name 'user_test'
     path ''
     role 'User-defined Test'
-    file_type {FactoryGirl.create(:java_file_type)}
+    file_type {FactoryBot.create(:java_file_type)}
   end
 
   factory :codeharbor_test_file, class: 'ExerciseFile' do
@@ -66,7 +66,7 @@ FactoryGirl.define do
     name 'test'
     path ''
     purpose 'test'
-    file_type {FactoryGirl.create(:java_file_type)}
+    file_type {FactoryBot.create(:java_file_type)}
     visibility true
   end
 end

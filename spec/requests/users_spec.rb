@@ -3,9 +3,10 @@ require 'rails_helper'
 RSpec.describe 'users', type: :request do
   context 'when logged in' do
     before(:each) do
-      @user = FactoryGirl.create(:user)
-      @user_params = FactoryGirl.attributes_for(:user)
-      post_via_redirect login_path, :email => @user.email, :password => @user.password
+      @user = FactoryBot.create(:user)
+      @user_params = FactoryBot.attributes_for(:user)
+      post login_path, params: {:email => @user.email, :password => @user.password}
+      follow_redirect!
     end
     describe 'GET /users' do
       it 'has http 200' do
@@ -15,7 +16,7 @@ RSpec.describe 'users', type: :request do
     end
     describe 'POST /users' do
       it 'has http 302' do
-        post users_path, {user: @user_params}
+        post users_path, params: {user: @user_params}
         expect(response).to have_http_status(302)
       end
     end

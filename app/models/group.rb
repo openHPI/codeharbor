@@ -1,4 +1,4 @@
-class Group < ActiveRecord::Base
+class Group < ApplicationRecord
   groupify :group, members: [:users, :exercises], default_members: :users
   validates :name, presence: true
 

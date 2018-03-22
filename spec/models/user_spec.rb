@@ -3,10 +3,10 @@ require 'nokogiri'
 
 RSpec.describe User, type: :model do
   describe 'cart count' do
-    let!(:user) {FactoryGirl.create(:user)}
-    let!(:exercise1) {FactoryGirl.create(:simple_exercise)}
-    let!(:exercise2) {FactoryGirl.create(:simple_exercise)}
-    let(:cart) {FactoryGirl.create(:cart, user: user, exercises: [exercise1])}
+    let!(:user) {FactoryBot.create(:user)}
+    let!(:exercise1) {FactoryBot.create(:simple_exercise)}
+    let!(:exercise2) {FactoryBot.create(:simple_exercise)}
+    let(:cart) {FactoryBot.create(:cart, user: user, exercises: [exercise1])}
 
 
     it 'return +1 when exercise is added' do
@@ -27,9 +27,9 @@ RSpec.describe User, type: :model do
   end
 
   describe 'is_author' do
-    let!(:user1) {FactoryGirl.create(:user)}
-    let!(:user2) {FactoryGirl.create(:user)}
-    let!(:exercise) {FactoryGirl.create(:exercise_with_author, authors: [user1])}
+    let!(:user1) {FactoryBot.create(:user)}
+    let!(:user2) {FactoryBot.create(:user)}
+    let!(:exercise) {FactoryBot.create(:exercise_with_author, authors: [user1])}
 
     it 'returns true for author' do
       expect(user1.is_author?(exercise)).to be true
@@ -41,11 +41,11 @@ RSpec.describe User, type: :model do
   end
 
   describe 'handles Groups when destroyed' do
-    let!(:user) { FactoryGirl.create(:user) }
-    let(:second_user) { FactoryGirl.create(:user) }
-    let(:third_user) { FactoryGirl.create(:user) }
-    let(:one_member_group) { FactoryGirl.create(:group, users: [user]) }
-    let(:many_members_group) { FactoryGirl.create(:group, users: [user, second_user, third_user]) }
+    let!(:user) { FactoryBot.create(:user) }
+    let(:second_user) { FactoryBot.create(:user) }
+    let(:third_user) { FactoryBot.create(:user) }
+    let(:one_member_group) { FactoryBot.create(:group, users: [user]) }
+    let(:many_members_group) { FactoryBot.create(:group, users: [user, second_user, third_user]) }
     
     it 'deletes a user' do
       user_count = described_class.count
@@ -99,36 +99,36 @@ RSpec.describe User, type: :model do
   
   describe 'factories' do
     it 'has valid factory' do
-      expect(FactoryGirl.build_stubbed(:user)).to be_valid
+      expect(FactoryBot.build_stubbed(:user)).to be_valid
     end
 
     it 'requires first name' do
-      expect(FactoryGirl.build_stubbed(:user, first_name: '')).not_to be_valid
+      expect(FactoryBot.build_stubbed(:user, first_name: '')).not_to be_valid
     end
 
     it 'requires last name' do
-      expect(FactoryGirl.build_stubbed(:user, last_name: '')).not_to be_valid
+      expect(FactoryBot.build_stubbed(:user, last_name: '')).not_to be_valid
     end
 
     it 'requires email' do
-      expect(FactoryGirl.build_stubbed(:user, email: '')).not_to be_valid
+      expect(FactoryBot.build_stubbed(:user, email: '')).not_to be_valid
     end
 
     it 'uses the provided primary email for created users' do
       email = 'test@example.com'
-      user = FactoryGirl.create(:user, email: 'test@example.com')
+      user = FactoryBot.create(:user, email: 'test@example.com')
       user.email = email
     end
 
     it 'uses the provided primary email even for stubbed users' do
       email = 'test@example.com'
-      user = FactoryGirl.build_stubbed(:user, email: 'test@example.com')
+      user = FactoryBot.build_stubbed(:user, email: 'test@example.com')
       user.email = email
     end
 
     it 'allows to users to be created without a primary email' do
-      user1 = FactoryGirl.create(:user)
-      user2 = FactoryGirl.create(:user)
+      user1 = FactoryBot.create(:user)
+      user2 = FactoryBot.create(:user)
       expect(user1).to be_valid
       expect(user2).to be_valid
       expect(user1.email).not_to eql user2.email
@@ -136,11 +136,11 @@ RSpec.describe User, type: :model do
   end
   
   describe 'groups_sorted_by_admin_state_and_name' do
-    let!(:user) { FactoryGirl.create(:user) }
-    let!(:group1) { FactoryGirl.create(:group, users: [user], name: 'C') }
-    let!(:group2) { FactoryGirl.create(:group, users: [user], name: 'B') }
-    let!(:group3) { FactoryGirl.create(:group, users: [user], name: 'D') }
-    let!(:group4) { FactoryGirl.create(:group, users: [user], name: 'A') }
+    let!(:user) { FactoryBot.create(:user) }
+    let!(:group1) { FactoryBot.create(:group, users: [user], name: 'C') }
+    let!(:group2) { FactoryBot.create(:group, users: [user], name: 'B') }
+    let!(:group3) { FactoryBot.create(:group, users: [user], name: 'D') }
+    let!(:group4) { FactoryBot.create(:group, users: [user], name: 'A') }
 
     before(:each) do
       #UserGroup.set_is_admin(group1.id, user.id, true)
@@ -159,12 +159,12 @@ RSpec.describe User, type: :model do
   end
   
   describe 'exercise visible for user' do
-    let!(:user) { FactoryGirl.create(:user) }
-    let!(:user2) { FactoryGirl.create(:user) }
-    let!(:group) { FactoryGirl.create(:group, users: [user]) }
-    let!(:exercise) {FactoryGirl.create(:only_meta_data, private: false, authors: [user])}
-    let!(:exercise2) {FactoryGirl.create(:only_meta_data, private: true, authors: [user])}
-    let!(:exercise3) {FactoryGirl.create(:only_meta_data, private: true, authors: [user2], groups: [group])}
+    let!(:user) { FactoryBot.create(:user) }
+    let!(:user2) { FactoryBot.create(:user) }
+    let!(:group) { FactoryBot.create(:group, users: [user]) }
+    let!(:exercise) {FactoryBot.create(:only_meta_data, private: false, authors: [user])}
+    let!(:exercise2) {FactoryBot.create(:only_meta_data, private: true, authors: [user])}
+    let!(:exercise3) {FactoryBot.create(:only_meta_data, private: true, authors: [user2], groups: [group])}
     
     it 'allows access to a public exercise to all users' do
       expect(exercise.can_access(user2)).to eql true

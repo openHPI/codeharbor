@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :simple_description, class: 'Description' do
   	text "Very descriptive"
     language "en"

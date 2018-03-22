@@ -3,11 +3,12 @@ require 'rails_helper'
 RSpec.describe "groups", type: :request do
   context 'logged in' do
     before(:each) do
-      @user = FactoryGirl.create(:user)
-      @group = FactoryGirl.create(:group, users: [@user])
+      @user = FactoryBot.create(:user)
+      @group = FactoryBot.create(:group, users: [@user])
       @group.make_admin(@user)
-      @group_params = FactoryGirl.attributes_for(:group)
-      post_via_redirect login_path, :email => @user.email, :password => @user.password
+      @group_params = FactoryBot.attributes_for(:group)
+      post login_path, params: {:email => @user.email, :password => @user.password}
+      follow_redirect!
     end
 
     describe "GET /groups" do
@@ -18,7 +19,7 @@ RSpec.describe "groups", type: :request do
     end
     describe 'POST /groups' do
       it 'has http 302' do
-        post groups_path,{group: @group_params}
+        post groups_path, params: {group: @group_params}
         expect(response).to have_http_status(302)
       end
     end

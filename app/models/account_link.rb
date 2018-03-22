@@ -1,4 +1,4 @@
-class AccountLink < ActiveRecord::Base
+class AccountLink < ApplicationRecord
   validates :push_url, presence: true
   validates :account_name, presence: true
   validates :oauth2_token, presence: true

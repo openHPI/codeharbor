@@ -7,7 +7,7 @@ describe Proforma::XmlGenerator do
 
   describe 'test complex exercise' do
 
-    let (:exercise) { FactoryGirl.create(:complex_exercise)}
+    let (:exercise) { FactoryBot.create(:complex_exercise)}
     let(:xml) {
       ::Nokogiri::XML(
           generator.generate_xml(exercise)
@@ -100,7 +100,7 @@ describe Proforma::XmlGenerator do
   describe 'files' do
     let(:xml) {
       ::Nokogiri::XML(
-          generator.generate_xml(FactoryGirl.create(:only_meta_data))
+          generator.generate_xml(FactoryBot.create(:only_meta_data))
       ).xpath('/p:task')[0]
     }
 
@@ -118,7 +118,7 @@ describe Proforma::XmlGenerator do
     context 'one Java main file' do
       let(:xml) {
         ::Nokogiri::XML(
-            generator.generate_xml(FactoryGirl.create(:exercise_with_single_java_main_file))
+            generator.generate_xml(FactoryBot.create(:exercise_with_single_java_main_file))
         ).xpath('/p:task')[0]
       }
 
@@ -171,7 +171,7 @@ describe Proforma::XmlGenerator do
     context 'no tests' do
       let(:xml) {
         ::Nokogiri::XML(
-            generator.generate_xml(FactoryGirl.create(:only_meta_data))
+            generator.generate_xml(FactoryBot.create(:only_meta_data))
         ).xpath('/p:task')[0]
       }
 
@@ -187,7 +187,7 @@ describe Proforma::XmlGenerator do
     context 'single JUnit test file' do
       let(:xml) {
         doc = ::Nokogiri::XML(
-            generator.generate_xml(FactoryGirl.create(:exercise_with_single_junit_test))
+            generator.generate_xml(FactoryBot.create(:exercise_with_single_junit_test))
         )
         doc.collect_namespaces
         return doc.xpath('/p:task')[0]
@@ -240,7 +240,7 @@ describe Proforma::XmlGenerator do
       context 'no model solutions' do
         let(:xml) {
           ::Nokogiri::XML(
-              generator.generate_xml(FactoryGirl.create(:only_meta_data))
+              generator.generate_xml(FactoryBot.create(:only_meta_data))
           ).xpath('/p:task')[0]
         }
 
@@ -256,7 +256,7 @@ describe Proforma::XmlGenerator do
       context 'single model solution file' do
         let(:xml) {
           doc = ::Nokogiri::XML(
-              generator.generate_xml(FactoryGirl.create(:exercise_with_single_model_solution))
+              generator.generate_xml(FactoryBot.create(:exercise_with_single_model_solution))
           )
           doc.collect_namespaces
           return doc.xpath('/p:task')[0]

@@ -3,10 +3,11 @@ require 'rails_helper'
 RSpec.describe "exercises", type: :request do
   context 'logged in' do
     before(:each) do
-      @user = FactoryGirl.create(:user)
-      @exercise = FactoryGirl.create(:only_meta_data, authors: [@user])
-      @exercise_params = FactoryGirl.attributes_for(:only_meta_data).merge(:descriptions_attributes => {"0"=>FactoryGirl.attributes_for(:simple_description)})
-      post_via_redirect login_path, :email => @user.email, :password => @user.password
+      @user = FactoryBot.create(:user)
+      @exercise = FactoryBot.create(:only_meta_data, authors: [@user])
+      @exercise_params = FactoryBot.attributes_for(:only_meta_data).merge(:descriptions_attributes => {"0"=>FactoryBot.attributes_for(:simple_description)})
+      post login_path, params: {:email => @user.email, :password => @user.password}
+      follow_redirect!
     end
 
     describe "GET /exercises" do
@@ -17,7 +18,7 @@ RSpec.describe "exercises", type: :request do
     end
     describe 'POST /exercises' do
       it 'has http 302' do
-        post exercises_path,{exercise: @exercise_params}
+        post exercises_path, params: {exercise: @exercise_params}
         expect(response).to have_http_status(302)
       end
     end

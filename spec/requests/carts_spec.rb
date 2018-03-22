@@ -3,9 +3,10 @@ require 'rails_helper'
 RSpec.describe 'Carts', type: :request do
   context 'when logged in' do
     before(:each) do
-      @user = FactoryGirl.create(:user)
-      @cart = FactoryGirl.create(:cart, user: @user)
-      post_via_redirect login_path, :email => @user.email, :password => @user.password
+      @user = FactoryBot.create(:user)
+      @cart = FactoryBot.create(:cart, user: @user)
+      post login_path, params: {:email => @user.email, :password => @user.password}
+      follow_redirect!
     end
     describe 'GET /carts' do
       it 'has http 200' do

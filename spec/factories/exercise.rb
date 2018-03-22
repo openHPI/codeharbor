@@ -1,23 +1,23 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :simple_exercise, class: 'Exercise' do
     sequence(:title) {|n| "Test Exercise #{n}" }
-    descriptions {[FactoryGirl.create(:simple_description)]}
+    descriptions {[FactoryBot.create(:simple_description)]}
   end
 
   factory :exercise_with_author, class: 'Exercise' do
     title 'Some Exercise'
-    descriptions {[FactoryGirl.create(:simple_description)]}
-    authors {[FactoryGirl.create(:user), FactoryGirl.create(:user)]}
+    descriptions {[FactoryBot.create(:simple_description)]}
+    authors {[FactoryBot.create(:user), FactoryBot.create(:user)]}
   end
 
   factory :only_meta_data, class: 'Exercise' do
   	title 'Some Exercise'
-    descriptions {[FactoryGirl.create(:simple_description)]}
+    descriptions {[FactoryBot.create(:simple_description)]}
     maxrating 10
     private false
-    authors {[FactoryGirl.create(:user), FactoryGirl.create(:user)]}
-    execution_environment {FactoryGirl.create(:java_8_execution_environment)}
-    license {FactoryGirl.create(:license)}
+    authors {[FactoryBot.create(:user), FactoryBot.create(:user)]}
+    execution_environment {FactoryBot.create(:java_8_execution_environment)}
+    license {FactoryBot.create(:license)}
     #after(:create) do |exercise|
      # create(:simple_description, exercise: exercise)
     #end
@@ -25,9 +25,9 @@ FactoryGirl.define do
 
   factory :exercise_with_single_java_main_file, class: 'Exercise' do
     title 'Some Exercise'
-    descriptions {[FactoryGirl.create(:simple_description)]}
-    execution_environment { FactoryGirl.create(:java_8_execution_environment) }
-    license {FactoryGirl.create(:license)}
+    descriptions {[FactoryBot.create(:simple_description)]}
+    execution_environment { FactoryBot.create(:java_8_execution_environment) }
+    license {FactoryBot.create(:license)}
     after(:create) do |exercise|
       create(:simple_description, exercise: exercise)
       create(:single_java_main_file, exercise: exercise)
@@ -36,9 +36,9 @@ FactoryGirl.define do
 
   factory :exercise_with_single_junit_test, class: 'Exercise' do
     title 'Exercises with single JUnit Test'
-    descriptions {[FactoryGirl.create(:simple_description)]}
-    execution_environment { FactoryGirl.create(:java_8_execution_environment) }
-    license {FactoryGirl.create(:license)}
+    descriptions {[FactoryBot.create(:simple_description)]}
+    execution_environment { FactoryBot.create(:java_8_execution_environment) }
+    license {FactoryBot.create(:license)}
     after(:create) do |exercise|
       create(:simple_description, exercise: exercise)
       create(:single_junit_test, exercise: exercise)
@@ -47,9 +47,9 @@ FactoryGirl.define do
 
   factory :exercise_with_single_model_solution, class: 'Exercise' do
     title 'Exercises with single Model Solution'
-    descriptions {[FactoryGirl.create(:simple_description)]}
-    execution_environment { FactoryGirl.create(:java_8_execution_environment) }
-    license {FactoryGirl.create(:license)}
+    descriptions {[FactoryBot.create(:simple_description)]}
+    execution_environment { FactoryBot.create(:java_8_execution_environment) }
+    license {FactoryBot.create(:license)}
     after(:create) do |exercise|
       create(:simple_description, exercise: exercise)
       create(:model_solution_file, exercise: exercise)
@@ -58,9 +58,9 @@ FactoryGirl.define do
 
   factory :complex_exercise, class: Exercise do
     title 'Codeharbor Export Test'
-    descriptions {[FactoryGirl.create(:codeharbor_description)]}
-    execution_environment { FactoryGirl.create(:java_8_execution_environment) }
-    license {FactoryGirl.create(:license)}
+    descriptions {[FactoryBot.create(:codeharbor_description)]}
+    execution_environment { FactoryBot.create(:java_8_execution_environment) }
+    license {FactoryBot.create(:license)}
     after(:create) do |exercise|
       create(:codeharbor_main_file, exercise: exercise)
       create(:codeharbor_regular_file, exercise: exercise)

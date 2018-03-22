@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery
 
-  after_filter :flash_to_headers
+  after_action :flash_to_headers
 
   #http://www.rubydoc.info/docs/rails/AbstractController/Helpers/ClassMethods:helper_method
   helper_method :current_user

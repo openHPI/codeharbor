@@ -3,12 +3,12 @@ require 'rails_helper'
 RSpec.describe Cart, type: :model do
   #pending "add some examples to (or delete) #{__FILE__}"
   describe 'Add Exercise' do
-    let!(:user1) {FactoryGirl.create(:user)}
-    let!(:user2) {FactoryGirl.create(:user)}
-    let!(:exercise1) {FactoryGirl.create(:simple_exercise)}
-    let!(:exercise2) {FactoryGirl.create(:simple_exercise)}
-    let(:cart_with_one_exercise) {FactoryGirl.create(:cart, user: user1, exercises: [exercise1] )}
-    let(:cart_with_two_exercises) {FactoryGirl.create(:cart, user: user2, exercises: [exercise1, exercise2] )}
+    let!(:user1) {FactoryBot.create(:user)}
+    let!(:user2) {FactoryBot.create(:user)}
+    let!(:exercise1) {FactoryBot.create(:simple_exercise)}
+    let!(:exercise2) {FactoryBot.create(:simple_exercise)}
+    let(:cart_with_one_exercise) {FactoryBot.create(:cart, user: user1, exercises: [exercise1] )}
+    let(:cart_with_two_exercises) {FactoryBot.create(:cart, user: user2, exercises: [exercise1, exercise2] )}
 
     it 'should add when not in cart already' do
       cart = cart_with_one_exercise
@@ -25,9 +25,9 @@ RSpec.describe Cart, type: :model do
     end
   end
   describe 'Destroy:' do
-    let!(:user) {FactoryGirl.create(:user)}
-    let!(:exercise) {FactoryGirl.create(:simple_exercise)}
-    let!(:cart) {FactoryGirl.create(:cart, user: user, exercises: [exercise])}
+    let!(:user) {FactoryBot.create(:user)}
+    let!(:exercise) {FactoryBot.create(:simple_exercise)}
+    let!(:cart) {FactoryBot.create(:cart, user: user, exercises: [exercise])}
 
     it 'delete exercise from cart' do
       exercises_count = Exercise.all.count
@@ -61,7 +61,7 @@ RSpec.describe Cart, type: :model do
   end
   describe 'factories' do
     it 'has valid factory' do
-      expect(FactoryGirl.build_stubbed(:cart)).to be_valid
+      expect(FactoryBot.build_stubbed(:cart)).to be_valid
     end
   end
 end

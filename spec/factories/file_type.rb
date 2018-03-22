@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :file_type, class: 'FileType' do
     name "Java"
     file_extension ".java"
