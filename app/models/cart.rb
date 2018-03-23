@@ -1,4 +1,4 @@
-class Cart < ActiveRecord::Base
+class Cart < ApplicationRecord
   belongs_to :user
   has_and_belongs_to_many :exercises, dependent: :destroy
   validates :user, presence: true

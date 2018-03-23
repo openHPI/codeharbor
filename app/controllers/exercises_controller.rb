@@ -6,7 +6,7 @@ class ExercisesController < ApplicationController
   load_and_authorize_resource :except => [:import_proforma_xml]
   before_action :set_exercise, only: [:show, :edit, :update, :destroy, :add_to_cart, :add_to_collection, :push_external, :contribute]
   before_action :set_search, only: [:index]
-  skip_before_filter :verify_authenticity_token, only: [:import_proforma_xml]
+  skip_before_action :verify_authenticity_token, only: [:import_proforma_xml]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.exercise.authorization')

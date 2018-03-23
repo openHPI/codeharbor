@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
 
   factory :single_junit_test, class: 'Test' do
     feedback_message "Dude... seriously?"

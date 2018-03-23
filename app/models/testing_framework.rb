@@ -1,3 +1,3 @@
-class TestingFramework < ActiveRecord::Base
+class TestingFramework < ApplicationRecord
   has_many :tests
 end

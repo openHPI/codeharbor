@@ -21,14 +21,14 @@ require 'rails_helper'
 RSpec.describe ExercisesController, type: :controller do
 
   before { allow_any_instance_of(CanCan::ControllerResource).to receive(:load_and_authorize_resource){ nil } }
-  let!(:user) {FactoryGirl.create(:user)}
-  let!(:cart) {FactoryGirl.create(:cart, user: user, exercises: [])}
-  let!(:collection) {FactoryGirl.create(:collection, users: [user], exercises: [])}
+  let!(:user) {FactoryBot.create(:user)}
+  let!(:cart) {FactoryBot.create(:cart, user: user, exercises: [])}
+  let!(:collection) {FactoryBot.create(:collection, users: [user], exercises: [])}
   # This should return the minimal set of attributes required to create a valid
   # Exercise. As you add validations to Exercise, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    FactoryGirl.attributes_for(:only_meta_data, user: user).merge(:descriptions_attributes => {"0"=>FactoryGirl.attributes_for(:simple_description)})
+    FactoryBot.attributes_for(:only_meta_data, user: user).merge(:descriptions_attributes => {"0"=>FactoryBot.attributes_for(:simple_description)})
   }
 
   let(:invalid_attributes) {
@@ -47,7 +47,7 @@ RSpec.describe ExercisesController, type: :controller do
   describe "GET #index (My Exercises)" do
     it "shows all Exercises of that user" do
       exercise = Exercise.create! valid_attributes
-      get :index, {}, valid_session
+      get :index, params: {}, session: valid_session
       expect(assigns(:exercises)).to eq([exercise])
     end
   end
@@ -55,14 +55,14 @@ RSpec.describe ExercisesController, type: :controller do
   describe "GET #show" do
     it "assigns the requested exercise as @exercise" do
       exercise = Exercise.create! valid_attributes
-      get :show, {:id => exercise.to_param}, valid_session
+      get :show, params: {:id => exercise.to_param}, session: valid_session
       expect(assigns(:exercise)).to eq(exercise)
     end
   end
 
   describe "GET #new" do
     it "assigns a new exercise as @exercise" do
-      get :new, {}, valid_session
+      get :new, params: {}, session: valid_session
       expect(assigns(:exercise)).to be_a_new(Exercise)
     end
   end
@@ -70,7 +70,7 @@ RSpec.describe ExercisesController, type: :controller do
   describe "GET #edit" do
     it "assigns the requested exercise as @exercise" do
       exercise = Exercise.create! valid_attributes
-      get :edit, {:id => exercise.to_param}, valid_session
+      get :edit, params: {:id => exercise.to_param}, session: valid_session
       expect(assigns(:exercise)).to eq(exercise)
     end
   end
@@ -79,30 +79,30 @@ RSpec.describe ExercisesController, type: :controller do
     context "with valid params" do
       it "creates a new Exercise" do
         expect {
-          post :create, {:exercise => valid_attributes}, valid_session
+          post :create, params: {:exercise => valid_attributes}, session: valid_session
         }.to change(Exercise, :count).by(1)
       end
 
       it "assigns a newly created exercise as @exercise" do
-        post :create, {:exercise => valid_attributes}, valid_session
+        post :create, params: {:exercise => valid_attributes}, session: valid_session
         expect(assigns(:exercise)).to be_a(Exercise)
         expect(assigns(:exercise)).to be_persisted
       end
 
       it "redirects to the created exercise" do
-        post :create, {:exercise => valid_attributes}, valid_session
+        post :create, params: {:exercise => valid_attributes}, session: valid_session
         expect(response).to redirect_to(Exercise.last)
       end
     end
 
     context "with invalid params" do
       it "assigns a newly created but unsaved exercise as @exercise" do
-        post :create, {:exercise => invalid_attributes}, valid_session
+        post :create, params: {:exercise => invalid_attributes}, session: valid_session
         expect(assigns(:exercise)).to be_a_new(Exercise)
       end
 
       it "re-renders the 'new' template" do
-        post :create, {:exercise => invalid_attributes}, valid_session
+        post :create, params: {:exercise => invalid_attributes}, session: valid_session
         expect(response).to render_template("new")
       end
     end
@@ -116,20 +116,20 @@ RSpec.describe ExercisesController, type: :controller do
 
       it "updates the requested exercise" do
         exercise = Exercise.create! valid_attributes
-        put :update, {:id => exercise.to_param, :exercise => new_attributes}, valid_session
+        put :update, params: {:id => exercise.to_param, :exercise => new_attributes}, session: valid_session
         exercise.reload
         skip("Add assertions for updated state")
       end
 
       it "assigns the requested exercise as @exercise" do
         exercise = Exercise.create! valid_attributes
-        put :update, {:id => exercise.to_param, :exercise => valid_attributes}, valid_session
+        put :update, params: {:id => exercise.to_param, :exercise => valid_attributes}, session: valid_session
         expect(assigns(:exercise)).to eq(exercise)
       end
 
       it "redirects to the exercise" do
         exercise = Exercise.create! valid_attributes
-        put :update, {:id => exercise.to_param, :exercise => valid_attributes}, valid_session
+        put :update, params: {:id => exercise.to_param, :exercise => valid_attributes}, session: valid_session
         expect(response).to redirect_to(exercise)
       end
     end
@@ -137,13 +137,13 @@ RSpec.describe ExercisesController, type: :controller do
     context "with invalid params" do
       it "assigns the exercise as @exercise" do
         exercise = Exercise.create! valid_attributes
-        put :update, {:id => exercise.to_param, :exercise => invalid_attributes}, valid_session
+        put :update, params: {:id => exercise.to_param, :exercise => invalid_attributes}, session: valid_session
         expect(assigns(:exercise)).to eq(exercise)
       end
 
       it "re-renders the 'edit' template" do
         exercise = Exercise.create! valid_attributes
-        put :update, {:id => exercise.to_param, :exercise => invalid_attributes}, valid_session
+        put :update, params: {:id => exercise.to_param, :exercise => invalid_attributes}, session: valid_session
         expect(response).to render_template("edit")
       end
     end
@@ -153,13 +153,13 @@ RSpec.describe ExercisesController, type: :controller do
     it "destroys the requested exercise" do
       exercise = Exercise.create! valid_attributes
       expect {
-        delete :destroy, {:id => exercise.to_param}, valid_session
+        delete :destroy, params: {:id => exercise.to_param}, session: valid_session
       }.to change(Exercise, :count).by(-1)
     end
 
     it "redirects to the exercises list" do
       exercise = Exercise.create! valid_attributes
-      delete :destroy, {:id => exercise.to_param}, valid_session
+      delete :destroy, params: {:id => exercise.to_param}, session: valid_session
       expect(response).to redirect_to(exercises_url)
     end
   end
@@ -167,7 +167,7 @@ RSpec.describe ExercisesController, type: :controller do
   describe "GET #exercises_all" do
     it "assigns all exercises as @exercises" do
       exercise = Exercise.create! valid_attributes
-      get :exercises_all, {}, valid_session
+      get :exercises_all, params: {}, session: valid_session
       expect(assigns(:exercises)).to eq([exercise])
     end
   end
@@ -176,7 +176,7 @@ RSpec.describe ExercisesController, type: :controller do
     it "adds exercise to cart" do
       exercise = Exercise.create! valid_attributes
       expect{
-        post :add_to_cart, {:id => exercise.to_param}, valid_session
+        post :add_to_cart, params: {:id => exercise.to_param}, session: valid_session
       }.to change(cart.exercises, :count).by(+1)
     end
   end
@@ -184,7 +184,7 @@ RSpec.describe ExercisesController, type: :controller do
     it "adds exercise to collection" do
       exercise = Exercise.create! valid_attributes
       expect {
-        post :add_to_collection, {:id => exercise.to_param, collection: collection.id}, valid_session
+        post :add_to_collection, params: {:id => exercise.to_param, collection: collection.id}, session: valid_session
       }.to change(collection.exercises, :count).by(+1)
     end
   end

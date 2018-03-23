@@ -1,4 +1,4 @@
-class Message < ActiveRecord::Base
+class Message < ApplicationRecord
   validates :text, :presence => true
 
   belongs_to :sender, :class_name => 'User', :foreign_key =>  'sender_id'

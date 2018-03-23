@@ -1,4 +1,4 @@
-class Test < ActiveRecord::Base
+class Test < ApplicationRecord
   belongs_to :testing_framework
   belongs_to :exercise
   belongs_to :exercise_file

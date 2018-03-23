@@ -1,2 +1,2 @@
-class ExecutionEnvironment < ActiveRecord::Base
+class ExecutionEnvironment < ApplicationRecord
 end

@@ -5,17 +5,17 @@ describe Proforma::Importer do
 
   let (:importer) {described_class.new}
   let (:generator) {Proforma::XmlGenerator.new}
-  let(:exercise) {FactoryGirl.create(:complex_exercise)}
+  let(:exercise) {FactoryBot.create(:complex_exercise)}
   let(:xml) { generator.generate_xml(exercise) }
-  let(:user) {FactoryGirl.create(:user)}
+  let(:user) {FactoryBot.create(:user)}
 
 
 
 
   describe 'import exercise' do
 
-    let!(:testing_framework) {FactoryGirl.create(:junit_testing_framework, name: 'JUnit 4')}
-    let!(:license) {FactoryGirl.create(:license, name: 'MIT License')}
+    let!(:testing_framework) {FactoryBot.create(:junit_testing_framework, name: 'JUnit 4')}
+    let!(:license) {FactoryBot.create(:license, name: 'MIT License')}
 
     let(:imported_exercise) {
       imported_exercise = Exercise.new

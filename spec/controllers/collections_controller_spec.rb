@@ -24,7 +24,7 @@ RSpec.describe CollectionsController, type: :controller do
   before { allow_any_instance_of(CanCan::ControllerResource).to receive(:load_and_authorize_resource){ nil } }
 
   let(:valid_attributes) {
-    FactoryGirl.attributes_for(:collection)
+    FactoryBot.attributes_for(:collection)
   }
 
   let(:invalid_attributes) {
@@ -35,13 +35,13 @@ RSpec.describe CollectionsController, type: :controller do
   # in order to pass any filters (e.g. authentication) defined in
   # CollectionsController. Be sure to keep this updated too.
   let(:valid_session) {
-    {user_id: FactoryGirl.create(:user).id}
+    {user_id: FactoryBot.create(:user).id}
   }
 
   describe "GET #index" do
     xit "assigns all collections as @collections" do
       collection = Collection.create! valid_attributes
-      get :index, {}, valid_session
+      get :index, params: {}, session: valid_session
       expect(assigns(:collections)).to eq([collection])
     end
   end
@@ -49,14 +49,14 @@ RSpec.describe CollectionsController, type: :controller do
   describe "GET #show" do
     it "assigns the requested collection as @collection" do
       collection = Collection.create! valid_attributes
-      get :show, {:id => collection.to_param}, valid_session
+      get :show, params: {:id => collection.to_param}, session: valid_session
       expect(assigns(:collection)).to eq(collection)
     end
   end
 
   describe "GET #new" do
     it "assigns a new collection as @collection" do
-      get :new, {}, valid_session
+      get :new, params: {}, session: valid_session
       expect(assigns(:collection)).to be_a_new(Collection)
     end
   end
@@ -64,7 +64,7 @@ RSpec.describe CollectionsController, type: :controller do
   describe "GET #edit" do
     it "assigns the requested collection as @collection" do
       collection = Collection.create! valid_attributes
-      get :edit, {:id => collection.to_param}, valid_session
+      get :edit, params: {:id => collection.to_param}, session: valid_session
       expect(assigns(:collection)).to eq(collection)
     end
   end
@@ -73,30 +73,30 @@ RSpec.describe CollectionsController, type: :controller do
     context "with valid params" do
       it "creates a new Collection" do
         expect {
-          post :create, {:collection => valid_attributes}, valid_session
+          post :create, params: {:collection => valid_attributes}, session: valid_session
         }.to change(Collection, :count).by(1)
       end
 
       it "assigns a newly created collection as @collection" do
-        post :create, {:collection => valid_attributes}, valid_session
+        post :create, params: {:collection => valid_attributes}, session: valid_session
         expect(assigns(:collection)).to be_a(Collection)
         expect(assigns(:collection)).to be_persisted
       end
 
       it "redirects to the created collection" do
-        post :create, {:collection => valid_attributes}, valid_session
+        post :create, params: {:collection => valid_attributes}, session: valid_session
         expect(response).to redirect_to(collections_path)
       end
     end
 
     context "with invalid params" do
       it "assigns a newly created but unsaved collection as @collection" do
-        post :create, {:collection => invalid_attributes}, valid_session
+        post :create, params: {:collection => invalid_attributes}, session: valid_session
         expect(assigns(:collection)).to be_a_new(Collection)
       end
 
       it "re-renders the 'new' template" do
-        post :create, {:collection => invalid_attributes}, valid_session
+        post :create, params: {:collection => invalid_attributes}, session: valid_session
         expect(response).to render_template("new")
       end
     end
@@ -110,20 +110,20 @@ RSpec.describe CollectionsController, type: :controller do
 
       it "updates the requested collection" do
         collection = Collection.create! valid_attributes
-        put :update, {:id => collection.to_param, :collection => new_attributes}, valid_session
+        put :update, params: {:id => collection.to_param, :collection => new_attributes}, session: valid_session
         collection.reload
         skip("Add assertions for updated state")
       end
 
       it "assigns the requested collection as @collection" do
         collection = Collection.create! valid_attributes
-        put :update, {:id => collection.to_param, :collection => valid_attributes}, valid_session
+        put :update, params: {:id => collection.to_param, :collection => valid_attributes}, session: valid_session
         expect(assigns(:collection)).to eq(collection)
       end
 
       it "redirects to the collection" do
         collection = Collection.create! valid_attributes
-        put :update, {:id => collection.to_param, :collection => valid_attributes}, valid_session
+        put :update, params: {:id => collection.to_param, :collection => valid_attributes}, session: valid_session
         expect(response).to redirect_to(collections_path)
       end
     end
@@ -131,13 +131,13 @@ RSpec.describe CollectionsController, type: :controller do
     context "with invalid params" do
       it "assigns the collection as @collection" do
         collection = Collection.create! valid_attributes
-        put :update, {:id => collection.to_param, :collection => invalid_attributes}, valid_session
+        put :update, params: {:id => collection.to_param, :collection => invalid_attributes}, session: valid_session
         expect(assigns(:collection)).to eq(collection)
       end
 
       it "re-renders the 'edit' template" do
         collection = Collection.create! valid_attributes
-        put :update, {:id => collection.to_param, :collection => invalid_attributes}, valid_session
+        put :update, params: {:id => collection.to_param, :collection => invalid_attributes}, session: valid_session
         expect(response).to render_template("edit")
       end
     end
@@ -147,13 +147,13 @@ RSpec.describe CollectionsController, type: :controller do
     it "destroys the requested collection" do
       collection = Collection.create! valid_attributes
       expect {
-        delete :destroy, {:id => collection.to_param}, valid_session
+        delete :destroy, params: {:id => collection.to_param}, session: valid_session
       }.to change(Collection, :count).by(-1)
     end
 
     it "redirects to the collections list" do
       collection = Collection.create! valid_attributes
-      delete :destroy, {:id => collection.to_param}, valid_session
+      delete :destroy, params: {:id => collection.to_param}, session: valid_session
       expect(response).to redirect_to(collections_url)
     end
   end

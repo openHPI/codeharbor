@@ -4,8 +4,8 @@ require 'nokogiri'
 RSpec.describe Exercise, type: :model do
   describe 'test creation' do
     context 'and adding description, tasks and tests' do
-      let(:exercise){FactoryGirl.create(:only_meta_data)}
-      let(:file_type){FactoryGirl.create(:file_type)}
+      let(:exercise){FactoryBot.create(:only_meta_data)}
+      let(:file_type){FactoryBot.create(:file_type)}
 
       it 'does not add anything new' do
         params = {:tests_attributes => nil, :exercise_files_attributes => nil, :descriptions_attributes => nil}

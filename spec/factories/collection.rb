@@ -1,7 +1,7 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :collection do
     title 'Some Collection'
-    users {[FactoryGirl.create(:user)]}
-    exercises {[FactoryGirl.create(:simple_exercise), FactoryGirl.create(:simple_exercise)]}
+    users {[FactoryBot.create(:user)]}
+    exercises {[FactoryBot.create(:simple_exercise), FactoryBot.create(:simple_exercise)]}
   end
 end

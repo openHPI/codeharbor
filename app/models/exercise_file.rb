@@ -1,4 +1,4 @@
-class ExerciseFile < ActiveRecord::Base
+class ExerciseFile < ApplicationRecord
   belongs_to :exercise
   belongs_to :file_type
   has_many :tests, dependent: :destroy

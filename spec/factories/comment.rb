@@ -1,7 +1,7 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :comment do
     text 'A good comment'
-    exercise {FactoryGirl.create(:simple_exercise)}
-    user {FactoryGirl.create(:user)}
+    exercise {FactoryBot.create(:simple_exercise)}
+    user {FactoryBot.create(:user)}
   end
 end

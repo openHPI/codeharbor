@@ -1,3 +1,3 @@
-class LabelCategory < ActiveRecord::Base
+class LabelCategory < ApplicationRecord
   has_many :labels
 end

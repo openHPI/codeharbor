@@ -1,7 +1,7 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :cart do
-    user {FactoryGirl.create(:user)}
-    exercises {[FactoryGirl.create(:simple_exercise), FactoryGirl.create(:simple_exercise)]}
+    user {FactoryBot.create(:user)}
+    exercises {[FactoryBot.create(:simple_exercise), FactoryBot.create(:simple_exercise)]}
   end
 
 end

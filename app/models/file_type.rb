@@ -1,4 +1,4 @@
-class FileType < ActiveRecord::Base
+class FileType < ApplicationRecord
   belongs_to :exercise_files
 
   def name_with_extension
