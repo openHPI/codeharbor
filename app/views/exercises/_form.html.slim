@@ -88,12 +88,13 @@
       .form-content
         .field-element
           = f.nested_fields_for :exercise_files, style: 'margin-left: 10px' do |file|
-            = render 'file_form', f: f, file: file
-            .field-element
-              = file.remove_nested_fields_link :text, class:'btn btn-main btn-xs' do
-                i.fa.fa-remove style=("color: #800000")
-                = ' ' + t('exercises.form.files.remove')
-            hr style="color:black"
+            - unless file.object.purpose == 'test'
+              = render 'file_form', f: f, file: file
+              .field-element
+                = file.remove_nested_fields_link :text, class:'btn btn-main btn-xs' do
+                  i.fa.fa-remove style=("color: #800000")
+                  = ' ' + t('exercises.form.files.remove')
+              hr style="color:black"
           .field-element
             = f.add_nested_fields_link :exercise_files, ' ', class:'btn btn-main', id: 'addFileButton' do
               i.fa.fa-plus style=("color: #008000")

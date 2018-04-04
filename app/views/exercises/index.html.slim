@@ -19,9 +19,9 @@
             li.dropdown-header style="padding-left: 2px;"
               = t('exercises.import_xml')
             li
-              = file_field_tag 'xml', form: 'create-xml', accept: '.xml', class: 'inputfile'
+              = file_field_tag 'file_upload', form: 'create-xml', accept: '.zip', class: 'inputfile'
               .btn-group style="display:inline-flex"
-                = label_tag 'xml', 'choose file', form: 'create-xml', id: 'xml-label', class: 'btn btn-default'
+                = label_tag 'file_upload', 'choose file', form: 'create-xml', id: 'file-label', class: 'btn btn-default'
                 = submit_tag 'Import', form: 'create-xml', id: 'import-button', class: 'btn btn-default'
 
   br

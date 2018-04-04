@@ -20,8 +20,31 @@ div[style="margin-left: 10px;"]
     br
     = file.check_box :read_only
   .field-element
-    = f.label :content, t('exercises.files.content'), class: 'form-label'
-    .edit
-      .editor
-        = file.text_area :content
-      = file.text_area :content, class:'hidden form-control'
+    = f.label :content, t('exercises.files.content'), class: 'form-label', style: 'margin-bottom: 15px'
+    = file.hidden_field :file_input, value: file.object.attachment.exists?
+    - if file.object.attachment.exists?
+      a.btn.btn-main.btn-xs.toggle-input data={text_initial: "Upload file", text_toggled: "Back"} href='#'
+        = "Back"
+      .toggle-divs
+        .edit style=("display:none") data-display="false"
+          .editor
+            = file.text_area :content, class: 'hidden form-control'
+        .attachment data-display= "true"
+          .btn-group
+            = link_to file.object.attachment.original_filename, download_attachment_path(file.object), class: 'btn btn-default', style: "border-right: none"
+            = link_to '#', class: 'btn btn-default remove-attachment', style: "border-left: none; margin-right: 5px;" do
+              i.fa.fa-remove style=("color: gray")
+          .alternative style=("display:none")
+            = file.file_field :attachment, class: 'alternative-input form-control'
+    - else
+      a.btn.btn-main.btn-xs.toggle-input data={text_initial: "Upload file", text_toggled: "Back"} href='#'
+        = "Upload file"
+      .toggle-divs
+        .edit data-display="true"
+          .editor
+            = file.text_area :content, class:'hidden form-control'
+        .attachment style=("display:none") data-display= "false"
+          - if file.object.attachment.exists?
+            = link_to file.object.attachment.original_filename, download_attachment_path(file.object)
+          - else
+            = file.file_field :attachment, class: 'alternative-input form-control'

@@ -134,6 +134,10 @@ ActiveRecord::Schema.define(version: 20180314123634) do
     t.boolean  "hidden"
     t.boolean  "read_only"
     t.integer  "file_type_id"
+    t.string   "attachment_file_name"
+    t.string   "attachment_content_type"
+    t.integer  "attachment_file_size"
+    t.datetime "attachment_updated_at"
   end
 
   add_index "exercise_files", ["exercise_id"], name: "index_exercise_files_on_exercise_id", using: :btree
@@ -317,6 +321,8 @@ ActiveRecord::Schema.define(version: 20180314123634) do
     t.datetime "updated_at",                       null: false
     t.string   "role",            default: "user"
     t.boolean  "deleted"
+    t.boolean  "email_confirmed", default: false
+    t.string   "confirm_token"
   end
 
   add_foreign_key "account_links", "users"

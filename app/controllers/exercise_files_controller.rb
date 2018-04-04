@@ -1,6 +1,6 @@
 class ExerciseFilesController < ApplicationController
   load_and_authorize_resource
-  before_action :set_exercise_file, only: [:show, :edit, :update, :destroy]
+  before_action :set_exercise_file, only: [:show, :edit, :update, :destroy, :download_attachment]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized to for this action.'
@@ -27,6 +27,7 @@ class ExerciseFilesController < ApplicationController
 
   # POST /exercise_files
   # POST /exercise_files.json
+
   def create
     @exercise_file = ExerciseFile.new(exercise_file_params)
 
@@ -40,7 +41,6 @@ class ExerciseFilesController < ApplicationController
       end
     end
   end
-
   # PATCH/PUT /exercise_files/1
   # PATCH/PUT /exercise_files/1.json
   def update
@@ -65,6 +65,10 @@ class ExerciseFilesController < ApplicationController
     end
   end
 
+  def download_attachment
+      send_file @exercise_file.attachment.path
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_exercise_file
@@ -73,6 +77,6 @@ class ExerciseFilesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def exercise_file_params
-      params.require(:exercise_file).permit(:main, :content, :path, :solution, :file_extension, :exercise_id, :purpose, :visibility, :name)
+      params.require(:exercise_file).permit(:main, :content, :path, :solution, :file_extension, :exercise_id, :purpose, :visibility, :name, :attachment)
     end
 end

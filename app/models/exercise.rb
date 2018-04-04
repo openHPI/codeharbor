@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'zip'
 
 class Exercise < ApplicationRecord
   groupify :group_member
@@ -224,9 +225,27 @@ class Exercise < ApplicationRecord
       file_type = FileType.find(array[:file_type_id])
       if id
         file = ExerciseFile.find(id)
-        destroy ? file.destroy : file.update(file_permit(array))
+        if destroy
+          file.destroy
+        else
+          if array[:existing_file]
+            content = nil
+            attachment = file.attachment
+          else
+            attachment = array[:attachment] ? array[:attachment] : nil
+            content = array[:content]
+          end
+          file.update(content: content, attachment: attachment, name: array[:name], path: array[:path], file_type_id: array[:file_type_id])
+        end
       else
-        exercise_files.new(file_permit(array)) unless destroy
+        if array[:file_input]
+          attachment = array[:file_input] ? array[:file_input] : nil
+          content = nil
+        else
+          attachment = nil
+          content = array[:content]
+        end
+        exercise_files.new(content: content, attachment: attachment, name: array[:name], path: array[:path], file_type_id: array[:file_type_id]) unless destroy
       end
     end
   end
@@ -242,11 +261,25 @@ class Exercise < ApplicationRecord
           test.destroy
         else
           test.update(test_permit(array))
-          test.exercise_file.update(content: array[:content])
+          if array[:file_input]
+            attachment = array[:file_input] ? array[:file_input] : nil
+            content = nil
+          else
+            attachment = nil
+            content = array[:content]
+          end
+          test.exercise_file.update(content: content, attachment: attachment, name: array[:name], path: array[:path], file_type_id: array[:file_type_id])
         end
       else
         unless destroy
-          file = ExerciseFile.new(content: array[:content], name: array[:name], path: array[:path], file_type_id: array[:file_type_id], purpose: 'test' )
+          if array[:file_input]
+            attachment = array[:file_input] ? array[:file_input] : nil
+            content = nil
+          else
+            attachment = nil
+            content = array[:content]
+          end
+          file = ExerciseFile.new(content: content, attachment: attachment, name: array[:name], path: array[:path], file_type_id: array[:file_type_id], purpose: 'test')
           test = Test.new(test_permit(array))
           test.exercise_file =  file
           tests << test
@@ -268,7 +301,7 @@ class Exercise < ApplicationRecord
   end
 
   def file_permit(params)
-    params.permit(:role, :content, :path, :name, :hidden, :read_only, :file_type_id)
+    params.permit(:role, :content, :path, :name, :hidden, :read_only, :file_type_id, :attachment)
   end
 
   def test_permit(params)

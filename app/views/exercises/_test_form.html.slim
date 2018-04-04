@@ -15,8 +15,12 @@ div[style="margin-left: 10px;"]
     = f.label :testing_framework, t('exercises.tests.framework'), class:'form-label'
     = test.collection_select :testing_framework_id, TestingFramework.all, :id, :name, {}, {class: 'form-control'}
   .field-element
-    = f.label :content, t('exercises.tests.content'), class:'form-label'
-    .edit
-      .editor
-        = test.text_area :content
-      = test.text_area :content, class:'hidden'
+    = f.label :content, t('exercises.files.content'), class: 'form-label', style: 'margin-bottom: 15px'
+    a.btn.btn-main.btn-xs.toggle-input data={text_initial: "Upload file", text_toggled: "Back"} href='#'
+      = "Upload file"
+    .toggle-divs
+      .edit data-display="true"
+        .editor
+          = test.text_area :content, class:'hidden form-control'
+      .attachment style=("display:none") data-display= "false"
+        = test.file_field :attachment, class: 'alternative-input form-control'
