@@ -1,5 +1,5 @@
 .col-md-12
-  = simple_form_for @exercise, html: { class: 'form-horizontal project exercise-validation' } do |f|
+  = simple_form_for @exercise, html: { class: 'form-horizontal project exercise-validation', mulipart: true } do |f|
     - if @exercise.errors.any?
       #error_explanation.panel.panel-danger
         .panel-heading

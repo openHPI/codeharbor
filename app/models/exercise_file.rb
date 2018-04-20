@@ -4,6 +4,7 @@ class ExerciseFile < ApplicationRecord
   has_many :tests, dependent: :destroy
   has_attached_file :attachment
   do_not_validate_attachment_file_type :attachment
+  validates :name, presence: true
 
   accepts_nested_attributes_for :tests
 

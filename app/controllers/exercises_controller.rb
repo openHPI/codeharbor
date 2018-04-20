@@ -1,6 +1,8 @@
 require 'oauth2'
 require 'proforma/importer'
 require 'proforma/xml_generator'
+require 'proforma/zip_importer'
+require 'zip'
 
 class ExercisesController < ApplicationController
   load_and_authorize_resource :except => [:import_proforma_xml]
@@ -136,21 +138,6 @@ class ExercisesController < ApplicationController
     end
   end
 
-  def handle_file_uploads
-    params[:exercise][:files_attributes].try(:each) do |index, file_attributes|
-      if file_attributes[:content].respond_to?(:read)
-        file_params = params[:exercise][:files_attributes][index]
-        if FileType.find_by(id: file_attributes[:file_type_id]).try(:binary?)
-          file_params[:content] = nil
-          file_params[:native_file] = file_attributes[:content]
-        else
-          file_params[:content] = file_attributes[:content].read
-        end
-      end
-    end
-  end
-  private :handle_file_uploads
-
   def add_to_cart
     cart = Cart.find_cart_of(current_user)
     if cart.add_exercise(@exercise)
@@ -180,6 +167,7 @@ class ExercisesController < ApplicationController
       format.js{ render 'load_related_exercises.js.erb' }
     end
   end
+
   def push_external
     account_link = AccountLink.find(params[:account_link])
     oauth2Client = OAuth2::Client.new('client_id', 'client_secret', :site => account_link.push_url)
@@ -187,7 +175,7 @@ class ExercisesController < ApplicationController
     token = OAuth2::AccessToken.from_hash(oauth2Client, :access_token => oauth2_token)
     xml_generator = Proforma::XmlGenerator.new
     xml_document = xml_generator.generate_xml(@exercise)
-    token.post(account_link.push_url, {body: xml_document})
+    token.post(account_link.push_url, {body: xml_document, headers: {'Content-Type' => 'text/xml'}})
     redirect_to @exercise, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
   end
 
@@ -210,10 +198,9 @@ class ExercisesController < ApplicationController
       end
       redirect_to @exercise, alert: t('controllers.exercise.download_error')
     else
-
       stringio = Zip::OutputStream.write_buffer do |zio|
         zio.put_next_entry('task.xml')
-        zio.write xml
+        zio.write xml_document
         @exercise.exercise_files.each do |file|
           zio.put_next_entry(file.attachment.original_filename)
           zio.write Paperclip.io_adapters.for(file.attachment).read
@@ -222,7 +209,7 @@ class ExercisesController < ApplicationController
       binary_data = stringio.string
       downloads_new = @exercise.downloads+1
       @exercise.update(downloads: downloads_new)
-      send_data(binary_data, :type => 'application/zip', :filename => filename)
+      send_data(binary_data, :type => 'application/zip', :filename => filename, :disposition => 'attachment')
     end
   end
 
@@ -281,20 +268,26 @@ class ExercisesController < ApplicationController
   private :user_by_code_harbor_token
 
   def import_exercise
+    files = Hash.new
+    begin
+      uploaded_io = params[:file_upload]
+      raise "You need to choose a file." unless uploaded_io
 
-    uploaded_io = params[:file_upload]
-    if uploaded_io
       Zip::File.open(uploaded_io.path) do |zip_file|
 
-        xml = zip_file.glob("task.xml").first
-
-        if xml.nil?
-          flash[:alert] = "task.xml file is required!"
-          redirect_to exercises_path
+        zip_file.each do |entry|
+          name = entry.name.split('.').first
+          extension = '.' + entry.name.split('.').second
+          tempfile = Paperclip::Tempfile.new([name, extension])
+          tempfile.write entry.get_input_stream.read
+          tempfile.rewind
+          files[entry.name.to_s] = tempfile
         end
 
-        xml = xml.get_input_stream.read
+        xml = zip_file.glob("task.xml").first
+        raise "task.xml file is required!" unless xml
 
+        xml = xml.get_input_stream.read
         xsd = Nokogiri::XML::Schema(File.read('app/assets/taskxml.xsd'))
         doc = Nokogiri::XML(xml)
 
@@ -304,29 +297,30 @@ class ExercisesController < ApplicationController
           errors.each do |error|
             puts error.message
           end
-          flash[:alert] = t('controllers.exercise.xml_not_valid')
-          redirect_to exercises_path
+          raise t('controllers.exercise.xml_not_valid')
         else
           exercise = Exercise.new
-	  importer = Proforma::Importer.new
-	  exercise = importer.from_proforma_xml(exercise, doc)
-	  exercise.user = current_user
-	  saved = exercise.save
+          importer = Proforma::ZipImporter.new
+          exercise = importer.from_proforma_zip(exercise, doc, files)
+          exercise.user = current_user
+          saved = exercise.save
 
-	  if saved
+          if saved
             flash[:notice] = t('controllers.exercise.import_success')
-            redirect_to edit_exercise_path(@exercise.id)
+            redirect_to edit_exercise_path(exercise.id)
           else
-            flash[:alert] = t('controllers.exercise.import_fail')
-            redirect_to exercises_path
+            raise t('controllers.exercise.import_fail')
           end
         end
       end
-      flash[:alert] = t('controllers.exercise.xml_not_valid')
-      render :nothing => true, :status => 200
-    else
-      flash[:alert] = "You need to choose a file."
+    rescue Exception => e
+      flash[:alert] = e.message
       redirect_to exercises_path
+    ensure
+      files.each do |key, file|
+        file.close
+        file.unlink
+      end
     end
   end
 

@@ -140,6 +140,8 @@ en:
   sure: "Are you sure?"
   time_ago: "%{time} ago"
 
+  shared:
+    back: "BacK"
   account:
     pushURL: "Push URL"
     name: "Account Name"
@@ -240,7 +242,7 @@ en:
       title: "Title"
       actions: "Actions"
       name: "Name"
-
+      allow_push: "Allow push to..."
       button:
         new: "New Group"
         show: "Show"
@@ -370,6 +372,7 @@ en:
     in_carts: "In Carts"
     in_collections: "In Collections"
     files:
+      attachment: "Attachment"
       role: "Role"
       label: "Files"
       content: "Content"
@@ -378,6 +381,7 @@ en:
       main: "Main"
       purpose: "Purpose"
       name: "Name"
+      upload_file: "Upload File"
     tests:
       label: "Tests"
       content: "Content"
@@ -671,12 +675,17 @@ en:
 
 
   users:
+    remove_avatar: "Remove Avatar"
     first_name: "First name"
     last_name: "Last name"
     email: "Email"
     role: "Role"
     back: "Back"
-
+    public_information: "Public Information"
+    private_information: "Private Information"
+    username: "Username"
+    full_name: "Full name"
+    save_user: "Save User"
     new:
       header: "New User"
       password: "Password"
@@ -727,6 +736,7 @@ en:
       unknown: "unknown"
       delete: "Delete"
     reply_to: "Reply to"
+    message_to: "Send Message to"
     send_message: "Send Message"
     recipient: "Recipient"
 

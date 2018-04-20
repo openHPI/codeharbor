@@ -12,5 +12,4 @@ $(document).ajaxComplete (event, request) ->
 ready =->
   $('#flash-message').children().first().delay(2000).slideUp 'medium'
 
-$(document).ready(ready)
-$(document).on('page:load', ready)
+$(document).on('turbolinks:load', ready)

@@ -9,6 +9,9 @@ $exercise-color: #006600;
   height: 300px;
 }
 
+.exercise-show {
+  border-left-color: rgba($exercise-color, .5);
+}
 .editor_readonly {
   position: relative;
   height: 300px;

@@ -26,7 +26,7 @@ class Ability
       end
 
       #Exercise
-      can [:create, :contribute], Exercise
+      can [:create, :contribute, :read_comments, :related_exercises], Exercise
       can [:show, :read, :add_to_cart, :add_to_collection, :export, :duplicate, :download_exercise, :report], Exercise do |exercise|
         exercise.can_access(user)
       end
@@ -58,8 +58,11 @@ class Ability
       end
 
       #User
-      can [:create], User
-      can [:show, :edit, :delete, :manage_accountlinks], User do |this_user|
+      can [:create, :view, :show], User
+      can [:message], User do |this_user|
+        this_user != user
+      end
+      can [:edit, :delete, :manage_accountlinks], User do |this_user|
         this_user == user
       end
 

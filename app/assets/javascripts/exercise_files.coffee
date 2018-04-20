@@ -2,34 +2,49 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
+
 loadFileScript =->
 
-  $('.remove-attachment').on 'click', (event) ->
+  $('form').on 'click', '.remove-attachment', (event) ->
     event.preventDefault()
     $(this).parent().hide()
-    $(this).parent().next().show()
+    $(this).parents('.attachment').find('.alternative').show()
+    $(this).parents('.attachment').find('.hidden-attachment-present').val(false)
 
-  $('.toggle-input').on 'click', (event) ->
+  $('form').on 'click','.toggle-input', (event) ->
     event.preventDefault()
+    $content = $(this).next()
+    $editor = $content.find('.edit')
+    $attachment = $content.find('.attachment')
 
-    content = $(this).next()
-    first = content.children()[0]
-    second = content.children()[1]
-
-    if ($(second).attr('data-display') == 'false')
+    if ($attachment.css('display') == 'none')
       $(this).text($(this).data('text-toggled'))
-      $(first).attr('data-display', "false").hide()
-      $(second).attr('data-display', "true").show()
+      $editor.find('.hidden').attr('disabled', true)
+      $editor.hide()
+      $attachment.find('.alternative-input').attr('disabled', false)
+      $attachment.show()
     else
       $(this).text($(this).data('text-initial'))
-      $(second).attr('data-display', "false").hide()
-      $(first).attr('data-display', "true").show()
+      $attachment.find('.alternative-input').attr('disabled', true)
+      $attachment.hide()
+      $editor.find('hidden').attr('disabled', false)
+      $editor.show()
+    return
 
+  $('form').on 'change', '.alternative-input', (event) ->
+    event.preventDefault()
+    fullPath = this.value
+    fullName = get_filename_from_full_path(fullPath)
+    name = fullName.split('.')[0]
+    extension = '.' + fullName.split('.')[1]
+    if fullPath
+      console.log(name)
+      $(this).parents('.file-container').find('.file-name').val(name)
+      index = $(this).parents('.file-container').find('.file-type option[data-extension="' + extension + '"]').val()
+      $(this).parents('.file-container').find('.file-type').val(index)
+      $(this).parents('.file-container').find('.file-type').trigger('change')
+      
 ready =->
-    $(document).on "fields_added.nested_form_fields", (event, param) ->
-      loadFileScript()
-
     loadFileScript()
 
-$(document).ready(ready)
-$(document).on('page:load', ready)
+$(document).on('turbolinks:load', ready)

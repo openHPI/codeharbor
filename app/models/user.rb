@@ -5,18 +5,23 @@ class User < ApplicationRecord
   groupify :named_group_member
 
   validates :email, presence: true, uniqueness: true
+  validates_uniqueness_of :username, :allow_blank => true
   validates :first_name, :last_name, presence: true
   has_secure_password
 
+  has_and_belongs_to_many :account_links
   has_and_belongs_to_many :collections, dependent: :destroy
   has_many :reports, dependent: :destroy
-  has_many :account_links
+  has_many :created_account_links, foreign_key: "user_id", class_name: "AccountLink"
   has_many :exercises
   has_one :cart, dependent: :destroy
   has_many :exercise_authors, dependent: :destroy
   has_many :exercises, through: :exercise_authors
   has_many :sent_messages, :class_name => 'Message', :foreign_key => 'sender_id'
   has_many :received_messages, :class_name => 'Message', :foreign_key => 'recipient_id'
+
+  has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100#" }, :default_url => "/images/:style/missing.png"
+  validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
 
   default_scope { where(deleted: [nil, false]) }
 

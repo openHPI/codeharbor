@@ -29,6 +29,8 @@ Rails.application.routes.draw do
       get :remove_exercise
       get :leave
       get :deny_access
+      post :add_account_link_to_member
+      post :remove_account_link_from_member
     end
     collection do
       get :groups_all

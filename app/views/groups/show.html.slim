@@ -4,28 +4,65 @@
     .std-heading
       i.fa.fa-group
       = ' ' + @group.name
-  table.vertical-table
-    tr
-      th = t('groups.show.description')
-      td = @group.description
-    tr
-      th = t('groups.show.admins')
-      td
+  .show-table
+    .row.vertical
+      .row-label = t('groups.show.description')
+      .row-value = @group.description
+    .row.vertical
+      .row-label = t('groups.show.admins')
+      .row-value
         - @group.admins.each do |admin|
           .table-list
             = admin.email
+            = ' '
+            - unless admin == current_user
+              .btn-group.pull-right
+                .dropdown.btn-group
+                  = button_tag class: 'btn btn-default btn-xs dropdown-toggle', data: {toggle: 'dropdown'} do
+                    = t('groups.allow_push') + ' '
+                    span.fa.fa-caret-down
+                  ul.scrollable.dropdown-menu[role="menu"]
+                    - current_user.created_account_links.each do |account_link|
+                      li
+                        - if admin.account_links.include?(account_link)
+                          = link_to remove_account_link_from_member_group_path(@group, user: admin, account_link: account_link), method: 'post', class: 'dropdown-item remove_account_link' do
+                            i.fa.fa-check
+                            = ' '
+                            = account_link.account_name
+                        - else
+                          = link_to add_account_link_to_member_group_path(@group, user: admin, account_link: account_link), method: 'post', class: 'dropdown-item add_account_link' do
+                            i.fa.fa-close
+                            = ' '
+                            = account_link.account_name
+    .row.vertical
+      .row-label = t('groups.show.users')
 
-    tr
-      th = t('groups.show.users')
-
-      td
+      .row-value
         - @group.members.each do |member|
           - unless @group.is_admin(member)
             .table-list
               = member.email
               = ' '
-              - if can? :edit, @group
+              - if can? :view, @group
                 .btn-group.pull-right
+                  .dropdown.btn-group
+                    = button_tag class: 'btn btn-default btn-xs dropdown-toggle', data: {toggle: 'dropdown'} do
+                      = t('groups.allow_push') + ' '
+                      span.fa.fa-caret-down
+                    ul.scrollable.dropdown-menu[role="menu"]
+                      - current_user.created_account_links.each do |account_link|
+                        li
+                          - if member.account_links.include?(account_link)
+                            = link_to remove_account_link_from_member_group_path(@group, user: member, account_link: account_link), method: 'post', class: 'dropdown-item remove_account_link' do
+                              i.fa.fa-check
+                              = ' '
+                              = account_link.account_name
+                          - else
+                            = link_to add_account_link_to_member_group_path(@group, user: member, account_link: account_link), method: 'post', class: 'dropdown-item add_account_link' do
+                              i.fa.fa-close
+                              = ' '
+                              = account_link.account_name
+                - if can? :edit, @group
                   = link_to make_admin_path(group: @group, user: member), class: 'btn btn-default btn-xs' do
                     i.fa.fa-plus style=("color:#008000")
                     = ' ' + t('groups.button.make_admin')
@@ -36,9 +73,9 @@
 
 
     - if @group.is_admin(current_user)
-      tr
-        th = t('groups.show.pending')
-        td
+      .row.vertical
+        .row-label = t('groups.show.pending')
+        .row-value
           - @group.pending_users.each do |user|
             .table-list
               = user.email
@@ -50,9 +87,9 @@
                 = link_to deny_access_group_path(group: @group, user: user), class: 'btn btn-default btn-xs' do
                   i.fa.fa-remove style=("color:#800000")
                   = ' ' + t('message.index.deny_access')
-    tr
-      th = t('groups.show.exercises')
-      td
+    .row.vertical
+      .row-label = t('groups.show.exercises')
+      .row-value
         - @group.exercises.each do |exercise|
           .table-list
             .btn-group

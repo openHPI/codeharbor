@@ -1,52 +1,88 @@
 - model_class = User
-.page-header
-  h1
-    = @user.name
-dl.dl-horizontal
-  dt
-    = t('users.first_name')
-    | :
-  dd
-    = @user.first_name
-  dt
-    = t('users.last_name')
-    | :
-  dd
-    = @user.last_name
-  dt
-    = t('users.email')
-    | :
-  dd
-    = @user.email
-  dt
-    = t('users.role')
-    | :
-  dd
-    = @user.role
-  - if can? :manage_accountlinks, @user
-    dl.dl-horizontal
-      dt
-        = t('users.show.account_links.label')
-      dd
-        = link_to t('users.show.account_links.add'), new_user_account_link_path(@user), class:'btn btn-success btn-xs'
-      - @user.account_links.each do |account_link|
-        dd
+- if can? :view, @user
+  .header
+    .std-heading
+      i.fa.fa-user
+      = ' ' + @user.name
+  .show-table
+    - if can? :edit, @user
+      .table-header
+        = t('users.public_information')
+    .row
+      .inner-section style="width: 15%"
+        .avatar
+          = image_tag(@user.avatar.url(:thumb))
+      .inner-section style="width: 80%"
+        .row
+          .row-label
+            = t('users.username')
+            | :
+          .row-value
+            = @user.username.nil? ? @user.name : @user.username
+        .row
+          .row-label
+            = t('users.full_name')
+            | :
+          .row-value
+            = @user.name
+        .row
+          .row-label
+            = t('users.role')
+            | :
+          .row-value
+            = @user.role
+    .row.vertical
+      .row-label
+        = t('groups.show.description')
+        | :
+      .row-value
+        = @user.description
 
-        dt[style="margin-top: 10px"]
-          = t('users.show.account_links.links')
+  - if can? :manage_accountlinks, @user
+    .show-table
+      .table-header
+        = t('users.private_information')
+      .row
+        .row-label
+          = t('users.email')
           | :
-        dd[style="margin-top: 10px"]
-          = account_link.readable
-        dt[style="margin-top: 5px"]
-          = t('users.show.account_links.actions')
-          | :
-        dd.actions.btn-group[role="group" style="margin-top: 5px; margin-left: 20px;"]
-          = link_to t('users.show.account_links.show'), user_account_link_path(account_link.user, account_link), class:'btn btn-default btn-xs'
-          = link_to t('users.show.account_links.edit'), edit_user_account_link_path(account_link.user, account_link), class:'btn btn-warning btn-xs'
-          = link_to t('users.show.account_links.destroy'), user_account_link_path(account_link.user, account_link), method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-danger btn-xs'
+        .row-value
+          = @user.email
+      .row.vertical
+        .row-label
+          = t('users.show.account_links.label')
+          |:
+        .row-value
+          = link_to new_user_account_link_path(@user), class:'btn btn-default btn-xs', style: 'margin-bottom: 10px' do
+            i.fa.fa-plus
+            = ' '
+            = t('users.show.account_links.add')
+          - @user.created_account_links.each do |account_link|
+            .table-list
+              = account_link.readable
+              .btn-group.pull-right
+                = link_to t('users.show.account_links.show'), user_account_link_path(account_link.user, account_link), class:'btn btn-default btn-xs'
+                = link_to edit_user_account_link_path(account_link.user, account_link), class:'btn btn-default btn-xs' do
+                  i.fa.fa-edit
+                  = ' '
+                  = t('users.show.account_links.edit')
+                = link_to user_account_link_path(account_link.user, account_link), method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-default btn-xs' do
+                  i.fa.fa-trash
+                  = ' '
+                  = t('users.show.account_links.destroy')
 .actions.btn-group[role="group"]
+  - if can? :message, @user
+    = link_to reply_user_messages_path(current_user, recipient: @user), class: 'btn btn-important' do
+      i.fa.fa-envelope
+      = ' ' + t('message.send_message')
   - if can? :edit, @user
-    = link_to t('users.show.edit'), edit_user_path(@user), class:'btn btn-warning'
+    = link_to edit_user_path(@user), class:'btn btn-important' do
+      i.fa.fa-edit
+      = ' '
+      = t('users.show.edit')
   - if can? :delete, @user
-    = link_to t('users.show.delete'), @user, method: :delete, data: { confirm: t('sure')}, class:'btn btn-danger'
-  = link_to t('users.show.back'), :back, class:'btn btn-default'
+    = link_to @user, method: :delete, data: { confirm: t('sure')}, class:'btn btn-important' do
+      i.fa.fa-trash
+      = ' '
+      = t('users.show.delete')
+  = link_to t('users.show.back'), :back, class:'btn btn-important'

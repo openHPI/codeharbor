@@ -36,111 +36,111 @@ legend
   span.number = '1'
   = t('exercises.form.basic_info') + ' '
   span.fa.fa-caret-down.toggle
-table.vertical-table
-  tr
-    th
+.show-table.exercise-show
+  .row
+    .row-label
       = t('exercises.title')
       | :
-    td
+    .row-value
       = @exercise.title
 
   - if @exercise_relation
-    tr
-      th
+    .row
+      .row-label
         = t('exercises.parent')
         | :
-      td
+      .row-value
         - if @exercise_relation.origin
           = link_to @exercise_relation.origin.title, exercise_path(@exercise_relation.origin)
         - else
           = t('exercises.parent_deleted')
-    tr
-      th
+    .row
+      .row-label
         = t('exercises.relation')
         | :
-      td
+      .row-value
         = @exercise_relation.relation.name
 
   - @exercise.descriptions.each do |description|
-    tr
-      th
+    .row.vertical
+      .row-label
         = t('exercises.description_in') + ' '
         = description.language
         | :
-      td
+      .row-value
         = description.text
-  tr
-    th
+  .row.vertical
+    .row-label
       = t('exercises.instructions')
       | :
-    td
+    .row-value
       = @exercise.instruction
-  tr
-    th
+  .row
+    .row-label
       = t('exercises.execution_environment')
       | :
-    td
+    .row-value
       = @exercise.execution_environment.language
-  tr
-    th
+  .row
+    .row-label
       = t('exercises.created_at')
       | :
-    td
+    .row-value
       = @exercise.created_at
-  tr
-    th
+  .row
+    .row-label
       = t('exercises.created_by')
       | :
     - if !@exercise.user
-      td
+      .row-value
         = t('users.undefined')
     - elsif @exercise.user == current_user
-      td
+      .row-value
         = t('users.yourself')
-    - elsif @exercise.user.first_name.nil? || current_user.role === 'user'
-      td
+    - elsif @exercise.user.first_name.nil?
+      .row-value
         = "User#{@exercise.user.id}"
     - else
-      td
-        = @exercise.user.name
+      .row-value
+        = link_to @exercise.user.name, user_path(@exercise.user)
 legend
   span.number = '2'
   = t('exercises.form.additional_info') + ' '
   span.fa.fa-caret-down.toggle
-table.vertical-table
-  tr
-    th
+.show-table.exercise-show
+  .row
+    .row-label
       = t('exercises.visibility.label')
       | :
-    td
+    .row-value
       = @exercise.private ? t('exercises.visibility.private') : t('exercises.visibility.public')
-  tr
-    th
+  .row
+    .row-label
       = t('exercises.labels')
       | :
-    td
+    .row-value
       - @exercise.labels.each do |label|
         = '#' + label.name + ' '
-  tr
-    th
+  .row
+    .row-label
       = t('exercises.groups')
       | :
-    td
+    .row-value
       - @exercise.groups.each do |group|
         = link_to group.name, group_path(group)
-  tr
-    th
+  .row
+    .row-label
       = t('exercises.license')
       | :
-    td
+    .row-value
       = @exercise.license.name
       = ': '
       = link_to @exercise.license.link, @exercise.license.link
-  tr
-    th
+  .row
+    .row-label
       = t('exercises.impact')
       | :
-    td
+    .row-value
       p.impact
         = t('exercises.downloads')
         = ': '
@@ -162,49 +162,42 @@ legend
   p style="margin-left: 10px;"
     = t('exercises.show.no_files')
 - @files.each do |file|
-  table.vertical-table
-    - if file.purpose != 'test'
+  - if file.purpose != 'test'
+    .show-table.exercise-show
       - if !file.attachment.present?
-        tr
-          td colspan=2
-            .editor_readonly
-              = file.content
-      - else
-        tr
-          th
-            = "Attachment: "
-          td
-            = link_to file.attachment.original_filename, download_attachment_path(file)
-
-table.vertical-table
-  - if @files.empty?
-    p style="margin-left: 10px;"
-      = t('exercises.show.no_files')
-  - @files.each do |file|
-    - if file.purpose != 'test'
-      tr
-        td colspan=2
+        .row
           .editor_readonly
             = file.content
-      tr
-        th
+      - else
+        .row
+          .row-label
+            = t('exercises.files.attachment')
+            | :
+          .row-value
+            = link_to file.attachment.original_filename, download_attachment_pa.row-label(file), 'data-turbolinks': false
+      .row
+        .row-label
           = t('exercises.files.name')
-        td
+          | :
+        .row-value
           = file.name
-      tr
-        th
+      .row
+        .row-label
           = t('exercises.files.path')
-        td
+          | :
+        .row-value
           = file.path
-      tr
-        th
+      .row
+        .row-label
           = t('exercises.files.extension')
-        td
+          | :
+        .row-value
           = file.file_type.name_with_extension
-      tr
-        th
+      .row
+        .row-label
           = t('exercises.files.role')
-        td
+          | :
+        .row-value
           = file.role
 
 legend
@@ -217,42 +210,47 @@ legend
   p style="margin-left: 10px;"
     = t('exercises.show.no_tests')
 - @tests.each do |test|
-  table.vertical-table
+  .show-table.exercise-show
     - if !test.attachment.present?
-      tr
-        td colspan=2
-          .editor_readonly
-            = test.content
+      .row
+        .editor_readonly
+          = test.content
     - else
-      tr
-        th
-          = "Attachment: "
-        td
-          = link_to test.attachment.original_filename, download_attachment_path(test.exercise_file)
-    tr
-      th
+      .row
+        .row-label
+          = t('exercises.files.attachment')
+          | :
+        .row-value
+          = link_to test.attachment.original_filename, download_attachment_path(test.exercise_file), 'data-turbolinks': false
+    .row
+      .row-label
         = t('exercises.files.name')
-      td
+        | :
+      .row-value
         = test.name
-      tr
-        th
-          = t('exercises.files.path')
-        td
-          = test.path
-      tr
-        th
-          = t('exercises.files.extension')
-        td
-          = test.file_type.name_with_extension if test.file_type
-    tr
-      th
+    .row
+      .row-label
+        = t('exercises.files.path')
+        | :
+      .row-value
+        = test.path
+    .row
+      .row-label
+        = t('exercises.files.extension')
+        | :
+      .row-value
+        = test.file_type.name_with_extension if test.file_type
+    .row
+      .row-label
         = t('exercises.tests.feedback')
-      td
+        | :
+      .row-value
         = test.feedback_message
-    tr
-      th
+    .row
+      .row-label
         = t('exercises.tests.framework')
-      td
+        | :
+      .row-value
         = test.testing_framework.name
 
 .actions.btn-group[role="group"]
@@ -284,7 +282,7 @@ legend
         = t('exercises.show.export') + ' '
         span.caret
       ul.scrollable.dropdown-menu[role="menu"]
-        li = link_to t('.download_xml'), download_exercise_exercise_url(@exercise)
+        li = link_to t('.download_xml'), download_exercise_exercise_url(@exercise), 'data-turbolinks': false
         li.divider
         li.dropdown-header = t('.export_to') + ': '
         - if !current_user.account_links.empty?

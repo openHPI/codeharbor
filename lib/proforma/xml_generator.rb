@@ -59,9 +59,6 @@ module Proforma
           @exercise.exercise_files.all? { |file|
             build_proforma_xml_for_single_file(xml, file)
           }
-          @exercise.tests.all? { |test|
-            build_proforma_xml_for_single_file(xml, test.exercise_file)
-          }
           ### Set Placeholder file for placeholder solution-file and tests if there aren't any
           if model_solution_files.blank?
             proforma.file('', 'id' => '0', 'class' => 'internal')

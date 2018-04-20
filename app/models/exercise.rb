@@ -221,31 +221,15 @@ class Exercise < ApplicationRecord
     file_array.try(:each) do |key, array|
       destroy = array[:_destroy]
       id = array[:id]
-
-      file_type = FileType.find(array[:file_type_id])
       if id
         file = ExerciseFile.find(id)
         if destroy
           file.destroy
         else
-          if array[:existing_file]
-            content = nil
-            attachment = file.attachment
-          else
-            attachment = array[:attachment] ? array[:attachment] : nil
-            content = array[:content]
-          end
-          file.update(content: content, attachment: attachment, name: array[:name], path: array[:path], file_type_id: array[:file_type_id])
+          file.update(file_permit(array))
         end
       else
-        if array[:file_input]
-          attachment = array[:file_input] ? array[:file_input] : nil
-          content = nil
-        else
-          attachment = nil
-          content = array[:content]
-        end
-        exercise_files.new(content: content, attachment: attachment, name: array[:name], path: array[:path], file_type_id: array[:file_type_id]) unless destroy
+        exercise_files.new(file_permit(array)) unless destroy
       end
     end
   end
@@ -254,6 +238,7 @@ class Exercise < ApplicationRecord
     test_array.try(:each) do |key, array|
       destroy = array[:_destroy]
       id = array[:id]
+
       if id
         test = Test.find(id)
         if destroy
@@ -261,31 +246,35 @@ class Exercise < ApplicationRecord
           test.destroy
         else
           test.update(test_permit(array))
-          if array[:file_input]
-            attachment = array[:file_input] ? array[:file_input] : nil
-            content = nil
-          else
-            attachment = nil
-            content = array[:content]
-          end
-          test.exercise_file.update(content: content, attachment: attachment, name: array[:name], path: array[:path], file_type_id: array[:file_type_id])
+          test.exercise_file.update(file_permit(array))
         end
       else
         unless destroy
-          if array[:file_input]
-            attachment = array[:file_input] ? array[:file_input] : nil
-            content = nil
-          else
-            attachment = nil
-            content = array[:content]
-          end
-          file = ExerciseFile.new(content: content, attachment: attachment, name: array[:name], path: array[:path], file_type_id: array[:file_type_id], purpose: 'test')
+          file = ExerciseFile.new(file_permit(array))
+          file.purpose = 'test'
           test = Test.new(test_permit(array))
           test.exercise_file =  file
           tests << test
         end
       end
     end
+  end
+
+  def update_file_params(file_attributes)
+    puts file_attributes[:attachment].inspect
+    puts file_attributes[:attachment_present]
+    puts file_attributes[:content].inspect
+
+    #file_attributes[:file_type] = FileType.find_by(file_extension: file_attributes[:file_type])
+
+    if file_attributes[:content].respond_to?(:read)
+      file_attributes[:attachment] = file_attributes[:content]
+      file_attributes[:content] = nil
+    else
+      file_attributes[:attachment] = nil
+    end
+    file_attributes
+
   end
 
   def delete_dependencies
@@ -301,7 +290,10 @@ class Exercise < ApplicationRecord
   end
 
   def file_permit(params)
-    params.permit(:role, :content, :path, :name, :hidden, :read_only, :file_type_id, :attachment)
+    params = update_file_params(params)
+    allowed_params = [:role, :content, :path, :name, :hidden, :read_only, :file_type_id]
+    allowed_params << :attachment if params[:attachment_present] == 'false'
+    params.permit(allowed_params)
   end
 
   def test_permit(params)

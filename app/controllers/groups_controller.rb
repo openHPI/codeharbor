@@ -133,6 +133,20 @@ class GroupsController < ApplicationController
     redirect_to @group, notice: t('controllers.group.make_admin_notice')
   end
 
+  def add_account_link_to_member
+    user = User.find(params[:user])
+    account_link = AccountLink.find(params[:account_link])
+    user.account_links << account_link
+    redirect_to @group, notice: "Granted push privileges to user "
+  end
+
+  def remove_account_link_from_member
+    user = User.find(params[:user])
+    account_link = AccountLink.find(params[:account_link])
+    user.account_links.delete(account_link)
+    redirect_to @group, notice: "Removed push privileges for user "
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_option

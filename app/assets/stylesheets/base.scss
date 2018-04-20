@@ -58,6 +58,74 @@ body:before {
   }
 }
 
+.show-table {
+  margin-bottom: 30px;
+  width: 100%;
+  border: 1px #dddddd solid;
+  border-left: 8px #dddddd solid;
+  border-radius: 2px;
+  padding: 8px 8px;
+  float: left;
+
+  .table-header {
+    text-align: left;
+    background-color: #f5f5f5;
+    margin: -8px -8px;
+    margin-bottom: 16px;
+    padding: 8px 8px;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 26px;
+    border-bottom: 1px #dddddd solid;
+    color: #333;
+  }
+  .row {
+    display: block;
+    margin: 8px 2%;
+    border-radius: 2px;
+    border: 1px #dddddd solid;
+    width: 96%;
+
+    .row-label, .inner-section .row-label {
+      float: left;
+      text-align: left;
+      background-color: #f5f5f5;
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 18px;
+      color: #333;
+      display: inline;
+      padding: 4px 8px;
+      min-width: 80px;
+      border-right: 1px #dddddd solid;
+    }
+    .row-value, .inner-section .row-value{
+      float: left;
+      text-align: left;
+      padding: 4px 8px;
+      display: inline;
+    }
+
+    .inner-section {
+      float: left;
+      display: inline-block;
+    }
+  }
+
+  .row.vertical, .inner-section .row-vertical {
+    .row-label {
+      width: 100%;
+      display: block;
+      margin-bottom: 5px;
+      border-bottom: 1px #dddddd solid;
+      border-right: none;
+    }
+    .row-value {
+      width: 100%;
+      display: blocK;
+    }
+  }
+}
 
 table.vertical-table {
   border-collapse: separate;
@@ -176,4 +244,5 @@ fieldset.form-group {
 
 .table-list {
   display:block;
+  margin-bottom: 8px;
 }

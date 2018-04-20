@@ -156,11 +156,7 @@ ready =->
   $('#file_upload').on 'change', ->
     fullPath = document.getElementById('file_upload').value
     if fullPath
-      startIndex = if fullPath.indexOf('\\') >= 0 then fullPath.lastIndexOf('\\') else fullPath.lastIndexOf('/')
-      filename = fullPath.substring(startIndex)
-      if filename.indexOf('\\') == 0 or filename.indexOf('/') == 0
-        filename = filename.substring(1)
-      document.getElementById('file-label').innerHTML = filename
+      document.getElementById('file-label').innerHTML = get_filename_from_full_path(fullPath)
 
   $('.toggle').on 'click', ->
     $($(this).parent().next()).toggle()
@@ -271,8 +267,6 @@ ready =->
       $(this).removeClass('active').addClass('inactive')
     $(this).siblings('.slide-right').removeClass('inactive').addClass('active')
 
-
-
   if document.getElementById('window')
     if document.getElementById('window').value == "true"
       $('.dropdown-content').show()
@@ -317,5 +311,4 @@ ready =->
     link = option.getAttribute("data-link")
     $('.link').html("<p>Link: <a href='#{link}'>#{link}</a></p>")
 
-$(document).ready(ready)
-$(document).on('page:load', ready)
+$(document).on('turbolinks:load', ready)
