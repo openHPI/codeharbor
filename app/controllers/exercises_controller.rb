@@ -170,13 +170,17 @@ class ExercisesController < ApplicationController
 
   def push_external
     account_link = AccountLink.find(params[:account_link])
-    oauth2Client = OAuth2::Client.new('client_id', 'client_secret', :site => account_link.push_url)
+    oauth2_client = OAuth2::Client.new(account_link.client_id, account_link.client_secret, :site => account_link.push_url)
     oauth2_token = account_link[:oauth2_token]
-    token = OAuth2::AccessToken.from_hash(oauth2Client, :access_token => oauth2_token)
+    token = OAuth2::AccessToken.from_hash(oauth2_client, :access_token => oauth2_token)
     xml_generator = Proforma::XmlGenerator.new
     xml_document = xml_generator.generate_xml(@exercise)
-    token.post(account_link.push_url, {body: xml_document, headers: {'Content-Type' => 'text/xml'}})
-    redirect_to @exercise, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
+    begin
+      token.post(account_link.push_url, {body: xml_document, headers: {'Content-Type' => 'text/xml'}})
+      redirect_to @exercise, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
+    rescue
+      redirect_to @exercise, alert: "Your account_link #{account_link.readable} does not seem to be working."
+    end
   end
 
   def download_exercise

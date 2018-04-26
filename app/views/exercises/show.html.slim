@@ -276,7 +276,7 @@ legend
       - else
         li
           = link_to t('exercises.show.add_collection'), new_collection_path(current_user)
-  - if can? :export, Exercise
+  - if can? :push_external, Exercise
     .dropup.btn-group
       = button_tag class: 'btn btn-important dropdown-toggle', data: {toggle: 'dropdown'} do
         = t('exercises.show.export') + ' '

@@ -39,5 +39,4 @@ class ApplicationController < ActionController::Base
     end
     return :empty
   end
-
 end

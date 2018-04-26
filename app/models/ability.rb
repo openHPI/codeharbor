@@ -7,6 +7,11 @@ class Ability
         can :manage, :all
       end
 
+      #AccountLink
+      can [:new], AccountLink
+      can [:manage], AccountLink do |account_link|
+        account_link.user = user
+      end
       #Answer
       can [:new], Answer
       can [:manage], Answer do |answer|
@@ -27,7 +32,7 @@ class Ability
 
       #Exercise
       can [:create, :contribute, :read_comments, :related_exercises], Exercise
-      can [:show, :read, :add_to_cart, :add_to_collection, :export, :duplicate, :download_exercise, :report], Exercise do |exercise|
+      can [:show, :read, :add_to_cart, :add_to_collection, :push_external, :duplicate, :download_exercise, :report], Exercise do |exercise|
         exercise.can_access(user)
       end
       can [:manage], Exercise do |exercise|
@@ -36,8 +41,6 @@ class Ability
       cannot [:report], Exercise do |exercise|
         ExerciseAuthor.where(user_id: user.id, exercise_id: exercise.id).any? || exercise.user == user
       end
-
-
 
       #Comment
       can [:show, :create, :read, :answer ], Comment
@@ -62,7 +65,7 @@ class Ability
       can [:message], User do |this_user|
         this_user != user
       end
-      can [:edit, :delete, :manage_accountlinks], User do |this_user|
+      can [:edit, :update, :delete, :manage_accountlinks], User do |this_user|
         this_user == user
       end
 

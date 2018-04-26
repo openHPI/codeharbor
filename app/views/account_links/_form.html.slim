@@ -8,17 +8,33 @@
         - @account_link.errors.full_messages.each do |message|
           li
             = message
-  .field
-    = f.label :push_url, t('account.pushURL')
-    br/
-    = f.text_field :push_url
-  .field
-    = f.label :account_name, t('account.name')
-    br/
-    = f.text_field :account_name
-  .field
-    = f.label :oauth2_token, t('account.token')
-    br/
-    = f.text_field :oauth2_token
-  .actions
-    = f.submit t('account.button.create'), class:'btn btn-primary'
+  .field-element.form-group
+    = f.label :push_url, t('account.pushURL'), class: 'form-label'
+    = f.text_field :push_url, class: 'form-control'
+  .field-element.form-group
+    = f.label :account_name, t('account.name'), class: 'form-label'
+    = f.text_field :account_name, class: 'form-control'
+  .field-element.form-group
+    = f.label :oauth2_token, t('account.token'), class: 'form-label'
+    .input-group
+      = f.text_field :oauth2_token, class: 'form-control oauth2-token'
+      .input-group-btn
+        = button_tag "Generate", type: 'button', class: 'generate-oauth2-token btn btn-default'
+  .field-element.form-group
+    = f.label :client_id, t('account.client_id'), class: 'form-label'
+    .input-group
+      = f.text_field :client_id, class: 'form-control client-id'
+      .input-group-btn
+        = button_tag "Generate", type: 'button', class: 'generate-client-id btn btn-default'
+  .field-element.form-group
+    = f.label :client_secret, t('account.client_secret'), class: 'form-label'
+    .input-group
+      = f.text_field :client_secret, class: 'form-control client-secret'
+      .input-group-btn
+        = button_tag "Generate", type: 'button', class: 'generate-client-secret btn btn-default'
+  .form-group
+    .actions.btn-group[role="group"]
+      = f.submit t('account.button.save'), class: 'btn btn-important'
+      = link_to :back, class: 'btn btn-important' do
+        i.fa.fa-remove style=("color: gray")
+        = ' ' + t('exercises.form.cancel')

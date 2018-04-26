@@ -1,6 +1,30 @@
-p#notice
-  = notice
-= render "show"
-= link_to t('account.button.edit'), edit_user_account_link_path(@user, @account_link)
-|  \
-= link_to t('account.button.back'), user_path(@user)
+- model_class = AccountLink
+- if can? :view, @account_link
+  .header
+    .std-heading
+      i.fa.fa-user
+      = ' ' + t('account.show_header') +': ' + @account_link.account_name
+  .show-table
+    .row
+      .row-label = t('account.name')
+      .row-value = @account_link.account_name
+    .row
+      .row-label = t('account.pushURL')
+      .row-value = @account_link.push_url
+    .row
+      .row-label = t('account.token')
+      .row-value = @account_link.oauth2_token
+    .row
+      .row-label = t('account.client_id')
+      .row-value = @account_link.client_id
+    .row
+      .row-label = t('account.client_secret')
+      .row-value = @account_link.client_secret
+  .actions.btn-group
+    = link_to edit_user_account_link_path(@user, @account_link), class: 'btn btn-important' do
+      i.fa.fa-edit
+      = ' ' + t('account.button.edit')
+    = link_to user_account_link_path(@user, @account_link), class: 'btn btn-important', method: :delete, data: {confirm: 'Are you sure?'} do
+      i.fa.fa-trash style=("color:#800000")
+      = ' ' + t('account.button.delete')
+    = link_to t('account.button.back'), user_path(@user), class: 'btn btn-important'

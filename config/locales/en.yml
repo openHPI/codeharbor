@@ -143,16 +143,21 @@ en:
   shared:
     back: "BacK"
   account:
+    show_header: "Account Link"
     pushURL: "Push URL"
     name: "Account Name"
     token: "OAuth2 token"
+    client_id: "Client ID"
+    client_secret: "Client Secret"
+
     button:
       new: "New Account Link"
       show: "Show TEST"
       edit: "Edit"
+      delete: "Delete"
       destroy: "Destroy"
       back: "Back"
-      create: "Create Account Link"
+      save: "Save Account Link"
 
     edit:
       header: "Editing Account Link"
