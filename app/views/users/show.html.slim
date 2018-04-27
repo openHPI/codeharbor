@@ -50,26 +50,40 @@
           = @user.email
       .row.vertical
         .row-label
-          = t('users.show.account_links.label')
+          = t('users.account_links.created')
           |:
         .row-value
           = link_to new_user_account_link_path(@user), class:'btn btn-default btn-xs', style: 'margin-bottom: 10px' do
             i.fa.fa-plus
             = ' '
             = t('users.show.account_links.add')
-          - @user.created_account_links.each do |account_link|
+          - @user.account_links.each do |account_link|
             .table-list
               = account_link.readable
               .btn-group.pull-right
-                = link_to t('users.show.account_links.show'), user_account_link_path(account_link.user, account_link), class:'btn btn-default btn-xs'
-                = link_to edit_user_account_link_path(account_link.user, account_link), class:'btn btn-default btn-xs' do
+                = link_to t('users.show.account_links.show'), user_account_link_path(current_user, account_link), class:'btn btn-default btn-xs'
+                = link_to edit_user_account_link_path(current_user, account_link), class:'btn btn-default btn-xs' do
                   i.fa.fa-edit
                   = ' '
                   = t('users.show.account_links.edit')
-                = link_to user_account_link_path(account_link.user, account_link), method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-default btn-xs' do
+                = link_to user_account_link_path(current_user, account_link), method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-default btn-xs' do
                   i.fa.fa-trash
                   = ' '
                   = t('users.show.account_links.destroy')
+      .row.vertical
+        .row-label
+          = t('users.account_links.other')
+          |:
+        .row-value
+          - @user.external_account_links.each do |account_link|
+            .table-list
+              = account_link.readable
+              .btn-group.pull-right
+                = link_to t('users.show.account_links.show'), user_account_link_path(current_user, account_link), class: 'btn btn-default btn-xs'
+                = link_to remove_account_link_user_account_link_path(current_user, account_link), method: 'post', class: 'btn btn-default btn-xs' do
+                  i.fa.fa-remove
+                  = ' '
+                  = t('shared.remove')
 .actions.btn-group[role="group"]
   - if can? :message, @user
     = link_to reply_user_messages_path(current_user, recipient: @user), class: 'btn btn-important' do

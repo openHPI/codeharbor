@@ -126,6 +126,9 @@ en:
       updated: "User was successfully updated."
       destroyed: "User was successfully destroyed."
       last_admin: "User is only admin of a group with members."
+      remove_account_link:
+        success: "Account Link was successfully removed."
+        fail: "Account Link could not be removed."
 
 
   models:
@@ -145,6 +148,7 @@ en:
     export: "Export"
     download_zip: "Download Zip"
     export_to: "Export to"
+    remove: "Remove"
 
   account:
     show_header: "Account Link"
@@ -695,6 +699,9 @@ en:
     username: "Username"
     full_name: "Full name"
     save_user: "Save User"
+    account_links:
+      created: "Created Account Links"
+      other: "Other Account Links"
     new:
       header: "New User"
       password: "Password"
@@ -702,7 +709,6 @@ en:
 
     show:
       account_links:
-        label: "Account Links"
         add: "Add Account Link"
         links: "Links"
         actions: "Actions"

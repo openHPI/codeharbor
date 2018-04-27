@@ -21,10 +21,11 @@
       .row-label = t('account.client_secret')
       .row-value = @account_link.client_secret
   .actions.btn-group
-    = link_to edit_user_account_link_path(@user, @account_link), class: 'btn btn-important' do
-      i.fa.fa-edit
-      = ' ' + t('account.button.edit')
-    = link_to user_account_link_path(@user, @account_link), class: 'btn btn-important', method: :delete, data: {confirm: 'Are you sure?'} do
-      i.fa.fa-trash style=("color:#800000")
-      = ' ' + t('account.button.delete')
+    - if can? :edit, @account_link
+      = link_to edit_user_account_link_path(@user, @account_link), class: 'btn btn-important' do
+        i.fa.fa-edit
+        = ' ' + t('account.button.edit')
+      = link_to user_account_link_path(@user, @account_link), class: 'btn btn-important', method: :delete, data: {confirm: 'Are you sure?'} do
+        i.fa.fa-trash style=("color:#800000")
+        = ' ' + t('account.button.delete')
     = link_to t('account.button.back'), user_path(@user), class: 'btn btn-important'

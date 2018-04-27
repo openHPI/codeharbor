@@ -9,9 +9,13 @@ class Ability
 
       #AccountLink
       can [:new], AccountLink
-      can [:manage], AccountLink do |account_link|
-        account_link.user = user
+      can [:view], AccountLink do |account_link|
+        account_link.external_users.include?(user)
       end
+      can [:manage], AccountLink do |account_link|
+        account_link.user == user
+      end
+
       #Answer
       can [:new], Answer
       can [:manage], Answer do |answer|
@@ -61,11 +65,11 @@ class Ability
       end
 
       #User
-      can [:create, :view, :show], User
+      can [:create, :view, :show, :read], User
       can [:message], User do |this_user|
         this_user != user
       end
-      can [:edit, :update, :delete, :manage_accountlinks], User do |this_user|
+      can [:edit, :update, :delete, :manage_accountlinks, :remove_account_link], User do |this_user|
         this_user == user
       end
 

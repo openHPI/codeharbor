@@ -1,7 +1,14 @@
 class AccountLinksController < ApplicationController
-  before_action :set_user
-  before_action :set_account_link, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource :user
+  load_and_authorize_resource :account_links, through: :user
+  skip_load_and_authorize_resource :only => [:remove_account_link]
 
+  before_action :set_user
+  before_action :set_account_link, only: [:show, :edit, :update, :destroy, :remove_account_link]
+
+  rescue_from CanCan::AccessDenied do |_exception|
+    redirect_to root_path, alert: t('controllers.user.authorization')
+  end
   # GET /account_links
   # GET /account_links.json
   def index
@@ -59,6 +66,18 @@ class AccountLinksController < ApplicationController
     respond_to do |format|
       format.html { redirect_to @account_link.user, notice: 'Account link was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def remove_account_link
+    respond_to do |format|
+      if @account_link.external_users.delete(@user)
+        format.html { redirect_to @user, notice: t('controllers.user.remove_account_link.success') }
+        format.json { render :show, status: :ok, location: @user }
+      else
+        format.html { redirect_to @user, alert: t('controllers.user.remove_account_link.fail') }
+        format.json { render :show, status: :ok, location: @user }
+      end
     end
   end
 

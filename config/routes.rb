@@ -82,7 +82,9 @@ Rails.application.routes.draw do
   end
   resources :label_categories
   resources :users do
-    resources :account_links
+    resources :account_links do
+      post :remove_account_link, :on => :member
+    end
     resources :messages do
       get :delete, :on => :member
       get :reply, :on => :collection

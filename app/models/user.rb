@@ -9,10 +9,10 @@ class User < ApplicationRecord
   validates :first_name, :last_name, presence: true
   has_secure_password
 
-  has_and_belongs_to_many :account_links
+  has_and_belongs_to_many :external_account_links, class_name: "AccountLink"
   has_and_belongs_to_many :collections, dependent: :destroy
   has_many :reports, dependent: :destroy
-  has_many :created_account_links, foreign_key: "user_id", class_name: "AccountLink"
+  has_many :account_links, foreign_key: "user_id", class_name: "AccountLink"
   has_many :exercises
   has_one :cart, dependent: :destroy
   has_many :exercise_authors, dependent: :destroy
@@ -127,6 +127,14 @@ class User < ApplicationRecord
     Message.where(sender: self, param_type: ['exercise', 'group', 'collection']).destroy_all
   end
 
+  def shared_account_link_with(user)
+    account_link = AccountLink.find_by(user: self)
+    if account_link.users.include?(user)
+      true
+    else
+      false
+    end
+  end
   def unread_messages_count
     Message.where(recipient: self, recipient_status: 'u').count.to_s
   end
