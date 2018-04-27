@@ -57,6 +57,13 @@
             i.fa.fa-plus
             = ' '
             = t('users.show.account_links.add')
+          = ' '
+          = button_tag type: 'button', class: 'btn btn-default btn-xs show-description', style: 'margin-bottom: 10px' do
+            i.fa.fa-question
+          .account-link-description.info-box
+            span.fa.fa-info-circle
+            = t('account.description_html')
+            = link_to "More Information...", account_link_documentation_path
           - @user.account_links.each do |account_link|
             .table-list
               = account_link.readable

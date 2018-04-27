@@ -10,26 +10,26 @@
             = message
   .field-element.form-group
     = f.label :push_url, t('account.pushURL'), class: 'form-label'
-    = f.text_field :push_url, class: 'form-control'
+    = f.text_field :push_url, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('account.info.push_url'), class: 'form-control'
   .field-element.form-group
     = f.label :account_name, t('account.name'), class: 'form-label'
-    = f.text_field :account_name, class: 'form-control'
+    = f.text_field :account_name, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('account.info.name'), class: 'form-control'
   .field-element.form-group
     = f.label :oauth2_token, t('account.token'), class: 'form-label'
     .input-group
-      = f.text_field :oauth2_token, class: 'form-control oauth2-token'
+      = f.text_field :oauth2_token, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('account.info.token'), class: 'form-control oauth2-token'
       .input-group-btn
         = button_tag "Generate", type: 'button', class: 'generate-oauth2-token btn btn-default'
   .field-element.form-group
     = f.label :client_id, t('account.client_id'), class: 'form-label'
     .input-group
-      = f.text_field :client_id, class: 'form-control client-id'
+      = f.text_field :client_id, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('account.info.client_id'), class: 'form-control client-id'
       .input-group-btn
         = button_tag "Generate", type: 'button', class: 'generate-client-id btn btn-default'
   .field-element.form-group
     = f.label :client_secret, t('account.client_secret'), class: 'form-label'
     .input-group
-      = f.text_field :client_secret, class: 'form-control client-secret'
+      = f.text_field :client_secret, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('account.info.client_secret'), class: 'form-control client-secret'
       .input-group-btn
         = button_tag "Generate", type: 'button', class: 'generate-client-secret btn btn-default'
   .form-group

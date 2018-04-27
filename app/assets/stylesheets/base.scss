@@ -58,6 +58,22 @@ body:before {
   }
 }
 
+.info-box {
+  display: none;
+  background: #f5f5f5;
+  border: 1px solid #e5e5e5;
+  padding: 8px 28px;
+  margin-bottom: 10px;
+  border-radius: 2px;
+
+  span {
+    font-size: 16px;
+    //display: block;
+    margin-left: -20px;
+    margin-right: 6px;
+  }
+}
+
 .show-table {
   margin-bottom: 30px;
   width: 100%;

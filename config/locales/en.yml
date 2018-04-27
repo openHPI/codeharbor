@@ -157,6 +157,55 @@ en:
     token: "OAuth2 token"
     client_id: "Client ID"
     client_secret: "Client Secret"
+    documentation:
+      header: About autograders and account links
+      paragraph_html: |
+        <h3>About account links:</h3>
+        <p>
+          Account links define a connection to an autograder. <br/>
+          If you have an account link you can simply export exercises available to you into the autograder. <br/>
+          You can create your own account link if you have the push_url of an autograder that can handle OAuth2 post requests.</br>
+        </p>
+        <h3>You want to connect an autograder that already has OAuth2 and ProFormA-XML support:</h3>
+        <p>
+          If the autograder can import exercises sent via OAuth2 request in the ProFormA-XML format you will need the following things: <br/>
+          1. Push-url: The autograder needs to have an ULR codeharbor can post the exercise to. <br/>
+          2. OAuth2-token: The autograder must be able to link a token to your account to authorize exercises that will be pushed there. <br/>
+             If you do not need a specific token you can generate a token when creating an account link on codeharbor side or use whatever you want <br/>
+             as long as it is the same token on codeharbor and the autograders side.<br>
+          You also have to create a client-id and client-secret for an account link on codeharbor side. <br/>
+          If the autograder does not require a specific one you can auto-generate them.<br/>
+        </p>
+        <h3>How to prepare your own autograder:</h3>
+        <p>
+          Codeharbor uses the OAuth 2.0 protocol to send exercises via a post request. <a href="https://oauth.net/2/">https://oauth.net/2/</a><br/>
+          Codeharbor is the client in this case, your autograder the resource server and you are the resource owner.
+          When you are exporting an exercise, codeharbor first generates an XML-file complying with the ProFormA-XML standard for exchanging exercises. <a href="https://github.com/ProFormA/taskxml">https://github.com/ProFormA/taskxml</a>
+          Then it will make a post request to the URL you chose as the push_url. The XML-file will be in the request body and the OAuth2 token in the request headers ("request.headers['Authorization']"). <br/>
+          In your autograder you need to make sure that the OAuth2 token is validated and the corresponding user found. We recommend to add an interface for users to add an OAuth2-token. <br/>
+          The XML-file in the request-body needs to be parsed into the database. Since we are using the ProFormA-XML format you can parse the xml using xpath. <br/>
+          Finally, please respond with a 200 status code if everything went okay or a 400 if it did not. <br/>
+        </p>
+
+
+    description_html: |
+      Account links define a connection to an autograder. <br/>
+      If you have an account link you can simply export exercises available to you into the autograder. <br/>
+      You can create your own account link if you have the push_url of an autograder that can handle OAuth2 post requests.</br>
+      For more information on how to establish a connection to an autograder please click the following link:</br>
+
+    info:
+      push_url: |
+        The address on the autograder side your exercise can be exported to. If you don't know what to write here, ask the autograders admins.
+      name: |
+        Can be anything to Identify your account link.
+      token: |
+        Will be used to authenticate your export request. Has to be the same on both sides.
+      client_id:
+        Will be sent with your token. Can be automatically generated.
+      client_secret:
+        Will be sent with your token. Can be automatically generated.
+
 
     button:
       new: "New Account Link"

@@ -1,7 +1,6 @@
 class AccountLinksController < ApplicationController
   load_and_authorize_resource :user
   load_and_authorize_resource :account_links, through: :user
-  skip_load_and_authorize_resource :only => [:remove_account_link]
 
   before_action :set_user
   before_action :set_account_link, only: [:show, :edit, :update, :destroy, :remove_account_link]

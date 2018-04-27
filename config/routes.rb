@@ -56,6 +56,7 @@ Rails.application.routes.draw do
 
   get 'my_cart', to: 'carts#my_cart', as: 'my_cart'
   get 'about', to: 'home#about', as: 'about'
+  get 'account_link_documentation', to: 'home#account_link_documentation', as: 'account_link_documentation'
 
   get 'exercises/:id/duplicate', to: 'exercises#duplicate', as: 'duplicate_exercise'
   post 'exercises/:id/add_to_cart', to: 'exercises#add_to_cart', as: 'add_to_cart'

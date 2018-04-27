@@ -6,4 +6,8 @@ class HomeController < ApplicationController
   def about
     render 'about'
   end
+
+  def account_link_documentation
+    render 'account_link_documentation'
+  end
 end

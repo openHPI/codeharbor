@@ -9,4 +9,8 @@ ready =->
     $('.hidden-avatar-present').val(false)
     $('.file-input').show()
 
+  $('.show-description').on 'click', (event) ->
+    event.preventDefault()
+    $('.account-link-description').toggle()
+
 $(document).on('turbolinks:load', ready)
