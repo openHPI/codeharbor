@@ -40,7 +40,10 @@
         = file.hidden_field :attachment_present, value: attachment_present, class: 'hidden-attachment-present'
         - if attachment_present
           .btn-group
-            = link_to file.object.attachment.original_filename, download_attachment_path(file.object), class: 'btn btn-default', style: "border-right: none"
+            - if file.object.has_attached_image?
+              = image_tag file.object.attachment.url(:large)
+            - else
+              = link_to file.object.attachment.original_filename, download_attachment_path(file.object), class: 'btn btn-default', style: "border-right: none", 'data-turbolinks' => false
             = link_to '#', class: 'btn btn-default remove-attachment', style: "border-left: none; margin-right: 5px;" do
               i.fa.fa-remove style=("color: gray")
         .alternative style=editor_display

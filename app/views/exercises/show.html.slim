@@ -169,12 +169,15 @@ legend
           .editor_readonly
             = file.content
       - else
-        .row
+        .row.vertical
           .row-label
             = t('exercises.files.attachment')
             | :
           .row-value
-            = link_to file.attachment.original_filename, download_attachment_pa.row-label(file), 'data-turbolinks': false
+            - if file.has_attached_image?
+              = image_tag(file.attachment.url(:large))
+            - else
+              = link_to file.attachment.original_filename, download_attachment_path(file), 'data-turbolinks': false
       .row
         .row-label
           = t('exercises.files.name')
@@ -192,7 +195,7 @@ legend
           = t('exercises.files.extension')
           | :
         .row-value
-          = file.file_type.name_with_extension
+          = file.file_type.name_with_extension if file.file_type
       .row
         .row-label
           = t('exercises.files.role')
@@ -216,12 +219,15 @@ legend
         .editor_readonly
           = test.content
     - else
-      .row
+      .row.vertical
         .row-label
           = t('exercises.files.attachment')
           | :
         .row-value
-          = link_to test.attachment.original_filename, download_attachment_path(test.exercise_file), 'data-turbolinks': false
+          - if test.has_attached_image?
+            = image_tag(test.attachment.url(:large))
+          - else
+            = link_to test.attachment.original_filename, download_attachment_path(test.exercise_file), 'data-turbolinks': false
     .row
       .row-label
         = t('exercises.files.name')
@@ -240,7 +246,7 @@ legend
         | :
       .row-value
         = test.file_type.name_with_extension if test.file_type
-    .row
+    .row.vertical
       .row-label
         = t('exercises.tests.feedback')
         | :
