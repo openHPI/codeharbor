@@ -8,6 +8,9 @@ class CartsController < ApplicationController
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.carts.authorization')
   end
+
+  include ExerciseExport
+
   # GET /carts
   # GET /carts.json
   def index
@@ -85,22 +88,48 @@ class CartsController < ApplicationController
     end
   end
 
+  def push_cart
+    account_link = AccountLink.find(params[:account_link])
+    all_errors = Array.new
+    @cart.exercises.each do |exercise|
+      error = push_exercise(exercise, account_link)
+      if error.present?
+        all_errors << error
+      end
+    end
+    if all_errors.empty?
+      redirect_to @cart, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
+    else
+      all_errors.each do |error|
+        puts error
+      end
+      redirect_to @cart, alert: "Your account_link #{account_link.readable} does not seem to be working."
+    end
+  end
+
   def download_all
     filename = t('controllers.carts.zip')
 
     #This is the tricky part
     #Initialize the temp file as a zip file
 
+
     stringio = Zip::OutputStream.write_buffer do |zio|
       @cart.exercises.each do |exercise|
-        zio.put_next_entry("#{exercise.title}.xml")
-        xml_generator = Proforma::XmlGenerator.new
-        zio.write xml_generator.generate_xml(exercise)
+        zip_file = create_exercise_zip(exercise)
+        if zip_file[:errors].any?
+          zip_file[:errors].each do |error|
+            puts error.message
+          end
+        else
+          zio.put_next_entry(zip_file[:filename])
+          zio.write zip_file[:data]
+        end
       end
     end
     binary_data = stringio.string
 
-    send_data(binary_data, :type => 'application/zip', :filename => filename)
+    send_data(binary_data, :type => 'application/zip', :filename => filename, :disposition => 'attachment')
 
   end
 

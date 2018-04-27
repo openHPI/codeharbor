@@ -250,7 +250,7 @@ class Exercise < ApplicationRecord
         end
       else
         unless destroy
-          file = ExerciseFile.new(file_permit(array))
+          file = exercise_files.new(file_permit(array))
           file.purpose = 'test'
           test = Test.new(test_permit(array))
           test.exercise_file =  file

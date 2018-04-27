@@ -10,10 +10,12 @@ Rails.application.routes.draw do
   resources :carts do
     member do
       get :download_all
+      post :push_cart
     end
   end
   resources :collections do
     member do
+      post :push_collection
       get :download_all
       post :share
       get :view_shared

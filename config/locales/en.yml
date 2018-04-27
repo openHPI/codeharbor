@@ -141,7 +141,11 @@ en:
   time_ago: "%{time} ago"
 
   shared:
-    back: "BacK"
+    back: "Back"
+    export: "Export"
+    download_zip: "Download Zip"
+    export_to: "Export to"
+
   account:
     show_header: "Account Link"
     pushURL: "Push URL"

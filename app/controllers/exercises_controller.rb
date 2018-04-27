@@ -10,6 +10,8 @@ class ExercisesController < ApplicationController
   before_action :set_search, only: [:index]
   skip_before_action :verify_authenticity_token, only: [:import_proforma_xml]
 
+  include ExerciseExport
+
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.exercise.authorization')
   end
@@ -170,50 +172,27 @@ class ExercisesController < ApplicationController
 
   def push_external
     account_link = AccountLink.find(params[:account_link])
-    oauth2_client = OAuth2::Client.new(account_link.client_id, account_link.client_secret, :site => account_link.push_url)
-    oauth2_token = account_link[:oauth2_token]
-    token = OAuth2::AccessToken.from_hash(oauth2_client, :access_token => oauth2_token)
-    xml_generator = Proforma::XmlGenerator.new
-    xml_document = xml_generator.generate_xml(@exercise)
-    begin
-      token.post(account_link.push_url, {body: xml_document, headers: {'Content-Type' => 'text/xml'}})
+    error = push_exercise(@exercise, account_link)
+    if error.nil?
       redirect_to @exercise, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
-    rescue
+    else
+      puts error
       redirect_to @exercise, alert: "Your account_link #{account_link.readable} does not seem to be working."
     end
   end
 
   def download_exercise
-    xsd = Nokogiri::XML::Schema(File.read('app/assets/taskxml.xsd'))
-    xml_generator = Proforma::XmlGenerator.new
-    xml_document = xml_generator.generate_xml(@exercise)
-    doc = Nokogiri::XML(xml_document)
 
-    errors = xsd.validate(doc)
-
-    title = @exercise.title
-    title = title.tr('.,:*|"<>/\\', '')
-    title = title.gsub /[ (){}\[\]]/, '_'
-    filename = "#{title}.zip"
-
-    if errors.any?
-      errors.each do |error|
+    zip_file = create_exercise_zip(@exercise)
+    if zip_file[:errors].any?
+      zip_file[:errors].each do |error|
         puts error.message
       end
       redirect_to @exercise, alert: t('controllers.exercise.download_error')
     else
-      stringio = Zip::OutputStream.write_buffer do |zio|
-        zio.put_next_entry('task.xml')
-        zio.write xml_document
-        @exercise.exercise_files.each do |file|
-          zio.put_next_entry(file.attachment.original_filename)
-          zio.write Paperclip.io_adapters.for(file.attachment).read
-        end
-      end
-      binary_data = stringio.string
       downloads_new = @exercise.downloads+1
       @exercise.update(downloads: downloads_new)
-      send_data(binary_data, :type => 'application/zip', :filename => filename, :disposition => 'attachment')
+      send_data(zip_file[:data], :type => 'application/zip', :filename => zip_file[:filename], :disposition => 'attachment' )
     end
   end
 
