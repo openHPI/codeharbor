@@ -5,7 +5,7 @@ FactoryBot.define do
     
     after(:create) do |test|
       create(:junit_testing_framework, tests: [test])
-      test_file = create(:junit_test_file)
+      test_file = create(:junit_test_file, exercise: test.exercise)
       test.exercise_file = test_file
       test.save
     end
@@ -16,7 +16,7 @@ FactoryBot.define do
 
     after(:create) do |test|
       create(:junit_testing_framework, tests: [test])
-      test_file = create(:codeharbor_test_file)
+      test_file = create(:codeharbor_test_file, exercise: test.exercise)
       test.exercise_file = test_file
       test.save
     end

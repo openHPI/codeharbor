@@ -35,7 +35,7 @@ RSpec.describe Exercise, type: :model do
         files = ExerciseFile.where(exercise_id: exercise.id)
         descriptions = Description.where(exercise_id: exercise.id)
         expect(tests.size()).to be 1
-        expect(files.size()).to be 1 #Only actual file
+        expect(files.size()).to be 2 #Actual file and test.exercise_file
         expect(test.exercise_file).to be_truthy
         expect(descriptions.size()).to be 2
       end
