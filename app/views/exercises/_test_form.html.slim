@@ -1,46 +1,23 @@
 - test.object.build_exercise_file unless test.object.exercise_file
-- attachment_present = test.object.exercise_file.attachment.exists?
-- if attachment_present
-  - editor_display = "display: none"
-  - attachment_display = "display: block"
-- else
-  - editor_display = "display: block"
-  - attachment_display = "display: none"
-
-.file-container style="margin-left: 10px;"
+= test.fields_for :exercise_file do |file|
   .field-element
-    = f.label :name, t('exercises.files.name'), class:'form-label'
-    = test.text_field :name, class: 'form-control file-name'
+    = f.label :name, t('exercises.files.name'), class: 'form-label'
+    = file.text_field :name, class: 'form-control file-name'
   .field-element
-    = f.label :path, t('exercises.files.path'), class:'form-label'
-    = test.text_field :path, size: 40, class: 'form-control'
-  .field-element
-    = f.label :file_types_id, t('exercises.files.extension'), class:'form-label'
-    = test.select :file_type_id, options_for_select(FileType.all.map {|ft| [ft.name_with_extension, ft.id, {'data-extension' => ft.file_extension }]}, test.object.file_type_id), {}, class: 'file-type'
-  .field-element
-    = f.label :feedback_message, t('exercises.tests.feedback'), class: 'form-label'
-    = test.text_area :feedback_message, class: 'form-control'
-  .field-element
-    = f.label :testing_framework, t('exercises.tests.framework'), class: 'form-label'
-    = test.collection_select :testing_framework_id, TestingFramework.all, :id, :name, {}, {class: 'form-control'}
-  .field-element
-    = f.label :content, t('exercises.files.content'), class: 'form-label', style: 'margin-bottom: 15px'
-    a.btn.btn-main.btn-xs.toggle-input data={text_initial: t('exercises.files.upload_file'), text_toggled: t('shared.back')} href='#'
-      = attachment_present ? t('shared.back') : t('exercises.files.upload_file')
-    .toggle-divs
-      .edit style=editor_display
-        .editor
-          = test.text_area :content
-        = test.text_area :content, disabled: attachment_present, class: 'hidden form-control'
-      .attachment style=attachment_display
-        = test.hidden_field :attachment_present, value: attachment_present, class: 'hidden-attachment-present'
-        - if attachment_present
-          .btn-group
-            - if test.object.has_attached_image?
-              = image_tag test.object.attachment.url(:large)
-            - else
-              = link_to test.object.attachment.original_filename, download_attachment_path(test.object.exercise_file), class: 'btn btn-default', style: "border-right: none", 'data-turbolinks' => false
-            = link_to '#', class: 'btn btn-default remove-attachment', style: "border-left: none; margin-right: 5px;" do
-              i.fa.fa-remove style=("color: gray")
-        .alternative style=editor_display
-          = test.file_field :content, disabled: !attachment_present, class: 'alternative-input form-control'
+    = f.label :path, t('exercises.files.path'), class: 'form-label'
+    = file.text_field :path, size: 40, class: 'form-control'
+  .field-row
+    .field-element-10
+      = f.label :file_types_id, t('exercises.files.extension'), class: 'form-label'
+      = file.select :file_type_id, options_for_select(FileType.all.map { |ft| [ft.name_with_extension, ft.id, {'data-extension' => ft.file_extension}] }, file.object.file_type_id), {}, class: 'file-type'
+    .field-element-2
+      = render 'permissions', file: file
+.field-element
+  = f.label :feedback_message, t('exercises.tests.feedback'), class: 'form-label'
+  = test.text_area :feedback_message, class: 'form-control'
+.field-element
+  = f.label :testing_framework, t('exercises.tests.framework'), class: 'form-label'
+  = test.collection_select :testing_framework_id, TestingFramework.all, :id, :name, {}, {class: 'form-control'}
+.field-element
+  = test.fields_for :exercise_file do |file|
+    = render 'editor', f:f, file: file

@@ -1,51 +1,18 @@
-- attachment_present = file.object.attachment.exists?
-- if attachment_present
-  - editor_display = "display: none"
-  - attachment_display = "display: block"
-- else
-  - editor_display = "display: block"
-  - attachment_display = "display: none"
-
-.file-container style="margin-left: 10px;"
-  .field-element
-    = f.label :name, t('exercises.files.name'), class:'form-label'
-    = file.text_field :name, class: 'form-control file-name'
-  .field-element
-    = f.label :path, t('exercises.files.path'), class:'form-label'
-    = file.text_field :path, size: 40, class: 'form-control'
-  .field-element
+.field-element
+  = f.label :name, t('exercises.files.name'), class:'form-label'
+  = file.text_field :name, class: 'form-control file-name'
+.field-element
+  = f.label :path, t('exercises.files.path'), class:'form-label'
+  = file.text_field :path, size: 40, class: 'form-control'
+.field-row
+  .field-element-5
     = f.label :file_types_id, t('exercises.files.extension'), class:'form-label'
     = file.select :file_type_id, options_for_select(FileType.all.map {|ft| [ft.name_with_extension, ft.id, {'data-extension' => ft.file_extension }]}, file.object.file_type_id), {}, class: 'file-type'
-  .field-element
+  .field-element-5
     = f.label :role, 'Role', class:'form-label'
-    = file.select :role, ExerciseFile::ROLES, {}, class: 'form-control'
-  .field-element
-    = f.label :hidden, 'Hidden', class:'form-label'
-    br
-    = file.check_box :hidden
-  .field-element
-    = f.label :read_only, 'Read only', class:'form-label'
-    br
-    = file.check_box :read_only
-  .field-element
-    = f.label :content, t('exercises.files.content'), class: 'form-label', style: 'margin-bottom: 15px'
-    a.btn.btn-main.btn-xs.toggle-input data={text_initial: t('exercises.files.upload_file'), text_toggled: t('shared.back')} href='#'
-      = file.object.attachment.exists? ? t('shared.back') : t('exercises.files.upload_file')
-    .toggle-divs
-      .edit style=editor_display
-        .editor
-          = file.text_area :content
-        = file.text_area :content, disabled: attachment_present, class: 'hidden form-control'
-      .attachment style=attachment_display
-        = file.hidden_field :attachment_present, value: attachment_present, class: 'hidden-attachment-present'
-        - if attachment_present
-          .btn-group
-            - if file.object.has_attached_image?
-              = image_tag file.object.attachment.url(:large)
-            - else
-              = link_to file.object.attachment.original_filename, download_attachment_path(file.object), class: 'btn btn-default', style: "border-right: none", 'data-turbolinks' => false
-            = link_to '#', class: 'btn btn-default remove-attachment', style: "border-left: none; margin-right: 5px;" do
-              i.fa.fa-remove style=("color: gray")
-        .alternative style=editor_display
-          = file.file_field :content, disabled: !attachment_present, class: 'alternative-input form-control'
+    = file.select :role, ExerciseFile::ROLES, {}, class: 'file-role'
+  .field-element-2
+    = render 'permissions', file: file
+.field-element
+  = render 'editor', f:f, file: file
 

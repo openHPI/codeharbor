@@ -25,8 +25,8 @@
   .panel.panel-default style=("margin-top: 20px")
     .panel-heading
       h3.panel-title
-        span
-          = exercise.title
+        span data-toggle="tooltip" data-placement="bottom" title="#{exercise.title}"
+          = truncate(exercise.title, length: 100)
         span.star-rating.pull-right
           small.number-rating
             = exercise.average_rating.round(1)
@@ -55,7 +55,7 @@
               = t('exercises.defaults.no_labels')
           - else
             - exercise.labels.each do |label|
-              .exerciseLabel style=("background-color: #{'#' + label.color.to_s}; color: white;")
+              .exercise_label style=("background-color: #{'#' + label.color.to_s}; color: #{'#' + label.font_color.to_s};")
                 = label.name
       .exercise-buttons.btn-group-vertical.pull-right aria-label="..." role="group"
         - if can? :read, exercise

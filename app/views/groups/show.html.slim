@@ -99,6 +99,8 @@
 
   br
   .actions.btn-group[role="group"]
+    - if can? :request_access, @group
+      = link_to t('groups.button.request'), request_access_path(@group), class: 'btn btn-important'
     - if can? :edit, @group
       = link_to edit_group_path(@group), class: 'btn btn-important' do
         i.fa.fa-edit
@@ -106,7 +108,8 @@
       = link_to group_path(@group), class: 'btn btn-important', method: :delete, data: {confirm: 'Are you sure?'} do
         i.fa.fa-trash style=("color:#800000")
         = ' ' + t('groups.button.delete')
-    = link_to t('groups.button.leave'), leave_group_path(@group), class: 'btn btn-important', data: {confirm: 'Are you sure?'}
+    - if can? :leave, @group
+      = link_to t('groups.button.leave'), leave_group_path(@group), class: 'btn btn-important', data: {confirm: 'Are you sure?'}
     = link_to t('groups.button.back'), :back, class: 'btn btn-important'
 
 - else

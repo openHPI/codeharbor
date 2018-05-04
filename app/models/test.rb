@@ -2,6 +2,7 @@ class Test < ApplicationRecord
   belongs_to :testing_framework
   belongs_to :exercise
   belongs_to :exercise_file
+  accepts_nested_attributes_for :exercise_file, allow_destroy: true
 
   def content
     content = ''
@@ -39,5 +40,9 @@ class Test < ApplicationRecord
     else
       false
     end
+  end
+
+  def full_file_name
+    exercise_file.try(:full_file_name)
   end
 end

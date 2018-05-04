@@ -246,11 +246,11 @@ class Exercise < ApplicationRecord
           test.destroy
         else
           test.update(test_permit(array))
-          test.exercise_file.update(file_permit(array))
+          test.exercise_file.update(file_permit(array[:exercise_file_attributes]))
         end
       else
         unless destroy
-          file = exercise_files.new(file_permit(array))
+          file = exercise_files.new(file_permit(array[:exercise_file_attributes]))
           file.purpose = 'test'
           test = Test.new(test_permit(array))
           test.exercise_file =  file
@@ -261,12 +261,6 @@ class Exercise < ApplicationRecord
   end
 
   def update_file_params(file_attributes)
-    puts file_attributes[:attachment].inspect
-    puts file_attributes[:attachment_present]
-    puts file_attributes[:content].inspect
-
-    #file_attributes[:file_type] = FileType.find_by(file_extension: file_attributes[:file_type])
-
     if file_attributes[:content].respond_to?(:read)
       file_attributes[:attachment] = file_attributes[:content]
       file_attributes[:content] = nil

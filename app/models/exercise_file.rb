@@ -13,7 +13,7 @@ class ExerciseFile < ApplicationRecord
   def full_file_name
     filename = ''
     filename += "#{self.path}/" unless self.path.blank?
-    filename += "#{self.name}#{self.file_type.file_extension}"
+    filename += "#{self.name}#{self.file_type.try(:file_extension)}"
     return filename
   end
 

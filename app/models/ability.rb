@@ -5,6 +5,12 @@ class Ability
     if user
       if user.role == 'admin'
         can :manage, :all
+
+        #Define Abilities admins cannot do
+        #Group
+        cannot :leave, Group do |group|
+          !user.in_group?(group)
+        end
       end
 
       #AccountLink
@@ -62,6 +68,9 @@ class Ability
       end
       can [:manage], Group do |group|
         user.in_group?(group, as: 'admin')
+      end
+      cannot [:request_access], Group do |group|
+        user.in_group?(group)
       end
 
       #User

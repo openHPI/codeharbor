@@ -16,10 +16,16 @@ validateForm = (e) ->
 
 loadSelect2 = ->
 
+  $('.file-role').select2
+    tags: false
+    width: '100%'
+    multiple: false
+
   $('#select2-control').select2
     tags: false
     width: '20%'
     multiple: false
+
   $('.file-type').select2
     tags: false
     width: '100%'
@@ -53,8 +59,6 @@ loadSelect2 = ->
       'You can only add 5 topics'
 
 ready =->
-
-  $('[data-toggle="tooltip"]').tooltip();
 
   $(".change-hidden-field").click ->
     value = (this).id
@@ -158,12 +162,16 @@ ready =->
     if fullPath
       document.getElementById('file-label').innerHTML = get_filename_from_full_path(fullPath)
 
-  $('.toggle').on 'click', ->
-    $($(this).parent().next()).toggle()
-    if $(this).hasClass('fa-caret-down')
-      $(this).removeClass('fa-caret-down').addClass('fa-caret-up')
+  $('.toggle-next').on 'click', ->
+    $next = $(this).next()
+    $next.toggle()
+    $caret = $(this).find('span.fa')
+    if $caret.hasClass('fa-caret-down')
+      $caret.removeClass('fa-caret-down').addClass('fa-caret-up')
+      $(this).removeClass('closed')
     else
-      $(this).removeClass('fa-caret-up').addClass('fa-caret-down')
+      $caret.removeClass('fa-caret-up').addClass('fa-caret-down')
+      $(this).addClass('closed')
 
   $('.comment-button').on 'click', ->
     exercise_id = this.getAttribute("data-exercise")

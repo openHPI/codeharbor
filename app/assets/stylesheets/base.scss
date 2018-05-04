@@ -50,8 +50,10 @@ body:before {
 
 
 .header {
-  height: 40px;
+  //height: 40px;
   margin-bottom: 30px;
+  display: inline-block;
+  width: 100%;
 
   .header-btn {
     padding: 9px 15px;
@@ -84,6 +86,7 @@ body:before {
   float: left;
 
   .table-header {
+    height: 40px;
     text-align: left;
     background-color: #f5f5f5;
     margin: -8px -8px;
@@ -95,6 +98,11 @@ body:before {
     border-bottom: 1px #dddddd solid;
     color: #333;
   }
+  .table-header.closed {
+    margin-bottom: -8px;
+    border-bottom: none;
+  }
+
   .row {
     display: block;
     margin: 8px 2%;
@@ -111,14 +119,14 @@ body:before {
       line-height: 18px;
       color: #333;
       display: inline;
-      padding: 4px 8px;
+      padding: 6px 8px;
       min-width: 80px;
       border-right: 1px #dddddd solid;
     }
     .row-value, .inner-section .row-value{
       float: left;
       text-align: left;
-      padding: 4px 8px;
+      padding: 6px 8px;
       display: inline;
     }
 
@@ -138,7 +146,9 @@ body:before {
     }
     .row-value {
       width: 100%;
-      display: blocK;
+      display: block;
+      word-wrap: break-word;
+      overflow: auto;
     }
   }
 }
@@ -187,14 +197,12 @@ table.vertical-table {
   color: #800000;
 }
 .std-heading {
-  margin: 0px 0px 0px 20px;
   font-size: 30px;
   height: 40px;
-  width: 200px;
+  width: 100%;
   color: #444444;
   padding-top: 5px;
   padding-bottom: 5px;
-  padding-right: 50%;
   display: inline;
 }
 
@@ -248,6 +256,47 @@ table.vertical-table {
   text-align: left;
 }
 
+.field-row {
+  display: block;
+  margin-bottom: 15px;
+  padding-left: 10px;
+  width: 100%;
+
+  div {
+    display: inline-block;
+    padding-left: 5px;
+  }
+  div:first-child {
+    padding-left: 0px;
+  }
+  .field-element-10 {
+    width: 83.3%
+  }
+  .field-element-9{
+    width: 75%;
+  }
+  .field-element-8{
+    width: 66.6%;
+  }
+  .field-element-6{
+    width: 50%;
+  }
+  .field-element-5 {
+    width: 41.6%;
+  }
+  .field-element-4{
+    width: 33.3%;
+  }
+  .field-element-3{
+   width: 25%;
+  }
+  .field-element-2{
+    width: 16.6%;
+  }
+  .field-element-1 {
+    width: 8.3%;
+  }
+}
 .field-element {
   margin-bottom: 15px;
   padding-left: 10px;

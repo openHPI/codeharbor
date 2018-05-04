@@ -22,7 +22,7 @@ RSpec.describe Exercise, type: :model do
 
         params = ActionController::Parameters.new({
           :tests_attributes => 
-            {"0" => {name: 'test', file_type_id: file_type.id , :content =>'this is some test', :feedback_message => 'not_working', :_destroy => false, :testing_framework => {:name => 'pytest', :id => '12345678'}}},
+            {"0" => {:exercise_file_attributes => {name: 'test', file_type_id: file_type.id , :content =>'this is some test'}, :feedback_message => 'not_working', :_destroy => false, :testing_framework => {:name => 'pytest', :id => '12345678'}}},
           :exercise_files_attributes =>
             {"0" => {:role => 'Main File', :content => 'some new exercise', :path => 'some/path/', :purpose => 'a new purpose',
               :name => 'awesome', :file_type_id => file_type.id, :_destroy => false}},
