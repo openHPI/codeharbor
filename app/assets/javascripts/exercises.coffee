@@ -177,71 +177,80 @@ ready =->
     exercise_id = this.getAttribute("data-exercise")
     if exercise_id
       url = window.location.pathname + '/' + exercise_id + "/comments"
-      comment_box = $(".comment-box[data-exercise=#{exercise_id}]")
+      $comment_box = $(".comment-box[data-exercise=#{exercise_id}]")
+      $related_box = $(".related-box[data-exercise=#{exercise_id}]")
     else
       url = window.location.pathname + "/comments"
-      comment_box = $(".comment-box")
-    caret = $(this).children('.my-caret')
-    icon = $(this).children('.wait')
+      $comment_box = $(".comment-box")
+    $caret = $(this).children('.my-caret')
+    $icon = $(this).children('.wait')
 
-    if $(caret).hasClass('fa-caret-down')
-      $(caret).removeClass('fa-caret-down').addClass('fa-caret-up')
+    if $caret.hasClass('fa-caret-down')
+      $caret.removeClass('fa-caret-down').addClass('fa-caret-up')
       $.ajax({
         type: 'GET',
         url: url
         dataType: 'script'
         beforeSend: ->
-          console.log(icon)
-          $(icon).show()
+          $icon.show()
         success: ->
-          $(comment_box).show()
+          if $related_box
+            if $related_box.css('display') != 'none'
+              $related_box.addClass('with-bottom-border')
+          $comment_box.show()
           anchor = document.getElementById('page_end')
           if anchor
             anchor.scrollIntoView(false)
         complete: ->
-          console.log("After")
-          $(icon).hide()
+          $icon.hide()
       })
     else
-      $(caret).removeClass('fa-caret-up').addClass('fa-caret-down')
-      $(comment_box).hide()
+      $caret.removeClass('fa-caret-up').addClass('fa-caret-down')
+      $comment_box.hide()
+      if $related_box
+        $related_box.removeClass('with-bottom-border')
 
   $('.related-button').on 'click', ->
     exercise_id = this.getAttribute("data-exercise")
     if exercise_id
       url = window.location.pathname + '/' + exercise_id + "/related_exercises"
-      related_box = $(".related-box[data-exercise=#{exercise_id}]")
+      $related_box = $(".related-box[data-exercise=#{exercise_id}]")
+      $comment_box = $(".comment-box[data-exercise=#{exercise_id}]")
     else
       url = window.location.pathname + "/related_exercises"
-      related_box = $(".related-box")
-    caret = $(this).children('.my-caret')
-    icon = $(this).children('.wait')
+      $related_box = $(".related-box")
+    $caret = $(this).children('.my-caret')
+    $icon = $(this).children('.wait')
 
-    if $(caret).hasClass('fa-caret-down')
+    if $caret.hasClass('fa-caret-down')
       $.ajax({
         type: 'GET',
         url: url
         dataType: 'script'
         beforeSend: ->
-          $(icon).show()
+          $icon.show()
         success: ->
-          related_exercises = $(related_box).find('.related-exercises')
-          shown_elements = $(related_exercises).slice(0,3)
-          if $(related_exercises).size() > 3
-            $(related_box).find('.slide-right').removeClass('inactive').addClass('active')
-          $(shown_elements).addClass('displayed')
-          $(related_exercises).not(shown_elements).addClass('not-displayed')
-          $(caret).removeClass('fa-caret-down').addClass('fa-caret-up')
-          $(related_box).show()
+          $related_exercises = $related_box.find('.related-exercises')
+          $shown_elements = $related_exercises.slice(0,3)
+          if $related_exercises.size() > 3
+            $related_box.find('.slide-right').removeClass('inactive').addClass('active')
+          $shown_elements.addClass('displayed')
+          $related_exercises.not($shown_elements).addClass('not-displayed')
+          $caret.removeClass('fa-caret-down').addClass('fa-caret-up')
+          if $comment_box
+            if $comment_box.css('display') != 'none'
+              $related_box.addClass('with-bottom-border')
+          $related_box.show()
           anchor = document.getElementById('page_end')
           if anchor
             anchor.scrollIntoView(false)
         complete: ->
-          $(icon).hide()
+          $icon.hide()
       })
     else
-      $(caret).removeClass('fa-caret-up').addClass('fa-caret-down')
-      $(related_box).hide()
+      $caret.removeClass('fa-caret-up').addClass('fa-caret-down')
+      $related_box.hide()
+      $related_box.removeClass('with-bottom-border')
 
   $('.slide-right').on 'click', ->
     if $(this).hasClass('inactive')

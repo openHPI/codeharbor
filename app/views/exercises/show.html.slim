@@ -338,7 +338,7 @@ legend.toggle-next
       = link_to t('exercises.all.duplicate'), duplicate_exercise_path(@exercise), class:'btn btn-default'
 
 .related-panel
-  = button_tag type: 'button', class: 'related-button' do
+  = button_tag type: 'button', class: 'full-window-button related-button' do
     = t('exercises.all.related_exercises')+ ' '
     span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
     span.fa.fa-caret-down.my-caret
@@ -351,7 +351,7 @@ div class=("related-box with-borders") data-exercise=@exercise.id
     = button_tag do
       i.fa.fa-caret-right
 .comments-panel
-  = button_tag type: 'button', class: 'comment-button' do
+  = button_tag type: 'button', class: 'full-window-button comment-button' do
     = t('exercises.all.comments') + ' '
     span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
     span.fa.fa-caret-down.my-caret

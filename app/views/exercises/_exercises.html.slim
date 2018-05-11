@@ -41,6 +41,8 @@
             = ' '
             = exercise.ratings.count
             = ' ' + t('exercises.all.ratings')
+        span.programming-language.pull-right
+          = exercise.execution_environment.language
     .panel-body
       .exercise-content
         .description
@@ -76,8 +78,21 @@
         = t('exercises.all.related_exercises') + ' '
         span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
         span.fa.fa-caret-down.my-caret
+      .pull-right.stats
+        p.impact
+          = t('exercises.downloads')
+          = ': '
+          = exercise.downloads.to_s
+        p.impact
+          = t('exercises.in_carts')
+          = ': '
+          = exercise.in_carts
+        p.impact
+          = t('exercises.in_collections')
+          = ': '
+          = exercise.in_collections
 
-    div class=("related-box with-borders") data-exercise=exercise.id
+    div class=("related-box") data-exercise=exercise.id
 
       .slide-left.inactive
         = button_tag do

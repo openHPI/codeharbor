@@ -178,9 +178,16 @@ $exercise-color: #006600;
 }
 
 .star-rating {
-  line-height:32px;
   font-size:1.25em;
   cursor: pointer;
+}
+
+.programming-language {
+  margin-right: 16px;
+  padding: 2px 4px;
+  color: #7C7C7C;
+  border: 1px #7C7C7C solid;
+  border-radius: 4px;
 }
 
 .inputfile {
@@ -326,7 +333,7 @@ input[type="radio"]:checked+label {
   background-color: #eeeeee;
 }
 
-.comment-button, .related-button {
+.full-window-button{
 
   width: 100%;
   height: 40px;
@@ -487,6 +494,10 @@ input[type="radio"]:checked+label {
   }
 }
 
+.with-bottom-border {
+  border-bottom: 1px #dddddd solid;
+}
+
 .with-borders {
   margin-top: 10px;
   border: 1px #dddddd solid;
@@ -543,4 +554,11 @@ input[type="radio"]:checked+label {
 .impact {
   display: inline;
   margin-right: 20px;
+}
+
+.stats {
+  color: #7C7C7C;
+  height: 32px;
+  line-height: 32px;
+  vertical-align: middle;
 }
