@@ -11,11 +11,14 @@ class Ability
         cannot :leave, Group do |group|
           !user.in_group?(group)
         end
+
+        can :view_all, User
       end
 
       #AccountLink
-      can [:new], AccountLink
-      can [:view], AccountLink do |account_link|
+      can [:create, :new], AccountLink
+      #can [:manage], AccountLink, :user_id => user.id
+      can [:view, :remove_account_link], AccountLink do |account_link|
         account_link.external_users.include?(user)
       end
       can [:manage], AccountLink do |account_link|

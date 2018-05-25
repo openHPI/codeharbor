@@ -144,8 +144,10 @@ body:before {
     .row-value {
       width: 100%;
       display: block;
-      word-wrap: break-word;
-      overflow: auto;
+      .text {
+        word-wrap: break-word;
+        overflow: auto;
+      }
     }
   }
 }

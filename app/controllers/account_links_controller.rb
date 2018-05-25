@@ -1,8 +1,5 @@
 class AccountLinksController < ApplicationController
-  load_and_authorize_resource :user
-  load_and_authorize_resource :account_links, through: :user
-
-  before_action :set_user
+  before_action :set_user, except: [:index]
   before_action :set_account_link, only: [:show, :edit, :update, :destroy, :remove_account_link]
 
   rescue_from CanCan::AccessDenied do |_exception|
@@ -11,21 +8,25 @@ class AccountLinksController < ApplicationController
   # GET /account_links
   # GET /account_links.json
   def index
-    @account_links = AccountLink.all
+    authorize! :view_all , current_user
+    @account_links = AccountLink.all.paginate(per_page: 10, page: params[:page])
   end
 
   # GET /account_links/1
   # GET /account_links/1.json
   def show
+    authorize! :view, @account_link
   end
 
   # GET /account_links/new
   def new
     @account_link = AccountLink.new
+    authorize! :new, @account_link
   end
 
   # GET /account_links/1/edit
   def edit
+    authorize! :edit, @account_link
   end
 
   # POST /account_links
@@ -33,6 +34,7 @@ class AccountLinksController < ApplicationController
   def create
     @account_link = AccountLink.new(account_link_params)
     @account_link.user = @user
+    authorize! :create, @account_link
     respond_to do |format|
       if @account_link.save
         format.html { redirect_to @account_link.user, notice: 'Account link was successfully created.' }
@@ -47,6 +49,7 @@ class AccountLinksController < ApplicationController
   # PATCH/PUT /account_links/1
   # PATCH/PUT /account_links/1.json
   def update
+    authorize! :update, @account_link
     respond_to do |format|
       if @account_link.update(account_link_params)
         format.html { redirect_to @account_link.user, notice: 'Account link was successfully updated.' }
@@ -61,6 +64,7 @@ class AccountLinksController < ApplicationController
   # DELETE /account_links/1
   # DELETE /account_links/1.json
   def destroy
+    authorize! :destroy, @account_link
     @account_link.destroy
     respond_to do |format|
       format.html { redirect_to @account_link.user, notice: 'Account link was successfully destroyed.' }
@@ -69,6 +73,7 @@ class AccountLinksController < ApplicationController
   end
 
   def remove_account_link
+    authorize! :remove_account_link, @account_link
     respond_to do |format|
       if @account_link.external_users.delete(@user)
         format.html { redirect_to @user, notice: t('controllers.user.remove_account_link.success') }

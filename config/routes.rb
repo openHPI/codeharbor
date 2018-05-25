@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'home#index'
 
+  get 'account_links' => 'account_links#index'
+
   resources :licenses
   resources :execution_environments
   resources :carts do

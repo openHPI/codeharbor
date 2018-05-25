@@ -144,11 +144,19 @@ en:
   time_ago: "%{time} ago"
 
   shared:
+    actions: "Actions"
     back: "Back"
     export: "Export"
     download_zip: "Download Zip"
     export_to: "Export to"
     remove: "Remove"
+    user: "User"
+    buttons:
+      show: "Show"
+      edit: "Edit"
+      delete: "Delete"
+      destroy: "Destroy"
+      deleteX: "X"
 
   account:
     show_header: "Account Link"
@@ -206,7 +214,8 @@ en:
       client_secret:
         Will be sent with your token. Can be automatically generated.
 
-
+    admin:
+      header: "Account Link Administration"
     button:
       new: "New Account Link"
       show: "Show TEST"
