@@ -60,6 +60,15 @@ a.classic-link {
   }
 }
 
+.img-circle {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 50%;
+    width:128px;
+    height:128px;
+}
+
 .info-box {
   display: none;
   background: #f5f5f5;
