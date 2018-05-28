@@ -15,11 +15,13 @@
     .form-group.field-element
       span
         = t('sessions.forgot_password')
+        = ' '
         = link_to t('sessions.reset'), forgot_password_home_index_path, class: 'classic-link'
       span style="margin: 0 6px;"
         = '|'
       span
         = t('sessions.no_confirmation')
+        = ' '
         = link_to t('sessions.resend'), resend_confirmation_home_index_path, class: 'classic-link'
     br
     .btn-group[role="group"]

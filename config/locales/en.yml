@@ -867,11 +867,11 @@ en:
       header: "Registration confirmation"
       greeting: "Hello %{user}"
       paragraph: |
-        Thanks for registering! To confirm your registration click the link below.
+        Thanks for registering to Codeharbor! To confirm your registration click the link below.
       button: "Confirm Email"
     reset_password:
       header: "Reset password"
       greeting: "Hello %{user}"
-      paragraph1: You have requested a password reset, please follow the link below to reset your password.
+      paragraph1: You have requested a password reset for CodeHarbor, please follow the link below to reset your password.
       paragraph2: Please ignore this email if you did not request a password change.
       button: 'Reset Password'
