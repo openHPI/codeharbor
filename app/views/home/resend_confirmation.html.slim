@@ -1,6 +1,6 @@
 .header
   .std-heading
-    = "Resend Confirmation"
+    = t('home.resend_confirmation')
 = form_tag '/home/send_confirmation', method: 'post' do
   .field-element
     = label_tag 'email', "Email", class: 'form-label'

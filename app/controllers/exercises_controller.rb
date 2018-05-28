@@ -107,7 +107,6 @@ class ExercisesController < ApplicationController
         if !params[:exercise][:exercise_relation] #Exercise Relation is set if form is for duplicate exercise, otherwise it's not.
           format.html { render :new }
         else
-          puts(@exercise.errors.inspect)
           format.html { redirect_to duplicate_exercise_path(params[:exercise][:exercise_relation][:origin_id])}
         end
         format.json { render json: @exercise.errors, status: :unprocessable_entity }
@@ -177,7 +176,7 @@ class ExercisesController < ApplicationController
       redirect_to @exercise, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
     else
       puts error
-      redirect_to @exercise, alert: "Your account_link #{account_link.readable} does not seem to be working."
+      redirect_to @exercise, alert: t('controllers.account_links.not_working', account_link: account_link.readable)
     end
   end
 
@@ -186,7 +185,7 @@ class ExercisesController < ApplicationController
     zip_file = create_exercise_zip(@exercise)
     if zip_file[:errors].any?
       zip_file[:errors].each do |error|
-        puts error.message
+        logger.error(error)
       end
       redirect_to @exercise, alert: t('controllers.exercise.download_error')
     else
@@ -254,7 +253,7 @@ class ExercisesController < ApplicationController
     files = Hash.new
     begin
       uploaded_io = params[:file_upload]
-      raise "You need to choose a file." unless uploaded_io
+      raise t('controllers.exercise.choose_file') unless uploaded_io
 
       Zip::File.open(uploaded_io.path) do |zip_file|
 
@@ -268,7 +267,7 @@ class ExercisesController < ApplicationController
         end
 
         xml = zip_file.glob("task.xml").first
-        raise "task.xml file is required!" unless xml
+        raise t('controllers.exercise.taskxml_required') unless xml
 
         xml = xml.get_input_stream.read
         xsd = Nokogiri::XML::Schema(File.read('app/assets/taskxml.xsd'))

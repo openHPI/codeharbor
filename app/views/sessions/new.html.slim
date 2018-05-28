@@ -14,13 +14,13 @@
       = password_field_tag :password, params[:password], type:'text', class:'form-control', placeholder:t('sessions.password.placeholder')
     .form-group.field-element
       span
-        = "Forgot Password? "
-        = link_to "Reset", forgot_password_home_index_path, class: 'classic-link'
+        = t('sessions.forgot_password')
+        = link_to t('sessions.reset'), forgot_password_home_index_path, class: 'classic-link'
       span style="margin: 0 6px;"
-        = "|"
+        = '|'
       span
-        = "Did not receive confirmation? "
-        = link_to "Resend", resend_confirmation_home_index_path, class: 'classic-link'
+        = t('sessions.no_confirmation')
+        = link_to t('sessions.resend'), resend_confirmation_home_index_path, class: 'classic-link'
     br
     .btn-group[role="group"]
       = button_tag type: 'submit', class:'btn btn-important' do

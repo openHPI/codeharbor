@@ -37,7 +37,7 @@ class AccountLinksController < ApplicationController
     authorize! :create, @account_link
     respond_to do |format|
       if @account_link.save
-        format.html { redirect_to @account_link.user, notice: 'Account link was successfully created.' }
+        format.html { redirect_to @account_link.user, notice: t('controllers.account_links.created') }
         format.json { render :show, status: :created, location: @account_link }
       else
         format.html { render :new }
@@ -52,7 +52,7 @@ class AccountLinksController < ApplicationController
     authorize! :update, @account_link
     respond_to do |format|
       if @account_link.update(account_link_params)
-        format.html { redirect_to @account_link.user, notice: 'Account link was successfully updated.' }
+        format.html { redirect_to @account_link.user, notice: t('controllers.account_links.updated') }
         format.json { render :show, status: :ok, location: @account_link }
       else
         format.html { render :edit }
@@ -67,7 +67,7 @@ class AccountLinksController < ApplicationController
     authorize! :destroy, @account_link
     @account_link.destroy
     respond_to do |format|
-      format.html { redirect_to @account_link.user, notice: 'Account link was successfully destroyed.' }
+      format.html { redirect_to @account_link.user, notice: t('controllers.account_links.destroyed') }
       format.json { head :no_content }
     end
   end
@@ -77,10 +77,8 @@ class AccountLinksController < ApplicationController
     respond_to do |format|
       if @account_link.external_users.delete(@user)
         format.html { redirect_to @user, notice: t('controllers.user.remove_account_link.success') }
-        format.json { render :show, status: :ok, location: @user }
       else
         format.html { redirect_to @user, alert: t('controllers.user.remove_account_link.fail') }
-        format.json { render :show, status: :ok, location: @user }
       end
     end
   end

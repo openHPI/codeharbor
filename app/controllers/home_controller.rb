@@ -15,9 +15,9 @@ class HomeController < ApplicationController
     user = User.find_by(confirm_token: params[:confirm_token])
     if user
       user.email_activate
-      redirect_to login_url, notice: "Welcome to the Sample App! Your email has been confirmed. Please sign in to continue."
+      redirect_to login_url, notice: t('controllers.home.email_confirmed')
     else
-      redirect_to home_index_path, notice: "Sorry. User does not exist"
+      redirect_to home_index_path, notice: t('controllers.home.no_user')
     end
   end
 
@@ -37,7 +37,7 @@ class HomeController < ApplicationController
   def send_confirmation
     email = params[:email]
     if email.blank?
-      return render json: {error: 'Email not present'}
+      redirect_to resend_confirmation_home_index_path, alert: t('controllers.home.no_email') and return
     end
 
     user = User.find_by(email: email.downcase)
@@ -45,9 +45,9 @@ class HomeController < ApplicationController
     respond_to do |format|
       if user
         UserMailer.registration_confirmation(user).deliver_now
-        format.html { redirect_to home_index_path, notice: "Confirmation Email was resent."}
+        format.html { redirect_to home_index_path, notice: t('controllers.home.send_confirmation.success')}
       else
-        format.hmtl { redirect_to home_index_path, notice: "Could not find a user for the given email address."}
+        format.html { redirect_to resend_confirmation_home_index_path, alert: t('controllers.home.send_confirmation.alert')}
       end
     end
   end

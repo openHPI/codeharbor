@@ -14,10 +14,10 @@ class SessionsController < ApplicationController
           redirect_to home_index_path
         end
       else
-        redirect_to login_url, alert: 'Please activate your account by following the instructions in the account confirmation email you received to proceed'
+        redirect_to login_url, alert: t('controllers.session.activate_email')
       end
     else
-      redirect_to login_url, alert: 'Invalid user/password combination'
+      redirect_to login_url, alert: t('controllers.session.invalid_credentials')
     end
   end
 
@@ -26,7 +26,7 @@ class SessionsController < ApplicationController
       redirect_to user_messages_path(current_user)
     else
       session[:user_id] = nil
-      flash[:notice] = "Please login first."
+      flash[:notice] = t('controllers.session.login_first')
       @messages_redirect = true
       render 'new'
     end
@@ -34,6 +34,6 @@ class SessionsController < ApplicationController
 
   def destroy
     session[:user_id] = nil
-    redirect_to home_index_path, notice: 'Logged out'
+    redirect_to home_index_path, notice: t('controllers.session.logged_out')
   end
 end

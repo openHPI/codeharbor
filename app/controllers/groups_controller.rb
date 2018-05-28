@@ -137,14 +137,14 @@ class GroupsController < ApplicationController
     user = User.find(params[:user])
     account_link = AccountLink.find(params[:account_link])
     user.external_account_links << account_link
-    redirect_to @group, notice: "Granted push privileges to user "
+    redirect_to @group, notice: t('controllers.group.granted_push')
   end
 
   def remove_account_link_from_member
     user = User.find(params[:user])
     account_link = AccountLink.find(params[:account_link])
     user.external_account_links.delete(account_link)
-    redirect_to @group, notice: "Removed push privileges for user "
+    redirect_to @group, notice: t('controllers.group.removed_push')
   end
 
   private

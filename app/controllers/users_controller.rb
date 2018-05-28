@@ -35,7 +35,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
         UserMailer.registration_confirmation(@user).deliver_now
-        format.html { redirect_to home_index_path, notice: 'Please confirm your email address to continue.' }
+        format.html { redirect_to home_index_path, notice: t('controllers.user.confirm_email') }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }

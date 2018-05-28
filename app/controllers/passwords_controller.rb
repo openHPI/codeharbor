@@ -3,7 +3,7 @@ class PasswordsController < ApplicationController
     email = params[:email].to_s
 
     if params[:email].blank?
-      redirect_to forgot_password_home_index_path, alert: "Email not present." and return
+      redirect_to forgot_password_home_index_path, alert: t('controllers.password.email_not_present') and return
     end
 
     user = User.find_by(email: email.downcase)
@@ -11,9 +11,9 @@ class PasswordsController < ApplicationController
       if user.present? && user.email_confirmed
         user.generate_password_token!
         UserMailer.reset_password(user).deliver_now
-        format.html { redirect_to login_path, notice: "Email to reset password has been sent." }
+        format.html { redirect_to login_path, notice: t('controllers.password.email_sent') }
       else
-        format.html { redirect_to forgot_password_home_index_path, alert: "Email address not found. Please check and try again."}
+        format.html { redirect_to forgot_password_home_index_path, alert: t('controllers.password.email_not_found')}
       end
     end
   end
@@ -22,19 +22,19 @@ class PasswordsController < ApplicationController
     token = params[:token].to_s
 
     if token.blank?
-      redirect_to login_path, alert: 'Token not present'
+      redirect_to login_path, alert: t('controllers.password.token_not_present')
     end
 
     user = User.find_by(reset_password_token: token)
 
     if user.present? && user.password_token_valid?
       if user.reset_password!(params[:password], params[:password_confirmation])
-        redirect_to login_path, notice: "Your password was successfully changed"
+        redirect_to login_path, notice: t('controllers.password.change_successful')
       else
         redirect_to reset_password_home_index_path(confirm_token: token), alert: user.errors.full_messages.first
       end
     else
-      redirect_to login_path, alert: 'Link not valid or expired. Try generating a new link.'
+      redirect_to login_path, alert: t('controllers.password.link_invalid')
     end
   end
 end

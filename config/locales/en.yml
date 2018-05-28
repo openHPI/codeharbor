@@ -22,6 +22,11 @@
 en:
 
   controllers:
+    account_links:
+      created: 'Account link was successfully created.'
+      updated: 'Account link was successfully updated.'
+      destroyed: 'Account link was successfully destroyed.'
+      not_working: "Your account_link %{account_link} does not seem to be working."
     carts:
       authorization: 'You are not authorized for this action.'
       created: 'Cart was successfully created.'
@@ -51,6 +56,8 @@ en:
         alert: "Something went wrong."
 
     exercise:
+      choose_file: "You need to choose a file."
+      taskxml_required: "task.xml file is required!"
       authorization: 'You are not authorized for this exercise.'
       created: 'Exercise was successfully created.'
       updated: 'Exercise was successfully updated.'
@@ -79,6 +86,12 @@ en:
         no_token: "No token in Authorization header"
         unknown_token: "Unknown OAuth2 token"
 
+    exercise_file:
+      authorization: "You are not authorized to for this action."
+      created: "Exercise file was successfully created."
+      updated: "Exercise file was successfully updated."
+      destroyed: "Exercise file was successfully destroyed."
+
     group:
       authorization: "You are not authorized to for this action."
       created: "Group was successfully created."
@@ -99,6 +112,16 @@ en:
       remove_exercise_notice: "Exercise successfully removed"
       delete_from_group_notice: "User deleted from group."
       make_admin_notice: "Made user to admin."
+      granted_push: "Granted push privileges to user."
+      removed_push: "Removed push privileges for user."
+
+    home:
+      email_confirmed: "Welcome to the CodeHarbor! Your email has been confirmed. Please sign in to continue."
+      no_user: "Sorry. User does not exist"
+      no_email: 'Email not present'
+      send_confirmation:
+        success: "Confirmation Email was resent."
+        alert: "Could not find a user for the given email address."
 
     message:
       authorization: "You are not authorized to for this action."
@@ -120,12 +143,27 @@ en:
       updated: "License was successfully updated."
       destroyed: "License was successfully destroyed."
 
+    password:
+      token_not_present: "Token not present"
+      email_not_present: "Email not present."
+      email_sent: "Email to reset password has been sent."
+      email_not_found: "Email address not found. Please check and try again."
+      change_successful: "Your password was successfully changed"
+      link_invalid: 'Link not valid or expired. Try generating a new link.'
+
+    session:
+      invalid_credentials: 'Invalid user/password combination'
+      activate_email: 'Please activate your account by following the instructions in the account confirmation email you received to proceed'
+      login_first: "Please login first."
+      logged_out: "Logged out."
+
     user:
       authorization: "You are not authorized to for this action."
       created: "User was successfully created."
       updated: "User was successfully updated."
       destroyed: "User was successfully destroyed."
       last_admin: "User is only admin of a group with members."
+      confirm_email: 'Please confirm your email address to continue.'
       remove_account_link:
         success: "Account Link was successfully removed."
         fail: "Account Link could not be removed."
@@ -151,7 +189,9 @@ en:
     export_to: "Export to"
     remove: "Remove"
     user: "User"
+    email: "Email"
     buttons:
+      update: "Update"
       show: "Show"
       edit: "Edit"
       delete: "Delete"
@@ -568,6 +608,11 @@ en:
     search_exercise: "Search Exercise"
     create_exercise: "Create Exercise"
     update_profile: "Update Profile"
+    reset_password: "Reset Password"
+    password: "Password"
+    password_confirmation: "Password confirmation"
+    resend_confirmation: "Resend confirmmation"
+    send: "Send"
 
     banner1:
       header: "Your exercise repository"
@@ -696,6 +741,10 @@ en:
     link: "Link"
 
   sessions:
+    forgot_password: "Forgot password?"
+    no_confirmation: "Did not receive confirmation?"
+    reset: "Reset"
+    resend: "Resend"
     header: "Please Log In"
     email:
       label: "Email"
@@ -813,3 +862,16 @@ en:
     send_message: "Send Message"
     recipient: "Recipient"
 
+  user_mailer:
+    registration_confirmation:
+      header: "Registration confirmation"
+      greeting: "Hello %{user}"
+      paragraph: |
+        Thanks for registering! To confirm your registration click the link below.
+      button: "Confirm Email"
+    reset_password:
+      header: "Reset password"
+      greeting: "Hello %{user}"
+      paragraph1: You have requested a password reset, please follow the link below to reset your password.
+      paragraph2: Please ignore this email if you did not request a password change.
+      button: 'Reset Password'
