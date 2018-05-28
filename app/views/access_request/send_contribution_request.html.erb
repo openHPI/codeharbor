@@ -4,13 +4,13 @@
   <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
 </head>
 <body>
-<h1>Hello <%= @author.name %></h1>
+<h3>Hello <%= @author.name %></h3>
 <p>
   <%= @user.name %> asked to contribute to your Exercise "<%= @exercise.title %>".
   If you want to make him a co-author or suggest Membership to a group click the link below.
   Otherwise ignore this Email. <br/>
   <br/>
-  <%= link_to 'Codeharbor', users_url(@author), class: 'btn btn-success' %>
+  <%= link_to 'Codeharbor', sessions_email_link_url(user: @author)%>
 </p>
 </body>
 </html>

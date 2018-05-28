@@ -7,13 +7,13 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 
-user1 = User.create(first_name: 'Manfred', last_name: 'Anderson', email: 'manfredAnderson@bhak1.de', password: 'pwd', role: 'admin')
-user2 = User.create(first_name: 'Johannes', last_name: 'Maier', email: 'j.maier@waldschule.de', password: 'pwd')
-user3 = User.create(first_name: 'Denise', last_name: 'Feler', email: 'denise.feler@gmx.de', password: 'pwd')
-user4 = User.create(first_name: 'Theresa', last_name: 'Zobel', email: 'theresa.zobel@aon.at', password: '1234')
-user5 = User.create(first_name: 'Theresa', last_name: 'Zobel', email: 'theresa.zobel@student.hpi.de', password: '1234')
-user6 = User.create(first_name: 'Adrian', last_name: 'Steppat', email: 'adrian.steppat@student.hpi.de', password: 'harbor', role: 'admin')
-user7 = User.create(first_name: 'Adrian', last_name: 'Steppat', email: 'adrian.steppat@web.de', password: 'harbor')
+user1 = User.create(first_name: 'Manfred', last_name: 'Anderson', email: 'manfredAnderson@bhak1.de', email_confirmed: true, password: 'pwd', role: 'admin')
+user2 = User.create(first_name: 'Johannes', last_name: 'Maier', email: 'j.maier@waldschule.de', email_confirmed: true, password: 'pwd')
+user3 = User.create(first_name: 'Denise', last_name: 'Feler', email: 'denise.feler@gmx.de', email_confirmed: true, password: 'pwd')
+user4 = User.create(first_name: 'Theresa', last_name: 'Zobel', email: 'theresa.zobel@aon.at', email_confirmed: true, password: '1234')
+user5 = User.create(first_name: 'Theresa', last_name: 'Zobel', email: 'theresa.zobel@student.hpi.de', email_confirmed: true, password: '1234')
+user6 = User.create(first_name: 'Adrian', last_name: 'Steppat', email: 'adrian.steppat@student.hpi.de', email_confirmed: true, password: 'harbor', role: 'admin')
+user7 = User.create(first_name: 'Adrian', last_name: 'Steppat', email: 'adrian.steppat@web.de', email_confirmed: true, password: 'harbor')
 
 license1 = License.create(name: 'MIT License', link: 'https://opensource.org/licenses/MIT')
 license2 = License.create(name: 'Creative Common Attribution', link: 'https://creativecommons.org/licenses/by/4.0/')
@@ -36,8 +36,8 @@ test_framework = TestingFramework.create(name: 'JUnit 4')
 test_framework2 = TestingFramework.create(name: 'Pytest')
 
 java_file = FileType.create(name: 'CSS', file_extension: '.css')
-coffee_file = FileType.create(name: 'CoffeeScript', file_extension: '.java')
-gif_file = FileType.create(name: 'GIF', file_extension: '.coffee')
+coffee_file = FileType.create(name: 'CoffeeScript', file_extension: '.coffee')
+gif_file = FileType.create(name: 'GIF', file_extension: '.gif')
 html_file = FileType.create(name: 'HTML', file_extension: '.html')
 java_file = FileType.create(name: 'Java', file_extension: '.java')
 jar_file = FileType.create(name: 'Jar', file_extension: '.jar')
@@ -60,10 +60,10 @@ xml_file = FileType.create(name: 'XML', file_extension: '.xml')
 
 exercise1 = Exercise.new(title: "Hello World", maxrating: '10', private: false, user_id:user1.id, license: license1)
 
-exercise1_main = ExerciseFile.create(content: "public class HelloWorld{ public static void main String[] args) { } }", path: '', purpose:'template', visibility: true, role: 'Main File', hidden: false, read_only: false, file_type: java_file)
+exercise1_main = ExerciseFile.create(content: "public class HelloWorld{ public static void main String[] args) { } }", name: 'main', path: '', purpose:'template', visibility: true, role: 'Main File', hidden: false, read_only: false, file_type: java_file)
 exercise1.exercise_files << exercise1_main
 
-exercise1_test = ExerciseFile.create(content: "public class HelloWorld{ public static void main String[] args) {System.out.println('Hello World.'); } }", path: '', purpose:'test', visibility: true, role: 'Main File', hidden: false, read_only: false, file_type: java_file, exercise: exercise1)
+exercise1_test = ExerciseFile.create(content: "public class HelloWorld{ public static void main String[] args) {System.out.println('Hello World.'); } }", name: 'test', path: '', purpose:'test', visibility: true, hidden: false, read_only: false, file_type: java_file, exercise: exercise1)
 test = Test.create(feedback_message: "Es wird noch nicht 'Hello World' am Bildschrim ausgegeben!", exercise_file: exercise1_test, testing_framework: test_framework)
 exercise1.tests << test
 
@@ -73,7 +73,12 @@ exercise1.descriptions << description1
 exercise1.descriptions << description2
 
 ee1 = ExecutionEnvironment.create(language: 'Java', version: '8')
-ee2 = ExecutionEnvironment.create(language: 'Python', version: '2.7')
+ee2 = ExecutionEnvironment.create(language: 'Python', version: '3.4')
+ee3 = ExecutionEnvironment.create(language: 'Ruby', version: '2.2')
+ee4 = ExecutionEnvironment.create(language: 'Node.js', version: '')
+ee5 = ExecutionEnvironment.create(language: 'HTML', version: '5')
+ee6 = ExecutionEnvironment.create(language: 'CoffeeScript', version: '2')
+ee2 = ExecutionEnvironment.create(language: 'SQLite', version: '3')
 
 exercise1.execution_environment = ee1
 exercise1.save

@@ -34,7 +34,8 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to sessions_create_path(user_params), notice: t('controllers.user.created')}
+        UserMailer.registration_confirmation(@user).deliver_now
+        format.html { redirect_to home_index_path, notice: t('controllers.user.confirm_email') }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
@@ -46,6 +47,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+    @user.avatar = nil if params[:user][:avatar].nil? && params[:user][:avatar_present] == 'false'
     respond_to do |format|
       if @user.update(user_params)
         format.html { redirect_to @user, notice: t('controllers.user.updated') }
@@ -79,6 +81,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:first_name, :last_name, :email, :password, :password_confirmation)
+      params.require(:user).permit(:avatar, :username, :description, :first_name, :last_name, :email, :password, :password_confirmation)
     end
 end

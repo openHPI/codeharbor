@@ -22,7 +22,7 @@ RSpec.describe Exercise, type: :model do
 
         params = ActionController::Parameters.new({
           :tests_attributes => 
-            {"0" => {name: 'test', file_type_id: file_type.id , :content =>'this is some test', :feedback_message => 'not_working', :_destroy => false, :testing_framework => {:name => 'pytest', :id => '12345678'}}},
+            {"0" => {:exercise_file_attributes => {name: 'test', file_type_id: file_type.id , :content =>'this is some test'}, :feedback_message => 'not_working', :_destroy => false, :testing_framework => {:name => 'pytest', :id => '12345678'}}},
           :exercise_files_attributes =>
             {"0" => {:role => 'Main File', :content => 'some new exercise', :path => 'some/path/', :purpose => 'a new purpose',
               :name => 'awesome', :file_type_id => file_type.id, :_destroy => false}},
@@ -35,7 +35,7 @@ RSpec.describe Exercise, type: :model do
         files = ExerciseFile.where(exercise_id: exercise.id)
         descriptions = Description.where(exercise_id: exercise.id)
         expect(tests.size()).to be 1
-        expect(files.size()).to be 1 #Only actual file
+        expect(files.size()).to be 2 #Actual file and test.exercise_file
         expect(test.exercise_file).to be_truthy
         expect(descriptions.size()).to be 2
       end

@@ -16,10 +16,16 @@ validateForm = (e) ->
 
 loadSelect2 = ->
 
+  $('.file-role').select2
+    tags: false
+    width: '100%'
+    multiple: false
+
   $('#select2-control').select2
     tags: false
     width: '20%'
     multiple: false
+
   $('.file-type').select2
     tags: false
     width: '100%'
@@ -53,8 +59,6 @@ loadSelect2 = ->
       'You can only add 5 topics'
 
 ready =->
-
-  $('[data-toggle="tooltip"]').tooltip();
 
   $(".change-hidden-field").click ->
     value = (this).id
@@ -153,91 +157,100 @@ ready =->
     e.stopPropagation()
     return
 
-  $('#xml').on 'change', ->
-    fullPath = document.getElementById('xml').value
+  $('#file_upload').on 'change', ->
+    fullPath = document.getElementById('file_upload').value
     if fullPath
-      startIndex = if fullPath.indexOf('\\') >= 0 then fullPath.lastIndexOf('\\') else fullPath.lastIndexOf('/')
-      filename = fullPath.substring(startIndex)
-      if filename.indexOf('\\') == 0 or filename.indexOf('/') == 0
-        filename = filename.substring(1)
-      document.getElementById('xml-label').innerHTML = filename
+      document.getElementById('file-label').innerHTML = get_filename_from_full_path(fullPath)
 
-  $('.toggle').on 'click', ->
-    $($(this).parent().next()).toggle()
-    if $(this).hasClass('fa-caret-down')
-      $(this).removeClass('fa-caret-down').addClass('fa-caret-up')
+  $('.toggle-next').on 'click', ->
+    $next = $(this).next()
+    $next.toggle()
+    $caret = $(this).find('span.fa')
+    if $caret.hasClass('fa-caret-down')
+      $caret.removeClass('fa-caret-down').addClass('fa-caret-up')
+      $(this).removeClass('closed')
     else
-      $(this).removeClass('fa-caret-up').addClass('fa-caret-down')
+      $caret.removeClass('fa-caret-up').addClass('fa-caret-down')
+      $(this).addClass('closed')
 
   $('.comment-button').on 'click', ->
     exercise_id = this.getAttribute("data-exercise")
     if exercise_id
       url = window.location.pathname + '/' + exercise_id + "/comments"
-      comment_box = $(".comment-box[data-exercise=#{exercise_id}]")
+      $comment_box = $(".comment-box[data-exercise=#{exercise_id}]")
+      $related_box = $(".related-box[data-exercise=#{exercise_id}]")
     else
       url = window.location.pathname + "/comments"
-      comment_box = $(".comment-box")
-    caret = $(this).children('.my-caret')
-    icon = $(this).children('.wait')
+      $comment_box = $(".comment-box")
+    $caret = $(this).children('.my-caret')
+    $icon = $(this).children('.wait')
 
-    if $(caret).hasClass('fa-caret-down')
-      $(caret).removeClass('fa-caret-down').addClass('fa-caret-up')
+    if $caret.hasClass('fa-caret-down')
+      $caret.removeClass('fa-caret-down').addClass('fa-caret-up')
       $.ajax({
         type: 'GET',
         url: url
         dataType: 'script'
         beforeSend: ->
-          console.log(icon)
-          $(icon).show()
+          $icon.show()
         success: ->
-          $(comment_box).show()
+          if $related_box
+            if $related_box.css('display') != 'none'
+              $related_box.addClass('with-bottom-border')
+          $comment_box.show()
           anchor = document.getElementById('page_end')
           if anchor
             anchor.scrollIntoView(false)
         complete: ->
-          console.log("After")
-          $(icon).hide()
+          $icon.hide()
       })
     else
-      $(caret).removeClass('fa-caret-up').addClass('fa-caret-down')
-      $(comment_box).hide()
+      $caret.removeClass('fa-caret-up').addClass('fa-caret-down')
+      $comment_box.hide()
+      if $related_box
+        $related_box.removeClass('with-bottom-border')
 
   $('.related-button').on 'click', ->
     exercise_id = this.getAttribute("data-exercise")
     if exercise_id
       url = window.location.pathname + '/' + exercise_id + "/related_exercises"
-      related_box = $(".related-box[data-exercise=#{exercise_id}]")
+      $related_box = $(".related-box[data-exercise=#{exercise_id}]")
+      $comment_box = $(".comment-box[data-exercise=#{exercise_id}]")
     else
       url = window.location.pathname + "/related_exercises"
-      related_box = $(".related-box")
-    caret = $(this).children('.my-caret')
-    icon = $(this).children('.wait')
+      $related_box = $(".related-box")
+    $caret = $(this).children('.my-caret')
+    $icon = $(this).children('.wait')
 
-    if $(caret).hasClass('fa-caret-down')
+    if $caret.hasClass('fa-caret-down')
       $.ajax({
         type: 'GET',
         url: url
         dataType: 'script'
         beforeSend: ->
-          $(icon).show()
+          $icon.show()
         success: ->
-          related_exercises = $(related_box).find('.related-exercises')
-          shown_elements = $(related_exercises).slice(0,3)
-          if $(related_exercises).size() > 3
-            $(related_box).find('.slide-right').removeClass('inactive').addClass('active')
-          $(shown_elements).addClass('displayed')
-          $(related_exercises).not(shown_elements).addClass('not-displayed')
-          $(caret).removeClass('fa-caret-down').addClass('fa-caret-up')
-          $(related_box).show()
+          $related_exercises = $related_box.find('.related-exercises')
+          $shown_elements = $related_exercises.slice(0,3)
+          if $related_exercises.size() > 3
+            $related_box.find('.slide-right').removeClass('inactive').addClass('active')
+          $shown_elements.addClass('displayed')
+          $related_exercises.not($shown_elements).addClass('not-displayed')
+          $caret.removeClass('fa-caret-down').addClass('fa-caret-up')
+          if $comment_box
+            if $comment_box.css('display') != 'none'
+              $related_box.addClass('with-bottom-border')
+          $related_box.show()
           anchor = document.getElementById('page_end')
           if anchor
             anchor.scrollIntoView(false)
         complete: ->
-          $(icon).hide()
+          $icon.hide()
       })
     else
-      $(caret).removeClass('fa-caret-up').addClass('fa-caret-down')
-      $(related_box).hide()
+      $caret.removeClass('fa-caret-up').addClass('fa-caret-down')
+      $related_box.hide()
+      $related_box.removeClass('with-bottom-border')
 
   $('.slide-right').on 'click', ->
     if $(this).hasClass('inactive')
@@ -270,8 +283,6 @@ ready =->
     if index = 3
       $(this).removeClass('active').addClass('inactive')
     $(this).siblings('.slide-right').removeClass('inactive').addClass('active')
-
-
 
   if document.getElementById('window')
     if document.getElementById('window').value == "true"
@@ -317,5 +328,4 @@ ready =->
     link = option.getAttribute("data-link")
     $('.link').html("<p>Link: <a href='#{link}'>#{link}</a></p>")
 
-$(document).ready(ready)
-$(document).on('page:load', ready)
+$(document).on('turbolinks:load', ready)

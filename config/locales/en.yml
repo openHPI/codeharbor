@@ -22,6 +22,11 @@
 en:
 
   controllers:
+    account_links:
+      created: 'Account link was successfully created.'
+      updated: 'Account link was successfully updated.'
+      destroyed: 'Account link was successfully destroyed.'
+      not_working: "Your account_link %{account_link} does not seem to be working."
     carts:
       authorization: 'You are not authorized for this action.'
       created: 'Cart was successfully created.'
@@ -51,6 +56,8 @@ en:
         alert: "Something went wrong."
 
     exercise:
+      choose_file: "You need to choose a file."
+      taskxml_required: "task.xml file is required!"
       authorization: 'You are not authorized for this exercise.'
       created: 'Exercise was successfully created.'
       updated: 'Exercise was successfully updated.'
@@ -79,6 +86,12 @@ en:
         no_token: "No token in Authorization header"
         unknown_token: "Unknown OAuth2 token"
 
+    exercise_file:
+      authorization: "You are not authorized to for this action."
+      created: "Exercise file was successfully created."
+      updated: "Exercise file was successfully updated."
+      destroyed: "Exercise file was successfully destroyed."
+
     group:
       authorization: "You are not authorized to for this action."
       created: "Group was successfully created."
@@ -99,6 +112,16 @@ en:
       remove_exercise_notice: "Exercise successfully removed"
       delete_from_group_notice: "User deleted from group."
       make_admin_notice: "Made user to admin."
+      granted_push: "Granted push privileges to user."
+      removed_push: "Removed push privileges for user."
+
+    home:
+      email_confirmed: "Welcome to the CodeHarbor! Your email has been confirmed. Please sign in to continue."
+      no_user: "Sorry. User does not exist"
+      no_email: 'Email not present'
+      send_confirmation:
+        success: "Confirmation Email was resent."
+        alert: "Could not find a user for the given email address."
 
     message:
       authorization: "You are not authorized to for this action."
@@ -120,12 +143,30 @@ en:
       updated: "License was successfully updated."
       destroyed: "License was successfully destroyed."
 
+    password:
+      token_not_present: "Token not present"
+      email_not_present: "Email not present."
+      email_sent: "Email to reset password has been sent."
+      email_not_found: "Email address not found. Please check and try again."
+      change_successful: "Your password was successfully changed"
+      link_invalid: 'Link not valid or expired. Try generating a new link.'
+
+    session:
+      invalid_credentials: 'Invalid user/password combination'
+      activate_email: 'Please activate your account by following the instructions in the account confirmation email you received to proceed'
+      login_first: "Please login first."
+      logged_out: "Logged out."
+
     user:
       authorization: "You are not authorized to for this action."
       created: "User was successfully created."
       updated: "User was successfully updated."
       destroyed: "User was successfully destroyed."
       last_admin: "User is only admin of a group with members."
+      confirm_email: 'Please confirm your email address to continue.'
+      remove_account_link:
+        success: "Account Link was successfully removed."
+        fail: "Account Link could not be removed."
 
 
   models:
@@ -140,17 +181,89 @@ en:
   sure: "Are you sure?"
   time_ago: "%{time} ago"
 
+  shared:
+    actions: "Actions"
+    back: "Back"
+    export: "Export"
+    download_zip: "Download Zip"
+    export_to: "Export to"
+    remove: "Remove"
+    user: "User"
+    email: "Email"
+    buttons:
+      update: "Update"
+      show: "Show"
+      edit: "Edit"
+      delete: "Delete"
+      destroy: "Destroy"
+      deleteX: "X"
+
   account:
+    show_header: "Account Link"
     pushURL: "Push URL"
     name: "Account Name"
     token: "OAuth2 token"
+    client_id: "Client ID"
+    client_secret: "Client Secret"
+    documentation:
+      header: About autograders and account links
+      paragraph_html: |
+        <h3>About account links:</h3>
+        <p>
+          Account links define a connection to an autograder. <br/>
+          If you have an account link you can simply export exercises available to you into the autograder. <br/>
+          You can create your own account link if you have the push_url of an autograder that can handle OAuth2 post requests.</br>
+        </p>
+        <h3>You want to connect an autograder that already has OAuth2 and ProFormA-XML support:</h3>
+        <p>
+          If the autograder can import exercises sent via OAuth2 request in the ProFormA-XML format you will need the following things: <br/>
+          1. Push-url: The autograder needs to have an ULR codeharbor can post the exercise to. <br/>
+          2. OAuth2-token: The autograder must be able to link a token to your account to authorize exercises that will be pushed there. <br/>
+             If you do not need a specific token you can generate a token when creating an account link on codeharbor side or use whatever you want <br/>
+             as long as it is the same token on codeharbor and the autograders side.<br>
+          You also have to create a client-id and client-secret for an account link on codeharbor side. <br/>
+          If the autograder does not require a specific one you can auto-generate them.<br/>
+        </p>
+        <h3>How to prepare your own autograder:</h3>
+        <p>
+          Codeharbor uses the OAuth 2.0 protocol to send exercises via a post request. <a href="https://oauth.net/2/">https://oauth.net/2/</a><br/>
+          Codeharbor is the client in this case, your autograder the resource server and you are the resource owner.
+          When you are exporting an exercise, codeharbor first generates an XML-file complying with the ProFormA-XML standard for exchanging exercises. <a href="https://github.com/ProFormA/taskxml">https://github.com/ProFormA/taskxml</a>
+          Then it will make a post request to the URL you chose as the push_url. The XML-file will be in the request body and the OAuth2 token in the request headers ("request.headers['Authorization']"). <br/>
+          In your autograder you need to make sure that the OAuth2 token is validated and the corresponding user found. We recommend to add an interface for users to add an OAuth2-token. <br/>
+          The XML-file in the request-body needs to be parsed into the database. Since we are using the ProFormA-XML format you can parse the xml using xpath. <br/>
+          Finally, please respond with a 200 status code if everything went okay or a 400 if it did not. <br/>
+        </p>
+
+
+    description_html: |
+      Account links define a connection to an autograder. <br/>
+      If you have an account link you can simply export exercises available to you into the autograder. <br/>
+      You can create your own account link if you have the push_url of an autograder that can handle OAuth2 post requests.</br>
+      For more information on how to establish a connection to an autograder please click the following link:</br>
+
+    info:
+      push_url: |
+        The address on the autograder side your exercise can be exported to. If you don't know what to write here, ask the autograders admins.
+      name: |
+        Can be anything to Identify your account link.
+      token: |
+        Will be used to authenticate your export request. Has to be the same on both sides.
+      client_id:
+        Will be sent with your token. Can be automatically generated.
+      client_secret:
+        Will be sent with your token. Can be automatically generated.
+
+    admin:
+      header: "Account Link Administration"
     button:
       new: "New Account Link"
       show: "Show TEST"
       edit: "Edit"
+      delete: "Delete"
       destroy: "Destroy"
       back: "Back"
-      create: "Create Account Link"
+      save: "Save Account Link"
 
     edit:
       header: "Editing Account Link"
@@ -240,7 +353,7 @@ en:
       title: "Title"
       actions: "Actions"
       name: "Name"
-
+      allow_push: "Allow push to..."
       button:
         new: "New Group"
         show: "Show"
@@ -370,6 +483,7 @@ en:
     in_carts: "In Carts"
     in_collections: "In Collections"
     files:
+      attachment: "Attachment"
       role: "Role"
       label: "Files"
       content: "Content"
@@ -378,6 +492,7 @@ en:
       main: "Main"
       purpose: "Purpose"
       name: "Name"
+      upload_file: "Upload File"
     tests:
       label: "Tests"
       content: "Content"
@@ -493,6 +608,11 @@ en:
     search_exercise: "Search Exercise"
     create_exercise: "Create Exercise"
     update_profile: "Update Profile"
+    reset_password: "Reset Password"
+    password: "Password"
+    password_confirmation: "Password confirmation"
+    resend_confirmation: "Resend confirmmation"
+    send: "Send"
 
     banner1:
       header: "Your exercise repository"
@@ -621,6 +741,10 @@ en:
     link: "Link"
 
   sessions:
+    forgot_password: "Forgot password?"
+    no_confirmation: "Did not receive confirmation?"
+    reset: "Reset"
+    resend: "Resend"
     header: "Please Log In"
     email:
       label: "Email"
@@ -671,12 +795,20 @@ en:
 
 
   users:
+    remove_avatar: "Remove Avatar"
     first_name: "First name"
     last_name: "Last name"
     email: "Email"
     role: "Role"
     back: "Back"
-
+    public_information: "Public Information"
+    private_information: "Private Information"
+    username: "Username"
+    full_name: "Full name"
+    save_user: "Save User"
+    account_links:
+      created: "Created Account Links"
+      other: "Other Account Links"
     new:
       header: "New User"
       password: "Password"
@@ -684,7 +816,6 @@ en:
 
     show:
       account_links:
-        label: "Account Links"
         add: "Add Account Link"
         links: "Links"
         actions: "Actions"
@@ -727,6 +858,20 @@ en:
       unknown: "unknown"
       delete: "Delete"
     reply_to: "Reply to"
+    message_to: "Send Message to"
     send_message: "Send Message"
     recipient: "Recipient"
 
+  user_mailer:
+    registration_confirmation:
+      header: "Registration confirmation"
+      greeting: "Hello %{user}"
+      paragraph: |
+        Thanks for registering to Codeharbor! To confirm your registration click the link below.
+      button: "Confirm Email"
+    reset_password:
+      header: "Reset password"
+      greeting: "Hello %{user}"
+      paragraph1: You have requested a password reset for CodeHarbor, please follow the link below to reset your password.
+      paragraph2: Please ignore this email if you did not request a password change.
+      button: 'Reset Password'

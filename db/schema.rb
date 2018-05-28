@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,21 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180314123634) do
+ActiveRecord::Schema.define(version: 20180525134311) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "account_links", force: :cascade do |t|
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.string   "push_url"
     t.string   "account_name"
     t.integer  "user_id"
     t.string   "oauth2_token"
+    t.string   "client_id"
+    t.string   "client_secret"
+    t.index ["user_id"], name: "index_account_links_on_user_id", using: :btree
   end
 
-  add_index "account_links", ["user_id"], name: "index_account_links_on_user_id", using: :btree
+  create_table "account_links_users", id: false, force: :cascade do |t|
+    t.integer "account_link_id", null: false
+    t.integer "user_id",         null: false
+    t.index ["account_link_id", "user_id"], name: "index_account_links_users_on_account_link_id_and_user_id", using: :btree
+  end
 
   create_table "answers", force: :cascade do |t|
     t.integer  "comment_id"
@@ -33,34 +39,30 @@ ActiveRecord::Schema.define(version: 20180314123634) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text     "text"
+    t.index ["comment_id"], name: "index_answers_on_comment_id", using: :btree
+    t.index ["user_id"], name: "index_answers_on_user_id", using: :btree
   end
-
-  add_index "answers", ["comment_id"], name: "index_answers_on_comment_id", using: :btree
-  add_index "answers", ["user_id"], name: "index_answers_on_user_id", using: :btree
 
   create_table "assemblies_parts", id: false, force: :cascade do |t|
     t.integer "assembly_id"
     t.integer "part_id"
+    t.index ["assembly_id"], name: "index_assemblies_parts_on_assembly_id", using: :btree
+    t.index ["part_id"], name: "index_assemblies_parts_on_part_id", using: :btree
   end
-
-  add_index "assemblies_parts", ["assembly_id"], name: "index_assemblies_parts_on_assembly_id", using: :btree
-  add_index "assemblies_parts", ["part_id"], name: "index_assemblies_parts_on_part_id", using: :btree
 
   create_table "carts", force: :cascade do |t|
     t.integer  "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_carts_on_user_id", using: :btree
   end
-
-  add_index "carts", ["user_id"], name: "index_carts_on_user_id", using: :btree
 
   create_table "carts_exercises", force: :cascade do |t|
     t.integer "exercise_id"
     t.integer "cart_id"
+    t.index ["cart_id"], name: "index_carts_exercises_on_cart_id", using: :btree
+    t.index ["exercise_id"], name: "index_carts_exercises_on_exercise_id", using: :btree
   end
-
-  add_index "carts_exercises", ["cart_id"], name: "index_carts_exercises_on_cart_id", using: :btree
-  add_index "carts_exercises", ["exercise_id"], name: "index_carts_exercises_on_exercise_id", using: :btree
 
   create_table "collections", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -71,18 +73,16 @@ ActiveRecord::Schema.define(version: 20180314123634) do
   create_table "collections_exercises", force: :cascade do |t|
     t.integer "exercise_id"
     t.integer "collection_id"
+    t.index ["collection_id"], name: "index_collections_exercises_on_collection_id", using: :btree
+    t.index ["exercise_id"], name: "index_collections_exercises_on_exercise_id", using: :btree
   end
-
-  add_index "collections_exercises", ["collection_id"], name: "index_collections_exercises_on_collection_id", using: :btree
-  add_index "collections_exercises", ["exercise_id"], name: "index_collections_exercises_on_exercise_id", using: :btree
 
   create_table "collections_users", force: :cascade do |t|
     t.integer "user_id"
     t.integer "collection_id"
+    t.index ["collection_id"], name: "index_collections_users_on_collection_id", using: :btree
+    t.index ["user_id"], name: "index_collections_users_on_user_id", using: :btree
   end
-
-  add_index "collections_users", ["collection_id"], name: "index_collections_users_on_collection_id", using: :btree
-  add_index "collections_users", ["user_id"], name: "index_collections_users_on_user_id", using: :btree
 
   create_table "comments", force: :cascade do |t|
     t.text     "text"
@@ -90,18 +90,16 @@ ActiveRecord::Schema.define(version: 20180314123634) do
     t.integer  "user_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.index ["exercise_id"], name: "index_comments_on_exercise_id", using: :btree
+    t.index ["user_id"], name: "index_comments_on_user_id", using: :btree
   end
-
-  add_index "comments", ["exercise_id"], name: "index_comments_on_exercise_id", using: :btree
-  add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
   create_table "descriptions", force: :cascade do |t|
     t.string  "text"
     t.integer "exercise_id"
     t.string  "language",    default: "EN"
+    t.index ["exercise_id"], name: "index_descriptions_on_exercise_id", using: :btree
   end
-
-  add_index "descriptions", ["exercise_id"], name: "index_descriptions_on_exercise_id", using: :btree
 
   create_table "execution_environments", force: :cascade do |t|
     t.string   "language"
@@ -115,18 +113,17 @@ ActiveRecord::Schema.define(version: 20180314123634) do
     t.integer  "user_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.index ["exercise_id"], name: "index_exercise_authors_on_exercise_id", using: :btree
+    t.index ["user_id"], name: "index_exercise_authors_on_user_id", using: :btree
   end
-
-  add_index "exercise_authors", ["exercise_id"], name: "index_exercise_authors_on_exercise_id", using: :btree
-  add_index "exercise_authors", ["user_id"], name: "index_exercise_authors_on_user_id", using: :btree
 
   create_table "exercise_files", force: :cascade do |t|
     t.text     "content"
     t.string   "path"
     t.boolean  "solution"
     t.integer  "exercise_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
     t.boolean  "visibility"
     t.string   "name"
     t.string   "purpose"
@@ -134,20 +131,22 @@ ActiveRecord::Schema.define(version: 20180314123634) do
     t.boolean  "hidden"
     t.boolean  "read_only"
     t.integer  "file_type_id"
+    t.string   "attachment_file_name"
+    t.string   "attachment_content_type"
+    t.integer  "attachment_file_size"
+    t.datetime "attachment_updated_at"
+    t.index ["exercise_id"], name: "index_exercise_files_on_exercise_id", using: :btree
+    t.index ["file_type_id"], name: "index_exercise_files_on_file_type_id", using: :btree
   end
-
-  add_index "exercise_files", ["exercise_id"], name: "index_exercise_files_on_exercise_id", using: :btree
-  add_index "exercise_files", ["file_type_id"], name: "index_exercise_files_on_file_type_id", using: :btree
 
   create_table "exercise_group_accesses", force: :cascade do |t|
     t.integer  "exercise_id"
     t.integer  "group_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.index ["exercise_id"], name: "index_exercise_group_accesses_on_exercise_id", using: :btree
+    t.index ["group_id"], name: "index_exercise_group_accesses_on_group_id", using: :btree
   end
-
-  add_index "exercise_group_accesses", ["exercise_id"], name: "index_exercise_group_accesses_on_exercise_id", using: :btree
-  add_index "exercise_group_accesses", ["group_id"], name: "index_exercise_group_accesses_on_group_id", using: :btree
 
   create_table "exercise_relations", force: :cascade do |t|
     t.integer  "origin_id"
@@ -169,19 +168,17 @@ ActiveRecord::Schema.define(version: 20180314123634) do
     t.integer  "downloads",                default: 0
     t.integer  "license_id"
     t.boolean  "deleted"
+    t.index ["execution_environment_id"], name: "index_exercises_on_execution_environment_id", using: :btree
+    t.index ["license_id"], name: "index_exercises_on_license_id", using: :btree
+    t.index ["user_id"], name: "index_exercises_on_user_id", using: :btree
   end
-
-  add_index "exercises", ["execution_environment_id"], name: "index_exercises_on_execution_environment_id", using: :btree
-  add_index "exercises", ["license_id"], name: "index_exercises_on_license_id", using: :btree
-  add_index "exercises", ["user_id"], name: "index_exercises_on_user_id", using: :btree
 
   create_table "exercises_labels", id: false, force: :cascade do |t|
     t.integer "exercise_id"
     t.integer "label_id"
+    t.index ["exercise_id"], name: "index_exercises_labels_on_exercise_id", using: :btree
+    t.index ["label_id"], name: "index_exercises_labels_on_label_id", using: :btree
   end
-
-  add_index "exercises_labels", ["exercise_id"], name: "index_exercises_labels_on_exercise_id", using: :btree
-  add_index "exercises_labels", ["label_id"], name: "index_exercises_labels_on_label_id", using: :btree
 
   create_table "file_types", force: :cascade do |t|
     t.string   "name"
@@ -199,11 +196,10 @@ ActiveRecord::Schema.define(version: 20180314123634) do
     t.string   "membership_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["group_name"], name: "index_group_memberships_on_group_name", using: :btree
+    t.index ["group_type", "group_id"], name: "index_group_memberships_on_group_type_and_group_id", using: :btree
+    t.index ["member_type", "member_id"], name: "index_group_memberships_on_member_type_and_member_id", using: :btree
   end
-
-  add_index "group_memberships", ["group_name"], name: "index_group_memberships_on_group_name", using: :btree
-  add_index "group_memberships", ["group_type", "group_id"], name: "index_group_memberships_on_group_type_and_group_id", using: :btree
-  add_index "group_memberships", ["member_type", "member_id"], name: "index_group_memberships_on_member_type_and_member_id", using: :btree
 
   create_table "groups", force: :cascade do |t|
     t.string   "name"
@@ -224,9 +220,8 @@ ActiveRecord::Schema.define(version: 20180314123634) do
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
     t.string   "color"
+    t.index ["label_category_id"], name: "index_labels_on_label_category_id", using: :btree
   end
-
-  add_index "labels", ["label_category_id"], name: "index_labels_on_label_category_id", using: :btree
 
   create_table "licenses", force: :cascade do |t|
     t.string   "name"
@@ -253,10 +248,9 @@ ActiveRecord::Schema.define(version: 20180314123634) do
     t.integer  "user_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.index ["exercise_id"], name: "index_ratings_on_exercise_id", using: :btree
+    t.index ["user_id"], name: "index_ratings_on_user_id", using: :btree
   end
-
-  add_index "ratings", ["exercise_id"], name: "index_ratings_on_exercise_id", using: :btree
-  add_index "ratings", ["user_id"], name: "index_ratings_on_user_id", using: :btree
 
   create_table "relations", force: :cascade do |t|
     t.string   "name"
@@ -270,10 +264,9 @@ ActiveRecord::Schema.define(version: 20180314123634) do
     t.text     "text"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.index ["exercise_id"], name: "index_reports_on_exercise_id", using: :btree
+    t.index ["user_id"], name: "index_reports_on_user_id", using: :btree
   end
-
-  add_index "reports", ["exercise_id"], name: "index_reports_on_exercise_id", using: :btree
-  add_index "reports", ["user_id"], name: "index_reports_on_user_id", using: :btree
 
   create_table "testing_frameworks", force: :cascade do |t|
     t.string   "name"
@@ -290,11 +283,10 @@ ActiveRecord::Schema.define(version: 20180314123634) do
     t.integer  "exercise_id"
     t.integer  "exercise_file_id"
     t.float    "score"
+    t.index ["exercise_file_id"], name: "index_tests_on_exercise_file_id", using: :btree
+    t.index ["exercise_id"], name: "index_tests_on_exercise_id", using: :btree
+    t.index ["testing_framework_id"], name: "index_tests_on_testing_framework_id", using: :btree
   end
-
-  add_index "tests", ["exercise_file_id"], name: "index_tests_on_exercise_file_id", using: :btree
-  add_index "tests", ["exercise_id"], name: "index_tests_on_exercise_id", using: :btree
-  add_index "tests", ["testing_framework_id"], name: "index_tests_on_testing_framework_id", using: :btree
 
   create_table "user_groups", force: :cascade do |t|
     t.boolean  "is_admin",   default: false
@@ -303,20 +295,29 @@ ActiveRecord::Schema.define(version: 20180314123634) do
     t.integer  "group_id"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+    t.index ["group_id"], name: "index_user_groups_on_group_id", using: :btree
+    t.index ["user_id"], name: "index_user_groups_on_user_id", using: :btree
   end
-
-  add_index "user_groups", ["group_id"], name: "index_user_groups_on_group_id", using: :btree
-  add_index "user_groups", ["user_id"], name: "index_user_groups_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"
     t.string   "email"
     t.string   "password_digest"
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
-    t.string   "role",            default: "user"
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.string   "role",                   default: "user"
     t.boolean  "deleted"
+    t.string   "avatar_file_name"
+    t.string   "avatar_content_type"
+    t.integer  "avatar_file_size"
+    t.datetime "avatar_updated_at"
+    t.string   "username"
+    t.text     "description"
+    t.boolean  "email_confirmed",        default: false
+    t.string   "confirm_token"
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
   end
 
   add_foreign_key "account_links", "users"

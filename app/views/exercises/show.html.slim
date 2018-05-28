@@ -1,9 +1,10 @@
 - model_class = Exercise
-.header style=("clear: both")
+.header
   .col-md-9
-    .std-heading
+    .std-heading data-toggle="tooltip" data-placement="bottom" title="#{@exercise.title}"
       i.i.fa.fa-file-text-o style=("color: #008000")
-      = ' ' + @exercise.title
+      = ' '
+      = truncate(@exercise.title, length: 100)
   .col-md-3
     span.star-rating.pull-right style=("font-size: 2.0em")
       - [*1..5].each do |i|
@@ -32,115 +33,116 @@
 
   br
 
-legend
+legend.toggle-next
   span.number = '1'
   = t('exercises.form.basic_info') + ' '
-  span.fa.fa-caret-down.toggle
-table.vertical-table
-  tr
-    th
+  span.fa.fa-caret-up
+.show-table.exercise-show
+  .row
+    .row-label
       = t('exercises.title')
       | :
-    td
-      = @exercise.title
+    .row-value data-toggle="tooltip" data-placement="bottom" title="#{@exercise.title}"
+      = truncate(@exercise.title, length: 120)
 
   - if @exercise_relation
-    tr
-      th
+    .row
+      .row-label
         = t('exercises.parent')
         | :
-      td
+      .row-value
         - if @exercise_relation.origin
           = link_to @exercise_relation.origin.title, exercise_path(@exercise_relation.origin)
         - else
           = t('exercises.parent_deleted')
-    tr
-      th
+    .row
+      .row-label
         = t('exercises.relation')
         | :
-      td
+      .row-value
         = @exercise_relation.relation.name
 
   - @exercise.descriptions.each do |description|
-    tr
-      th
+    .row.vertical
+      .row-label
         = t('exercises.description_in') + ' '
         = description.language
         | :
-      td
+      .row-value
         = description.text
-  tr
-    th
+  .row.vertical
+    .row-label
       = t('exercises.instructions')
       | :
-    td
+    .row-value
       = @exercise.instruction
-  tr
-    th
+  .row
+    .row-label
       = t('exercises.execution_environment')
       | :
-    td
+    .row-value
       = @exercise.execution_environment.language
-  tr
-    th
+  .row
+    .row-label
       = t('exercises.created_at')
       | :
-    td
+    .row-value
       = @exercise.created_at
-  tr
-    th
+  .row
+    .row-label
       = t('exercises.created_by')
       | :
     - if !@exercise.user
-      td
+      .row-value
         = t('users.undefined')
     - elsif @exercise.user == current_user
-      td
+      .row-value
         = t('users.yourself')
-    - elsif @exercise.user.first_name.nil? || current_user.role === 'user'
-      td
+    - elsif @exercise.user.first_name.nil?
+      .row-value
         = "User#{@exercise.user.id}"
     - else
-      td
-        = @exercise.user.name
-legend
+      .row-value
+        = link_to @exercise.user.name, user_path(@exercise.user)
+legend.toggle-next
   span.number = '2'
   = t('exercises.form.additional_info') + ' '
-  span.fa.fa-caret-down.toggle
-table.vertical-table
-  tr
-    th
+  span.fa.fa-caret-up
+.show-table.exercise-show
+  .row
+    .row-label
       = t('exercises.visibility.label')
       | :
-    td
+    .row-value
       = @exercise.private ? t('exercises.visibility.private') : t('exercises.visibility.public')
-  tr
-    th
+  .row
+    .row-label
       = t('exercises.labels')
       | :
-    td
+    .row-value
       - @exercise.labels.each do |label|
-        = '#' + label.name + ' '
-  tr
-    th
+        .exercise_label style=("background-color: #{'#' + label.color.to_s}; color: #{'#' + label.font_color.to_s};")
+          = label.name
+  .row
+    .row-label
       = t('exercises.groups')
       | :
-    td
+    .row-value
       - @exercise.groups.each do |group|
         = link_to group.name, group_path(group)
-  tr
-    th
+  .row
+    .row-label
       = t('exercises.license')
       | :
-    td
+    .row-value
       = @exercise.license.name
       = ': '
       = link_to @exercise.license.link, @exercise.license.link
-  tr
-    th
+  .row
+    .row-label
       = t('exercises.impact')
       | :
-    td
+    .row-value
       p.impact
         = t('exercises.downloads')
         = ': '
@@ -154,122 +156,216 @@ table.vertical-table
         = ': '
         = @exercise.in_collections
 
-legend
+legend.toggle-next
   span.number = '3'
   = t('exercises.files.label') + ' '
-  span.fa.fa-caret-down.toggle
-
-table.vertical-table
-  - if @files.empty?
-    p style="margin-left: 10px;"
-      = t('exercises.show.no_files')
+  span.fa.fa-caret-up
+- if @files.empty?
+  p style="margin-left: 10px; margin-bottom: 30px"
+    = t('exercises.show.no_files')
+.files
   - @files.each do |file|
     - if file.purpose != 'test'
-      tr
-        td colspan=2
-          .editor_readonly
-            = file.content
-      tr
-        th
-          = t('exercises.files.name')
-        td
-          = file.name
-      tr
-        th
-          = t('exercises.files.path')
-        td
-          = file.path
-      tr
-        th
-          = t('exercises.files.extension')
-        td
-          = file.file_type.name_with_extension
-      tr
-        th
-          = t('exercises.files.role')
-        td
-          = file.role
+      .show-table.exercise-show
+        .table-header.closed.toggle-next
+          = file.full_file_name
+          = ' '
+          span.fa.fa-caret-down
+          - if file.hidden
+            span.fa-stack.crossed-out.small-slash.pull-right
+              i class="fa-stack-1x fa fa-eye"
+          - else
+            span.fa-stack.pull-right
+              i.fa.fa-stack-1x.fa-eye
+          - if file.read_only
+            span.fa-stack.crossed-out.small-slash.pull-right
+              i class="fa-stack-1x fa fa-pencil"
+          - else
+            span.fa-stack.pull-right
+              i.fa.fa-stack-1x.fa-pencil
+        .file-content
+          - if !file.attachment.present?
+            .row
+              .editor_readonly
+                = file.content
+          - else
+            .row.vertical
+              .row-label
+                = t('exercises.files.attachment')
+                | :
+              .row-value
+                - if file.has_attached_image?
+                  = image_tag(file.attachment.url(:large))
+                - else
+                  = link_to file.attachment.original_filename, download_attachment_path(file), 'data-turbolinks': false
+          .row
+            .row-label
+              = t('exercises.files.name')
+              | :
+            .row-value
+              = file.name
+          .row
+            .row-label
+              = t('exercises.files.path')
+              | :
+            .row-value
+              = file.path
+          .row
+            .row-label
+              = t('exercises.files.extension')
+              | :
+            .row-value
+              = file.file_type.name_with_extension if file.file_type
+          .row
+            .row-label
+              = t('exercises.files.role')
+              | :
+            .row-value
+              = file.role
 
-legend
+legend.toggle-next
   span.number = '4'
   = t('exercises.tests.label') + ' '
-  span.fa.fa-caret-down.toggle
-
-table.vertical-table
-  - if @tests.empty?
-    p style="margin-left: 10px;"
-      = t('exercises.show.no_tests')
+  span.fa.fa-caret-up
+- if @tests.empty?
+  p style="margin-left: 10px; margin-bottom: 30px"
+    = t('exercises.show.no_tests')
+.files
   - @tests.each do |test|
-    tr
-      td colspan=2
-        .editor_readonly
-          = test.exercise_file.content
-    tr
-      th
-        = t('exercises.files.name')
-      td
-        = test.name
-      tr
-        th
-          = t('exercises.files.path')
-        td
-          = test.path
-      tr
-        th
-          = t('exercises.files.extension')
-        td
-          = test.file_type.name_with_extension
-    tr
-      th
-        = t('exercises.tests.feedback')
-      td
-        = test.feedback_message
-    tr
-      th
-        = t('exercises.tests.framework')
-      td
-        = test.testing_framework.name
+    .show-table.exercise-show
+      .table-header.closed.toggle-next
+        = test.full_file_name
+        = ' '
+        span.fa.fa-caret-down
+        - if test.exercise_file.hidden
+          span.fa-stack.crossed-out.small-slash.pull-right
+            i class="fa-stack-1x fa fa-eye"
+        - else
+          span.fa-stack.pull-right
+            i.fa.fa-stack-1x.fa-eye
+        - if test.exercise_file.read_only
+          span.fa-stack.crossed-out.small-slash.pull-right
+            i class="fa-stack-1x fa fa-pencil"
+        - else
+          span.fa-stack.pull-right
+            i.fa.fa-stack-1x.fa-pencil
+      .file-content
+        - if !test.attachment.present?
+          .row
+            .editor_readonly
+              = test.content
+        - else
+          .row.vertical
+            .row-label
+              = t('exercises.files.attachment')
+              | :
+            .row-value
+              - if test.has_attached_image?
+                = image_tag(test.attachment.url(:large))
+              - else
+                = link_to test.attachment.original_filename, download_attachment_path(test.exercise_file), 'data-turbolinks': false
+        .row
+          .row-label
+            = t('exercises.files.name')
+            | :
+          .row-value
+            = test.name
+        .row
+          .row-label
+            = t('exercises.files.path')
+            | :
+          .row-value
+            = test.path
+        .row
+          .row-label
+            = t('exercises.files.extension')
+            | :
+          .row-value
+            = test.file_type.name_with_extension if test.file_type
+        .row.vertical
+          .row-label
+            = t('exercises.tests.feedback')
+            | :
+          .row-value
+            = test.feedback_message
+        .row
+          .row-label
+            = t('exercises.tests.framework')
+            | :
+          .row-value
+            = test.testing_framework.name
+.button-panel
+  .button-box
+    .button-description
+      = "Save Exercises for later by adding them to your cart or a collection."
+    .wrapper
+      = link_to t('exercises.show.add_to_cart'), add_to_cart_path(@exercise), method: 'post', class: 'btn btn-default'
+      .dropdown.btn-group
+        = button_tag class: 'btn btn-default dropdown-toggle', data: {toggle: 'dropdown'} do
+          = t('exercises.show.add_to_collection') + ' '
+          span.caret
+        ul.scrollable.dropdown-menu[role="menu"]
+          - if !current_user.collections.empty?
+            - current_user.collections.each do |collection|
+              li
+                = link_to collection.title, add_to_collection_path(collection: collection), method: 'post', class: 'dropdown-item'
+          - else
+            li
+              = link_to t('exercises.show.add_collection'), new_collection_path(current_user)
+  .button-box
+    .button-description
+      = "Download your Exercise as a zip file or export them directly to an autograder."
+    - if can? :push_external, Exercise
+      .wrapper
+        = link_to t('shared.download_zip'), download_exercise_exercise_url(@exercise), class: 'btn btn-default', 'data-turbolinks'=> false
+        .dropdown.btn-group
+          = button_tag class: 'btn btn-default dropdown-toggle', data: {toggle: 'dropdown'} do
+            = t('exercises.show.export') + ' '
+            .caret
+          ul.scrollable.dropdown-menu[role="menu"]
+            li.dropdown-header = t('.export_to') + ': '
+            - if !current_user.account_links.empty?
+              - current_user.account_links.each do |acc_link|
+                li
+                  = link_to acc_link.account_name, push_external_exercise_path(account_link: acc_link), method: 'post', class: 'dropdown-item'
+            - else
+              li
+                = link_to t('exercises.show.define_account_link'), new_user_account_link_path(current_user)
+  .button-box
+    .button-description
+      = "Derivate, translate or port this Exercise by duplicating it. The duplicate will be owned by you."
+    .wrapper
+      = link_to t('exercises.all.duplicate'), duplicate_exercise_path(@exercise), class:'btn btn-default'
 
-.actions.btn-group[role="group"]
-
-  = button_tag type: 'button', class: 'btn btn-important comment-button' do
-    = t('exercises.all.comments') + ' '
-    span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
-    span.fa.fa-caret-down.my-caret
-  = button_tag type: 'button', class: 'btn btn-important related-button' do
+.related-panel
+  = button_tag type: 'button', class: 'full-window-button related-button' do
     = t('exercises.all.related_exercises')+ ' '
     span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
     span.fa.fa-caret-down.my-caret
-  = link_to t('exercises.show.add_to_cart'), add_to_cart_path(@exercise), method: 'post', class: 'btn btn-important'
-  .dropup.btn-group
-    = button_tag class: 'btn btn-important dropdown-toggle',  data: {toggle: 'dropdown'} do
-      = t('exercises.show.add_to_collection') + ' '
-      span.caret
-    ul.scrollable.dropdown-menu[role="menu"]
-      - if !current_user.collections.empty?
-        - current_user.collections.each do |collection|
-          li
-            = link_to collection.title, add_to_collection_path(collection: collection), method: 'post', class: 'dropdown-item'
-      - else
-        li
-          = link_to t('exercises.show.add_collection'), new_collection_path(current_user)
-  - if can? :export, Exercise
-    .dropup.btn-group
-      = button_tag class: 'btn btn-important dropdown-toggle', data: {toggle: 'dropdown'} do
-        = t('exercises.show.export') + ' '
-        span.caret
-      ul.scrollable.dropdown-menu[role="menu"]
-        li = link_to t('.download_xml'), download_exercise_exercise_url(@exercise)
-        li.divider
-        li.dropdown-header = t('.export_to') + ': '
-        - if !current_user.account_links.empty?
-          - current_user.account_links.each do |acc_link|
-            li
-              = link_to acc_link.account_name, push_external_exercise_path(account_link: acc_link), method: 'post', class: 'dropdown-item'
-        - else
-          li
-            = link_to t('exercises.show.define_account_link'), new_user_account_link_path(current_user)
+div class=("related-box with-borders") data-exercise=@exercise.id
+  .slide-left.inactive
+    = button_tag do
+      i.fa.fa-caret-left
+  .content
+  .slide-right.inactive
+    = button_tag do
+      i.fa.fa-caret-right
+.comments-panel
+  = button_tag type: 'button', class: 'full-window-button comment-button' do
+    = t('exercises.all.comments') + ' '
+    span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
+    span.fa.fa-caret-down.my-caret
+div class=("comment-box with-borders") data-exercise=@exercise.id
+  = form_for :comment, url: exercise_comments_path(@exercise), remote: true do |f|
+    .write-comment
+      .input-group
+        = f.label_tag 'new_comment_label', 'New Comment', class: 'input-group-addon'
+        = f.text_field :text, class: 'form-control'
+        span.input-group-btn
+          = f.submit class: 'btn btn-default'
+  .comment-body
 
+.actions.btn-group[role="group"]
   - if can? :edit, @exercise
     = link_to edit_exercise_path(@exercise),  class: 'btn btn-important' do
       i.fa.fa-edit
@@ -291,26 +387,6 @@ table.vertical-table
             .input-group-btn
               = submit_tag t('exercises.show.submit'), form: 'report', class: 'btn btn-default'
   = link_to t('exercises.show.back'), :back,  class: 'btn btn-important'
-
-div class=("related-box with-borders") data-exercise=@exercise.id
-
-  .slide-left.inactive
-    = button_tag do
-      i.fa.fa-caret-left
-  .content
-  .slide-right.inactive
-    = button_tag do
-      i.fa.fa-caret-right
-
-div class=("comment-box with-borders") data-exercise=@exercise.id
-  = form_for :comment, url: exercise_comments_path(@exercise), remote: true do |f|
-    .write-comment
-      .input-group
-        = f.label_tag 'new_comment_label', 'New Comment', class: 'input-group-addon'
-        = f.text_field :text, class: 'form-control'
-        span.input-group-btn
-          = f.submit class: 'btn btn-default'
-  .comment-body
 
 = form_tag report_exercise_path(@exercise), id: 'report'
 

@@ -14,6 +14,6 @@ module ControllerHelpers
   end
 
   def current_user
-    User.find(request.session[:user])
+    User.find(request.session[:user_id])
   end
 end

@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'zip'
 
 class Exercise < ApplicationRecord
   groupify :group_member
@@ -220,11 +221,13 @@ class Exercise < ApplicationRecord
     file_array.try(:each) do |key, array|
       destroy = array[:_destroy]
       id = array[:id]
-
-      file_type = FileType.find(array[:file_type_id])
       if id
         file = ExerciseFile.find(id)
-        destroy ? file.destroy : file.update(file_permit(array))
+        if destroy
+          file.destroy
+        else
+          file.update(file_permit(array))
+        end
       else
         exercise_files.new(file_permit(array)) unless destroy
       end
@@ -235,6 +238,7 @@ class Exercise < ApplicationRecord
     test_array.try(:each) do |key, array|
       destroy = array[:_destroy]
       id = array[:id]
+
       if id
         test = Test.find(id)
         if destroy
@@ -242,17 +246,29 @@ class Exercise < ApplicationRecord
           test.destroy
         else
           test.update(test_permit(array))
-          test.exercise_file.update(content: array[:content])
+          test.exercise_file.update(file_permit(array[:exercise_file_attributes]))
         end
       else
         unless destroy
-          file = ExerciseFile.new(content: array[:content], name: array[:name], path: array[:path], file_type_id: array[:file_type_id], purpose: 'test' )
+          file = exercise_files.new(file_permit(array[:exercise_file_attributes]))
+          file.purpose = 'test'
           test = Test.new(test_permit(array))
           test.exercise_file =  file
           tests << test
         end
       end
     end
+  end
+
+  def update_file_params(file_attributes)
+    if file_attributes[:content].respond_to?(:read)
+      file_attributes[:attachment] = file_attributes[:content]
+      file_attributes[:content] = nil
+    else
+      file_attributes[:attachment] = nil
+    end
+    file_attributes
+
   end
 
   def delete_dependencies
@@ -268,7 +284,10 @@ class Exercise < ApplicationRecord
   end
 
   def file_permit(params)
-    params.permit(:role, :content, :path, :name, :hidden, :read_only, :file_type_id)
+    params = update_file_params(params)
+    allowed_params = [:role, :content, :path, :name, :hidden, :read_only, :file_type_id]
+    allowed_params << :attachment if params[:attachment_present] == 'false'
+    params.permit(allowed_params)
   end
 
   def test_permit(params)

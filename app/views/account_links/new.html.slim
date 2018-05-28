@@ -1,3 +1,4 @@
-h1 = t('account.new.header')
+.header
+  .std-heading
+    = t('account.new.header')
 = render 'form'
-= link_to t('account.button.back'), user_path(current_user), class:'btn btn-default btn-xs'

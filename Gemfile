@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+# Handle file upload
+gem 'paperclip'
 #Create Zip files
 gem 'rubyzip'
 #Handle Group Access

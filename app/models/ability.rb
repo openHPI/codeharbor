@@ -2,9 +2,28 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
+
     if user
       if user.role == 'admin'
         can :manage, :all
+
+        #Define Abilities admins cannot do
+        #Group
+        cannot :leave, Group do |group|
+          !user.in_group?(group)
+        end
+
+        can :view_all, User
+      end
+
+      #AccountLink
+      can [:create, :new], AccountLink
+      #can [:manage], AccountLink, :user_id => user.id
+      can [:view, :remove_account_link], AccountLink do |account_link|
+        account_link.external_users.include?(user)
+      end
+      can [:manage], AccountLink do |account_link|
+        account_link.user == user
       end
 
       #Answer
@@ -15,7 +34,7 @@ class Ability
 
       #Cart
       can [:create], Cart
-      can [:my_cart, :show, :remove_all, :download_all, :remove_exercise], Cart do |cart|
+      can [:my_cart, :show, :remove_all, :download_all, :push_cart, :export, :remove_exercise], Cart do |cart|
         cart.user == user
       end
 
@@ -26,8 +45,8 @@ class Ability
       end
 
       #Exercise
-      can [:create, :contribute], Exercise
-      can [:show, :read, :add_to_cart, :add_to_collection, :export, :duplicate, :download_exercise, :report], Exercise do |exercise|
+      can [:create, :contribute, :read_comments, :related_exercises], Exercise
+      can [:show, :read, :add_to_cart, :add_to_collection, :push_external, :duplicate, :download_exercise, :report], Exercise do |exercise|
         exercise.can_access(user)
       end
       can [:manage], Exercise do |exercise|
@@ -36,8 +55,6 @@ class Ability
       cannot [:report], Exercise do |exercise|
         ExerciseAuthor.where(user_id: user.id, exercise_id: exercise.id).any? || exercise.user == user
       end
-
-
 
       #Comment
       can [:show, :create, :read, :answer ], Comment
@@ -56,10 +73,16 @@ class Ability
       can [:manage], Group do |group|
         user.in_group?(group, as: 'admin')
       end
+      cannot [:request_access], Group do |group|
+        user.in_group?(group)
+      end
 
       #User
-      can [:create], User
-      can [:show, :edit, :delete, :manage_accountlinks], User do |this_user|
+      can [:create, :view, :show, :read], User
+      can [:message], User do |this_user|
+        this_user != user
+      end
+      can [:edit, :update, :soft_delete, :delete, :manage_accountlinks, :remove_account_link], User do |this_user|
         this_user == user
       end
 

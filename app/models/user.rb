@@ -5,12 +5,14 @@ class User < ApplicationRecord
   groupify :named_group_member
 
   validates :email, presence: true, uniqueness: true
+  validates_uniqueness_of :username, :allow_blank => true
   validates :first_name, :last_name, presence: true
   has_secure_password
 
+  has_and_belongs_to_many :external_account_links, class_name: "AccountLink", dependent: :destroy
   has_and_belongs_to_many :collections, dependent: :destroy
   has_many :reports, dependent: :destroy
-  has_many :account_links
+  has_many :account_links, foreign_key: "user_id", class_name: "AccountLink", dependent: :destroy
   has_many :exercises
   has_one :cart, dependent: :destroy
   has_many :exercise_authors, dependent: :destroy
@@ -18,9 +20,13 @@ class User < ApplicationRecord
   has_many :sent_messages, :class_name => 'Message', :foreign_key => 'sender_id'
   has_many :received_messages, :class_name => 'Message', :foreign_key => 'recipient_id'
 
+  has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100#" }, :default_url => "/images/:style/missing.png"
+  validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
+
   default_scope { where(deleted: [nil, false]) }
 
-  before_destroy :handle_destroy, prepend: true
+  before_create :confirmation_token
+  #before_destroy :handle_destroy, prepend: true
 
   def soft_delete
     destroy = handle_destroy
@@ -29,15 +35,6 @@ class User < ApplicationRecord
       new_email = Digest::MD5.hexdigest email
       update(first_name: 'deleted', last_name: 'user', email: new_email, deleted: true)
     end
-  end
-
-  def last_admin? (group)
-    if self.in_group?(group, as: 'admin')
-      if group.admins.size == 1
-        true
-      end
-    end
-    false
   end
 
   def last_admin? (group)
@@ -69,12 +66,13 @@ class User < ApplicationRecord
 
   def handle_destroy
     destroy = handle_group_memberships
-    if destroy == false
-      throw :abort
+    if !destroy
+      false
     else
       handle_collection_membership
       handle_exercises
       handle_messages
+      true
     end
   end
 
@@ -98,6 +96,7 @@ class User < ApplicationRecord
         group.destroy
       end
     end
+    true
   end
   
   def groups_sorted_by_admin_state_and_name(groups_to_sort = groups)
@@ -122,7 +121,50 @@ class User < ApplicationRecord
     Message.where(sender: self, param_type: ['exercise', 'group', 'collection']).destroy_all
   end
 
+  def shared_account_link_with(user)
+    account_link = AccountLink.find_by(user: self)
+    if account_link.users.include?(user)
+      true
+    else
+      false
+    end
+  end
+
   def unread_messages_count
     Message.where(recipient: self, recipient_status: 'u').count.to_s
   end
+
+  def email_activate
+    self.email_confirmed = true
+    self.confirm_token = nil
+    save!(:validate => false)
+  end
+
+  def generate_password_token!
+    self.reset_password_token = generate_token
+    self.reset_password_sent_at = Time.now.utc
+    save!
+  end
+
+  def password_token_valid?
+    (self.reset_password_sent_at + 4.hours) > Time.now.utc
+  end
+
+  def reset_password!(password, password_confirmation)
+    self.reset_password_token = nil
+    self.password = password
+    self.password_confirmation = password_confirmation
+    save
+  end
+
+  private
+    def confirmation_token
+      if self.confirm_token.blank?
+        self.confirm_token = SecureRandom.urlsafe_base64.to_s
+      end
+    end
+
+    def generate_token
+      SecureRandom.hex(10)
+    end
 end

@@ -8,7 +8,7 @@ module Proforma
       version = doc.xpath('/p:task/p:proglang/@version').first.value
       exec_environment = ExecutionEnvironment.where('language = ? AND version = ?', prog_language, version).take
       unless exec_environment
-        exec_environment = ExecutionEnvironment.find_by(language: 'java') #Default Execution Environment for Test seeds, please change in Production!
+        exec_environment = ExecutionEnvironment.find_by(language: 'Java') #Default Execution Environment for Test seeds, please change in Production!
       end
       @exercise.execution_environment = exec_environment
       @exercise.private = false
@@ -25,7 +25,7 @@ module Proforma
           metadata = file_metadata(file)
           file_attributes = file_attributes(xml,  metadata)
           shared_attributes = shared_attributes(file, metadata)
-          unless shared_attributes[:name] == ''
+          if metadata[:filename]
             if file_attributes[:role] == 'Test'
               test = add_test_xml(xml, metadata)
               attributes = test_attributes.merge(shared_attributes)
