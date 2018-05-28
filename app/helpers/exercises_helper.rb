@@ -1,2 +1,10 @@
 module ExercisesHelper
+  def fa_with_slash(classes)
+    render('exercises/fa_with_slash', classes: classes)
+  end
+
+  def block_to_partial(partial_name, options = {}, &block)
+    options.merge!(:body => capture(&block))
+    concat(render(:partial => partial_name, :locals => options), block.binding)
+  end
 end

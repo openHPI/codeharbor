@@ -3,4 +3,4 @@ Hello <%= @admin.name %>
 <%= @user.name %> asked to join your group " <%= @group.name %>
 If you want to give your permission click on the link below.
 Otherwise ignore this Email.
-<%= link_to 'Confirm Request', group_url(@group), class: 'btn btn-success' %>
+<%= sessions_email_link_url(user: @admin)%>

@@ -1,12 +1,16 @@
 require 'oauth2'
 require 'proforma/importer'
 require 'proforma/xml_generator'
+require 'proforma/zip_importer'
+require 'zip'
 
 class ExercisesController < ApplicationController
   load_and_authorize_resource :except => [:import_proforma_xml]
   before_action :set_exercise, only: [:show, :edit, :update, :destroy, :add_to_cart, :add_to_collection, :push_external, :contribute]
   before_action :set_search, only: [:index]
   skip_before_action :verify_authenticity_token, only: [:import_proforma_xml]
+
+  include ExerciseExport
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.exercise.authorization')
@@ -103,7 +107,6 @@ class ExercisesController < ApplicationController
         if !params[:exercise][:exercise_relation] #Exercise Relation is set if form is for duplicate exercise, otherwise it's not.
           format.html { render :new }
         else
-          puts(@exercise.errors.inspect)
           format.html { redirect_to duplicate_exercise_path(params[:exercise][:exercise_relation][:origin_id])}
         end
         format.json { render json: @exercise.errors, status: :unprocessable_entity }
@@ -165,38 +168,30 @@ class ExercisesController < ApplicationController
       format.js{ render 'load_related_exercises.js.erb' }
     end
   end
+
   def push_external
     account_link = AccountLink.find(params[:account_link])
-    oauth2Client = OAuth2::Client.new('client_id', 'client_secret', :site => account_link.push_url)
-    oauth2_token = account_link[:oauth2_token]
-    token = OAuth2::AccessToken.from_hash(oauth2Client, :access_token => oauth2_token)
-    xml_generator = Proforma::XmlGenerator.new
-    xml_document = xml_generator.generate_xml(@exercise)
-    token.post(account_link.push_url, {body: xml_document})
-    redirect_to @exercise, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
+    error = push_exercise(@exercise, account_link)
+    if error.nil?
+      redirect_to @exercise, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
+    else
+      puts error
+      redirect_to @exercise, alert: t('controllers.account_links.not_working', account_link: account_link.readable)
+    end
   end
 
   def download_exercise
-    xsd = Nokogiri::XML::Schema(File.read('app/assets/taskxml.xsd'))
-    xml_generator = Proforma::XmlGenerator.new
-    xml_document = xml_generator.generate_xml(@exercise)
-    doc = Nokogiri::XML(xml_document)
 
-    errors = xsd.validate(doc)
-
-    title = @exercise.title
-    title = title.tr('.,:*|"<>/\\', '')
-    title = title.gsub /[ (){}\[\]]/, '_'
-
-    if errors.any?
-      errors.each do |error|
-        puts error.message
+    zip_file = create_exercise_zip(@exercise)
+    if zip_file[:errors].any?
+      zip_file[:errors].each do |error|
+        logger.error(error)
       end
       redirect_to @exercise, alert: t('controllers.exercise.download_error')
     else
       downloads_new = @exercise.downloads+1
       @exercise.update(downloads: downloads_new)
-      send_data doc, filename: "#{title}.xml", type: "application/xml"
+      send_data(zip_file[:data], :type => 'application/zip', :filename => zip_file[:filename], :disposition => 'attachment' )
     end
   end
 
@@ -255,31 +250,58 @@ class ExercisesController < ApplicationController
   private :user_by_code_harbor_token
 
   def import_exercise
+    files = Hash.new
+    begin
+      uploaded_io = params[:file_upload]
+      raise t('controllers.exercise.choose_file') unless uploaded_io
 
-    xsd = Nokogiri::XML::Schema(File.read('app/assets/taskxml.xsd'))
-    doc = Nokogiri::XML(params[:xml])
+      Zip::File.open(uploaded_io.path) do |zip_file|
 
-    errors = xsd.validate(doc)
+        zip_file.each do |entry|
+          name = entry.name.split('.').first
+          extension = '.' + entry.name.split('.').second
+          tempfile = Paperclip::Tempfile.new([name, extension])
+          tempfile.write entry.get_input_stream.read
+          tempfile.rewind
+          files[entry.name.to_s] = tempfile
+        end
 
-    if errors.any?
-      errors.each do |error|
-        puts error.message
+        xml = zip_file.glob("task.xml").first
+        raise t('controllers.exercise.taskxml_required') unless xml
+
+        xml = xml.get_input_stream.read
+        xsd = Nokogiri::XML::Schema(File.read('app/assets/taskxml.xsd'))
+        doc = Nokogiri::XML(xml)
+
+        errors = xsd.validate(doc)
+
+        if errors.any?
+          errors.each do |error|
+            puts error.message
+          end
+          raise t('controllers.exercise.xml_not_valid')
+        else
+          exercise = Exercise.new
+          importer = Proforma::ZipImporter.new
+          exercise = importer.from_proforma_zip(exercise, doc, files)
+          exercise.user = current_user
+          saved = exercise.save
+
+          if saved
+            flash[:notice] = t('controllers.exercise.import_success')
+            redirect_to edit_exercise_path(exercise.id)
+          else
+            raise t('controllers.exercise.import_fail')
+          end
+        end
       end
-      flash[:alert] = t('controllers.exercise.xml_not_valid')
-      render :nothing => true, :status => 200
-    else
-      exercise = Exercise.new
-      importer = Proforma::Importer.new
-      exercise = importer.from_proforma_xml(exercise, doc)
-      exercise.user = current_user
-      saved = exercise.save
-
-      if saved
-        flash[:notice] = t('controllers.exercise.import_success')
-        redirect_to edit_exercise_path(exercise.id)
-      else
-        flash[:alert] = t('controllers.exercise.import_fail')
-        redirect_to exercises_path
+    rescue Exception => e
+      flash[:alert] = e.message
+      redirect_to exercises_path
+    ensure
+      files.each do |key, file|
+        file.close
+        file.unlink
       end
     end
   end
@@ -365,8 +387,8 @@ class ExercisesController < ApplicationController
     else
       @created = "0"
     end
-
   end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_exercise
     @exercise = Exercise.find(params[:id])

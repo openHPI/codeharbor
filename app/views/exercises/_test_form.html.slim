@@ -1,22 +1,23 @@
-div[style="margin-left: 10px;"]
+- test.object.build_exercise_file unless test.object.exercise_file
+= test.fields_for :exercise_file do |file|
   .field-element
     = f.label :name, t('exercises.files.name'), class: 'form-label'
-    = test.text_field :name, class: 'form-control'
+    = file.text_field :name, class: 'form-control file-name'
   .field-element
     = f.label :path, t('exercises.files.path'), class: 'form-label'
-    = test.text_field :path, size: 40, class: 'form-control'
-  .field-element
-    = f.label :file_types_id, t('exercises.files.extension'), class: 'form-label'
-    = test.collection_select :file_type_id, FileType.all, :id, :name_with_extension, {}, {class: 'file-type'}
-  .field-element
-    = f.label :feedback_message, t('exercises.tests.feedback'), class:'form-label'
-    = test.text_area :feedback_message, class: 'form-control'
-  .field-element
-    = f.label :testing_framework, t('exercises.tests.framework'), class:'form-label'
-    = test.collection_select :testing_framework_id, TestingFramework.all, :id, :name, {}, {class: 'form-control'}
-  .field-element
-    = f.label :content, t('exercises.tests.content'), class:'form-label'
-    .edit
-      .editor
-        = test.text_area :content
-      = test.text_area :content, class:'hidden'
+    = file.text_field :path, size: 40, class: 'form-control'
+  .field-row
+    .field-element-10
+      = f.label :file_types_id, t('exercises.files.extension'), class: 'form-label'
+      = file.select :file_type_id, options_for_select(FileType.all.map { |ft| [ft.name_with_extension, ft.id, {'data-extension' => ft.file_extension}] }, file.object.file_type_id), {}, class: 'file-type'
+    .field-element-2
+      = render 'permissions', file: file
+.field-element
+  = f.label :feedback_message, t('exercises.tests.feedback'), class: 'form-label'
+  = test.text_area :feedback_message, class: 'form-control'
+.field-element
+  = f.label :testing_framework, t('exercises.tests.framework'), class: 'form-label'
+  = test.collection_select :testing_framework_id, TestingFramework.all, :id, :name, {}, {class: 'form-control'}
+.field-element
+  = test.fields_for :exercise_file do |file|
+    = render 'editor', f:f, file: file

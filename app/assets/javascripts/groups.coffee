@@ -7,5 +7,4 @@ ready =->
   if option = document.getElementById('option')
     $(document.getElementById(option.value)).addClass('selected')
 
-$(document).ready(ready)
-$(document).on('page:load', ready)
+$(document).on('turbolinks:load', ready)

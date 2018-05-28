@@ -54,7 +54,7 @@ RSpec.describe Collection, type: :model do
 
     it 'delete collections, when user gets destroyed' do
       collections_count = Collection.all.count
-      expect(user.destroy).to be_truthy
+      expect(user.soft_delete).to be_truthy
       expect(Collection.all.count).to eql (collections_count - 1)
     end
   end

@@ -11,7 +11,7 @@ RSpec.describe 'users', type: :request do
     describe 'GET /users' do
       it 'has http 200' do
         get users_path
-        expect(response).to have_http_status(302)
+        expect(response).to have_http_status(200)
       end
     end
     describe 'POST /users' do

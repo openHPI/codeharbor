@@ -1,0 +1,24 @@
+= label_tag 'Permissions', "Permissions", class: 'form-label'
+.placeholder.form-control
+  .radio-switch
+    = file.radio_button :read_only, false, value: false, checked: true
+    = file.label :read_only_false, data: {toggle: 'tooltip', placement: 'bottom'}, title: 'editable', class: 'radio-left small-radio' do
+      div style="display:inline-block"
+        span.fa-stack
+          i.fa.fa-stack-1x.fa-pencil.fa-2x
+    = file.radio_button :read_only, true, value: true
+    = file.label :read_only_true, data: {toggle: 'tooltip', placement: 'bottom'}, title: 'read only', class: 'radio-right small-radio' do
+      div style="display:inline-block"
+        span.fa-stack.crossed-out
+          i.fa.fa-stack-1x.fa-pencil.fa-2x
+  .radio-switch
+    = file.radio_button :hidden, false, value: false, checked: true
+    = file.label :hidden_false, data: {toggle: 'tooltip', placement: 'bottom'}, title: 'visible', class: 'radio-left small-radio' do
+      div style="display:inline-block"
+        span.fa-stack
+          i.fa.fa-stack-1x.fa-eye.fa-2x
+    = file.radio_button :hidden, true, value: true
+    = file.label :hidden_true, data: {toggle: 'tooltip', placement: 'bottom'}, title: 'hidden', class: 'radio-right small-radio' do
+      div style="display:inline-block"
+        span.fa-stack.crossed-out
+          i.fa.fa-stack-1x.fa-eye.fa-2x

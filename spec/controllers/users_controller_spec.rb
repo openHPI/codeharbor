@@ -85,9 +85,9 @@ RSpec.describe UsersController, type: :controller do
         expect(assigns(:user)).to be_persisted
       end
 
-      it 'redirects to session create' do
+      it 'redirects to home to wait for confirmation' do
         post :create, params: {:user => valid_attributes}, session: valid_session
-        expect(response).to redirect_to(sessions_create_path(valid_attributes))
+        expect(response).to redirect_to(home_index_path)
       end
     end
 

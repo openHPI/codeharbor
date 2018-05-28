@@ -1,3 +1,4 @@
-h1  = t('account.edit.header')
+.header
+  .std-heading
+    = t('account.edit.header')
 = render 'form'
-= link_to t('account.button.back'), user_path(@account_link.user)

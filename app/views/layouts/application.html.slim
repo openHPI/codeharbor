@@ -7,85 +7,85 @@ html
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
   body
-    .nav.navbar.navbar-default.navbar-fixed-top.navbar-offset
-      = nav_bar fixed: :top, brand: 'CodeHarbor', responsive: true do
-        = menu_group do
-          - if current_user
-            = menu_item exercises_path  do
-              i.fa.fa-file-text-o style=("color: #006600")
-              = ' ' + t('layouts.exercises')
-            = menu_item collections_path do
-              i.fa.fa-folder-open style=("color: #000066")
-              = ' ' + t('layouts.collections')
-            = menu_item groups_path do
-              i.fa.fa-group style=("color: #660000")
-              = ' ' + t('layouts.groups')
-            = menu_divider
-            - if current_user.role === 'admin'
-              = drop_down t('layouts.admin') do
-                = menu_item t('layouts.admin_nav.user'), users_path
-                = menu_item t('layouts.admin_nav.exercise'), exercises_exercises_all_path
-                = menu_item t('layouts.admin_nav.comments'), comments_comments_all_path
-                = menu_item t('layouts.admin_nav.collections'), collections_all_collections_path
-                = menu_item t('layouts.admin_nav.groups'), groups_all_groups_path
-                = menu_item t('layouts.admin_nav.file_types'), file_types_path
-                = menu_item t('layouts.admin_nav.execution_environments'), execution_environments_path
-                = menu_item t('layouts.admin_nav.testing_framework'), testing_frameworks_path
-                = menu_item t('layouts.admin_nav.lables'), labels_path
-                = menu_item t('layouts.admin_nav.license'), licenses_path
-        = menu_group pull: :right do
-          - if current_user
-            = menu_item my_cart_path do
-              i.fa.fa-shopping-cart
-              = ' ' + t('layouts.cart')+' (' + current_user.cart_count.to_s + ')'
-            li.dropdown
-              a href="#" class= "dropdown-toggle" data-toggle="dropdown"
-                = current_user.email
-                = ' '
-                - if current_user.unread_messages_count != '0'
-                  span.menu-number
-                    = current_user.unread_messages_count
-                b.caret
-              ul.dropdown-menu
-                li
-                  = link_to 'Profile', user_path(current_user)
-                li
-                  = link_to user_messages_path(current_user) do
-                    = "Messages"
-                    = ' '
-                    - if current_user.unread_messages_count != '0'
-                      span.menu-number
-                        = current_user.unread_messages_count
-            = menu_item t('layouts.logout'),  logout_path, method: :delete
-          - else
-            = menu_item new_user_path do
-              i.fa.fa-user
-              = ' ' + t('home.sign_up')
-            = menu_item login_path do
-              i.fa.fa-sign-in
-              = ' ' + t('home.login')
-    #wrap
-      #main
-        - if @index
-          .container style=("margin-top: 50px")
-            .col-md-12
-              = yield
-            = yield :modals
-        - else
-          .container style=("margin-top: 50px")
-            #flash-message
-              - flash.each do |name, msg|
-                - if msg == alert
-                  div#flash-error.alert.alert-danger style=("margin-top:30px; margin-bottom: -20px;")
-                    = flash[:alert]
-                - elsif msg == notice
-                  div#flash-notice.alert.alert-success style=("margin-top:30px; margin-bottom: -20px;")
-                    = flash[:notice]
-                - else
-                  = content_tag :div, msg, :id => "flash_#{name}"
-            .col-md-12 style=("margin-top: 50px")
-              = yield
+    #content
+      .nav.navbar.navbar-default.navbar-fixed-top.navbar-offset
+        = nav_bar fixed: :top, brand: 'CodeHarbor', responsive: true do
+          = menu_group do
+            - if current_user
+              = menu_item exercises_path  do
+                i.fa.fa-file-text-o style=("color: #006600")
+                = ' ' + t('layouts.exercises')
+              = menu_item collections_path do
+                i.fa.fa-folder-open style=("color: #000066")
+                = ' ' + t('layouts.collections')
+              = menu_item groups_path do
+                i.fa.fa-group style=("color: #660000")
+                = ' ' + t('layouts.groups')
+              = menu_divider
+              - if current_user.role === 'admin'
+                = drop_down t('layouts.admin') do
+                  = menu_item t('layouts.admin_nav.user'), users_path
+                  = menu_item t('layouts.admin_nav.exercise'), exercises_exercises_all_path
+                  = menu_item t('layouts.admin_nav.comments'), comments_comments_all_path
+                  = menu_item t('layouts.admin_nav.collections'), collections_all_collections_path
+                  = menu_item t('layouts.admin_nav.groups'), groups_all_groups_path
+                  = menu_item t('layouts.admin_nav.file_types'), file_types_path
+                  = menu_item t('layouts.admin_nav.execution_environments'), execution_environments_path
+                  = menu_item t('layouts.admin_nav.testing_framework'), testing_frameworks_path
+                  = menu_item t('layouts.admin_nav.lables'), labels_path
+                  = menu_item t('layouts.admin_nav.license'), licenses_path
+          = menu_group pull: :right do
+            - if current_user
+              = menu_item my_cart_path do
+                i.fa.fa-shopping-cart
+                = ' ' + t('layouts.cart')+' (' + current_user.cart_count.to_s + ')'
+              li.dropdown
+                a href="#" class= "dropdown-toggle" data-toggle="dropdown"
+                  = current_user.email
+                  = ' '
+                  - if current_user.unread_messages_count != '0'
+                    span.menu-number
+                      = current_user.unread_messages_count
+                  b.caret
+                ul.dropdown-menu
+                  li
+                    = link_to 'Profile', user_path(current_user)
+                  li
+                    = link_to user_messages_path(current_user) do
+                      = "Messages"
+                      = ' '
+                      - if current_user.unread_messages_count != '0'
+                        span.menu-number
+                          = current_user.unread_messages_count
+              = menu_item t('layouts.logout'),  logout_path, method: :delete
+            - else
+              = menu_item new_user_path do
+                i.fa.fa-user
+                = ' ' + t('home.sign_up')
+              = menu_item login_path do
+                i.fa.fa-sign-in
+                = ' ' + t('home.login')
+
+      - if @index
+        .container style=("margin-top: 50px")
+          .col-md-12
+            = yield
           = yield :modals
+      - else
+        .container style=("margin-top: 50px")
+          #flash-message
+            - flash.each do |name, msg|
+              - if msg == alert
+                div#flash-error.alert.alert-danger style=("margin-top:30px; margin-bottom: -20px;")
+                  = flash[:alert]
+              - elsif msg == notice
+                div#flash-notice.alert.alert-success style=("margin-top:30px; margin-bottom: -20px;")
+                  = flash[:notice]
+              - else
+                = content_tag :div, msg, :id => "flash_#{name}"
+          .col-md-12 style=("margin-top: 50px")
+            = yield
+        = yield :modals
     #footer
       .container
         .col-md-6

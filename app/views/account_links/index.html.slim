@@ -1,6 +1,32 @@
-p#notice
-  = notice
-h1 = t('account.links.header')
-= render partial: "all", locals: {account_links: @account_links}
+h1
+  = t('account.admin.header')
+  = ' '
+  = link_to t('account.button.new'), new_user_account_link_path(current_user), class: 'btn btn-success'
+table.table
+  thead
+    tr
+      th
+        = t('account.show_header')
+      th
+        = t('shared.user')
+      th
+        = t('shared.actions')
+
+  tbody
+    - @account_links.each do |account_link|
+      tr
+        td
+          = account_link.readable
+        - if account_link.user.first_name.nil?
+          td
+            = link_to "User#{account_link.user.id}", user_path(account_link.user)
+        - else
+          td
+            = link_to account_link.user.name, user_path(account_link.user)
+        td.actions.btn-group[role="group"]
+          = link_to t('shared.buttons.show'), user_account_link_path(account_link.user, account_link), class:'btn btn-default btn-xs'
+          = link_to t('shared.buttons.edit'), edit_user_account_link_path(account_link.user, account_link), class:'btn btn-warning btn-xs'
+          = link_to t('shared.buttons.destroy'), user_account_link_path(account_link.user, account_link), method: :delete, data: { confirm: t('sure') }, class:'btn btn-danger btn-xs'
 br
-= link_to t('account.button.new'), new_user_account_link_path(@user)
+
+= will_paginate @account_links
