@@ -66,14 +66,12 @@ class User < ApplicationRecord
 
   def handle_destroy
     destroy = handle_group_memberships
-    puts destroy
-    if destroy == false
+    if !destroy
       false
     else
       handle_collection_membership
       handle_exercises
       handle_messages
-      puts 'All handled'
       true
     end
   end
@@ -85,7 +83,6 @@ class User < ApplicationRecord
   
   def handle_group_memberships
 
-    puts 'Handle group'
     self.in_all_groups?(as: 'admin')
 
     self.groups.each do |group|
@@ -99,6 +96,7 @@ class User < ApplicationRecord
         group.destroy
       end
     end
+    true
   end
   
   def groups_sorted_by_admin_state_and_name(groups_to_sort = groups)

@@ -49,7 +49,7 @@ RSpec.describe User, type: :model do
     
     it 'deletes a user' do
       user_count = described_class.count
-      expect(user.destroy).to be_truthy
+      expect(user.soft_delete).to be_truthy
       expect(described_class.count).to eql(user_count - 1)
     end
     
@@ -57,7 +57,7 @@ RSpec.describe User, type: :model do
       #UserGroup.set_is_admin(one_member_group.id, user.id, true)
       one_member_group.make_admin(user)
       group_count = Group.all.count
-      expect(user.destroy).to be_truthy
+      expect(user.soft_delete).to be_truthy
       expect(Group.all.count).to eql(group_count - 1)
     end
     
@@ -75,7 +75,7 @@ RSpec.describe User, type: :model do
       #require 'pry'
       #binding.pry
       #user.destroy
-      expect(user.destroy).to be_truthy
+      expect(user.soft_delete).to be_truthy
       expect(Group.all.count).to eql(group_count)
     end
     
@@ -91,7 +91,7 @@ RSpec.describe User, type: :model do
 
       group_count = Group.all.count
       user_count = described_class.count
-      expect(user.destroy).to be_falsey
+      expect(user.soft_delete).to be_falsey
       expect(described_class.count).to eql(user_count)
       expect(Group.all.count).to eql(group_count)
     end

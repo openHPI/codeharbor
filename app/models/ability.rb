@@ -82,7 +82,7 @@ class Ability
       can [:message], User do |this_user|
         this_user != user
       end
-      can [:edit, :update, :delete, :manage_accountlinks, :remove_account_link], User do |this_user|
+      can [:edit, :update, :soft_delete, :delete, :manage_accountlinks, :remove_account_link], User do |this_user|
         this_user == user
       end
 

@@ -9,7 +9,7 @@ RSpec.describe SessionsController, type: :controller do
 
     it "returns redirection to home" do
       get :destroy
-      expect(response).to redirect_to "/home/index"
+      expect(response).to redirect_to "/home"
     end
   end
 
