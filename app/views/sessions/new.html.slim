@@ -3,7 +3,7 @@
     .std-heading
       i.fa.fa-sign-in style="color:#444444"
       = ' ' + t('sessions.header')
-  = form_tag '/login', method: 'post' do
+  = form_tag login_path, method: 'post' do
     - if @messages_redirect
       = hidden_field_tag 'redirect', @messages_redirect
     .form-group.field-element
