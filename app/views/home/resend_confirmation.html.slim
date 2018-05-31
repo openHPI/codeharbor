@@ -1,7 +1,7 @@
 .header
   .std-heading
     = t('home.resend_confirmation')
-= form_tag '/home/send_confirmation', method: 'post' do
+= form_tag send_confirmation_home_index_path, method: 'post' do
   .field-element
     = label_tag 'email', "Email", class: 'form-label'
     = text_field_tag 'email', nil, class: 'form-control'

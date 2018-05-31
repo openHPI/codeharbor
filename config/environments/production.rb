@@ -114,4 +114,12 @@ Rails.application.configure do
   
   # Run on subfolder in production environment.
   config.relative_url_root = '/codeharbor'
+
+  # Set up ActionMailer for subfolder
+  config.action_mailer.default_url_options = {
+      :host => 'https://tools.openhpi.de',
+      :only_path => false,
+      :script_name => '/codeharbor'
+  }
+
 end
