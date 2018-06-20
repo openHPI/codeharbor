@@ -13,13 +13,13 @@ gem 'i18n'
 #Use slim format
 gem 'slim-rails'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '5.0'
+gem 'rails', '5.0.0'
 # Use sqlite3 as the database for Active Record
 #gem 'sqlite3'
 # Use postgres as the database for Active Record
 gem 'pg', '~> 0.20'
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
+gem 'sass-rails', '~> 5.0', '>= 5.0.7'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 gem 'yui-compressor'
@@ -52,12 +52,12 @@ gem 'cancancan'
 
 # Use Bootstrap (app/assets/stylesheets)
 gem 'therubyracer', platforms: :ruby
-gem 'twitter-bootstrap-rails'
+gem 'twitter-bootstrap-rails', '>= 3.2.2'
 gem 'devise-bootstrap-views'
 
-gem 'nested_form_fields'
+gem 'nested_form_fields', '>= 0.8.2'
 
-gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
+gem "less-rails" , ">= 3.0.0" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
 
 gem 'jquery-ui-rails'
 gem 'select2-rails', '~> 4.0', '>= 4.0.3'
@@ -86,7 +86,7 @@ end
 group :development do
   gem 'rack-mini-profiler'
   # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
+  gem 'web-console', '~> 2.3', '>= 2.3.0'
   
   gem "capistrano", "~> 3.6"
   gem 'capistrano3-puma'
