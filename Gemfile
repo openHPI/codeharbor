@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # Handle file upload
 gem 'paperclip'
 #Create Zip files
-gem 'rubyzip'
+gem 'rubyzip', '>= 1.2.2'
 #Handle Group Access
 gem 'groupify'
 #Private Data
