@@ -13,7 +13,7 @@ gem 'i18n'
 #Use slim format
 gem 'slim-rails'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '5.0'
+gem 'rails', '5.0.7.1'
 # Use sqlite3 as the database for Active Record
 #gem 'sqlite3'
 # Use postgres as the database for Active Record
@@ -55,7 +55,7 @@ gem 'therubyracer', platforms: :ruby
 gem 'twitter-bootstrap-rails'
 gem 'devise-bootstrap-views'
 
-gem 'nested_form_fields'
+gem 'nested_form_fields', '>= 0.8.2'
 
 gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
 
