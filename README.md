@@ -7,6 +7,11 @@
 <img src="https://codeclimate.com/github/openHPI/codeharbor/badges/coverage.svg" />
 [![Stories in Ready](https://badge.waffle.io/kirstin/codeharbor.svg?label=ready&title=Ready)](http://waffle.io/kirstin/codeharbor) 
 
+
+## Server setup
+Use capistrano
+
+
 ## unix development
 
 ```
