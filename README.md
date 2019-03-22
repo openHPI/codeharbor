@@ -9,7 +9,7 @@
 
 
 ## Server setup
-Use capistrano
+Use capistrano. Docker and Vagrant are for local development only.
 
 
 ## unix development
