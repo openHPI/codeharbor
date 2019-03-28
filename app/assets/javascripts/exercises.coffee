@@ -58,7 +58,49 @@ loadSelect2 = ->
     formatSelectionTooBig: (limit) ->
       'You can only add 5 topics'
 
+# toggleDescription = (description) ->
+#   dots = $(description).children('.dots')
+#   more = $(description).children('.more')
+#   toggle = $(description).children('.more-btn')
+
+#   if(more.css('display') == 'none')
+#     dots.css 'display', 'none'
+#     toggle.html 'Show less'
+#     more.css 'display', 'inline'
+#     $(description).parent().css 'height', 'unset'
+#   else
+#     dots.css 'display', 'inline'
+#     toggle.html 'Show more'
+#     more.css 'display', 'none'
+#     $(description).parent().css 'height', '120px'
+
+toggleDescription = (description) ->
+  window.description = description
+  # dots = $(description).children('.dots')
+  # more = $(description).children('.more')
+  toggle = $(description).children('.more-btn')
+
+  if(toggle.html() == 'Show more')
+    # dots.css 'display', 'none'
+    # more.css 'display', 'inline'
+    toggle.html 'Show less'
+    $(description).css 'height', $(description).children('.description').prop('scrollHeight')+'px'
+  else
+    # dots.css 'display', 'inline'
+    # more.css 'display', 'none'
+    toggle.html 'Show more'
+    $(description).css 'height', '120px'
+
+initDescriptions =->
+  $('.description').each ->
+    if $(this).prop('scrollHeight') > $(this).prop('clientHeight')
+      $(this).css('height', '75%')
+      $(this).after('<div class="more-btn">Show more</div>')
+
 ready =->
+  initDescriptions()
+  $('.more-btn').click ->
+    toggleDescription $(this).parent()
 
   $(".change-hidden-field").click ->
     value = (this).id

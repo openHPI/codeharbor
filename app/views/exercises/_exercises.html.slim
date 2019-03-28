@@ -51,6 +51,14 @@
               = t('exercises.defaults.no_description')
           - else
             = exercise.descriptions.first.text
+            / span.less
+              = exercise.descriptions.first.text[0..500]
+            / span.dots
+              = '...'
+            / span.more
+              = exercise.descriptions.first.text[501..-1]
+            / .more-btn
+              = 'Show more'
         .labels
           - if exercise.labels.empty?
             span style=("color: gray")
@@ -106,7 +114,7 @@
       = form_for :comment, url: exercise_comments_path(exercise), remote: true do |f|
         .write-comment
           .input-group
-            = f.label_tag 'new_comment_label', 'New Comment', class: 'input-group-addon'
+            = f.label_tag 'new_comment_label', t('exercises.all.new_comment'), class: 'input-group-addon'
             = f.text_field :text, class: 'form-control'
             span.input-group-btn
               = f.submit class: 'btn btn-default'

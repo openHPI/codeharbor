@@ -510,6 +510,7 @@ en:
       view: "View"
       related_exercises: "Show Related Exercises"
       comments: "Show Comments"
+      new_comment: "New Comment"
       duplicate: "Duplicate"
       edit: "Edit"
       delete: "Delete"
@@ -639,9 +640,9 @@ en:
     feature:
       exercises:
         header: "Search, discuss and create exercises"
-        paragraph: "CodeHarbor allows to share, rate, and discuss auto-gradeable programming exercises with colleagues and peers. 
-                    Re-use existing exercises, clone exercises and adjust them to your needs. 
-                    Translate exercises to other human languages or port them to other programming languages. 
+        paragraph: "CodeHarbor allows to share, rate, and discuss auto-gradeable programming exercises with colleagues and peers.
+                    Re-use existing exercises, clone exercises and adjust them to your needs.
+                    Translate exercises to other human languages or port them to other programming languages.
                     You always keep full control with whom you share."
       collections:
         header: "Create exercise collections"
