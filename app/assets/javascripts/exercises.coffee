@@ -74,27 +74,29 @@ loadSelect2 = ->
 #     more.css 'display', 'none'
 #     $(description).parent().css 'height', '120px'
 
-toggleDescription = (description) ->
-  window.description = description
-  # dots = $(description).children('.dots')
-  # more = $(description).children('.more')
-  toggle = $(description).children('.more-btn')
+toggleDescription = (exercise_content) ->
+
+  # dots = $(exercise_content).children('.dots')
+  # more = $(exercise_content).children('.more')
+  toggle = $(exercise_content).children('.more-btn')
+  description = $(exercise_content).children('.description')
 
   if(toggle.html() == 'Show more')
     # dots.css 'display', 'none'
     # more.css 'display', 'inline'
     toggle.html 'Show less'
-    $(description).css 'height', $(description).children('.description').prop('scrollHeight')+'px'
+    $(exercise_content).css 'height', 'unset'
+    description.css 'height', description.prop('scrollHeight')+'px'
   else
     # dots.css 'display', 'inline'
     # more.css 'display', 'none'
     toggle.html 'Show more'
-    $(description).css 'height', '120px'
+    description.css 'height', '100px'
 
 initDescriptions =->
   $('.description').each ->
     if $(this).prop('scrollHeight') > $(this).prop('clientHeight')
-      $(this).css('height', '75%')
+      $(this).css('height', '90px')
       $(this).after('<div class="more-btn">Show more</div>')
 
 ready =->
