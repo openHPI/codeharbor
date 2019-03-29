@@ -45,20 +45,14 @@
           = exercise.execution_environment.language
     .panel-body
       .exercise-content
-        .description
+        .description.notransition
           - if exercise.descriptions.first.text == ''
             span style=("color: gray")
               = t('exercises.defaults.no_description')
           - else
             = exercise.descriptions.first.text
-            / span.less
-              = exercise.descriptions.first.text[0..500]
-            / span.dots
-              = '...'
-            / span.more
-              = exercise.descriptions.first.text[501..-1]
-            / .more-btn
-              = 'Show more'
+        .more-btn-wrapper
+          = link_to 'Show more', exercise, class: 'more-btn'
         .labels
           - if exercise.labels.empty?
             span style=("color: gray")

@@ -68,14 +68,9 @@ $exercise-color: #006600;
 .exercise-content {
   display: inline-block;
   width: 80%;
-  height: 120px;
+  max-height: 110px;
   float: left;
 
-  -webkit-transition: all .8s ease;
-  -moz-transition: all .8s ease;
-  -ms-transition: all .8s ease;
-  -o-transition: all .8s ease;
-  transition: all .8s ease;
 }
 
 .exercise-buttons {
@@ -117,16 +112,19 @@ $exercise-color: #006600;
 .description {
   width: 90%;
   height: 100px;
+  max-height: 100px;
   display: block;
   word-wrap: break-word;
   overflow: hidden;
   border-bottom: 1px lightgrey solid;
   padding-bottom: 5px;
-}
 
-.labels {
-  margin-top: 10px;
-  float: left;
+
+  -webkit-transition: all .8s ease;
+  -moz-transition: all .8s ease;
+  -ms-transition: all .8s ease;
+  -o-transition: all .8s ease;
+  transition: all .8s ease;
 }
 
 .fa-star, .fa-star-o, .fa-star-half-o {
@@ -568,7 +566,20 @@ input[type="radio"]:checked+label {
   line-height: 32px;
   vertical-align: middle;
 }
+.exercise-content {
+  .more-btn-wrapper {
+    width: 90%;
+  }
+}
 
-.more {
-  display:none;
+.more-btn-wrapper {
+  text-align: right;
+}
+
+.notransition {
+  -o-transition: none !important;
+  -ms-transition: none !important;
+  -moz-transition: none !important;
+  -webkit-transition: none !important;
+  transition: none !important;
 }

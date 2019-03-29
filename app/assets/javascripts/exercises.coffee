@@ -58,51 +58,51 @@ loadSelect2 = ->
     formatSelectionTooBig: (limit) ->
       'You can only add 5 topics'
 
-# toggleDescription = (description) ->
-#   dots = $(description).children('.dots')
-#   more = $(description).children('.more')
-#   toggle = $(description).children('.more-btn')
+toggleHideShowMore = (element) ->
+  $parent = $(element).parent()
 
-#   if(more.css('display') == 'none')
-#     dots.css 'display', 'none'
-#     toggle.html 'Show less'
-#     more.css 'display', 'inline'
-#     $(description).parent().css 'height', 'unset'
-#   else
-#     dots.css 'display', 'inline'
-#     toggle.html 'Show more'
-#     more.css 'display', 'none'
-#     $(description).parent().css 'height', '120px'
-
-toggleDescription = (exercise_content) ->
-
-  # dots = $(exercise_content).children('.dots')
-  # more = $(exercise_content).children('.more')
-  toggle = $(exercise_content).children('.more-btn')
-  description = $(exercise_content).children('.description')
-
-  if(toggle.html() == 'Show more')
-    # dots.css 'display', 'none'
-    # more.css 'display', 'inline'
-    toggle.html 'Show less'
-    $(exercise_content).css 'height', 'unset'
-    description.css 'height', description.prop('scrollHeight')+'px'
+  $toggle = $(element).find('.more-btn')
+  $text = $(element).prev()
+  if($toggle.html() == 'Show more')
+    $toggle.html 'Show less'
+    $parent.css 'max-height', 'unset'
+    $text.prop 'default-max-height', $text.css 'max-height'
+    $text.css 'max-height', $text.prop('scrollHeight')+'px'
   else
-    # dots.css 'display', 'inline'
-    # more.css 'display', 'none'
-    toggle.html 'Show more'
-    description.css 'height', '100px'
+    $toggle.html 'Show more'
+    $text.css 'max-height', $text.prop 'default-max-height'
 
 initDescriptions =->
   $('.description').each ->
     if $(this).prop('scrollHeight') > $(this).prop('clientHeight')
-      $(this).css('height', '90px')
-      $(this).after('<div class="more-btn">Show more</div>')
+      $(this).css 'height', 'unset'
+      $(this).css('max-height', '90px')
+    else
+      $(this).siblings('.more-btn-wrapper').hide()
+    removeNotransition()
+
+initComments =->
+  $('.comment-text').each ->
+    if $(this).prop('scrollHeight') > $(this).prop('clientHeight')
+      $(this).css('max-height', '55px')
+    else
+      $(this).siblings('.more-btn-wrapper').hide()
+    removeNotransition()
+
+removeNotransition =->
+  setTimeout ->
+    $('.notransition').removeClass('notransition')
+  , 100
 
 ready =->
   initDescriptions()
-  $('.more-btn').click ->
-    toggleDescription $(this).parent()
+
+  $(document).on 'click', '.more-btn-wrapper', (event) ->
+    event.preventDefault()
+    toggleHideShowMore $(this)
+
+  $(document).on "ajaxComplete", (event) ->
+    initComments()
 
   $(".change-hidden-field").click ->
     value = (this).id
@@ -245,6 +245,7 @@ ready =->
           anchor = document.getElementById('page_end')
           if anchor
             anchor.scrollIntoView(false)
+          initComments()
         complete: ->
           $icon.hide()
       })

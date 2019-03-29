@@ -13,9 +13,9 @@
         .pull-right.created-at
           = 'Created at: '
           = t('time_ago', time: time_ago_in_words(comment.created_at))
-      .comment-text data-exercise=@exercise.id data-comment=comment.id
+      .comment-text.notransition data-exercise=@exercise.id data-comment=comment.id
         = comment.text
-        .actions.btn-group.pull-right role="group"
+        .btn-group.pull-right role="group"
           - if can? :edit, comment
             = link_to edit_exercise_comment_path(@exercise, comment), class: 'btn btn-default btn-xs', remote: true do
               i.fa.fa-edit
@@ -23,7 +23,7 @@
             = link_to exercise_comment_path(@exercise, comment), class: 'btn btn-default btn-xs', method: :delete, remote: true, data: {confirm: t('sure')}
               i.fa.fa-trash
               = ' ' + t('comments.button.delete')
+      .more-btn-wrapper
+        = link_to 'Show more', '', class: 'more-btn'
+
   = js_will_paginate(@comments)
-
-
-
