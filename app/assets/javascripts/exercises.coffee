@@ -60,7 +60,7 @@ loadSelect2 = ->
 
 toggleHideShowMore = (element) ->
   $parent = $(element).parent()
-
+  console.log('Test')
   $toggle = $(element).find('.more-btn')
   $text = $(element).prev()
   if($toggle.html() == 'Show more')
@@ -97,11 +97,12 @@ removeNotransition =->
 ready =->
   initDescriptions()
 
-  $(document).on 'click', '.more-btn-wrapper', (event) ->
+  $('body').on 'click', '.more-btn-wrapper', (event) ->
     event.preventDefault()
     toggleHideShowMore $(this)
+    return false
 
-  $(document).on "ajaxComplete", (event) ->
+  $('body').on "ajaxComplete", (event) ->
     initComments()
 
   $(".change-hidden-field").click ->
