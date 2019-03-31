@@ -75,12 +75,6 @@ toggleHideShowMore = (element) ->
   $less_tag.toggleClass 'hidden'
   $more_tag.toggleClass 'hidden'
 
-initDescriptions =->
-  initCollapsable($('.description'), '90px')
-
-initComments =->
-  initCollapsable($('.comment-text'), '55px')
-
 initCollapsable = (collapsables, max_height) ->
   collapsables.each ->
     if $(this).prop('scrollHeight') > $(this).prop('clientHeight')
@@ -97,15 +91,17 @@ removeNotransition =->
   , 100
 
 ready =->
-  initDescriptions()
+  initCollapsable($('.description'), '90px')
 
   $('body').on 'click', '.more-btn-wrapper', (event) ->
     event.preventDefault()
     toggleHideShowMore $(this)
-    return false
+
+  $('body').on 'click', '.open-link', (event) ->
+    Turbolinks.visit($(this).prop('href'))
 
   $('body').on "ajaxComplete", (event) ->
-    initComments()
+    initCollapsable($('.comment-text'), '55px')
 
   $(".change-hidden-field").click ->
     value = (this).id
@@ -248,7 +244,7 @@ ready =->
           anchor = document.getElementById('page_end')
           if anchor
             anchor.scrollIntoView(false)
-          initComments()
+          initCollapsable($('.comment-text'), '55px')
         complete: ->
           $icon.hide()
       })
@@ -294,6 +290,7 @@ ready =->
             anchor.scrollIntoView(false)
         complete: ->
           $icon.hide()
+          initCollapsable($('.small-description'), '58px')
       })
     else
       $caret.removeClass('fa-caret-up').addClass('fa-caret-down')

@@ -516,6 +516,7 @@ en:
       delete: "Delete"
       show_more: "Show more"
       show_less: "Show less"
+      open_exercise: "Open exercise"
 
     search:
       advanced: "Advanced"
