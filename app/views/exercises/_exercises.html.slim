@@ -52,7 +52,11 @@
           - else
             = exercise.descriptions.first.text
         .more-btn-wrapper
-          = link_to 'Show more', exercise, class: 'more-btn'
+          = link_to exercise, class: 'more-btn' do
+            span class=("more-tag")
+              = t('exercises.all.show_more')
+            span class=("less-tag hidden")
+              = t('exercises.all.show_less')
         .labels
           - if exercise.labels.empty?
             span style=("color: gray")

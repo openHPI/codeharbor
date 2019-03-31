@@ -60,36 +60,38 @@ loadSelect2 = ->
 
 toggleHideShowMore = (element) ->
   $parent = $(element).parent()
-  console.log('Test')
-  $toggle = $(element).find('.more-btn')
+  $toggle = $(element).find '.more-btn'
+  $less_tag = $toggle.children '.less-tag'
+  $more_tag = $toggle.children '.more-tag'
   $text = $(element).prev()
-  if($toggle.html() == 'Show more')
-    $toggle.html 'Show less'
+
+  if $less_tag.hasClass 'hidden'
     $parent.css 'max-height', 'unset'
+    # Save old height somewhere for later use
     $text.prop 'default-max-height', $text.css 'max-height'
     $text.css 'max-height', $text.prop('scrollHeight')+'px'
   else
-    $toggle.html 'Show more'
     $text.css 'max-height', $text.prop 'default-max-height'
+  $less_tag.toggleClass 'hidden'
+  $more_tag.toggleClass 'hidden'
 
 initDescriptions =->
-  $('.description').each ->
-    if $(this).prop('scrollHeight') > $(this).prop('clientHeight')
-      $(this).css 'height', 'unset'
-      $(this).css('max-height', '90px')
-    else
-      $(this).siblings('.more-btn-wrapper').hide()
-    removeNotransition()
+  initCollapsable($('.description'), '90px')
 
 initComments =->
-  $('.comment-text').each ->
+  initCollapsable($('.comment-text'), '55px')
+
+initCollapsable = (collapsables, max_height) ->
+  collapsables.each ->
     if $(this).prop('scrollHeight') > $(this).prop('clientHeight')
-      $(this).css('max-height', '55px')
+      $(this).css 'height', 'unset'
+      $(this).css 'max-height', max_height
     else
       $(this).siblings('.more-btn-wrapper').hide()
     removeNotransition()
 
 removeNotransition =->
+  # notransition class is necessary, because we don't want to animate on page-load
   setTimeout ->
     $('.notransition').removeClass('notransition')
   , 100

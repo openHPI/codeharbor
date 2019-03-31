@@ -514,6 +514,8 @@ en:
       duplicate: "Duplicate"
       edit: "Edit"
       delete: "Delete"
+      show_more: "Show more"
+      show_less: "Show less"
 
     search:
       advanced: "Advanced"
