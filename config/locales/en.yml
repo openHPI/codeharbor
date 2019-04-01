@@ -517,6 +517,8 @@ en:
       show_more: "Show more"
       show_less: "Show less"
       open_exercise: "Open exercise"
+      no_comments: "This Exercise does not have comments yet"
+      refresh_comments: "Refresh Comments"
 
     search:
       advanced: "Advanced"

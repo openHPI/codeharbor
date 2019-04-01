@@ -1,17 +1,17 @@
 - if @comments.empty?
   .comment-block
-    = 'This Exercise does not have comments yet'
+    = t('comments.all.no_comments')
 
 -else
   = link_to exercise_comments_path(@exercise), class: 'refresh', remote: true do
     span.fa.fa-refresh
-    = ' ' + "Refresh Comments"
+    = ' ' + t('comments.all.refresh_comments')
   - @comments.each do |comment|
     .comment-block
       .comment-user
         = comment.user.name
         .pull-right.created-at
-          = 'Created at: '
+          = t('comments.created_at') + ': '
           = t('time_ago', time: time_ago_in_words(comment.created_at))
       .comment-text.collapsable data-exercise=@exercise.id data-comment=comment.id
         = comment.text
