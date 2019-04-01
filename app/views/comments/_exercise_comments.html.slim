@@ -13,7 +13,7 @@
         .pull-right.created-at
           = 'Created at: '
           = t('time_ago', time: time_ago_in_words(comment.created_at))
-      .comment-text.notransition data-exercise=@exercise.id data-comment=comment.id
+      .comment-text.collapsable data-exercise=@exercise.id data-comment=comment.id
         = comment.text
         .btn-group.pull-right role="group"
           - if can? :edit, comment

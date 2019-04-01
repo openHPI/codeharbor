@@ -120,13 +120,6 @@ $exercise-color: #006600;
   overflow: hidden;
   border-bottom: 1px lightgrey solid;
   padding-bottom: 5px;
-
-
-  -webkit-transition: all .8s ease;
-  -moz-transition: all .8s ease;
-  -ms-transition: all .8s ease;
-  -o-transition: all .8s ease;
-  transition: all .8s ease;
 }
 
 .fa-star, .fa-star-o, .fa-star-half-o {
@@ -591,10 +584,10 @@ input[type="radio"]:checked+label {
   text-align: right;
 }
 
-.notransition {
-  -o-transition: none !important;
-  -ms-transition: none !important;
-  -moz-transition: none !important;
-  -webkit-transition: none !important;
-  transition: none !important;
+.animated-sliding {
+  -webkit-transition: all .8s ease;
+  -moz-transition: all .8s ease;
+  -ms-transition: all .8s ease;
+  -o-transition: all .8s ease;
+  transition: all .8s ease;
 }

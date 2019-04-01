@@ -22,12 +22,6 @@
     margin-bottom: 4px;
     max-height: 80px;
     overflow: hidden;
-
-    -webkit-transition: all .8s ease;
-    -moz-transition: all .8s ease;
-    -ms-transition: all .8s ease;
-    -o-transition: all .8s ease;
-    transition: all .8s ease;
   }
 }
 
@@ -37,12 +31,4 @@
   margin-bottom: 10px;
   display: block;
   padding: 5px;
-}
-
-.notransition {
-  -o-transition: none !important;
-  -ms-transition: none !important;
-  -moz-transition: none !important;
-  -webkit-transition: none !important;
-  transition: none !important;
 }

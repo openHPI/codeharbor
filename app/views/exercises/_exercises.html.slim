@@ -45,7 +45,7 @@
           = exercise.execution_environment.language
     .panel-body
       .exercise-content
-        .description.notransition
+        .description.collapsable
           - if exercise.descriptions.first.text == ''
             span style=("color: gray")
               = t('exercises.defaults.no_description')
