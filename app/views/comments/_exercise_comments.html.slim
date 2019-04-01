@@ -1,11 +1,11 @@
 - if @comments.empty?
   .comment-block
-    = t('comments.all.no_comments')
+    = t('comments.info.no_comments')
 
 -else
   = link_to exercise_comments_path(@exercise), class: 'refresh', remote: true do
     span.fa.fa-refresh
-    = ' ' + t('comments.all.refresh_comments')
+    = ' ' + t('comments.button.refresh_comments')
   - @comments.each do |comment|
     .comment-block
       .comment-user

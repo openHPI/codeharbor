@@ -392,6 +392,9 @@ en:
     user: "User"
     created_at: "Created at"
     actions: "Actions"
+    info:
+      no_comments: "This Exercise does not have comments yet"
+
     button:
       new: "New Comment"
       edit: "Edit"
@@ -399,6 +402,7 @@ en:
       delete: "Delete"
       cancel: "Cancel"
       save: "Save Comment"
+      refresh_comments: "Refresh Comments"
     search:
       placeholder: "Search for comments"
       button: "Search"
@@ -517,8 +521,6 @@ en:
       show_more: "Show more"
       show_less: "Show less"
       open_exercise: "Open exercise"
-      no_comments: "This Exercise does not have comments yet"
-      refresh_comments: "Refresh Comments"
 
     search:
       advanced: "Advanced"
