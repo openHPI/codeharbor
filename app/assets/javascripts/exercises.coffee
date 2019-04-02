@@ -82,10 +82,9 @@ initCollapsable = (collapsables, max_height) ->
       $(this).css 'max-height', max_height
     else
       $(this).siblings('.more-btn-wrapper').hide()
-    removeNotransition()
+    addAnimatedSliding()
 
-removeNotransition =->
-  # notransition class is necessary, because we don't want to animate on page-load
+addAnimatedSliding =->
   setTimeout ->
     $('.collapsable').addClass('animated-sliding')
   , 100
@@ -99,12 +98,6 @@ ready =->
 
   $('body').on 'click', '.open-link', (event) ->
     Turbolinks.visit($(this).prop('href'))
-
-  # the event has to be unbound, because turbolink persists the document object
-  # and we don't want to handle the event multiple times
-  $(document).off "ajaxComplete"
-  $(document).on "ajaxComplete", (event) ->
-    initCollapsable($('.comment-text'), '58px')
 
   $(".change-hidden-field").click ->
     value = (this).id
