@@ -18,9 +18,9 @@ Rails.application.configure do
 
     config.cache_store = :memory_store
     config.public_file_server.headers = {
-      'Cache-Control' => 'public, max-age=172800'
+      'Cache-Control' => "public, max-age=#{2.days.seconds.to_i}"
     }
- else
+  else
     config.action_controller.perform_caching = false
 
     config.cache_store = :null_store
@@ -41,24 +41,24 @@ Rails.application.configure do
   # number of complex assets.
   config.assets.debug = true
 
-   # Suppress logger output for asset requests.
+  # Suppress logger output for asset requests.
   config.assets.quiet = true
 
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
-  # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+  config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   # Adds additional error checking when serving assets at runtime.
   # Checks for improperly declared sprockets dependencies.
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
-  
+
   # Allow console from docker virtual machine host
   config.web_console.whitelisted_ips = '192.168.99.0/16'
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
-  
+
   config.action_mailer.delivery_method = :smtp
   # SMTP settings for mailgun
   ActionMailer::Base.smtp_settings = {
