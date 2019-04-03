@@ -53,7 +53,7 @@ gem 'cancancan'
 # Use Bootstrap (app/assets/stylesheets)
 gem 'therubyracer', platforms: :ruby
 gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
-gem 'devise-bootstrap-views'
+gem 'devise-bootstrap-views', '~> 1.0'
 
 gem 'nested_form_fields'
 
