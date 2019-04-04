@@ -327,7 +327,7 @@ DEPENDENCIES
   codeclimate-test-reporter (~> 1.0.0)
   coffee-rails
   devise-bootstrap-views (~> 1.0)
-  factory_bot_rails
+  factory_bot_rails (~> 5.0.1)
   figaro
   font-awesome-rails
   groupify
