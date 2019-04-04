@@ -17,12 +17,15 @@ gem 'rails', '~> 5.2.3'
 # Use sqlite3 as the database for Active Record
 #gem 'sqlite3'
 # Use postgres as the database for Active Record
-gem 'pg', '~> 0.20'
+gem 'pg', '>= 0.18', '< 2.0'
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
+gem 'sass-rails'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
-gem 'yui-compressor'
+
+# old?
+# gem 'yui-compressor'
+
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails'
 # See https://github.com/rails/execjs#readme for more supported runtimes
@@ -39,7 +42,7 @@ gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0', group: :doc
+# gem 'sdoc', '~> 1.0', group: :doc
 
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
@@ -57,12 +60,12 @@ gem 'devise-bootstrap-views', '~> 1.0'
 
 gem 'nested_form_fields'
 
-gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
+gem 'less-rails' #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
 
 gem 'jquery-ui-rails'
 gem 'select2-rails', '~> 4.0', '>= 4.0.3'
 
-gem 'oauth2', '~> 1.1.0'
+gem 'oauth2', '~> 1.4.0'
 gem 'nokogiri'
 gem 'font-awesome-rails'
 
@@ -79,18 +82,18 @@ group :development, :test do
   gem 'byebug'
   gem 'pry-byebug'
   gem 'rspec-rails'
-  gem "factory_bot_rails", '~> 4.8.2'
+  gem 'factory_bot_rails', '~> 4.8.2' # update?
   gem 'rails-controller-testing'
 end
 
 group :development do
   gem 'rack-mini-profiler'
   # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
+  gem 'web-console'
 
-  gem "capistrano", "~> 3.6"
+  gem 'capistrano', '~> 3.10', require: false
+  gem 'capistrano-rails', '~> 1.4', require: false
   gem 'capistrano3-puma'
-  gem 'capistrano-rails'
   gem 'capistrano-rvm'
   gem 'capistrano-upload-config'
   gem 'airbrussh', require: false
@@ -100,6 +103,6 @@ group :development do
 end
 
 group :test do
-  gem "simplecov"
-  gem "codeclimate-test-reporter", "~> 1.0.0"
+  gem 'simplecov'
+  gem 'codeclimate-test-reporter', '~> 1.0.0'
 end
