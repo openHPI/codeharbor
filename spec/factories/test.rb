@@ -1,8 +1,8 @@
 FactoryBot.define do
 
   factory :single_junit_test, class: 'Test' do
-    feedback_message "Dude... seriously?"
-    
+    feedback_message { "Dude... seriously?" }
+
     after(:create) do |test|
       create(:junit_testing_framework, tests: [test])
       test_file = create(:junit_test_file, exercise: test.exercise)
@@ -12,7 +12,7 @@ FactoryBot.define do
   end
 
   factory :codeharbor_test, class: 'Test' do
-    feedback_message 'Your solution is not correct yet.'
+    feedback_message { 'Your solution is not correct yet.' }
 
     after(:create) do |test|
       create(:junit_testing_framework, tests: [test])

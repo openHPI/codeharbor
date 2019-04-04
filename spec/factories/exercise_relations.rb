@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :exercise_relation do
-    name ""
+    name { "" }
   end
 
 end
