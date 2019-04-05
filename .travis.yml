@@ -13,6 +13,9 @@ addons:
     repo_token: 6d1107ed298902217e9ba186b3d717461f190e8c783e6561095d45d01864470a
   postgresql: "9.5"
 
+before_install:
+  - gem install bundler
+
 before_script:
   - cp .rspec.travis .rspec
   - cp config/action_mailer.yml.travis config/action_mailer.yml
