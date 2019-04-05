@@ -1,21 +1,26 @@
 sudo: required
 
+language: ruby
+
+rvm:
+  - 2.6.1
+
+cache:
+  bundler: true
+
 addons:
   code_climate:
     repo_token: 6d1107ed298902217e9ba186b3d717461f190e8c783e6561095d45d01864470a
   postgresql: "9.5"
+
 before_script:
   - cp .rspec.travis .rspec
   - cp config/action_mailer.yml.travis config/action_mailer.yml
   - cp config/database.yml.travis config/database.yml
   - cp config/secrets.yml.travis config/secrets.yml
   - psql --command='CREATE DATABASE travis_ci_test;' --username=postgres
-  - bundle exec rake db:schema:load RAILS_ENV=test  
-  
-cache: bundler  
-language: ruby
-rvm:
-- 2.3.1
+  - bundle exec rake db:schema:load RAILS_ENV=test
+  - bundle exec rake db:create db:migrate RAILS_ENV=test
+
 script:
-- RAILS_ENV=test bundle exec rake db:create db:migrate
-- xvfb-run bundle exec rspec spec/
+  - xvfb-run bundle exec rspec spec/
