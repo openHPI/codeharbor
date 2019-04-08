@@ -21,18 +21,18 @@ require 'rails_helper'
 RSpec.describe ExercisesController, type: :controller do
 
   before { allow_any_instance_of(CanCan::ControllerResource).to receive(:load_and_authorize_resource){ nil } }
-  let!(:user) {FactoryBot.create(:user)}
-  let!(:cart) {FactoryBot.create(:cart, user: user, exercises: [])}
-  let!(:collection) {FactoryBot.create(:collection, users: [user], exercises: [])}
+  let!(:user) { create(:user) }
+  let!(:cart) { create(:cart, user: user, exercises: []) }
+  let!(:collection) { create(:collection, users: [user], exercises: []) }
   # This should return the minimal set of attributes required to create a valid
   # Exercise. As you add validations to Exercise, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    FactoryBot.attributes_for(:only_meta_data, user: user).merge(:descriptions_attributes => {"0"=>FactoryBot.attributes_for(:simple_description)})
+    FactoryBot.attributes_for(:only_meta_data, user: user).merge(:descriptions_attributes => { '0'=>FactoryBot.attributes_for(:simple_description) })
   }
 
   let(:invalid_attributes) {
-    {title: ''}
+    { title: '' }
   }
 
   # Duplicate Exercise
@@ -44,11 +44,38 @@ RSpec.describe ExercisesController, type: :controller do
     {user_id: user.id}
   }
 
-  describe "GET #index (My Exercises)" do
-    it "shows all Exercises of that user" do
-      exercise = Exercise.create! valid_attributes
-      get :index, params: {}, session: valid_session
-      expect(assigns(:exercises)).to eq([exercise])
+  describe 'GET #index (My Exercises)' do
+    before { create(:simple_exercise) }
+    let(:params) {}
+
+    context 'when user has no exercise' do
+      it 'shows no Exercises' do
+        get :index, params: params, session: valid_session
+        expect(assigns(:exercises)).to eq([])
+      end
+    end
+
+    context 'when user has an exercise' do
+      let!(:exercise) { create(:simple_exercise, user: user) }
+
+      it 'shows all Exercises of that user' do
+        get :index, params: params, session: valid_session
+        expect(assigns(:exercises)).to eq([exercise])
+      end
+    end
+
+    context 'when user uses filter' do
+      before { create_list(:simple_exercise, 2, user: user) }
+
+      let!(:exercise) do
+        create :simple_exercise, user: user, descriptions: [create(:simple_description, text: 'filter me')]
+      end
+      let(:params) { { search: 'filter' } }
+
+      it 'shows only the matching Exercises' do
+        get :index, params: params, session: valid_session
+        expect(assigns(:exercises)).to eq([exercise])
+      end
     end
   end
 
