@@ -392,6 +392,9 @@ en:
     user: "User"
     created_at: "Created at"
     actions: "Actions"
+    info:
+      no_comments: "This Exercise does not have comments yet"
+
     button:
       new: "New Comment"
       edit: "Edit"
@@ -399,6 +402,7 @@ en:
       delete: "Delete"
       cancel: "Cancel"
       save: "Save Comment"
+      refresh_comments: "Refresh Comments"
     search:
       placeholder: "Search for comments"
       button: "Search"
@@ -510,9 +514,13 @@ en:
       view: "View"
       related_exercises: "Show Related Exercises"
       comments: "Show Comments"
+      new_comment: "New Comment"
       duplicate: "Duplicate"
       edit: "Edit"
       delete: "Delete"
+      show_more: "Show more"
+      show_less: "Show less"
+      open_exercise: "Open exercise"
 
     search:
       advanced: "Advanced"
@@ -639,9 +647,9 @@ en:
     feature:
       exercises:
         header: "Search, discuss and create exercises"
-        paragraph: "CodeHarbor allows to share, rate, and discuss auto-gradeable programming exercises with colleagues and peers. 
-                    Re-use existing exercises, clone exercises and adjust them to your needs. 
-                    Translate exercises to other human languages or port them to other programming languages. 
+        paragraph: "CodeHarbor allows to share, rate, and discuss auto-gradeable programming exercises with colleagues and peers.
+                    Re-use existing exercises, clone exercises and adjust them to your needs.
+                    Translate exercises to other human languages or port them to other programming languages.
                     You always keep full control with whom you share."
       collections:
         header: "Create exercise collections"

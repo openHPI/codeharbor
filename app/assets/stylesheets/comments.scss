@@ -7,6 +7,7 @@
   margin-bottom: 10px;
   border: 1px #e6e6e6 solid;
   border-radius: 4px;
+  max-height: 120px;
 
   .comment-user {
     font-weight: bold;
@@ -18,7 +19,9 @@
   }
   .comment-text {
     margin-top: 8px;
-    margin-bottom: 4px
+    margin-bottom: 4px;
+    max-height: 80px;
+    overflow: hidden;
   }
 }
 
