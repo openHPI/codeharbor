@@ -1,21 +1,21 @@
 - if @comments.empty?
   .comment-block
-    = 'This Exercise does not have comments yet'
+    = t('comments.info.no_comments')
 
 -else
   = link_to exercise_comments_path(@exercise), class: 'refresh', remote: true do
     span.fa.fa-refresh
-    = ' ' + "Refresh Comments"
+    = ' ' + t('comments.button.refresh_comments')
   - @comments.each do |comment|
     .comment-block
       .comment-user
         = comment.user.name
         .pull-right.created-at
-          = 'Created at: '
+          = t('comments.created_at') + ': '
           = t('time_ago', time: time_ago_in_words(comment.created_at))
-      .comment-text data-exercise=@exercise.id data-comment=comment.id
+      .comment-text.collapsable data-exercise=@exercise.id data-comment=comment.id
         = comment.text
-        .actions.btn-group.pull-right role="group"
+        .btn-group.pull-right role="group"
           - if can? :edit, comment
             = link_to edit_exercise_comment_path(@exercise, comment), class: 'btn btn-default btn-xs', remote: true do
               i.fa.fa-edit
@@ -23,7 +23,12 @@
             = link_to exercise_comment_path(@exercise, comment), class: 'btn btn-default btn-xs', method: :delete, remote: true, data: {confirm: t('sure')}
               i.fa.fa-trash
               = ' ' + t('comments.button.delete')
+      .more-btn-wrapper
+        = link_to exercise, class: 'more-btn' do
+          span class=("more-tag")
+            = t('exercises.all.show_more')
+          span class=("less-tag hidden")
+            = t('exercises.all.show_less')
+
+
   = js_will_paginate(@comments)
-
-
-

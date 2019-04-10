@@ -45,12 +45,18 @@
           = exercise.execution_environment.language
     .panel-body
       .exercise-content
-        .description
+        .description.collapsable
           - if exercise.descriptions.first.text == ''
             span style=("color: gray")
               = t('exercises.defaults.no_description')
           - else
             = exercise.descriptions.first.text
+        .more-btn-wrapper
+          = link_to exercise, class: 'more-btn' do
+            span class=("more-tag")
+              = t('exercises.all.show_more')
+            span class=("less-tag hidden")
+              = t('exercises.all.show_less')
         .labels
           - if exercise.labels.empty?
             span style=("color: gray")
@@ -106,7 +112,7 @@
       = form_for :comment, url: exercise_comments_path(exercise), remote: true do |f|
         .write-comment
           .input-group
-            = f.label_tag 'new_comment_label', 'New Comment', class: 'input-group-addon'
+            = f.label_tag 'new_comment_label', t('exercises.all.new_comment'), class: 'input-group-addon'
             = f.text_field :text, class: 'form-control'
             span.input-group-btn
               = f.submit class: 'btn btn-default'

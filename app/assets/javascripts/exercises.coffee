@@ -58,7 +58,46 @@ loadSelect2 = ->
     formatSelectionTooBig: (limit) ->
       'You can only add 5 topics'
 
+toggleHideShowMore = (element) ->
+  $parent = $(element).parent()
+  $toggle = $(element).find '.more-btn'
+  $less_tag = $toggle.children '.less-tag'
+  $more_tag = $toggle.children '.more-tag'
+  $text = $(element).prev()
+
+  if $less_tag.hasClass 'hidden'
+    $parent.css 'max-height', 'unset'
+    # Save old height somewhere for later use
+    $text.prop 'default-max-height', $text.css 'max-height'
+    $text.css 'max-height', $text.prop('scrollHeight')+'px'
+  else
+    $text.css 'max-height', $text.prop 'default-max-height'
+  $less_tag.toggleClass 'hidden'
+  $more_tag.toggleClass 'hidden'
+
+initCollapsable = (collapsables, max_height) ->
+  collapsables.each ->
+    if $(this).prop('scrollHeight') > $(this).prop('clientHeight')
+      $(this).css 'height', 'unset'
+      $(this).css 'max-height', max_height
+    else
+      $(this).siblings('.more-btn-wrapper').hide()
+    addAnimatedSliding()
+
+addAnimatedSliding =->
+  setTimeout ->
+    $('.collapsable').addClass('animated-sliding')
+  , 100
+
 ready =->
+  initCollapsable($('.description'), '95px')
+
+  $('body').on 'click', '.more-btn-wrapper', (event) ->
+    event.preventDefault()
+    toggleHideShowMore $(this)
+
+  $('body').on 'click', '.open-link', (event) ->
+    Turbolinks.visit($(this).prop('href'))
 
   $(".change-hidden-field").click ->
     value = (this).id
@@ -246,6 +285,7 @@ ready =->
             anchor.scrollIntoView(false)
         complete: ->
           $icon.hide()
+          initCollapsable($('.small-description'), '58px')
       })
     else
       $caret.removeClass('fa-caret-up').addClass('fa-caret-down')
