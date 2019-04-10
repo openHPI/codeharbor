@@ -104,10 +104,25 @@ GEM
       thor (~> 0.14)
     font-awesome-rails (4.7.0.3)
       railties (>= 3.2, < 5.2)
+    formatador (0.2.5)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     grease (0.3.1)
     groupify (0.9.0)
+    guard (2.15.0)
+      formatador (>= 0.2.4)
+      listen (>= 2.7, < 4.0)
+      lumberjack (>= 1.0.12, < 2.0)
+      nenv (~> 0.1)
+      notiffany (~> 0.0)
+      pry (>= 0.9.12)
+      shellany (~> 0.0)
+      thor (>= 0.18.1)
+    guard-compat (1.2.1)
+    guard-rspec (4.7.3)
+      guard (~> 2.1)
+      guard-compat (~> 1.1)
+      rspec (>= 2.99.0, < 4.0)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
     jbuilder (2.7.0)
@@ -130,9 +145,14 @@ GEM
       sprockets (> 2, < 4)
       tilt
     libv8 (3.16.14.19)
+    listen (3.1.5)
+      rb-fsevent (~> 0.9, >= 0.9.4)
+      rb-inotify (~> 0.9, >= 0.9.7)
+      ruby_dep (~> 1.2)
     loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
+    lumberjack (1.0.13)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
     method_source (0.9.2)
@@ -146,6 +166,7 @@ GEM
     multi_json (1.13.1)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
+    nenv (0.3.0)
     nested_form_fields (0.8.2)
       coffee-rails (>= 3.2.1)
       jquery-rails
@@ -156,6 +177,9 @@ GEM
     nio4r (2.3.1)
     nokogiri (1.10.1)
       mini_portile2 (~> 2.4.0)
+    notiffany (0.1.1)
+      nenv (~> 0.1)
+      shellany (~> 0.0)
     oauth2 (1.1.0)
       faraday (>= 0.8, < 0.10)
       jwt (~> 1.0, < 1.5.2)
@@ -214,6 +238,10 @@ GEM
       ffi (>= 0.5.0, < 2)
     rdoc (4.3.0)
     ref (2.0.0)
+    rspec (3.7.0)
+      rspec-core (~> 3.7.0)
+      rspec-expectations (~> 3.7.0)
+      rspec-mocks (~> 3.7.0)
     rspec-core (3.7.1)
       rspec-support (~> 3.7.0)
     rspec-expectations (3.7.0)
@@ -231,6 +259,7 @@ GEM
       rspec-mocks (~> 3.7.0)
       rspec-support (~> 3.7.0)
     rspec-support (3.7.1)
+    ruby_dep (1.5.0)
     rubyzip (1.2.2)
     sass (3.5.6)
       sass-listen (~> 4.0.0)
@@ -248,6 +277,7 @@ GEM
       rdoc (~> 4.0)
     select2-rails (4.0.3)
       thor (~> 0.14)
+    shellany (0.0.1)
     simple_form (3.5.1)
       actionpack (> 4, < 5.2)
       activemodel (> 4, < 5.2)
@@ -328,6 +358,8 @@ DEPENDENCIES
   figaro
   font-awesome-rails
   groupify
+  guard
+  guard-rspec
   i18n
   jbuilder (~> 2.0)
   jquery-rails
@@ -361,4 +393,4 @@ DEPENDENCIES
   yui-compressor
 
 BUNDLED WITH
-   1.17.3
+   2.0.1

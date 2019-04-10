@@ -84,10 +84,12 @@ group :development, :test do
 end
 
 group :development do
+  gem 'guard'
+  gem 'guard-rspec'
   gem 'rack-mini-profiler'
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
-  
+
   gem "capistrano", "~> 3.6"
   gem 'capistrano3-puma'
   gem 'capistrano-rails'
