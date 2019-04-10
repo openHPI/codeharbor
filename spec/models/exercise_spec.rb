@@ -85,7 +85,7 @@ RSpec.describe Exercise, type: :model do
     let(:settings) do
       {stars: stars, created: created, language: language, proglanguage: proglanguage}
     end
-    let(:option) {}
+    let(:option) { 'mine' }
     let(:user_param) { user }
 
     let(:user) { create(:user) }
@@ -136,15 +136,42 @@ RSpec.describe Exercise, type: :model do
       end
     end
 
-    # context 'when user has multiple exercises' do
-    #   before do
-    #     create_list(:exercise, 3, user: user)
-    #     exercise
-    #   end
+    context 'when user has multiple exercises' do
+      before do
+        exercise_list
+        exercise
+      end
 
-    #   let(:exercise) { create(:simple_exercise, user: user) }
+      let(:exercise_list) { create_list(:simple_exercise, 3, user: user) }
+      let(:exercise) { create(:simple_exercise, user: user, title: 'filter me') }
 
+      it { is_expected.to match_array [*exercise_list, exercise] }
 
-    # end
+      context 'when search is set' do
+        let(:search) { 'nomatch' }
+
+        it { is_expected.to be_empty }
+      end
+
+      context 'when title is searched' do
+        let(:search) { 'filter' }
+
+        it { is_expected.to include exercise }
+      end
+
+      context 'when label is search' do
+        let(:exercise) { create(:simple_exercise, user: user, labels: [create(:label, name: 'filterlabel')]) }
+        let(:search) { 'filterlabel' }
+
+        it { is_expected.to include exercise }
+      end
+
+      context 'when description is searched' do
+        let(:exercise) { create(:simple_exercise, user: user, descriptions: [create(:simple_description, text: 'filtertext')]) }
+        let(:search) { 'filtertext' }
+
+        it { is_expected.to include exercise }
+      end
+    end
   end
 end
