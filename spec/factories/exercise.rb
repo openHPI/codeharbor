@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :simple_exercise, class: 'Exercise' do
     sequence(:title) {|n| "Test Exercise #{n}" }
-    descriptions {[create(:simple_description)]}
+    descriptions {[FactoryBot.create(:simple_description)]}
   end
 
   factory :exercise_with_author, class: 'Exercise' do

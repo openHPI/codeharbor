@@ -94,8 +94,6 @@ RSpec.describe Exercise, type: :model do
     let(:language) {}
     let(:proglanguage) { [] }
 
-    # let(:execution_environment) { create(:java_8_execution_environment) }
-
     it { is_expected.to be_empty }
 
     context 'when exercise exists' do
