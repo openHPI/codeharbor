@@ -53,7 +53,6 @@ class Exercise < ApplicationRecord
   end
 
   def self.search(search, settings, option, user_param)
-
     if option == 'private'
       priv = true
       user = nil
@@ -77,26 +76,24 @@ class Exercise < ApplicationRecord
       if settings[:proglanguage]
         proglanguages = settings[:proglanguage]
         proglanguages.delete_at(0) if proglanguages[0].blank?
-        proglanguages = proglanguages.collect{|x| ExecutionEnvironment.find_by(language: x).id}
+        proglanguages = proglanguages.collect { |x| ExecutionEnvironment.find_by(language: x).id }
       end
     end
 
-    if search
-      results = search_query(stars, languages, proglanguages, priv, user, search, intervall)
-      label = Label.find_by('lower(name) = ?', search.downcase)
+    return search_query(stars, languages, proglanguages, priv, user, search, intervall) unless search
 
-      if label
-        collection = Label.find_by('lower(name) = ?', search.downcase).exercises.search_query(stars, languages, proglanguages, priv, user, nil, intervall)
+    results = search_query(stars, languages, proglanguages, priv, user, search, intervall)
+    label = Label.find_by('lower(name) = ?', search.downcase)
 
-        results.each do |r|
-          collection << r unless collection.find_by(id: r.id)
-        end
-        return collection
+    if label
+      collection = Label.find_by('lower(name) = ?', search.downcase).exercises.search_query(stars, languages, proglanguages, priv, user, nil, intervall)
+
+      results.each do |r|
+        collection << r unless collection.find_by(id: r.id)
       end
-      return results
-    else
-      return search_query(stars, languages, proglanguages, priv, user, search, intervall)
+      return collection
     end
+    results
   end
 
   def can_access(user)
@@ -114,7 +111,6 @@ class Exercise < ApplicationRecord
       return true
     end
   end
-
 
   def avg_rating
     if ratings.empty?
