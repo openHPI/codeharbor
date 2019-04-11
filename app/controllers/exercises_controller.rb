@@ -348,6 +348,7 @@ class ExercisesController < ApplicationController
       redirect_to exercise_path(@exercise), notice: t('controllers.exercise.report_notice')
     end
   end
+
   private
 
   def restore_search_params
