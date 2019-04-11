@@ -386,7 +386,7 @@ div class=("comment-box with-borders") data-exercise=@exercise.id
             = text_field_tag 'text', nil, form: 'report', class: 'form-control'
             .input-group-btn
               = submit_tag t('exercises.show.submit'), form: 'report', class: 'btn btn-default'
-  = link_to t('exercises.show.back'), :back,  class: 'btn btn-important'
+  = link_to t('exercises.show.back'), exercises_path, class: 'btn btn-important'
 
 = form_tag report_exercise_path(@exercise), id: 'report'
 
