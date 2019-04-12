@@ -5,16 +5,16 @@ FactoryBot.define do
   end
 
   factory :exercise_with_author, class: 'Exercise' do
-    title 'Some Exercise'
+    title { 'Some Exercise' }
     descriptions {[FactoryBot.create(:simple_description)]}
     authors {[FactoryBot.create(:user), FactoryBot.create(:user)]}
   end
 
   factory :only_meta_data, class: 'Exercise' do
-  	title 'Some Exercise'
+  	title { 'Some Exercise' }
     descriptions {[FactoryBot.create(:simple_description)]}
-    maxrating 10
-    private false
+    maxrating { 10 }
+    private { false }
     authors {[FactoryBot.create(:user), FactoryBot.create(:user)]}
     execution_environment {FactoryBot.create(:java_8_execution_environment)}
     license {FactoryBot.create(:license)}
@@ -24,7 +24,7 @@ FactoryBot.define do
   end
 
   factory :exercise_with_single_java_main_file, class: 'Exercise' do
-    title 'Some Exercise'
+    title { 'Some Exercise' }
     descriptions {[FactoryBot.create(:simple_description)]}
     execution_environment { FactoryBot.create(:java_8_execution_environment) }
     license {FactoryBot.create(:license)}
@@ -35,7 +35,7 @@ FactoryBot.define do
   end
 
   factory :exercise_with_single_junit_test, class: 'Exercise' do
-    title 'Exercises with single JUnit Test'
+    title { 'Exercises with single JUnit Test' }
     descriptions {[FactoryBot.create(:simple_description)]}
     execution_environment { FactoryBot.create(:java_8_execution_environment) }
     license {FactoryBot.create(:license)}
@@ -46,7 +46,7 @@ FactoryBot.define do
   end
 
   factory :exercise_with_single_model_solution, class: 'Exercise' do
-    title 'Exercises with single Model Solution'
+    title { 'Exercises with single Model Solution' }
     descriptions {[FactoryBot.create(:simple_description)]}
     execution_environment { FactoryBot.create(:java_8_execution_environment) }
     license {FactoryBot.create(:license)}
@@ -57,7 +57,7 @@ FactoryBot.define do
   end
 
   factory :complex_exercise, class: Exercise do
-    title 'Codeharbor Export Test'
+    title { 'Codeharbor Export Test' }
     descriptions {[FactoryBot.create(:codeharbor_description)]}
     execution_environment { FactoryBot.create(:java_8_execution_environment) }
     license {FactoryBot.create(:license)}

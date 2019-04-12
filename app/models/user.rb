@@ -1,8 +1,8 @@
 require 'digest'
 
 class User < ApplicationRecord
-  groupify :group_member
   groupify :named_group_member
+  groupify :group_member
 
   validates :email, presence: true, uniqueness: true
   validates_uniqueness_of :username, :allow_blank => true
@@ -53,7 +53,7 @@ class User < ApplicationRecord
       return 0
     end
   end
-  
+
   def is_author?(exercise)
     exercise_authors = User.find(ExerciseAuthor.where(exercise_id: exercise.id).collect(&:user_id))
     return exercise_authors.include? self
@@ -80,7 +80,7 @@ class User < ApplicationRecord
   def has_access_through_any_group?(exercise)
     self.shares_any_group?(exercise)
   end
-  
+
   def handle_group_memberships
 
     self.in_all_groups?(as: 'admin')
@@ -98,7 +98,7 @@ class User < ApplicationRecord
     end
     true
   end
-  
+
   def groups_sorted_by_admin_state_and_name(groups_to_sort = groups)
     groups_to_sort.sort_by do |group|
       [group.admins.include?(self) ? 0 : 1, group.name]
