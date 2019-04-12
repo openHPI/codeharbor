@@ -1,6 +1,6 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
-  
+
   ### !!! Important: remove this line before this goes anywhere near productive !!!
   config.consider_all_requests_local = true
 
@@ -16,6 +16,11 @@ Rails.application.configure do
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
+
+  # Attempt to read encrypted secrets from `config/secrets.yml.enc`.
+  # Requires an encryption key in `ENV["RAILS_MASTER_KEY"]` or
+  # `config/secrets.yml.key`.
+  config.read_encrypted_secrets = true
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
@@ -37,6 +42,9 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
+  # Store uploaded files on the local file system (see config/storage.yml for options)
+  config.active_storage.service = :local
+
   # Mount Action Cable outside main process or domain
   # config.action_cable.mount_path = nil
   # config.action_cable.url = 'wss://example.com/cable'
@@ -48,7 +56,7 @@ Rails.application.configure do
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
   config.log_level = :debug
-  
+
   # Prepend all log lines with the following tags.
   config.log_tags = [ :request_id ]
 
@@ -84,34 +92,34 @@ Rails.application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
   if ENV["RAILS_LOG_TO_STDOUT"].present?
-        logger           = ActiveSupport::Logger.new(STDOUT)
-        logger.formatter = config.log_formatter
-        config.logger = ActiveSupport::TaggedLogging.new(logger)
+    logger           = ActiveSupport::Logger.new(STDOUT)
+    logger.formatter = config.log_formatter
+    config.logger    = ActiveSupport::TaggedLogging.new(logger)
   end
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-  
+
   # set asset compression method for CSS
   config.assets.css_compressor = :yui
-  
+
   # set asset compression method for JS
   config.assets.js_compressor = :uglifier
-  
+
   # Don't fallback to assets pipeline if a precompiled asset is missed
   #config.assets.compile = false
-  
+
   # Generate digests for assets URLs. This is planned for deprecation.
   #config.assets.digest = true
-  
+
   # which to precompile
   config.assets.precompile =  ['*.js', '*.css', '*.css.erb', '*.coffee', '*.scss'] #, '*.woff', '*.ttf', '*.svg', '*.eot', '.woff2', '*.otf'
-  
+
   # use relative URL path while compiling, maybe?
   config.assets.initialize_on_precompile = true
-  
+
   Rails.application.routes.default_url_options[:host] = 'https://tools.openhpi.de'
-  
+
   # Run on subfolder in production environment.
   config.relative_url_root = '/codeharbor'
 
