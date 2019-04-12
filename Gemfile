@@ -13,20 +13,18 @@ gem 'i18n'
 #Use slim format
 gem 'slim-rails'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.0.0'
-# Use sqlite3 as the database for Active Record
-#gem 'sqlite3'
+gem 'rails', '~> 5.2.3'
 # Use postgres as the database for Active Record
-gem 'pg', '~> 0.20'
+gem 'pg', '>= 0.18', '< 2.0'
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
+gem 'sass-rails'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
-gem 'yui-compressor'
+
+# gem 'yui-compressor'
+
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.1.0'
-# See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
+gem 'coffee-rails'
 
 # Use puma instead of WEBrick
 gem 'puma'
@@ -39,7 +37,7 @@ gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0', group: :doc
+# gem 'sdoc', '~> 1.0', group: :doc
 
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
@@ -50,37 +48,28 @@ gem 'will_paginate'
 # Continuation of CanCan (authoriation Gem for RoR)
 gem 'cancancan'
 
-# Use Bootstrap (app/assets/stylesheets)
+# See https://github.com/rails/execjs#readme for more supported runtimes
 gem 'therubyracer', platforms: :ruby
-gem 'twitter-bootstrap-rails'
-gem 'devise-bootstrap-views'
-
-gem 'nested_form_fields'
-
-gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
-
-gem 'jquery-ui-rails'
-gem 'select2-rails', '~> 4.0', '>= 4.0.3'
-
-gem 'oauth2', '~> 1.1.0'
-gem 'nokogiri'
-gem 'font-awesome-rails'
-
-# Use Unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
+# Use Bootstrap (app/assets/stylesheets)
+gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
+gem 'devise-bootstrap-views', '~> 1.0'
 
 gem 'better_errors' #!!!Important!!! move this to the development group before codeharbor goes really productive!!!Important!!!
+gem 'font-awesome-rails'
+gem 'jquery-ui-rails'
+gem 'less-rails' #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
+gem 'nested_form_fields'
+gem 'nokogiri'
+gem 'oauth2', '~> 1.4.0'
+gem 'select2-rails', '~> 4.0', '>= 4.0.3'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
+  gem 'factory_bot_rails', '~> 5.0.1'
   gem 'pry-byebug'
-  gem 'rspec-rails'
-  gem "factory_bot_rails"
   gem 'rails-controller-testing'
+  gem 'rspec-rails'
 end
 
 group :development do
@@ -88,20 +77,20 @@ group :development do
   gem 'guard-rspec'
   gem 'rack-mini-profiler'
   # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
+  gem 'web-console'
 
-  gem "capistrano", "~> 3.6"
+  gem 'airbrussh', require: false
+  gem 'capistrano', '~> 3.10', require: false
   gem 'capistrano3-puma'
-  gem 'capistrano-rails'
+  gem 'capistrano-rails', '~> 1.4', require: false
   gem 'capistrano-rvm'
   gem 'capistrano-upload-config'
-  gem 'airbrussh', require: false
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 end
 
 group :test do
-  gem "simplecov"
-  gem "codeclimate-test-reporter", "~> 1.0.0"
+  gem 'codeclimate-test-reporter', '~> 1.0.0'
+  gem 'simplecov'
 end
