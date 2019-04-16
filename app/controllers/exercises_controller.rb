@@ -8,6 +8,7 @@ class ExercisesController < ApplicationController
   load_and_authorize_resource :except => [:import_proforma_xml]
   before_action :set_exercise, only: [:show, :edit, :update, :destroy, :add_to_cart, :add_to_collection, :push_external, :contribute]
   before_action :set_search, only: [:index]
+  before_action :handle_search_params, only: :index
   skip_before_action :verify_authenticity_token, only: [:import_proforma_xml]
 
   include ExerciseExport
@@ -347,7 +348,24 @@ class ExercisesController < ApplicationController
       redirect_to exercise_path(@exercise), notice: t('controllers.exercise.report_notice')
     end
   end
+
   private
+
+  def restore_search_params
+    search_params = session.delete(:exercise_search_params)&.symbolize_keys || {}
+    params[:search] ||= search_params[:search]
+    params[:settings] ||= search_params[:settings]
+    params[:page] ||= search_params[:page]
+  end
+
+  def save_search_params
+    session[:exercise_search_params] = {search: params[:search], settings: params[:settings], page: params[:page]}
+  end
+
+  def handle_search_params
+    restore_search_params
+    save_search_params
+  end
 
   def set_search
     if params[:option]

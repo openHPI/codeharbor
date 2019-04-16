@@ -19,173 +19,205 @@ require 'rails_helper'
 # that an instance is receiving a specific message.
 
 RSpec.describe ExercisesController, type: :controller do
-
-  before { allow_any_instance_of(CanCan::ControllerResource).to receive(:load_and_authorize_resource){ nil } }
-  let!(:user) {FactoryBot.create(:user)}
-  let!(:cart) {FactoryBot.create(:cart, user: user, exercises: [])}
-  let!(:collection) {FactoryBot.create(:collection, users: [user], exercises: [])}
+  let(:user) { create(:user) }
+  let(:cart) { create(:cart, user: user, exercises: []) }
+  let(:collection) { create(:collection, users: [user], exercises: []) }
   # This should return the minimal set of attributes required to create a valid
   # Exercise. As you add validations to Exercise, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    FactoryBot.attributes_for(:only_meta_data, user: user).merge(:descriptions_attributes => {"0"=>FactoryBot.attributes_for(:simple_description)})
-  }
+  let(:valid_attributes) do
+    FactoryBot.attributes_for(:only_meta_data, user: user).merge(
+      descriptions_attributes: {'0' => FactoryBot.attributes_for(:simple_description)}
+    )
+  end
 
-  let(:invalid_attributes) {
+  let(:invalid_attributes) do
     {title: ''}
-  }
+  end
 
   # Duplicate Exercise
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # ExercisesController. Be sure to keep this updated too.
-  let(:valid_session) {
+  let(:valid_session) do
     {user_id: user.id}
-  }
+  end
 
-  describe "GET #index (My Exercises)" do
-    it "shows all Exercises of that user" do
-      exercise = Exercise.create! valid_attributes
-      get :index, params: {}, session: valid_session
-      expect(assigns(:exercises)).to eq([exercise])
+  describe 'GET #index (My Exercises)' do
+    subject(:get_request) { get :index, params: params, session: valid_session }
+
+    let(:get_request_without_params) { get :index, params: {}, session: valid_session }
+    let!(:exercise) { create(:simple_exercise, valid_attributes) }
+    let(:params) { {} }
+
+    it 'shows all Exercises of that user' do
+      get_request
+      expect(assigns(:exercises)).to contain_exactly exercise
+    end
+
+    context 'when user has multiple exercises' do
+      before { create(:simple_exercise, valid_attributes) }
+
+      it 'shows all Exercises of that user' do
+        get_request
+        expect(assigns(:exercises).size).to eq 2
+      end
+
+      context 'when a filter is used' do
+        let(:params) { {search: 'filter'} }
+        let!(:exercise) { create(:simple_exercise, user: user, title: 'filter me') }
+
+        it 'shows the matching Exercise' do
+          get_request
+          expect(assigns(:exercises)).to contain_exactly exercise
+        end
+
+        context 'when a second request without searchparams is made' do
+          it 'shows the matching Exercise' do
+            get_request
+            get_request_without_params
+            expect(assigns(:exercises)).to contain_exactly exercise
+          end
+        end
+      end
     end
   end
 
-  describe "GET #show" do
-    it "assigns the requested exercise as @exercise" do
-      exercise = Exercise.create! valid_attributes
-      get :show, params: {:id => exercise.to_param}, session: valid_session
+  describe 'GET #show' do
+    let!(:exercise) { create(:simple_exercise, valid_attributes) }
+
+    it 'assigns the requested exercise as @exercise' do
+      get :show, params: {id: exercise.to_param}, session: valid_session
       expect(assigns(:exercise)).to eq(exercise)
     end
   end
 
-  describe "GET #new" do
-    it "assigns a new exercise as @exercise" do
+  describe 'GET #new' do
+    it 'assigns a new exercise as @exercise' do
       get :new, params: {}, session: valid_session
       expect(assigns(:exercise)).to be_a_new(Exercise)
     end
   end
 
-  describe "GET #edit" do
-    it "assigns the requested exercise as @exercise" do
-      exercise = Exercise.create! valid_attributes
-      get :edit, params: {:id => exercise.to_param}, session: valid_session
+  describe 'GET #edit' do
+    let!(:exercise) { create(:simple_exercise, valid_attributes) }
+
+    it 'assigns the requested exercise as @exercise' do
+      get :edit, params: {id: exercise.to_param}, session: valid_session
       expect(assigns(:exercise)).to eq(exercise)
     end
   end
 
-  describe "POST #create" do
-    context "with valid params" do
-      it "creates a new Exercise" do
-        expect {
-          post :create, params: {:exercise => valid_attributes}, session: valid_session
-        }.to change(Exercise, :count).by(1)
+  describe 'POST #create' do
+    context 'with valid params' do
+      it 'creates a new Exercise' do
+        expect do
+          post :create, params: {exercise: valid_attributes}, session: valid_session
+        end.to change(Exercise, :count).by(1)
       end
 
-      it "assigns a newly created exercise as @exercise" do
-        post :create, params: {:exercise => valid_attributes}, session: valid_session
-        expect(assigns(:exercise)).to be_a(Exercise)
+      it 'assigns a newly created exercise as @exercise' do
+        post :create, params: {exercise: valid_attributes}, session: valid_session
         expect(assigns(:exercise)).to be_persisted
       end
 
-      it "redirects to the created exercise" do
-        post :create, params: {:exercise => valid_attributes}, session: valid_session
+      it 'redirects to the created exercise' do
+        post :create, params: {exercise: valid_attributes}, session: valid_session
         expect(response).to redirect_to(Exercise.last)
       end
     end
 
-    context "with invalid params" do
-      it "assigns a newly created but unsaved exercise as @exercise" do
-        post :create, params: {:exercise => invalid_attributes}, session: valid_session
+    context 'with invalid params' do
+      it 'assigns a newly created but unsaved exercise as @exercise' do
+        post :create, params: {exercise: invalid_attributes}, session: valid_session
         expect(assigns(:exercise)).to be_a_new(Exercise)
       end
 
       it "re-renders the 'new' template" do
-        post :create, params: {:exercise => invalid_attributes}, session: valid_session
-        expect(response).to render_template("new")
+        post :create, params: {exercise: invalid_attributes}, session: valid_session
+        expect(response).to render_template('new')
       end
     end
   end
 
-  describe "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
+  describe 'PUT #update' do
+    let!(:exercise) { create(:simple_exercise, valid_attributes) }
 
-      it "updates the requested exercise" do
-        exercise = Exercise.create! valid_attributes
-        put :update, params: {:id => exercise.to_param, :exercise => new_attributes}, session: valid_session
+    context 'with valid params' do
+      let(:new_attributes) { {title: 'new_title'} }
+
+      it 'updates the requested exercise' do
+        put :update, params: {id: exercise.to_param, exercise: new_attributes}, session: valid_session
         exercise.reload
-        skip("Add assertions for updated state")
+        expect(exercise.title).to eq 'new_title'
       end
 
-      it "assigns the requested exercise as @exercise" do
-        exercise = Exercise.create! valid_attributes
-        put :update, params: {:id => exercise.to_param, :exercise => valid_attributes}, session: valid_session
+      it 'assigns the requested exercise as @exercise' do
+        put :update, params: {id: exercise.to_param, exercise: valid_attributes}, session: valid_session
         expect(assigns(:exercise)).to eq(exercise)
       end
 
-      it "redirects to the exercise" do
-        exercise = Exercise.create! valid_attributes
-        put :update, params: {:id => exercise.to_param, :exercise => valid_attributes}, session: valid_session
+      it 'redirects to the exercise' do
+        put :update, params: {id: exercise.to_param, exercise: valid_attributes}, session: valid_session
         expect(response).to redirect_to(exercise)
       end
     end
 
-    context "with invalid params" do
-      it "assigns the exercise as @exercise" do
-        exercise = Exercise.create! valid_attributes
-        put :update, params: {:id => exercise.to_param, :exercise => invalid_attributes}, session: valid_session
+    context 'with invalid params' do
+      it 'assigns the exercise as @exercise' do
+        put :update, params: {id: exercise.to_param, exercise: invalid_attributes}, session: valid_session
         expect(assigns(:exercise)).to eq(exercise)
       end
 
       it "re-renders the 'edit' template" do
-        exercise = Exercise.create! valid_attributes
-        put :update, params: {:id => exercise.to_param, :exercise => invalid_attributes}, session: valid_session
-        expect(response).to render_template("edit")
+        put :update, params: {id: exercise.to_param, exercise: invalid_attributes}, session: valid_session
+        expect(response).to render_template('edit')
       end
     end
   end
 
-  describe "DELETE #destroy" do
-    it "destroys the requested exercise" do
-      exercise = Exercise.create! valid_attributes
-      expect {
-        delete :destroy, params: {:id => exercise.to_param}, session: valid_session
-      }.to change(Exercise, :count).by(-1)
+  describe 'DELETE #destroy' do
+    let!(:exercise) { create(:simple_exercise, valid_attributes) }
+
+    it 'destroys the requested exercise' do
+      expect do
+        delete :destroy, params: {id: exercise.to_param}, session: valid_session
+      end.to change(Exercise, :count).by(-1)
     end
 
-    it "redirects to the exercises list" do
-      exercise = Exercise.create! valid_attributes
-      delete :destroy, params: {:id => exercise.to_param}, session: valid_session
+    it 'redirects to the exercises list' do
+      delete :destroy, params: {id: exercise.to_param}, session: valid_session
       expect(response).to redirect_to(exercises_url)
     end
   end
 
-  describe "GET #exercises_all" do
-    it "assigns all exercises as @exercises" do
-      exercise = Exercise.create! valid_attributes
+  describe 'GET #exercises_all' do
+    let!(:exercise) { create(:simple_exercise, valid_attributes) }
+
+    it 'assigns all exercises as @exercises' do
       get :exercises_all, params: {}, session: valid_session
       expect(assigns(:exercises)).to eq([exercise])
     end
   end
 
-  describe "POST #add_to_cart" do
-    it "adds exercise to cart" do
-      exercise = Exercise.create! valid_attributes
-      expect{
-        post :add_to_cart, params: {:id => exercise.to_param}, session: valid_session
-      }.to change(cart.exercises, :count).by(+1)
+  describe 'POST #add_to_cart' do
+    let!(:exercise) { create(:simple_exercise, valid_attributes) }
+
+    it 'adds exercise to cart' do
+      expect do
+        post :add_to_cart, params: {id: exercise.to_param}, session: valid_session
+      end.to change(cart.exercises, :count).by(+1)
     end
   end
-  describe "POST #add_to_collection" do
-    it "adds exercise to collection" do
-      exercise = Exercise.create! valid_attributes
-      expect {
-        post :add_to_collection, params: {:id => exercise.to_param, collection: collection.id}, session: valid_session
-      }.to change(collection.exercises, :count).by(+1)
+
+  describe 'POST #add_to_collection' do
+    let!(:exercise) { create(:simple_exercise, valid_attributes) }
+
+    it 'adds exercise to collection' do
+      expect do
+        post :add_to_collection, params: {id: exercise.to_param, collection: collection.id}, session: valid_session
+      end.to change(collection.exercises, :count).by(+1)
     end
   end
 end
