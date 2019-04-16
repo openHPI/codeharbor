@@ -22,9 +22,13 @@ class ExercisesController < ApplicationController
   # GET /exercises.json
   def index
     if @order == 'order_created'
-      @exercises = Exercise.search(params[:search], params[:settings], @option, current_user).sort { |y, x| x.created_at <=> y.created_at }.paginate(per_page: 5, page: params[:page])
+      @exercises = Exercise.search(params[:search], params[:settings], @option, current_user).sort do |y, x|
+        x.created_at <=> y.created_at
+      end.paginate(per_page: 5, page: params[:page])
     else
-      @exercises = Exercise.search(params[:search], params[:settings], @option, current_user).sort { |y, x| x.average_rating <=> y.average_rating }.paginate(per_page: 5, page: params[:page])
+      @exercises = Exercise.search(params[:search], params[:settings], @option, current_user).sort do |y, x|
+        x.average_rating <=> y.average_rating
+      end.paginate(per_page: 5, page: params[:page])
     end
   end
 
@@ -297,7 +301,12 @@ class ExercisesController < ApplicationController
     user = User.find(params[:user])
     ExerciseAuthor.create(user: user, exercise: @exercise)
     text = t('controllers.exercise.add_author_text', user: current_user.name, exercise: @exercise.title)
-    Message.create(sender: current_user, recipient: user, param_type: 'exercise_accepted', param_id: @exercise.id, text: text, sender_status: 'd')
+    Message.create(sender: current_user,
+                   recipient: user,
+                   param_type: 'exercise_accepted',
+                   param_id: @exercise.id,
+                   text: text,
+                   sender_status: 'd')
     Message.where(sender: user, recipient: current_user, param_type: 'exercise', param_id: @exercise.id).delete_all
     redirect_to user_messages_path(current_user), notice: t('controllers.exercise.add_author_notice')
   end

@@ -13,13 +13,19 @@ class MessagesController < ApplicationController
   # GET /messages.json
   def index
     if @option == 'inbox'
-      @messages = Message.where(recipient: current_user).where('recipient_status != ?', 'd').order(created_at: :desc).paginate(per_page: 5, page: params[:page])
+      @messages = Message.where(recipient: current_user)
+                         .where('recipient_status != ?', 'd')
+                         .order(created_at: :desc)
+                         .paginate(per_page: 5, page: params[:page])
       @messages.each do |message|
         message.recipient_status = 'r'
         message.save
       end
     else
-      @messages = Message.where(sender: current_user).where('sender_status != ?', 'd').order(created_at: :desc).paginate(per_page: 5, page: params[:page])
+      @messages = Message.where(sender: current_user)
+                         .where('sender_status != ?', 'd')
+                         .order(created_at: :desc)
+                         .paginate(per_page: 5, page: params[:page])
     end
   end
 

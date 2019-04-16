@@ -95,7 +95,12 @@ class GroupsController < ApplicationController
   def request_access
     flash[:notice] = t('controllers.group.request_access.notice')
     @group.admins.each do |admin|
-      Message.create(sender: current_user, recipient: admin, text: t('controllers.group.request_access.text', user: current_user.name, group: @group.name), param_type: 'group', param_id: @group.id, sender_status: 'd')
+      Message.create(sender: current_user,
+                     recipient: admin,
+                     text: t('controllers.group.request_access.text', user: current_user.name, group: @group.name),
+                     param_type: 'group',
+                     param_id: @group.id,
+                     sender_status: 'd')
       AccessRequest.send_access_request(current_user, admin, @group).deliver_now
     end
     @group.add_pending_user(current_user)
@@ -111,7 +116,12 @@ class GroupsController < ApplicationController
   def grant_access
     user = User.find(params[:user])
     @group.grant_access(user)
-    Message.create(sender: current_user, recipient: user, text: t('controllers.group.grant_access.text', user: current_user.name, group: @group.name), param_type: 'group_accepted', param_id: @group.id, sender_status: 'd')
+    Message.create(sender: current_user,
+                   recipient: user,
+                   text: t('controllers.group.grant_access.text', user: current_user.name, group: @group.name),
+                   param_type: 'group_accepted',
+                   param_id: @group.id,
+                   sender_status: 'd')
     Message.where(sender: user, recipient: current_user, param_type: 'group', param_id: @group.id).delete_all
     redirect_to @group, notice: t('controllers.group.grant_access.notice')
   end
@@ -125,7 +135,11 @@ class GroupsController < ApplicationController
   def deny_access
     user = User.find(params[:user])
     @group.users.delete(user)
-    Message.create(sender: current_user, recipient: user, text: t('controllers.group.deny_access.text', user: current_user.name, group: @group.name), param_type: 'group_declined', sender_status: 'd')
+    Message.create(sender: current_user,
+                   recipient: user,
+                   text: t('controllers.group.deny_access.text', user: current_user.name, group: @group.name),
+                   param_type: 'group_declined',
+                   sender_status: 'd')
     Message.where(sender: user, recipient: current_user, param_type: 'group', param_id: @group.id).delete_all
     redirect_to @group, notice: t('controllers.group.deny_access.notice')
   end

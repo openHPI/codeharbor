@@ -7,7 +7,9 @@ RSpec.describe 'exercises', type: :request do
     before do
       @user = FactoryBot.create(:user)
       @exercise = FactoryBot.create(:only_meta_data, authors: [@user])
-      @exercise_params = FactoryBot.attributes_for(:only_meta_data).merge(descriptions_attributes: {'0' => FactoryBot.attributes_for(:simple_description)})
+      @exercise_params = FactoryBot.attributes_for(:only_meta_data).merge(
+        descriptions_attributes: {'0' => FactoryBot.attributes_for(:simple_description)}
+      )
       post login_path, params: {email: @user.email, password: @user.password}
       follow_redirect!
     end

@@ -115,7 +115,8 @@ Rails.application.configure do
   # config.assets.digest = true
 
   # which to precompile
-  config.assets.precompile =  ['*.js', '*.css', '*.css.erb', '*.coffee', '*.scss'] # , '*.woff', '*.ttf', '*.svg', '*.eot', '.woff2', '*.otf'
+  # , '*.woff', '*.ttf', '*.svg', '*.eot', '.woff2', '*.otf'
+  config.assets.precompile =  ['*.js', '*.css', '*.css.erb', '*.coffee', '*.scss']
 
   # use relative URL path while compiling, maybe?
   config.assets.initialize_on_precompile = true

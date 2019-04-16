@@ -8,13 +8,43 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-user1 = User.create(first_name: 'Manfred', last_name: 'Anderson', email: 'manfredAnderson@bhak1.de', email_confirmed: true, password: 'pwd', role: 'admin')
-user2 = User.create(first_name: 'Johannes', last_name: 'Maier', email: 'j.maier@waldschule.de', email_confirmed: true, password: 'pwd')
-user3 = User.create(first_name: 'Denise', last_name: 'Feler', email: 'denise.feler@gmx.de', email_confirmed: true, password: 'pwd')
-user4 = User.create(first_name: 'Theresa', last_name: 'Zobel', email: 'theresa.zobel@aon.at', email_confirmed: true, password: '1234')
-user5 = User.create(first_name: 'Theresa', last_name: 'Zobel', email: 'theresa.zobel@student.hpi.de', email_confirmed: true, password: '1234')
-user6 = User.create(first_name: 'Adrian', last_name: 'Steppat', email: 'adrian.steppat@student.hpi.de', email_confirmed: true, password: 'harbor', role: 'admin')
-user7 = User.create(first_name: 'Adrian', last_name: 'Steppat', email: 'adrian.steppat@web.de', email_confirmed: true, password: 'harbor')
+user1 = User.create(first_name: 'Manfred',
+                    last_name: 'Anderson',
+                    email: 'manfredAnderson@bhak1.de',
+                    email_confirmed: true,
+                    password: 'pwd',
+                    role: 'admin')
+user2 = User.create(first_name: 'Johannes',
+                    last_name: 'Maier',
+                    email: 'j.maier@waldschule.de',
+                    email_confirmed: true,
+                    password: 'pwd')
+user3 = User.create(first_name: 'Denise',
+                    last_name: 'Feler',
+                    email: 'denise.feler@gmx.de',
+                    email_confirmed: true,
+                    password: 'pwd')
+user4 = User.create(first_name: 'Theresa',
+                    last_name: 'Zobel',
+                    email: 'theresa.zobel@aon.at',
+                    email_confirmed: true,
+                    password: '1234')
+user5 = User.create(first_name: 'Theresa',
+                    last_name: 'Zobel',
+                    email: 'theresa.zobel@student.hpi.de',
+                    email_confirmed: true,
+                    password: '1234')
+user6 = User.create(first_name: 'Adrian',
+                    last_name: 'Steppat',
+                    email: 'adrian.steppat@student.hpi.de',
+                    email_confirmed: true,
+                    password: 'harbor',
+                    role: 'admin')
+user7 = User.create(first_name: 'Adrian',
+                    last_name: 'Steppat',
+                    email: 'adrian.steppat@web.de',
+                    email_confirmed: true,
+                    password: 'harbor')
 
 license1 = License.create(name: 'MIT License', link: 'https://opensource.org/licenses/MIT')
 license2 = License.create(name: 'Creative Common Attribution', link: 'https://creativecommons.org/licenses/by/4.0/')
@@ -60,11 +90,35 @@ xml_file = FileType.create(name: 'XML', file_extension: '.xml')
 
 exercise1 = Exercise.new(title: 'Hello World', maxrating: '10', private: false, user_id: user1.id, license: license1)
 
-exercise1_main = ExerciseFile.create(content: 'public class HelloWorld{ public static void main String[] args) { } }', name: 'main', path: '', purpose: 'template', visibility: true, role: 'Main File', hidden: false, read_only: false, file_type: java_file)
+exercise1_main = ExerciseFile.create(
+  content: 'public class HelloWorld{ public static void main String[] args) { } }',
+  name: 'main',
+  path: '',
+  purpose: 'template',
+  visibility: true,
+  role: 'Main File',
+  hidden: false,
+  read_only: false,
+  file_type: java_file
+)
 exercise1.exercise_files << exercise1_main
 
-exercise1_test = ExerciseFile.create(content: "public class HelloWorld{ public static void main String[] args) {System.out.println('Hello World.'); } }", name: 'test', path: '', purpose: 'test', visibility: true, hidden: false, read_only: false, file_type: java_file, exercise: exercise1)
-test = Test.create(feedback_message: "Es wird noch nicht 'Hello World' am Bildschrim ausgegeben!", exercise_file: exercise1_test, testing_framework: test_framework)
+exercise1_test = ExerciseFile.create(
+  content: "public class HelloWorld{ public static void main String[] args) {System.out.println('Hello World.'); } }",
+  name: 'test',
+  path: '',
+  purpose: 'test',
+  visibility: true,
+  hidden: false,
+  read_only: false,
+  file_type: java_file,
+  exercise: exercise1
+)
+test = Test.create(
+  feedback_message: "Es wird noch nicht 'Hello World' am Bildschrim ausgegeben!",
+  exercise_file: exercise1_test,
+  testing_framework: test_framework
+)
 exercise1.tests << test
 
 description1 = Description.create(text: "Schreibe ein Java Programm, das 'Hello World' am Bildschirm ausgibt.", language: 'de')
