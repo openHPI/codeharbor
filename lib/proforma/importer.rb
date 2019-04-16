@@ -67,7 +67,7 @@ module Proforma
         comment: file.xpath('@comment').first.try(:value),
         filename: file.xpath('@filename').first
       }
-      end
+    end
 
     def test_attributes
       {

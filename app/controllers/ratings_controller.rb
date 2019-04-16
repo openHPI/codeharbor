@@ -89,7 +89,7 @@ class RatingsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_rating
     @rating = Rating.find(params[:id])
-    end
+  end
 
   def set_exercise
     @exercise = Exercise.find(params[:exercise_id])
