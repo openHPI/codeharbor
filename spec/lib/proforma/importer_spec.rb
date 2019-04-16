@@ -4,8 +4,8 @@ require 'rails_helper'
 require 'nokogiri'
 
 describe Proforma::Importer do
-  let (:importer) { described_class.new }
-  let (:generator) { Proforma::XmlGenerator.new }
+  let(:importer) { described_class.new }
+  let(:generator) { Proforma::XmlGenerator.new }
   let(:exercise) { FactoryBot.create(:complex_exercise) }
   let(:xml) { generator.generate_xml(exercise) }
   let(:user) { FactoryBot.create(:user) }

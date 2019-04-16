@@ -59,7 +59,7 @@ RSpec.describe Cart, type: :model do
     it 'delete cart, when user gets destroyed' do
       cart_count = Cart.all.count
       expect(user.destroy).to be_truthy
-      expect(Cart.all.count).to eql (cart_count - 1)
+      expect(Cart.all.count).to eql(cart_count - 1)
     end
   end
 

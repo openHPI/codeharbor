@@ -4,10 +4,10 @@ require 'rails_helper'
 require 'nokogiri'
 
 describe Proforma::XmlGenerator do
-  let (:generator) { described_class.new }
+  let(:generator) { described_class.new }
 
   describe 'test complex exercise' do
-    let (:exercise) { FactoryBot.create(:complex_exercise) }
+    let(:exercise) { FactoryBot.create(:complex_exercise) }
     let(:xml) do
       ::Nokogiri::XML(
         generator.generate_xml(exercise)
@@ -56,7 +56,7 @@ describe Proforma::XmlGenerator do
         exercise_main_file = exercise.exercise_files.where(role: 'Main File').first
         expect(file.size).to be 1
         expect(file.text).to eq exercise_main_file.content
-        expect(file.xpath('@filename').first.value).to eq (exercise_main_file.path + '/' + exercise_main_file.name + '.java')
+        expect(file.xpath('@filename').first.value).to eq(exercise_main_file.path + '/' + exercise_main_file.name + '.java')
       end
 
       it 'has 4 internal files' do
