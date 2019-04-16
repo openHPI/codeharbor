@@ -54,7 +54,7 @@ RSpec.shared_examples 'create examples' do |klass:, resource:|
   end
 end
 
-RSpec.shared_examples 'create_and_redirect_example' do |klass:, resource:, redirect:|
+RSpec.shared_examples 'create_and_redirect_example' do |resource:, redirect:|
   context 'with valid attributes' do
     it "redirects to the created #{resource}" do
       post :create, params: empty_params.merge(resource => valid_attributes), session: valid_session

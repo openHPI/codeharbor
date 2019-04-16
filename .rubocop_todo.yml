@@ -6,23 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 1
-Lint/RescueException:
-  Exclude:
-    - 'app/controllers/exercises_controller.rb'
-
-# Offense count: 1
-Lint/UnreachableCode:
-  Exclude:
-    - 'app/controllers/exercises_controller.rb'
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: IgnoreEmptyBlocks, AllowUnusedKeywordArguments.
-Lint/UnusedBlockArgument:
-  Exclude:
-    - 'spec/support/shared_examples/standard_examples.rb'
-
 # Offense count: 52
 Lint/UselessAssignment:
   Exclude:

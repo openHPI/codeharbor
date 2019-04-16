@@ -33,14 +33,14 @@ class Exercise < ApplicationRecord
   default_scope { where(deleted: [nil, false]) }
 
   scope :timespan, ->(days) { days != 0 ? where('DATE(created_at) >= ?', Date.today - days) : where(nil) }
-  scope :text_like, lambda(text) {
+  scope :text_like, lambda { |text|
     if text.present?
       joins(:descriptions).where('title ILIKE ? OR descriptions.text ILIKE ?', "%#{text.downcase}%", "%#{text.downcase}%")
     else
       where(nil)
     end
   }
-  scope :mine, lambda(user) {
+  scope :mine, lambda { |user|
     if !user.nil?
       where('user_id = ? OR (exercises.id in (select exercise_id from exercise_authors where user_id = ?))', user.id, user.id)
     else
@@ -48,7 +48,7 @@ class Exercise < ApplicationRecord
     end
   }
   scope :visibility, ->(priv) { !priv.nil? ? where(private: priv) : where(nil) }
-  scope :languages, lambda(languages) {
+  scope :languages, lambda { |languages|
     if languages.present?
       where('(select count(language) from descriptions where exercises.id = descriptions.exercise_id AND '\
         'descriptions.language in (?)) = ? ', languages, languages.length)
@@ -58,7 +58,7 @@ class Exercise < ApplicationRecord
   }
   scope :proglanguage, ->(prog) { prog.present? ? where('execution_environment_id IN (?)', prog) : where(nil) }
   scope :not_deleted, -> { where('(select count(*) from reports where exercises.id = reports.exercise_id) < 3') }
-  scope :search_query, lambda(stars, languages, proglanguages, priv, user, search, intervall) {
+  scope :search_query, lambda { |stars, languages, proglanguages, priv, user, search, intervall|
     joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS average_rating FROM ratings GROUP BY exercise_id) AS ratings ON '\
     'ratings.exercise_id = exercises.id')
       .mine(user)

@@ -209,7 +209,6 @@ class ExercisesController < ApplicationController
       render text: error.message, status: error.status
     else
       raise error
-      render text: '', status: 500
     end
   end
 
@@ -278,7 +277,7 @@ class ExercisesController < ApplicationController
           end
         end
       end
-    rescue Exception => e
+    rescue StandardError => e
       flash[:alert] = e.message
       redirect_to exercises_path
     ensure
