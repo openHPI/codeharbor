@@ -14,7 +14,7 @@ module ExerciseExport
     unless errors.any?
       title = exercise.title
       title = title.tr('.,:*|"<>/\\', '')
-      title = title.gsub /[ (){}\[\]]/, '_'
+      title = title.gsub(/[ (){}\[\]]/, '_')
       filename = "#{title}.zip"
       stringio = Zip::OutputStream.write_buffer do |zio|
         zio.put_next_entry('task.xml')
