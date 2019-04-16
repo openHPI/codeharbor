@@ -54,7 +54,7 @@ class User < ApplicationRecord
     end
   end
 
-  def is_author?(exercise)
+  def author?(exercise)
     exercise_authors = User.find(ExerciseAuthor.where(exercise_id: exercise.id).collect(&:user_id))
     exercise_authors.include? self
   end
@@ -75,7 +75,7 @@ class User < ApplicationRecord
     end
   end
 
-  def has_access_through_any_group?(exercise)
+  def access_through_any_group?(exercise)
     shares_any_group?(exercise)
   end
 

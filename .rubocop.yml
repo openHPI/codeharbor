@@ -10,6 +10,7 @@ AllCops:
     - db/schema.rb
     - test/**/*
     - tmp/**/*
+    - views/**/*
 
 Rails:
   Enabled: true

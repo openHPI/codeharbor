@@ -17,7 +17,7 @@ a.btn.btn-main.btn-xs.toggle-input data={text_initial: t('exercises.files.upload
     = file.hidden_field :attachment_present, value: attachment_present, class: 'hidden-attachment-present'
     - if attachment_present
       .btn-group
-        - if file.object.has_attached_image?
+        - if file.object.attached_image?
           = image_tag file.object.attachment.url(:large)
         - else
           = link_to file.object.attachment.original_filename, download_attachment_path(file.object), class: 'btn btn-default', style: "border-right: none", 'data-turbolinks' => false

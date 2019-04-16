@@ -39,7 +39,7 @@
 
       .row-value
         - @group.members.each do |member|
-          - unless @group.is_admin(member)
+          - unless @group.admin?(member)
             .table-list
               = member.email
               = ' '
@@ -72,7 +72,7 @@
 
 
 
-    - if @group.is_admin(current_user)
+    - if @group.admin?(current_user)
       .row.vertical
         .row-label = t('groups.show.pending')
         .row-value

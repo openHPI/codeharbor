@@ -8,11 +8,11 @@ class Group < ApplicationRecord
     User.in_group(self).as(:admin)
   end
 
-  def is_admin(user)
+  def admin?(user)
     user.in_group?(self, as: 'admin')
   end
 
-  def has_member(user)
+  def member?(user)
     user.in_group?(self) unless user.in_group?(self, as: 'pending')
   end
 

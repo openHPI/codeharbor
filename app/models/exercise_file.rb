@@ -36,7 +36,7 @@ class ExerciseFile < ApplicationRecord
     end
   end
 
-  def has_attached_image?
+  def attached_image?
     attachment.try(:content_type) =~ %r{(image/jpeg)|(image/gif)|(image/png)}
   end
 end

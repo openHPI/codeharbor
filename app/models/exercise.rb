@@ -132,8 +132,8 @@ class Exercise < ApplicationRecord
 
   def can_access(user)
     if private
-      if !user.is_author?(self)
-        if !user.has_access_through_any_group?(self)
+      if !user.author?(self)
+        if !user.access_through_any_group?(self)
           false
         else
           true
