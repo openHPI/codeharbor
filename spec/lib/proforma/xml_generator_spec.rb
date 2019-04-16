@@ -43,7 +43,7 @@ describe Proforma::XmlGenerator do
         expect(proglang_version.first.value).to eq '1.8'
       end
 
-      it 'has empty <p:submission-restrictions>/<p:file-restriction>/<p:optional filename=''> tag' do
+      it "has empty <p:submission-restrictions>/<p:file-restriction>/<p:optional filename=''> tag" do
         restrictions = xml.xpath('p:submission-restrictions/p:file-restrictions/p:optional')
         expect(restrictions.size).to be 0
         expect(restrictions.text).to be_empty
