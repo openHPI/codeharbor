@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class TestingFrameworksController < ApplicationController
   load_and_authorize_resource
-  before_action :set_testing_framework, only: [:show, :edit, :update, :destroy]
+  before_action :set_testing_framework, only: %i[show edit update destroy]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized for this action.'
@@ -13,8 +15,7 @@ class TestingFrameworksController < ApplicationController
 
   # GET /testing_frameworks/1
   # GET /testing_frameworks/1.json
-  def show
-  end
+  def show; end
 
   # GET /testing_frameworks/new
   def new
@@ -22,8 +23,7 @@ class TestingFrameworksController < ApplicationController
   end
 
   # GET /testing_frameworks/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /testing_frameworks
   # POST /testing_frameworks.json
@@ -66,13 +66,14 @@ class TestingFrameworksController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_testing_framework
-      @testing_framework = TestingFramework.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def testing_framework_params
-      params.require(:testing_framework).permit(:name)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_testing_framework
+    @testing_framework = TestingFramework.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def testing_framework_params
+    params.require(:testing_framework).permit(:name)
+  end
 end

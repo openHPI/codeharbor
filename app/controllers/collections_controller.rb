@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'zip'
 require 'proforma/xml_generator'
 
 class CollectionsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_collection, only: [:show, :edit, :update, :destroy, :remove_exercise, :remove_all, :download_all, :share, :view_shared, :save_shared]
+  before_action :set_collection, only: %i[show edit update destroy remove_exercise remove_all download_all share view_shared save_shared]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.collections.authorization')
@@ -14,16 +16,16 @@ class CollectionsController < ApplicationController
   # GET /collections
   # GET /collections.json
   def index
-    @collections = Collection.includes(:collections_users).where(:collections_users => { :user => current_user}).distinct.paginate(per_page: 5, page: params[:page])
+    @collections = Collection.includes(:collections_users).where(collections_users: {user: current_user}).distinct.paginate(per_page: 5, page: params[:page])
   end
 
   def collections_all
     @collections = Collection.all.paginate(per_page: 10, page: params[:page])
   end
+
   # GET /collections/1
   # GET /collections/1.json
-  def show
-  end
+  def show; end
 
   # GET /collections/new
   def new
@@ -31,8 +33,7 @@ class CollectionsController < ApplicationController
   end
 
   # GET /collections/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /collections
   # POST /collections.json
@@ -42,7 +43,7 @@ class CollectionsController < ApplicationController
 
     respond_to do |format|
       if @collection.save
-        format.html { redirect_to collections_path, notice: t('controllers.collections.created')}
+        format.html { redirect_to collections_path, notice: t('controllers.collections.created') }
         format.json { render :index, status: :created, location: @collection }
       else
         format.html { render :new }
@@ -56,7 +57,7 @@ class CollectionsController < ApplicationController
   def update
     respond_to do |format|
       if @collection.update(collection_params)
-        format.html { redirect_to collections_path, notice: t('controllers.collections.updated')}
+        format.html { redirect_to collections_path, notice: t('controllers.collections.updated') }
         format.json { render :index, status: :ok, location: @collection }
       else
         format.html { render :edit }
@@ -83,12 +84,10 @@ class CollectionsController < ApplicationController
 
   def push_collection
     account_link = AccountLink.find(params[:account_link])
-    all_errors = Array.new
+    all_errors = []
     @collection.exercises.each do |exercise|
       error = push_exercise(exercise, account_link)
-      if error.present?
-        all_errors << error
-      end
+      all_errors << error if error.present?
     end
     if all_errors.empty?
       redirect_to @collection, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
@@ -103,8 +102,8 @@ class CollectionsController < ApplicationController
   def download_all
     filename = "#{@collection.title}.zip"
 
-    #This is the tricky part
-    #Initialize the temp file as a zip file
+    # This is the tricky part
+    # Initialize the temp file as a zip file
 
     stringio = Zip::OutputStream.write_buffer do |zio|
       @collection.exercises.each do |exercise|
@@ -121,8 +120,7 @@ class CollectionsController < ApplicationController
     end
     binary_data = stringio.string
 
-    send_data(binary_data, :type => 'application/zip', :filename => filename, :disposition => 'attachment')
-
+    send_data(binary_data, type: 'application/zip', filename: filename, disposition: 'attachment')
   end
 
   def share
@@ -145,29 +143,31 @@ class CollectionsController < ApplicationController
     @collection.users << current_user
 
     if @collection.save
-      redirect_to collection_path(@collection), notice:  t('controllers.collections.save_shared.notice')
+      redirect_to collection_path(@collection), notice: t('controllers.collections.save_shared.notice')
     else
-      redirect_to users_messages_path, alert:  t('controllers.collections.save_shared.alert')
+      redirect_to users_messages_path, alert: t('controllers.collections.save_shared.alert')
     end
   end
+
   # DELETE /collections/1
   # DELETE /collections/1.json
   def destroy
     @collection.destroy
     respond_to do |format|
-      format.html { redirect_to collections_url, notice: t('controllers.collections.destroyed')}
+      format.html { redirect_to collections_url, notice: t('controllers.collections.destroyed') }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_collection
-      @collection = Collection.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def collection_params
-      params.require(:collection).permit(:title)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_collection
+    @collection = Collection.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def collection_params
+    params.require(:collection).permit(:title)
+  end
 end

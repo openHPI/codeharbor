@@ -1,7 +1,8 @@
-FactoryBot.define do
+# frozen_string_literal: true
 
+FactoryBot.define do
   factory :single_junit_test, class: 'Test' do
-    feedback_message { "Dude... seriously?" }
+    feedback_message { 'Dude... seriously?' }
 
     after(:create) do |test|
       create(:junit_testing_framework, tests: [test])
@@ -21,5 +22,4 @@ FactoryBot.define do
       test.save
     end
   end
-
 end

@@ -1,14 +1,15 @@
+# frozen_string_literal: true
+
 class Ability
   include CanCan::Ability
 
   def initialize(user)
-
     if user
       if user.role == 'admin'
         can :manage, :all
 
-        #Define Abilities admins cannot do
-        #Group
+        # Define Abilities admins cannot do
+        # Group
         cannot :leave, Group do |group|
           !user.in_group?(group)
         end
@@ -16,9 +17,9 @@ class Ability
         can :view_all, User
       end
 
-      #AccountLink
-      can [:create, :new], AccountLink
-      #can [:manage], AccountLink, :user_id => user.id
+      # AccountLink
+      can %i[create new], AccountLink
+      # can [:manage], AccountLink, :user_id => user.id
       can [:view, :remove_account_link], AccountLink do |account_link|
         account_link.external_users.include?(user)
       end
@@ -26,26 +27,26 @@ class Ability
         account_link.user == user
       end
 
-      #Answer
+      # Answer
       can [:new], Answer
       can [:manage], Answer do |answer|
         answer.user == user
       end
 
-      #Cart
+      # Cart
       can [:create], Cart
       can [:my_cart, :show, :remove_all, :download_all, :push_cart, :export, :remove_exercise], Cart do |cart|
         cart.user == user
       end
 
-      #Collection
-      can [:create, :view_shared, :save_shared, :show], Collection
+      # Collection
+      can %i[create view_shared save_shared show], Collection
       can [:manage], Collection do |collection|
         collection.users.include?(user)
       end
 
-      #Exercise
-      can [:create, :contribute, :read_comments, :related_exercises], Exercise
+      # Exercise
+      can %i[create contribute read_comments related_exercises], Exercise
       can [:show, :read, :add_to_cart, :add_to_collection, :push_external, :duplicate, :download_exercise, :report], Exercise do |exercise|
         exercise.can_access(user)
       end
@@ -56,17 +57,17 @@ class Ability
         ExerciseAuthor.where(user_id: user.id, exercise_id: exercise.id).any? || exercise.user == user
       end
 
-      #Comment
-      can [:show, :create, :read, :answer ], Comment
+      # Comment
+      can %i[show create read answer], Comment
       can [:manage], Comment do |comment|
         comment.user == user
       end
 
-      #Rating
-      can [:read, :create], Rating
+      # Rating
+      can %i[read create], Rating
 
-      #Groups
-      can [:create, :request_access], Group
+      # Groups
+      can %i[create request_access], Group
       can [:view, :read, :members, :admins, :leave], Group do |group|
         user.in_group?(group, as: 'member')
       end
@@ -77,8 +78,8 @@ class Ability
         user.in_group?(group)
       end
 
-      #User
-      can [:create, :view, :show, :read], User
+      # User
+      can %i[create view show read], User
       can [:message], User do |this_user|
         this_user != user
       end
@@ -86,7 +87,7 @@ class Ability
         this_user == user
       end
 
-      #Message
+      # Message
       can [:create], Message
       can [:show, :reply, :delete, :add_author], Message do |message|
         message.recipient == user

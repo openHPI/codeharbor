@@ -1,5 +1,6 @@
-Rails.application.routes.draw do
+# frozen_string_literal: true
 
+Rails.application.routes.draw do
   resources :relations
   resources :exercise_relations
   # You can have the root of your site routed with "root"
@@ -28,7 +29,7 @@ Rails.application.routes.draw do
     end
   end
   resources :groups do
-    get :search, :on => :collection
+    get :search, on: :collection
     member do
       get :remove_exercise
       get :leave
@@ -83,10 +84,10 @@ Rails.application.routes.draw do
   get 'groups/:id/delete_from_group', to: 'groups#delete_from_group', as: 'delete_from_group'
   get 'groups/:id/make_admin', to: 'groups#make_admin', as: 'make_admin'
 
-  get 'collections/:id/remove_exercise', to: 'collections#remove_exercise' ,as: 'remove_exercise_collection'
-  get 'carts/:id/remove_exercise', to: 'carts#remove_exercise' ,as: 'remove_exercise_cart'
-  get 'collections/:id/remove_all', to: 'collections#remove_all' ,as: 'remove_all_collection'
-  get 'carts/:id/remove_all', to: 'carts#remove_all' ,as: 'remove_all_cart'
+  get 'collections/:id/remove_exercise', to: 'collections#remove_exercise', as: 'remove_exercise_collection'
+  get 'carts/:id/remove_exercise', to: 'carts#remove_exercise', as: 'remove_exercise_cart'
+  get 'collections/:id/remove_all', to: 'collections#remove_all', as: 'remove_all_collection'
+  get 'carts/:id/remove_all', to: 'carts#remove_all', as: 'remove_all_cart'
 
   post 'user/:id/messages/:id/add_author', to: 'messages#add_author', as: 'add_author'
 
@@ -96,21 +97,21 @@ Rails.application.routes.draw do
   post 'passwords/reset', to: 'passwords#reset'
 
   resources :labels do
-    get :search, :on => :collection
+    get :search, on: :collection
   end
   resources :label_categories
   resources :users do
     resources :account_links do
-      post :remove_account_link, :on => :member
+      post :remove_account_link, on: :member
     end
     resources :messages do
-      get :delete, :on => :member
-      get :reply, :on => :collection
+      get :delete, on: :member
+      get :reply, on: :collection
     end
   end
   resources :tests
   resources :file_types do
-    get :search, :on => :collection
+    get :search, on: :collection
   end
   resources :exercise_files
   resources :testing_frameworks
@@ -137,13 +138,8 @@ Rails.application.routes.draw do
     end
   end
 
-
-
-
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
-
-
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

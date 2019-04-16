@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class RatingsController < ApplicationController
   load_and_authorize_resource
   before_action :set_exercise
-  before_action :set_rating, only: [:show, :edit, :update, :destroy]
+  before_action :set_rating, only: %i[show edit update destroy]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized to rate.'
@@ -15,8 +17,7 @@ class RatingsController < ApplicationController
 
   # GET /ratings/1
   # GET /ratings/1.json
-  def show
-  end
+  def show; end
 
   # GET /ratings/new
   def new
@@ -24,14 +25,13 @@ class RatingsController < ApplicationController
   end
 
   # GET /ratings/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /ratings
   # POST /ratings.json
   def create
     if @exercise.user == current_user
-      flash[:alert] = "You cannot rate your own exercise."
+      flash[:alert] = 'You cannot rate your own exercise.'
       overall_rating = @exercise.round_avg_rating
       respond_to do |format|
         format.json { render json: {overall_rating: overall_rating, user_rating: overall_rating} }
@@ -55,7 +55,7 @@ class RatingsController < ApplicationController
         overall_rating = @exercise.round_avg_rating
         format.json { render json: {overall_rating: overall_rating, user_rating: rating} }
       else
-        format.json {render :layout => false, notice: "An Error occured"}
+        format.json { render layout: false, notice: 'An Error occured' }
       end
     end
   end
@@ -85,17 +85,18 @@ class RatingsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+
+  # Use callbacks to share common setup or constraints between actions.
   def set_rating
-      @rating = Rating.find(params[:id])
+    @rating = Rating.find(params[:id])
     end
 
-    def set_exercise
-      @exercise = Exercise.find(params[:exercise_id])
-    end
+  def set_exercise
+    @exercise = Exercise.find(params[:exercise_id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def rating_params
-      params.require(:rating).permit(:rating, :exercise_id, :user_id)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def rating_params
+    params.require(:rating).permit(:rating, :exercise_id, :user_id)
+  end
 end

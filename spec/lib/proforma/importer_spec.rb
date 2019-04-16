@@ -1,30 +1,27 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require 'nokogiri'
 
 describe Proforma::Importer do
-
-  let (:importer) {described_class.new}
-  let (:generator) {Proforma::XmlGenerator.new}
-  let(:exercise) {FactoryBot.create(:complex_exercise)}
+  let (:importer) { described_class.new }
+  let (:generator) { Proforma::XmlGenerator.new }
+  let(:exercise) { FactoryBot.create(:complex_exercise) }
   let(:xml) { generator.generate_xml(exercise) }
-  let(:user) {FactoryBot.create(:user)}
-
-
-
+  let(:user) { FactoryBot.create(:user) }
 
   describe 'import exercise' do
+    let!(:testing_framework) { FactoryBot.create(:junit_testing_framework, name: 'JUnit 4') }
+    let!(:license) { FactoryBot.create(:license, name: 'MIT License') }
 
-    let!(:testing_framework) {FactoryBot.create(:junit_testing_framework, name: 'JUnit 4')}
-    let!(:license) {FactoryBot.create(:license, name: 'MIT License')}
-
-    let(:imported_exercise) {
+    let(:imported_exercise) do
       imported_exercise = Exercise.new
       doc = Nokogiri::XML(xml)
       imported_exercise = importer.from_proforma_xml(imported_exercise, doc)
       imported_exercise.user = user
       imported_exercise.save
       imported_exercise
-    }
+    end
 
     it 'imports valid exercise' do
       expect(imported_exercise).to be_valid

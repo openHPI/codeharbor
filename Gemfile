@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 # Handle file upload
 gem 'paperclip'
-#Create Zip files
+# Create Zip files
 gem 'rubyzip'
-#Handle Group Access
+# Handle Group Access
 gem 'groupify'
-#Private Data
+# Private Data
 gem 'figaro'
-#Translate
+# Translate
 gem 'i18n'
-#Use slim format
+# Use slim format
 gem 'slim-rails'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.3'
@@ -28,7 +30,7 @@ gem 'coffee-rails'
 
 # Use puma instead of WEBrick
 gem 'puma'
-#Use simple_form
+# Use simple_form
 gem 'simple_form'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -42,7 +44,7 @@ gem 'jbuilder', '~> 2.0'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
-#pagination
+# pagination
 gem 'will_paginate'
 
 # Continuation of CanCan (authoriation Gem for RoR)
@@ -51,13 +53,13 @@ gem 'cancancan'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 gem 'therubyracer', platforms: :ruby
 # Use Bootstrap (app/assets/stylesheets)
-gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 gem 'devise-bootstrap-views', '~> 1.0'
+gem 'twitter-bootstrap-rails', git: 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 
-gem 'better_errors' #!!!Important!!! move this to the development group before codeharbor goes really productive!!!Important!!!
+gem 'better_errors' # !!!Important!!! move this to the development group before codeharbor goes really productive!!!Important!!!
 gem 'font-awesome-rails'
 gem 'jquery-ui-rails'
-gem 'less-rails' #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
+gem 'less-rails' # Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
 gem 'nested_form_fields'
 gem 'nokogiri'
 gem 'oauth2', '~> 1.4.0'

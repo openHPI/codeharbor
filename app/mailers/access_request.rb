@@ -1,5 +1,6 @@
-class AccessRequest < ApplicationMailer
+# frozen_string_literal: true
 
+class AccessRequest < ApplicationMailer
   def send_access_request(user, admin, group)
     @user = user
     @admin = admin
@@ -14,4 +15,3 @@ class AccessRequest < ApplicationMailer
     mail(to: @author.email, subject: "#{user.name} wants to contribute to your Exercise '#{exercise.title}'")
   end
 end
-

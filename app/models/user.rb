@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'digest'
 
 class User < ApplicationRecord
@@ -5,28 +7,28 @@ class User < ApplicationRecord
   groupify :group_member
 
   validates :email, presence: true, uniqueness: true
-  validates_uniqueness_of :username, :allow_blank => true
+  validates :username, uniqueness: {allow_blank: true}
   validates :first_name, :last_name, presence: true
   has_secure_password
 
-  has_and_belongs_to_many :external_account_links, class_name: "AccountLink", dependent: :destroy
+  has_and_belongs_to_many :external_account_links, class_name: 'AccountLink', dependent: :destroy
   has_and_belongs_to_many :collections, dependent: :destroy
   has_many :reports, dependent: :destroy
-  has_many :account_links, foreign_key: "user_id", class_name: "AccountLink", dependent: :destroy
+  has_many :account_links, foreign_key: 'user_id', class_name: 'AccountLink', dependent: :destroy
   has_many :exercises
   has_one :cart, dependent: :destroy
   has_many :exercise_authors, dependent: :destroy
   has_many :exercises, through: :exercise_authors
-  has_many :sent_messages, :class_name => 'Message', :foreign_key => 'sender_id'
-  has_many :received_messages, :class_name => 'Message', :foreign_key => 'recipient_id'
+  has_many :sent_messages, class_name: 'Message', foreign_key: 'sender_id'
+  has_many :received_messages, class_name: 'Message', foreign_key: 'recipient_id'
 
-  has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100#" }, :default_url => "/images/:style/missing.png"
-  validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
+  has_attached_file :avatar, styles: {medium: '300x300>', thumb: '100x100#'}, default_url: '/images/:style/missing.png'
+  validates_attachment_content_type :avatar, content_type: %r{\Aimage/.*\Z}
 
   default_scope { where(deleted: [nil, false]) }
 
   before_create :confirmation_token
-  #before_destroy :handle_destroy, prepend: true
+  # before_destroy :handle_destroy, prepend: true
 
   def soft_delete
     destroy = handle_destroy
@@ -37,28 +39,25 @@ class User < ApplicationRecord
     end
   end
 
-  def last_admin? (group)
-    if self.in_group?(group, as: 'admin')
-      if group.admins.size == 1
-        true
-      end
+  def last_admin?(group)
+    if in_group?(group, as: 'admin')
+      true if group.admins.size == 1
     end
     false
   end
 
   def cart_count
     if cart
-      return cart.exercises.size
+      cart.exercises.size
     else
-      return 0
+      0
     end
   end
 
   def is_author?(exercise)
     exercise_authors = User.find(ExerciseAuthor.where(exercise_id: exercise.id).collect(&:user_id))
-    return exercise_authors.include? self
+    exercise_authors.include? self
   end
-
 
   def name
     "#{first_name} #{last_name}"
@@ -76,21 +75,17 @@ class User < ApplicationRecord
     end
   end
 
-
   def has_access_through_any_group?(exercise)
-    self.shares_any_group?(exercise)
+    shares_any_group?(exercise)
   end
 
   def handle_group_memberships
+    in_all_groups?(as: 'admin')
 
-    self.in_all_groups?(as: 'admin')
-
-    self.groups.each do |group|
+    groups.each do |group|
       if group.users.size > 1
-        if self.in_group?(group, as: 'admin')
-          if group.admins.size == 1
-            return false
-          end
+        if in_group?(group, as: 'admin')
+          return false if group.admins.size == 1
         end
       else
         group.destroy
@@ -106,10 +101,8 @@ class User < ApplicationRecord
   end
 
   def handle_collection_membership
-    self.collections.each do |collection|
-      if collection.users.size == 1
-        collection.delete
-      end
+    collections.each do |collection|
+      collection.delete if collection.users.size == 1
     end
   end
 
@@ -118,7 +111,7 @@ class User < ApplicationRecord
   end
 
   def handle_messages
-    Message.where(sender: self, param_type: ['exercise', 'group', 'collection']).destroy_all
+    Message.where(sender: self, param_type: %w[exercise group collection]).destroy_all
   end
 
   def shared_account_link_with(user)
@@ -137,7 +130,7 @@ class User < ApplicationRecord
   def email_activate
     self.email_confirmed = true
     self.confirm_token = nil
-    save!(:validate => false)
+    save!(validate: false)
   end
 
   def generate_password_token!
@@ -147,7 +140,7 @@ class User < ApplicationRecord
   end
 
   def password_token_valid?
-    (self.reset_password_sent_at + 4.hours) > Time.now.utc
+    (reset_password_sent_at + 4.hours) > Time.now.utc
   end
 
   def reset_password!(password, password_confirmation)
@@ -158,13 +151,12 @@ class User < ApplicationRecord
   end
 
   private
-    def confirmation_token
-      if self.confirm_token.blank?
-        self.confirm_token = SecureRandom.urlsafe_base64.to_s
-      end
-    end
 
-    def generate_token
-      SecureRandom.hex(10)
-    end
+  def confirmation_token
+    self.confirm_token = SecureRandom.urlsafe_base64.to_s if confirm_token.blank?
+  end
+
+  def generate_token
+    SecureRandom.hex(10)
+  end
 end

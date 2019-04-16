@@ -1,0 +1,22 @@
+require: rubocop-rspec
+
+AllCops:
+  TargetRubyVersion: 2.6
+  Exclude:
+    - bin/*
+    - db/migrate/**/*
+    - db/schema.rb
+    - test/**/*
+    - tmp/**/*
+
+Rails:
+  Enabled: true
+
+Metrics/LineLength:
+  Max: 140
+
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+
+Style/Documentation:
+  Enabled: false

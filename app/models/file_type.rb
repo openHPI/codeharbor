@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FileType < ApplicationRecord
   belongs_to :exercise_files
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -58,7 +60,7 @@ Rails.application.configure do
   config.log_level = :debug
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [ :request_id ]
+  config.log_tags = [:request_id]
 
   # Use a different logger for distributed setups.
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
@@ -91,7 +93,7 @@ Rails.application.configure do
   # require 'syslog/logger'
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
-  if ENV["RAILS_LOG_TO_STDOUT"].present?
+  if ENV['RAILS_LOG_TO_STDOUT'].present?
     logger           = ActiveSupport::Logger.new(STDOUT)
     logger.formatter = config.log_formatter
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
@@ -107,13 +109,13 @@ Rails.application.configure do
   config.assets.js_compressor = :uglifier
 
   # Don't fallback to assets pipeline if a precompiled asset is missed
-  #config.assets.compile = false
+  # config.assets.compile = false
 
   # Generate digests for assets URLs. This is planned for deprecation.
-  #config.assets.digest = true
+  # config.assets.digest = true
 
   # which to precompile
-  config.assets.precompile =  ['*.js', '*.css', '*.css.erb', '*.coffee', '*.scss'] #, '*.woff', '*.ttf', '*.svg', '*.eot', '.woff2', '*.otf'
+  config.assets.precompile =  ['*.js', '*.css', '*.css.erb', '*.coffee', '*.scss'] # , '*.woff', '*.ttf', '*.svg', '*.eot', '.woff2', '*.otf'
 
   # use relative URL path while compiling, maybe?
   config.assets.initialize_on_precompile = true
@@ -125,9 +127,8 @@ Rails.application.configure do
 
   # Set up ActionMailer for subfolder
   config.action_mailer.default_url_options = {
-      :host => 'https://tools.openhpi.de',
-      :only_path => false,
-      :script_name => '/codeharbor'
+    host: 'https://tools.openhpi.de',
+    only_path: false,
+    script_name: '/codeharbor'
   }
-
 end

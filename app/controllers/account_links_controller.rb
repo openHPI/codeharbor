@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class AccountLinksController < ApplicationController
   before_action :set_user, except: [:index]
-  before_action :set_account_link, only: [:show, :edit, :update, :destroy, :remove_account_link]
+  before_action :set_account_link, only: %i[show edit update destroy remove_account_link]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.user.authorization')
@@ -8,7 +10,7 @@ class AccountLinksController < ApplicationController
   # GET /account_links
   # GET /account_links.json
   def index
-    authorize! :view_all , current_user
+    authorize! :view_all, current_user
     @account_links = AccountLink.all.paginate(per_page: 10, page: params[:page])
   end
 
@@ -84,17 +86,18 @@ class AccountLinksController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_account_link
-      @account_link = AccountLink.find(params[:id])
-    end
 
-    def set_user
-      @user = User.find(params[:user_id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_account_link
+    @account_link = AccountLink.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def account_link_params
-      params.require(:account_link).permit(:push_url, :account_name, :oauth2_token, :client_id, :client_secret)
-    end
+  def set_user
+    @user = User.find(params[:user_id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def account_link_params
+    params.require(:account_link).permit(:push_url, :account_name, :oauth2_token, :client_id, :client_secret)
+  end
 end

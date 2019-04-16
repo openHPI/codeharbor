@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Proforma
   class ZipImporter < Importer
     def from_proforma_zip(exercise, doc, files)
@@ -12,14 +14,15 @@ module Proforma
       content = attachment ? nil : file.text
       puts attachment.inspect
       {
-          attachment: attachment,
-          attachment_file_name: metadata[:filename],
-          content: content,
-          name: get_name_from_filename(metadata[:filename]),
-          path: get_path_from_filename(metadata[:filename]),
-          file_type: get_filetype_from_filename(metadata[:filename]),
-          hidden: metadata[:file_class] == 'internal',
-          read_only: false }
+        attachment: attachment,
+        attachment_file_name: metadata[:filename],
+        content: content,
+        name: get_name_from_filename(metadata[:filename]),
+        path: get_path_from_filename(metadata[:filename]),
+        file_type: get_filetype_from_filename(metadata[:filename]),
+        hidden: metadata[:file_class] == 'internal',
+        read_only: false
+      }
     end
   end
 end

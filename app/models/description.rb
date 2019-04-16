@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 class Description < ApplicationRecord
   belongs_to :exercise
 
-  LANGUAGES= ['en', 'de','fr', 'es', 'ja', 'cn']
+  LANGUAGES = %w[en de fr es ja cn].freeze
   LANGUAGES.freeze
-
 end

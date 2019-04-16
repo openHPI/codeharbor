@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class LabelCategoriesController < ApplicationController
   load_and_authorize_resource
-  before_action :set_label_category, only: [:show, :edit, :update, :destroy]
+  before_action :set_label_category, only: %i[show edit update destroy]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized for this action.'
@@ -13,8 +15,7 @@ class LabelCategoriesController < ApplicationController
 
   # GET /label_categories/1
   # GET /label_categories/1.json
-  def show
-  end
+  def show; end
 
   # GET /label_categories/new
   def new
@@ -22,8 +23,7 @@ class LabelCategoriesController < ApplicationController
   end
 
   # GET /label_categories/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /label_categories
   # POST /label_categories.json
@@ -66,13 +66,14 @@ class LabelCategoriesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_label_category
-      @label_category = LabelCategory.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def label_category_params
-      params.require(:label_category).permit(:name)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_label_category
+    @label_category = LabelCategory.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def label_category_params
+    params.require(:label_category).permit(:name)
+  end
 end

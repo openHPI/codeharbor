@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class FileTypesController < ApplicationController
   load_and_authorize_resource
-  before_action :set_file_type, only: [:show, :edit, :update, :destroy]
+  before_action :set_file_type, only: %i[show edit update destroy]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.file_type.authorization')
@@ -13,6 +15,7 @@ class FileTypesController < ApplicationController
       format.json { render json: @file_types.where('type ilike ?', "%#{params[:term]}%") }
     end
   end
+
   # GET /file_types
   # GET /file_types.json
   def index
@@ -21,8 +24,7 @@ class FileTypesController < ApplicationController
 
   # GET /file_types/1
   # GET /file_types/1.json
-  def show
-  end
+  def show; end
 
   # GET /file_types/new
   def new
@@ -30,8 +32,7 @@ class FileTypesController < ApplicationController
   end
 
   # GET /file_types/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /file_types
   # POST /file_types.json
@@ -40,7 +41,7 @@ class FileTypesController < ApplicationController
 
     respond_to do |format|
       if @file_type.save
-        format.html { redirect_to @file_type, notice: t('controllers.file_type.created')}
+        format.html { redirect_to @file_type, notice: t('controllers.file_type.created') }
         format.json { render :show, status: :created, location: @file_type }
       else
         format.html { render :new }
@@ -68,19 +69,20 @@ class FileTypesController < ApplicationController
   def destroy
     @file_type.destroy
     respond_to do |format|
-      format.html { redirect_to file_types_url, notice: t('controllers.file_type.destroyed')}
+      format.html { redirect_to file_types_url, notice: t('controllers.file_type.destroyed') }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_file_type
-      @file_type = FileType.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def file_type_params
-      params[:file_type].permit(:name, :file_extension)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_file_type
+    @file_type = FileType.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def file_type_params
+    params[:file_type].permit(:name, :file_extension)
+  end
 end

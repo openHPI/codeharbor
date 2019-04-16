@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Collection < ApplicationRecord
   validates :title, presence: true
 
@@ -5,18 +7,16 @@ class Collection < ApplicationRecord
   has_and_belongs_to_many :exercises, dependent: :destroy
 
   def add_exercise(exercise)
-    unless self.exercises.find_by(id: exercise.id)
-      self.exercises << exercise
-    end
+    exercises << exercise unless exercises.find_by(id: exercise.id)
   end
 
   def remove_exercise(exercise)
-    self.exercises.delete(exercise)
+    exercises.delete(exercise)
   end
 
   def remove_all
-    self.exercises.each do |exercise|
-      self.exercises.delete(exercise)
+    exercises.each do |exercise|
+      exercises.delete(exercise)
     end
   end
 end

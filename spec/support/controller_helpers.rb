@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module ControllerHelpers
   def login_with(user = double('user'))
-  	session[:user_id] = user.id
-  	redirect_to exercises_path
+    session[:user_id] = user.id
+    redirect_to exercises_path
   end
 
   def login_user
