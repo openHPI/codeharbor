@@ -7,33 +7,27 @@ class Test < ApplicationRecord
   accepts_nested_attributes_for :exercise_file, allow_destroy: true
 
   def content
-    content = ''
-    content = exercise_file.content if exercise_file
+    exercise_file&.content || ''
   end
 
   def name
-    name = ''
-    name = exercise_file.name if exercise_file
+    exercise_file&.name || ''
   end
 
   def path
-    path = ''
-    path = exercise_file.path if exercise_file
+    exercise_file&.path || ''
   end
 
   def file_type_id
-    id = ''
-    id = exercise_file.file_type_id if exercise_file
+    exercise_file.file_type_id || ''
   end
 
   def file_type
-    file_type = nil
-    file_type = exercise_file.file_type if exercise_file
+    exercise_file&.file_type
   end
 
   def attachment
-    attachment = nil
-    attachment = exercise_file.attachment if exercise_file
+    exercise_file&.attachment
   end
 
   def has_attached_image?

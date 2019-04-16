@@ -9,9 +9,7 @@
 # Offense count: 52
 Lint/UselessAssignment:
   Exclude:
-    - 'app/models/test.rb'
     - 'db/seeds.rb'
-    - 'lib/proforma/importer.rb'
 
 # Offense count: 48
 Metrics/AbcSize:

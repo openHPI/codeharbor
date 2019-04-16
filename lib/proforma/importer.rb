@@ -129,7 +129,7 @@ module Proforma
     end
 
     def get_path_from_filename(filename_attribute)
-      path = split_up_filename(filename_attribute.value).first if filename_attribute
+      split_up_filename(filename_attribute.value).first if filename_attribute
       ''
     end
 
