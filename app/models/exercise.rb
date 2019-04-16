@@ -31,13 +31,14 @@ class Exercise < ApplicationRecord
   default_scope { where(deleted: [nil, false]) }
 
   scope :timespan, -> (days) {(days != 0) ? where('DATE(created_at) >= ?', Date.today-days) : where(nil)}
-  scope :title_like, -> (title) {(!title.blank?) ? where('lower(title) ilike ?',"%#{title.downcase}%") : where(nil)}
-  scope :mine, -> (user) {(!user.nil?) ? where('user_id = ? OR (id in (select exercise_id from exercise_authors where user_id = ?))', user.id, user.id) : where(nil)}
+  scope :text_like, -> (text) {(!text.blank?) ? joins(:descriptions).where('title ILIKE ? OR descriptions.text ILIKE ?', "%#{text.downcase}%", "%#{text.downcase}%") : where(nil)}
+  scope :mine, -> (user) {(!user.nil?) ? where('user_id = ? OR (exercises.id in (select exercise_id from exercise_authors where user_id = ?))', user.id, user.id) : where(nil)}
   scope :visibility, -> (priv) {(!priv.nil?) ? where(private: priv) : where(nil)}
   scope :languages, -> (languages) {(!languages.blank?) ? where('(select count(language) from descriptions where exercises.id = descriptions.exercise_id AND descriptions.language in (?)) = ? ', languages, languages.length) : where(nil)}
   scope :proglanguage, -> (prog) {(!prog.blank?) ? where('execution_environment_id IN (?)', prog) : where(nil)}
   scope :not_deleted, -> {where('(select count(*) from reports where exercises.id = reports.exercise_id) < 3')}
-  scope :search_query, -> (stars, languages, proglanguages, priv, user, search, intervall) {joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS average_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').mine(user).visibility(priv).rating(stars).languages(languages).proglanguage(proglanguages).title_like(search).timespan(intervall).not_deleted.select('exercises.*, coalesce(average_rating, 0) AS average_rating')}
+  scope :search_query, -> (stars, languages, proglanguages, priv, user, search, intervall) {joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS average_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').mine(user).visibility(priv).rating(stars).languages(languages).proglanguage(proglanguages).text_like(search).timespan(intervall).not_deleted.select('exercises.*, coalesce(average_rating, 0) AS average_rating').distinct}
+
 
   def self.rating(stars)
     if !stars.blank?
@@ -52,7 +53,6 @@ class Exercise < ApplicationRecord
   end
 
   def self.search(search, settings, option, user_param)
-
     if option == 'private'
       priv = true
       user = nil
@@ -76,28 +76,26 @@ class Exercise < ApplicationRecord
       if settings[:proglanguage]
         proglanguages = settings[:proglanguage]
         proglanguages.delete_at(0) if proglanguages[0].blank?
-        proglanguages = proglanguages.collect{|x| ExecutionEnvironment.find_by(language: x).id}
+        proglanguages = proglanguages.collect { |x| ExecutionEnvironment.find_by(language: x).id }
       end
     end
 
-    if search
-      results = search_query(stars, languages, proglanguages, priv, user, search, intervall)
-      label = Label.find_by('lower(name) = ?', search.downcase)
+    return search_query(stars, languages, proglanguages, priv, user, search, intervall) unless search
 
-      if label
-        collection = Label.find_by('lower(name) = ?', search.downcase).exercises.search_query(stars, languages, proglanguages, priv, user, search, intervall)
+    results = search_query(stars, languages, proglanguages, priv, user, search, intervall)
+    label = Label.find_by('lower(name) = ?', search.downcase)
 
-        results.each do |r|
-          collection << r unless collection.find_by(id: r.id)
-        end
-        return collection
+    if label
+      collection = Label.find_by('lower(name) = ?', search.downcase).exercises.search_query(stars, languages, proglanguages, priv, user, nil, intervall)
+
+      results.each do |r|
+        collection << r unless collection.find_by(id: r.id)
       end
-      return results
-    else
-      return search_query(stars, languages, proglanguages, priv, user, search, intervall)
+      return collection
     end
+    results
   end
-  
+
   def can_access(user)
     if private
       if not user.is_author?(self)
@@ -109,11 +107,10 @@ class Exercise < ApplicationRecord
       else
         return true
       end
-    else 
+    else
       return true
     end
   end
-
 
   def avg_rating
     if ratings.empty?
