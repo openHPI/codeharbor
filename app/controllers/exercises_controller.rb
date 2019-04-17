@@ -205,11 +205,9 @@ class ExercisesController < ApplicationController
       render text: t('controllers.exercise.import_proforma_xml.invalid'), status: 400
     end
   rescue StandardError => e
-    if e.class == Hash
-      render text: e.message, status: e.status
-    else
-      raise e
-    end
+    raise e unless e.class == Hash
+
+    render text: e.message, status: e.status
   end
 
   def import_exercise
@@ -249,12 +247,10 @@ class ExercisesController < ApplicationController
           exercise.user = current_user
           saved = exercise.save
 
-          if saved
-            flash[:notice] = t('controllers.exercise.import_success')
-            redirect_to edit_exercise_path(exercise.id)
-          else
-            raise t('controllers.exercise.import_fail')
-          end
+          raise t('controllers.exercise.import_fail') unless saved
+
+          flash[:notice] = t('controllers.exercise.import_success')
+          redirect_to edit_exercise_path(exercise.id)
         end
       end
     rescue StandardError => e

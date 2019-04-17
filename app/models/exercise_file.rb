@@ -29,11 +29,11 @@ class ExerciseFile < ApplicationRecord
   ROLES.freeze
 
   def parse_text_data
-    puts attachment.content_type
-    if %r{(text/)|(application/xml)}.match?(attachment.instance.attachment_content_type)
-      self.content = Paperclip.io_adapters.for(attachment.instance.attachment).read
-      self.attachment = nil
-    end
+    # puts attachment.content_type
+    return unless %r{(text/)|(application/xml)}.match?(attachment.instance.attachment_content_type)
+
+    self.content = Paperclip.io_adapters.for(attachment.instance.attachment).read
+    self.attachment = nil
   end
 
   def attached_image?

@@ -98,5 +98,5 @@ RSpec.configure do |config|
   #   # as the one that triggered the failure.
   #   Kernel.srand config.seed
 
-  config.before { allow($stdout).to receive(:write) }
+  # config.before { allow($stdout).to receive(:write) }
 end

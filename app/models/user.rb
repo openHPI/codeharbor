@@ -31,12 +31,11 @@ class User < ApplicationRecord
   # before_destroy :handle_destroy, prepend: true
 
   def soft_delete
-    destroy = handle_destroy
-    if destroy
-      email = self.email
-      new_email = Digest::MD5.hexdigest email
-      update(first_name: 'deleted', last_name: 'user', email: new_email, deleted: true)
-    end
+    return false unless handle_destroy
+
+    email = self.email
+    new_email = Digest::MD5.hexdigest email
+    update(first_name: 'deleted', last_name: 'user', email: new_email, deleted: true)
   end
 
   def last_admin?(group)
@@ -80,7 +79,7 @@ class User < ApplicationRecord
   end
 
   def handle_group_memberships
-    in_all_groups?(as: 'admin')
+    # in_all_groups?(as: 'admin')
 
     groups.each do |group|
       if group.users.size > 1
@@ -102,7 +101,7 @@ class User < ApplicationRecord
 
   def handle_collection_membership
     collections.each do |collection|
-      collection.delete if collection.users.size == 1
+      collection.delete if collection.users.count == 1
     end
   end
 

@@ -41,59 +41,124 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe 'handles Groups when destroyed' do
-    let!(:user) { FactoryBot.create(:user) }
-    let(:second_user) { FactoryBot.create(:user) }
-    let(:third_user) { FactoryBot.create(:user) }
-    let(:one_member_group) { FactoryBot.create(:group, users: [user]) }
-    let(:many_members_group) { FactoryBot.create(:group, users: [user, second_user, third_user]) }
+  describe '#soft_delete' do
+    subject(:soft_delete) { user.soft_delete }
 
-    it 'deletes a user' do
-      user_count = described_class.count
-      expect(user.soft_delete).to be_truthy
-      expect(described_class.count).to eql(user_count - 1)
+    let!(:user) { create(:user) }
+
+    it 'hashes email' do
+      expect { soft_delete }.to change(user, :email).to Digest::MD5.hexdigest(user.email)
     end
 
-    it 'deletes the user and group when user is last member' do
-      # UserGroup.set_is_admin(one_member_group.id, user.id, true)
-      one_member_group.make_admin(user)
-      group_count = Group.all.count
-      expect(user.soft_delete).to be_truthy
-      expect(Group.all.count).to eql(group_count - 1)
+    it { is_expected.to be true }
+
+    it 'changes first_name to deleted' do
+      expect { soft_delete }.to change(user, :first_name).to 'deleted'
     end
 
-    it 'deletes the user when user is one of many admins' do
-      # UserGroup.set_is_admin(many_members_group.id, user.id, true)
-      # UserGroup.set_is_admin(many_members_group.id, second_user.id, true)
-      # UserGroup.set_is_active(many_members_group.id, user.id, true)
-      # UserGroup.set_is_active(many_members_group.id, second_user.id, true)
-
-      many_members_group.make_admin(user)
-      many_members_group.make_admin(second_user)
-
-      group_count = Group.all.count
-      # require 'pry'
-      # binding.pry
-      # user.destroy
-      expect(user.soft_delete).to be_truthy
-      expect(Group.all.count).to eql(group_count)
+    it 'changes last_name to user' do
+      expect { soft_delete }.to change(user, :last_name).to 'user'
     end
 
-    it 'does not delete the user when user is last admin and there are other members in group ' do
-      # UserGroup.set_is_admin(many_members_group.id, user.id, true)
-      # UserGroup.set_is_active(many_members_group.id, user.id, true)
-      # UserGroup.set_is_active(many_members_group.id, second_user.id, true)
-      # UserGroup.set_is_active(many_members_group.id, third_user.id, true)
+    it 'changes deleted to deleted' do
+      expect { soft_delete }.to change(user, :deleted).to true
+    end
 
-      many_members_group.make_admin(user)
-      many_members_group.grant_access(second_user)
-      many_members_group.grant_access(third_user)
+    context 'when user is in a group' do
+      before { group }
 
-      group_count = Group.all.count
-      user_count = described_class.count
-      expect(user.soft_delete).to be_falsey
-      expect(described_class.count).to eql(user_count)
-      expect(Group.all.count).to eql(group_count)
+      let(:group) { create(:group, users: [user]) }
+
+      it { is_expected.to be true }
+
+      it 'deletes group' do
+        expect { soft_delete }.to change(Group, :count).by(-1)
+      end
+
+      context 'when another user is in the group' do
+        before { group.users << other_user }
+
+        let(:other_user) { create(:user) }
+
+        it { is_expected.to be true }
+
+        it 'does not delete group' do
+          expect { soft_delete }.not_to change(Group, :count)
+        end
+
+        context 'when user is admin of group' do
+          before { group.make_admin user }
+
+          it { is_expected.to be false }
+
+          it 'does not delete group' do
+            expect { soft_delete }.not_to change(Group, :count)
+          end
+        end
+
+        context 'when both users are admins of group' do
+          before do
+            group.make_admin user
+            group.make_admin other_user
+          end
+
+          it { is_expected.to be true }
+
+          it 'does not delete group' do
+            expect { soft_delete }.not_to change(Group, :count)
+          end
+        end
+      end
+    end
+
+    context 'when user has a collection' do
+      before { user.collections << collection }
+
+      let(:collection) { create(:collection, users: []) }
+
+      it 'deletes collection' do
+        expect { soft_delete }.to change(Collection, :count).by(-1)
+      end
+
+      context 'when another user also has that collection' do
+        before { create(:user).collections << collection }
+
+        let(:collection) { create(:collection) }
+
+        it 'deletes collection' do
+          expect { soft_delete }.not_to change(Collection, :count)
+        end
+      end
+    end
+
+    context 'when user has an exercise' do
+      before { user.exercises << exercise }
+
+      let(:exercise) { create(:simple_exercise, user: user) }
+
+      it 'changes user of exercise to nil' do
+        expect { soft_delete }.to change { exercise.reload.user }.from(user).to(nil)
+      end
+    end
+
+    context 'when user has sent messages' do
+      before { create(:message, sender: user) }
+
+      it 'does not delete message' do
+        expect { soft_delete }.not_to change(Message, :count)
+      end
+
+      context 'when message has type exercise' do
+        before do
+          create(:message, sender: user, param_type: 'exercise')
+          create(:message, sender: user, param_type: 'group')
+          create(:message, sender: user, param_type: 'collection')
+        end
+
+        it 'deletes message' do
+          expect { soft_delete }.to change(Message, :count).by(-3)
+        end
+      end
     end
   end
 
