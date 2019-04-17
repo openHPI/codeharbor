@@ -17,7 +17,9 @@ module WillPaginateHelper
       end
 
       @template.link_to(target, attributes.merge(remote: true)) do
+        # rubocop:disable Rails/OutputSafety
         text.to_s.html_safe
+        # rubocop:enable Rails/OutputSafety
       end
     end
   end

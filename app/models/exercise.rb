@@ -32,7 +32,7 @@ class Exercise < ApplicationRecord
 
   default_scope { where(deleted: [nil, false]) }
 
-  scope :timespan, ->(days) { days != 0 ? where('DATE(created_at) >= ?', Date.today - days) : where(nil) }
+  scope :timespan, ->(days) { days != 0 ? where('DATE(created_at) >= ?', Time.zone.today - days) : where(nil) }
   scope :text_like, lambda { |text|
     if text.present?
       joins(:descriptions).where('title ILIKE ? OR descriptions.text ILIKE ?', "%#{text.downcase}%", "%#{text.downcase}%")
@@ -192,7 +192,7 @@ class Exercise < ApplicationRecord
 
   def add_license(params)
     self.license_id = Exercise.find(params[:exercise_relation][:origin_id]).license_id if params[:exercise_relation]
-    self.license_id = params[:license_id] if downloads == 0 && params[:exercise_relation].nil?
+    self.license_id = params[:license_id] if downloads.zero? && params[:exercise_relation].nil?
   end
 
   def add_labels(labels_array)

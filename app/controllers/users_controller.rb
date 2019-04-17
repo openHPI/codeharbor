@@ -65,11 +65,10 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.soft_delete
         format.html { redirect_to users_url, notice: t('controllers.user.destroyed') }
-        format.json { head :no_content }
       else
         format.html { redirect_to users_url, alert: t('controllers.user.last_admin') }
-        format.json { head :no_content }
       end
+      format.json { head :no_content }
     end
   end
 

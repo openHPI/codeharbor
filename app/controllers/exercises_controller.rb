@@ -21,15 +21,15 @@ class ExercisesController < ApplicationController
   # GET /exercises
   # GET /exercises.json
   def index
-    if @order == 'order_created'
-      @exercises = Exercise.search(params[:search], params[:settings], @option, current_user).sort do |y, x|
-        x.created_at <=> y.created_at
-      end.paginate(per_page: 5, page: params[:page])
-    else
-      @exercises = Exercise.search(params[:search], params[:settings], @option, current_user).sort do |y, x|
-        x.average_rating <=> y.average_rating
-      end.paginate(per_page: 5, page: params[:page])
-    end
+    @exercises = if @order == 'order_created'
+                   Exercise.search(params[:search], params[:settings], @option, current_user).sort do |y, x|
+                     x.created_at <=> y.created_at
+                   end.paginate(per_page: 5, page: params[:page])
+                 else
+                   Exercise.search(params[:search], params[:settings], @option, current_user).sort do |y, x|
+                     x.average_rating <=> y.average_rating
+                   end.paginate(per_page: 5, page: params[:page])
+                 end
   end
 
   # GET /exercises/1
@@ -84,7 +84,7 @@ class ExercisesController < ApplicationController
     @exercise_relation = exercise_relation if exercise_relation
     @license_default = @exercise.license_id
     @license_hidden = false
-    @license_hidden = true if @exercise.downloads > 0
+    @license_hidden = true if @exercise.downloads.positive?
   end
 
   # POST /exercises
@@ -204,33 +204,13 @@ class ExercisesController < ApplicationController
       logger.info(exercise.errors.full_messages)
       render text: t('controllers.exercise.import_proforma_xml.invalid'), status: 400
     end
-  rescue StandardError => error
-    if error.class == Hash
-      render text: error.message, status: error.status
+  rescue StandardError => e
+    if e.class == Hash
+      render text: e.message, status: e.status
     else
-      raise error
+      raise e
     end
   end
-
-  def user_for_oauth2_request
-    authorizationHeader = request.headers['Authorization']
-    raise(status: 401, message: t('controllers.exercise.import_proforma_xml.no_header')) if authorizationHeader.nil?
-
-    oauth2Token = authorizationHeader.split(' ')[1]
-    raise(status: 401, message: t('controllers.exercise.import_proforma_xml.no_token')) if oauth2Token.blank?
-
-    user = user_by_code_harbor_token(oauth2Token)
-    raise(status: 401, message: t('controllers.exercise.import_proforma_xml.unknown_token')) if user.nil?
-
-    user
-  end
-  private :user_for_oauth2_request
-
-  def user_by_code_harbor_token(oauth2Token)
-    link = AccountLink.where(oauth2_token: oauth2Token)[0]
-    return link.user unless link.nil?
-  end
-  private :user_by_code_harbor_token
 
   def import_exercise
     files = {}
@@ -385,5 +365,23 @@ class ExercisesController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def exercise_params
     params.require(:exercise).permit(:title, :instruction, :maxrating, :private, :execution_environment_id)
+  end
+
+  def user_for_oauth2_request
+    authorizationHeader = request.headers['Authorization']
+    raise(status: 401, message: t('controllers.exercise.import_proforma_xml.no_header')) if authorizationHeader.nil?
+
+    oauth2Token = authorizationHeader.split(' ')[1]
+    raise(status: 401, message: t('controllers.exercise.import_proforma_xml.no_token')) if oauth2Token.blank?
+
+    user = user_by_code_harbor_token(oauth2Token)
+    raise(status: 401, message: t('controllers.exercise.import_proforma_xml.unknown_token')) if user.nil?
+
+    user
+  end
+
+  def user_by_code_harbor_token(oauth2_token)
+    link = AccountLink.where(oauth2_token: oauth2_token)[0]
+    return link.user unless link.nil?
   end
 end

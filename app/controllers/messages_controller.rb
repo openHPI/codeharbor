@@ -2,7 +2,7 @@
 
 class MessagesController < ApplicationController
   before_action :set_user
-  before_action :set_message, only: %i[show edit update destroy add_author delete]
+  before_action :set_message, only: %i[show edit update destroy delete]
   before_action :set_option, only: [:index]
 
   rescue_from CanCan::AccessDenied do |_exception|

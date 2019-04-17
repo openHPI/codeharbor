@@ -107,7 +107,7 @@ class User < ApplicationRecord
   end
 
   def handle_exercises
-    Exercise.where(user: self).update_all(user_id: nil)
+    Exercise.where(user: self).find_each { |e| e.update(user: nil) }
   end
 
   def handle_messages
