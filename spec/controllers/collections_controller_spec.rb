@@ -21,8 +21,6 @@ require 'rails_helper'
 # that an instance is receiving a specific message.
 
 RSpec.describe CollectionsController, type: :controller do
-  before { allow_any_instance_of(CanCan::ControllerResource).to receive(:load_and_authorize_resource).and_return(nil) }
-
   let(:valid_attributes) do
     FactoryBot.attributes_for(:collection)
   end
@@ -35,20 +33,24 @@ RSpec.describe CollectionsController, type: :controller do
   # in order to pass any filters (e.g. authentication) defined in
   # CollectionsController. Be sure to keep this updated too.
   let(:valid_session) do
-    {user_id: FactoryBot.create(:user).id}
+    {user_id: user.id}
   end
 
+  let(:user) { create(:user) }
+
   describe 'GET #index' do
-    xit 'assigns all collections as @collections' do
-      collection = Collection.create! valid_attributes
+    let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
+
+    it 'assigns all collections as @collections' do
       get :index, params: {}, session: valid_session
-      expect(assigns(:collections)).to eq([collection])
+      expect(assigns(:collections)).to include collection
     end
   end
 
   describe 'GET #show' do
+    let(:collection) { create(:collection, valid_attributes) }
+
     it 'assigns the requested collection as @collection' do
-      collection = Collection.create! valid_attributes
       get :show, params: {id: collection.to_param}, session: valid_session
       expect(assigns(:collection)).to eq(collection)
     end
@@ -62,8 +64,9 @@ RSpec.describe CollectionsController, type: :controller do
   end
 
   describe 'GET #edit' do
+    let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
+
     it 'assigns the requested collection as @collection' do
-      collection = Collection.create! valid_attributes
       get :edit, params: {id: collection.to_param}, session: valid_session
       expect(assigns(:collection)).to eq(collection)
     end
@@ -103,26 +106,25 @@ RSpec.describe CollectionsController, type: :controller do
   end
 
   describe 'PUT #update' do
+    let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
+
     context 'with valid params' do
       let(:new_attributes) do
-        skip('Add a hash of attributes valid for your model')
+        {title: 'new title'}
       end
 
       it 'updates the requested collection' do
-        collection = Collection.create! valid_attributes
-        put :update, params: {id: collection.to_param, collection: new_attributes}, session: valid_session
-        collection.reload
-        skip('Add assertions for updated state')
+        expect do
+          put :update, params: {id: collection.to_param, collection: new_attributes}, session: valid_session
+        end.to change { collection.reload.title }.to('new title')
       end
 
       it 'assigns the requested collection as @collection' do
-        collection = Collection.create! valid_attributes
         put :update, params: {id: collection.to_param, collection: valid_attributes}, session: valid_session
         expect(assigns(:collection)).to eq(collection)
       end
 
       it 'redirects to the collection' do
-        collection = Collection.create! valid_attributes
         put :update, params: {id: collection.to_param, collection: valid_attributes}, session: valid_session
         expect(response).to redirect_to(collections_path)
       end
@@ -130,13 +132,11 @@ RSpec.describe CollectionsController, type: :controller do
 
     context 'with invalid params' do
       it 'assigns the collection as @collection' do
-        collection = Collection.create! valid_attributes
         put :update, params: {id: collection.to_param, collection: invalid_attributes}, session: valid_session
         expect(assigns(:collection)).to eq(collection)
       end
 
       it "re-renders the 'edit' template" do
-        collection = Collection.create! valid_attributes
         put :update, params: {id: collection.to_param, collection: invalid_attributes}, session: valid_session
         expect(response).to render_template('edit')
       end
@@ -144,15 +144,15 @@ RSpec.describe CollectionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
+    let!(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
+
     it 'destroys the requested collection' do
-      collection = Collection.create! valid_attributes
       expect do
         delete :destroy, params: {id: collection.to_param}, session: valid_session
       end.to change(Collection, :count).by(-1)
     end
 
     it 'redirects to the collections list' do
-      collection = Collection.create! valid_attributes
       delete :destroy, params: {id: collection.to_param}, session: valid_session
       expect(response).to redirect_to(collections_url)
     end
