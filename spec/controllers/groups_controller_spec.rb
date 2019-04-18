@@ -21,14 +21,14 @@ require 'rails_helper'
 # that an instance is receiving a specific message.
 
 RSpec.describe GroupsController, type: :controller do
-  before { allow_any_instance_of(CanCan::ControllerResource).to receive(:load_and_authorize_resource).and_return(nil) }
+  # before { allow_any_instance_of(CanCan::ControllerResource).to receive(:load_and_authorize_resource).and_return(nil) }
   # This should return the minimal set of attributes required to create a valid
   # Group. As you add validations to Group, be sure to
   # adjust the attributes here as well.
 
   let!(:user) { FactoryBot.create(:user) }
 
-  let(:valid_attributes) do
+  let(:valid_post_attributes) do
     FactoryBot.attributes_for(:group, users: [user])
   end
 
@@ -40,12 +40,15 @@ RSpec.describe GroupsController, type: :controller do
   # in order to pass any filters (e.g. authentication) defined in
   # GroupsController. Be sure to keep this updated too.
   let(:valid_session) do
-    {user_id: FactoryBot.create(:user).id}
+    {user_id: user.id}
   end
 
+  let(:group) { create(:group) }
+
+  before { group.grant_access(user) }
+
   describe 'GET #index' do
-    xit 'assigns all groups as @groups' do
-      group = Group.create! valid_attributes
+    it 'assigns all groups as @groups' do
       get :index, params: {}, session: valid_session
       expect(assigns(:groups)).to eq([group])
     end
@@ -53,7 +56,6 @@ RSpec.describe GroupsController, type: :controller do
 
   describe 'GET #show' do
     it 'assigns the requested group as @group' do
-      group = Group.create! valid_attributes
       get :show, params: {id: group.to_param}, session: valid_session
       expect(assigns(:group)).to eq(group)
     end
@@ -66,11 +68,62 @@ RSpec.describe GroupsController, type: :controller do
     end
   end
 
-  describe 'GET #edit' do
-    it 'assigns the requested group as @group' do
-      group = Group.create! valid_attributes
-      get :edit, params: {id: group.to_param}, session: valid_session
-      expect(assigns(:group)).to eq(group)
+  context 'when user is admin of group' do
+    before { group.make_admin(user) }
+
+    describe 'GET #edit' do
+      it 'assigns the requested group as @group' do
+        get :edit, params: {id: group.to_param}, session: valid_session
+        expect(assigns(:group)).to eq(group)
+      end
+    end
+
+    describe 'PUT #update' do
+      context 'with valid params' do
+        let(:new_attributes) do
+          {name: 'new name'}
+        end
+
+        it 'updates the requested group' do
+          expect { put :update, params: {id: group.to_param, group: new_attributes}, session: valid_session }
+            .to change { group.reload.name }.to('new name')
+        end
+
+        it 'assigns the requested group as @group' do
+          put :update, params: {id: group.to_param, group: new_attributes}, session: valid_session
+          expect(assigns(:group)).to eq(group)
+        end
+
+        it 'redirects to the group' do
+          put :update, params: {id: group.to_param, group: new_attributes}, session: valid_session
+          expect(response).to redirect_to(group)
+        end
+      end
+
+      context 'with invalid params' do
+        it 'assigns the group as @group' do
+          put :update, params: {id: group.to_param, group: invalid_attributes}, session: valid_session
+          expect(assigns(:group)).to eq(group)
+        end
+
+        it "re-renders the 'edit' template" do
+          put :update, params: {id: group.to_param, group: invalid_attributes}, session: valid_session
+          expect(response).to render_template('edit')
+        end
+      end
+    end
+
+    describe 'DELETE #destroy' do
+      it 'destroys the requested group' do
+        expect do
+          delete :destroy, params: {id: group.to_param}, session: valid_session
+        end.to change(Group, :count).by(-1)
+      end
+
+      it 'redirects to the groups list' do
+        delete :destroy, params: {id: group.to_param}, session: valid_session
+        expect(response).to redirect_to(groups_url)
+      end
     end
   end
 
@@ -78,18 +131,18 @@ RSpec.describe GroupsController, type: :controller do
     context 'with valid params' do
       it 'creates a new Group' do
         expect do
-          post :create, params: {group: valid_attributes}, session: valid_session
+          post :create, params: {group: valid_post_attributes}, session: valid_session
         end.to change(Group, :count).by(1)
       end
 
       it 'assigns a newly created group as @group' do
-        post :create, params: {group: valid_attributes}, session: valid_session
+        post :create, params: {group: valid_post_attributes}, session: valid_session
         expect(assigns(:group)).to be_a(Group)
         expect(assigns(:group)).to be_persisted
       end
 
       it 'redirects to the created group' do
-        post :create, params: {group: valid_attributes}, session: valid_session
+        post :create, params: {group: valid_post_attributes}, session: valid_session
         expect(response).to redirect_to(Group.last)
       end
     end
@@ -104,62 +157,6 @@ RSpec.describe GroupsController, type: :controller do
         post :create, params: {group: invalid_attributes}, session: valid_session
         expect(response).to render_template('new')
       end
-    end
-  end
-
-  describe 'PUT #update' do
-    context 'with valid params' do
-      let(:new_attributes) do
-        skip('Add a hash of attributes valid for your model')
-      end
-
-      it 'updates the requested group' do
-        group = Group.create! valid_attributes
-        put :update, params: {id: group.to_param, group: new_attributes}, session: valid_session
-        group.reload
-        skip('Add assertions for updated state')
-      end
-
-      it 'assigns the requested group as @group' do
-        group = Group.create! valid_attributes
-        put :update, params: {id: group.to_param, group: valid_attributes}, session: valid_session
-        expect(assigns(:group)).to eq(group)
-      end
-
-      it 'redirects to the group' do
-        group = Group.create! valid_attributes
-        put :update, params: {id: group.to_param, group: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(group)
-      end
-    end
-
-    context 'with invalid params' do
-      it 'assigns the group as @group' do
-        group = Group.create! valid_attributes
-        put :update, params: {id: group.to_param, group: invalid_attributes}, session: valid_session
-        expect(assigns(:group)).to eq(group)
-      end
-
-      it "re-renders the 'edit' template" do
-        group = Group.create! valid_attributes
-        put :update, params: {id: group.to_param, group: invalid_attributes}, session: valid_session
-        expect(response).to render_template('edit')
-      end
-    end
-  end
-
-  describe 'DELETE #destroy' do
-    it 'destroys the requested group' do
-      group = Group.create! valid_attributes
-      expect do
-        delete :destroy, params: {id: group.to_param}, session: valid_session
-      end.to change(Group, :count).by(-1)
-    end
-
-    it 'redirects to the groups list' do
-      group = Group.create! valid_attributes
-      delete :destroy, params: {id: group.to_param}, session: valid_session
-      expect(response).to redirect_to(groups_url)
     end
   end
 end

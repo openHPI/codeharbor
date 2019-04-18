@@ -21,12 +21,12 @@ require 'rails_helper'
 # that an instance is receiving a specific message.
 
 RSpec.describe UsersController, type: :controller do
-  before { allow_any_instance_of(CanCan::ControllerResource).to receive(:load_and_authorize_resource).and_return(nil) }
+  # before { allow_any_instance_of(CanCan::ControllerResource).to receive(:load_and_authorize_resource).and_return(nil) }
   # This should return the minimal set of attributes required to create a valid
   # User. As you add validations to User, be sure to
   # adjust the attributes here as well.
 
-  let(:user) { FactoryBot.create(:user) }
+  let!(:user) { FactoryBot.create(:user) }
 
   let(:valid_attributes) do
     FactoryBot.attributes_for(:user)
@@ -40,11 +40,11 @@ RSpec.describe UsersController, type: :controller do
   # in order to pass any filters (e.g. authentication) defined in
   # UsersController. Be sure to keep this updated too.
   let(:valid_session) do
+    {user_id: user.id}
   end
 
   describe 'GET #index' do
     it 'assigns all users as @users' do
-      user = User.create! valid_attributes
       get :index, params: {}, session: valid_session
       expect(assigns(:users)).to eq([user])
     end
@@ -52,7 +52,6 @@ RSpec.describe UsersController, type: :controller do
 
   describe 'GET #show' do
     it 'assigns the requested user as @user' do
-      user = User.create! valid_attributes
       get :show, params: {id: user.to_param}, session: valid_session
       expect(assigns(:user)).to eq(user)
     end
@@ -67,7 +66,6 @@ RSpec.describe UsersController, type: :controller do
 
   describe 'GET #edit' do
     it 'assigns the requested user as @user' do
-      user = User.create! valid_attributes
       get :edit, params: {id: user.to_param}, session: valid_session
       expect(assigns(:user)).to eq(user)
     end
@@ -113,20 +111,17 @@ RSpec.describe UsersController, type: :controller do
       end
 
       it 'updates the requested user' do
-        user = User.create! valid_attributes
         put :update, params: {id: user.to_param, user: new_attributes}, session: valid_session
         user.reload
         skip('Add assertions for updated state')
       end
 
       it 'assigns the requested user as @user' do
-        user = User.create! valid_attributes
         put :update, params: {id: user.to_param, user: valid_attributes}, session: valid_session
         expect(assigns(:user)).to eq(user)
       end
 
       it 'redirects to the user' do
-        user = User.create! valid_attributes
         put :update, params: {id: user.to_param, user: valid_attributes}, session: valid_session
         expect(response).to redirect_to(user)
       end
@@ -134,31 +129,14 @@ RSpec.describe UsersController, type: :controller do
 
     context 'with invalid params' do
       it 'assigns the user as @user' do
-        user = User.create! valid_attributes
         put :update, params: {id: user.to_param, user: invalid_attributes}, session: valid_session
         expect(assigns(:user)).to eq(user)
       end
 
       it 're-renders the "edit" template' do
-        user = User.create! valid_attributes
         put :update, params: {id: user.to_param, user: invalid_attributes}, session: valid_session
         expect(response).to render_template('edit')
       end
-    end
-  end
-
-  describe 'DELETE #destroy' do
-    it 'soft deletes user' do
-      user = User.create! valid_attributes
-      expect do
-        delete :destroy, params: {id: user.to_param}, session: valid_session
-      end.to change(User, :count).by(-1)
-    end
-
-    it 'redirects to the users list' do
-      user = User.create! valid_attributes
-      delete :destroy, params: {id: user.to_param}, session: valid_session
-      expect(response).to redirect_to(users_url)
     end
   end
 end

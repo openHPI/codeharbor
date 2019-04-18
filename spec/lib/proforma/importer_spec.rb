@@ -2,6 +2,9 @@
 
 require 'rails_helper'
 require 'nokogiri'
+require 'proforma/importer'
+require 'proforma/xml_generator'
+require 'proforma/zip_importer'
 
 describe Proforma::Importer do
   let(:importer) { described_class.new }
@@ -11,8 +14,8 @@ describe Proforma::Importer do
   let(:user) { FactoryBot.create(:user) }
 
   describe 'import exercise' do
-    let!(:testing_framework) { FactoryBot.create(:junit_testing_framework, name: 'JUnit 4') }
-    let!(:license) { FactoryBot.create(:license, name: 'MIT License') }
+    let(:testing_framework) { FactoryBot.create(:junit_testing_framework, name: 'JUnit 4') }
+    let(:license) { FactoryBot.create(:license, name: 'MIT License') }
 
     let(:imported_exercise) do
       imported_exercise = Exercise.new

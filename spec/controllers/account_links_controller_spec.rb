@@ -3,21 +3,21 @@
 require 'rails_helper'
 
 RSpec.describe AccountLinksController, type: :controller do
-  let!(:user) { FactoryBot.create(:user) }
+  let(:user) { FactoryBot.create(:user) }
 
-  let!(:account_link) { FactoryBot.create(:account_link) }
+  let(:account_link) { FactoryBot.create(:account_link) }
 
-  let!(:valid_attributes) { FactoryBot.attributes_for(:account_link).merge(user: user) }
-  let!(:invalid_attributes) do
+  let(:valid_attributes) { FactoryBot.attributes_for(:account_link).merge(user: user) }
+  let(:invalid_attributes) do
     {account_name: ''}
   end
-  let!(:valid_session) do
+  let(:valid_session) do
     {user_id: user.id}
   end
-  let!(:invalid_session) do
+  let(:invalid_session) do
     {user_id: nil}
   end
-  let!(:empty_params) { {user_id: user.id} }
+  let(:empty_params) { {user_id: user.id} }
 
   context 'When not logged in' do
     include_examples 'logged out examples', klass: AccountLink, resource: :account_link

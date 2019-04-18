@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 require 'nokogiri'
+require 'proforma/xml_generator'
 
 describe Proforma::XmlGenerator do
   let(:generator) { described_class.new }
@@ -32,15 +33,17 @@ describe Proforma::XmlGenerator do
         expect(title.first.text).to eq exercise.title
       end
 
-      it 'has single tag <p:proglang version="8">java</p:proglang>' do
-        proglangs = xml.xpath('p:proglang')
-        expect(proglangs.size).to be 1
+      context 'when proglangs is queried' do
+        let(:proglangs) { xml.xpath('p:proglang') }
+        let(:proglang_version) { proglangs.first.xpath('@version') }
 
-        expect(proglangs.text).to eq 'Java'
+        it 'has single tag <p:proglang version="8">java</p:proglang>' do
+          expect(proglangs.size).to be 1
+          expect(proglangs.text).to eq 'Java'
 
-        proglang_version = proglangs.first.xpath('@version')
-        expect(proglang_version.size).to be 1
-        expect(proglang_version.first.value).to eq '1.8'
+          expect(proglang_version.size).to be 1
+          expect(proglang_version.first.value).to eq '1.8'
+        end
       end
 
       it "has empty <p:submission-restrictions>/<p:file-restriction>/<p:optional filename=''> tag" do
@@ -64,22 +67,28 @@ describe Proforma::XmlGenerator do
         expect(files.size).to be 4
       end
 
-      it 'has one test file referenced by tests' do
-        test_ref = xml.xpath('//p:test/p:test-configuration/p:filerefs/p:fileref[1]/@refid').first.value
-        test = xml.xpath('p:files/p:file[@filename="test.java"]')
-        expect(test_ref).not_to be_nil
-        expect(test.size).to be 1
-        expect(test.xpath('@id').first.value).to eq test_ref
-        expect(test.text).to eq exercise.tests.first.content
+      context 'when one test file is referenced' do
+        let(:test_ref) { xml.xpath('//p:test/p:test-configuration/p:filerefs/p:fileref[1]/@refid').first.value }
+        let(:test) { xml.xpath('p:files/p:file[@filename="test.java"]') }
+
+        it 'has one test file referenced by tests' do
+          expect(test_ref).not_to be_nil
+          expect(test.size).to be 1
+          expect(test.xpath('@id').first.value).to eq test_ref
+          expect(test.text).to eq exercise.tests.first.content
+        end
       end
 
-      it 'has one reference implementation referenced by model solutions' do
-        solution_ref = xml.xpath('//p:model-solution/p:filerefs/p:fileref[1]/@refid').first.value
-        solution = xml.xpath('p:files/p:file[@filename="solution.java"]')
-        expect(solution_ref).not_to be_nil
-        expect(solution.size).to be 1
-        expect(solution.xpath('@id').first.value).to eq solution_ref
-        expect(solution.text).to eq generator.model_solution_files.first.content
+      context 'when one reference implementation referenced by model solutions' do
+        let(:solution_ref) { xml.xpath('//p:model-solution/p:filerefs/p:fileref[1]/@refid').first.value }
+        let(:solution) { xml.xpath('p:files/p:file[@filename="solution.java"]') }
+
+        it 'has one reference implementation referenced by model solutions' do
+          expect(solution_ref).not_to be_nil
+          expect(solution.size).to be 1
+          expect(solution.xpath('@id').first.value).to eq solution_ref
+          expect(solution.text).to eq generator.model_solution_files.first.content
+        end
       end
 
       it 'has one user defined test' do
@@ -185,7 +194,7 @@ describe Proforma::XmlGenerator do
       end
 
       it 'has single <p:tests>/<p:test> tag' do
-        print(xml)
+        # print(xml)
         tests = xml.xpath('p:tests/p:test')
         expect(tests.size).to be 1
       end
