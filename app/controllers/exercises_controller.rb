@@ -170,7 +170,7 @@ class ExercisesController < ApplicationController
     if error.nil?
       redirect_to @exercise, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
     else
-      puts error
+      logger.debug(error)
       redirect_to @exercise, alert: t('controllers.account_links.not_working', account_link: account_link.readable)
     end
   end
@@ -210,6 +210,7 @@ class ExercisesController < ApplicationController
     render text: e.message, status: e.status
   end
 
+  # rubocop:disable Metrics/AbcSize
   def import_exercise
     files = {}
     begin
@@ -237,7 +238,7 @@ class ExercisesController < ApplicationController
 
         if errors.any?
           errors.each do |error|
-            puts error.message
+            logger.debug(error.message)
           end
           raise t('controllers.exercise.xml_not_valid')
         else
@@ -263,6 +264,7 @@ class ExercisesController < ApplicationController
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def contribute
     author = @exercise.user

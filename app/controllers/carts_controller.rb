@@ -116,7 +116,7 @@ class CartsController < ApplicationController
         zip_file = create_exercise_zip(exercise)
         if zip_file[:errors].any?
           zip_file[:errors].each do |error|
-            puts error.message
+            logger.debug(error)
           end
         else
           zio.put_next_entry(zip_file[:filename])

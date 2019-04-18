@@ -4,15 +4,15 @@ module Proforma
   class ZipImporter < Importer
     def from_proforma_zip(exercise, doc, files)
       @files = files
-      puts @files.inspect
+      # puts @files.inspect
       from_proforma_xml(exercise, doc)
     end
 
     def shared_attributes(file, metadata)
-      puts metadata[:filename]
+      # puts metadata[:filename]
       attachment = @files[metadata[:filename].to_s]
       content = attachment ? nil : file.text
-      puts attachment.inspect
+      # puts attachment.inspect
       {
         attachment: attachment,
         attachment_file_name: metadata[:filename],

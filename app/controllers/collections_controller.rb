@@ -96,7 +96,7 @@ class CollectionsController < ApplicationController
       redirect_to @collection, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
     else
       all_errors.each do |error|
-        puts error
+        logger.debug(error)
       end
       redirect_to @collection, alert: "Your account_link #{account_link.readable} does not seem to be working."
     end
@@ -113,7 +113,7 @@ class CollectionsController < ApplicationController
         zip_file = create_exercise_zip(exercise)
         if zip_file[:errors].any?
           zip_file[:errors].each do |error|
-            puts error.message
+            logger.debug(error.message)
           end
         else
           zio.put_next_entry(zip_file[:filename])
