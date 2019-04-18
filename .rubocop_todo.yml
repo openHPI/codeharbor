@@ -90,16 +90,6 @@ Rails/HasAndBelongsToMany:
     - 'app/models/label.rb'
     - 'app/models/user.rb'
 
-# Offense count: 6
-# Configuration parameters: Include.
-# Include: app/models/**/*.rb
-Rails/HasManyOrHasOneDependent:
-  Exclude:
-    - 'app/models/exercise.rb'
-    - 'app/models/label_category.rb'
-    - 'app/models/testing_framework.rb'
-    - 'app/models/user.rb'
-
 # Offense count: 10
 # Configuration parameters: Include.
 # Include: app/models/**/*.rb

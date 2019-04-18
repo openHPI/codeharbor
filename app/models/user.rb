@@ -15,12 +15,12 @@ class User < ApplicationRecord
   has_and_belongs_to_many :collections, dependent: :destroy
   has_many :reports, dependent: :destroy
   has_many :account_links, foreign_key: 'user_id', class_name: 'AccountLink', dependent: :destroy
-  has_many :exercises
+  has_many :exercises, dependent: :nullify
   has_one :cart, dependent: :destroy
   has_many :exercise_authors, dependent: :destroy
   has_many :exercises, through: :exercise_authors
-  has_many :sent_messages, class_name: 'Message', foreign_key: 'sender_id'
-  has_many :received_messages, class_name: 'Message', foreign_key: 'recipient_id'
+  has_many :sent_messages, class_name: 'Message', foreign_key: 'sender_id', dependent: :nullify
+  has_many :received_messages, class_name: 'Message', foreign_key: 'recipient_id', dependent: :nullify
 
   has_attached_file :avatar, styles: {medium: '300x300>', thumb: '100x100#'}, default_url: '/images/:style/missing.png'
   validates_attachment_content_type :avatar, content_type: %r{\Aimage/.*\Z}

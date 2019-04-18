@@ -21,7 +21,7 @@ class Exercise < ApplicationRecord
   belongs_to :execution_environment
   belongs_to :license
   has_many :descriptions, dependent: :destroy
-  has_many :origin_relations, class_name: 'ExerciseRelation', foreign_key: 'origin_id'
+  has_many :origin_relations, class_name: 'ExerciseRelation', foreign_key: 'origin_id', dependent: :destroy
   has_many :clone_relations, class_name: 'ExerciseRelation', foreign_key: 'clone_id', dependent: :destroy
   validates :descriptions, presence: true
 
