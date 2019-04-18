@@ -66,10 +66,6 @@ RSpec/InstanceVariable:
 RSpec/MultipleExpectations:
   Max: 4
 
-# Offense count: 25
-RSpec/NestedGroups:
-  Max: 5
-
 # Offense count: 10
 # Configuration parameters: Include.
 # Include: app/models/**/*.rb
@@ -80,14 +76,4 @@ Rails/HasAndBelongsToMany:
     - 'app/models/collection.rb'
     - 'app/models/exercise.rb'
     - 'app/models/label.rb'
-    - 'app/models/user.rb'
-
-# Offense count: 10
-# Configuration parameters: Include.
-# Include: app/models/**/*.rb
-Rails/InverseOf:
-  Exclude:
-    - 'app/models/exercise.rb'
-    - 'app/models/exercise_relation.rb'
-    - 'app/models/message.rb'
     - 'app/models/user.rb'

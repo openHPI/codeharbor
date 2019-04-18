@@ -1,6 +1,8 @@
 inherit_from: .rubocop_todo.yml
-
 require: rubocop-rspec
+
+Rails:
+  Enabled: true
 
 AllCops:
   TargetRubyVersion: 2.6
@@ -12,8 +14,9 @@ AllCops:
     - tmp/**/*
     - views/**/*
 
-Rails:
-  Enabled: true
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*
 
 Metrics/LineLength:
   Max: 140
@@ -21,9 +24,8 @@ Metrics/LineLength:
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
+RSpec/NestedGroups:
+  Max: 5
+
 Style/Documentation:
   Enabled: false
-
-Metrics/BlockLength:
-  Exclude:
-    - spec/**/*
