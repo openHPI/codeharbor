@@ -366,13 +366,13 @@ class ExercisesController < ApplicationController
   end
 
   def user_for_oauth2_request
-    authorizationHeader = request.headers['Authorization']
-    raise(status: 401, message: t('controllers.exercise.import_proforma_xml.no_header')) if authorizationHeader.nil?
+    authorization_header = request.headers['Authorization']
+    raise(status: 401, message: t('controllers.exercise.import_proforma_xml.no_header')) if authorization_header.nil?
 
-    oauth2Token = authorizationHeader.split(' ')[1]
-    raise(status: 401, message: t('controllers.exercise.import_proforma_xml.no_token')) if oauth2Token.blank?
+    oauth2_token = authorization_header.split(' ')[1]
+    raise(status: 401, message: t('controllers.exercise.import_proforma_xml.no_token')) if oauth2_token.blank?
 
-    user = user_by_code_harbor_token(oauth2Token)
+    user = user_by_code_harbor_token(oauth2_token)
     raise(status: 401, message: t('controllers.exercise.import_proforma_xml.unknown_token')) if user.nil?
 
     user

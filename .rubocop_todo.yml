@@ -34,14 +34,6 @@ Metrics/MethodLength:
 Metrics/PerceivedComplexity:
   Max: 12
 
-# Offense count: 8
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: snake_case, camelCase
-Naming/VariableName:
-  Exclude:
-    - 'app/controllers/exercises_controller.rb'
-    - 'spec/lib/proforma/xml_generator_spec.rb'
-
 # Offense count: 13
 # Configuration parameters: Prefixes.
 # Prefixes: when, with, without

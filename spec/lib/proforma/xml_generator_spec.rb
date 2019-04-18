@@ -23,8 +23,8 @@ describe Proforma::XmlGenerator do
       end
 
       it 'has single <p:meta-data> tag' do
-        metaData = xml.xpath('p:meta-data')
-        expect(metaData.size).to be 1
+        meta_data = xml.xpath('p:meta-data')
+        expect(meta_data.size).to be 1
       end
 
       it 'has <p:meta-data>/<p:title> tag which contains title' do
@@ -112,10 +112,10 @@ describe Proforma::XmlGenerator do
 
     context 'no files' do
       it 'contains a single empty <p:files>-tag with an ' do
-        filesContainer = xml.xpath('p:files')
-        expect(filesContainer.size).to be 1
-        allFiles = xml.xpath('*/p:file')
-        expect(allFiles.size).to be 1 # Because there has to be at least one file that model-solutions can reference to!
+        files_container = xml.xpath('p:files')
+        expect(files_container.size).to be 1
+        all_files = xml.xpath('*/p:file')
+        expect(all_files.size).to be 1 # Because there has to be at least one file that model-solutions can reference to!
       end
     end
 
@@ -132,8 +132,8 @@ describe Proforma::XmlGenerator do
       end
 
       it 'p:file tag has class="template"' do
-        filesClass = xml.xpath('p:files/p:file/@class').first
-        expect(filesClass.value).to eq 'template'
+        files_class = xml.xpath('p:files/p:file/@class').first
+        expect(files_class.value).to eq 'template'
       end
 
       it 'has attribute id on <p:file>-tag' do
@@ -177,10 +177,10 @@ describe Proforma::XmlGenerator do
       end
 
       it 'contains a single empty <p:tests>-tag' do
-        testsContainer = xml.xpath('p:tests')
-        expect(testsContainer.size).to be 1
-        allTests = xml.xpath('*/p:test')
-        expect(allTests.size).to be 0
+        tests_container = xml.xpath('p:tests')
+        expect(tests_container.size).to be 1
+        all_tests = xml.xpath('*/p:test')
+        expect(all_tests.size).to be 0
       end
     end
 
