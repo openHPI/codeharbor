@@ -251,7 +251,7 @@ describe Proforma::XmlGenerator do
       # end
     end
 
-    context 'single model solution file' do
+    context 'when exercise has single model solution file' do
       let(:exercise) { create(:exercise_with_single_model_solution) }
       let(:refids) { xml.xpath('p:model-solutions/p:model-solution/p:filerefs/p:fileref/@refid') }
       let(:filenames) { xml.xpath("p:files/p:file[@id=#{refids.first.value}]/@filename") }

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'exercises', type: :request do
-  context 'logged in' do
+  context 'when logged in' do
     before do
       @user = FactoryBot.create(:user)
       @exercise = FactoryBot.create(:only_meta_data, authors: [@user])

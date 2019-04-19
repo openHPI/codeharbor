@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'groups', type: :request do
-  context 'logged in' do
+  context 'when logged in' do
     before do
       @user = FactoryBot.create(:user)
       @group = FactoryBot.create(:group, users: [@user])

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'ExecutionEnvironments', type: :request do
-  context 'logged in' do
+  context 'when logged in' do
     before do
       @user = FactoryBot.create(:user)
       post login_path, params: {email: @user.email, password: @user.password}
