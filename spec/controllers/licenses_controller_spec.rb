@@ -79,6 +79,10 @@ RSpec.describe LicensesController, type: :controller do
       it 'assigns a newly created license as @license' do
         post :create, params: {license: valid_attributes}, session: valid_session
         expect(assigns(:license)).to be_a(License)
+      end
+
+      it 'persists @license' do
+        post :create, params: {license: valid_attributes}, session: valid_session
         expect(assigns(:license)).to be_persisted
       end
 

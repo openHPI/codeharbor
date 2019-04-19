@@ -138,6 +138,10 @@ RSpec.describe GroupsController, type: :controller do
       it 'assigns a newly created group as @group' do
         post :create, params: {group: valid_post_attributes}, session: valid_session
         expect(assigns(:group)).to be_a(Group)
+      end
+
+      it 'persists @group' do
+        post :create, params: {group: valid_post_attributes}, session: valid_session
         expect(assigns(:group)).to be_persisted
       end
 

@@ -83,6 +83,10 @@ RSpec.describe CollectionsController, type: :controller do
       it 'assigns a newly created collection as @collection' do
         post :create, params: {collection: valid_attributes}, session: valid_session
         expect(assigns(:collection)).to be_a(Collection)
+      end
+
+      it 'persists @collection' do
+        post :create, params: {collection: valid_attributes}, session: valid_session
         expect(assigns(:collection)).to be_persisted
       end
 

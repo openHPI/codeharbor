@@ -79,6 +79,10 @@ RSpec.describe ExecutionEnvironmentsController, type: :controller do
       it 'assigns a newly created execution_environment as @execution_environment' do
         post :create, params: {execution_environment: valid_attributes}, session: valid_session
         expect(assigns(:execution_environment)).to be_a(ExecutionEnvironment)
+      end
+
+      it 'persists @execution_environment' do
+        post :create, params: {execution_environment: valid_attributes}, session: valid_session
         expect(assigns(:execution_environment)).to be_persisted
       end
 

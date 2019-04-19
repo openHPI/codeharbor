@@ -79,6 +79,10 @@ RSpec.describe FileTypesController, type: :controller do
       it 'assigns a newly created file_type as @file_type' do
         post :create, params: {file_type: valid_attributes}, session: valid_session
         expect(assigns(:file_type)).to be_a(FileType)
+      end
+
+      it 'persists @file_type' do
+        post :create, params: {file_type: valid_attributes}, session: valid_session
         expect(assigns(:file_type)).to be_persisted
       end
 

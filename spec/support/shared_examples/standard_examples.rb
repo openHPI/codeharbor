@@ -37,6 +37,10 @@ RSpec.shared_examples 'create examples' do |klass:, resource:|
     it "assigns a newly created #{resource} as @#{resource}" do
       post :create, params: empty_params.merge(resource => valid_attributes), session: valid_session
       expect(assigns(resource)).to be_a(klass)
+    end
+
+    it "persists as @#{resource}" do
+      post :create, params: empty_params.merge(resource => valid_attributes), session: valid_session
       expect(assigns(resource)).to be_persisted
     end
   end

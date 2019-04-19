@@ -162,6 +162,20 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#destroy' do
+    subject(:destroy) { user.destroy }
+
+    let(:user) { create(:user) }
+
+    context 'when user has a cart' do
+      before { create(:cart, user: user) }
+
+      it 'deletes cart' do
+        expect { destroy }.to change(Cart, :count).by(-1)
+      end
+    end
+  end
+
   describe 'factories' do
     it 'has valid factory' do
       expect(FactoryBot.build_stubbed(:user)).to be_valid
@@ -191,12 +205,21 @@ RSpec.describe User, type: :model do
       user.email = email
     end
 
-    it 'allows to users to be created without a primary email' do
-      user1 = FactoryBot.create(:user)
-      user2 = FactoryBot.create(:user)
-      expect(user1).to be_valid
-      expect(user2).to be_valid
-      expect(user1.email).not_to eql user2.email
+    context 'when two users are created' do
+      let!(:user1) { create(:user) }
+      let!(:user2) { create(:user) }
+
+      it 'creates valid user1' do
+        expect(user1).to be_valid
+      end
+
+      it 'creates valid user2' do
+        expect(user2).to be_valid
+      end
+
+      it 'allows two users to be created without a primary email' do
+        expect(user1.email).not_to eql user2.email
+      end
     end
   end
 

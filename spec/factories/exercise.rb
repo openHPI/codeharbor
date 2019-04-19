@@ -1,6 +1,16 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
+  factory :exercise do
+    sequence(:title) { |n| "Test Exercise #{n}" }
+    descriptions { [FactoryBot.create(:simple_description)] }
+
+    trait :empty do
+      title {}
+      descriptions { [] }
+    end
+  end
+
   factory :simple_exercise, class: 'Exercise' do
     sequence(:title) { |n| "Test Exercise #{n}" }
     descriptions { [FactoryBot.create(:simple_description)] }

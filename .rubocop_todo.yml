@@ -6,6 +6,21 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
+
+
+# OWN PR BEGIN
+# Offense count: 10
+# Configuration parameters: Include.
+# Include: app/models/**/*.rb
+Rails/HasAndBelongsToMany:
+  Exclude:
+    - 'app/models/account_link.rb'
+    - 'app/models/cart.rb'
+    - 'app/models/collection.rb'
+    - 'app/models/exercise.rb'
+    - 'app/models/label.rb'
+    - 'app/models/user.rb'
+
 # Offense count: 48
 Metrics/AbcSize:
   Max: 60
@@ -29,6 +44,8 @@ Metrics/CyclomaticComplexity:
 # Configuration parameters: CountComments, ExcludedMethods.
 Metrics/MethodLength:
   Max: 66
+
+# OWN PR END
 
 # Offense count: 2
 Metrics/PerceivedComplexity:
@@ -60,20 +77,3 @@ RSpec/InstanceVariable:
     - 'spec/requests/users_spec.rb'
     - 'spec/views/file_types/edit.html.slim_spec.rb'
     - 'spec/views/licenses/edit.html.slim_spec.rb'
-
-# Offense count: 46
-# Configuration parameters: AggregateFailuresByDefault.
-RSpec/MultipleExpectations:
-  Max: 4
-
-# Offense count: 10
-# Configuration parameters: Include.
-# Include: app/models/**/*.rb
-Rails/HasAndBelongsToMany:
-  Exclude:
-    - 'app/models/account_link.rb'
-    - 'app/models/cart.rb'
-    - 'app/models/collection.rb'
-    - 'app/models/exercise.rb'
-    - 'app/models/label.rb'
-    - 'app/models/user.rb'

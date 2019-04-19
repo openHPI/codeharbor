@@ -82,6 +82,10 @@ RSpec.describe UsersController, type: :controller do
       it 'assigns a newly created user as @user' do
         post :create, params: {user: valid_attributes}, session: valid_session
         expect(assigns(:user)).to be_a(User)
+      end
+
+      it 'persists @user' do
+        post :create, params: {user: valid_attributes}, session: valid_session
         expect(assigns(:user)).to be_persisted
       end
 
