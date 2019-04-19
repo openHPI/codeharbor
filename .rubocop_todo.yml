@@ -46,17 +46,3 @@ Metrics/MethodLength:
   Max: 66
 
 # OWN PR END
-
-# Offense count: 59
-# Configuration parameters: AssignmentOnly.
-RSpec/InstanceVariable:
-  Exclude:
-    - 'spec/requests/carts_spec.rb'
-    - 'spec/requests/collections_spec.rb'
-    - 'spec/requests/execution_environments_spec.rb'
-    - 'spec/requests/exercises_spec.rb'
-    - 'spec/requests/groups_spec.rb'
-    - 'spec/requests/licenses_spec.rb'
-    - 'spec/requests/users_spec.rb'
-    - 'spec/views/file_types/edit.html.slim_spec.rb'
-    - 'spec/views/licenses/edit.html.slim_spec.rb'

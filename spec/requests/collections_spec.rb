@@ -4,11 +4,12 @@ require 'rails_helper'
 
 RSpec.describe 'Collections', type: :request do
   context 'when logged in' do
+    let(:user) { FactoryBot.create(:user) }
+    let(:collection) { FactoryBot.create(:collection, title: 'Some Collection', users: [user], exercises: []) }
+    let(:collection_params) { FactoryBot.attributes_for(:collection) }
+
     before do
-      @user = FactoryBot.create(:user)
-      @collection = FactoryBot.create(:collection, title: 'Some Collection', users: [@user], exercises: [])
-      @collection_params = FactoryBot.attributes_for(:collection)
-      post login_path, params: {email: @user.email, password: @user.password}
+      post login_path, params: {email: user.email, password: user.password}
       follow_redirect!
     end
 
@@ -21,7 +22,7 @@ RSpec.describe 'Collections', type: :request do
 
     describe 'POST /collections' do
       it 'has http 302' do
-        post collections_path, params: {collection: @collection_params}
+        post collections_path, params: {collection: collection_params}
         expect(response).to have_http_status(:found)
       end
     end
@@ -35,35 +36,35 @@ RSpec.describe 'Collections', type: :request do
 
     describe 'GET /collections/:id/edit' do
       it 'has http 200' do
-        get edit_collection_path(@collection)
+        get edit_collection_path(collection)
         expect(response).to have_http_status(:ok)
       end
     end
 
     describe 'GET /collection/:id' do
       it 'has http 200' do
-        get collection_path(@collection)
+        get collection_path(collection)
         expect(response).to have_http_status(:ok)
       end
     end
 
     describe 'PATCH /collection/:id' do
       it 'has http 302' do
-        patch collection_path(@collection, collection: @collection_params)
+        patch collection_path(collection, collection: collection_params)
         expect(response).to have_http_status(:found)
       end
     end
 
     describe 'PUT /collection/:id' do
       it 'has http 302' do
-        put collection_path(@collection, collection: @collection_params)
+        put collection_path(collection, collection: collection_params)
         expect(response).to have_http_status(:found)
       end
     end
 
     describe 'DELETE /collection/:id' do
       it 'has http 200' do
-        delete collection_path(@collection)
+        delete collection_path(collection)
         expect(response).to have_http_status(:found)
       end
     end

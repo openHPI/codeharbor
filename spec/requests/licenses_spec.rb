@@ -5,9 +5,10 @@ require 'rails_helper'
 RSpec.describe 'Licenses', type: :request do
   context 'when logged in' do
     context 'when being an admin' do
+      let(:user) { FactoryBot.create(:admin) }
+
       before do
-        @user = FactoryBot.create(:admin)
-        post login_path, params: {email: @user.email, password: @user.password}
+        post login_path, params: {email: user.email, password: user.password}
         follow_redirect!
       end
 

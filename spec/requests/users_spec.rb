@@ -4,10 +4,11 @@ require 'rails_helper'
 
 RSpec.describe 'users', type: :request do
   context 'when logged in' do
+    let(:user) { FactoryBot.create(:user) }
+    let(:user_params) { FactoryBot.attributes_for(:user) }
+
     before do
-      @user = FactoryBot.create(:user)
-      @user_params = FactoryBot.attributes_for(:user)
-      post login_path, params: {email: @user.email, password: @user.password}
+      post login_path, params: {email: user.email, password: user.password}
       follow_redirect!
     end
 
@@ -20,7 +21,7 @@ RSpec.describe 'users', type: :request do
 
     describe 'POST /users' do
       it 'has http 302' do
-        post users_path, params: {user: @user_params}
+        post users_path, params: {user: user_params}
         expect(response).to have_http_status(:found)
       end
     end
@@ -34,35 +35,35 @@ RSpec.describe 'users', type: :request do
 
     describe 'GET /users/:id/edit' do
       it 'has http 200' do
-        get edit_user_path(@user)
+        get edit_user_path(user)
         expect(response).to have_http_status(:ok)
       end
     end
 
     describe 'GET /user/:id' do
       it 'has http 302' do
-        get user_path(@user)
+        get user_path(user)
         expect(response).to have_http_status(:ok)
       end
     end
 
     describe 'PATCH /user/:id' do
       it 'has http 302' do
-        patch user_path(@user, user: @user_params)
+        patch user_path(user, user: user_params)
         expect(response).to have_http_status(:found)
       end
     end
 
     describe 'PUT /user/:id' do
       it 'has http 302' do
-        put user_path(@user, user: @user_params)
+        put user_path(user, user: user_params)
         expect(response).to have_http_status(:found)
       end
     end
 
     describe 'DELETE /user/:id' do
       it 'has http 302' do
-        delete user_path(@user)
+        delete user_path(user)
         expect(response).to have_http_status(:found)
       end
     end
