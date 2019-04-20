@@ -2,7 +2,10 @@
 
 class Cart < ApplicationRecord
   belongs_to :user
-  has_and_belongs_to_many :exercises, dependent: :destroy
+
+  has_many :cart_exercises, dependent: :destroy
+  has_many :exercises, through: :cart_exercises
+
   validates :user, presence: true
 
   def self.find_cart_of(user)

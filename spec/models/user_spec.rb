@@ -15,12 +15,14 @@ RSpec.describe User, type: :model do
       cart.add_exercise(exercise1)
       expect(user.cart_count).to be_eql(count + 1)
     end
+
     it 'return -1 when exercise is removed' do
       cart.add_exercise(exercise2)
       count = user.cart_count
       cart.remove_exercise(exercise2)
       expect(user.cart_count).to be_eql(count - 1)
     end
+
     it 'return 0 when cart got destroyed' do
       cart.destroy
       expect(user.cart_count).to be_eql(0)

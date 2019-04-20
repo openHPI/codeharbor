@@ -2,7 +2,10 @@
 
 class Label < ApplicationRecord
   belongs_to :label_category
-  has_and_belongs_to_many :exercises
+
+  has_many :exercise_labels, dependent: :destroy
+  has_many :exercises, through: :exercise_labels
+
   before_create :choose_random_color
 
   def font_color

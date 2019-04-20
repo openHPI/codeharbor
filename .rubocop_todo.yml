@@ -9,17 +9,6 @@
 
 
 # OWN PR BEGIN
-# Offense count: 10
-# Configuration parameters: Include.
-# Include: app/models/**/*.rb
-Rails/HasAndBelongsToMany:
-  Exclude:
-    - 'app/models/account_link.rb'
-    - 'app/models/cart.rb'
-    - 'app/models/collection.rb'
-    - 'app/models/exercise.rb'
-    - 'app/models/label.rb'
-    - 'app/models/user.rb'
 
 # Offense count: 48
 Metrics/AbcSize:
