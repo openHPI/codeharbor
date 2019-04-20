@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_20_101319) do
+ActiveRecord::Schema.define(version: 2019_04_20_101801) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,18 +50,18 @@ ActiveRecord::Schema.define(version: 2019_04_20_101319) do
     t.index ["part_id"], name: "index_assemblies_parts_on_part_id"
   end
 
+  create_table "cart_exercises", id: :serial, force: :cascade do |t|
+    t.integer "exercise_id"
+    t.integer "cart_id"
+    t.index ["cart_id"], name: "index_cart_exercises_on_cart_id"
+    t.index ["exercise_id"], name: "index_cart_exercises_on_exercise_id"
+  end
+
   create_table "carts", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_carts_on_user_id"
-  end
-
-  create_table "carts_exercises", id: :serial, force: :cascade do |t|
-    t.integer "exercise_id"
-    t.integer "cart_id"
-    t.index ["cart_id"], name: "index_carts_exercises_on_cart_id"
-    t.index ["exercise_id"], name: "index_carts_exercises_on_exercise_id"
   end
 
   create_table "collection_exercises", id: :serial, force: :cascade do |t|
