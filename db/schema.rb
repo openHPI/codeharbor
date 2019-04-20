@@ -10,10 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_20_101801) do
+ActiveRecord::Schema.define(version: 2019_04_20_105445) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "account_link_users", id: false, force: :cascade do |t|
+    t.integer "account_link_id", null: false
+    t.integer "user_id", null: false
+    t.index ["account_link_id", "user_id"], name: "index_account_link_users_on_account_link_id_and_user_id"
+  end
 
   create_table "account_links", id: :serial, force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -25,12 +31,6 @@ ActiveRecord::Schema.define(version: 2019_04_20_101801) do
     t.string "client_id"
     t.string "client_secret"
     t.index ["user_id"], name: "index_account_links_on_user_id"
-  end
-
-  create_table "account_links_users", id: false, force: :cascade do |t|
-    t.integer "account_link_id", null: false
-    t.integer "user_id", null: false
-    t.index ["account_link_id", "user_id"], name: "index_account_links_users_on_account_link_id_and_user_id"
   end
 
   create_table "answers", id: :serial, force: :cascade do |t|

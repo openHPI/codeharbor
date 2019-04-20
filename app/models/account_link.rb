@@ -8,7 +8,9 @@ class AccountLink < ApplicationRecord
   validates :client_secret, presence: true
 
   belongs_to :user
-  has_and_belongs_to_many :external_users, class_name: 'User'
+
+  has_many :account_link_users, dependent: :destroy
+  has_many :external_users, through: :account_link_users
 
   def readable
     account_name + ' / ' + push_url
