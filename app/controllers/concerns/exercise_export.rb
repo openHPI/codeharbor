@@ -2,36 +2,25 @@
 
 module ExerciseExport
   def create_exercise_zip(exercise)
-    xsd = Nokogiri::XML::Schema(File.read('app/assets/taskxml.xsd'))
-    xml_generator = Proforma::XmlGenerator.new
-    xml_document = xml_generator.generate_xml(exercise)
-    doc = Nokogiri::XML(xml_document)
-
-    binary_data = nil
-    filename = nil
-    errors = xsd.validate(doc)
+    xml_document = generate_xml exercise
+    errors = verify_xml xml_document
 
     unless errors.any?
-      title = exercise.title
-      title = title.tr('.,:*|"<>/\\', '')
-      title = title.gsub(/[ (){}\[\]]/, '_')
-      filename = "#{title}.zip"
+      @filename = generate_filename exercise.title
+
       stringio = Zip::OutputStream.write_buffer do |zio|
         zio.put_next_entry('task.xml')
         zio.write xml_document
         exercise.exercise_files.each do |file|
-          if file.attachment.original_filename
-            zio.put_next_entry(file.attachment.original_filename)
-            zio.write Paperclip.io_adapters.for(file.attachment).read
-          end
+          add_file(zio, file)
         end
       end
-      binary_data = stringio.string
+      @binary_data = stringio.string
     end
 
     {
-      data: binary_data,
-      filename: filename,
+      data: @binary_data,
+      filename: @filename,
       errors: errors
     }
   end
@@ -48,5 +37,34 @@ module ExerciseExport
     rescue StandardError => e
       return e
     end
+  end
+
+  private
+
+  def add_file(zio, file)
+    original_filename = file.attachment.original_filename
+
+    return unless original_filename
+
+    zio.put_next_entry(original_filename)
+    zio.write file_attachment_from_paperclip(file.attachment)
+  end
+
+  def file_attachment_from_paperclip(file_attachment)
+    Paperclip.io_adapters.for(file_attachment).read
+  end
+
+  def generate_filename(filename)
+    filename.tr('.,:*|"<>/\\', '').gsub(/[ (){}\[\]]/, '_') + '.zip'
+  end
+
+  def generate_xml(exercise)
+    xml_generator = Proforma::XmlGenerator.new
+    xml_generator.generate_xml(exercise)
+  end
+
+  def verify_xml(xml_document)
+    xsd = Nokogiri::XML::Schema(File.read('app/assets/taskxml.xsd'))
+    xsd.validate(Nokogiri::XML(xml_document))
   end
 end

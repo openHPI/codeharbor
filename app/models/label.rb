@@ -9,10 +9,19 @@ class Label < ApplicationRecord
   before_create :choose_random_color
 
   def font_color
-    r = color[0] + color[1]
-    g = color[2] + color[3]
-    b = color[4] + color[5]
-    c_codes = [r, g, b].collect do |c|
+    c_codes = color_codes
+    l_value = 0.2126 * c_codes[0] + 0.7152 * c_codes[1] + 0.0722 * c_codes[2]
+    if l_value > 0.179
+      '000000'
+    else
+      'ffffff'
+    end
+
+    # Based on: https://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color
+  end
+
+  def color_codes
+    color_code_hex.collect do |c|
       c = c.to_i(16)
       c /= 255.0
       c = if c <= 0.03928
@@ -22,14 +31,14 @@ class Label < ApplicationRecord
           end
       c
     end
-    l_value = 0.2126 * c_codes[0] + 0.7152 * c_codes[1] + 0.0722 * c_codes[2]
-    if l_value > 0.179
-      '000000'
-    else
-      'ffffff'
-    end
+  end
 
-    # Based on: https://stackoverflow.com/questions/3942878/how-to-decide-font-color-in-white-or-black-depending-on-background-color
+  def color_code_hex
+    [
+      color[0] + color[1],
+      color[2] + color[3],
+      color[4] + color[5]
+    ]
   end
 
   def choose_random_color

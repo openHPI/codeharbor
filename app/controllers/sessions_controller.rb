@@ -6,16 +6,7 @@ class SessionsController < ApplicationController
   def create
     user = User.find_by(email: params[:email])
     if user&.authenticate(params[:password])
-      if user.email_confirmed
-        session[:user_id] = user.id
-        if params[:redirect]
-          redirect_to user_messages_path(current_user)
-        else
-          redirect_to home_index_path
-        end
-      else
-        redirect_to login_url, alert: t('controllers.session.activate_email')
-      end
+      authenticate_user user
     else
       redirect_to login_url, alert: t('controllers.session.invalid_credentials')
     end
@@ -35,5 +26,20 @@ class SessionsController < ApplicationController
   def destroy
     session[:user_id] = nil
     redirect_to home_index_path, notice: t('controllers.session.logged_out')
+  end
+
+  private
+
+  def authenticate_user(user)
+    if user.email_confirmed
+      session[:user_id] = user.id
+      if params[:redirect]
+        redirect_to user_messages_path(current_user)
+      else
+        redirect_to home_index_path
+      end
+    else
+      redirect_to login_url, alert: t('controllers.session.activate_email')
+    end
   end
 end

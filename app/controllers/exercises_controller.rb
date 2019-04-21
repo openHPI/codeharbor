@@ -332,6 +332,7 @@ class ExercisesController < ApplicationController
   end
 
   # will be replaced with ransack
+  # rubocop:disable Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/PerceivedComplexity
   def set_search
     @option = params[:option] || 'mine'
@@ -356,6 +357,7 @@ class ExercisesController < ApplicationController
                  '0'
                end
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
   # rubocop:enable Metrics/PerceivedComplexity
 
   # Use callbacks to share common setup or constraints between actions.

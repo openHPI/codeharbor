@@ -94,6 +94,8 @@ class Exercise < ApplicationRecord
 
   # will be replaced with ransack
   # rubocop:disable Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/AbcSize
   def self.search(search, settings, option, user_param)
     if option == 'private'
       priv = true
@@ -139,7 +141,9 @@ class Exercise < ApplicationRecord
     end
     results
   end
+  # rubocop:enable Metrics/AbcSize
   # rubocop:enable Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   def can_access(user)
     if private
@@ -267,7 +271,6 @@ class Exercise < ApplicationRecord
 
   def add_tests(test_array)
     test_array.try(:each) do |_key, array|
-      destroy = array[:_destroy]
       id = array[:id]
 
       if id
@@ -280,15 +283,19 @@ class Exercise < ApplicationRecord
           test.exercise_file.update(file_permit(array[:exercise_file_attributes]))
         end
       else
-        unless destroy
-          file = exercise_files.new(file_permit(array[:exercise_file_attributes]))
-          file.purpose = 'test'
-          test = Test.new(test_permit(array))
-          test.exercise_file = file
-          tests << test
-        end
+        create_new_test array
       end
     end
+  end
+
+  def create_new_test(array)
+    return if array[:_destroy]
+
+    file = exercise_files.new(file_permit(array[:exercise_file_attributes]))
+    file.purpose = 'test'
+    test = Test.new(test_permit(array))
+    test.exercise_file = file
+    tests << test
   end
 
   def update_file_params(file_attributes)
