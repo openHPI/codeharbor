@@ -12,6 +12,7 @@ AllCops:
     - test/**/*
     - tmp/**/*
     - views/**/*
+    - vendor/**/*
 
 Metrics/BlockLength:
   Exclude:
