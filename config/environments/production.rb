@@ -103,13 +103,13 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # set asset compression method for CSS
-  config.assets.css_compressor = :yui
+  # config.assets.css_compressor = :yui
 
   # set asset compression method for JS
   config.assets.js_compressor = :uglifier
 
   # Don't fallback to assets pipeline if a precompiled asset is missed
-  # config.assets.compile = false
+  config.assets.compile = false
 
   # Generate digests for assets URLs. This is planned for deprecation.
   # config.assets.digest = true
