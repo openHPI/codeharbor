@@ -1,4 +1,3 @@
-inherit_from: .rubocop_todo.yml
 require: rubocop-rspec
 
 Rails:
@@ -17,9 +16,15 @@ AllCops:
 Metrics/BlockLength:
   Exclude:
     - spec/**/*
+    - config/routes.rb
+    - Guardfile
+    - config/environments/*
 
 Metrics/LineLength:
   Max: 140
+
+Metrics/MethodLength:
+  Max: 20
 
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
@@ -29,3 +34,6 @@ RSpec/NestedGroups:
 
 Style/Documentation:
   Enabled: false
+
+Metrics/ClassLength:
+  Max: 150

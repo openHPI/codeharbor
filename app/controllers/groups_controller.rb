@@ -4,6 +4,8 @@ class GroupsController < ApplicationController
   load_and_authorize_resource
   before_action :set_group, only: %i[show edit update destroy request_access grant_access delete_from_group make_admin]
   before_action :set_option, only: [:index]
+  before_action :set_user, only: %i[grant_access delete_from_group deny_access make_admin add_account_link_to_member
+                                    remove_account_link_from_member]
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.group.authorization')
   end
@@ -73,8 +75,7 @@ class GroupsController < ApplicationController
   end
 
   def leave
-    last_admin = current_user.last_admin?(@group)
-    if last_admin
+    if current_user.last_admin?(@group)
       redirect_to @group, alert: t('controllers.group.leave.alert')
     else
       @group.users.delete(current_user)
@@ -100,23 +101,20 @@ class GroupsController < ApplicationController
   end
 
   def grant_access
-    user = User.find(params[:user])
-    @group.grant_access(user)
-    send_grant_access_messages(user, @group)
+    @group.grant_access(@user)
+    send_grant_access_messages(@user, @group)
 
-    Message.where(sender: user, recipient: current_user, param_type: 'group', param_id: @group.id).delete_all
+    Message.where(sender: @user, recipient: current_user, param_type: 'group', param_id: @group.id).delete_all
     redirect_to @group, notice: t('controllers.group.grant_access.notice')
   end
 
   def delete_from_group
-    user = User.find(params[:user])
-    @group.users.delete(user)
+    @group.users.delete(@user)
     redirect_to @group, notice: t('controllers.group.delete_from_group_notice')
   end
 
   def deny_access
-    user = User.find(params[:user])
-    @group.users.delete(user)
+    @group.users.delete(@user)
     send_deny_access_message(user, @group)
 
     Message.where(sender: user, recipient: current_user, param_type: 'group', param_id: @group.id).delete_all
@@ -124,22 +122,19 @@ class GroupsController < ApplicationController
   end
 
   def make_admin
-    user = User.find(params[:user])
-    @group.make_admin(user)
+    @group.make_admin(@user)
     redirect_to @group, notice: t('controllers.group.make_admin_notice')
   end
 
   def add_account_link_to_member
-    user = User.find(params[:user])
     account_link = AccountLink.find(params[:account_link])
-    user.external_account_links << account_link
+    @user.external_account_links << account_link
     redirect_to @group, notice: t('controllers.group.granted_push')
   end
 
   def remove_account_link_from_member
-    user = User.find(params[:user])
     account_link = AccountLink.find(params[:account_link])
-    user.external_account_links.delete(account_link)
+    @user.external_account_links.delete(account_link)
     redirect_to @group, notice: t('controllers.group.removed_push')
   end
 
@@ -178,6 +173,10 @@ class GroupsController < ApplicationController
 
   def set_group
     @group = Group.find(params[:id])
+  end
+
+  def set_user
+    @user = User.find(params[:user])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

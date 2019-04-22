@@ -6,6 +6,7 @@ require 'proforma/xml_generator'
 require 'proforma/zip_importer'
 require 'zip'
 
+# rubocop:disable Metrics/ClassLength
 class ExercisesController < ApplicationController
   load_and_authorize_resource except: [:import_proforma_xml]
   before_action :set_exercise, only: %i[show edit update destroy add_to_cart add_to_collection push_external contribute]
@@ -190,6 +191,8 @@ class ExercisesController < ApplicationController
     render text: e.message, status: e.status
   end
 
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/BlockLength
   def import_exercise
     files = {}
     begin
@@ -243,6 +246,8 @@ class ExercisesController < ApplicationController
       end
     end
   end
+  # rubocop:enable Metrics/BlockLength
+  # rubocop:enable Metrics/MethodLength
   # rubocop:enable Metrics/AbcSize
 
   def contribute
@@ -278,17 +283,9 @@ class ExercisesController < ApplicationController
     else
       Report.create(user: current_user, exercise: @exercise, text: params[:text])
       if @exercise.reports == 1
-        Message.create(recipient: @exercise.user,
-                       param_type: 'report',
-                       param_id: @exercise.id,
-                       text: text,
-                       sender_status: 'd')
+        Message.create(recipient: @exercise.user, param_type: 'report', param_id: @exercise.id, text: text, sender_status: 'd')
         @exercise.exercise_authors.each do |author|
-          Message.create(recipient: author,
-                         param_type: 'report',
-                         param_id: @exercise.id,
-                         text: text,
-                         sender_status: 'd')
+          Message.create(recipient: author, param_type: 'report', param_id: @exercise.id, text: text, sender_status: 'd')
         end
         # Insert message for "Revision Board" here
       end
@@ -397,3 +394,4 @@ class ExercisesController < ApplicationController
     return link.user unless link.nil?
   end
 end
+# rubocop:enable Metrics/ClassLength
