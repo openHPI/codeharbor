@@ -289,6 +289,8 @@ GEM
     rubocop-rails (1.5.0)
       railties (>= 3.0)
       rubocop (~> 0.53)
+    rubocop-rspec (1.32.0)
+      rubocop (>= 0.60.0)
     ruby-progressbar (1.10.0)
     ruby_dep (1.5.0)
     rubyzip (1.2.2)
@@ -401,6 +403,7 @@ DEPENDENCIES
   rspec-rails
   rubocop (~> 0.67.2)
   rubocop-rails (~> 1.5.0)
+  rubocop-rspec
   rubyzip
   sass-rails
   select2-rails (~> 4.0, >= 4.0.3)
