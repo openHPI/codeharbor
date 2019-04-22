@@ -9,40 +9,28 @@ class MessagesController < ApplicationController
     redirect_to root_path, alert: t('controllers.message.authorization')
   end
 
-  # GET /messages
-  # GET /messages.json
   def index
     if @option == 'inbox'
-      @messages = Message.where(recipient: current_user)
-                         .where('recipient_status != ?', 'd')
+      @messages = Message.received_by(current_user)
                          .order(created_at: :desc)
                          .paginate(per_page: 5, page: params[:page])
-      @messages.each do |message|
-        message.recipient_status = 'r'
-        message.save
-      end
+      mark_messages_as_read @messages
     else
-      @messages = Message.where(sender: current_user)
-                         .where('sender_status != ?', 'd')
+      @messages = Message.sent_by(current_user)
                          .order(created_at: :desc)
                          .paginate(per_page: 5, page: params[:page])
     end
   end
 
-  # GET /messages/1
-  # GET /messages/1.json
   def show; end
 
-  # GET /messages/new
   def new
     @message = Message.new
   end
 
-  # GET /messages/1/edit
   def edit; end
 
-  # POST /messages
-  # POST /messages.json
+  # rubocop:disable Metrics/AbcSize
   def create
     @message = Message.new(message_params)
     @message.recipient_status = 'u'
@@ -63,9 +51,8 @@ class MessagesController < ApplicationController
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
-  # PATCH/PUT /messages/1
-  # PATCH/PUT /messages/1.json
   def update
     respond_to do |format|
       if @message.update(message_params)
@@ -78,15 +65,14 @@ class MessagesController < ApplicationController
     end
   end
 
-  # DELETE /messages/1
-  # DELETE /messages/1.json
+  # rubocop:disable Metrics/AbcSize
   def delete
     if @message.sender == current_user
       @message.sender_status = 'd'
-      @message.delete if @message.recipient_status == 'd'
+      @message.delete if @message.deleted_by_recipient?
     else
       @message.recipient_status = 'd'
-      @message.delete if @message.sender_status == 'd'
+      @message.delete if @message.deleted_by_sender?
     end
 
     option = params[:option]
@@ -97,6 +83,7 @@ class MessagesController < ApplicationController
       redirect_to user_messages_path(@user, option: option), alert: t('controllers.message.deleted_alert')
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def destroy
     @message.destroy
@@ -113,6 +100,13 @@ class MessagesController < ApplicationController
   end
 
   private
+
+  def mark_messages_as_read(messages)
+    messages.each do |message|
+      message.recipient_status = 'r'
+      message.save
+    end
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_option

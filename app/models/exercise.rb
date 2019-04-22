@@ -330,4 +330,13 @@ class Exercise < ApplicationRecord
   def test_permit(params)
     params.permit(:feedback_message, :testing_framework_id)
   end
+
+  def duplicate
+    Exercise.new(
+      private: private,
+      descriptions: descriptions.map(&:dup),
+      tests: tests.map(&:dup),
+      exercise_files: exercise_files.map(&:dup)
+    )
+  end
 end
