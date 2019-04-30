@@ -595,3 +595,7 @@ input[type="radio"]:checked+label {
 .more-btn-wrapper[style*='display: none'] ~ .labels {
   margin-top: 5px;
 }
+
+.exercise-panel {
+  min-height: 155px;
+}
