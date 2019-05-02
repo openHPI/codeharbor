@@ -2,6 +2,7 @@
 
 source 'https://rubygems.org'
 
+gem 'proforma', path: '../proforma'
 # Handle file upload
 gem 'paperclip'
 # Create Zip files
@@ -91,6 +92,7 @@ group :development do
   gem 'capistrano-upload-config'
   gem 'capistrano3-puma'
 
+  gem 'pry-rails'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 end

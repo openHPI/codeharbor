@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_20_105445) do
+ActiveRecord::Schema.define(version: 2019_05_01_134821) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -175,6 +175,7 @@ ActiveRecord::Schema.define(version: 2019_04_20_105445) do
     t.integer "downloads", default: 0
     t.integer "license_id"
     t.boolean "deleted"
+    t.uuid "uuid", null: false
     t.index ["execution_environment_id"], name: "index_exercises_on_execution_environment_id"
     t.index ["license_id"], name: "index_exercises_on_license_id"
     t.index ["user_id"], name: "index_exercises_on_user_id"
