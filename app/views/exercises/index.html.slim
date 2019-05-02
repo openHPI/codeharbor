@@ -30,6 +30,7 @@
       = text_field_tag :search, params[:search], class: 'form-control', type: 'text', placeholder: t('exercises.all.placeholder')
       span.input-group-btn
         = submit_tag t('exercises.all.search'), type: 'submit', name: nil, class: 'btn btn-default'
+        = submit_tag t('exercises.all.reset'), id: 'reset-btn', type: 'button', name: nil, class: 'btn btn-default'
         = button_tag type: 'button', id: 'advanced', class: 'btn btn-default' do
           small
             = t('exercises.search.advanced') + ' '

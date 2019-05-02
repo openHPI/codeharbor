@@ -99,6 +99,11 @@ ready =->
   $('body').on 'click', '.open-link', (event) ->
     Turbolinks.visit($(this).prop('href'))
 
+  $("#reset-btn").click ->
+    $('#search').attr('value', '')
+    $(".index").submit()
+
+
   $(".change-hidden-field").click ->
     value = (this).id
     document.getElementById('option').value = value
