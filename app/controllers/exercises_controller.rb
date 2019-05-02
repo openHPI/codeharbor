@@ -283,9 +283,17 @@ class ExercisesController < ApplicationController
     else
       Report.create(user: current_user, exercise: @exercise, text: params[:text])
       if @exercise.reports == 1
-        Message.create(recipient: @exercise.user, param_type: 'report', param_id: @exercise.id, text: text, sender_status: 'd')
+        Message.create(recipient: @exercise.user,
+                       param_type: 'report',
+                       param_id: @exercise.id,
+                       text: text,
+                       sender_status: 'd')
         @exercise.exercise_authors.each do |author|
-          Message.create(recipient: author, param_type: 'report', param_id: @exercise.id, text: text, sender_status: 'd')
+          Message.create(recipient: author,
+                         param_type: 'report',
+                         param_id: @exercise.id,
+                         text: text,
+                         sender_status: 'd')
         end
         # Insert message for "Revision Board" here
       end
