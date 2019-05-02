@@ -16,8 +16,8 @@ class CollectionsController < ApplicationController
   # GET /collections
   # GET /collections.json
   def index
-    @collections = Collection.includes(:collections_users)
-                             .where(collections_users: {user: current_user})
+    @collections = Collection.includes(:collection_users)
+                             .where(collection_users: {user: current_user})
                              .distinct
                              .paginate(per_page: 5, page: params[:page])
   end

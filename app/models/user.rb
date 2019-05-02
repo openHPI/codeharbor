@@ -11,8 +11,14 @@ class User < ApplicationRecord
   validates :first_name, :last_name, presence: true
   has_secure_password
 
-  has_and_belongs_to_many :external_account_links, class_name: 'AccountLink', dependent: :destroy
-  has_and_belongs_to_many :collections, dependent: :destroy
+  has_many :collection_users, dependent: :destroy
+  has_many :collections, through: :collection_users
+
+  has_many :account_link_users, dependent: :destroy
+  has_many :external_account_links, through: :account_link_users, dependent: :destroy, source: :account_link
+
+  # has_and_belongs_to_many :external_account_links, class_name: 'AccountLink', dependent: :destroy
+
   has_many :reports, dependent: :destroy
   has_many :account_links, dependent: :destroy
   has_many :exercises, dependent: :nullify

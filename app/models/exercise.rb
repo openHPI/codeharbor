@@ -9,14 +9,22 @@ class Exercise < ApplicationRecord
 
   has_many :exercise_files, dependent: :destroy
   has_many :tests, dependent: :destroy
-  has_and_belongs_to_many :labels
+
+  has_many :exercise_labels, dependent: :destroy
+  has_many :labels, through: :exercise_labels
+
   has_many :comments, dependent: :destroy
   has_many :ratings, dependent: :destroy
   has_many :reports, dependent: :destroy
   has_many :exercise_authors, dependent: :destroy
   has_many :authors, through: :exercise_authors, source: :user
-  has_and_belongs_to_many :collections, dependent: :destroy
-  has_and_belongs_to_many :carts, dependent: :destroy
+
+  has_many :collection_exercises, dependent: :destroy
+  has_many :collections, through: :collection_exercises
+
+  has_many :cart_exercises, dependent: :destroy
+  has_many :carts, through: :cart_exercises
+
   belongs_to :user
   belongs_to :execution_environment
   belongs_to :license
