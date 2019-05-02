@@ -2,6 +2,7 @@
 
 module Proforma
   class Importer
+    # rubocop:disable Metrics/AbcSize
     def from_proforma_xml(exercise, doc)
       @exercise = exercise
       @exercise.title = doc.xpath('/p:task/p:meta-data/p:title').text
@@ -43,8 +44,7 @@ module Proforma
 
     def add_test_xml(xml, metadata)
       test = xml.xpath("//p:test/p:test-configuration/p:filerefs/p:fileref[@refid='#{metadata[:file_id]}']/../../..")
-      testtype = test.xpath('p:test-type/text()').to_s
-      if  testtype == 'unittest'
+      if test.xpath('p:test-type/text()').to_s == 'unittest'
         framework_name = test.xpath('p:test-configuration/p:unit-test/@framework').first
         framework_version = test.xpath('p:test-configuration/p:unit-test/@version').first
         framework = if framework_name
@@ -59,6 +59,7 @@ module Proforma
       end
       exercise_test
     end
+    # rubocop:enable Metrics/AbcSize
 
     def file_metadata(file)
       {

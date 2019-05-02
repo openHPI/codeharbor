@@ -8,26 +8,20 @@ class UsersController < ApplicationController
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.user.authorization')
   end
-  # GET /users
-  # GET /users.json
+
   def index
     @users = User.all.paginate(per_page: 10, page: params[:page])
   end
 
-  # GET /users/1
-  # GET /users/1.json
   def show; end
 
-  # GET /users/new
   def new
     @user = User.new
   end
 
-  # GET /users/1/edit
   def edit; end
 
-  # POST /users
-  # POST /users.json
+  # rubocop:disable Metrics/AbcSize
   def create
     @user = User.new(user_params)
     Cart.create(user: @user)
@@ -43,11 +37,10 @@ class UsersController < ApplicationController
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
-  # PATCH/PUT /users/1
-  # PATCH/PUT /users/1.json
   def update
-    @user.avatar = nil if params[:user][:avatar].nil? && params[:user][:avatar_present] == 'false'
+    set_avatar
     respond_to do |format|
       if @user.update(user_params)
         format.html { redirect_to @user, notice: t('controllers.user.updated') }
@@ -59,8 +52,6 @@ class UsersController < ApplicationController
     end
   end
 
-  # DELETE /users/1
-  # DELETE /users/1.json
   def destroy
     respond_to do |format|
       if @user.soft_delete
@@ -73,6 +64,10 @@ class UsersController < ApplicationController
   end
 
   private
+
+  def set_avatar
+    @user.avatar = nil if params[:user][:avatar].nil? && params[:user][:avatar_present] == 'false'
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_user

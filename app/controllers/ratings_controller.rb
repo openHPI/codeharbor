@@ -9,46 +9,22 @@ class RatingsController < ApplicationController
     redirect_to root_path, alert: 'You are not authorized to rate.'
   end
 
-  # GET /ratings
-  # GET /ratings.json
   def index
     @ratings = Rating.all
   end
 
-  # GET /ratings/1
-  # GET /ratings/1.json
   def show; end
 
-  # GET /ratings/new
   def new
     @rating = Rating.new
   end
 
-  # GET /ratings/1/edit
   def edit; end
 
-  # POST /ratings
-  # POST /ratings.json
   def create
-    if @exercise.user == current_user
-      flash[:alert] = 'You cannot rate your own exercise.'
-      overall_rating = @exercise.round_avg_rating
-      respond_to do |format|
-        format.json { render json: {overall_rating: overall_rating, user_rating: overall_rating} }
-      end
-      return
-    end
-    rating = @exercise.ratings.find_by(user: current_user)
-    notice = 'Rating was successfully created.'
-    if rating
-      notice = 'Rating was successfully updated.'
-      rating.update(rating_params)
-    else
-      rating = Rating.new(rating_params)
-    end
-    rating.exercise = @exercise
-    rating.user = current_user
-    flash[:notice] = notice
+    return handle_own_rating if @exercise.user == current_user
+
+    rating = handle_rating
 
     respond_to do |format|
       if rating.save
@@ -60,8 +36,6 @@ class RatingsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /ratings/1
-  # PATCH/PUT /ratings/1.json
   def update
     respond_to do |format|
       if @rating.update(rating_params)
@@ -74,8 +48,6 @@ class RatingsController < ApplicationController
     end
   end
 
-  # DELETE /ratings/1
-  # DELETE /ratings/1.json
   def destroy
     @rating.destroy
     respond_to do |format|
@@ -98,5 +70,29 @@ class RatingsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def rating_params
     params.require(:rating).permit(:rating, :exercise_id, :user_id)
+  end
+
+  def handle_own_rating
+    flash[:alert] = 'You cannot rate your own exercise.'
+    overall_rating = @exercise.round_avg_rating
+    respond_to do |format|
+      format.json { render json: {overall_rating: overall_rating, user_rating: overall_rating} }
+    end
+  end
+
+  def handle_rating
+    rating = @exercise.ratings.find_by(user: current_user)
+    notice = 'Rating was successfully created.'
+    if rating
+      notice = 'Rating was successfully updated.'
+      rating.update(rating_params)
+    else
+      rating = Rating.new(rating_params)
+    end
+    rating.exercise = @exercise
+    rating.user = current_user
+    flash[:notice] = notice
+
+    rating
   end
 end

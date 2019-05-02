@@ -7,8 +7,6 @@ class GroupsController < ApplicationController
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.group.authorization')
   end
-  # GET /groups
-  # GET /groups.json
   def index
     @groups = if @option == 'mine'
                 current_user.groups.paginate(per_page: 5, page: params[:page])
@@ -29,26 +27,21 @@ class GroupsController < ApplicationController
     end
   end
 
-  # GET /groups/1
-  # GET /groups/1.json
   def show; end
 
-  # GET /groups/new
   def new
     @group = Group.new
   end
 
-  # GET /groups/1/edit
   def edit; end
 
-  # POST /groups
-  # POST /groups.json
+  # rubocop:disable Metrics/AbcSize
   def create
     @group = Group.new(group_params)
 
     respond_to do |format|
       if @group.save
-        @group.add(current_user, as: 'admin')
+        @group.make_admin(current_user)
         format.html { redirect_to @group, notice: t('controllers.group.created') }
         format.json { render :index, status: :created, location: @group }
       else
@@ -57,9 +50,8 @@ class GroupsController < ApplicationController
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
-  # PATCH/PUT /groups/1
-  # PATCH/PUT /groups/1.json
   def update
     respond_to do |format|
       if @group.update(group_params)
@@ -72,8 +64,6 @@ class GroupsController < ApplicationController
     end
   end
 
-  # DELETE /groups/1
-  # DELETE /groups/1.json
   def destroy
     @group.destroy
     respond_to do |format|
@@ -95,12 +85,8 @@ class GroupsController < ApplicationController
   def request_access
     flash[:notice] = t('controllers.group.request_access.notice')
     @group.admins.each do |admin|
-      Message.create(sender: current_user,
-                     recipient: admin,
-                     text: t('controllers.group.request_access.text', user: current_user.name, group: @group.name),
-                     param_type: 'group',
-                     param_id: @group.id,
-                     sender_status: 'd')
+      send_access_request_message(admin, @group)
+
       AccessRequest.send_access_request(current_user, admin, @group).deliver_now
     end
     @group.add_pending_user(current_user)
@@ -116,12 +102,8 @@ class GroupsController < ApplicationController
   def grant_access
     user = User.find(params[:user])
     @group.grant_access(user)
-    Message.create(sender: current_user,
-                   recipient: user,
-                   text: t('controllers.group.grant_access.text', user: current_user.name, group: @group.name),
-                   param_type: 'group_accepted',
-                   param_id: @group.id,
-                   sender_status: 'd')
+    send_grant_access_messages(user, @group)
+
     Message.where(sender: user, recipient: current_user, param_type: 'group', param_id: @group.id).delete_all
     redirect_to @group, notice: t('controllers.group.grant_access.notice')
   end
@@ -135,11 +117,8 @@ class GroupsController < ApplicationController
   def deny_access
     user = User.find(params[:user])
     @group.users.delete(user)
-    Message.create(sender: current_user,
-                   recipient: user,
-                   text: t('controllers.group.deny_access.text', user: current_user.name, group: @group.name),
-                   param_type: 'group_declined',
-                   sender_status: 'd')
+    send_deny_access_message(user, @group)
+
     Message.where(sender: user, recipient: current_user, param_type: 'group', param_id: @group.id).delete_all
     redirect_to @group, notice: t('controllers.group.deny_access.notice')
   end
@@ -165,6 +144,32 @@ class GroupsController < ApplicationController
   end
 
   private
+
+  def send_access_request_message(admin, group)
+    Message.create(sender: current_user,
+                   recipient: admin,
+                   text: t('controllers.group.request_access.text', user: current_user.name, group: group.name),
+                   param_type: 'group',
+                   param_id: group.id,
+                   sender_status: 'd')
+  end
+
+  def send_deny_access_message(user, group)
+    Message.create(sender: current_user,
+                   recipient: user,
+                   text: t('controllers.group.deny_access.text', user: current_user.name, group: group.name),
+                   param_type: 'group_declined',
+                   sender_status: 'd')
+  end
+
+  def send_grant_access_messages(user, group)
+    Message.create(sender: current_user,
+                   recipient: user,
+                   text: t('controllers.group.grant_access.text', user: current_user.name, group: group.name),
+                   param_type: 'group_accepted',
+                   param_id: group.id,
+                   sender_status: 'd')
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_option

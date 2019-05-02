@@ -4,21 +4,18 @@ class CommentsController < ApplicationController
   load_and_authorize_resource
   before_action :set_exercise, except: [:comments_all]
   before_action :set_comment, only: %i[show edit update destroy]
+  before_action :new_comment, only: :create
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized to comment.'
   end
 
-  # GET /comments/1
-  # GET /comments/1.json
   def show; end
 
-  # GET /comments/new
   def new
     @comment = Comment.new
   end
 
-  # GET /comments/1/edit
   def edit
     respond_to do |format|
       format.html { render :edit }
@@ -26,29 +23,22 @@ class CommentsController < ApplicationController
     end
   end
 
-  # POST /comments
-  # POST /comments.json
+  # rubocop:disable Metrics/AbcSize
   def create
-    @comment = Comment.new(comment_params)
-    @comment.user = current_user
-    @comment.exercise = @exercise
-
     respond_to do |format|
       if @comment.save
         format.html { redirect_to exercise_comments_path(@exercise), notice: 'Comment was successfully created.' }
-        format.json { render :index, status: :created, location: @collection }
+        format.json { render :index, status: :created, location: @comment }
         format.js { index }
       else
         format.html { render :new }
-        format.json { render json: @collection.errors, status: :unprocessable_entity }
+        format.json { render json: @comment.errors, status: :unprocessable_entity }
         flash[:alert] = 'An error ocurred while creating your comment.'
         format.js { render nothing: true, status: 200 }
       end
     end
   end
 
-  # PATCH/PUT /comments/1
-  # PATCH/PUT /comments/1.json
   def update
     respond_to do |format|
       if @comment.update(comment_params)
@@ -63,9 +53,8 @@ class CommentsController < ApplicationController
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
-  # DELETE /comments/1
-  # DELETE /comments/1.json
   def destroy
     @comment.destroy
     respond_to do |format|
@@ -92,6 +81,12 @@ class CommentsController < ApplicationController
   end
 
   private
+
+  def new_comment
+    @comment = Comment.new(comment_params)
+    @comment.user = current_user
+    @comment.exercise = @exercise
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_comment

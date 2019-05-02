@@ -50,7 +50,7 @@ Rails.application.routes.draw do
       get :email_link
       get :forgot_password
       get :resend_confirmation
-      post :send_confirmation
+      # post :send_confirmation
     end
   end
 

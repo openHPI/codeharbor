@@ -65,6 +65,7 @@ module Proforma
       end
     end
 
+    # rubocop:disable Metrics/AbcSize
     def build_proforma_xml_for_tests(xml)
       proforma = xml['p']
       proforma.tests do
@@ -132,5 +133,6 @@ module Proforma
       end
       builder.to_xml
     end
+    # rubocop:enable Metrics/AbcSize
   end
 end

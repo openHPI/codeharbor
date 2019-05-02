@@ -89,29 +89,52 @@ class CartsController < ApplicationController
   end
 
   def push_cart
-    account_link = AccountLink.find(params[:account_link])
-    all_errors = []
-    @cart.exercises.each do |exercise|
-      error = push_exercise(exercise, account_link)
-      all_errors << error if error.present?
-    end
-    if all_errors.empty?
-      redirect_to @cart, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
+    @account_link = AccountLink.find(params[:account_link])
+    errors = push_exercises
+
+    if errors.empty?
+      redirect_to @cart, notice: t('controllers.exercise.push_external_notice', account_link: @account_link.readable)
     else
-      all_errors.each do |error|
+      errors.each do |error|
         logger.error(error)
       end
-      redirect_to @cart, alert: t('controllers.account_links.not_working', account_link: account_link.readable)
+      redirect_to @cart, alert: t('controllers.account_links.not_working', account_link: @account_link.readable)
     end
   end
 
   def download_all
     filename = t('controllers.carts.zip')
 
+    binary_zip_data = send_zip
+
+    send_data(binary_zip_data.string, type: 'application/zip', filename: filename, disposition: 'attachment')
+  end
+
+  def my_cart
+    @cart = Cart.find_cart_of(current_user)
+    redirect_to cart_path(@cart)
+  end
+
+  private
+
+  def push_exercises
+    @cart.exercises.each do |exercise|
+      error = push_exercise(exercise, @account_link)
+      errors << error if error.present?
+    end
+    errors
+  end
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_cart
+    @cart = Cart.find(params[:id])
+  end
+
+  def send_zip
     # This is the tricky part
     # Initialize the temp file as a zip file
 
-    stringio = Zip::OutputStream.write_buffer do |zio|
+    Zip::OutputStream.write_buffer do |zio|
       @cart.exercises.each do |exercise|
         zip_file = create_exercise_zip(exercise)
         if zip_file[:errors].any?
@@ -124,22 +147,5 @@ class CartsController < ApplicationController
         end
       end
     end
-    binary_data = stringio.string
-
-    send_data(binary_data, type: 'application/zip', filename: filename, disposition: 'attachment')
   end
-
-  def my_cart
-    @cart = Cart.find_cart_of(current_user)
-    redirect_to cart_path(@cart)
-  end
-
-  private
-
-  # Use callbacks to share common setup or constraints between actions.
-  def set_cart
-    @cart = Cart.find(params[:id])
-  end
-
-  # Never trust parameters from the scary internet, only allow the white list through.
 end

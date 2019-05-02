@@ -36,19 +36,20 @@ class HomeController < ApplicationController
     render 'resend_confirmation'
   end
 
-  def send_confirmation
-    email = params[:email]
-    redirect_to(resend_confirmation_home_index_path, alert: t('controllers.home.no_email')) && return if email.blank?
+  # not used anywhere?
+  # def send_confirmation
+  #   email = params[:email]
+  #   redirect_to(resend_confirmation_home_index_path, alert: t('controllers.home.no_email')) && return if email.blank?
 
-    user = User.find_by(email: email.downcase)
+  #   user = User.find_by(email: email.downcase)
 
-    respond_to do |format|
-      if user
-        UserMailer.registration_confirmation(user).deliver_now
-        format.html { redirect_to home_index_path, notice: t('controllers.home.send_confirmation.success') }
-      else
-        format.html { redirect_to resend_confirmation_home_index_path, alert: t('controllers.home.send_confirmation.alert') }
-      end
-    end
-  end
+  #   respond_to do |format|
+  #     if user
+  #       UserMailer.registration_confirmation(user).deliver_now
+  #       format.html { redirect_to home_index_path, notice: t('controllers.home.send_confirmation.success') }
+  #     else
+  #       format.html { redirect_to resend_confirmation_home_index_path, alert: t('controllers.home.send_confirmation.alert') }
+  #     end
+  #   end
+  # end
 end
