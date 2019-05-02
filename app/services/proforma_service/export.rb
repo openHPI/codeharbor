@@ -16,7 +16,7 @@ module ProformaService
       @task = Proforma::Task.new(
         title: @exercise.title,
         description: @exercise.descriptions.first.text,
-        # internal_description: '',
+        internal_description: @exercise.instruction,
         proglang: proglang,
         # files: '',
         # tests: '',
