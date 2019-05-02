@@ -84,6 +84,8 @@ class Exercise < ApplicationRecord
     end
   end
 
+  # will be replaced with ransack
+  # rubocop:disable Metrics/PerceivedComplexity
   def self.search(search, settings, option, user_param)
     if option == 'private'
       priv = true
@@ -129,6 +131,7 @@ class Exercise < ApplicationRecord
     end
     results
   end
+  # rubocop:enable Metrics/PerceivedComplexity
 
   def can_access(user)
     if private

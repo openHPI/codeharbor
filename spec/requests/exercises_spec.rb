@@ -3,14 +3,17 @@
 require 'rails_helper'
 
 RSpec.describe 'exercises', type: :request do
-  context 'logged in' do
-    before do
-      @user = FactoryBot.create(:user)
-      @exercise = FactoryBot.create(:only_meta_data, authors: [@user])
-      @exercise_params = FactoryBot.attributes_for(:only_meta_data).merge(
+  context 'when logged in' do
+    let(:user) { FactoryBot.create(:user) }
+    let(:exercise) { FactoryBot.create(:only_meta_data, authors: [user]) }
+    let(:exercise_params) do
+      FactoryBot.attributes_for(:only_meta_data).merge(
         descriptions_attributes: {'0' => FactoryBot.attributes_for(:simple_description)}
       )
-      post login_path, params: {email: @user.email, password: @user.password}
+    end
+
+    before do
+      post login_path, params: {email: user.email, password: user.password}
       follow_redirect!
     end
 
@@ -23,7 +26,7 @@ RSpec.describe 'exercises', type: :request do
 
     describe 'POST /exercises' do
       it 'has http 302' do
-        post exercises_path, params: {exercise: @exercise_params}
+        post exercises_path, params: {exercise: exercise_params}
         expect(response).to have_http_status(:found)
       end
     end
@@ -37,35 +40,35 @@ RSpec.describe 'exercises', type: :request do
 
     describe 'GET /exercises/:id/edit' do
       it 'has http 200' do
-        get edit_exercise_path(@exercise)
+        get edit_exercise_path(exercise)
         expect(response).to have_http_status(:ok)
       end
     end
 
     describe 'GET /exercise/:id' do
       it 'has http 200' do
-        get exercise_path(@exercise)
+        get exercise_path(exercise)
         expect(response).to have_http_status(:ok)
       end
     end
 
     describe 'PATCH /exercise/:id' do
       it 'has http 302' do
-        patch exercise_path(@exercise, exercise: @exercise_params)
+        patch exercise_path(exercise, exercise: exercise_params)
         expect(response).to have_http_status(:found)
       end
     end
 
     describe 'PUT /exercise/:id' do
       it 'has http 302' do
-        put exercise_path(@exercise, exercise: @exercise_params)
+        put exercise_path(exercise, exercise: exercise_params)
         expect(response).to have_http_status(:found)
       end
     end
 
     describe 'DELETE /exercise/:id' do
       it 'has http 302' do
-        delete exercise_path(@exercise)
+        delete exercise_path(exercise)
         expect(response).to have_http_status(:found)
       end
     end

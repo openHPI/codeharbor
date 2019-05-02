@@ -3,13 +3,14 @@
 require 'rails_helper'
 
 RSpec.describe 'groups', type: :request do
-  context 'logged in' do
+  context 'when logged in' do
+    let(:user) { FactoryBot.create(:user) }
+    let(:group) { FactoryBot.create(:group, users: [user]) }
+    let(:group_params) { FactoryBot.attributes_for(:group) }
+
     before do
-      @user = FactoryBot.create(:user)
-      @group = FactoryBot.create(:group, users: [@user])
-      @group.make_admin(@user)
-      @group_params = FactoryBot.attributes_for(:group)
-      post login_path, params: {email: @user.email, password: @user.password}
+      group.make_admin(user)
+      post login_path, params: {email: user.email, password: user.password}
       follow_redirect!
     end
 
@@ -22,7 +23,7 @@ RSpec.describe 'groups', type: :request do
 
     describe 'POST /groups' do
       it 'has http 302' do
-        post groups_path, params: {group: @group_params}
+        post groups_path, params: {group: group_params}
         expect(response).to have_http_status(:found)
       end
     end
@@ -36,35 +37,35 @@ RSpec.describe 'groups', type: :request do
 
     describe 'GET /groups/:id/edit' do
       it 'has http 200' do
-        get edit_group_path(@group)
+        get edit_group_path(group)
         expect(response).to have_http_status(:ok)
       end
     end
 
     describe 'GET /group/:id' do
       it 'has http 302' do
-        get group_path(@group)
+        get group_path(group)
         expect(response).to have_http_status(:ok)
       end
     end
 
     describe 'PATCH /group/:id' do
       it 'has http 302' do
-        patch group_path(@group, group: @group_params)
+        patch group_path(group, group: group_params)
         expect(response).to have_http_status(:found)
       end
     end
 
     describe 'PUT /group/:id' do
       it 'has http 302' do
-        put group_path(@group, group: @group_params)
+        put group_path(group, group: group_params)
         expect(response).to have_http_status(:found)
       end
     end
 
     describe 'DELETE /group/:id' do
       it 'has http 302' do
-        delete group_path(@group)
+        delete group_path(group)
         expect(response).to have_http_status(:found)
       end
     end
