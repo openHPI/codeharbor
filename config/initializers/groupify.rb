@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Groupify.configure do |config|
   # Configure the default group class name.
   # Defaults to 'Group'

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class ExecutionEnvironmentsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_execution_environment, only: [:show, :edit, :update, :destroy]
+  before_action :set_execution_environment, only: %i[show edit update destroy]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized to for this action.'
@@ -13,8 +15,7 @@ class ExecutionEnvironmentsController < ApplicationController
 
   # GET /execution_environments/1
   # GET /execution_environments/1.json
-  def show
-  end
+  def show; end
 
   # GET /execution_environments/new
   def new
@@ -22,8 +23,7 @@ class ExecutionEnvironmentsController < ApplicationController
   end
 
   # GET /execution_environments/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /execution_environments
   # POST /execution_environments.json
@@ -66,13 +66,14 @@ class ExecutionEnvironmentsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_execution_environment
-      @execution_environment = ExecutionEnvironment.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def execution_environment_params
-      params.require(:execution_environment).permit(:language, :version)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_execution_environment
+    @execution_environment = ExecutionEnvironment.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def execution_environment_params
+    params.require(:execution_environment).permit(:language, :version)
+  end
 end

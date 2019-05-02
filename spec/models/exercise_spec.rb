@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require 'nokogiri'
 
@@ -169,6 +171,31 @@ RSpec.describe Exercise, type: :model do
         let(:search) { 'filtertext' }
 
         it { is_expected.to include exercise }
+      end
+    end
+  end
+
+  describe '#destroy' do
+    let(:user) { create(:user) }
+    let!(:exercise) { create(:simple_exercise, user: user) }
+
+    it 'deletes exercise' do
+      expect { exercise.destroy }.to change(Exercise, :count).by(-1)
+    end
+
+    context 'when exercise is in a collection' do
+      let!(:collection) { create(:collection, users: [user], exercises: [exercise]) }
+
+      it 'gets removed from collection' do
+        expect { exercise.destroy }.to change(collection.exercises, :count).by(-1)
+      end
+    end
+
+    context 'when exercise is in a cart' do
+      let!(:cart) { create(:cart, user: user, exercises: [exercise]) }
+
+      it 'gets removed from cart' do
+        expect { exercise.destroy }.to change(cart.exercises, :count).by(-1)
       end
     end
   end

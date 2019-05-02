@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AccountLink < ApplicationRecord
   validates :push_url, presence: true
   validates :account_name, presence: true
@@ -9,7 +11,6 @@ class AccountLink < ApplicationRecord
   has_and_belongs_to_many :external_users, class_name: 'User'
 
   def readable
-    self.account_name + " / " + self.push_url;
+    account_name + ' / ' + push_url
   end
-
 end

@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'zip'
 require 'proforma/xml_generator'
 
 class CartsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_cart, only: [:show, :edit, :update, :destroy, :remove_exercise, :remove_all, :download_all]
+  before_action :set_cart, only: %i[show edit update destroy remove_exercise remove_all download_all]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.carts.authorization')
@@ -19,8 +21,7 @@ class CartsController < ApplicationController
 
   # GET /carts/1
   # GET /carts/1.json
-  def show
-  end
+  def show; end
 
   # GET /carts/new
   def new
@@ -28,8 +29,7 @@ class CartsController < ApplicationController
   end
 
   # GET /carts/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /carts
   # POST /carts.json
@@ -53,7 +53,7 @@ class CartsController < ApplicationController
   def update
     respond_to do |format|
       if @cart.update(user: @user)
-        format.html { redirect_to carts_path, notice: t('controllers.carts.updated')}
+        format.html { redirect_to carts_path, notice: t('controllers.carts.updated') }
         format.json { render :index, status: :ok, location: @cart }
       else
         format.html { render :edit }
@@ -67,7 +67,7 @@ class CartsController < ApplicationController
   def destroy
     @cart.destroy
     respond_to do |format|
-      format.html { redirect_to carts_url, notice: t('controllers.carts.destroyed')}
+      format.html { redirect_to carts_url, notice: t('controllers.carts.destroyed') }
       format.json { head :no_content }
     end
   end
@@ -90,12 +90,10 @@ class CartsController < ApplicationController
 
   def push_cart
     account_link = AccountLink.find(params[:account_link])
-    all_errors = Array.new
+    all_errors = []
     @cart.exercises.each do |exercise|
       error = push_exercise(exercise, account_link)
-      if error.present?
-        all_errors << error
-      end
+      all_errors << error if error.present?
     end
     if all_errors.empty?
       redirect_to @cart, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
@@ -110,16 +108,15 @@ class CartsController < ApplicationController
   def download_all
     filename = t('controllers.carts.zip')
 
-    #This is the tricky part
-    #Initialize the temp file as a zip file
-
+    # This is the tricky part
+    # Initialize the temp file as a zip file
 
     stringio = Zip::OutputStream.write_buffer do |zio|
       @cart.exercises.each do |exercise|
         zip_file = create_exercise_zip(exercise)
         if zip_file[:errors].any?
           zip_file[:errors].each do |error|
-            puts error.message
+            logger.debug(error)
           end
         else
           zio.put_next_entry(zip_file[:filename])
@@ -129,8 +126,7 @@ class CartsController < ApplicationController
     end
     binary_data = stringio.string
 
-    send_data(binary_data, :type => 'application/zip', :filename => filename, :disposition => 'attachment')
-
+    send_data(binary_data, type: 'application/zip', filename: filename, disposition: 'attachment')
   end
 
   def my_cart
@@ -139,10 +135,11 @@ class CartsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_cart
-      @cart = Cart.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+  # Use callbacks to share common setup or constraints between actions.
+  def set_cart
+    @cart = Cart.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
 end

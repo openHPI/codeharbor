@@ -1,11 +1,11 @@
-class SessionsController < ApplicationController
-  def new
+# frozen_string_literal: true
 
-  end
+class SessionsController < ApplicationController
+  def new; end
 
   def create
     user = User.find_by(email: params[:email])
-    if user and user.authenticate(params[:password])
+    if user&.authenticate(params[:password])
       if user.email_confirmed
         session[:user_id] = user.id
         if params[:redirect]

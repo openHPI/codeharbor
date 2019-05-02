@@ -1,5 +1,6 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
-RSpec.describe ExerciseRelationsController, type: :controller do
+# require 'rails_helper'
 
-end
+# RSpec.describe ExerciseRelationsController, type: :controller do
+# end

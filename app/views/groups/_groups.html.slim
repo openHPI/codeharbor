@@ -16,7 +16,7 @@
         span= group.name
         span.pull-right
           - unless @option == 'all'
-            = group.is_admin(current_user) ? 'Admin' : 'Member'
+            = group.admin?(current_user) ? 'Admin' : 'Member'
     .panel-body
       .col-md-9 style=("overflow-wrap: break-word;")
         - if group.description

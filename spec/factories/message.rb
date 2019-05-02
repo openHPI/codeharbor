@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :exercise_relation do
-    name { '' }
+  factory :message do
+    text { 'Messagetext' }
   end
 end

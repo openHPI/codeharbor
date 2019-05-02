@@ -1,7 +1,8 @@
-class MessagesController < ApplicationController
+# frozen_string_literal: true
 
+class MessagesController < ApplicationController
   before_action :set_user
-  before_action :set_message, only: [:show, :edit, :update, :destroy, :add_author, :delete]
+  before_action :set_message, only: %i[show edit update destroy delete]
   before_action :set_option, only: [:index]
 
   rescue_from CanCan::AccessDenied do |_exception|
@@ -12,20 +13,25 @@ class MessagesController < ApplicationController
   # GET /messages.json
   def index
     if @option == 'inbox'
-      @messages = Message.where(recipient: current_user).where('recipient_status != ?', 'd').order(created_at: :desc).paginate(per_page: 5, page: params[:page])
+      @messages = Message.where(recipient: current_user)
+                         .where('recipient_status != ?', 'd')
+                         .order(created_at: :desc)
+                         .paginate(per_page: 5, page: params[:page])
       @messages.each do |message|
         message.recipient_status = 'r'
         message.save
       end
     else
-      @messages = Message.where(sender: current_user).where('sender_status != ?', 'd').order(created_at: :desc).paginate(per_page: 5, page: params[:page])
+      @messages = Message.where(sender: current_user)
+                         .where('sender_status != ?', 'd')
+                         .order(created_at: :desc)
+                         .paginate(per_page: 5, page: params[:page])
     end
   end
 
   # GET /messages/1
   # GET /messages/1.json
-  def show
-  end
+  def show; end
 
   # GET /messages/new
   def new
@@ -33,8 +39,7 @@ class MessagesController < ApplicationController
   end
 
   # GET /messages/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /messages
   # POST /messages.json
@@ -42,11 +47,11 @@ class MessagesController < ApplicationController
     @message = Message.new(message_params)
     @message.recipient_status = 'u'
     @message.sender = current_user
-    if params[:message][:recipient]
-      @message.recipient = User.find_by(email: params[:message][:recipient])
-    else
-      @message.recipient = User.find(params[:message][:recipient_hidden])
-    end
+    @message.recipient = if params[:message][:recipient]
+                           User.find_by(email: params[:message][:recipient])
+                         else
+                           User.find(params[:message][:recipient_hidden])
+                         end
 
     respond_to do |format|
       if @message.save
@@ -87,7 +92,7 @@ class MessagesController < ApplicationController
     option = params[:option]
 
     if @message.save
-       redirect_to user_messages_path(@user, option: option), notice: t('controllers.message.deleted_notice')
+      redirect_to user_messages_path(@user, option: option), notice: t('controllers.message.deleted_notice')
     else
       redirect_to user_messages_path(@user, option: option), alert: t('controllers.message.deleted_alert')
     end
@@ -108,26 +113,22 @@ class MessagesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_option
-      if params[:option]
-        @option = params[:option]
-      else
-        @option = 'inbox'
-      end
-    end
 
-    def set_message
-      @message = Message.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_option
+    @option = params[:option] || 'inbox'
+  end
 
-    def set_user
-      @user = User.find(params[:user_id])
-    end
+  def set_message
+    @message = Message.find(params[:id])
+  end
 
+  def set_user
+    @user = User.find(params[:user_id])
+  end
 
   # Never trust parameters from the scary internet, only allow the white list through.
-    def message_params
-      params.require(:message).permit(:text, :sender_id, :recipient_id, :sender_status, :recipient_status)
-    end
+  def message_params
+    params.require(:message).permit(:text, :sender_id, :recipient_id, :sender_status, :recipient_status)
+  end
 end

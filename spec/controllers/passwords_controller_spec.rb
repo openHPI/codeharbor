@@ -1,5 +1,6 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-RSpec.describe PasswordsController, type: :controller do
-
-end
+# RSpec.describe PasswordsController, type: :controller do
+# end

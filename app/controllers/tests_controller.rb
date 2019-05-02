@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class TestsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_test, only: [:show, :edit, :update, :destroy]
+  before_action :set_test, only: %i[show edit update destroy]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized for this action.'
@@ -13,8 +15,7 @@ class TestsController < ApplicationController
 
   # GET /tests/1
   # GET /tests/1.json
-  def show
-  end
+  def show; end
 
   # GET /tests/new
   def new
@@ -22,8 +23,7 @@ class TestsController < ApplicationController
   end
 
   # GET /tests/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /tests
   # POST /tests.json
@@ -66,13 +66,14 @@ class TestsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_test
-      @test = Test.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def test_params
-      params.require(:test).permit(:exercise_file_id, :feedback_message, :testing_framework_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_test
+    @test = Test.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def test_params
+    params.require(:test).permit(:exercise_file_id, :feedback_message, :testing_framework_id)
+  end
 end

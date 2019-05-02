@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'nokogiri'
 require 'zip'
 
@@ -19,8 +21,8 @@ class Exercise < ApplicationRecord
   belongs_to :execution_environment
   belongs_to :license
   has_many :descriptions, dependent: :destroy
-  has_many :origin_relations, :class_name => 'ExerciseRelation', :foreign_key => 'origin_id'
-  has_many :clone_relations, :class_name => 'ExerciseRelation', :foreign_key => 'clone_id', dependent: :destroy
+  has_many :origin_relations, class_name: 'ExerciseRelation', foreign_key: 'origin_id', dependent: :destroy, inverse_of: :origin
+  has_many :clone_relations, class_name: 'ExerciseRelation', foreign_key: 'clone_id', dependent: :destroy, inverse_of: :clone
   validates :descriptions, presence: true
 
   attr_reader :tag_tokens
@@ -30,18 +32,48 @@ class Exercise < ApplicationRecord
 
   default_scope { where(deleted: [nil, false]) }
 
-  scope :timespan, -> (days) {(days != 0) ? where('DATE(created_at) >= ?', Date.today-days) : where(nil)}
-  scope :text_like, -> (text) {(!text.blank?) ? joins(:descriptions).where('title ILIKE ? OR descriptions.text ILIKE ?', "%#{text.downcase}%", "%#{text.downcase}%") : where(nil)}
-  scope :mine, -> (user) {(!user.nil?) ? where('user_id = ? OR (exercises.id in (select exercise_id from exercise_authors where user_id = ?))', user.id, user.id) : where(nil)}
-  scope :visibility, -> (priv) {(!priv.nil?) ? where(private: priv) : where(nil)}
-  scope :languages, -> (languages) {(!languages.blank?) ? where('(select count(language) from descriptions where exercises.id = descriptions.exercise_id AND descriptions.language in (?)) = ? ', languages, languages.length) : where(nil)}
-  scope :proglanguage, -> (prog) {(!prog.blank?) ? where('execution_environment_id IN (?)', prog) : where(nil)}
-  scope :not_deleted, -> {where('(select count(*) from reports where exercises.id = reports.exercise_id) < 3')}
-  scope :search_query, -> (stars, languages, proglanguages, priv, user, search, intervall) {joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS average_rating FROM ratings GROUP BY exercise_id) AS ratings ON ratings.exercise_id = exercises.id').mine(user).visibility(priv).rating(stars).languages(languages).proglanguage(proglanguages).text_like(search).timespan(intervall).not_deleted.select('exercises.*, coalesce(average_rating, 0) AS average_rating').distinct}
-
+  scope :timespan, ->(days) { days != 0 ? where('DATE(created_at) >= ?', Time.zone.today - days) : where(nil) }
+  scope :text_like, lambda { |text|
+    if text.present?
+      joins(:descriptions).where('title ILIKE ? OR descriptions.text ILIKE ?', "%#{text.downcase}%", "%#{text.downcase}%")
+    else
+      where(nil)
+    end
+  }
+  scope :mine, lambda { |user|
+    if !user.nil?
+      where('user_id = ? OR (exercises.id in (select exercise_id from exercise_authors where user_id = ?))', user.id, user.id)
+    else
+      where(nil)
+    end
+  }
+  scope :visibility, ->(priv) { !priv.nil? ? where(private: priv) : where(nil) }
+  scope :languages, lambda { |languages|
+    if languages.present?
+      where('(select count(language) from descriptions where exercises.id = descriptions.exercise_id AND '\
+        'descriptions.language in (?)) = ? ', languages, languages.length)
+    else
+      where(nil)
+    end
+  }
+  scope :proglanguage, ->(prog) { prog.present? ? where('execution_environment_id IN (?)', prog) : where(nil) }
+  scope :not_deleted, -> { where('(select count(*) from reports where exercises.id = reports.exercise_id) < 3') }
+  scope :search_query, lambda { |stars, languages, proglanguages, priv, user, search, intervall|
+    joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS average_rating FROM ratings GROUP BY exercise_id) AS ratings ON '\
+    'ratings.exercise_id = exercises.id')
+      .mine(user)
+      .visibility(priv)
+      .rating(stars)
+      .languages(languages)
+      .proglanguage(proglanguages)
+      .text_like(search)
+      .timespan(intervall)
+      .not_deleted
+      .select('exercises.*, coalesce(average_rating, 0) AS average_rating').distinct
+  }
 
   def self.rating(stars)
-    if !stars.blank?
+    if stars.present?
       if stars != '0'
         where('average_rating >= ?', stars)
       else
@@ -86,7 +118,9 @@ class Exercise < ApplicationRecord
     label = Label.find_by('lower(name) = ?', search.downcase)
 
     if label
-      collection = Label.find_by('lower(name) = ?', search.downcase).exercises.search_query(stars, languages, proglanguages, priv, user, nil, intervall)
+      collection = Label.find_by('lower(name) = ?', search.downcase)
+                        .exercises
+                        .search_query(stars, languages, proglanguages, priv, user, nil, intervall)
 
       results.each do |r|
         collection << r unless collection.find_by(id: r.id)
@@ -98,17 +132,17 @@ class Exercise < ApplicationRecord
 
   def can_access(user)
     if private
-      if not user.is_author?(self)
-        if not user.has_access_through_any_group?(self)
-          return false
+      if !user.author?(self)
+        if !user.access_through_any_group?(self)
+          false
         else
-          return true
+          true
         end
       else
-        return true
+        true
       end
     else
-      return true
+      true
     end
   end
 
@@ -122,25 +156,23 @@ class Exercise < ApplicationRecord
   end
 
   def round_avg_rating
-    (avg_rating*2).round / 2.0
+    (avg_rating * 2).round / 2.0
   end
 
   def rating_star(avg)
-    avg*2.round / 2
+    avg * 2.round / 2
   end
 
   def in_carts
-    self.carts.count.to_s
+    carts.count.to_s
   end
 
   def in_collections
-    self.collections.count.to_s
+    collections.count.to_s
   end
 
   def add_attributes(params)
-    if params[:exercise_relation]
-      add_relation(params[:exercise_relation])
-    end
+    add_relation(params[:exercise_relation]) if params[:exercise_relation]
     add_license(params)
     add_labels(params[:labels])
     add_groups(params[:groups])
@@ -159,35 +191,27 @@ class Exercise < ApplicationRecord
   end
 
   def add_license(params)
-    if params[:exercise_relation]
-      self.license_id = Exercise.find(params[:exercise_relation][:origin_id]).license_id
-    end
-    if self.downloads == 0 && params[:exercise_relation].nil?
-      self.license_id = params[:license_id]
-    end
+    self.license_id = Exercise.find(params[:exercise_relation][:origin_id]).license_id if params[:exercise_relation]
+    self.license_id = params[:license_id] if downloads.zero? && params[:exercise_relation].nil?
   end
 
   def add_labels(labels_array)
-
     if labels_array
       labels_array.delete_at(0)
       labels.clear
     end
 
     labels_array.try(:each) do |array|
-
       label = Label.find_by(name: array)
       if label
         labels << label
       else
         labels.new(name: array, color: '006600', label_category: nil)
       end
-
     end
   end
 
   def add_groups(groups_array)
-
     if groups_array
       groups_array.delete_at(0)
       groups.clear
@@ -196,12 +220,11 @@ class Exercise < ApplicationRecord
     groups_array.try(:each) do |array|
       group = Group.find(array)
       groups << group
-
     end
   end
 
   def add_descriptions(description_array)
-    description_array.try(:each) do |key, array|
+    description_array.try(:each) do |_key, array|
       destroy = array[:_destroy]
       id = array[:id]
 
@@ -215,7 +238,7 @@ class Exercise < ApplicationRecord
   end
 
   def add_files(file_array)
-    file_array.try(:each) do |key, array|
+    file_array.try(:each) do |_key, array|
       destroy = array[:_destroy]
       id = array[:id]
       if id
@@ -232,7 +255,7 @@ class Exercise < ApplicationRecord
   end
 
   def add_tests(test_array)
-    test_array.try(:each) do |key, array|
+    test_array.try(:each) do |_key, array|
       destroy = array[:_destroy]
       id = array[:id]
 
@@ -250,7 +273,7 @@ class Exercise < ApplicationRecord
           file = exercise_files.new(file_permit(array[:exercise_file_attributes]))
           file.purpose = 'test'
           test = Test.new(test_permit(array))
-          test.exercise_file =  file
+          test.exercise_file = file
           tests << test
         end
       end
@@ -265,7 +288,6 @@ class Exercise < ApplicationRecord
       file_attributes[:attachment] = nil
     end
     file_attributes
-
   end
 
   def delete_dependencies
@@ -276,13 +298,13 @@ class Exercise < ApplicationRecord
   end
 
   def soft_delete
-    self.delete_dependencies
+    delete_dependencies
     update(deleted: true)
   end
 
   def file_permit(params)
     params = update_file_params(params)
-    allowed_params = [:role, :content, :path, :name, :hidden, :read_only, :file_type_id]
+    allowed_params = %i[role content path name hidden read_only file_type_id]
     allowed_params << :attachment if params[:attachment_present] == 'false'
     params.permit(allowed_params)
   end

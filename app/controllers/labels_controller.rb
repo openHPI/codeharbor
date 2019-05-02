@@ -1,6 +1,7 @@
-class LabelsController < ApplicationController
+# frozen_string_literal: true
 
-  before_action :set_label, only: [:show, :edit, :update, :destroy]
+class LabelsController < ApplicationController
+  before_action :set_label, only: %i[show edit update destroy]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized for this action.'
@@ -10,10 +11,10 @@ class LabelsController < ApplicationController
   def index
     @labels = Label.all.paginate(per_page: 10, page: params[:page])
   end
+
   # GET /labels/1
   # GET /labels/1.json
-  def show
-  end
+  def show; end
 
   # GET /labels/new
   def new
@@ -29,8 +30,7 @@ class LabelsController < ApplicationController
   end
 
   # GET /labels/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /labels
   # POST /labels.json
@@ -73,13 +73,14 @@ class LabelsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_label
-      @label = Label.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def label_params
-      params.require(:label).permit(:name, :label_category_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_label
+    @label = Label.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def label_params
+    params.require(:label).permit(:name, :label_category_id)
+  end
 end

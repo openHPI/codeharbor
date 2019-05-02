@@ -1,10 +1,10 @@
+# frozen_string_literal: true
+
 class PasswordsController < ApplicationController
   def forgot
     email = params[:email].to_s
 
-    if params[:email].blank?
-      redirect_to forgot_password_home_index_path, alert: t('controllers.password.email_not_present') and return
-    end
+    redirect_to(forgot_password_home_index_path, alert: t('controllers.password.email_not_present')) && return if params[:email].blank?
 
     user = User.find_by(email: email.downcase)
     respond_to do |format|
@@ -13,7 +13,7 @@ class PasswordsController < ApplicationController
         UserMailer.reset_password(user).deliver_now
         format.html { redirect_to login_path, notice: t('controllers.password.email_sent') }
       else
-        format.html { redirect_to forgot_password_home_index_path, alert: t('controllers.password.email_not_found')}
+        format.html { redirect_to forgot_password_home_index_path, alert: t('controllers.password.email_not_found') }
       end
     end
   end
@@ -21,9 +21,7 @@ class PasswordsController < ApplicationController
   def reset
     token = params[:token].to_s
 
-    if token.blank?
-      redirect_to login_path, alert: t('controllers.password.token_not_present')
-    end
+    redirect_to login_path, alert: t('controllers.password.token_not_present') if token.blank?
 
     user = User.find_by(reset_password_token: token)
 

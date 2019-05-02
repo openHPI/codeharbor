@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class GroupsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_group, only: [:show, :edit, :update, :destroy, :request_access, :grant_access, :delete_from_group, :make_admin]
+  before_action :set_group, only: %i[show edit update destroy request_access grant_access delete_from_group make_admin]
   before_action :set_option, only: [:index]
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.group.authorization')
@@ -8,11 +10,11 @@ class GroupsController < ApplicationController
   # GET /groups
   # GET /groups.json
   def index
-    if @option == 'mine'
-      @groups = current_user.groups.paginate(per_page: 5, page: params[:page])
-    else
-      @groups = Group.all.paginate(per_page: 5, page: params[:page])
-    end
+    @groups = if @option == 'mine'
+                current_user.groups.paginate(per_page: 5, page: params[:page])
+              else
+                Group.all.paginate(per_page: 5, page: params[:page])
+              end
   end
 
   def groups_all
@@ -26,10 +28,10 @@ class GroupsController < ApplicationController
       format.json { render json: @groups.where('name ilike ?', "%#{params[:term]}%") }
     end
   end
+
   # GET /groups/1
   # GET /groups/1.json
-  def show
-  end
+  def show; end
 
   # GET /groups/new
   def new
@@ -37,8 +39,7 @@ class GroupsController < ApplicationController
   end
 
   # GET /groups/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /groups
   # POST /groups.json
@@ -90,10 +91,16 @@ class GroupsController < ApplicationController
       redirect_to groups_path, notice: t('controllers.group.leave.notice')
     end
   end
+
   def request_access
     flash[:notice] = t('controllers.group.request_access.notice')
     @group.admins.each do |admin|
-      Message.create(sender: current_user, recipient: admin, text: t('controllers.group.request_access.text', user: current_user.name, group: @group.name), param_type: 'group', param_id: @group.id, sender_status: 'd')
+      Message.create(sender: current_user,
+                     recipient: admin,
+                     text: t('controllers.group.request_access.text', user: current_user.name, group: @group.name),
+                     param_type: 'group',
+                     param_id: @group.id,
+                     sender_status: 'd')
       AccessRequest.send_access_request(current_user, admin, @group).deliver_now
     end
     @group.add_pending_user(current_user)
@@ -105,11 +112,17 @@ class GroupsController < ApplicationController
     @group.exercises.delete(exercise)
     redirect_to @group, notice: t('controllers.group.remove_exercise_notice')
   end
+
   def grant_access
     user = User.find(params[:user])
     @group.grant_access(user)
-    Message.create(sender: current_user, recipient: user, text: t('controllers.group.grant_access.text', user: current_user.name, group: @group.name), param_type: 'group_accepted', param_id: @group.id, sender_status: 'd')
-    Message.where(sender: user, recipient:current_user, param_type: 'group', param_id: @group.id).delete_all
+    Message.create(sender: current_user,
+                   recipient: user,
+                   text: t('controllers.group.grant_access.text', user: current_user.name, group: @group.name),
+                   param_type: 'group_accepted',
+                   param_id: @group.id,
+                   sender_status: 'd')
+    Message.where(sender: user, recipient: current_user, param_type: 'group', param_id: @group.id).delete_all
     redirect_to @group, notice: t('controllers.group.grant_access.notice')
   end
 
@@ -122,8 +135,12 @@ class GroupsController < ApplicationController
   def deny_access
     user = User.find(params[:user])
     @group.users.delete(user)
-    Message.create(sender: current_user, recipient: user, text: t('controllers.group.deny_access.text', user: current_user.name, group: @group.name), param_type: 'group_declined', sender_status: 'd')
-    Message.where(sender: user, recipient:current_user, param_type: 'group', param_id: @group.id).delete_all
+    Message.create(sender: current_user,
+                   recipient: user,
+                   text: t('controllers.group.deny_access.text', user: current_user.name, group: @group.name),
+                   param_type: 'group_declined',
+                   sender_status: 'd')
+    Message.where(sender: user, recipient: current_user, param_type: 'group', param_id: @group.id).delete_all
     redirect_to @group, notice: t('controllers.group.deny_access.notice')
   end
 
@@ -148,21 +165,18 @@ class GroupsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_option
-      if params[:option]
-        @option = params[:option]
-      else
-        @option = 'mine'
-      end
-    end
 
-    def set_group
-      @group = Group.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_option
+    @option = params[:option] || 'mine'
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def group_params
-      params.require(:group).permit(:name, :description)
-    end
+  def set_group
+    @group = Group.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def group_params
+    params.require(:group).permit(:name, :description)
+  end
 end

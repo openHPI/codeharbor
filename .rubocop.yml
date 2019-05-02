@@ -1,0 +1,31 @@
+inherit_from: .rubocop_todo.yml
+require: rubocop-rspec
+
+Rails:
+  Enabled: true
+
+AllCops:
+  TargetRubyVersion: 2.6
+  Exclude:
+    - bin/*
+    - db/migrate/**/*
+    - db/schema.rb
+    - test/**/*
+    - tmp/**/*
+    - views/**/*
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*
+
+Metrics/LineLength:
+  Max: 140
+
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+
+RSpec/NestedGroups:
+  Max: 5
+
+Style/Documentation:
+  Enabled: false
