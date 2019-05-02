@@ -26,4 +26,5 @@ before_script:
   - bundle exec rake db:create db:migrate RAILS_ENV=test
 
 script:
-  - xvfb-run bundle exec rspec spec/
+  - bundle exec rspec spec/
+  - bundle exec rubocop

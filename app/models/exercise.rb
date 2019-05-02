@@ -2,7 +2,7 @@
 
 require 'nokogiri'
 require 'zip'
-
+# rubocop:disable Metrics/ClassLength
 class Exercise < ApplicationRecord
   groupify :group_member
   validates :title, presence: true
@@ -96,6 +96,7 @@ class Exercise < ApplicationRecord
   # rubocop:disable Metrics/PerceivedComplexity
   # rubocop:disable Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength
   def self.search(search, settings, option, user_param)
     if option == 'private'
       priv = true
@@ -141,6 +142,7 @@ class Exercise < ApplicationRecord
     end
     results
   end
+  # rubocop:enable Metrics/MethodLength
   # rubocop:enable Metrics/AbcSize
   # rubocop:enable Metrics/PerceivedComplexity
   # rubocop:enable Metrics/CyclomaticComplexity
@@ -340,3 +342,4 @@ class Exercise < ApplicationRecord
     )
   end
 end
+# rubocop:enable Metrics/ClassLength
