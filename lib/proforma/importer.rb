@@ -53,7 +53,7 @@ module Proforma
                       TestingFramework.find_by(name: 'JUnit 4') # Default Testing Framework for Test seeds, please change in Production!
                     end
         exercise_test = ::Test.new(testing_framework: framework,
-                                 feedback_message: test.xpath('p:test-configuration/c:feedback-message').text)
+                                   feedback_message: test.xpath('p:test-configuration/c:feedback-message').text)
       else
         exercise_test = Test.new
       end
