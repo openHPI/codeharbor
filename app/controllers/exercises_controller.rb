@@ -73,6 +73,7 @@ class ExercisesController < ApplicationController
   # rubocop:disable Metrics/AbcSize
   def create
     @exercise = Exercise.new(exercise_params)
+    # @exercise.uuid = SecureRandom.uuid
     @exercise.add_attributes(params[:exercise])
     @exercise.user = current_user
 
