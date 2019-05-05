@@ -33,15 +33,28 @@ module ProformaService
 
     def files
       @exercise.exercise_files.map do |file|
-        Proforma::TaskFile.new(
-          id: file.id,
-          content: file.content,
-          filename: file.full_file_name,
-          used_by_grader: true,
-          usage_by_lms: file.read_only ? 'display' : 'edit',
-          visible: file.hidden ? 'no' : 'yes',
-          binary: false
-        )
+        if file.attachment.exists?
+          bin_content = Paperclip.io_adapters.for(file.attachment).read
+          Proforma::TaskFile.new(
+            id: file.id,
+            content: bin_content,
+            filename: file.full_file_name,
+            used_by_grader: false,
+            usage_by_lms: file.read_only ? 'display' : 'edit',
+            visible: file.hidden ? 'no' : 'yes',
+            binary: true
+          )
+        else
+          Proforma::TaskFile.new(
+            id: file.id,
+            content: file.content,
+            filename: file.full_file_name,
+            used_by_grader: true,
+            usage_by_lms: file.read_only ? 'display' : 'edit',
+            visible: file.hidden ? 'no' : 'yes',
+            binary: false
+          )
+        end
       end
     end
   end
