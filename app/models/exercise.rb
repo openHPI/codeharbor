@@ -274,6 +274,7 @@ class Exercise < ApplicationRecord
   def add_tests(test_array)
     test_array.try(:each) do |_key, array|
       id = array[:id]
+      destroy = array[:_destroy]
 
       if id
         test = Test.find(id)
