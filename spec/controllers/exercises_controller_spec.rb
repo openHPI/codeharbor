@@ -164,6 +164,20 @@ RSpec.describe ExercisesController, type: :controller do
         put :update, params: {id: exercise.to_param, exercise: valid_attributes}, session: valid_session
         expect(response).to redirect_to(exercise)
       end
+
+      context 'when exercise has a test' do
+        let(:test) { create(:codeharbor_test) }
+        let!(:exercise) { create(:simple_exercise, valid_attributes.merge(tests: [test])) }
+
+        let(:new_attributes) { {title: 'new_title', tests_attributes: tests_attributes} }
+        let(:tests_attributes) { {'0' => test.attributes.merge('exercise_file_attributes' => test.exercise_file.attributes)} }
+
+        let(:put_update) { put :update, params: {id: exercise.to_param, exercise: new_attributes}, session: valid_session }
+
+        it 'updates the requested exercise' do
+          expect { put_update }.not_to change(Exercise, :count)
+        end
+      end
     end
 
     context 'with invalid params' do
