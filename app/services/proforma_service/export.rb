@@ -45,7 +45,8 @@ module ProformaService
               used_by_grader: false,
               usage_by_lms: 'display',
               visible: 'delayed',
-              binary: false
+              binary: false,
+              internal_description: file.role
             )
           ]
         )
@@ -79,7 +80,8 @@ module ProformaService
         filename: file.full_file_name,
         used_by_grader: true,
         visible: file.hidden ? 'no' : 'yes',
-        binary: false
+        binary: false,
+        internal_description: file.role || 'Teacher-defined Test'
       )]
     end
 
@@ -94,7 +96,8 @@ module ProformaService
             used_by_grader: false,
             usage_by_lms: file.read_only ? 'display' : 'edit',
             visible: file.hidden ? 'no' : 'yes',
-            binary: true
+            binary: true,
+            internal_description: file.role || 'Regular File'
           )
         else
           Proforma::TaskFile.new(
@@ -104,7 +107,8 @@ module ProformaService
             used_by_grader: true,
             usage_by_lms: file.read_only ? 'display' : 'edit',
             visible: file.hidden ? 'no' : 'yes',
-            binary: false
+            binary: false,
+            internal_description: file.role || 'Regular File'
           )
         end
       end

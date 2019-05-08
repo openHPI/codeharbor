@@ -19,14 +19,23 @@ class ExerciseFile < ApplicationRecord
     filename
   end
 
+  def full_file_name=(full_file_name)
+    extension = File.extname(full_file_name)
+    file_type = FileType.find_by(file_extension: extension)
+    raise "Filetype \"#{extension}\" doesn't exist!" if file_type.nil?
+
+    path = File.dirname(full_file_name)
+    self.path = path unless path == '.'
+    self.name = File.basename(full_file_name, '.*')
+    self.file_type = file_type
+  end
+
   ROLES = [
     'Main File',
     'Reference Implementation',
     'Regular File',
     'User-defined Test'
   ].freeze
-
-  ROLES.freeze
 
   def parse_text_data
     # puts attachment.content_type
