@@ -25,7 +25,7 @@ class ExerciseFile < ApplicationRecord
     raise "Filetype \"#{extension}\" doesn't exist!" if file_type.nil?
 
     path = File.dirname(full_file_name)
-    self.path = path unless path == '.'
+    self.path = path == '.' ? '' : path
     self.name = File.basename(full_file_name, '.*')
     self.file_type = file_type
   end

@@ -86,7 +86,8 @@ module ProformaService
     end
 
     def files
-      @exercise.exercise_files.filter { |file| file.role != 'Reference Implementation' }.map do |file|
+      @exercise.exercise_files
+               .filter { |file| file.role != 'Reference Implementation' && !file.in?(@exercise.tests.map(&:exercise_file)) }.map do |file|
         if file.attachment.exists?
           bin_content = Paperclip.io_adapters.for(file.attachment).read
           Proforma::TaskFile.new(
@@ -97,7 +98,8 @@ module ProformaService
             usage_by_lms: file.read_only ? 'display' : 'edit',
             visible: file.hidden ? 'no' : 'yes',
             binary: true,
-            internal_description: file.role || 'Regular File'
+            internal_description: file.role || 'Regular File',
+            mimetype: file.attachment_content_type
           )
         else
           Proforma::TaskFile.new(

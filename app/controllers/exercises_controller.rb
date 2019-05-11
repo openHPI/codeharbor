@@ -191,65 +191,16 @@ class ExercisesController < ApplicationController
 
     render text: e.message, status: e.status
   end
-
-  # rubocop:disable Metrics/MethodLength
-  # rubocop:disable Metrics/BlockLength
-  def import_exercise
-    files = {}
-    begin
-      uploaded_io = params[:file_upload]
-      raise t('controllers.exercise.choose_file') unless uploaded_io
-
-      Zip::File.open(uploaded_io.path) do |zip_file|
-        zip_file.each do |entry|
-          name = entry.name.split('.').first
-          extension = '.' + entry.name.split('.').second
-          tempfile = Paperclip::Tempfile.new([name, extension])
-          tempfile.write entry.get_input_stream.read
-          tempfile.rewind
-          files[entry.name.to_s] = tempfile
-        end
-
-        xml = zip_file.glob('task.xml').first
-        raise t('controllers.exercise.taskxml_required') unless xml
-
-        xml = xml.get_input_stream.read
-        xsd = Nokogiri::XML::Schema(File.read('app/assets/taskxml.xsd'))
-        doc = Nokogiri::XML(xml)
-
-        errors = xsd.validate(doc)
-
-        if errors.any?
-          errors.each do |error|
-            logger.debug(error.message)
-          end
-          raise t('controllers.exercise.xml_not_valid')
-        else
-          exercise = Exercise.new
-          importer = Proforma::ZipImporter.new
-          exercise = importer.from_proforma_zip(exercise, doc, files)
-          exercise.user = current_user
-          saved = exercise.save
-
-          raise t('controllers.exercise.import_fail') unless saved
-
-          flash[:notice] = t('controllers.exercise.import_success')
-          redirect_to edit_exercise_path(exercise.id)
-        end
-      end
-    rescue StandardError => e
-      flash[:alert] = e.message
-      redirect_to exercises_path
-    ensure
-      files.each do |_key, file|
-        file.close
-        file.unlink
-      end
-    end
-  end
-  # rubocop:enable Metrics/BlockLength
-  # rubocop:enable Metrics/MethodLength
   # rubocop:enable Metrics/AbcSize
+
+  def import_exercise
+    uploaded_io = params[:file_upload]
+    raise t('controllers.exercise.choose_file') unless uploaded_io
+
+    @exercise = ProformaService::Import.call(zip: uploaded_io)
+    @license_default = 1
+    @license_hidden = false
+  end
 
   def contribute
     author = @exercise.user

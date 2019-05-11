@@ -255,18 +255,22 @@ class Exercise < ApplicationRecord
   end
 
   def add_files(file_array)
-    file_array.try(:each) do |_key, array|
-      destroy = array[:_destroy]
-      id = array[:id]
+    file_array.try(:each) do |_key, params|
+      destroy = params[:_destroy]
+      id = params[:id]
       if id
         file = ExerciseFile.find(id)
         if destroy
           file.destroy
         else
-          file.update(file_permit(array))
+          file.update(file_permit(params))
         end
       else
-        exercise_files.new(file_permit(array)) unless destroy
+        file = exercise_files.new(file_permit(params)) unless destroy
+        if params['attachment-base64']
+          file.attachment = params['attachment-base64']
+          file.attachment_file_name = file.name + file.file_type.file_extension
+        end
       end
     end
   end
