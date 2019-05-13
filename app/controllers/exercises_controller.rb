@@ -156,18 +156,9 @@ class ExercisesController < ApplicationController
   end
 
   def download_exercise
-    zip_file = create_exercise_zip(@exercise)
-    errors = zip_file[:errors]
-    if errors.any?
-      errors.each do |error|
-        logger.error(error)
-      end
-      redirect_to @exercise, alert: t('controllers.exercise.download_error')
-    else
-      downloads_new = @exercise.downloads + 1
-      @exercise.update(downloads: downloads_new)
-      send_data(zip_file[:data], type: 'application/zip', filename: zip_file[:filename], disposition: 'attachment')
-    end
+    zip_file = ProformaService::Export.call(exercise: @exercise)
+    @exercise.update(downloads: @exercise.downloads + 1)
+    send_data(zip_file.string, type: 'application/zip', filename: "task_#{@exercise.id}.zip", disposition: 'attachment')
   end
 
   # rubocop:disable Metrics/AbcSize
