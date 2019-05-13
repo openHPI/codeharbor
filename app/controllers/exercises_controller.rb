@@ -156,7 +156,7 @@ class ExercisesController < ApplicationController
   end
 
   def download_exercise
-    zip_file = ProformaService::Export.call(exercise: @exercise)
+    zip_file = ProformaService::ExportTask.call(exercise: @exercise)
     @exercise.update(downloads: @exercise.downloads + 1)
     send_data(zip_file.string, type: 'application/zip', filename: "task_#{@exercise.id}.zip", disposition: 'attachment')
   end

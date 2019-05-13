@@ -90,31 +90,26 @@ class CollectionsController < ApplicationController
   end
 
   def download_all
-    filename = "#{@collection.title}.zip"
+    binary_zip_data = ProformaService::ExportTasks.call(exercises: @collection.exercises)
 
-    # This is the tricky part
-    # Initialize the temp file as a zip file
-
-    binary_zip_data = send_zip.string
-
-    send_data(binary_zip_data, type: 'application/zip', filename: filename, disposition: 'attachment')
+    send_data(binary_zip_data.string, type: 'application/zip', filename: "#{@collection.title}.zip", disposition: 'attachment')
   end
 
-  def send_zip(exercises)
-    Zip::OutputStream.write_buffer do |zio|
-      exercises.each do |exercise|
-        zip_file = create_exercise_zip(exercise)
-        if zip_file[:errors].any?
-          zip_file[:errors].each do |error|
-            logger.debug(error)
-          end
-        else
-          zio.put_next_entry(zip_file[:filename])
-          zio.write zip_file[:data]
-        end
-      end
-    end
-  end
+  # def send_zip(exercises)
+  #   Zip::OutputStream.write_buffer do |zio|
+  #     exercises.each do |exercise|
+  #       zip_file = create_exercise_zip(exercise)
+  #       if zip_file[:errors].any?
+  #         zip_file[:errors].each do |error|
+  #           logger.debug(error)
+  #         end
+  #       else
+  #         zio.put_next_entry(zip_file[:filename])
+  #         zio.write zip_file[:data]
+  #       end
+  #     end
+  #   end
+  # end
 
   def share
     if share_message.save

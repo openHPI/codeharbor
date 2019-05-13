@@ -36,7 +36,7 @@ en:
       remove_exercise_fail: "You cannot remove this exercise."
       remove_all_success: 'All Exercises were successfully removed'
       remove_all_fail: 'You cannot remove all exercises'
-      zip: 'cart_exercises.zip'
+      zip_filename: 'cart_exercises_%{date}.zip'
 
     collections:
       authorization: "You are not authorized to for this action."
@@ -464,7 +464,7 @@ en:
       mine: "My Exercises"
       public: "Public"
       private: "Private"
-    import_xml: "Import XML-File"
+    import_zip: "Import ZIP file"
     title: "Title"
     rate: "Rate"
     description_in: "Description in"

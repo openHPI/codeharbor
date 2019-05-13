@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ProformaService
-  class Export < ServiceBase
+  class ExportTask < ServiceBase
     def initialize(exercise: nil)
       @exercise = exercise
     end

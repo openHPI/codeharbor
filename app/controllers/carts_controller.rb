@@ -13,26 +13,18 @@ class CartsController < ApplicationController
 
   include ExerciseExport
 
-  # GET /carts
-  # GET /carts.json
   def index
     @carts = Cart.all
   end
 
-  # GET /carts/1
-  # GET /carts/1.json
   def show; end
 
-  # GET /carts/new
   def new
     @cart = Cart.new
   end
 
-  # GET /carts/1/edit
   def edit; end
 
-  # POST /carts
-  # POST /carts.json
   def create
     @cart = Cart.new
     @cart.user = current_user
@@ -48,8 +40,6 @@ class CartsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /carts/1
-  # PATCH/PUT /carts/1.json
   def update
     respond_to do |format|
       if @cart.update(user: @user)
@@ -62,8 +52,6 @@ class CartsController < ApplicationController
     end
   end
 
-  # DELETE /carts/1
-  # DELETE /carts/1.json
   def destroy
     @cart.destroy
     respond_to do |format|
@@ -103,9 +91,9 @@ class CartsController < ApplicationController
   end
 
   def download_all
-    filename = t('controllers.carts.zip')
+    filename = t('controllers.carts.zip_filename', date: Time.zone.today.strftime)
 
-    binary_zip_data = send_zip
+    binary_zip_data = ProformaService::ExportTasks.call(exercises: @cart.exercises)
 
     send_data(binary_zip_data.string, type: 'application/zip', filename: filename, disposition: 'attachment')
   end
@@ -128,24 +116,5 @@ class CartsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_cart
     @cart = Cart.find(params[:id])
-  end
-
-  def send_zip
-    # This is the tricky part
-    # Initialize the temp file as a zip file
-
-    Zip::OutputStream.write_buffer do |zio|
-      @cart.exercises.each do |exercise|
-        zip_file = create_exercise_zip(exercise)
-        if zip_file[:errors].any?
-          zip_file[:errors].each do |error|
-            logger.debug(error)
-          end
-        else
-          zio.put_next_entry(zip_file[:filename])
-          zio.write zip_file[:data]
-        end
-      end
-    end
   end
 end
