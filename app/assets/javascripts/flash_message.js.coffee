@@ -10,6 +10,6 @@ $(document).ajaxComplete (event, request) ->
   show_ajax_message msg, type unless type == 'empty' #use whatever popup, notification or whatever plugin you want
 
 ready =->
-  $('#flash-message').children().first().delay(2000).slideUp 'medium'
+  $('#flash-message').children().first().delay(5000).slideUp 'medium'
 
 $(document).on('turbolinks:load', ready)
