@@ -74,7 +74,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'rubocop', '~> 0.68.1'
   gem 'rubocop-rails', '~> 1.5.0'
-  gem 'rubocop-rspec', '~> 1.32.0'
+  gem 'rubocop-rspec', '~> 1.33.0'
 end
 
 group :development do
