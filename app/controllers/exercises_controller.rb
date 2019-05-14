@@ -188,7 +188,14 @@ class ExercisesController < ApplicationController
     uploaded_io = params[:file_upload]
     raise t('controllers.exercise.choose_file') unless uploaded_io
 
-    @exercise = ProformaService::Import.call(zip: uploaded_io)
+    result = ProformaService::Import.call(zip: uploaded_io, user: current_user)
+
+    if result.is_a?(Array)
+      return redirect_to exercises_path, notice: t('controllers.exercise.import_proforma_xml.multi_import_successful', count: result.length)
+    end
+
+    flash.now[:notice] = t('controllers.exercise.import_proforma_xml.import_successful_please_save')
+    @exercise = result
     @license_default = 1
     @license_hidden = false
   end

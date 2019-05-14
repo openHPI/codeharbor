@@ -8,12 +8,45 @@ module ProformaService
     end
 
     def execute
-      importer = Proforma::Importer.new(@zip)
-      @task = importer.perform
-      initialize_exercise
+      if single_task?
+        importer = Proforma::Importer.new(@zip)
+        @task = importer.perform
+        initialize_exercise
+      else
+        import_multi
+      end
     end
 
     private
+
+    def import_multi
+      Zip::File.open(@zip.path) do |zip_file|
+        zip_files = zip_file.filter { |entry| entry.name.match?(/\.zip$/) }
+        begin
+          zip_files.map! do |entry|
+            tempfile = Tempfile.new(entry.name)
+            string = entry.get_input_stream.read.force_encoding('UTF-8')
+            tempfile.write string
+            tempfile.rewind
+            tempfile
+          end
+          exercises = zip_files.map do |proforma_file|
+            Import.call(zip: proforma_file, user: @user)
+          end
+          exercises.each(&:save)
+        ensure
+          zip_files.each(&:unlink)
+        end
+      end
+    end
+
+    def single_task?
+      filenames = Zip::File.open(@zip.path) do |zip_file|
+        zip_file.map(&:name)
+      end
+
+      filenames.select { |f| f[/\.xml$/] }.any?
+    end
 
     def initialize_exercise
       @exercise = Exercise.new(
@@ -26,7 +59,6 @@ module ProformaService
         exercise_files: task_files.values,
         user: @user
       )
-      # set_parent_relation
     end
 
     def task_files
