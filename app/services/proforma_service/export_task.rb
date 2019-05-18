@@ -33,8 +33,6 @@ module ProformaService
 
     def model_solutions
       @exercise.exercise_files.filter { |file| file.role == 'Reference Implementation' }.map do |file|
-        # attr_accessor :id, :files, :description, :internal_description
-
         Proforma::ModelSolution.new(
           id: "ms-#{file.id}",
           files: [
@@ -55,14 +53,9 @@ module ProformaService
 
     def tests
       @exercise.tests.map do |test|
-        # :id, :title, :description, :internal_description, :test_type, :files, :meta_data
-
         Proforma::Test.new(
           id: test.id,
           title: test.exercise_file.name,
-          # description: '',
-          # internal_description: '',
-          # test_type: '',
           files: test_file(test.exercise_file),
           meta_data: {
             'feedback-message' => test.feedback_message,
