@@ -62,27 +62,32 @@ module ProformaService
     end
 
     def task_files
-      @task_files ||= @task.files.reject { |key| key == 'ms-placeholder-file' }.transform_values do |task_file|
-        if !task_file.binary
-          ExerciseFile.new(
-            content: task_file.content,
-            full_file_name: task_file.filename,
-            read_only: task_file.usage_by_lms.in?(%w[display download]),
-            hidden: task_file.visible == 'no',
-            role: task_file.internal_description
-          )
-        else
-          ExerciseFile.new(
-            full_file_name: task_file.filename,
-            read_only: task_file.usage_by_lms.in?(%w[display download]),
-            hidden: task_file.visible == 'no',
-            role: task_file.internal_description,
-            attachment: file_base64(task_file),
-            attachment_file_name: task_file.filename,
-            attachment_content_type: task_file.mimetype
-          )
+      @task_files ||= Hash[
+        @task.all_files.reject { |file| file.id == 'ms-placeholder-file' }.map do |task_file|
+          [
+            task_file.id,
+            if !task_file.binary
+              ExerciseFile.new(
+                content: task_file.content,
+                full_file_name: task_file.filename,
+                read_only: task_file.usage_by_lms.in?(%w[display download]),
+                hidden: task_file.visible == 'no',
+                role: task_file.internal_description
+              )
+            else
+              ExerciseFile.new(
+                full_file_name: task_file.filename,
+                read_only: task_file.usage_by_lms.in?(%w[display download]),
+                hidden: task_file.visible == 'no',
+                role: task_file.internal_description,
+                attachment: file_base64(task_file),
+                attachment_file_name: task_file.filename,
+                attachment_content_type: task_file.mimetype
+              )
+            end
+          ]
         end
-      end
+      ]
     end
 
     def file_base64(file)
