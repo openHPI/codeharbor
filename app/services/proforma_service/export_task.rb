@@ -12,6 +12,8 @@ module ProformaService
       exporter.perform
     end
 
+    private
+
     def create_task
       @task = Proforma::Task.new(
         title: @exercise.title,

@@ -72,6 +72,7 @@ group :development, :test do
   gem 'factory_bot_rails', '~> 5.0.2'
   gem 'pry-byebug'
   gem 'rails-controller-testing'
+  gem 'rspec-collection_matchers', '~> 1.1.3'
   gem 'rspec-rails'
   gem 'rubocop', '~> 0.70.0'
   gem 'rubocop-rails', '~> 2.0.0'

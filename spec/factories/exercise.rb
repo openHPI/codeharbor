@@ -9,6 +9,11 @@ FactoryBot.define do
       title {}
       descriptions { [] }
     end
+
+    trait :exportable do
+      execution_environment { build(:java_8_execution_environment) }
+
+    end
   end
 
   factory :simple_exercise, class: 'Exercise' do
