@@ -17,7 +17,14 @@ RSpec.describe ProformaService::ExportTask do
     subject(:execute) { export_service.execute }
 
     let(:export_service) { described_class.new(exercise: exercise) }
-    let(:exercise) { build(:exercise, :exportable, instruction: 'instruction', uuid: SecureRandom.uuid) }
+    let(:exercise) do
+      create(:exercise,
+             :exportable,
+             instruction: 'instruction',
+             uuid: SecureRandom.uuid,
+             exercise_files: files)
+    end
+    let(:files) { [] }
 
     let(:zip_files) do
       {}.tap do |hash|
@@ -57,5 +64,38 @@ RSpec.describe ProformaService::ExportTask do
       expect(xml.xpath('/task').attribute('uuid').value).to eql exercise.uuid
     end
 
+    context 'when exercise has a mainfile' do
+      let(:files) { [file] }
+      let(:file) { build(:codeharbor_main_file) }
+
+      it_behaves_like 'task node with file'
+
+      context 'when the mainfile is very large' do
+        let(:file) { build(:codeharbor_main_file, content: 'test' * 10**5) }
+
+        it 'adds a attached-txt-file node to the file node' do
+          expect(xml.xpath("/task/files/file[@id!='ms-placeholder-file']/attached-txt-file")).to have(1).item
+        end
+
+        it 'adds attached file to zip' do
+          expect(zip_files[file.full_file_name]).not_to be nil
+        end
+      end
+    end
+
+    context 'when exercise has a regular file' do
+      let(:files) { [file] }
+      let(:file) { build(:codeharbor_regular_file) }
+
+      it_behaves_like 'task node with file'
+
+      context 'when file has an attachment' do
+        let(:file) { build(:codeharbor_regular_file, :with_attachment) }
+
+        it 'adds a embedded-bin-file node to the file node' do
+          expect(xml.xpath("/task/files/file[@id!='ms-placeholder-file']/embedded-bin-file")).to have(1).item
+        end
+      end
+    end
   end
 end

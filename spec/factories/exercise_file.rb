@@ -35,6 +35,13 @@ FactoryBot.define do
     path { '' }
     role { 'Regular File' }
     file_type { FactoryBot.create(:txt_file_type) }
+
+    trait(:with_attachment) do
+      content {}
+      attachment { "data:image/bmp;base64,#{Base64.encode64("BM:\u0000\u0000\u0000\u0000\u0000\u0000\u00006\u0000\u0000\u0000(\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0001\u0000\u0018\u0000\u0000\u0000\u0000\u0000\u0004\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\xFFY")}" }
+      attachment_file_name { 'explanation' }
+      attachment_content_type { 'image/jpeg' }
+    end
   end
 
   factory :codeharbor_main_file, class: 'ExerciseFile' do
