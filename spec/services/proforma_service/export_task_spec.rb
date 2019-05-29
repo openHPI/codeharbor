@@ -19,12 +19,13 @@ RSpec.describe ProformaService::ExportTask do
     let(:export_service) { described_class.new(exercise: exercise) }
     let(:exercise) do
       create(:exercise,
-             :exportable,
              instruction: 'instruction',
              uuid: SecureRandom.uuid,
-             exercise_files: files)
+             exercise_files: files,
+             tests: tests)
     end
     let(:files) { [] }
+    let(:tests) { [] }
 
     let(:zip_files) do
       {}.tap do |hash|
@@ -64,6 +65,18 @@ RSpec.describe ProformaService::ExportTask do
       expect(xml.xpath('/task').attribute('uuid').value).to eql exercise.uuid
     end
 
+    context 'when exercise is minimal' do
+      let(:exercise) do
+        create(:exercise,
+               :empty,
+               title: 'title',
+               descriptions: build_list(:simple_description, 1),
+               execution_environment: build(:java_8_execution_environment))
+      end
+
+      it_behaves_like 'zipped task node xml'
+    end
+
     context 'when exercise has a mainfile' do
       let(:files) { [file] }
       let(:file) { build(:codeharbor_main_file) }
@@ -95,6 +108,106 @@ RSpec.describe ProformaService::ExportTask do
         it 'adds a embedded-bin-file node to the file node' do
           expect(xml.xpath("/task/files/file[@id!='ms-placeholder-file']/embedded-bin-file")).to have(1).item
         end
+      end
+    end
+
+    context 'when exercise has a file with role reference implementation' do
+      let(:files) { [file] }
+      let(:file) { build(:codeharbor_solution_file) }
+
+      it 'adds id attribute to model-solution node' do
+        expect(xml.xpath('/task/model-solutions/model-solution').attribute('id').value).to eql "ms-#{file.id}"
+      end
+
+      it 'adds correct refid attribute to fileref' do
+        expect(
+          xml.xpath('/task/model-solutions/model-solution/filerefs/fileref').attribute('refid').value
+        ).to eql xml.xpath('/task/files/file').attribute('id').value
+      end
+
+      it 'adds description attribute to model-solution' do
+        expect(xml.xpath('/task/model-solutions/model-solution/description').text).to be_empty
+      end
+
+      it 'adds internal-description attribute to model-solution' do
+        expect(xml.xpath('/task/model-solutions/model-solution/internal-description').text).to be_empty
+      end
+
+      it 'adds correct used-by-grader attribute to the referenced file node' do
+        expect(xml.xpath('/task/files/file').attribute('used-by-grader').value).to eql 'false'
+      end
+
+      it 'adds correct usage-by-lms attribute to the referenced file node' do
+        expect(xml.xpath('/task/files/file').attribute('usage-by-lms').value).to eql 'display'
+      end
+
+      it 'adds correct visible attribute to the referenced file node' do
+        expect(xml.xpath('/task/files/file').attribute('visible').value).to eql 'delayed'
+      end
+
+      it 'adds correct role to internal-description of the  referenced file node' do
+        expect(xml.xpath('/task/files/file/internal-description').text).to eql file.role
+      end
+    end
+
+    context 'when exercise has multiple files with role reference implementation' do
+      let(:files) { create_list(:codeharbor_solution_file, 2) }
+
+      it 'adds test node to tests node' do
+        expect(xml.xpath('/task/model-solutions/model-solution')).to have(2).item
+      end
+    end
+
+    context 'when exercise has a test' do
+      let(:tests) { [test] }
+      let(:test) { create(:codeharbor_test) }
+
+      it 'adds test node to tests node' do
+        expect(xml.xpath('/task/tests/test')).to have(1).item
+      end
+
+      it 'adds id attribute to tests node' do
+        expect(xml.xpath('/task/tests/test').attribute('id').value).to eql test.id.to_s
+      end
+
+      it 'adds correct title node to test node' do
+        expect(xml.xpath('/task/tests/test/title').text).to eql test.exercise_file.name
+      end
+
+      it 'adds fileref node' do
+        expect(xml.xpath('/task/tests/test/test-configuration/filerefs/fileref')).to have(1).item
+      end
+
+      it 'adds correct refid attribute to fileref' do
+        expect(
+          xml.xpath('/task/tests/test/test-configuration/filerefs/fileref').attribute('refid').value
+        ).to eql xml.xpath("/task/files/file[@id!='ms-placeholder-file']").attribute('id').value
+      end
+
+      it 'adds feedback-message with codeharbor namespace to test-meta-data node' do
+        expect(
+          doc.xpath('/xmlns:task/xmlns:tests/xmlns:test/xmlns:test-configuration/xmlns:test-meta-data/c:feedback-message').text
+        ).to eql test.feedback_message
+      end
+
+      it 'adds testing-framework with codeharbor namespace to test-meta-data node' do
+        expect(
+          doc.xpath('/xmlns:task/xmlns:tests/xmlns:test/xmlns:test-configuration/xmlns:test-meta-data/c:testing-framework').text
+        ).to eql test.testing_framework.name
+      end
+
+      it 'adds testing-framework-version with codeharbor namespace to test-meta-data node' do
+        expect(
+          doc.xpath('/xmlns:task/xmlns:tests/xmlns:test/xmlns:test-configuration/xmlns:test-meta-data/c:testing-framework-version').text
+        ).to eql test.testing_framework.version
+      end
+    end
+
+    context 'when exercise has multiple tests' do
+      let(:tests) { create_list(:codeharbor_test, 2) }
+
+      it 'adds test node to tests node' do
+        expect(xml.xpath('/task/tests/test')).to have(2).item
       end
     end
   end

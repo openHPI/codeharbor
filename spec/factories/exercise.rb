@@ -4,27 +4,25 @@ FactoryBot.define do
   factory :exercise do
     sequence(:title) { |n| "Test Exercise #{n}" }
     descriptions { [FactoryBot.create(:simple_description)] }
+    execution_environment { build(:java_8_execution_environment) }
 
     trait :empty do
       title {}
       descriptions { [] }
-    end
-
-    trait :exportable do
-      execution_environment { build(:java_8_execution_environment) }
-
     end
   end
 
   factory :simple_exercise, class: 'Exercise' do
     sequence(:title) { |n| "Test Exercise #{n}" }
     descriptions { [FactoryBot.create(:simple_description)] }
+    execution_environment { build(:java_8_execution_environment) }
   end
 
   factory :exercise_with_author, class: 'Exercise' do
     title { 'Some Exercise' }
     descriptions { [FactoryBot.create(:simple_description)] }
     authors { [FactoryBot.create(:user), FactoryBot.create(:user)] }
+    execution_environment { build(:java_8_execution_environment) }
   end
 
   factory :only_meta_data, class: 'Exercise' do

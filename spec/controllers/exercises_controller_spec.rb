@@ -113,19 +113,27 @@ RSpec.describe ExercisesController, type: :controller do
 
   describe 'POST #create' do
     context 'with valid params' do
+      let(:valid_params) do
+        {
+          title: 'title',
+          descriptions_attributes: {'0' => {text: 'description'}},
+          execution_environment_id: create(:java_8_execution_environment).id
+        }
+      end
+
       it 'creates a new Exercise' do
         expect do
-          post :create, params: {exercise: valid_attributes}, session: valid_session
+          post :create, params: {exercise: valid_params}, session: valid_session
         end.to change(Exercise, :count).by(1)
       end
 
       it 'assigns a newly created exercise as @exercise' do
-        post :create, params: {exercise: valid_attributes}, session: valid_session
+        post :create, params: {exercise: valid_params}, session: valid_session
         expect(assigns(:exercise)).to be_persisted
       end
 
       it 'redirects to the created exercise' do
-        post :create, params: {exercise: valid_attributes}, session: valid_session
+        post :create, params: {exercise: valid_params}, session: valid_session
         expect(response).to redirect_to(Exercise.last)
       end
     end

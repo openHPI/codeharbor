@@ -6,6 +6,8 @@ require 'zip'
 class Exercise < ApplicationRecord
   groupify :group_member
   validates :title, presence: true
+  validates :descriptions, presence: true
+  validates :execution_environment, presence: true
 
   has_many :exercise_files, dependent: :destroy
   has_many :tests, dependent: :destroy
@@ -31,7 +33,6 @@ class Exercise < ApplicationRecord
   has_many :descriptions, dependent: :destroy
   has_many :origin_relations, class_name: 'ExerciseRelation', foreign_key: 'origin_id', dependent: :destroy, inverse_of: :origin
   has_many :clone_relations, class_name: 'ExerciseRelation', foreign_key: 'clone_id', dependent: :destroy, inverse_of: :clone
-  validates :descriptions, presence: true
 
   attr_reader :tag_tokens
   accepts_nested_attributes_for :descriptions, allow_destroy: true

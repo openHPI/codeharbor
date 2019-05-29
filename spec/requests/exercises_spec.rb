@@ -6,10 +6,12 @@ RSpec.describe 'exercises', type: :request do
   context 'when logged in' do
     let(:user) { FactoryBot.create(:user) }
     let(:exercise) { FactoryBot.create(:only_meta_data, authors: [user]) }
-    let(:exercise_params) do
-      FactoryBot.attributes_for(:only_meta_data).merge(
-        descriptions_attributes: {'0' => FactoryBot.attributes_for(:simple_description)}
-      )
+    let(:valid_params) do
+      {
+        title: 'title',
+        descriptions_attributes: {'0' => {text: 'description'}},
+        execution_environment_id: create(:java_8_execution_environment).id
+      }
     end
 
     before do
@@ -26,7 +28,7 @@ RSpec.describe 'exercises', type: :request do
 
     describe 'POST /exercises' do
       it 'has http 302' do
-        post exercises_path, params: {exercise: exercise_params}
+        post exercises_path, params: {exercise: valid_params}
         expect(response).to have_http_status(:found)
       end
     end
@@ -54,14 +56,14 @@ RSpec.describe 'exercises', type: :request do
 
     describe 'PATCH /exercise/:id' do
       it 'has http 302' do
-        patch exercise_path(exercise, exercise: exercise_params)
+        patch exercise_path(exercise, exercise: valid_params)
         expect(response).to have_http_status(:found)
       end
     end
 
     describe 'PUT /exercise/:id' do
       it 'has http 302' do
-        put exercise_path(exercise, exercise: exercise_params)
+        put exercise_path(exercise, exercise: valid_params)
         expect(response).to have_http_status(:found)
       end
     end
