@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :single_java_main_file, class: 'ExerciseFile' do
+  factory :exercise_file, aliases: [:single_java_main_file], class: 'ExerciseFile' do
     content { 'public class AsteriksPattern{ public static void main String[] args) { } }' }
     name { 'Main' }
     path { '' }

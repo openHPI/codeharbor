@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :exercise do
+  factory :exercise, aliases: [:simple_exercise] do
     sequence(:title) { |n| "Test Exercise #{n}" }
     descriptions { [FactoryBot.create(:simple_description)] }
     execution_environment { build(:java_8_execution_environment) }
@@ -10,12 +10,6 @@ FactoryBot.define do
       title {}
       descriptions { [] }
     end
-  end
-
-  factory :simple_exercise, class: 'Exercise' do
-    sequence(:title) { |n| "Test Exercise #{n}" }
-    descriptions { [FactoryBot.create(:simple_description)] }
-    execution_environment { build(:java_8_execution_environment) }
   end
 
   factory :exercise_with_author, class: 'Exercise' do
