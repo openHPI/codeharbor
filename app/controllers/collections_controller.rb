@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'zip'
-require 'proforma/xml_generator'
 
 class CollectionsController < ApplicationController
   load_and_authorize_resource

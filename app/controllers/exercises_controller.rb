@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 require 'oauth2'
-require 'proforma/importer'
-require 'proforma/xml_generator'
-require 'proforma/zip_importer'
 require 'zip'
 
 # rubocop:disable Metrics/ClassLength
