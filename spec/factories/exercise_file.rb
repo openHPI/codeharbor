@@ -6,8 +6,10 @@ FactoryBot.define do
     name { 'Main' }
     path { '' }
     solution { false }
-    file_type { FactoryBot.create(:java_file_type) }
+    file_type { build(:java_file_type) }
     visibility { true }
+    hidden { false }
+    read_only { false }
     role { 'Main File' }
   end
 
@@ -27,6 +29,8 @@ FactoryBot.define do
     role { 'Reference Implementation' }
     file_type { FactoryBot.create(:java_file_type) }
     visibility { false }
+    hidden { false }
+    read_only { true }
   end
 
   factory :codeharbor_regular_file, class: 'ExerciseFile' do
@@ -35,12 +39,16 @@ FactoryBot.define do
     path { '' }
     role { 'Regular File' }
     file_type { FactoryBot.create(:txt_file_type) }
+    hidden { true }
+    read_only { true }
 
     trait(:with_attachment) do
+      name { 'image' }
       content {}
       attachment { "data:image/bmp;base64,#{Base64.encode64("BM:\u0000\u0000\u0000\u0000\u0000\u0000\u00006\u0000\u0000\u0000(\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0001\u0000\u0018\u0000\u0000\u0000\u0000\u0000\u0004\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\xFFY")}" }
-      attachment_file_name { 'explanation' }
-      attachment_content_type { 'image/jpeg' }
+      attachment_file_name { 'image.bmp' }
+      attachment_content_type { 'image/bmp' }
+      file_type { FactoryBot.create(:bmp_file_type) }
     end
   end
 
@@ -49,6 +57,8 @@ FactoryBot.define do
     name { 'hello_world' }
     path { 'source/main' }
     role { 'Main File' }
+    hidden { false }
+    read_only { false }
     file_type { FactoryBot.create(:java_file_type) }
   end
 
@@ -57,7 +67,8 @@ FactoryBot.define do
     name { 'solution' }
     path { '' }
     role { 'Reference Implementation' }
-    hidden { true }
+    hidden { false }
+    read_only { true }
     file_type { FactoryBot.create(:java_file_type) }
   end
 
@@ -76,5 +87,7 @@ FactoryBot.define do
     purpose { 'test' }
     file_type { FactoryBot.create(:java_file_type) }
     visibility { true }
+    hidden { true }
+    read_only { true }
   end
 end

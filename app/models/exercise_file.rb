@@ -7,6 +7,8 @@ class ExerciseFile < ApplicationRecord
   has_attached_file :attachment, styles: ->(a) { ['image/jpeg', 'image/png', 'image/giv'].include?(a.content_type) ? {large: '900x'} : {} }
   do_not_validate_attachment_file_type :attachment
   validates :name, presence: true
+  validates :hidden, inclusion: [true, false]
+  validates :read_only, inclusion: [true, false]
 
   before_save :parse_text_data
 

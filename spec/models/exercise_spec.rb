@@ -27,7 +27,7 @@ RSpec.describe Exercise, type: :model do
     context 'when params attributes are set' do
       subject(:add_attributes) do
         exercise.add_attributes(params)
-        exercise.save
+        exercise.save!
       end
 
       let(:params) do
@@ -35,7 +35,11 @@ RSpec.describe Exercise, type: :model do
           tests_attributes: {
             '0' => {
               exercise_file_attributes: {
-                name: 'test', file_type_id: file_type.id, content: 'this is some test'
+                name: 'test',
+                file_type_id: file_type.id,
+                content: 'this is some test',
+                hidden: 'false',
+                read_only: 'true'
               },
               feedback_message: 'not_working',
               _destroy: false,
@@ -50,6 +54,8 @@ RSpec.describe Exercise, type: :model do
               purpose: 'a new purpose',
               name: 'awesome',
               file_type_id: file_type.id,
+              hidden: 'false',
+              read_only: 'false',
               _destroy: false
             }
           },
@@ -196,6 +202,81 @@ RSpec.describe Exercise, type: :model do
 
       it 'gets removed from cart' do
         expect { exercise.destroy }.to change(cart.exercises, :count).by(-1)
+      end
+    end
+  end
+
+  describe 'custom matcher' do
+    let(:exercise1) { build(:exercise) }
+    let(:exercise2) { build(:exercise) }
+
+    before do
+      FactoryBot.rewind_sequences
+      exercise1
+      FactoryBot.rewind_sequences
+      exercise2
+    end
+
+    it 'matches the exercises' do
+      expect(exercise1).to be_an_equal_exercise_as exercise2
+    end
+
+    context 'when titles are different' do
+      let(:exercise2) { build(:exercise, title: 'title2') }
+
+      it 'does not match the exercises' do
+        expect(exercise1).not_to be_an_equal_exercise_as exercise2
+      end
+    end
+
+    context 'when exercise has descriptions' do
+      let(:exercise1) { build(:exercise, descriptions: [build(:description, text: 'text')]) }
+      let(:exercise2) { build(:exercise, descriptions: [build(:description, text: 'text')]) }
+
+      it 'matches the exercises' do
+        expect(exercise1).to be_an_equal_exercise_as exercise2
+      end
+
+      context 'when descriptions are different' do
+        let(:exercise2) { build(:exercise, descriptions: [build(:description, text: 'text2')]) }
+
+        it 'does not match the exercises' do
+          expect(exercise1).not_to be_an_equal_exercise_as exercise2
+        end
+      end
+    end
+
+    context 'when exercise has tests' do
+      let(:exercise1) { build(:exercise, tests: [build(:test, feedback_message: 'feedback_message')]) }
+      let(:exercise2) { build(:exercise, tests: [build(:test, feedback_message: 'feedback_message')]) }
+
+      it 'matches the exercises' do
+        expect(exercise1).to be_an_equal_exercise_as exercise2
+      end
+
+      context 'when descriptions are different' do
+        let(:exercise2) { build(:exercise, tests: [build(:test, feedback_message: 'feedback_message2')]) }
+
+        it 'does not match the exercises' do
+          expect(exercise1).not_to be_an_equal_exercise_as exercise2
+        end
+      end
+    end
+
+    context 'when exercise has tests' do
+      let(:exercise1) { build(:exercise, exercise_files: [build(:exercise_file, purpose: 'purpose')]) }
+      let(:exercise2) { build(:exercise, exercise_files: [build(:exercise_file, purpose: 'purpose')]) }
+
+      it 'matches the exercises' do
+        expect(exercise1).to be_an_equal_exercise_as exercise2
+      end
+
+      context 'when descriptions are different' do
+        let(:exercise2) { build(:exercise, exercise_files: [build(:exercise_file, purpose: 'purpose2')]) }
+
+        it 'does not match the exercises' do
+          expect(exercise1).not_to be_an_equal_exercise_as exercise2
+        end
       end
     end
   end

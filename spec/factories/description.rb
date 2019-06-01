@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :simple_description, class: 'Description' do
+  factory :description, aliases: [:simple_description], class: 'Description' do
     text { 'Very descriptive' }
     language { 'en' }
   end

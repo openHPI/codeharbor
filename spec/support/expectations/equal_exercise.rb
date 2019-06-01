@@ -12,8 +12,6 @@ RSpec::Matchers.define :be_an_equal_exercise_as do |other|
     return attributes_equal?(object, other) if object.is_a?(ApplicationRecord)
     return array_equal?(object, other) if object.is_a?(Array) || object.is_a?(ActiveRecord::Associations::CollectionProxy)
 
-    # return object.stringify_keys == other.stringify_keys if object.is_a?(Hash)
-
     object == other
   end
 
@@ -37,6 +35,6 @@ RSpec::Matchers.define :be_an_equal_exercise_as do |other|
       attributes[:exercise_files] = object.exercise_files if defined? object.exercise_files
       attributes[:descriptions] = object.descriptions if defined? object.descriptions
       attributes[:tests] = object.tests if defined? object.tests
-    end.except('id', 'created_at', 'updated_at')
+    end.except('id', 'created_at', 'updated_at', 'exercise_id', 'attachment_updated_at', 'exercise_file_id')
   end
 end

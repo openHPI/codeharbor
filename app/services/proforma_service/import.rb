@@ -63,7 +63,9 @@ module ProformaService
 
     def task_files
       @task_files ||= Hash[
-        @task.all_files.reject { |file| file.id == 'ms-placeholder-file' }.map do |task_file|
+        @task.all_files.reject { |file| file.id == 'ms-placeholder-file' }
+             .map do |task_file|
+             # .reject { |file| @task.tests.map(&:files).flatten.include? file }
           [
             task_file.id,
             if !task_file.binary
@@ -108,7 +110,7 @@ module ProformaService
     end
 
     def test_file(test_object)
-      task_files[test_object.files.first.id].tap { |file| file.purpose = 'test' }
+      task_files.delete(test_object.files.first.id).tap { |file| file.purpose = 'test' }
     end
 
     def execution_environment
