@@ -43,7 +43,7 @@ gem 'jbuilder', '~> 2.9'
 # gem 'sdoc', '~> 1.0', group: :doc
 
 # Use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.13'
 
 # pagination
 gem 'will_paginate'
@@ -74,7 +74,7 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers', '~> 1.1.3'
   gem 'rspec-rails'
-  gem 'rubocop', '~> 0.70.0'
+  gem 'rubocop', '~> 0.71.0'
   gem 'rubocop-rails', '~> 2.0.0'
   gem 'rubocop-rspec', '~> 1.33.0'
 end
