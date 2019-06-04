@@ -32,11 +32,30 @@ RSpec.describe ProformaService::Import do
     end
     let(:files) { [] }
     let(:tests) { [] }
+    let(:exporter) { ProformaService::ExportTask.call(exercise: exercise).string }
 
     before do
-      zip_file.write(ProformaService::ExportTask.call(exercise: exercise).string)
+      zip_file.write(exporter)
       zip_file.rewind
     end
+
+    ### move down
+    context 'when zip contains multiple tasks' do
+      let(:exporter) { ProformaService::ExportTasks.call(exercises: [exercise, exercise2]).string }
+
+      let(:exercise2) do
+        create(:exercise,
+               instruction: 'instruction2',
+               uuid: SecureRandom.uuid,
+               exercise_files: files2,
+               tests: tests2)
+      end
+      let(:files) { [] }
+      let(:tests) { [] }
+
+      it
+    end
+    ####
 
     it { is_expected.to be_an_equal_exercise_as exercise }
 

@@ -63,9 +63,7 @@ module ProformaService
 
     def task_files
       @task_files ||= Hash[
-        @task.all_files.reject { |file| file.id == 'ms-placeholder-file' }
-             .map do |task_file|
-             # .reject { |file| @task.tests.map(&:files).flatten.include? file }
+        @task.all_files.reject { |file| file.id == 'ms-placeholder-file' }.map do |task_file|
           [
             task_file.id,
             if !task_file.binary
@@ -115,10 +113,6 @@ module ProformaService
 
     def execution_environment
       ExecutionEnvironment.where(language: @task.proglang[:name], version: @task.proglang[:version]).first_or_initialize
-    end
-
-    def set_meta_data
-      exercise.title = @task.title
     end
   end
 end
