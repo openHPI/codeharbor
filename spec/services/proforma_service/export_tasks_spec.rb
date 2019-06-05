@@ -39,11 +39,11 @@ RSpec.describe ProformaService::ExportTasks do
     end
 
     it 'creates a zip-file of two importable zip-files' do
-      expect(imported_exercises.values.map { |exercise| exercise.is_a? Exercise }).to match_array [true, true]
+      expect(imported_exercises.values).to all be_an(Exercise)
     end
 
     it 'creates a zip-file of two importable zip-files which contain valid exercises' do
-      expect(imported_exercises.values.map(&:save)).to match_array [true, true]
+      expect(imported_exercises.values).to all be_valid
     end
 
     context 'when 10 exercises are supplied' do

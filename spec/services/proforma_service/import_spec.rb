@@ -19,17 +19,20 @@ RSpec.describe ProformaService::Import do
   end
 
   describe '#execute' do
-    subject { described_class.call(zip: zip_file, user: user) }
+    subject(:import_service) { described_class.call(zip: zip_file, user: user) }
 
-    let(:user) {} # todo test
+    let(:user) {}
     let(:zip_file) { Tempfile.new('proforma_test_zip_file') }
     let(:exercise) do
       create(:exercise,
              instruction: 'instruction',
              uuid: SecureRandom.uuid,
+             execution_environment: execution_environment,
              exercise_files: files,
              tests: tests)
     end
+
+    let(:execution_environment) { build(:java_8_execution_environment) }
     let(:files) { [] }
     let(:tests) { [] }
     let(:exporter) { ProformaService::ExportTask.call(exercise: exercise).string }
@@ -39,25 +42,15 @@ RSpec.describe ProformaService::Import do
       zip_file.rewind
     end
 
-    ### move down
-    context 'when zip contains multiple tasks' do
-      let(:exporter) { ProformaService::ExportTasks.call(exercises: [exercise, exercise2]).string }
-
-      let(:exercise2) do
-        create(:exercise,
-               instruction: 'instruction2',
-               uuid: SecureRandom.uuid,
-               exercise_files: files2,
-               tests: tests2)
-      end
-      let(:files) { [] }
-      let(:tests) { [] }
-
-      it
-    end
-    ####
-
     it { is_expected.to be_an_equal_exercise_as exercise }
+
+    context 'when a user is supplied' do
+      let(:user) { build(:user) }
+
+      it 'sets the correct user as owner of the exercise' do
+        expect(import_service.user).to be user
+      end
+    end
 
     context 'when exercise has a mainfile' do
       let(:files) { [file] }
@@ -109,6 +102,36 @@ RSpec.describe ProformaService::Import do
       let(:tests) { create_list(:codeharbor_test, 2) }
 
       it { is_expected.to be_an_equal_exercise_as exercise }
+    end
+
+    context 'when zip contains multiple tasks' do
+      let(:exporter) { ProformaService::ExportTasks.call(exercises: [exercise, exercise2]).string }
+
+      let(:exercise2) do
+        create(:exercise,
+               instruction: 'instruction2',
+               uuid: SecureRandom.uuid,
+               execution_environment: execution_environment,
+               exercise_files: [],
+               tests: [])
+      end
+
+      it 'imports the exercises from zip containing multiple zips' do
+        expect(import_service).to all be_an(Exercise)
+      end
+
+      it 'imports the zip exactly how the were exported' do
+        expect(import_service).to all be_an_equal_exercise_as(exercise).or be_an_equal_exercise_as(exercise2)
+      end
+
+      context 'when a exercise has files and tests' do
+        let(:files) { create_list(:codeharbor_main_file, 2) }
+        let(:tests) { create_list(:codeharbor_test, 2) }
+
+        it 'imports the zip exactly how the were exported' do
+          expect(import_service).to all be_an_equal_exercise_as(exercise).or be_an_equal_exercise_as(exercise2)
+        end
+      end
     end
   end
 end
