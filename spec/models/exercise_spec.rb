@@ -27,7 +27,7 @@ RSpec.describe Exercise, type: :model do
     context 'when params attributes are set' do
       subject(:add_attributes) do
         exercise.add_attributes(params)
-        exercise.save!
+        exercise.save
       end
 
       let(:params) do

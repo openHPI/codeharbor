@@ -45,7 +45,12 @@ FactoryBot.define do
     trait(:with_attachment) do
       name { 'image' }
       content {}
-      attachment { "data:image/bmp;base64,#{Base64.encode64("BM:\u0000\u0000\u0000\u0000\u0000\u0000\u00006\u0000\u0000\u0000(\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0001\u0000\u0018\u0000\u0000\u0000\u0000\u0000\u0004\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\xFFY")}" }
+      attachment do
+        "data:image/bmp;base64,#{Base64.encode64("BM:\u0000\u0000\u0000\u0000\u0000\u0000\u00006\u0000\u0000\u0000(\u0000"\
+          "\u0000\u0000\u0001\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0001\u0000\u0018\u0000\u0000\u0000\u0000\u0000\u0004"\
+          "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"\
+          "\u0000\u0000\xFFY")}"
+      end
       attachment_file_name { 'image.bmp' }
       attachment_content_type { 'image/bmp' }
       file_type { FactoryBot.create(:bmp_file_type) }

@@ -193,7 +193,6 @@ class ExercisesController < ApplicationController
     flash.now[:notice] = t('controllers.exercise.import_proforma_xml.import_successful_please_save')
     @exercise = result
     @license_default = 1
-    @license_hidden = false
   end
 
   def contribute

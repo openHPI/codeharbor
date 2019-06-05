@@ -19,7 +19,6 @@ RSpec::Matchers.define :be_an_equal_exercise_as do |other|
     other_attributes = attributes_and_associations(other)
     attributes_and_associations(object).each do |k, v|
       return false unless equal?(other_attributes[k], v)
-      # binding.pry unless equal?(other_attributes[k], v)
     end
     true
   end
