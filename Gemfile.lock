@@ -13,6 +13,7 @@ PATH
   specs:
     proforma (0.1.0)
       activemodel (~> 5.2.3)
+      activesupport (~> 5.2.3)
       nokogiri (~> 1.10.2)
       rubyzip (~> 1.2.2)
 
