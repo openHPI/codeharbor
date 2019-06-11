@@ -46,6 +46,10 @@ RSpec.describe ProformaService::ExportTasks do
       expect(imported_exercises.values).to all be_valid
     end
 
+    it 'names the zipped files correctly' do
+      expect(zip_files.keys).to match_array(exercises.map { |e| "task_#{e.id}-#{e.title.underscore.gsub(/[^0-9A-Za-z.\-]/, '_')}.zip" })
+    end
+
     context 'when 10 exercises are supplied' do
       let(:exercises) { create_list(:exercise, 10) }
 
