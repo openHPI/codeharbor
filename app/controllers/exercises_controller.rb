@@ -190,7 +190,7 @@ class ExercisesController < ApplicationController
       return redirect_to exercises_path, notice: t('controllers.exercise.import_proforma_xml.multi_import_successful', count: result.length)
     end
 
-    redirect_to result
+    redirect_to edit_exercise_path(result), notice: t('controllers.exercise.import_proforma_xml.single_import_successful')
   end
 
   def contribute

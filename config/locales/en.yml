@@ -86,6 +86,7 @@ en:
         no_token: "No token in Authorization header"
         unknown_token: "Unknown OAuth2 token"
         multi_import_successful: "Successfully imported %{count} exercises."
+        single_import_successful: "Successfully imported exercise."
 
     exercise_file:
       authorization: "You are not authorized to for this action."
