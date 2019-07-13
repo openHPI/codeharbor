@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :description, aliases: [:simple_description], class: 'Description' do
-    text { 'Very descriptive' }
+    sequence(:text) { |n| "Very descriptive #{n}" }
     language { 'en' }
   end
 

@@ -87,6 +87,7 @@ en:
         unknown_token: "Unknown OAuth2 token"
         multi_import_successful: "Successfully imported %{count} exercises."
         single_import_successful: "Successfully imported exercise."
+        validation_error: "Validation of submitted XML-file failed."
 
     exercise_file:
       authorization: "You are not authorized to for this action."

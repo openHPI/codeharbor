@@ -184,13 +184,17 @@ class ExercisesController < ApplicationController
     uploaded_io = params[:file_upload]
     raise t('controllers.exercise.choose_file') unless uploaded_io
 
-    result = ProformaService::Import.call(zip: uploaded_io, user: current_user)
+    begin
+      result = ProformaService::Import.call(zip: uploaded_io, user: current_user)
 
-    if result.is_a?(Array)
-      return redirect_to exercises_path, notice: t('controllers.exercise.import_proforma_xml.multi_import_successful', count: result.length)
+      if result.is_a?(Array)
+        return redirect_to exercises_path, notice: t('controllers.exercise.import_proforma_xml.multi_import_successful', count: result.length)
+      end
+
+      redirect_to edit_exercise_path(result), notice: t('controllers.exercise.import_proforma_xml.single_import_successful')
+    rescue Proforma::PreImportValidationError => e
+      redirect_to exercises_path, alert: t('controllers.exercise.import_proforma_xml.validation_error')
     end
-
-    redirect_to edit_exercise_path(result), notice: t('controllers.exercise.import_proforma_xml.single_import_successful')
   end
 
   def contribute

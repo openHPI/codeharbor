@@ -25,6 +25,7 @@ RSpec::Matchers.define :be_an_equal_exercise_as do |other|
 
   def array_equal?(object, other)
     return true if object == other # for []
+    return false if object.length != other.length
 
     object.to_a.product(other.to_a).map { |k, v| equal?(k, v) }.any?
   end
