@@ -135,9 +135,13 @@ legend.toggle-next
       = t('exercises.license')
       | :
     .row-value
-      = @exercise.license.name
-      = ': '
-      = link_to @exercise.license.link, @exercise.license.link
+      - if @exercise.license
+        = @exercise.license.name
+        = ': '
+        = link_to @exercise.license.link, @exercise.license.link
+      - else
+        = t('exercises.show.no_license_chosen') + ' '
+        = link_to('Edit', edit_exercise_path(@exercise)) + '.'
   .row
     .row-label
       = t('exercises.impact')

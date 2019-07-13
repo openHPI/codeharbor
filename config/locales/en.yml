@@ -86,7 +86,6 @@ en:
         no_token: "No token in Authorization header"
         unknown_token: "Unknown OAuth2 token"
         multi_import_successful: "Successfully imported %{count} exercises."
-        import_successful_please_save: "Successfully imported the exercise - please check the data below and save."
 
     exercise_file:
       authorization: "You are not authorized to for this action."
@@ -596,6 +595,7 @@ en:
       report: "Report"
       report_message: "Report message"
       submit: "Submit"
+      no_license_chosen: No license has been chosen. Please select a license through
 
     edit:
       header: "Edit:"

@@ -11,7 +11,7 @@ module ProformaService
       if single_task?
         importer = Proforma::Importer.new(@zip)
         @task = importer.perform
-        initialize_exercise
+        import_exercise
       else
         import_multi
       end
@@ -51,8 +51,8 @@ module ProformaService
       filenames.select { |f| f[/\.xml$/] }.any?
     end
 
-    def initialize_exercise
-      @exercise = Exercise.new(
+    def import_exercise
+      @exercise = Exercise.create(
         title: @task.title,
         descriptions: [Description.new(text: @task.description, language: @task.language)],
         instruction: @task.internal_description,

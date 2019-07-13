@@ -190,9 +190,7 @@ class ExercisesController < ApplicationController
       return redirect_to exercises_path, notice: t('controllers.exercise.import_proforma_xml.multi_import_successful', count: result.length)
     end
 
-    flash.now[:notice] = t('controllers.exercise.import_proforma_xml.import_successful_please_save')
-    @exercise = result
-    @license_default = 1
+    redirect_to result
   end
 
   def contribute
