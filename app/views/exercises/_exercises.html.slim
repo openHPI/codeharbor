@@ -43,6 +43,9 @@
             = ' ' + t('exercises.all.ratings')
         span.programming-language.pull-right
           = exercise.execution_environment.language
+        - if exercise.tag_list.include? 'new'
+          span.new-tag.pull-right
+            = t('exercises.new_tag')
     .panel-body.exercise-panel
       .exercise-content
         .description.collapsable

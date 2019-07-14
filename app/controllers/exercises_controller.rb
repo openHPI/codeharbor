@@ -6,7 +6,7 @@ require 'zip'
 # rubocop:disable Metrics/ClassLength
 class ExercisesController < ApplicationController
   load_and_authorize_resource except: [:import_proforma_xml]
-  before_action :set_exercise, only: %i[show edit update destroy add_to_cart add_to_collection push_external contribute]
+  before_action :set_exercise, only: %i[show edit update destroy add_to_cart add_to_collection push_external contribute remove_new]
   before_action :set_search, only: [:index]
   before_action :handle_search_params, only: :index
   skip_before_action :verify_authenticity_token, only: [:import_proforma_xml]
@@ -90,6 +90,7 @@ class ExercisesController < ApplicationController
 
   def update
     @exercise.add_attributes(params[:exercise])
+    @exercise.tag_list.remove('new')
     respond_to do |format|
       if @exercise.update(exercise_params)
         format.html { redirect_to @exercise, notice: t('controllers.exercise.updated') }
@@ -108,6 +109,11 @@ class ExercisesController < ApplicationController
       format.html { redirect_to exercises_url, notice: t('controllers.exercise.destroyed') }
       format.json { head :no_content }
     end
+  end
+
+  def remove_new
+    @exercise.tag_list.remove('new')
+    @exercise.save
   end
 
   def add_to_cart

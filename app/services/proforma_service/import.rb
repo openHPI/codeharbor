@@ -53,14 +53,16 @@ module ProformaService
 
     def import_exercise
       @exercise = Exercise.create(
+        uuid: @task.uuid,
+        user: @user,
         title: @task.title,
+        private: true,
         descriptions: [Description.new(text: @task.description, language: @task.language)],
         instruction: @task.internal_description,
         execution_environment: execution_environment,
         tests: tests,
-        uuid: @task.uuid,
         exercise_files: task_files.values,
-        user: @user
+        tag_list: 'new'
       )
     end
 

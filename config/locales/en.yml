@@ -606,6 +606,7 @@ en:
     errorMessage: "prohibited this project from being saved"
     import_exercise:
       imported_exercise_header: 'Imported exercise:'
+    new_tag: new
 
   file_types:
     header: "File Types"

@@ -4,6 +4,8 @@ require 'nokogiri'
 require 'zip'
 # rubocop:disable Metrics/ClassLength
 class Exercise < ApplicationRecord
+  acts_as_taggable
+
   groupify :group_member
   validates :title, presence: true
   validates :descriptions, presence: true

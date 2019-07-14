@@ -57,6 +57,7 @@ gem 'therubyracer', platforms: :ruby
 gem 'devise-bootstrap-views', '~> 1.0'
 gem 'twitter-bootstrap-rails', git: 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 
+gem 'acts-as-taggable-on', '~> 6.0'
 gem 'better_errors' # !!!Important!!! move this to the development group before codeharbor goes really productive!!!Important!!!
 gem 'font-awesome-rails'
 gem 'jquery-ui-rails'
