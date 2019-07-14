@@ -184,17 +184,7 @@ class ExercisesController < ApplicationController
     uploaded_io = params[:file_upload]
     raise t('controllers.exercise.choose_file') unless uploaded_io
 
-    begin
-      result = ProformaService::Import.call(zip: uploaded_io, user: current_user)
-
-      if result.is_a?(Array)
-        return redirect_to exercises_path, notice: t('controllers.exercise.import_proforma_xml.multi_import_successful', count: result.length)
-      end
-
-      redirect_to edit_exercise_path(result), notice: t('controllers.exercise.import_proforma_xml.single_import_successful')
-    rescue Proforma::PreImportValidationError => e
-      redirect_to exercises_path, alert: t('controllers.exercise.import_proforma_xml.validation_error')
-    end
+    handle_proforma_import(zip: uploaded_io, user: current_user)
   end
 
   def contribute
@@ -339,6 +329,25 @@ class ExercisesController < ApplicationController
   def user_by_code_harbor_token(oauth2_token)
     link = AccountLink.where(oauth2_token: oauth2_token)[0]
     return link.user unless link.nil?
+  end
+
+  def handle_proforma_import(zip:, user:)
+    result = ProformaService::Import.call(zip: zip, user: user)
+
+    return handle_proforma_multi_import(result) if result.is_a?(Array)
+
+    redirect_to edit_exercise_path(result), notice: t('controllers.exercise.import_proforma_xml.single_import_successful')
+  rescue Proforma::PreImportValidationError
+    redirect_to exercises_path, alert: t('controllers.exercise.import_proforma_xml.validation_error')
+  end
+
+  def handle_proforma_multi_import(result)
+    if result.empty?
+      redirect_to exercises_path, alert: t('controllers.exercise.import_proforma_xml.no_file_present')
+    else
+      redirect_to exercises_path,
+                  notice: t('controllers.exercise.import_proforma_xml.multi_import_successful', count: result.length)
+    end
   end
 end
 # rubocop:enable Metrics/ClassLength

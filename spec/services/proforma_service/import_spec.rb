@@ -148,7 +148,6 @@ RSpec.describe ProformaService::Import do
       let(:descriptions) { create_list :description, 2 }
 
       it { is_expected.to be_an_equal_exercise_as exercise }
-
     end
   end
 end
