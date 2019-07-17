@@ -113,7 +113,8 @@ class ExercisesController < ApplicationController
 
   def remove_new
     @exercise.tag_list.remove('new')
-    @exercise.save
+
+    flash[:notice] = "successfully removed new-tag" if @exercise.save
   end
 
   def add_to_cart

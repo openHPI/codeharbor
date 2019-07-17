@@ -373,4 +373,17 @@ ready =->
     link = option.getAttribute("data-link")
     $('.link').html("<p>Link: <a href='#{link}'>#{link}</a></p>")
 
+  $('.newtag-remove-button').on 'click', (event) ->
+    target = $(event.target)
+    exercise_id = target.attr('data-id')
+    $.ajax({
+      type: "POST",
+      url: '/exercises/' + exercise_id + "/remove_new",
+      dataType: 'json',
+      success: (response) ->
+        target.parent().parent().hide()
+      error: (a, b, c) ->
+        alert("error:" + c);
+    })
+
 $(document).on('turbolinks:load', ready)

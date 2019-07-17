@@ -43,9 +43,7 @@
             = ' ' + t('exercises.all.ratings')
         span.programming-language.pull-right
           = exercise.execution_environment.language
-        - if exercise.tag_list.include? 'new'
-          span.new-tag.pull-right
-            = t('exercises.new_tag')
+        = render 'remove_new_tag', exercise: exercise
     .panel-body.exercise-panel
       .exercise-content
         .description.collapsable

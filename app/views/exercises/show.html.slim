@@ -30,8 +30,7 @@
               - else
                 - [*1..5].each do |i|
                   span.fa.fa-star-o data-rating=i
-    span.new-tag.pull-right
-      = 'new'
+    = render 'remove_new_tag', exercise: @exercise
 
   br
 

@@ -1,0 +1,8 @@
+- if exercise.tag_list.include? 'new'
+  span.newtag-dropdown.pull-right
+    = 'new'
+    .newtag-popup
+      .newtag-remove-button data = {id: exercise.id}
+        / alt: .newtag-remove-button data = {'remove-path': remove_new_exercise_url(exercise)}
+        = 'remove "new"'
+          /acknowledge with checkbox?
