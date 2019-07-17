@@ -4,6 +4,23 @@ require 'rails_helper'
 require 'nokogiri'
 
 RSpec.describe Exercise, type: :model do
+  describe '#valid?' do
+    it { is_expected.to validate_presence_of(:descriptions) }
+    it { is_expected.to validate_presence_of(:execution_environment) }
+
+    context 'when exercise is private' do
+      subject { build(:exercise, private: true) }
+
+      it { is_expected.not_to validate_presence_of(:license) }
+    end
+
+    context 'when exercise is public' do
+      subject { build(:exercise, private: false) }
+
+      it { is_expected.to validate_presence_of(:license) }
+    end
+  end
+
   describe '#add_attributes' do
     let(:exercise) { create(:only_meta_data) }
     let(:file_type) { create(:file_type) }
