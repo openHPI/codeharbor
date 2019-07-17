@@ -10,7 +10,8 @@ RSpec.describe 'exercises', type: :request do
       {
         title: 'title',
         descriptions_attributes: {'0' => {text: 'description'}},
-        execution_environment_id: create(:java_8_execution_environment).id
+        execution_environment_id: create(:java_8_execution_environment).id,
+        license_id: create(:license).id
       }
     end
 

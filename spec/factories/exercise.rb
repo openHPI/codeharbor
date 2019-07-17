@@ -5,6 +5,7 @@ FactoryBot.define do
     sequence(:title) { |n| "Test Exercise #{n}" }
     descriptions { [FactoryBot.create(:simple_description)] }
     execution_environment { build(:java_8_execution_environment) }
+    license { build(:license) }
 
     trait :empty do
       title {}
@@ -17,6 +18,7 @@ FactoryBot.define do
     descriptions { [FactoryBot.create(:simple_description)] }
     authors { [FactoryBot.create(:user), FactoryBot.create(:user)] }
     execution_environment { build(:java_8_execution_environment) }
+    license { build(:license) }
   end
 
   factory :only_meta_data, class: 'Exercise' do

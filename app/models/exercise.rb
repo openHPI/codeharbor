@@ -10,6 +10,7 @@ class Exercise < ApplicationRecord
   validates :title, presence: true
   validates :descriptions, presence: true
   validates :execution_environment, presence: true
+  validates :license, presence: true, unless: :private?
 
   has_many :exercise_files, dependent: :destroy
   has_many :tests, dependent: :destroy
@@ -193,7 +194,7 @@ class Exercise < ApplicationRecord
 
   def add_attributes(params)
     add_relation(params[:exercise_relation]) if params[:exercise_relation]
-    add_license(params)
+    add_license(params) if params[:license_id]
     add_labels(params[:labels])
     add_groups(params[:groups])
     add_tests(params[:tests_attributes])
