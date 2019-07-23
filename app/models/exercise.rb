@@ -30,6 +30,9 @@ class Exercise < ApplicationRecord
   has_many :cart_exercises, dependent: :destroy
   has_many :carts, through: :cart_exercises
 
+  belongs_to :successor, class_name: 'Exercise', inverse_of: :predecessor
+  has_one :predecessor, class_name: 'Exercise', foreign_key: 'successor_id', inverse_of: :successor
+
   belongs_to :user
   belongs_to :execution_environment
   belongs_to :license
@@ -44,6 +47,7 @@ class Exercise < ApplicationRecord
 
   default_scope { where(deleted: [nil, false]) }
 
+  scope :active, -> { where(successor: nil) }
   scope :timespan, ->(days) { days != 0 ? where('DATE(created_at) >= ?', Time.zone.today - days) : where(nil) }
   scope :text_like, lambda { |text|
     if text.present?

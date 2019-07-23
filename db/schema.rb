@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_14_093448) do
+ActiveRecord::Schema.define(version: 2019_07_23_114152) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -177,8 +177,10 @@ ActiveRecord::Schema.define(version: 2019_07_14_093448) do
     t.integer "license_id"
     t.boolean "deleted"
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.bigint "successor_id"
     t.index ["execution_environment_id"], name: "index_exercises_on_execution_environment_id"
     t.index ["license_id"], name: "index_exercises_on_license_id"
+    t.index ["successor_id"], name: "index_exercises_on_successor_id"
     t.index ["user_id"], name: "index_exercises_on_user_id"
   end
 

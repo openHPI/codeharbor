@@ -120,7 +120,7 @@ RSpec.describe ProformaService::Import do
         expect(import_service).to all be_an(Exercise)
       end
 
-      it 'imports the zip exactly how the were exported' do
+      it 'imports the zip exactly how they were exported' do
         expect(import_service).to all be_an_equal_exercise_as(exercise).or be_an_equal_exercise_as(exercise2)
       end
 

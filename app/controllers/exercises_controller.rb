@@ -21,7 +21,8 @@ class ExercisesController < ApplicationController
     order_param = {average_rating: :desc}
     order_param = {created_at: :desc} if @order == 'order_created'
 
-    @exercises = Exercise.search(params[:search], params[:settings], @option, current_user).order(order_param)
+    @exercises = Exercise.active
+                         .search(params[:search], params[:settings], @option, current_user).order(order_param)
                          .paginate(per_page: 5, page: params[:page])
   end
 

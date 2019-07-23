@@ -12,7 +12,7 @@ module ProformaService
       exporter.perform
     end
 
-    private
+    # private
 
     def create_task
       @task = Proforma::Task.new(
