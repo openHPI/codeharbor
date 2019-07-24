@@ -1,4 +1,4 @@
-- attachment_present = file.object.attachment_file_name.present?
+- attachment_present = file.object.attachment.exists?
 - if attachment_present
   - editor_display = "display: none"
   - attachment_display = "display: block"
@@ -18,21 +18,10 @@ a.btn.btn-main.btn-xs.toggle-input data={text_initial: t('exercises.files.upload
     - if attachment_present
       .btn-group
         - if file.object.attached_image?
-          - if file.object.attachment.exists?
-            = image_tag file.object.attachment.url(:large)
-          - else
-            = image_tag "data:#{file.object.attachment_content_type || 'image/jpeg'};base64,#{Base64.encode64(Paperclip.io_adapters.for(file.object.attachment).read)}"
+          = image_tag file.object.attachment.url(:large)
         - else
-          - if file.object.attachment.exists?
-            / should be better solvable with activestorage blobs
-            = link_to file.object.attachment.original_filename, download_attachment_path(file.object), class: 'btn btn-default', style: "border-right: none", 'data-turbolinks' => false
-
-
+          = link_to file.object.attachment.original_filename, download_attachment_path(file.object), class: 'btn btn-default', style: "border-right: none", 'data-turbolinks' => false
         = link_to '#', class: 'btn btn-default remove-attachment', style: "border-left: none; margin-right: 5px;" do
           i.fa.fa-remove style=("color: gray")
     .alternative style=editor_display
       = file.file_field :content, disabled: !attachment_present, class: 'alternative-input form-control'
-      / should only trigger, when importing a zip
-      - if attachment_present
-        - if !file.object.attachment.exists?
-          = file.hidden_field :'attachment-base64', value: "data:#{file.object.attachment_content_type || 'image/jpeg'};base64,#{Base64.encode64(Paperclip.io_adapters.for(file.object.attachment).read)}"
