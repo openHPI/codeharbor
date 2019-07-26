@@ -148,6 +148,14 @@ class ExercisesController < ApplicationController
     end
   end
 
+  def history
+    @history_exercises = @exercise.all_predecessors
+    respond_to do |format|
+      format.html { render :index }
+      format.js { render 'load_history.js.erb' }
+    end
+  end
+
   def push_external
     account_link = AccountLink.find(params[:account_link])
     error = push_exercise(@exercise, account_link)

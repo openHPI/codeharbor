@@ -136,6 +136,7 @@ Rails.application.routes.draw do
       get :contribute
       get :download_exercise
       post :remove_new
+      get :history
     end
   end
 

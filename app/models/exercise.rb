@@ -11,6 +11,7 @@ class Exercise < ApplicationRecord
   validates :descriptions, presence: true
   validates :execution_environment, presence: true
   validates :license, presence: true, unless: :private?
+  validate :no_predecessor_loop
 
   has_many :exercise_files, dependent: :destroy
   has_many :tests, dependent: :destroy
@@ -355,6 +356,32 @@ class Exercise < ApplicationRecord
       tests: tests.map(&:dup),
       exercise_files: exercise_files.map(&:dup)
     )
+  end
+
+  def all_predecessors
+    predecessors = []
+    return predecessors unless valid?
+
+    current = predecessor
+    until current.nil?
+      predecessors << current
+      current = current.predecessor
+    end
+    predecessors
+  end
+
+  private
+
+  def no_predecessor_loop
+    predecessors = []
+    current = predecessor
+    until current.nil?
+      break errors.add(:predecessors, "are looped at id=#{current.id}") if predecessors.include? current
+
+      predecessors << current
+      current = current.predecessor
+    end
+    predecessors
   end
 end
 # rubocop:enable Metrics/ClassLength

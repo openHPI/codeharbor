@@ -393,6 +393,13 @@ input[type="radio"]:checked+label {
   margin-bottom: 15px;
 }
 
+.history-box {
+  display: none;
+  width: 100%;
+  position: relative;
+  margin-bottom: 15px;
+}
+
 .button-panel {
   width: 100%;
   display: inline-block;

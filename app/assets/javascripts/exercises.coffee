@@ -329,6 +329,39 @@ ready =->
       $(this).removeClass('active').addClass('inactive')
     $(this).siblings('.slide-right').removeClass('inactive').addClass('active')
 
+  $('.history-button').on 'click', ->
+    exercise_id = this.getAttribute("data-exercise")
+    url = window.location.pathname + "/history"
+    $history_box = $(".history-box")
+
+    $caret = $(this).children('.my-caret')
+    $icon = $(this).children('.wait')
+
+    if $caret.hasClass('fa-caret-down')
+      $caret.removeClass('fa-caret-down').addClass('fa-caret-up')
+      $.ajax({
+        type: 'GET',
+        url: url
+        dataType: 'script'
+        beforeSend: ->
+          $icon.show()
+        success: ->
+          $history_box.show()
+          anchor = document.getElementById('page_end')
+          if anchor
+            anchor.scrollIntoView(false)
+        complete: ->
+          $icon.hide()
+      })
+    else
+      $caret.removeClass('fa-caret-up').addClass('fa-caret-down')
+      $history_box.hide()
+
+
+
+
+
+
   if document.getElementById('window')
     if document.getElementById('window').value == "true"
       $('.dropdown-content').show()
