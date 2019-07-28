@@ -31,8 +31,8 @@ class Exercise < ApplicationRecord
   has_many :cart_exercises, dependent: :destroy
   has_many :carts, through: :cart_exercises
 
-  belongs_to :successor, class_name: 'Exercise', inverse_of: :predecessor
-  has_one :predecessor, class_name: 'Exercise', foreign_key: 'successor_id', inverse_of: :successor
+  belongs_to :predecessor, class_name: 'Exercise', inverse_of: :predecessor
+  has_one :successor, class_name: 'Exercise', foreign_key: 'predecessor_id', inverse_of: :successor
 
   belongs_to :user
   belongs_to :execution_environment
@@ -370,18 +370,28 @@ class Exercise < ApplicationRecord
     predecessors
   end
 
-  private
-
-  def no_predecessor_loop
+  def predecessor_loop?
     predecessors = []
     current = predecessor
     until current.nil?
-      break errors.add(:predecessors, "are looped at id=#{current.id}") if predecessors.include? current
+      return true if predecessors.include? current
 
       predecessors << current
       current = current.predecessor
     end
-    predecessors
+    false
+  end
+
+  def save_old_version
+    old_version = Exercise.find(id).dup
+    self.predecessor = old_version
+    old_version.save
+  end
+
+  private
+
+  def no_predecessor_loop
+    errors.add(:predecessors, 'are looped') if predecessor_loop?
   end
 end
 # rubocop:enable Metrics/ClassLength

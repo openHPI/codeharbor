@@ -599,6 +599,10 @@ en:
       report_message: "Report message"
       submit: "Submit"
       no_license_chosen: No license has been chosen. Please select a license through
+      history:
+        no_history: No history found
+        history_version_name: "Version: %{version_nr} from: %{updated_at}"
+
 
     edit:
       header: "Edit:"

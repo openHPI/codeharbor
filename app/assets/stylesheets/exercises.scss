@@ -398,6 +398,15 @@ input[type="radio"]:checked+label {
   width: 100%;
   position: relative;
   margin-bottom: 15px;
+  padding: 5px;
+}
+
+.history-info {
+  width: 100%;
+  text-align: center;
+  font-size: 15pt;
+  font-weight: bold;
+  margin: 5px;
 }
 
 .button-panel {

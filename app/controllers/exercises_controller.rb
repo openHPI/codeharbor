@@ -92,13 +92,17 @@ class ExercisesController < ApplicationController
   def update
     @exercise.add_attributes(params[:exercise])
     @exercise.tag_list.remove('new')
-    respond_to do |format|
-      if @exercise.update(exercise_params)
-        format.html { redirect_to @exercise, notice: t('controllers.exercise.updated') }
-        format.json { render :show, status: :ok, location: @exercise }
-      else
-        format.html { render :edit }
-        format.json { render json: @exercise.errors, status: :unprocessable_entity }
+    ActiveRecord::Base.transaction do
+      @exercise.save_old_version
+      respond_to do |format|
+        if @exercise.update(exercise_params)
+          format.html { redirect_to @exercise, notice: t('controllers.exercise.updated') }
+          format.json { render :show, status: :ok, location: @exercise }
+        else
+          format.html { render :edit }
+          format.json { render json: @exercise.errors, status: :unprocessable_entity }
+          raise ActiveRecord::Rollback
+        end
       end
     end
   end

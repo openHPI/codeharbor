@@ -1,10 +1,12 @@
-.panel.panel-default.history
-  .panel-heading
-    - if history_exercises.present?
-      - history_exercises.each do |exercise|
-        = link_to truncate(exercise.title, length: 40), exercise_path(exercise), data: {toggle: 'tooltip'}, title: exercise.title
+- if history_exercises.present?
+  - history_exercises.each_with_index do |exercise, index|
+    .panel.panel-default.history
+      .panel-body
+        span
+          = link_to t('exercises.show.history.history_version_name', version_nr: history_exercises.length - index, updated_at: exercise.updated_at), exercise_path(exercise)
         / - if can? :read, exercise
         /   span.pull-right
         /     = link_to t('exercises.all.view'), exercise_path(exercise), class: 'btn btn-xs btn-default'
-    - else
-      = 'History not found'
+- else
+  .history-info
+    = t('exercises.show.history.no_history')
