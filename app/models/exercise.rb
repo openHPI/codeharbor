@@ -48,7 +48,7 @@ class Exercise < ApplicationRecord
 
   default_scope { where(deleted: [nil, false]) }
 
-  scope :active, -> { where(successor: nil) }
+  scope :active, -> { where('NOT EXISTS (SELECT t2.id FROM exercises t2 WHERE exercises.id = t2.predecessor_id)') }
   scope :timespan, ->(days) { days != 0 ? where('DATE(created_at) >= ?', Time.zone.today - days) : where(nil) }
   scope :text_like, lambda { |text|
     if text.present?
@@ -383,9 +383,14 @@ class Exercise < ApplicationRecord
   end
 
   def save_old_version
-    old_version = Exercise.find(id).dup
-    self.predecessor = old_version
-    old_version.save
+    root_exercise = Exercise.find(id)
+    old_version = root_exercise.duplicate
+    old_version.assign_attributes root_exercise.attributes.except('id', 'created_at', 'updated_at', 'uuid')
+    ActiveRecord::Base.transaction do
+      update!(predecessor: nil)
+      old_version.save!
+      update!(predecessor: old_version)
+    end
   end
 
   private
