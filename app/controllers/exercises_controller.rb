@@ -153,7 +153,18 @@ class ExercisesController < ApplicationController
   end
 
   def history
-    @history_exercises = @exercise.all_predecessors
+    @history_exercises = @exercise.complete_history
+    @history_exercises.map!.with_index do |exercise, index|
+      version = if exercise == @exercise
+                  'selected'
+                else
+                  index.zero? ? 'latest' : @history_exercises.length - index
+                end
+      {
+        exercise: exercise,
+        version: version
+      }
+    end
     respond_to do |format|
       format.html { render :index }
       format.js { render 'load_history.js.erb' }

@@ -15,14 +15,14 @@ module ProformaService
     def create_task
       Proforma::Task.new(
         title: @exercise.title,
-        description: first_description,
+        description: primary_description.text,
         internal_description: @exercise.instruction,
         proglang: proglang,
         files: task_files,
         tests: tests,
         uuid: @exercise.uuid,
         parent_uuid: parent_uuid,
-        language: @exercise.descriptions.first.language,
+        language: primary_description.language,
         model_solutions: model_solutions
       )
     end
@@ -31,8 +31,8 @@ module ProformaService
       @exercise.clone_relations.first&.origin&.uuid
     end
 
-    def first_description
-      @exercise.descriptions.first.text
+    def primary_description
+      @exercise.descriptions.select(&:primary?).first
     end
 
     def proglang

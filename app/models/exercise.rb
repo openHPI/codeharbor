@@ -32,8 +32,8 @@ class Exercise < ApplicationRecord
   has_many :cart_exercises, dependent: :destroy
   has_many :carts, through: :cart_exercises
 
-  belongs_to :predecessor, class_name: 'Exercise', inverse_of: :predecessor
-  has_one :successor, class_name: 'Exercise', foreign_key: 'predecessor_id', inverse_of: :successor
+  belongs_to :predecessor, class_name: 'Exercise'
+  has_one :successor, class_name: 'Exercise', foreign_key: 'predecessor_id'
 
   belongs_to :user
   belongs_to :execution_environment
@@ -357,6 +357,19 @@ class Exercise < ApplicationRecord
       tests: tests.map(&:dup),
       exercise_files: exercise_files.map(&:dup)
     )
+  end
+
+  def last_successor
+    puts "puts #{id}"
+    successor.nil? ? self : successor.last_successor
+  end
+
+  def complete_history
+    latest_exercise = last_successor
+    history = [latest_exercise]
+    return history unless latest_exercise.valid?
+
+    history + latest_exercise.all_predecessors
   end
 
   def all_predecessors

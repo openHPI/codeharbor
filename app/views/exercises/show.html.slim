@@ -374,14 +374,13 @@ div class=("comment-box with-borders") data-exercise=@exercise.id
           = f.submit class: 'btn btn-default'
   .comment-body
 
-- if @exercise.predecessor
-  .history-panel
-    = button_tag type: 'button', class: 'full-window-button history-button' do
-      = t('exercises.all.history_exercises')+ ' '
-      span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
-      span.fa.fa-caret-down.my-caret
-  div class=("history-box with-borders") data-exercise=@exercise.id
-    .content
+.history-panel
+  = button_tag type: 'button', class: 'full-window-button history-button' do
+    = t('exercises.all.history_exercises')+ ' '
+    span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
+    span.fa.fa-caret-down.my-caret
+div class=("history-box with-borders") data-exercise=@exercise.id
+  .content
 
 .actions.btn-group[role="group"]
   - if can? :edit, @exercise

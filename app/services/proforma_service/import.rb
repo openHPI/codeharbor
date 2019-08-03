@@ -10,9 +10,14 @@ module ProformaService
     def execute
       if single_task?
         importer = Proforma::Importer.new(@zip)
-        task = importer.perform
-        exercise = ConvertTaskToExercise.call(task: task, user: @user, exercise: Exercise.find_by(uuid: task.uuid))
-        exercise.save!
+        @task = importer.perform
+        exercise = ConvertTaskToExercise.call(task: @task, user: @user, exercise: base_exercise)
+
+        ActiveRecord::Base.transaction do
+          exercise.save_old_version if exercise.persisted?
+          exercise.save!
+        end
+
         exercise
       else
         import_multi
@@ -20,6 +25,14 @@ module ProformaService
     end
 
     private
+
+    def base_exercise
+      exercise = Exercise.find_by(uuid: @task.uuid)
+      task_checksum = @task.import_checksum || @task.checksum
+      return exercise if exercise.checksum == task_checksum
+
+      nil
+    end
 
     def import_multi
       Zip::File.open(@zip.path) do |zip_file|

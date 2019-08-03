@@ -2,7 +2,7 @@
 
 module ProformaService
   class ConvertTaskToExercise < ServiceBase
-    def initialize(task: nil, user: nil, exercise: nil)
+    def initialize(task:, user:, exercise:)
       @task = task
       @user = user
       @exercise = exercise || Exercise.new
@@ -17,11 +17,10 @@ module ProformaService
 
     def import_exercise
       @exercise.assign_attributes(
-        uuid: @task.uuid,
         user: @user,
         title: @task.title,
         private: true,
-        descriptions: descriptions,
+        descriptions: new_descriptions,
         instruction: @task.internal_description,
         execution_environment: execution_environment,
         tests: tests,
@@ -30,8 +29,11 @@ module ProformaService
       )
     end
 
-    def descriptions
-      @exercise.descriptions[0] = [Description.new(text: @task.description, language: @task.language)]
+    def new_descriptions
+      descriptions = @exercise.descriptions.presence || [Description.new(primary: true)]
+      primary = descriptions.select(&:primary?).first
+      primary.assign_attributes(text: @task.description, language: @task.language)
+      descriptions
     end
 
     def task_files
