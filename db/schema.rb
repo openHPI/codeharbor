@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_23_114152) do
+ActiveRecord::Schema.define(version: 2019_08_01_135856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -99,6 +99,7 @@ ActiveRecord::Schema.define(version: 2019_07_23_114152) do
     t.string "text"
     t.integer "exercise_id"
     t.string "language", default: "EN"
+    t.boolean "primary"
     t.index ["exercise_id"], name: "index_descriptions_on_exercise_id"
   end
 
@@ -182,6 +183,7 @@ ActiveRecord::Schema.define(version: 2019_07_23_114152) do
     t.index ["license_id"], name: "index_exercises_on_license_id"
     t.index ["predecessor_id"], name: "index_exercises_on_predecessor_id"
     t.index ["user_id"], name: "index_exercises_on_user_id"
+    t.index ["uuid"], name: "index_exercises_on_uuid", unique: true
   end
 
   create_table "file_types", id: :serial, force: :cascade do |t|

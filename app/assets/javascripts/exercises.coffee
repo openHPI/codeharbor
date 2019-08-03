@@ -357,11 +357,6 @@ ready =->
       $caret.removeClass('fa-caret-up').addClass('fa-caret-down')
       $history_box.hide()
 
-
-
-
-
-
   if document.getElementById('window')
     if document.getElementById('window').value == "true"
       $('.dropdown-content').show()
@@ -418,5 +413,12 @@ ready =->
       error: (a, b, c) ->
         alert("error:" + c);
     })
+
+  $('body').on 'click', '.primary-checkbox', (event) ->
+    $('.primary-checkbox').prop('checked', false)
+    $(event.target).prop('checked', true)
+
+  if $('.primary-checkbox:checked').length < 1
+    $('.primary-checkbox')[0].click()
 
 $(document).on('turbolinks:load', ready)

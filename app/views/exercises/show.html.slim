@@ -64,8 +64,8 @@ legend.toggle-next
 
   - @exercise.descriptions.each do |description|
     .row.vertical
-      .row-label
-        = t('exercises.description_in') + ' '
+      .row-label class=(description.primary? ? 'primary-description' : '')
+        = (description.primary? ? t('exercises.primary_description_in') : t('exercises.description_in')) + ' '
         = description.language
         | :
       .row-value
@@ -104,6 +104,7 @@ legend.toggle-next
     - else
       .row-value
         = link_to @exercise.user.name, user_path(@exercise.user)
+
 legend.toggle-next
   span.number = '2'
   = t('exercises.form.additional_info') + ' '
@@ -159,7 +160,11 @@ legend.toggle-next
         = t('exercises.in_collections')
         = ': '
         = @exercise.in_collections
-
+  .row
+    .row-label
+      = 'UUID'
+    .row-value
+      = @exercise.uuid
 legend.toggle-next
   span.number = '3'
   = t('exercises.files.label') + ' '

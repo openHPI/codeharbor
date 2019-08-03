@@ -122,6 +122,18 @@ $exercise-color: #006600;
   padding-bottom: 5px;
 }
 
+.primary-description {
+  background-color: #CCC !important;
+  border-color: #CCC !important;
+}
+
+.description-lang-select {
+  display: unset;
+  width: unset;
+  height: unset;
+  padding: 5px;
+}
+
 .fa-star, .fa-star-o, .fa-star-half-o {
   color: #B79A00;
 }
@@ -330,31 +342,30 @@ legend {
   margin-bottom: 10px;
 }
 
-.radio-left {
+.radio-base {
   border: #CCCCCC 1px solid;
-  box-sizing: border-box;
   padding: 5px;
   font-size: 14px;
   cursor: pointer;
   font-weight: normal;
   text-align: center;
+  box-sizing: border-box;
+  border-radius: 4px;
+}
+
+.radio-left {
+  @extend .radio-base;
   width: 50%;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 
 .radio-right {
-  border: #CCCCCC 1px solid;
-  box-sizing: border-box;
+  @extend .radio-base;
   margin-left: -1px;
-  padding: 5px;
-  font-size: 14px;
-  cursor: pointer;
-  font-weight: normal;
-  text-align: center;
   width: 50%;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
 }
 
 .radio-left.small-radio, .radio-right.small-radio {
@@ -368,6 +379,17 @@ input[type="radio"] {
 
 input[type="radio"]:checked+label {
   background-color: #eeeeee;
+}
+
+.primary-checkbox:checked+label {
+  background-color: #CCC;
+}
+
+.primary-checkbox+label {
+  border-color: #AAA;
+  background-color: #FFF;
+  display: inline;
+  padding: 10px 25px;
 }
 
 .full-window-button{

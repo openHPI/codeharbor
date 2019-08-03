@@ -472,6 +472,7 @@ en:
     title: "Title"
     rate: "Rate"
     description_in: "Description in"
+    primary_description_in: "Description (primary) in"
     instructions: "Instructions"
     parent: "Parent"
     parent_deleted: "Parent was deleted"

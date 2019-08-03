@@ -11,7 +11,8 @@ class Exercise < ApplicationRecord
   validates :descriptions, presence: true
   validates :execution_environment, presence: true
   validates :license, presence: true, unless: :private?
-  validate :no_predecessor_loop
+  validate :no_predecessor_loop, :one_primary_description?
+  validates_uniqueness_of :uuid
 
   has_many :exercise_files, dependent: :destroy
   has_many :tests, dependent: :destroy
@@ -251,14 +252,14 @@ class Exercise < ApplicationRecord
 
   def add_descriptions(description_array)
     description_array.try(:each) do |_key, array|
-      destroy = array[:_destroy]
+      destroy_param = array[:_destroy]
       id = array[:id]
 
       if id
         description = Description.find(id)
-        destroy ? description.destroy : description.update(text: array[:text], language: array[:language])
+        destroy_param ? description.destroy : description.update(text: array[:text], language: array[:language], primary: array[:primary])
       else
-        descriptions.new(text: array[:text], language: array[:language]) unless destroy
+        descriptions.new(text: array[:text], language: array[:language]) unless destroy_param
       end
     end
   end
@@ -393,10 +394,20 @@ class Exercise < ApplicationRecord
     end
   end
 
+  def checksum
+    ProformaService::ConvertExerciseToTask.call(exercise: self).generate_checksum
+  end
+
   private
 
   def no_predecessor_loop
     errors.add(:predecessors, 'are looped') if predecessor_loop?
+  end
+
+  def one_primary_description?
+    primary_description_count = descriptions.select(&:primary?).count
+    errors.add(:exercise, 'has more than one primary descriptions') if primary_description_count > 1
+    errors.add(:exercise, 'has no primary description') if primary_description_count < 1
   end
 end
 # rubocop:enable Metrics/ClassLength

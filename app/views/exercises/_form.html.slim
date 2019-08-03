@@ -40,10 +40,15 @@
                 = f.label :language, class: 'form-label' do
                   = t('exercises.description_in')
                   = ' '
-                  = description.collection_select :language, Description::LANGUAGES, :to_s, :to_s, include_blank: false, class: 'form-control'
+                  = description.collection_select :language, Description::LANGUAGES, :to_s, :to_s, {}, {include_blank: false, class: 'form-control description-lang-select'}
+
+                = description.check_box :primary, {multiple:false, hidden: true, class: 'primary-checkbox'}, 'true', 'false'
+                = description.label :primary, {class: 'radio-base form-label'}
+
                 = description.remove_nested_fields_link :text, class:'btn btn-default btn-xs pull-right' do
                   i.fa.fa-remove style=("color: #800000")
                   = ' ' + t('exercises.form.descriptions.remove')
+
               = description.text_area :text, class:'form-control'
 
           = f.add_nested_fields_link :descriptions, ' ' , class: 'btn btn-main' do
