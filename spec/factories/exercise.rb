@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :exercise, aliases: [:simple_exercise] do
     sequence(:title) { |n| "Test Exercise #{n}" }
-    descriptions { [FactoryBot.create(:simple_description)] }
+    descriptions { [FactoryBot.create(:simple_description, :primary)] }
     execution_environment { build(:java_8_execution_environment) }
     license { build(:license) }
 
@@ -15,7 +15,7 @@ FactoryBot.define do
 
   factory :exercise_with_author, class: 'Exercise' do
     title { 'Some Exercise' }
-    descriptions { [FactoryBot.create(:simple_description)] }
+    descriptions { [FactoryBot.create(:simple_description, :primary)] }
     authors { [FactoryBot.create(:user), FactoryBot.create(:user)] }
     execution_environment { build(:java_8_execution_environment) }
     license { build(:license) }
@@ -34,6 +34,9 @@ FactoryBot.define do
     # after(:create) do |exercise|
     # create(:simple_description, exercise: exercise)
     # end
+    trait(:with_primary_description) do
+      descriptions { [FactoryBot.create(:simple_description, :primary)] }
+    end
   end
 
   factory :exercise_with_single_java_main_file, class: 'Exercise' do

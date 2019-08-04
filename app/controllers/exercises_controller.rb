@@ -88,25 +88,21 @@ class ExercisesController < ApplicationController
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def update
     @exercise.add_attributes(params[:exercise])
     @exercise.tag_list.remove('new')
-    ActiveRecord::Base.transaction do
-      @exercise.save_old_version
-      respond_to do |format|
-        if @exercise.update(exercise_params)
-          format.html { redirect_to @exercise, notice: t('controllers.exercise.updated') }
-          format.json { render :show, status: :ok, location: @exercise }
-        else
-          format.html { render :edit }
-          format.json { render json: @exercise.errors, status: :unprocessable_entity }
-          raise ActiveRecord::Rollback
-        end
+    respond_to do |format|
+      if @exercise.update_and_version(exercise_params)
+        format.html { redirect_to @exercise, notice: t('controllers.exercise.updated') }
+        format.json { render :show, status: :ok, location: @exercise }
+      else
+        format.html { render :edit }
+        format.json { render json: @exercise.errors, status: :unprocessable_entity }
       end
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
   def destroy
     @exercise.soft_delete

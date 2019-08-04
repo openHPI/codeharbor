@@ -2,9 +2,13 @@
 
 require 'rspec/expectations'
 
-RSpec::Matchers.define :be_an_equal_exercise_as do |other|
-  match do |exercise|
-    equal?(exercise, other)
+RSpec::Matchers.define :be_an_equal_exercise_as do |exercise|
+  match do |actual|
+    equal?(actual, exercise)
+  end
+  @last_checked
+  failure_message do |actual|
+    "#{actual.inspect} is not equal to \n#{exercise.inspect}. \nLast checked attribute: #{@last_checked}"
   end
 
   def equal?(object, other)
@@ -18,6 +22,7 @@ RSpec::Matchers.define :be_an_equal_exercise_as do |other|
   def attributes_equal?(object, other)
     other_attributes = attributes_and_associations(other)
     attributes_and_associations(object).each do |k, v|
+      @last_checked = "#{k}: \n#{v} vs \n#{other_attributes[k]}"
       return false unless equal?(other_attributes[k], v)
     end
     true

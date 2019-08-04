@@ -26,7 +26,6 @@ RSpec.describe ProformaService::Import do
     let(:exercise) do
       create(:exercise,
              instruction: 'instruction',
-             uuid: SecureRandom.uuid,
              execution_environment: execution_environment,
              exercise_files: files,
              tests: tests)
@@ -110,7 +109,6 @@ RSpec.describe ProformaService::Import do
       let(:exercise2) do
         create(:exercise,
                instruction: 'instruction2',
-               uuid: SecureRandom.uuid,
                execution_environment: execution_environment,
                exercise_files: [],
                tests: [])

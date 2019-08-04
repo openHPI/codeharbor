@@ -22,7 +22,7 @@ RSpec.describe Exercise, type: :model do
   end
 
   describe '#add_attributes' do
-    let(:exercise) { create(:only_meta_data) }
+    let(:exercise) { create(:only_meta_data, :with_primary_description) }
     let(:file_type) { create(:file_type) }
     let(:tests) { Test.where(exercise_id: exercise.id) }
     let(:files) { ExerciseFile.where(exercise_id: exercise.id) }
@@ -190,7 +190,7 @@ RSpec.describe Exercise, type: :model do
       end
 
       context 'when description is searched' do
-        let(:exercise) { create(:simple_exercise, user: user, descriptions: [create(:simple_description, text: 'filtertext')]) }
+        let(:exercise) { create(:simple_exercise, user: user, descriptions: [create(:simple_description, :primary, text: 'filtertext')]) }
         let(:search) { 'filtertext' }
 
         it { is_expected.to include exercise }

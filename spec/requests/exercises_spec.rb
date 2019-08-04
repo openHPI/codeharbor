@@ -5,10 +5,19 @@ require 'rails_helper'
 RSpec.describe 'exercises', type: :request do
   context 'when logged in' do
     let(:user) { FactoryBot.create(:user) }
-    let(:exercise) { FactoryBot.create(:only_meta_data, authors: [user]) }
+    let(:exercise) { FactoryBot.create(:only_meta_data, :with_primary_description, authors: [user]) }
     let(:valid_params) do
       {
         title: 'title',
+        descriptions_attributes: {'0' => {text: 'description', primary: true}},
+        execution_environment_id: create(:java_8_execution_environment).id,
+        license_id: create(:license).id
+      }
+    end
+
+    let(:update_params) do
+      {
+        title: 'new_title',
         descriptions_attributes: {'0' => {text: 'description'}},
         execution_environment_id: create(:java_8_execution_environment).id,
         license_id: create(:license).id
@@ -57,14 +66,14 @@ RSpec.describe 'exercises', type: :request do
 
     describe 'PATCH /exercise/:id' do
       it 'has http 302' do
-        patch exercise_path(exercise, exercise: valid_params)
+        patch exercise_path(exercise, exercise: update_params)
         expect(response).to have_http_status(:found)
       end
     end
 
     describe 'PUT /exercise/:id' do
       it 'has http 302' do
-        put exercise_path(exercise, exercise: valid_params)
+        put exercise_path(exercise, exercise: update_params)
         expect(response).to have_http_status(:found)
       end
     end

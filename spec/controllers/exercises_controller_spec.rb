@@ -29,7 +29,7 @@ RSpec.describe ExercisesController, type: :controller do
   # adjust the attributes here as well.
   let(:valid_attributes) do
     FactoryBot.attributes_for(:only_meta_data, user: user).merge(
-      descriptions_attributes: {'0' => FactoryBot.attributes_for(:simple_description)}
+      descriptions_attributes: {'0' => FactoryBot.attributes_for(:simple_description, :primary)}
     )
   end
 
@@ -116,7 +116,7 @@ RSpec.describe ExercisesController, type: :controller do
       let(:valid_params) do
         {
           title: 'title',
-          descriptions_attributes: {'0' => {text: 'description'}},
+          descriptions_attributes: {'0' => {text: 'description', primary: true}},
           execution_environment_id: create(:java_8_execution_environment).id,
           license_id: create(:license)
         }
@@ -153,6 +153,11 @@ RSpec.describe ExercisesController, type: :controller do
   end
 
   describe 'PUT #update' do
+    let(:update_attributes) do
+      FactoryBot.attributes_for(:only_meta_data, user: user).merge(
+        descriptions_attributes: {'0' => FactoryBot.attributes_for(:simple_description)}
+      )
+    end
     let!(:exercise) { create(:simple_exercise, valid_attributes) }
 
     context 'with valid params' do
@@ -165,18 +170,24 @@ RSpec.describe ExercisesController, type: :controller do
       end
 
       it 'assigns the requested exercise as @exercise' do
-        put :update, params: {id: exercise.to_param, exercise: valid_attributes}, session: valid_session
+        put :update, params: {id: exercise.to_param, exercise: update_attributes}, session: valid_session
         expect(assigns(:exercise)).to eq(exercise)
       end
 
       it 'redirects to the exercise' do
-        put :update, params: {id: exercise.to_param, exercise: valid_attributes}, session: valid_session
+        put :update, params: {id: exercise.to_param, exercise: update_attributes}, session: valid_session
         expect(response).to redirect_to(exercise)
+      end
+
+      it 'creates a predecessor of the exercise' do
+        expect { put :update, params: {id: exercise.to_param, exercise: update_attributes}, session: valid_session }.to change {
+          exercise.reload.predecessor
+        }.from(nil).to(be_an Exercise)
       end
 
       context 'when exercise has a test' do
         let(:test) { create(:codeharbor_test) }
-        let!(:exercise) { create(:simple_exercise, valid_attributes.merge(tests: [test])) }
+        let!(:exercise) { create(:simple_exercise, update_attributes.merge(tests: [test], descriptions: [build(:description, :primary)])) }
 
         let(:new_attributes) { {title: 'new_title', tests_attributes: tests_attributes} }
         let(:tests_attributes) { {'0' => test.attributes.merge('exercise_file_attributes' => test.exercise_file.attributes)} }
@@ -184,7 +195,7 @@ RSpec.describe ExercisesController, type: :controller do
         let(:put_update) { put :update, params: {id: exercise.to_param, exercise: new_attributes}, session: valid_session }
 
         it 'updates the requested exercise' do
-          expect { put_update }.not_to change(Exercise, :count)
+          expect { put_update }.to change { exercise.reload.title }.to('new_title')
         end
       end
     end

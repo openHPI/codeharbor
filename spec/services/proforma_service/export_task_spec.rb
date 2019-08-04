@@ -70,7 +70,7 @@ RSpec.describe ProformaService::ExportTask do
         create(:exercise,
                :empty,
                title: 'title',
-               descriptions: build_list(:simple_description, 1),
+               descriptions: build_list(:simple_description, 1, :primary),
                execution_environment: build(:java_8_execution_environment))
       end
 

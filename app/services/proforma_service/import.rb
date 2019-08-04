@@ -29,7 +29,7 @@ module ProformaService
     def base_exercise
       exercise = Exercise.find_by(uuid: @task.uuid)
       task_checksum = @task.import_checksum || @task.checksum
-      return exercise if exercise.checksum == task_checksum
+      return exercise if exercise&.checksum == task_checksum
 
       nil
     end

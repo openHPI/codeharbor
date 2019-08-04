@@ -4,7 +4,7 @@ require 'nokogiri'
 require 'zip'
 # rubocop:disable Metrics/ClassLength
 class Exercise < ApplicationRecord
-  acts_as_taggable
+  acts_as_taggable_on
 
   groupify :group_member
   validates :title, presence: true
@@ -259,7 +259,7 @@ class Exercise < ApplicationRecord
         description = Description.find(id)
         destroy_param ? description.destroy : description.update(text: array[:text], language: array[:language], primary: array[:primary])
       else
-        descriptions.new(text: array[:text], language: array[:language]) unless destroy_param
+        descriptions.new(text: array[:text], language: array[:language], primary: array[:primary]) unless destroy_param
       end
     end
   end
@@ -409,6 +409,15 @@ class Exercise < ApplicationRecord
 
   def checksum
     ProformaService::ConvertExerciseToTask.call(exercise: self).generate_checksum
+  end
+
+  def update_and_version(params)
+    ActiveRecord::Base.transaction do
+      save_old_version
+      return true if update(params)
+      raise ActiveRecord::Rollback
+    end
+    false
   end
 
   private
