@@ -135,7 +135,7 @@ Rails.application.routes.draw do
       post :push_external
       get :contribute
       get :download_exercise
-      post :remove_new
+      post :remove_state
       get :history
     end
   end

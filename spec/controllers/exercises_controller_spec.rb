@@ -256,4 +256,30 @@ RSpec.describe ExercisesController, type: :controller do
       end.to change(collection.exercises, :count).by(+1)
     end
   end
+
+  describe 'POST #remove_state' do
+    let!(:exercise) { create(:simple_exercise, user: user, state_list: state_list) }
+    let(:state_list) {}
+    let(:post_query) { post :remove_state, params: {id: exercise.to_param}, session: valid_session }
+
+    it 'does not change states' do
+      expect { post_query }.not_to(change { exercise.reload.state_list })
+    end
+
+    context 'when exercise has new-state' do
+      let(:state_list) { 'new' }
+
+      it 'does not change states' do
+        expect { post_query }.to change { exercise.reload.state_list }.from(['new']).to([])
+      end
+    end
+
+    context 'when exercise has updated-state' do
+      let(:state_list) { 'updated' }
+
+      it 'does not change states' do
+        expect { post_query }.to change { exercise.reload.state_list }.from(['updated']).to([])
+      end
+    end
+  end
 end

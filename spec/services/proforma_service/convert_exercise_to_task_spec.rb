@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ProformaService::ExportTask do
+RSpec.describe ProformaService::ConvertExerciseToTask do
   describe '.new' do
     subject(:export_service) { described_class.new(exercise: exercise) }
 
@@ -14,7 +14,7 @@ RSpec.describe ProformaService::ExportTask do
   end
 
   describe '#execute' do
-    subject(:execute) { export_service.execute }
+    subject(:task) { export_service.execute }
 
     let(:export_service) { described_class.new(exercise: exercise) }
     let(:exercise) do
@@ -27,82 +27,49 @@ RSpec.describe ProformaService::ExportTask do
     let(:files) { [] }
     let(:tests) { [] }
 
-    let(:zip_files) do
-      {}.tap do |hash|
-        Zip::InputStream.open(execute) do |io|
-          while (entry = io.get_next_entry)
-            hash[entry.name] = entry.get_input_stream.read
-          end
-        end
-      end
-    end
-    let(:doc) { Nokogiri::XML(zip_files['task.xml'], &:noblanks) }
-    let(:xml) { doc.remove_namespaces! }
-
-    it_behaves_like 'zipped task node xml'
-
-    it 'adds title node with correct content to task node' do
-      expect(xml.xpath('/task/title').text).to eql exercise.title
-    end
-
-    it 'adds description node with correct content to task node' do
-      expect(xml.xpath('/task/description').text).to eql exercise.descriptions.select(&:primary).first.text
-    end
-
-    it 'adds proglang node with correct content to task node' do
-      expect(xml.xpath('/task/proglang').text).to eql exercise.execution_environment.language
-    end
-
-    it 'adds version attribute to proglang node' do
-      expect(xml.xpath('/task/proglang').attribute('version').value).to eql exercise.execution_environment.version
-    end
-
-    it 'adds internal-description node with correct content to task node' do
-      expect(xml.xpath('/task/internal-description').text).to eql exercise.instruction
-    end
-
-    it 'adds uuid attribute to task node' do
-      expect(xml.xpath('/task').attribute('uuid').value).to eql exercise.uuid
-    end
-
-    context 'when exercise is minimal' do
-      let(:exercise) do
-        create(:exercise,
-               :empty,
-               title: 'title',
-               descriptions: build_list(:simple_description, 1, :primary),
-               execution_environment: build(:java_8_execution_environment))
-      end
-
-      it_behaves_like 'zipped task node xml'
+    it 'creates a task with all basic attributes' do
+      expect(task).to have_attributes(
+        title: exercise.title,
+        description: exercise.descriptions.select(&:primary?).first.text,
+        internal_description: exercise.instruction,
+        proglang: {
+          name: exercise.execution_environment.language,
+          version: exercise.execution_environment.version
+        },
+        uuid: exercise.uuid,
+        language: exercise.descriptions.select(&:primary?).first.language,
+        parent_uuid: exercise.clone_relations.first&.origin&.uuid,
+        files: [],
+        tests: [],
+        model_solutions: []
+      )
     end
 
     context 'when exercise has a mainfile' do
       let(:files) { [file] }
       let(:file) { build(:codeharbor_main_file) }
 
-      it_behaves_like 'task node with file'
-
-      context 'when the mainfile is very large' do
-        let(:file) { build(:codeharbor_main_file, content: 'test' * 10**5) }
-
-        it 'adds a attached-txt-file node to the file node' do
-          expect(xml.xpath("/task/files/file[@id!='ms-placeholder-file']/attached-txt-file")).to have(1).item
-        end
-
-        it 'adds attached file to zip' do
-          expect(zip_files[file.full_file_name]).not_to be nil
-        end
+      it 'creates a task-file with the correct attributes' do
+        expect(task.files.first).to have_attributes(
+          id: file.id,
+          content: file.content,
+          filename: file.full_file_name,
+          used_by_grader: true,
+          usage_by_lms: 'edit',
+          visible: 'yes',
+          binary: false,
+          internal_description: 'Main File'
+        )
       end
     end
 
-    context 'when exercise has a regular file' do
+##TODO
+    fcontext 'when exercise has a regular file' do
       let(:files) { [file] }
       let(:file) { build(:codeharbor_regular_file) }
 
-      it_behaves_like 'task node with file'
 
-      context 'when file has an attachment' do
+      xcontext 'when file has an attachment' do
         let(:file) { build(:codeharbor_regular_file, :with_attachment) }
 
         it 'adds a embedded-bin-file node to the file node' do

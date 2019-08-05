@@ -614,6 +614,7 @@ en:
     new_tag: new
     updated_tag: updated
     remove_state: remove state
+    state_removed: successfully removed state
 
   file_types:
     header: "File Types"

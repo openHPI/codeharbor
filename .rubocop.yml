@@ -33,6 +33,11 @@ Layout/SpaceInsideHashLiteralBraces:
 RSpec/NestedGroups:
   Max: 5
 
+
+RSpec/ExampleLength:
+  Exclude:
+    - spec/services/proforma_service/convert_exercise_to_task_spec.rb
+
 Style/Documentation:
   Enabled: false
 

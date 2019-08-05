@@ -6,7 +6,6 @@ RSpec::Matchers.define :be_an_equal_exercise_as do |exercise|
   match do |actual|
     equal?(actual, exercise)
   end
-  @last_checked
   failure_message do |actual|
     "#{actual.inspect} is not equal to \n#{exercise.inspect}. \nLast checked attribute: #{@last_checked}"
   end

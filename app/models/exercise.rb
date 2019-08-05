@@ -415,6 +415,7 @@ class Exercise < ApplicationRecord
     ActiveRecord::Base.transaction do
       save_old_version
       return true if update(params)
+
       raise ActiveRecord::Rollback
     end
     false
