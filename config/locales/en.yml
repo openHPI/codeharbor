@@ -612,6 +612,8 @@ en:
     import_exercise:
       imported_exercise_header: 'Imported exercise:'
     new_tag: new
+    updated_tag: updated
+    remove_state: remove state
 
   file_types:
     header: "File Types"

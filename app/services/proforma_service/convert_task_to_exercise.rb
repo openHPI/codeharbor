@@ -25,7 +25,7 @@ module ProformaService
         execution_environment: execution_environment,
         tests: tests,
         exercise_files: task_files.values,
-        tag_list: @exercise.persisted? ? 'updated' : 'new'
+        state_list: @exercise.persisted? ? 'updated' : 'new'
       )
     end
 

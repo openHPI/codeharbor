@@ -1,8 +1,8 @@
-- if exercise.tag_list.include? 'new'
+- if exercise.state_list.any?
   span.newtag-dropdown.pull-right
-    = 'new'
+    = t("exercises.#{exercise.state_list.first}_tag")
     .newtag-popup
       .newtag-remove-button data = {id: exercise.id}
         / alt: .newtag-remove-button data = {'remove-path': remove_new_exercise_url(exercise)}
-        = 'remove "new"'
+        = t('exercises.remove_state')
           /acknowledge with checkbox?

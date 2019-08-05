@@ -92,7 +92,7 @@ class ExercisesController < ApplicationController
 
   def update
     @exercise.add_attributes(params[:exercise])
-    @exercise.tag_list.remove('new')
+    @exercise.state_list.remove('new')
     respond_to do |format|
       if @exercise.update_and_version(exercise_params)
         format.html { redirect_to @exercise, notice: t('controllers.exercise.updated') }
@@ -113,7 +113,7 @@ class ExercisesController < ApplicationController
   end
 
   def remove_new
-    @exercise.tag_list.remove('new')
+    @exercise.state_list.remove('new')
 
     flash[:notice] = "successfully removed new-tag" if @exercise.save
   end
