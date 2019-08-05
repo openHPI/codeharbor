@@ -81,7 +81,7 @@ RSpec.describe Exercise, type: :model do
   end
 
   describe '.search' do
-    subject { Exercise.search(search, settings, option, user_param) }
+    subject { described_class.search(search, settings, option, user_param) }
 
     let(:search) {}
     let(:settings) do
@@ -180,7 +180,7 @@ RSpec.describe Exercise, type: :model do
     let!(:exercise) { create(:simple_exercise, user: user) }
 
     it 'deletes exercise' do
-      expect { exercise.destroy }.to change(Exercise, :count).by(-1)
+      expect { exercise.destroy }.to change(described_class, :count).by(-1)
     end
 
     context 'when exercise is in a collection' do

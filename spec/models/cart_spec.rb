@@ -57,7 +57,7 @@ RSpec.describe Cart, type: :model do
     it { is_expected.to be_truthy }
 
     it 'deletes cart' do
-      expect { destroy }.to change(Cart, :count).by(-1)
+      expect { destroy }.to change(described_class, :count).by(-1)
     end
 
     it 'does not delete exercises' do
