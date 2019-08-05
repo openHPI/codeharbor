@@ -57,7 +57,7 @@ RSpec.describe Collection, type: :model do
     it { is_expected.to be_truthy }
 
     it 'deletes collection' do
-      expect { destroy }.to change(Collection, :count).by(-1)
+      expect { destroy }.to change(described_class, :count).by(-1)
     end
 
     it 'does not delete exercises' do

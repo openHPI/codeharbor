@@ -76,8 +76,8 @@ group :development, :test do
   gem 'rspec-collection_matchers', '~> 1.1.3'
   gem 'rspec-rails'
   gem 'rubocop', '~> 0.72.0'
-  gem 'rubocop-rails', '~> 2.2.0'
-  gem 'rubocop-rspec', '~> 1.33.0'
+  gem 'rubocop-rails', '~> 2.2.1'
+  gem 'rubocop-rspec', '~> 1.35.0'
 end
 
 group :development do
