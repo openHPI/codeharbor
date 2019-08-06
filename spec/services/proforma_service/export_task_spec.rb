@@ -154,7 +154,7 @@ RSpec.describe ProformaService::ExportTask do
       let(:files) { create_list(:codeharbor_solution_file, 2) }
 
       it 'adds test node to tests node' do
-        expect(xml.xpath('/task/model-solutions/model-solution')).to have(2).item
+        expect(xml.xpath('/task/model-solutions/model-solution')).to have(2).items
       end
     end
 

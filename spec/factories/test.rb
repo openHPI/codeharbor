@@ -14,12 +14,7 @@ FactoryBot.define do
 
   factory :codeharbor_test, class: 'Test' do
     feedback_message { 'Your solution is not correct yet.' }
-
-    after(:create) do |test|
-      create(:junit_testing_framework, tests: [test])
-      test_file = create(:codeharbor_test_file, exercise: test.exercise)
-      test.exercise_file = test_file
-      test.save
-    end
+    exercise_file { create(:codeharbor_test_file) }
+    testing_framework { create(:junit_testing_framework) }
   end
 end

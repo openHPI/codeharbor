@@ -67,8 +67,8 @@ module ProformaService
           files: test_file(test.exercise_file),
           meta_data: {
             'feedback-message' => test.feedback_message,
-            'testing-framework' => test.testing_framework.name,
-            'testing-framework-version' => test.testing_framework.version
+            'testing-framework' => test.testing_framework&.name,
+            'testing-framework-version' => test.testing_framework&.version
           }.compact
         )
       end
