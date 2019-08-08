@@ -37,6 +37,7 @@ RSpec/NestedGroups:
 RSpec/ExampleLength:
   Exclude:
     - spec/services/proforma_service/convert_exercise_to_task_spec.rb
+    - spec/services/proforma_service/convert_task_to_exercise_spec.rb
 
 Style/Documentation:
   Enabled: false

@@ -4,19 +4,19 @@ require 'rails_helper'
 
 RSpec.describe ProformaService::ConvertExerciseToTask do
   describe '.new' do
-    subject(:export_service) { described_class.new(exercise: exercise) }
+    subject(:convert_to_task) { described_class.new(exercise: exercise) }
 
     let(:exercise) { build(:exercise) }
 
     it 'assigns exercise' do
-      expect(export_service.instance_variable_get(:@exercise)).to be exercise
+      expect(convert_to_task.instance_variable_get(:@exercise)).to be exercise
     end
   end
 
   describe '#execute' do
-    subject(:task) { export_service.execute }
+    subject(:task) { convert_to_task.execute }
 
-    let(:export_service) { described_class.new(exercise: exercise) }
+    let(:convert_to_task) { described_class.new(exercise: exercise) }
     let(:exercise) do
       create(:exercise,
              instruction: 'instruction',
