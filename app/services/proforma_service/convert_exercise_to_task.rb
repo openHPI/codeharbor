@@ -14,16 +14,18 @@ module ProformaService
 
     def create_task
       Proforma::Task.new(
-        title: @exercise.title,
-        description: primary_description.text,
-        internal_description: @exercise.instruction,
-        proglang: proglang,
-        files: task_files,
-        tests: tests,
-        uuid: @exercise.uuid,
-        parent_uuid: parent_uuid,
-        language: primary_description.language,
-        model_solutions: model_solutions
+        {
+          title: @exercise.title,
+          description: primary_description.text,
+          internal_description: @exercise.instruction,
+          proglang: proglang,
+          files: task_files,
+          tests: tests,
+          uuid: @exercise.uuid,
+          parent_uuid: parent_uuid,
+          language: primary_description.language,
+          model_solutions: model_solutions
+        }.compact
       )
     end
 

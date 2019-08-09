@@ -17,7 +17,7 @@ RSpec.describe ProformaService::ExportTasks do
     subject(:export_service) { described_class.call(exercises: exercises) }
 
     let(:exercises) { create_list(:exercise, 2) }
-
+    let(:user) { create(:user) }
     let(:zip_files) do
       {}.tap do |hash|
         Zip::InputStream.open(export_service) do |io|
@@ -32,7 +32,7 @@ RSpec.describe ProformaService::ExportTasks do
     end
     let(:doc) { Nokogiri::XML(zip_files['task.xml'], &:noblanks) }
     let(:xml) { doc.remove_namespaces! }
-    let(:imported_exercises) { zip_files.transform_values! { |zip_file| ProformaService::Import.call(zip: zip_file) } }
+    let(:imported_exercises) { zip_files.transform_values! { |zip_file| ProformaService::Import.call(zip: zip_file, user: user) } }
 
     it 'creates a zip-file with two files' do
       expect(zip_files.count).to be 2

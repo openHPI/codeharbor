@@ -19,22 +19,26 @@ RSpec.describe ProformaService::Import do
   end
 
   describe '#execute' do
-    subject(:import_service) { described_class.call(zip: zip_file, user: user) }
+    subject(:import_service) { described_class.call(zip: zip_file, user: import_user) }
 
-    let(:user) {}
+    let(:user) { build(:user) }
+    let(:import_user) { user }
     let(:zip_file) { Tempfile.new('proforma_test_zip_file') }
     let(:exercise) do
       create(:exercise,
              instruction: 'instruction',
              execution_environment: execution_environment,
              exercise_files: files,
-             tests: tests)
+             tests: tests,
+             uuid: uuid,
+             user: user)
     end
 
+    let(:uuid) {}
     let(:execution_environment) { build(:java_8_execution_environment) }
     let(:files) { [] }
     let(:tests) { [] }
-    let(:exporter) { ProformaService::ExportTask.call(exercise: exercise).string }
+    let(:exporter) { ProformaService::ExportTask.call(exercise: exercise.reload).string }
 
     before do
       zip_file.write(exporter)
@@ -43,12 +47,8 @@ RSpec.describe ProformaService::Import do
 
     it { is_expected.to be_an_equal_exercise_as exercise }
 
-    context 'when a user is supplied' do
-      let(:user) { build(:user) }
-
-      it 'sets the correct user as owner of the exercise' do
-        expect(import_service.user).to be user
-      end
+    it 'sets the correct user as owner of the exercise' do
+      expect(import_service.user).to be user
     end
 
     context 'when exercise has a mainfile' do
@@ -111,7 +111,8 @@ RSpec.describe ProformaService::Import do
                instruction: 'instruction2',
                execution_environment: execution_environment,
                exercise_files: [],
-               tests: [])
+               tests: [],
+               user: user)
       end
 
       it 'imports the exercises from zip containing multiple zips' do
@@ -128,6 +129,68 @@ RSpec.describe ProformaService::Import do
 
         it 'imports the zip exactly how the were exported' do
           expect(import_service).to all be_an_equal_exercise_as(exercise).or be_an_equal_exercise_as(exercise2)
+        end
+      end
+    end
+
+    context 'when task in zip has a different uuid' do
+      let(:uuid) { SecureRandom.uuid }
+      let(:new_uuid) { SecureRandom.uuid }
+
+      before { exercise.update(uuid: new_uuid) }
+
+      it 'creates a new Exercise' do
+        expect(import_service.id).not_to be exercise.id
+      end
+    end
+
+    context 'when task in zip has a the same uuid' do
+      let(:uuid) { SecureRandom.uuid }
+
+      it 'creates uses the old Exercise' do
+        expect(import_service.id).to be exercise.id
+      end
+
+      context 'when another user imports the exercise' do
+        let(:import_user) { create(:user) }
+
+        it 'creates a new Exercise' do
+          expect(import_service.id).not_to be exercise.id
+        end
+      end
+
+      context 'when exercise has been changed after export' do
+        before { exercise.update(title: 'new title') }
+
+        it 'creates a new Exercise' do
+          expect(import_service.id).not_to be exercise.id
+        end
+
+        context 'when matching import_checksum is given' do
+          let(:xml) do
+            Zip::File.open(zip_file.path) do |zip_file|
+              return zip_file.glob('task.xml').first.get_input_stream.read
+            end
+          end
+          let(:doc) { Nokogiri::XML(xml, &:noblanks) }
+
+          before do
+            doc.xpath('/xmlns:task/xmlns:meta-data/c:checksum').first
+               .add_next_sibling "<c:import-checksum>#{exercise.checksum}</c:import-checksum>"
+
+            File.open(zip_file.path, 'wb') do |file|
+              file.write(
+                Zip::OutputStream.write_buffer do |zio|
+                  zio.put_next_entry('task.xml')
+                  zio.write doc.to_xml
+                end.string
+              )
+            end
+          end
+
+          it 'creates uses the old Exercise' do
+            expect(import_service.id).to be exercise.id
+          end
         end
       end
     end

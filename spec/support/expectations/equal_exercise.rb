@@ -40,6 +40,6 @@ RSpec::Matchers.define :be_an_equal_exercise_as do |exercise|
       attributes[:descriptions] = object.descriptions if defined? object.descriptions
       attributes[:tests] = object.tests if defined? object.tests
     end.except('id', 'created_at', 'updated_at', 'exercise_id', 'attachment_updated_at', 'exercise_file_id',
-               'license_id', 'private', 'state_list')
+               'license_id', 'private', 'state_list', 'predecessor_id')
   end
 end

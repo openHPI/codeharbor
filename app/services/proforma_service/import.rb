@@ -2,7 +2,7 @@
 
 module ProformaService
   class Import < ServiceBase
-    def initialize(zip: nil, user: nil)
+    def initialize(zip:, user:)
       @zip = zip
       @user = user
     end
