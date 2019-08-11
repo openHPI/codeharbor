@@ -10,6 +10,33 @@ RSpec.describe Exercise, type: :model do
     it { is_expected.to validate_presence_of(:execution_environment) }
     it { is_expected.to validate_uniqueness_of(:uuid).case_insensitive }
 
+    context 'when exercise has a description' do
+      subject { build(:exercise, descriptions: descriptions) }
+
+      let(:descriptions) { [description] }
+      let(:description) { build(:description) }
+
+      it { is_expected.not_to be_valid }
+
+      context 'when description is primary' do
+        let(:description) { build(:description, primary: true) }
+
+        it { is_expected.to be_valid }
+
+        context 'with multiple descriptions' do
+          let(:descriptions) { [description, build(:description)] }
+
+          it { is_expected.to be_valid }
+        end
+
+        context 'with multiple primary descriptions' do
+          let(:descriptions) { [description, build(:description, primary: true)] }
+
+          it { is_expected.not_to be_valid }
+        end
+      end
+    end
+
     context 'when exercise is private' do
       subject { build(:exercise, private: true) }
 

@@ -202,21 +202,5 @@ RSpec.describe ProformaService::Import do
         end
       end
     end
-
-    xcontext 'when exercise has multiple descriptions' do
-      let(:exercise) do
-        create(:exercise,
-               instruction: 'instruction',
-               uuid: SecureRandom.uuid,
-               execution_environment: execution_environment,
-               exercise_files: files,
-               tests: tests,
-               descriptions: descriptions)
-      end
-
-      let(:descriptions) { create_list :description, 2 }
-
-      it { is_expected.to be_an_equal_exercise_as exercise }
-    end
   end
 end
