@@ -74,7 +74,7 @@ FactoryBot.define do
 
   factory :complex_exercise, class: Exercise do
     title { 'Codeharbor Export Test' }
-    descriptions { [FactoryBot.create(:codeharbor_description)] }
+    descriptions { [FactoryBot.create(:simple_description, :primary)] }
     execution_environment { FactoryBot.create(:java_8_execution_environment) }
     license { FactoryBot.create(:license) }
     after(:create) do |exercise|

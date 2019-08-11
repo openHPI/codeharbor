@@ -406,7 +406,7 @@ ready =->
     exercise_id = target.attr('data-id')
     $.ajax({
       type: "POST",
-      url: '/exercises/' + exercise_id + "/remove_new",
+      url: '/exercises/' + exercise_id + "/remove_state",
       dataType: 'json',
       success: (response) ->
         target.parent().parent().hide()

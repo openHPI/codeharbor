@@ -3,6 +3,4 @@
     = t("exercises.#{exercise.state_list.first}_tag")
     .newtag-popup
       .newtag-remove-button data = {id: exercise.id}
-        / alt: .newtag-remove-button data = {'remove-path': remove_new_exercise_url(exercise)}
         = t('exercises.remove_state')
-          /acknowledge with checkbox?

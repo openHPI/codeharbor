@@ -12,7 +12,6 @@ module ProformaService
         importer = Proforma::Importer.new(@zip)
         @task = importer.perform
         exercise = ConvertTaskToExercise.call(task: @task, user: @user, exercise: base_exercise)
-
         ActiveRecord::Base.transaction do
           exercise.save_old_version if exercise.persisted?
           exercise.save!

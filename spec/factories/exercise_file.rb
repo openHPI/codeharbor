@@ -82,6 +82,8 @@ FactoryBot.define do
     name { 'user_test' }
     path { '' }
     role { 'User-defined Test' }
+    hidden { false }
+    read_only { false }
     file_type { FactoryBot.create(:java_file_type) }
   end
 

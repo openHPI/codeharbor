@@ -6,7 +6,9 @@ require 'nokogiri'
 RSpec.describe Exercise, type: :model do
   describe '#valid?' do
     it { is_expected.to validate_presence_of(:descriptions) }
+    it { is_expected.to validate_presence_of(:title) }
     it { is_expected.to validate_presence_of(:execution_environment) }
+    it { is_expected.to validate_uniqueness_of(:uuid).case_insensitive }
 
     context 'when exercise is private' do
       subject { build(:exercise, private: true) }
@@ -18,6 +20,21 @@ RSpec.describe Exercise, type: :model do
       subject { build(:exercise, private: false) }
 
       it { is_expected.to validate_presence_of(:license) }
+    end
+
+    context 'when an exercise with predecessor exists' do
+      subject { exercise }
+
+      let(:exercise) { create(:exercise, predecessor: predecessor) }
+      let(:predecessor) { create(:exercise) }
+
+      it { is_expected.to be_valid }
+
+      context 'when predecessor has first exercise as predecessor' do
+        before { predecessor.assign_attributes(predecessor: exercise) }
+
+        it { is_expected.not_to be_valid }
+      end
     end
   end
 
@@ -198,6 +215,28 @@ RSpec.describe Exercise, type: :model do
     end
   end
 
+  describe '.active' do
+    subject(:active) { described_class.active }
+
+    it { is_expected.to be_empty }
+
+    context 'when a normal exercise exists' do
+      let(:exercise) { create(:exercise) }
+
+      before { exercise }
+
+      it { is_expected.to include(exercise) }
+
+      context 'when the exercise has a predecessor' do
+        let(:predecessor) { create(:exercise, successor: exercise) }
+
+        before { predecessor }
+
+        it { is_expected.to contain_exactly(exercise) }
+      end
+    end
+  end
+
   describe '#destroy' do
     let(:user) { create(:user) }
     let!(:exercise) { create(:simple_exercise, user: user) }
@@ -293,6 +332,226 @@ RSpec.describe Exercise, type: :model do
 
         it 'does not match the exercises' do
           expect(exercise1).not_to be_an_equal_exercise_as exercise2
+        end
+      end
+    end
+  end
+
+  # rubocop:disable RSpec/ExampleLength
+  describe '#save_old_version' do
+    subject(:save_old_version) { exercise.save_old_version }
+
+    let!(:exercise) { create(:complex_exercise).reload }
+
+    it 'creates the predecessor of the exercise' do
+      expect { save_old_version }.to change { exercise.reload.predecessor }.from(nil).to(be_a described_class)
+    end
+
+    it 'creates a new Exercise' do
+      expect { save_old_version }.to change(described_class, :count).by(1)
+    end
+
+    it 'creates the predecessor with correct attributes' do
+      save_old_version
+      expect(exercise.predecessor).to have_attributes(
+        title: exercise.title,
+        descriptions: have(exercise.descriptions.count).item.and(include(have_attributes(
+                                                                           text: exercise.descriptions.first.text,
+                                                                           language: exercise.descriptions.first.language
+                                                                         ))),
+        execution_environment: eql(exercise.execution_environment),
+        license: eql(exercise.license),
+        exercise_files: have(exercise.exercise_files.count).items,
+        tests: have(exercise.tests.count).items
+      )
+    end
+
+    it 'duplicates whole exercise' do
+      save_old_version
+      expect(exercise).to be_an_equal_exercise_as exercise.predecessor
+    end
+
+    it 'does not copy critical values' do
+      save_old_version
+      expect(exercise.predecessor).not_to have_attributes(
+        id: exercise.id,
+        uuid: exercise.uuid,
+        created_at: exercise.created_at,
+        updated_at: exercise.updated_at
+      )
+    end
+
+    # also test already existing predecessors
+    context 'when update of predecessor fails' do
+      before do
+        root_exercise = described_class.find(exercise.id)
+        allow(described_class).to receive(:find).with(exercise.id).and_return(root_exercise)
+        allow(root_exercise).to receive(:update!).and_raise('an error')
+      end
+
+      it 'does not create the predecessor of the exercise' do
+        expect { save_old_version }.not_to(change { exercise.reload.predecessor })
+      end
+
+      it 'does not create a new Exercise' do
+        expect { save_old_version }.to change(described_class, :count).by(1)
+      end
+    end
+  end
+  # rubocop:enable RSpec/ExampleLength
+
+  describe '#duplicate' do
+    subject(:duplicate) { exercise.duplicate }
+
+    let(:exercise) do
+      build(
+        :exercise,
+        private: private,
+        descriptions: descriptions,
+        tests: tests,
+        exercise_files: exercise_files
+      )
+    end
+    let(:private) { true }
+    let(:descriptions) { [description] }
+    let(:description) { build(:description, primary: true) }
+    let(:tests) { [test] }
+    let(:test) { build(:test, feedback_message: 'duplicatetest') }
+    let(:exercise_files) { [exercise_file] }
+    let(:exercise_file) { build(:exercise_file) }
+
+    it 'copies private attribute from exercise' do
+      expect(duplicate.private).to eql exercise.private
+    end
+
+    it 'copies description from exercise and does not use the same object' do
+      expect(duplicate.descriptions).not_to match_array(descriptions)
+    end
+
+    it 'copies description with correct attributes' do
+      expect(duplicate.descriptions).to include(have_attributes(text: description.text, primary: description.primary))
+    end
+
+    it 'copies test from exercise and does not use the same object' do
+      expect(duplicate.tests).not_to match_array(tests)
+    end
+
+    it 'copies test with correct attributes' do
+      expect(duplicate.tests).to include(have_attributes(feedback_message: test.feedback_message))
+    end
+
+    it 'copies exercise_file from exercise and does not use the same object' do
+      expect(duplicate.exercise_files).not_to match_array(exercise_files)
+    end
+
+    it 'copies exercise_file with correct attributes' do
+      expect(duplicate.exercise_files).to include(
+        have_attributes(content: exercise_file.content,
+                        name: exercise_file.name,
+                        role: exercise_file.role)
+      )
+    end
+
+    context 'when private is false' do
+      let(:private) { false }
+
+      it 'copies private attribute from exercise' do
+        expect(duplicate.private).to eql exercise.private
+      end
+    end
+  end
+
+  describe '#last_successor' do
+    let!(:exercise) { create(:exercise, predecessor: predecessor) }
+    let(:predecessor) {}
+
+    it 'returns self' do
+      expect(exercise.last_successor).to eql exercise
+    end
+
+    context 'when exercise has a history' do
+      let(:predecessor) { create(:exercise) }
+
+      it 'returns correct successor' do
+        expect(predecessor.last_successor).to eql exercise
+      end
+
+      context 'when history is large' do
+        let(:last_predecessor) { create(:exercise) }
+
+        before do
+          predecessor.update(
+            predecessor: create(:exercise, predecessor: last_predecessor)
+          )
+        end
+
+        it 'returns the correct last successor' do
+          expect(last_predecessor.last_successor).to eql exercise
+        end
+
+        it 'returns the correct last_successor' do
+          expect(predecessor.last_successor).to eql exercise
+        end
+      end
+    end
+  end
+
+  describe '#complete_history' do
+    let!(:exercise) { create(:exercise, predecessor: predecessor) }
+    let(:predecessor) {}
+
+    it 'returns correct history' do
+      expect(exercise.complete_history).to contain_exactly exercise
+    end
+
+    context 'when exercise has a history' do
+      let(:predecessor) { create(:exercise) }
+
+      it 'returns correct history' do
+        expect(predecessor.complete_history).to contain_exactly exercise, predecessor
+      end
+
+      context 'when history is large' do
+        let(:last_predecessor) { create(:exercise) }
+
+        before { predecessor.update(predecessor: last_predecessor) }
+
+        it 'returns correct history' do
+          expect(last_predecessor.complete_history)
+            .to(contain_exactly(exercise, predecessor, last_predecessor)
+              .and(match_array(predecessor.complete_history)
+                .and(match_array(exercise.complete_history))))
+        end
+      end
+    end
+  end
+
+  describe '#all_predecessors' do
+    let!(:exercise) { create(:exercise, predecessor: predecessor) }
+    let(:predecessor) {}
+
+    it 'returns nothing' do
+      expect(exercise.all_predecessors).to be_empty
+    end
+
+    context 'when exercise has a history' do
+      let(:predecessor) { create(:exercise) }
+
+      it 'returns the only predecessor' do
+        expect(exercise.all_predecessors).to contain_exactly predecessor
+      end
+
+      context 'when history is large' do
+        let(:last_predecessor) { create(:exercise) }
+
+        before { predecessor.update(predecessor: last_predecessor) }
+
+        it 'returns both predecessors' do
+          expect(exercise.all_predecessors).to(contain_exactly(predecessor, last_predecessor))
+        end
+
+        it 'returns the only predecessor' do
+          expect(predecessor.all_predecessors).to(contain_exactly(last_predecessor))
         end
       end
     end

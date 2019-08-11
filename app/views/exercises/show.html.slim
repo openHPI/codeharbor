@@ -1,11 +1,11 @@
 - model_class = Exercise
 .header
-  .col-md-9
+  .col-md-8
     .std-heading data-toggle="tooltip" data-placement="bottom" title="#{@exercise.title}"
       i.i.fa.fa-file-text-o style=("color: #008000")
       = ' '
       = truncate(@exercise.title, length: 100)
-  .col-md-3
+  .col-md-4
     span.star-rating.pull-right style=("font-size: 2.0em")
       - [*1..5].each do |i|
         - if @exercise.round_avg_rating >= i
@@ -30,7 +30,7 @@
               - else
                 - [*1..5].each do |i|
                   span.fa.fa-star-o data-rating=i
-    = render 'remove_new_tag', exercise: @exercise
+    = render 'remove_state_tag', exercise: @exercise
 
   br
 legend.toggle-next

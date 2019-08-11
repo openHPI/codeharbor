@@ -137,18 +137,26 @@ RSpec.describe ProformaService::Import do
       let(:uuid) { SecureRandom.uuid }
       let(:new_uuid) { SecureRandom.uuid }
 
-      before { exercise.update(uuid: new_uuid) }
+      before do
+        old_checksum = exercise.checksum
+        exercise.update(uuid: new_uuid)
+        allow(exercise).to receive(:checksum).and_return(old_checksum)
+      end
 
       it 'creates a new Exercise' do
         expect(import_service.id).not_to be exercise.id
       end
     end
 
-    context 'when task in zip has a the same uuid' do
+    context 'when task in zip has the same uuid and nothing has changed' do
       let(:uuid) { SecureRandom.uuid }
 
-      it 'creates uses the old Exercise' do
+      it 'updates the old Exercise' do
         expect(import_service.id).to be exercise.id
+      end
+
+      it 'creates a predecessor Exercise' do
+        expect { import_service }.to change { exercise.reload.predecessor }.from(nil).to(be_an Exercise)
       end
 
       context 'when another user imports the exercise' do
@@ -188,7 +196,7 @@ RSpec.describe ProformaService::Import do
             end
           end
 
-          it 'creates uses the old Exercise' do
+          it 'updates the old Exercise' do
             expect(import_service.id).to be exercise.id
           end
         end

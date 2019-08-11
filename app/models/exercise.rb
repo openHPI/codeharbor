@@ -360,7 +360,6 @@ class Exercise < ApplicationRecord
   end
 
   def last_successor
-    puts "puts #{id}"
     successor.nil? ? self : successor.last_successor
   end
 
