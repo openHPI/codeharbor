@@ -1,6 +1,6 @@
 - if exercise.state_list.any?
-  span.newtag-dropdown.pull-right
+  span.state-tag-dropdown.pull-right
     = t("exercises.#{exercise.state_list.first}_tag")
-    .newtag-popup
-      .newtag-remove-button data = {id: exercise.id}
+    .state-tag-popup
+      .state-tag-remove-button data = {id: exercise.id}
         = t('exercises.remove_state')

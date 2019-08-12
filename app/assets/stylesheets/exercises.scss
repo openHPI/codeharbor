@@ -201,22 +201,22 @@ $exercise-color: #006600;
   border-radius: 4px;
 }
 
-.newtag-dropdown {
+.state-tag-dropdown {
   color: #7C0000;
   font-size: 18px;
   margin-right: 12px;
   padding: 2px 4px;
 }
 
-.newtag-remove-button{
+.state-tag-remove-button{
   color: #000;
 }
 
-.newtag-dropdown:hover .newtag-popup {
+.state-tag-dropdown:hover .state-tag-popup {
   display: block;
 }
 
-.newtag-popup {
+.state-tag-popup {
   cursor: pointer;
   width: 125px;
   height: 30px;

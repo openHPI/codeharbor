@@ -401,7 +401,7 @@ ready =->
     link = option.getAttribute("data-link")
     $('.link').html("<p>Link: <a href='#{link}'>#{link}</a></p>")
 
-  $('.newtag-remove-button').on 'click', (event) ->
+  $('.state-tag-remove-button').on 'click', (event) ->
     target = $(event.target)
     exercise_id = target.attr('data-id')
     $.ajax({
