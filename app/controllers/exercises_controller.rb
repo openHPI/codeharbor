@@ -88,11 +88,10 @@ class ExercisesController < ApplicationController
       end
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
   def update
     @exercise.add_attributes(params[:exercise])
-    @exercise.state_list.remove('new')
+    @exercise.state_list = []
     respond_to do |format|
       if @exercise.update_and_version(exercise_params)
         format.html { redirect_to @exercise, notice: t('controllers.exercise.updated') }
@@ -103,6 +102,7 @@ class ExercisesController < ApplicationController
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def destroy
     @exercise.soft_delete

@@ -155,16 +155,15 @@ RSpec.describe ExercisesController, type: :controller do
   describe 'PUT #update' do
     let(:update_attributes) do
       FactoryBot.attributes_for(:only_meta_data, user: user).merge(
-        descriptions_attributes: {'0' => FactoryBot.attributes_for(:simple_description)}
+        descriptions_attributes: {'0' => FactoryBot.attributes_for(:simple_description)},
+        title: 'new_title'
       )
     end
     let!(:exercise) { create(:simple_exercise, valid_attributes) }
 
     context 'with valid params' do
-      let(:new_attributes) { {title: 'new_title'} }
-
       it 'updates the requested exercise' do
-        put :update, params: {id: exercise.to_param, exercise: new_attributes}, session: valid_session
+        put :update, params: {id: exercise.to_param, exercise: update_attributes}, session: valid_session
         exercise.reload
         expect(exercise.title).to eq 'new_title'
       end
@@ -189,13 +188,13 @@ RSpec.describe ExercisesController, type: :controller do
         let(:test) { create(:codeharbor_test) }
         let!(:exercise) { create(:simple_exercise, update_attributes.merge(tests: [test], descriptions: [build(:description, :primary)])) }
 
-        let(:new_attributes) { {title: 'new_title', tests_attributes: tests_attributes} }
+        let(:new_attributes) { {title: 'new title', tests_attributes: tests_attributes} }
         let(:tests_attributes) { {'0' => test.attributes.merge('exercise_file_attributes' => test.exercise_file.attributes)} }
 
         let(:put_update) { put :update, params: {id: exercise.to_param, exercise: new_attributes}, session: valid_session }
 
         it 'updates the requested exercise' do
-          expect { put_update }.to change { exercise.reload.title }.to('new_title')
+          expect { put_update }.to change { exercise.reload.title }.to('new title')
         end
       end
     end
@@ -209,6 +208,16 @@ RSpec.describe ExercisesController, type: :controller do
       it "re-renders the 'edit' template" do
         put :update, params: {id: exercise.to_param, exercise: invalid_attributes}, session: valid_session
         expect(response).to render_template('edit')
+      end
+    end
+
+    context 'when exercise has a state' do
+      before { exercise.update(state_list: 'new') }
+
+      let(:put_update) { put :update, params: {id: exercise.to_param, exercise: {title: 'updated title'}}, session: valid_session }
+
+      it 'removes the state' do
+        expect { put_update }.to change { exercise.reload.state_list }.from(['new']).to(be_empty)
       end
     end
   end

@@ -230,10 +230,6 @@ $exercise-color: #006600;
   margin-left: -45px;
   border: 2px grey solid;
   border-radius: 4px;
-
-  // .rating {
-  //   z-index: 1;
-  // }
 }
 
 
@@ -421,14 +417,6 @@ input[type="radio"]:checked+label {
   position: relative;
   margin-bottom: 15px;
   padding: 5px;
-}
-
-.history-info {
-  width: 100%;
-  text-align: center;
-  font-size: 15pt;
-  font-weight: bold;
-  margin: 5px;
 }
 
 .panel.panel-default.history:last-child {

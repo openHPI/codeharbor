@@ -408,7 +408,19 @@ RSpec.describe Exercise, type: :model do
       )
     end
 
-    # also test already existing predecessors
+    context 'when exercise already has a predecessor' do
+      before { exercise.save_old_version }
+
+      it 'creates a third exercise for the history' do
+        expect { save_old_version }.to change { exercise.complete_history.count }.from(2).to(3)
+      end
+
+      it 'creates another predecessor' do
+        save_old_version
+        expect(exercise.predecessor.predecessor).to be_a described_class
+      end
+    end
+
     context 'when update of predecessor fails' do
       before do
         root_exercise = described_class.find(exercise.id)
@@ -580,6 +592,69 @@ RSpec.describe Exercise, type: :model do
         it 'returns the only predecessor' do
           expect(predecessor.all_predecessors).to(contain_exactly(last_predecessor))
         end
+      end
+    end
+  end
+
+  describe '#checksum' do
+    subject(:checksum) { exercise.checksum }
+
+    let(:exercise) { create(:exercise) }
+
+    it { is_expected.to be_a String }
+    it { is_expected.to eql exercise.checksum }
+
+    context 'when there are two identical exercises' do
+      let(:reference_exercise) { create(:exercise) }
+
+      before do
+        FactoryBot.rewind_sequences
+        exercise
+        FactoryBot.rewind_sequences
+        reference_exercise
+      end
+
+      it { is_expected.to eql reference_exercise.checksum }
+    end
+  end
+
+  describe '#update_and_version' do
+    subject(:update_and_version) { exercise.update_and_version(params) }
+
+    let!(:exercise) { create(:exercise) }
+    let(:params) { {title: 'new_title'} }
+
+    it { is_expected.to be true }
+
+    it 'updates exercise' do
+      expect { update_and_version }.to change { exercise.reload.title }.to('new_title')
+    end
+
+    it 'creates new exercise' do
+      expect { update_and_version }.to change(described_class, :count).by(1)
+    end
+
+    it 'creates new exercise as predecessor of exercise' do
+      update_and_version
+      expect(described_class.last).to eql exercise.reload.predecessor
+    end
+
+    it 'does not change the title of predecessor' do
+      update_and_version
+      expect(exercise.predecessor.title).not_to eql('new_title')
+    end
+
+    context 'when invalid params are given' do
+      let(:params) { {descriptions: [], title: 'new_title'} }
+
+      it { is_expected.to be false }
+
+      it 'does not update exercise' do
+        expect { update_and_version }.not_to(change { exercise.reload.title })
+      end
+
+      it 'does not create new exercise' do
+        expect { update_and_version }.not_to change(described_class, :count)
       end
     end
   end

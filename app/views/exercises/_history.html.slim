@@ -1,12 +1,5 @@
-/- if history_exercises.present?
 - history_exercises.each do |exercise_hash|
   .panel.panel-default.history class=({'selected' => 'selected', 'latest' => 'latest'}[exercise_hash[:version]])
     .panel-body
       span
         = link_to t('exercises.show.history.history_version_name', version_nr: exercise_hash[:version], updated_at: exercise_hash[:exercise].updated_at), exercise_path(exercise_hash[:exercise])
-        / - if can? :read, exercise
-           span.pull-right
-             = link_to t('exercises.all.view'), exercise_path(exercise), class: 'btn btn-xs btn-default'
-/ - else
-   .history-info
-     = t('exercises.show.history.no_history')
