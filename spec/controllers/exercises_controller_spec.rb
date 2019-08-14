@@ -291,4 +291,21 @@ RSpec.describe ExercisesController, type: :controller do
       end
     end
   end
+
+  fdescribe 'POST #import_exercise' do
+    let(:post_query) { post :import_exercise, params: params, session: valid_session }
+    let(:params) { {} }
+
+    it 'returns an error' do
+      expect { post_query }.to raise_error(I18n.t('controllers.exercise.choose_file'))
+    end
+
+    context 'when a valid zip file is submitted' do
+      let(:params) { {file_upload: fixture_file_upload('files/proforma_import/testfile.zip', 'application/zip')} }
+
+      it do
+        post_query
+      end
+    end
+  end
 end

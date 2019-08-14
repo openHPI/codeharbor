@@ -362,8 +362,8 @@ class ExercisesController < ApplicationController
     return handle_proforma_multi_import(result) if result.is_a?(Array)
 
     redirect_to result, notice: t('controllers.exercise.import_proforma_xml.single_import_successful')
-  rescue Proforma::PreImportValidationError
-    redirect_to exercises_path, alert: t('controllers.exercise.import_proforma_xml.validation_error')
+  rescue Proforma::PreImportValidationError, Proforma::InvalidZip
+    redirect_to exercises_path, alert: t('controllers.exercise.import_proforma_xml.import_error')
   end
 
   def handle_proforma_multi_import(result)

@@ -87,7 +87,7 @@ en:
         unknown_token: "Unknown OAuth2 token"
         multi_import_successful: "Successfully imported %{count} exercises."
         single_import_successful: "Successfully imported exercise."
-        validation_error: "Validation of submitted XML-file failed."
+        import_error: "Import of submitted ZIP file failed."
         no_file_present: No importable file found in ZIP file
 
     exercise_file:

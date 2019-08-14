@@ -198,6 +198,7 @@ class Exercise < ApplicationRecord
     collections.count.to_s
   end
 
+  # rubocop:disable Metrics/AbcSize
   def add_attributes(params)
     add_relation(params[:exercise_relation]) if params[:exercise_relation]
     add_license(params) if params[:license_id]
@@ -207,6 +208,7 @@ class Exercise < ApplicationRecord
     add_files(params[:exercise_files_attributes])
     add_descriptions(params[:descriptions_attributes])
   end
+  # rubocop:enable Metrics/AbcSize
 
   def add_relation(relation_array)
     relation = ExerciseRelation.find_by(clone: self)
