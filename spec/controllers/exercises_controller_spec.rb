@@ -292,9 +292,13 @@ RSpec.describe ExercisesController, type: :controller do
     end
   end
 
-  fdescribe 'POST #import_exercise' do
+  describe 'POST #import_exercise' do
     let(:post_query) { post :import_exercise, params: params, session: valid_session }
     let(:params) { {} }
+
+    before do
+      create(:file_type, file_extension: '.java')
+    end
 
     it 'returns an error' do
       expect { post_query }.to raise_error(I18n.t('controllers.exercise.choose_file'))
@@ -303,9 +307,84 @@ RSpec.describe ExercisesController, type: :controller do
     context 'when a valid zip file is submitted' do
       let(:params) { {file_upload: fixture_file_upload('files/proforma_import/testfile.zip', 'application/zip')} }
 
-      it do
-        post_query
+      it 'imports the exercise' do
+        expect { post_query }.to change(Exercise, :count).by(1)
       end
+
+      it 'redirects to imported exercise' do
+        expect(post_query).to redirect_to action: :show, id: Exercise.last.id
+      end
+
+      it 'flashes import success' do
+        expect(post_query.request.flash[:notice]).to eql I18n.t('controllers.exercise.import_proforma_xml.single_import_successful')
+      end
+    end
+
+    context 'when an invalid zip file is submitted' do
+      let(:params) { {file_upload: fixture_file_upload('files/proforma_import/testfile_fail.zip', 'application/zip')} }
+
+      it 'redirects to index' do
+        expect(post_query).to redirect_to action: :index
+      end
+
+      it 'flashes import error' do
+        expect(post_query.request.flash[:alert]).to eql I18n.t('controllers.exercise.import_proforma_xml.no_file_present')
+      end
+    end
+
+    context 'when an zip with an invalid xml file is submitted' do
+      let(:params) { {file_upload: fixture_file_upload('files/proforma_import/testfile_fail_xml.zip', 'application/zip')} }
+
+      it 'redirects to index' do
+        expect(post_query).to redirect_to action: :index
+      end
+
+      it 'flashes import error' do
+        expect(post_query.request.flash[:alert]).to eql I18n.t('controllers.exercise.import_proforma_xml.import_error')
+      end
+    end
+
+    context 'when an invalid file is submitted' do
+      let(:params) { {file_upload: fixture_file_upload('files/proforma_import/testfile_fail', 'application/txt')} }
+
+      it 'redirects to index' do
+        expect(post_query).to redirect_to action: :index
+      end
+
+      it 'flashes import error' do
+        expect(post_query.request.flash[:alert]).to eql I18n.t('controllers.exercise.import_proforma_xml.import_error')
+      end
+    end
+
+    context 'when the zip file includes multiple exercises' do
+      let(:params) { {file_upload: fixture_file_upload('files/proforma_import/testfile_multi.zip', 'application/zip')} }
+
+      it 'imports the exercises' do
+        expect { post_query }.to change(Exercise, :count).by(3)
+      end
+
+      it 'redirects to index' do
+        expect(post_query).to redirect_to action: :index
+      end
+
+      it 'flashes import success' do
+        expect(post_query.request.flash[:notice]).to eql I18n
+          .t('controllers.exercise.import_proforma_xml.multi_import_successful', count: 3)
+      end
+    end
+  end
+
+  fdescribe '#download_exercise' do
+    let(:exercise) { create(:simple_exercise) }
+
+    let(:get_request) { get :download_exercise, params: {id: exercise.id}, session: valid_session }
+    let(:zip) { double(string: 'abcdefg') }
+
+    before { allow(ProformaService::ExportTask).to receive(:call).with(exercise: exercise).and_return(zip) }
+
+    it do
+      get_request
+      expect(ProformaService::ExportTask).to have_received(:call)
     end
   end
 end
