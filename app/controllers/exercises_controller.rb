@@ -160,7 +160,6 @@ class ExercisesController < ApplicationController
       }
     end
     respond_to do |format|
-      format.html { render :index }
       format.js { render 'load_history.js.erb' }
     end
   end

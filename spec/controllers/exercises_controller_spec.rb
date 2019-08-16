@@ -374,17 +374,85 @@ RSpec.describe ExercisesController, type: :controller do
     end
   end
 
-  fdescribe '#download_exercise' do
+  describe '#download_exercise' do
     let(:exercise) { create(:simple_exercise) }
 
     let(:get_request) { get :download_exercise, params: {id: exercise.id}, session: valid_session }
-    let(:zip) { double(string: 'abcdefg') }
+    let(:zip) { instance_double('StringIO', string: 'dummy') }
 
     before { allow(ProformaService::ExportTask).to receive(:call).with(exercise: exercise).and_return(zip) }
 
     it do
       get_request
       expect(ProformaService::ExportTask).to have_received(:call)
+    end
+
+    it 'updates download count' do
+      expect { get_request }.to change { exercise.reload.downloads }.by(1)
+    end
+
+    it 'sends the correct data' do
+      get_request
+      expect(response.body).to eql 'dummy'
+    end
+
+    it 'sets the correct Content-Type header' do
+      get_request
+      expect(response.header['Content-Type']).to eql 'application/zip'
+    end
+
+    it 'sets the correct Content-Disposition header' do
+      get_request
+      expect(response.header['Content-Disposition']).to eql "attachment; filename=\"task_#{exercise.id}.zip\""
+    end
+  end
+
+  describe '#history' do
+    let(:exercise) { create(:simple_exercise, valid_attributes) }
+    let(:get_request) { get :history, params: {id: exercise.id}, session: valid_session, format: :js, xhr: true }
+
+    before { exercise }
+
+    it 'sets complete history of exercise into history_exercises' do
+      get_request
+      expect(assigns(:history_exercises)).to contain_exactly(include(exercise: exercise, version: 'selected'))
+    end
+
+    it 'renders load_history javascript' do
+      get_request
+      expect(response).to render_template('load_history.js.erb')
+    end
+
+    context 'when history is large' do
+      let(:exercise) do
+        create(
+          :simple_exercise,
+          valid_attributes.merge(
+            predecessor: build(:simple_exercise,
+                               predecessor: build(:simple_exercise, user: user), user: user)
+          )
+        )
+      end
+
+      it 'sets complete history of exercise into history_exercises' do
+        get_request
+        expect(assigns(:history_exercises)).to have(3).items.and(
+          contain_exactly({exercise: exercise, version: 'selected'}, {exercise: exercise.predecessor, version: 2},
+                          exercise: exercise.predecessor.predecessor, version: 1)
+        )
+      end
+
+      context 'when history for the middle exercise is requested' do
+        let(:get_request) { get :history, params: {id: exercise.predecessor.id}, session: valid_session, format: :js, xhr: true }
+
+        it 'sets complete history of exercise into history_exercises' do
+          get_request
+          expect(assigns(:history_exercises)).to have(3).items.and(
+            contain_exactly({exercise: exercise, version: 'latest'}, {exercise: exercise.predecessor, version: 'selected'},
+                            exercise: exercise.predecessor.predecessor, version: 1)
+          )
+        end
+      end
     end
   end
 end
