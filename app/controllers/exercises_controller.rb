@@ -166,7 +166,7 @@ class ExercisesController < ApplicationController
 
   def push_external
     account_link = AccountLink.find(params[:account_link])
-    error = push_exercise(@exercise, account_link)
+    error = ExerciseService::PushExternal.call(zip: ProformaService::ExportTask.call(exercise: @exercise), account_link: account_link)
     if error.nil?
       redirect_to @exercise, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
     else
