@@ -12,6 +12,8 @@ class Exercise < ApplicationRecord
   validates :execution_environment, presence: true
   validates :license, presence: true, unless: :private?
   validate :no_predecessor_loop, :one_primary_description?
+  validate :valid_main_file?
+
   validates_uniqueness_of :uuid
 
   has_many :exercise_files, dependent: :destroy
@@ -158,7 +160,9 @@ class Exercise < ApplicationRecord
   # rubocop:enable Metrics/CyclomaticComplexity
 
   def can_access(user)
+
     if private
+
       if !user.author?(self)
         if !user.access_through_any_group?(self)
           false
@@ -354,7 +358,9 @@ class Exercise < ApplicationRecord
 
   def duplicate
     Exercise.new(
+
       private: private,
+
       descriptions: descriptions.map(&:dup),
       tests: tests.map(&:dup),
       exercise_files: exercise_files.map(&:dup)
@@ -432,6 +438,10 @@ class Exercise < ApplicationRecord
     primary_description_count = descriptions.select(&:primary?).count
     errors.add(:exercise, 'has more than one primary descriptions') if primary_description_count > 1
     errors.add(:exercise, 'has no primary description') if primary_description_count < 1
+  end
+
+  def valid_main_file?
+    errors.add(:files, 'max 1 mainfile') if exercise_files.select { |f| f.role == 'Main File' }.count > 1
   end
 end
 # rubocop:enable Metrics/ClassLength

@@ -16,7 +16,7 @@ module ExerciseService
         token.post(
           @account_link.push_url,
           body: body,
-          headers: {'Content-Type' => 'application/zip', 'Content-Length' => body.length.to_s, 'Accept' => 'application/json'}
+          headers: {'Content-Type' => 'application/zip', 'Content-Length' => body.length.to_s}
         )
         return nil
       rescue StandardError => e
