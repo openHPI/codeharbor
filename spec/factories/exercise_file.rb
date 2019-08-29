@@ -10,7 +10,7 @@ FactoryBot.define do
     visibility { true }
     hidden { false }
     read_only { false }
-    role { 'Main File' }
+    role { 'main_file' }
   end
 
   factory :junit_test_file, class: 'ExerciseFile' do
@@ -26,7 +26,7 @@ FactoryBot.define do
     content { 'public class ModelSolutionFile { public static void main String[] args) { } }' }
     name { 'ModelSolutionFile' }
     path { '' }
-    role { 'Reference Implementation' }
+    role { 'reference_implementation' }
     file_type { FactoryBot.create(:java_file_type) }
     visibility { false }
     hidden { false }
@@ -61,7 +61,7 @@ FactoryBot.define do
     content { 'System.x.print("Hello World");' }
     name { 'hello_world' }
     path { 'source/main' }
-    role { 'Main File' }
+    role { 'main_file' }
     hidden { false }
     read_only { false }
     file_type { FactoryBot.create(:java_file_type) }
@@ -71,7 +71,7 @@ FactoryBot.define do
     content { 'System.out.print("Hello World");' }
     name { 'solution' }
     path { '' }
-    role { 'Reference Implementation' }
+    role { 'reference_implementation' }
     hidden { false }
     read_only { true }
     file_type { FactoryBot.create(:java_file_type) }

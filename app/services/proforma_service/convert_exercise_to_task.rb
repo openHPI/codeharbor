@@ -42,7 +42,7 @@ module ProformaService
     end
 
     def model_solutions
-      @exercise.exercise_files.filter { |file| file.role == 'Reference Implementation' }.map do |file|
+      @exercise.exercise_files.filter { |file| file.role == 'reference_implementation' }.map do |file|
         Proforma::ModelSolution.new(
           id: "ms-#{file.id}",
           files: [
@@ -84,13 +84,13 @@ module ProformaService
         used_by_grader: true,
         visible: file.hidden ? 'no' : 'yes',
         binary: false,
-        internal_description: file.role || 'Teacher-defined Test'
+        internal_description: file.role || 'teacher_defined_test'
       )]
     end
 
     def task_files
       @exercise.exercise_files
-               .filter { |file| file.role != 'Reference Implementation' && !file.in?(@exercise.tests.map(&:exercise_file)) }.map do |file|
+               .filter { |file| file.role != 'reference_implementation' && !file.in?(@exercise.tests.map(&:exercise_file)) }.map do |file|
         task_file(file)
       end
     end

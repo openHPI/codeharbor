@@ -441,7 +441,7 @@ class Exercise < ApplicationRecord
   end
 
   def valid_main_file?
-    errors.add(:files, 'max 1 mainfile') if exercise_files.select { |f| f.role == 'Main File' }.count > 1
+    errors.add(:files, 'max 1 mainfile') if exercise_files.select { |f| f.role == 'main_file' }.count > 1
   end
 end
 # rubocop:enable Metrics/ClassLength

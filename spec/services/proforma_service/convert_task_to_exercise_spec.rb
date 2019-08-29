@@ -159,13 +159,13 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
           visible: 'yes',
           usage_by_lms: 'display',
           binary: false,
-          internal_description: 'Reference Implementation'
+          internal_description: 'reference_implementation'
         )
       end
 
       it 'creates an exercise with a file with role Reference Implementation' do
         expect(convert_to_exercise_service.exercise_files.first).to have_attributes(
-          role: 'Reference Implementation'
+          role: 'reference_implementation'
         )
       end
 
@@ -187,12 +187,12 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
             visible: 'yes',
             usage_by_lms: 'display',
             binary: false,
-            internal_description: 'Reference Implementation'
+            internal_description: 'reference_implementation'
           )
         end
 
         it 'creates an exercise with two files with role Reference Implementation' do
-          expect(convert_to_exercise_service.exercise_files).to have(2).items.and(all(have_attributes(role: 'Reference Implementation')))
+          expect(convert_to_exercise_service.exercise_files).to have(2).items.and(all(have_attributes(role: 'reference_implementation')))
         end
       end
     end
@@ -225,7 +225,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
           visible: 'no',
           usage_by_lms: 'display',
           binary: false,
-          internal_description: 'Teacher-defined Test'
+          internal_description: 'teacher_defined_test'
         )
       end
 
@@ -244,7 +244,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
           exercise_file: have_attributes(
             content: 'testfile-content',
             name: 'testfile',
-            role: 'Teacher-defined Test',
+            role: 'teacher_defined_test',
             hidden: true,
             read_only: true,
             file_type: be_a(FileType).and(have_attributes(file_extension: '.txt')),
@@ -275,7 +275,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
             visible: 'no',
             usage_by_lms: 'display',
             binary: false,
-            internal_description: 'Teacher-defined Test'
+            internal_description: 'teacher_defined_test'
           )
         end
 
@@ -359,7 +359,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
             visible: 'no',
             usage_by_lms: 'display',
             binary: false,
-            internal_description: 'Teacher-defined Test'
+            internal_description: 'teacher_defined_test'
           )
         end
         let(:model_solutions) { [model_solution] }
@@ -379,17 +379,17 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
             visible: 'yes',
             usage_by_lms: 'display',
             binary: false,
-            internal_description: 'Reference Implementation'
+            internal_description: 'reference_implementation'
           )
         end
 
         it 'assigns all values to given exercise' do
           expect(convert_to_exercise_service).to have_attributes(
             id: exercise.id,
-            exercise_files: have(2).items.and(include(have_attributes(content: 'ms-content', role: 'Reference Implementation')))
+            exercise_files: have(2).items.and(include(have_attributes(content: 'ms-content', role: 'reference_implementation')))
               .and(include(have_attributes(content: 'content', role: 'internal_description'))),
             tests: have(1).item
-              .and(include(have_attributes(exercise_file: have_attributes(content: 'testfile-content', role: 'Teacher-defined Test'))))
+              .and(include(have_attributes(exercise_file: have_attributes(content: 'testfile-content', role: 'teacher_defined_test'))))
           )
         end
       end

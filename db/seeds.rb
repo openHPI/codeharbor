@@ -96,7 +96,7 @@ exercise1_main = ExerciseFile.create(
   path: '',
   purpose: 'template',
   visibility: true,
-  role: 'Main File',
+  role: 'main_file',
   hidden: false,
   read_only: false,
   file_type: java_file

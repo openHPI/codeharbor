@@ -109,7 +109,7 @@ RSpec.describe Exercise, type: :model do
           },
           exercise_files_attributes: {
             '0' => {
-              role: 'Main File',
+              role: 'main_file',
               content: 'some new exercise',
               path: 'some/path/',
               purpose: 'a new purpose',

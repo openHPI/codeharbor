@@ -58,7 +58,7 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
           usage_by_lms: 'edit',
           visible: 'yes',
           binary: false,
-          internal_description: 'Main File'
+          internal_description: 'main_file'
         )
       end
     end
@@ -133,7 +133,7 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
           usage_by_lms: 'display',
           visible: 'delayed',
           binary: false,
-          internal_description: 'Reference Implementation'
+          internal_description: 'reference_implementation'
         )
       end
     end
@@ -176,7 +176,7 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
           used_by_grader: true,
           visible: 'no',
           binary: false,
-          internal_description: 'Teacher-defined Test'
+          internal_description: 'teacher_defined_test'
         )
       end
 

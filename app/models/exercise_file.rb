@@ -32,12 +32,13 @@ class ExerciseFile < ApplicationRecord
     self.file_type = file_type
   end
 
-  ROLES = [
-    'Main File',
-    'Reference Implementation',
-    'Regular File',
-    'User-defined Test'
-  ].freeze
+  ROLES = %w[main_file reference_implementation regular_file teacher_defined_test].freeze
+    # 'Main File',
+    # 'Reference Implementation',
+    # 'Regular File',
+    # 'User-defined Test'
+  # ].freeze
+
 
   def parse_text_data
     # puts attachment.content_type
