@@ -5,11 +5,11 @@ require 'zip'
 
 # rubocop:disable Metrics/ClassLength
 class ExercisesController < ApplicationController
-  load_and_authorize_resource except: [:import_proforma_xml]
+  load_and_authorize_resource except: [:import_exercise_oauth]
   before_action :set_exercise, only: %i[show edit update destroy add_to_cart add_to_collection push_external contribute remove_state]
   before_action :set_search, only: [:index]
   before_action :handle_search_params, only: :index
-  skip_before_action :verify_authenticity_token, only: [:import_proforma_xml]
+  skip_before_action :verify_authenticity_token, only: [:import_exercise_oauth]
 
   include ExerciseExport
 
@@ -181,28 +181,17 @@ class ExercisesController < ApplicationController
     send_data(zip_file.string, type: 'application/zip', filename: "task_#{@exercise.id}.zip", disposition: 'attachment')
   end
 
-  # rubocop:disable Metrics/AbcSize
-  def import_proforma_xml
+  def import_exercise_oauth
     user = user_for_oauth2_request
-    exercise = Exercise.new
-    request_body = request.body.read
-    doc = Nokogiri::XML(request_body)
-    importer = Proforma::Importer.new
-    exercise = importer.from_proforma_xml(exercise, doc)
-    exercise.user = user
-    saved = exercise.save
-    if saved
-      render text: t('controllers.exercise.import_proforma_xml.success'), status: 200
-    else
-      logger.info(exercise.errors.full_messages)
-      render text: t('controllers.exercise.import_proforma_xml.invalid'), status: 400
-    end
-  rescue StandardError => e
-    raise e unless e.class == Hash
+    tempfile = tempfile_from_string(request.body.read.force_encoding('UTF-8'))
 
-    render text: e.message, status: e.status
+    ProformaService::Import.call(zip: tempfile, user: user)
+    # return render text: t('controllers.exercise.import_proforma_xml.no_file_present'), status: 400 if result.is_a?(Array) && result.empty?
+
+    render json: t('controllers.exercise.import_proforma_xml.success'), status: 200
+  rescue Proforma::PreImportValidationError, Proforma::InvalidZip
+    render json: t('controllers.exercise.import_proforma_xml.invalid'), status: 400
   end
-  # rubocop:enable Metrics/AbcSize
 
   def import_exercise
     uploaded_io = params[:file_upload]
@@ -371,6 +360,13 @@ class ExercisesController < ApplicationController
     else
       redirect_to exercises_path,
                   notice: t('controllers.exercise.import_proforma_xml.multi_import_successful', count: result.length)
+    end
+  end
+
+  def tempfile_from_string(string)
+    Tempfile.new('codeharbor_import.zip').tap do |tempfile|
+      tempfile.write string
+      tempfile.rewind
     end
   end
 end

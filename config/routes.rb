@@ -60,7 +60,7 @@ Rails.application.routes.draw do
     delete 'logout' => :destroy
   end
 
-  post 'import_proforma_xml' => 'exercises#import_proforma_xml'
+  post 'import_exercise' => 'exercises#import_exercise_oauth'
 
   get 'sessions/create'
   get 'sessions/destroy'

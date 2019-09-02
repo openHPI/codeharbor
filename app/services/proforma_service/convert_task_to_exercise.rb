@@ -25,7 +25,8 @@ module ProformaService
         execution_environment: execution_environment,
         tests: tests,
         exercise_files: task_files.values,
-        state_list: @exercise.persisted? ? 'updated' : 'new'
+        state_list: @exercise.persisted? ? 'updated' : 'new',
+        uuid: @task.uuid
       )
     end
 
@@ -83,7 +84,11 @@ module ProformaService
     end
 
     def execution_environment
-      ExecutionEnvironment.where(language: @task.proglang[:name], version: @task.proglang[:version]).first_or_initialize
+      proglang_name = @task.proglang&.dig :name
+      proglang_version = @task.proglang&.dig :version
+      return nil if proglang_name.nil? || proglang_version.nil?
+
+      ExecutionEnvironment.where(language: proglang_name, version: proglang_version).first_or_initialize
     end
   end
 end

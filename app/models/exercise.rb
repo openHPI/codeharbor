@@ -9,7 +9,7 @@ class Exercise < ApplicationRecord
   groupify :group_member
   validates :title, presence: true
   validates :descriptions, presence: true
-  validates :execution_environment, presence: true
+  # validates :execution_environment, presence: true # same as codeocean, is nil after import...
   validates :license, presence: true, unless: :private?
   validate :no_predecessor_loop, :one_primary_description?
   validate :valid_main_file?
