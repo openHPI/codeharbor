@@ -82,9 +82,6 @@ en:
       import_proforma_xml:
         success: "SUCCESS"
         invalid: "Invalid exercise"
-        no_header: "No Authorization header"
-        no_token: "No token in Authorization header"
-        unknown_token: "Unknown OAuth2 token"
         multi_import_successful: "Successfully imported %{count} exercises."
         single_import_successful: "Successfully imported exercise."
         import_error: "Import of submitted ZIP file failed."
