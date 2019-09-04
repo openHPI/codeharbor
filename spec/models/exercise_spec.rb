@@ -7,7 +7,7 @@ RSpec.describe Exercise, type: :model do
   describe '#valid?' do
     it { is_expected.to validate_presence_of(:descriptions) }
     it { is_expected.to validate_presence_of(:title) }
-    it { is_expected.to validate_presence_of(:execution_environment) }
+    # it { is_expected.to validate_presence_of(:execution_environment) }
     it { is_expected.to validate_uniqueness_of(:uuid).case_insensitive }
 
     context 'when exercise has a description' do

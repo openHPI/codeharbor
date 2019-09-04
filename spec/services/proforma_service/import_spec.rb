@@ -51,6 +51,32 @@ RSpec.describe ProformaService::Import do
       expect(import_service.user).to be user
     end
 
+    it 'sets the uuid' do
+      expect(import_service.uuid).not_to be_blank
+    end
+
+    context 'when no exercise exists' do
+      before { exercise.destroy }
+
+      it { is_expected.to be_valid }
+
+      it 'sets the correct user as owner of the exercise' do
+        expect(import_service.user).to be user
+      end
+
+      it 'sets the uuid' do
+        expect(import_service.uuid).not_to be_blank
+      end
+
+      context 'when task has a uuid' do
+        let(:uuid) { SecureRandom.uuid }
+
+        it 'sets the uuid' do
+          expect(import_service.uuid).to eql uuid
+        end
+      end
+    end
+
     context 'when exercise has a mainfile' do
       let(:files) { [file] }
       let(:file) { build(:codeharbor_main_file) }
@@ -124,7 +150,7 @@ RSpec.describe ProformaService::Import do
       end
 
       context 'when a exercise has files and tests' do
-        let(:files) { create_list(:codeharbor_main_file, 2) }
+        let(:files) { [create(:codeharbor_main_file), create(:codeharbor_regular_file)] }
         let(:tests) { create_list(:codeharbor_test, 2) }
 
         it 'imports the zip exactly how the were exported' do

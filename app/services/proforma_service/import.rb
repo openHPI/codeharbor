@@ -26,11 +26,15 @@ module ProformaService
     private
 
     def base_exercise
-      exercise = Exercise.find_by(uuid: @task.uuid, user: @user)
+      exercise = Exercise.find_by(uuid: @task.uuid)
       task_checksum = @task.import_checksum || @task.checksum
-      return exercise if exercise&.checksum == task_checksum
+      if exercise
+        return exercise if exercise.checksum == task_checksum && exercise.user == @user
 
-      nil
+        return Exercise.new(uuid: SecureRandom.uuid)
+      end
+
+      Exercise.new(uuid: @task.uuid || SecureRandom.uuid)
     end
 
     def import_multi

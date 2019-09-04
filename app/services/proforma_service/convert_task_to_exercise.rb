@@ -25,8 +25,7 @@ module ProformaService
         execution_environment: execution_environment,
         tests: tests,
         exercise_files: task_files.values,
-        state_list: @exercise.persisted? ? 'updated' : 'new',
-        uuid: @task.uuid
+        state_list: @exercise.persisted? ? 'updated' : 'new'
       )
     end
 
