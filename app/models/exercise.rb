@@ -160,7 +160,6 @@ class Exercise < ApplicationRecord
   # rubocop:enable Metrics/CyclomaticComplexity
 
   def can_access(user)
-
     if private
 
       if !user.author?(self)
@@ -358,7 +357,6 @@ class Exercise < ApplicationRecord
 
   def duplicate
     Exercise.new(
-
       private: private,
 
       descriptions: descriptions.map(&:dup),

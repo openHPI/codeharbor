@@ -38,7 +38,7 @@ module ProformaService
     end
 
     def proglang
-      {name: @exercise.execution_environment.language, version: @exercise.execution_environment.version}
+      {name: @exercise.execution_environment&.language, version: @exercise.execution_environment&.version}
     end
 
     def model_solutions
