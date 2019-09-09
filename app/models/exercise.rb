@@ -255,19 +255,21 @@ class Exercise < ApplicationRecord
     end
   end
 
+  # rubocop:disable Metrics/AbcSize
   def add_descriptions(description_array)
     description_array.try(:each) do |_key, array|
       destroy_param = array[:_destroy]
       id = array[:id]
 
       if id
-        description = Description.find(id)
+        description = descriptions.detect { |desc| desc.id.to_s == id }
         destroy_param ? description.destroy : description.update(text: array[:text], language: array[:language], primary: array[:primary])
       else
         descriptions.new(text: array[:text], language: array[:language], primary: array[:primary]) unless destroy_param
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def add_files(file_array)
     file_array&.each do |_key, params|
@@ -416,10 +418,12 @@ class Exercise < ApplicationRecord
     ProformaService::ConvertExerciseToTask.call(exercise: self).generate_checksum
   end
 
-  def update_and_version(params)
+  # this needs to be fixed with proper nested forms
+  def update_and_version(exercise_params, params_exercise)
     ActiveRecord::Base.transaction do
       save_old_version
-      return true if update(params)
+      add_attributes(params_exercise)
+      return true if update(exercise_params)
 
       raise ActiveRecord::Rollback
     end

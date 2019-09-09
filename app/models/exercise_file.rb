@@ -33,14 +33,8 @@ class ExerciseFile < ApplicationRecord
   end
 
   ROLES = %w[main_file reference_implementation regular_file teacher_defined_test].freeze
-  # 'Main File',
-  # 'Reference Implementation',
-  # 'Regular File',
-  # 'User-defined Test'
-  # ].freeze
 
   def parse_text_data
-    # puts attachment.content_type
     return unless %r{(text/)|(application/xml)}.match?(attachment.instance.attachment_content_type)
 
     self.content = Paperclip.io_adapters.for(attachment.instance.attachment).read

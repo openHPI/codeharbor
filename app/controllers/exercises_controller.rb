@@ -90,10 +90,9 @@ class ExercisesController < ApplicationController
   end
 
   def update
-    @exercise.add_attributes(params[:exercise])
     @exercise.state_list = []
     respond_to do |format|
-      if @exercise.update_and_version(exercise_params)
+      if @exercise.update_and_version(exercise_params, params[:exercise])
         format.html { redirect_to @exercise, notice: t('controllers.exercise.updated') }
         format.json { render :show, status: :ok, location: @exercise }
       else
@@ -186,7 +185,6 @@ class ExercisesController < ApplicationController
     tempfile = tempfile_from_string(request.body.read.force_encoding('UTF-8'))
 
     ProformaService::Import.call(zip: tempfile, user: user)
-    # return render text: t('controllers.exercise.import_proforma_xml.no_file_present'), status: 400 if result.is_a?(Array) && result.empty?
 
     render json: t('controllers.exercise.import_proforma_xml.success'), status: 200
   rescue Proforma::PreImportValidationError, Proforma::InvalidZip
