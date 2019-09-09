@@ -499,6 +499,11 @@ en:
       purpose: "Purpose"
       name: "Name"
       upload_file: "Upload File"
+      roles:
+        main_file: Main File
+        regular_file: Regular File
+        reference_implementation: Reference Implementation
+        teacher_defined_test: Teacher-defined Test
     tests:
       label: "Tests"
       content: "Content"
