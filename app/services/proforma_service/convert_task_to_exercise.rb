@@ -19,7 +19,7 @@ module ProformaService
       @exercise.assign_attributes(
         user: @user,
         title: @task.title,
-        private: true,
+        private: @exercise.private.nil? ? true : @exercise.private,
         descriptions: new_descriptions,
         instruction: @task.internal_description,
         execution_environment: execution_environment,
@@ -85,7 +85,7 @@ module ProformaService
     def execution_environment
       proglang_name = @task.proglang&.dig :name
       proglang_version = @task.proglang&.dig :version
-      return nil if proglang_name.nil? || proglang_version.nil?
+      return @exercise.execution_environment if proglang_name.nil? || proglang_version.nil?
 
       ExecutionEnvironment.where(language: proglang_name, version: proglang_version).first_or_initialize
     end
