@@ -76,7 +76,7 @@ group :development, :test do
   gem 'rspec-collection_matchers', '~> 1.1.3'
   gem 'rspec-rails'
   gem 'rubocop', '~> 0.72.0'
-  gem 'rubocop-rails', '~> 2.2.1'
+  gem 'rubocop-rails', '~> 2.3.2'
   gem 'rubocop-rspec', '~> 1.35.0'
 end
 
@@ -88,7 +88,7 @@ group :development do
   gem 'web-console'
 
   gem 'airbrussh', require: false
-  gem 'capistrano', '~> 3.10', require: false
+  gem 'capistrano', '~> 3.11', require: false
   gem 'capistrano-rails', '~> 1.4', require: false
   gem 'capistrano-rvm'
   gem 'capistrano-upload-config'
