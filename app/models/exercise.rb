@@ -404,7 +404,7 @@ class Exercise < ApplicationRecord
   end
 
   def save_old_version
-    root_exercise = Exercise.find(id)
+    root_exercise = Exercise.unscoped.find(id)
     old_version = root_exercise.duplicate
     old_version.assign_attributes root_exercise.attributes.except('id', 'created_at', 'updated_at', 'uuid')
     ActiveRecord::Base.transaction do
