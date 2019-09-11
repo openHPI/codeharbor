@@ -85,7 +85,7 @@ group :development do
   gem 'web-console'
 
   gem 'airbrussh', require: false
-  gem 'capistrano', '~> 3.10', require: false
+  gem 'capistrano', '~> 3.11', require: false
   gem 'capistrano-rails', '~> 1.4', require: false
   gem 'capistrano-rvm'
   gem 'capistrano-upload-config'
