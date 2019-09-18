@@ -186,7 +186,7 @@ class ExercisesController < ApplicationController
 
     ProformaService::Import.call(zip: tempfile, user: user)
 
-    render json: t('controllers.exercise.import_proforma_xml.success'), status: 200
+    render json: t('controllers.exercise.import_proforma_xml.success'), status: 201
   rescue Proforma::PreImportValidationError, Proforma::InvalidZip
     render json: t('controllers.exercise.import_proforma_xml.invalid'), status: 400
   end
