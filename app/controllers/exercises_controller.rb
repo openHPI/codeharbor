@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'oauth2'
 require 'zip'
 
 # rubocop:disable Metrics/ClassLength
@@ -10,8 +9,6 @@ class ExercisesController < ApplicationController
   before_action :set_search, only: [:index]
   before_action :handle_search_params, only: :index
   skip_before_action :verify_authenticity_token, only: [:import_exercise_oauth]
-
-  include ExerciseExport
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.exercise.authorization')
@@ -322,12 +319,12 @@ class ExercisesController < ApplicationController
 
   def user_for_oauth2_request
     authorization_header = request.headers['Authorization']
-    oauth2_token = authorization_header&.split(' ')&.second
-    user_by_code_harbor_token(oauth2_token)
+    api_key = authorization_header&.split(' ')&.second
+    user_by_code_harbor_token(api_key)
   end
 
-  def user_by_code_harbor_token(oauth2_token)
-    link = AccountLink.where(oauth2_token: oauth2_token)[0]
+  def user_by_code_harbor_token(api_key)
+    link = AccountLink.where(api_key: api_key)[0]
     link&.user
   end
 

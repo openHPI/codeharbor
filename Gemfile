@@ -64,7 +64,8 @@ gem 'jquery-ui-rails'
 gem 'less-rails' # Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
 gem 'nested_form_fields'
 gem 'nokogiri'
-gem 'oauth2', '~> 1.4.0'
+# gem 'oauth2', '~> 1.4.0'
+gem 'faraday'
 gem 'select2-rails', '~> 4.0', '>= 4.0.3'
 
 group :development, :test do

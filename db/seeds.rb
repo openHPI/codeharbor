@@ -149,4 +149,4 @@ exercise1.labels << l1
 exercise1.labels << l2
 exercise1.labels << l3
 
-AccountLink.create(push_url: 'google.com/pushpush', account_name: 'account1000')
+AccountLink.create(user: user1, push_url: 'google.com/pushpush', api_key: 'abcdefg')

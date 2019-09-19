@@ -202,10 +202,8 @@ en:
   account:
     show_header: "Account Link"
     pushURL: "Push URL"
-    name: "Account Name"
-    token: "OAuth2 token"
-    client_id: "Client ID"
-    client_secret: "Client Secret"
+    name: "Name"
+    api_key: "API key"
     documentation:
       header: About autograders and account links
       paragraph_html: |
@@ -250,10 +248,6 @@ en:
         Can be anything to Identify your account link.
       token: |
         Will be used to authenticate your export request. Has to be the same on both sides.
-      client_id:
-        Will be sent with your token. Can be automatically generated.
-      client_secret:
-        Will be sent with your token. Can be automatically generated.
 
     admin:
       header: "Account Link Administration"

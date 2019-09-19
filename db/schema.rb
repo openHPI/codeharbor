@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_01_135856) do
+ActiveRecord::Schema.define(version: 2019_09_18_151604) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -26,11 +26,9 @@ ActiveRecord::Schema.define(version: 2019_08_01_135856) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "push_url"
-    t.string "account_name"
     t.integer "user_id"
-    t.string "oauth2_token"
-    t.string "client_id"
-    t.string "client_secret"
+    t.string "api_key"
+    t.string "name"
     t.index ["user_id"], name: "index_account_links_on_user_id"
   end
 

@@ -11,8 +11,6 @@ class CollectionsController < ApplicationController
     redirect_to root_path, alert: t('controllers.collections.authorization')
   end
 
-  include ExerciseExport
-
   # GET /collections
   # GET /collections.json
   def index

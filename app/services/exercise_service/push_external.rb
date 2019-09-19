@@ -8,16 +8,18 @@ module ExerciseService
     end
 
     def execute
-      oauth2_client = OAuth2::Client.new(@account_link.client_id, @account_link.client_secret, site: @account_link.push_url)
-      oauth2_token = @account_link[:oauth2_token]
-      token = OAuth2::AccessToken.from_hash(oauth2_client, access_token: oauth2_token)
       body = @zip.string
       begin
-        token.post(
-          @account_link.push_url,
-          body: body,
-          headers: {'Content-Type' => 'application/zip', 'Content-Length' => body.length.to_s}
-        )
+        conn = Faraday.new(url: @account_link.push_url) do |faraday|
+          faraday.adapter Faraday.default_adapter
+        end
+
+        conn.post do |req|
+          req.headers['Content-Type'] = 'application/zip'
+          req.headers['Content-Length'] = body.length.to_s
+          req.headers['Authorization'] = 'Bearer ' + @account_link.api_key
+          req.body = body
+        end
         return nil
       rescue StandardError => e
         return e

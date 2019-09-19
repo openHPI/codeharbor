@@ -10,8 +10,6 @@ class CartsController < ApplicationController
     redirect_to root_path, alert: t('controllers.carts.authorization')
   end
 
-  include ExerciseExport
-
   def index
     @carts = Cart.all
   end
