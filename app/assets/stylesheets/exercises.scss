@@ -674,3 +674,27 @@ input[type="radio"]:checked+label {
 .exercise-panel {
   min-height: 155px;
 }
+
+.export-action-button {
+  width: 100%;
+  text-align: left;
+}
+
+.export-exercise{
+  display: flex;
+}
+
+.export-message {
+  flex-grow: 2;
+  padding-right: 5px;
+}
+
+.export-exercise-actions {
+  flex-grow: 1;
+}
+
+.export-exercise + .export-exercise {
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px solid lightgrey;
+}

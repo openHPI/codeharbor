@@ -5,7 +5,8 @@ require 'zip'
 # rubocop:disable Metrics/ClassLength
 class ExercisesController < ApplicationController
   load_and_authorize_resource except: [:import_exercise_oauth]
-  before_action :set_exercise, only: %i[show edit update destroy add_to_cart add_to_collection push_external contribute remove_state]
+  before_action :set_exercise, only: %i[show edit update destroy add_to_cart add_to_collection push_external contribute
+                                        remove_state export_external_start]
   before_action :set_search, only: [:index]
   before_action :handle_search_params, only: :index
   skip_before_action :verify_authenticity_token, only: [:import_exercise_oauth]
@@ -158,6 +159,26 @@ class ExercisesController < ApplicationController
     respond_to do |format|
       format.js { render 'load_history.js.erb' }
     end
+  end
+
+  def export_external_start
+    @account_link = AccountLink.find(params[:account_link])
+    respond_to do |format|
+      format.js { render layout: false } # Add this line to you respond_to block
+    end
+  end
+
+  def export_external_check
+    render json: {
+      message: 'Checking Done',
+      actions: render_to_string(
+        partial: 'export_actions',
+        formats: :html,
+        layout: false,
+        locals: {exercise: @exercise}
+      )
+
+    }, status: 200
   end
 
   def push_external

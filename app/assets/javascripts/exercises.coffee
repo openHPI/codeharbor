@@ -418,7 +418,37 @@ ready =->
     $('.primary-checkbox').prop('checked', false)
     $(event.target).prop('checked', true)
 
-  if $('.primary-checkbox:checked').length < 1
+  # $('.export-test').on 'click', (event) ->
+  #   # $('.export-dialog').html('all the content <br><br>more stuffi')
+  #   $('#export-dialog').modal('show')
+
+
+  if $('.primary-checkbox').length > 0 && $('.primary-checkbox:checked').length < 1
     $('.primary-checkbox')[0].click()
 
 $(document).on('turbolinks:load', ready)
+
+buildActionButtons = (actions) ->
+  return 'this string'
+
+exportExercise = (exerciseID, accountLinkID) ->
+  $exerciseDiv = $('#export-exercise-' + exerciseID)
+  $messageDiv = $exerciseDiv.children('.export-message')
+  $actionsDiv = $exerciseDiv.children('.export-exercise-actions')
+
+  $messageDiv.html('requesting status')
+  $actionsDiv.html('spinning')
+
+  $.ajax({
+    type: 'POST',
+    url: '/exercises/' + exerciseID + '/export_external_check',
+    data: {account_link_id: accountLinkID},
+    dataType: 'json',
+    success: (response) ->
+      $messageDiv.html(response.message)
+      $actionsDiv.html(response.actions)
+    error: (a, b, c) ->
+      alert('error:' + c);
+  })
+# export function to make it accessible from outside this scope
+root = exports ? this; root.exportExercise = exportExercise

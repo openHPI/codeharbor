@@ -29,7 +29,7 @@ module ProformaService
       exercise = Exercise.unscoped.find_by(uuid: @task.uuid)
       task_checksum = @task.import_checksum || @task.checksum
       if exercise
-        return exercise if exercise.checksum == task_checksum && exercise.user == @user
+        return exercise if exercise.checksum == task_checksum && (exercise.user == @user || @user.author?(exercise))
 
         return Exercise.new(uuid: SecureRandom.uuid)
       end

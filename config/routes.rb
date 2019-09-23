@@ -137,6 +137,8 @@ Rails.application.routes.draw do
       get :download_exercise
       post :remove_state
       get :history
+      get :export_external_start
+      post :export_external_check
     end
   end
 
