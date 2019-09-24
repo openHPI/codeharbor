@@ -685,12 +685,12 @@ input[type="radio"]:checked+label {
 }
 
 .export-message {
-  flex-grow: 2;
+  flex-grow: 1;
   padding-right: 5px;
 }
 
 .export-exercise-actions {
-  flex-grow: 1;
+  max-width: 100px;
 }
 
 .export-exercise + .export-exercise {

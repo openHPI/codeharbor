@@ -169,14 +169,25 @@ class ExercisesController < ApplicationController
   end
 
   def export_external_check
+    @account_link = AccountLink.find(params[:account_link])
+    url = 'http://localhost:3000/import_uuid_check'
+
+    conn = Faraday.new(url: url) do |faraday|
+      faraday.adapter Faraday.default_adapter
+    end
+
+    response = conn.post do |req|
+      req.headers['Content-Type'] = 'application/json'
+      # req.headers['Content-Length'] = body.length.to_s
+      req.headers['Authorization'] = 'Bearer ' + @account_link.api_key
+      req.body = {uuid: 'aaaaaaaaaaaaaaab'}.to_json
+    end
+
+    response_hash = JSON.parse(response.body, symbolize_names: true)
+
     render json: {
-      message: 'Checking Done',
-      actions: render_to_string(
-        partial: 'export_actions',
-        formats: :html,
-        layout: false,
-        locals: {exercise: @exercise}
-      )
+      message: response_hash[:message],
+      actions: render_to_string(partial: 'export_actions', locals: {exercise: @exercise})
 
     }, status: 200
   end

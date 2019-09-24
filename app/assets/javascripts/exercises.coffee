@@ -428,9 +428,6 @@ ready =->
 
 $(document).on('turbolinks:load', ready)
 
-buildActionButtons = (actions) ->
-  return 'this string'
-
 exportExercise = (exerciseID, accountLinkID) ->
   $exerciseDiv = $('#export-exercise-' + exerciseID)
   $messageDiv = $exerciseDiv.children('.export-message')
@@ -442,7 +439,7 @@ exportExercise = (exerciseID, accountLinkID) ->
   $.ajax({
     type: 'POST',
     url: '/exercises/' + exerciseID + '/export_external_check',
-    data: {account_link_id: accountLinkID},
+    data: {account_link: accountLinkID},
     dataType: 'json',
     success: (response) ->
       $messageDiv.html(response.message)
@@ -450,5 +447,6 @@ exportExercise = (exerciseID, accountLinkID) ->
     error: (a, b, c) ->
       alert('error:' + c);
   })
+
 # export function to make it accessible from outside this scope
 root = exports ? this; root.exportExercise = exportExercise

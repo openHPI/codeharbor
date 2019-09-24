@@ -1,1 +1,9 @@
-= "Hello #{exercise.id}"
+= button_tag type: 'button', class:'btn btn-default btn-xs pull-right export-action-button' do
+  i.fa.fa-check style='color: #080;'
+  = ' Overwrite'
+= button_tag type: 'button', class:'btn btn-default btn-xs pull-right export-action-button' do
+  i.fa.fa-check style='color: #008;'
+  = ' Create new'
+= button_tag type: 'button', class:'btn btn-default btn-xs pull-right export-action-button' do
+  i.fa.fa-remove style='color: #800;'
+  = ' Abort'
