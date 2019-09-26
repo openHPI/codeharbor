@@ -1,9 +1,14 @@
-= button_tag type: 'button', class:'btn btn-default btn-xs pull-right export-action-button' do
-  i.fa.fa-check style='color: #080;'
-  = ' Overwrite'
-= button_tag type: 'button', class:'btn btn-default btn-xs pull-right export-action-button' do
-  i.fa.fa-check style='color: #008;'
-  = ' Create new'
+- if exercise_found
+  = button_tag type: 'button', class:'btn btn-default btn-xs pull-right export-action-button' do
+    i.fa.fa-check style='color: #080;'
+    = ' Overwrite'
+  = button_tag type: 'button', class:'btn btn-default btn-xs pull-right export-action-button' do
+    i.fa.fa-check style='color: #008;'
+    = ' Create new'
+- else
+  = button_tag type: 'button', class:'btn btn-default btn-xs pull-right export-action-button' do
+    i.fa.fa-check style='color: #080;'
+    = ' Export'
 = button_tag type: 'button', class:'btn btn-default btn-xs pull-right export-action-button' do
   i.fa.fa-remove style='color: #800;'
   = ' Abort'

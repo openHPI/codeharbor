@@ -6,7 +6,7 @@ require 'zip'
 class ExercisesController < ApplicationController
   load_and_authorize_resource except: [:import_exercise_oauth]
   before_action :set_exercise, only: %i[show edit update destroy add_to_cart add_to_collection push_external contribute
-                                        remove_state export_external_start]
+                                        remove_state export_external_start export_external_check]
   before_action :set_search, only: [:index]
   before_action :handle_search_params, only: :index
   skip_before_action :verify_authenticity_token, only: [:import_exercise_oauth]
@@ -180,19 +180,28 @@ class ExercisesController < ApplicationController
       req.headers['Content-Type'] = 'application/json'
       # req.headers['Content-Length'] = body.length.to_s
       req.headers['Authorization'] = 'Bearer ' + @account_link.api_key
-      req.body = {uuid: 'aaaaaaaaaaaaaaab'}.to_json
+      req.body = {uuid: @exercise.uuid}.to_json
     end
 
     response_hash = JSON.parse(response.body, symbolize_names: true)
 
     render json: {
       message: response_hash[:message],
-      actions: render_to_string(partial: 'export_actions', locals: {exercise: @exercise})
+      actions: render_to_string(
+        partial: 'export_actions',
+        locals: {exercise: @exercise, exercise_found: response_hash[:exercise_found]}
+      )
 
     }, status: 200
   end
 
-  def push_external
+  def export_external_confirm #push_external
+    push_type = param[:push_type]
+
+    return render :fail unless %w[overwrite create_new].include? push_type
+
+    exercise.uuid = nil if push_type == 'create_new'
+
     account_link = AccountLink.find(params[:account_link])
     error = ExerciseService::PushExternal.call(zip: ProformaService::ExportTask.call(exercise: @exercise), account_link: account_link)
     if error.nil?

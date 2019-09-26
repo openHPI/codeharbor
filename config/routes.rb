@@ -132,13 +132,13 @@ Rails.application.routes.draw do
       post :report
       get :add_author
       get :decline_author
-      post :push_external
       get :contribute
       get :download_exercise
       post :remove_state
       get :history
       get :export_external_start
       post :export_external_check
+      post :export_external_confirm
     end
   end
 
