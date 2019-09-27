@@ -195,20 +195,20 @@ class ExercisesController < ApplicationController
     }, status: 200
   end
 
-  def export_external_confirm #push_external
-    push_type = param[:push_type]
+  def export_external_confirm
+    push_type = params[:push_type]
 
-    return render :fail unless %w[overwrite create_new].include? push_type
+    return render :fail unless %w[overwrite create_new export].include? push_type
 
     exercise.uuid = nil if push_type == 'create_new'
 
     account_link = AccountLink.find(params[:account_link])
     error = ExerciseService::PushExternal.call(zip: ProformaService::ExportTask.call(exercise: @exercise), account_link: account_link)
     if error.nil?
-      redirect_to @exercise, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
+      render json: {status: 'success'} # @exercise, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
     else
       logger.debug(error)
-      redirect_to @exercise, alert: t('controllers.account_links.not_working', account_link: account_link.readable)
+      render json: {status: 'fail'} # redirect_to @exercise, alert: t('controllers.account_links.not_working', account_link: account_link.readable)
     end
   end
 

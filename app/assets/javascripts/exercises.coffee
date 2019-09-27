@@ -418,17 +418,18 @@ ready =->
     $('.primary-checkbox').prop('checked', false)
     $(event.target).prop('checked', true)
 
-  # $('.export-test').on 'click', (event) ->
-  #   # $('.export-dialog').html('all the content <br><br>more stuffi')
-  #   $('#export-dialog').modal('show')
-
+  $('body').on 'click', '.export-action', (event) ->
+    exportType = $(this).attr('data-export-type')
+    exerciseID = $(this).parent().parent().attr('data-exercise-id')
+    accountLinkID = $(this).parent().parent().attr('data-account-link')
+    exportExerciseConfirm(exerciseID, accountLinkID, exportType)
 
   if $('.primary-checkbox').length > 0 && $('.primary-checkbox:checked').length < 1
     $('.primary-checkbox')[0].click()
 
 $(document).on('turbolinks:load', ready)
 
-exportExercise = (exerciseID, accountLinkID) ->
+exportExerciseStart = (exerciseID, accountLinkID) ->
   $exerciseDiv = $('#export-exercise-' + exerciseID)
   $messageDiv = $exerciseDiv.children('.export-message')
   $actionsDiv = $exerciseDiv.children('.export-exercise-actions')
@@ -448,5 +449,39 @@ exportExercise = (exerciseID, accountLinkID) ->
       alert('error:' + c);
   })
 
+
+exportExerciseConfirm = (exerciseID, accountLinkID, pushType) ->
+  $exerciseDiv = $('#export-exercise-' + exerciseID)
+  # $messageDiv = $exerciseDiv.children('.export-message')
+  # $actionsDiv = $exerciseDiv.children('.export-exercise-actions')
+
+  # $messageDiv.html('requesting status')
+  # $actionsDiv.html('spinning')
+  # console.log 'hello'
+
+  $.ajax({
+    type: 'POST',
+    url: '/exercises/' + exerciseID + '/export_external_confirm',
+    data: {account_link: accountLinkID, push_type: pushType},
+    dataType: 'json',
+    success: (response) ->
+
+      $exerciseDiv.html "successfully exported"
+      $exerciseDiv.addClass 'exported'
+      checkExportDialog()
+      # $messageDiv.html(response.message)
+      # $actionsDiv.html(response.actions)
+    error: (a, b, c) ->
+      # console.log a
+      # console.log b
+      # console.log c
+      alert('error:' + c)
+  })
+
+checkExportDialog = () ->
+  console.log 'hier' + $('#export-modal-body').children(':not(.exported)').length
+  if $('#export-modal-body').children(':not(.exported)').length == 0
+    setTimeout (-> $('#export-dialog').modal('hide')), 1000
+
 # export function to make it accessible from outside this scope
-root = exports ? this; root.exportExercise = exportExercise
+root = exports ? this; root.exportExerciseStart = exportExerciseStart

@@ -675,7 +675,7 @@ input[type="radio"]:checked+label {
   min-height: 155px;
 }
 
-.export-action-button {
+.export-button {
   width: 100%;
   text-align: left;
 }
@@ -697,4 +697,17 @@ input[type="radio"]:checked+label {
   margin-top: 5px;
   padding-top: 5px;
   border-top: 1px solid lightgrey;
+}
+
+.confirm-icon {
+  color: #080;
+}
+
+.confirm-icon-alt {
+  color: #008;
+}
+
+.abort-icon {
+  color: #800;
+  width: 12px;
 }
