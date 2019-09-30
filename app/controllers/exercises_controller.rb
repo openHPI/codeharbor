@@ -173,23 +173,34 @@ class ExercisesController < ApplicationController
     url = 'http://localhost:3000/import_uuid_check'
 
     conn = Faraday.new(url: url) do |faraday|
+      faraday.options[:open_timeout] = 5
+      faraday.options[:timeout] = 5
+
       faraday.adapter Faraday.default_adapter
     end
 
-    response = conn.post do |req|
-      req.headers['Content-Type'] = 'application/json'
-      # req.headers['Content-Length'] = body.length.to_s
-      req.headers['Authorization'] = 'Bearer ' + @account_link.api_key
-      req.body = {uuid: @exercise.uuid}.to_json
+    error = false
+    response_hash = {}
+    message = ''
+    begin
+      response = conn.post do |req|
+        req.headers['Content-Type'] = 'application/json'
+        # req.headers['Content-Length'] = body.length.to_s
+        req.headers['Authorization'] = 'Bearer ' + @account_link.api_key
+        req.body = {uuid: @exercise.uuid}.to_json
+      end
+      response_hash = JSON.parse(response.body, symbolize_names: true)
+      message = response_hash[:message]
+    rescue Faraday::ClientError
+      message = 'an error occured'
+      error = true
     end
 
-    response_hash = JSON.parse(response.body, symbolize_names: true)
-
     render json: {
-      message: response_hash[:message],
+      message: message,
       actions: render_to_string(
         partial: 'export_actions',
-        locals: {exercise: @exercise, exercise_found: response_hash[:exercise_found]}
+        locals: {exercise: @exercise, exercise_found: response_hash[:exercise_found], error: error}
       )
 
     }, status: 200
@@ -200,7 +211,8 @@ class ExercisesController < ApplicationController
 
     return render :fail unless %w[overwrite create_new export].include? push_type
 
-    exercise.uuid = nil if push_type == 'create_new'
+    @exercise = @exercise.initialize_derivate if push_type == 'create_new'
+    @exercise.save!
 
     account_link = AccountLink.find(params[:account_link])
     error = ExerciseService::PushExternal.call(zip: ProformaService::ExportTask.call(exercise: @exercise), account_link: account_link)

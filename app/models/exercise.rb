@@ -363,8 +363,16 @@ class Exercise < ApplicationRecord
 
       descriptions: descriptions.map(&:dup),
       tests: tests.map(&:dup),
-      exercise_files: exercise_files.map(&:dup)
+      exercise_files: exercise_files.map(&:duplicate)
     )
+  end
+
+  def initialize_derivate
+    derivate = duplicate
+    derivate.assign_attributes attributes.except('id', 'created_at', 'updated_at', 'uuid', 'predecessor_id')
+
+    derivate.clone_relations << ExerciseRelation.new(origin: self, relation: Relation.find_by(name: 'Derivate'))
+    derivate
   end
 
   def last_successor

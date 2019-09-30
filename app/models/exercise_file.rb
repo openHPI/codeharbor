@@ -44,4 +44,10 @@ class ExerciseFile < ApplicationRecord
   def attached_image?
     attachment.try(:content_type) =~ %r{(image/jpeg)|(image/gif)|(image/png)}
   end
+
+  def duplicate
+    exercise_file_duplicate = dup
+    exercise_file_duplicate.attachment = attachment
+    exercise_file_duplicate
+  end
 end

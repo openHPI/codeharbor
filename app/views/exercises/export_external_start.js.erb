@@ -1,4 +1,4 @@
 $("#export-modal-body").html("<%= escape_javascript(render partial: 'exercises/export_dialog', locals: { exercise: @exercise, account_link: @account_link } ) %>");
 $('#export-dialog').modal('show');
 
-exportExerciseStart(<%= @exercise.id %>, <%= @account_link.id %>)
+exportExerciseStart(<%= @exercise.id %>)

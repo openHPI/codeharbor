@@ -429,8 +429,9 @@ ready =->
 
 $(document).on('turbolinks:load', ready)
 
-exportExerciseStart = (exerciseID, accountLinkID) ->
+exportExerciseStart = (exerciseID) ->
   $exerciseDiv = $('#export-exercise-' + exerciseID)
+  accountLinkID = $exerciseDiv.attr('data-account-link')
   $messageDiv = $exerciseDiv.children('.export-message')
   $actionsDiv = $exerciseDiv.children('.export-exercise-actions')
 
@@ -443,6 +444,10 @@ exportExerciseStart = (exerciseID, accountLinkID) ->
     data: {account_link: accountLinkID},
     dataType: 'json',
     success: (response) ->
+      if response.error
+        $messageDiv.html(response.error)
+        $actionsDiv.html('Retry?')
+
       $messageDiv.html(response.message)
       $actionsDiv.html(response.actions)
     error: (a, b, c) ->
