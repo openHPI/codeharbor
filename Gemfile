@@ -70,12 +70,12 @@ gem 'select2-rails', '~> 4.0', '>= 4.0.3'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-  gem 'factory_bot_rails', '~> 5.1.0'
+  gem 'factory_bot_rails', '~> 5.1.1'
   gem 'pry-byebug'
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers', '~> 1.1.3'
   gem 'rspec-rails'
-  gem 'rubocop', '~> 0.72.0'
+  gem 'rubocop', '~> 0.75.0'
   gem 'rubocop-rails', '~> 2.3.2'
   gem 'rubocop-rspec', '~> 1.36.0'
 end
