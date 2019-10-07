@@ -361,10 +361,13 @@ class Exercise < ApplicationRecord
     Exercise.new(
       private: private,
 
-      descriptions: descriptions.map(&:dup),
-      tests: tests.map(&:dup),
-      exercise_files: exercise_files.map(&:duplicate)
-    )
+      descriptions: descriptions.map(&:dup)
+    ).tap do |exercise|
+      exercise.tests = tests.map { |test| test.duplicate(exercise: exercise) }
+      exercise.exercise_files = exercise_files.reject do |file|
+        file.exercise.tests.map(&:exercise_file).include? file
+      end.map(&:duplicate)
+    end
   end
 
   def initialize_derivate

@@ -41,4 +41,10 @@ class Test < ApplicationRecord
   def full_file_name
     exercise_file.try(:full_file_name)
   end
+
+  def duplicate(exercise: nil)
+    test_duplicate = dup
+    test_duplicate.exercise_file = exercise_file.duplicate(exercise: exercise)
+    test_duplicate
+  end
 end

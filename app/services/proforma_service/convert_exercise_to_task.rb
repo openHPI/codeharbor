@@ -102,7 +102,7 @@ module ProformaService
           filename: file.full_file_name,
           usage_by_lms: file.read_only ? 'display' : 'edit',
           visible: file.hidden ? 'no' : 'yes',
-          internal_description: file.role || 'Regular File'
+          internal_description: file.role || 'regular_file'
         }.tap do |params|
           if file.attachment.exists?
             params[:content] = attachment_content(file)
