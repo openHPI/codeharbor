@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'proforma', path: '../proforma'
+gem 'proforma', git: 'git://github.com/openHPI/proforma.git' # use version not master
 # Handle file upload
 gem 'paperclip'
 # Create Zip files
