@@ -185,7 +185,6 @@ class ExercisesController < ApplicationController
     begin
       response = conn.post do |req|
         req.headers['Content-Type'] = 'application/json'
-        # req.headers['Content-Length'] = body.length.to_s
         req.headers['Authorization'] = 'Bearer ' + @account_link.api_key
         req.body = {uuid: @exercise.uuid}.to_json
       end
@@ -200,7 +199,12 @@ class ExercisesController < ApplicationController
       message: message,
       actions: render_to_string(
         partial: 'export_actions',
-        locals: {exercise: @exercise, exercise_found: response_hash[:exercise_found], error: error}
+        locals: {
+          exercise: @exercise,
+          exercise_found: response_hash[:exercise_found],
+          update_right: response_hash[:update_right],
+          error: error
+        }
       )
 
     }, status: 200

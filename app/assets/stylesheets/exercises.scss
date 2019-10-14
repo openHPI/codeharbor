@@ -691,6 +691,7 @@ input[type="radio"]:checked+label {
 
 .export-exercise-actions {
   max-width: 100px;
+  min-width: 100px;
 }
 
 .export-exercise + .export-exercise {
