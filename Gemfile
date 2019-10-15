@@ -72,7 +72,7 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'rails-controller-testing'
   gem 'rspec-rails'
-  gem 'rubocop', '~> 0.75.0'
+  gem 'rubocop', '~> 0.75.1'
   gem 'rubocop-rails', '~> 2.3.2'
   gem 'rubocop-rspec', '~> 1.36.0'
 end
