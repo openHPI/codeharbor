@@ -61,6 +61,7 @@ Rails.application.routes.draw do
   end
 
   post 'import_exercise' => 'exercises#import_exercise_oauth'
+  post 'import_uuid_check' => 'exercises#import_uuid_check'
 
   get 'sessions/create'
   get 'sessions/destroy'

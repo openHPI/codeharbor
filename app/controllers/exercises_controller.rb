@@ -4,12 +4,12 @@ require 'zip'
 
 # rubocop:disable Metrics/ClassLength
 class ExercisesController < ApplicationController
-  load_and_authorize_resource except: [:import_exercise_oauth]
+  load_and_authorize_resource except: %i[import_exercise_oauth import_uuid_check]
   before_action :set_exercise, only: %i[show edit update destroy add_to_cart add_to_collection push_external contribute
                                         remove_state export_external_start export_external_check]
   before_action :set_search, only: [:index]
   before_action :handle_search_params, only: :index
-  skip_before_action :verify_authenticity_token, only: [:import_exercise_oauth]
+  skip_before_action :verify_authenticity_token, only: %i[import_exercise_oauth import_uuid_check]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.exercise.authorization')
@@ -239,6 +239,26 @@ class ExercisesController < ApplicationController
     zip_file = ProformaService::ExportTask.call(exercise: @exercise)
     @exercise.update(downloads: @exercise.downloads + 1)
     send_data(zip_file.string, type: 'application/zip', filename: "task_#{@exercise.id}.zip", disposition: 'attachment')
+  end
+
+  def import_uuid_check
+    user = user_for_oauth2_request
+    return render json: {}, status: 401 if user.nil?
+
+    uuid = params[:uuid]
+    exercise = Exercise.find_by(uuid: uuid)
+
+    return render json: {exercise_found: false, message: t('exercises.import_exercise.check.no_exercise')} if exercise.nil?
+
+    unless exercise.can_access(user)
+      return render json: {
+        exercise_found: true,
+        update_right: false,
+        message: t('exercises.import_exercise.check.exercise_found_no_right')
+      }
+    end
+
+    render json: {exercise_found: true, update_right: true, message: t('exercises.import_exercise.check.exercise_found')}
   end
 
   def import_exercise_oauth
