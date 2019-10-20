@@ -67,9 +67,6 @@ en:
       add_to_collection_success: 'Exercise was successfully added to collection.'
       add_to_collection_fail: "Exercise already is in collection."
       download_error: "An error occurred. Please contact an admin!"
-      xml_not_valid: "Your xml file is not valid"
-      import_success: 'Exercise was successfully imported.'
-      import_fail: "Cannot import your xml file"
       contribute: "%{user} wants to contribute to your Exercise %{exercise}."
       contribute_notice: "Your access request has been sent."
       add_author_text: "%{user} made you co-author of his exercise: %{exercise}."
@@ -86,6 +83,7 @@ en:
         single_import_successful: "Successfully imported exercise."
         import_error: "Import of submitted ZIP file failed."
         no_file_present: No importable file found in ZIP file
+        internal_error: An internal error occurred on Codeharbor while importing the exercise.
 
     exercise_file:
       authorization: "You are not authorized to for this action."

@@ -471,8 +471,8 @@ exportExerciseConfirm = (exerciseID, accountLinkID, pushType) ->
     dataType: 'json',
     success: (response) ->
 
-      $exerciseDiv.html "successfully exported"
-      $exerciseDiv.addClass 'exported'
+      $exerciseDiv.html 'successfully exported'
+      $exerciseDiv.addClass 'export-success'
       checkExportDialog()
       # $messageDiv.html(response.message)
       # $actionsDiv.html(response.actions)
@@ -484,9 +484,9 @@ exportExerciseConfirm = (exerciseID, accountLinkID, pushType) ->
   })
 
 checkExportDialog = () ->
-  console.log 'hier' + $('#export-modal-body').children(':not(.exported)').length
-  if $('#export-modal-body').children(':not(.exported)').length == 0
-    setTimeout (-> $('#export-dialog').modal('hide')), 1000
+  console.log 'hier' + $('#export-modal-body').children(':not(.export-success)').length
+  if $('#export-modal-body').children(':not(.export-success)').length == 0
+    setTimeout (-> $('#export-dialog').modal('hide')), 2000
 
 # export function to make it accessible from outside this scope
 root = exports ? this; root.exportExerciseStart = exportExerciseStart

@@ -4,12 +4,12 @@ require 'zip'
 
 # rubocop:disable Metrics/ClassLength
 class ExercisesController < ApplicationController
-  load_and_authorize_resource except: %i[import_exercise_oauth import_uuid_check]
+  load_and_authorize_resource except: %i[import_external import_uuid_check]
   before_action :set_exercise, only: %i[show edit update destroy add_to_cart add_to_collection push_external contribute
                                         remove_state export_external_start export_external_check]
   before_action :set_search, only: [:index]
   before_action :handle_search_params, only: :index
-  skip_before_action :verify_authenticity_token, only: %i[import_exercise_oauth import_uuid_check]
+  skip_before_action :verify_authenticity_token, only: %i[import_external import_uuid_check]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.exercise.authorization')
@@ -164,7 +164,7 @@ class ExercisesController < ApplicationController
   def export_external_start
     @account_link = AccountLink.find(params[:account_link])
     respond_to do |format|
-      format.js { render layout: false } # Add this line to you respond_to block
+      format.js { render layout: false }
     end
   end
 
@@ -242,7 +242,7 @@ class ExercisesController < ApplicationController
   end
 
   def import_uuid_check
-    user = user_for_oauth2_request
+    user = user_for_api_request
     return render json: {}, status: 401 if user.nil?
 
     uuid = params[:uuid]
@@ -250,7 +250,7 @@ class ExercisesController < ApplicationController
 
     return render json: {exercise_found: false, message: t('exercises.import_exercise.check.no_exercise')} if exercise.nil?
 
-    unless exercise.can_access(user)
+    unless Ability.new(user).can?(:update, exercise)
       return render json: {
         exercise_found: true,
         update_right: false,
@@ -261,8 +261,8 @@ class ExercisesController < ApplicationController
     render json: {exercise_found: true, update_right: true, message: t('exercises.import_exercise.check.exercise_found')}
   end
 
-  def import_exercise_oauth
-    user = user_for_oauth2_request
+  def import_external
+    user = user_for_api_request
     tempfile = tempfile_from_string(request.body.read.force_encoding('UTF-8'))
 
     ProformaService::Import.call(zip: tempfile, user: user)
@@ -270,6 +270,8 @@ class ExercisesController < ApplicationController
     render json: t('controllers.exercise.import_proforma_xml.success'), status: 201
   rescue Proforma::PreImportValidationError, Proforma::InvalidZip
     render json: t('controllers.exercise.import_proforma_xml.invalid'), status: 400
+  rescue StandardError
+    render json: t('controllers.exercise.import_proforma_xml.internal_error'), status: 500
   end
 
   def import_exercise
@@ -401,15 +403,14 @@ class ExercisesController < ApplicationController
     params.require(:exercise).permit(:title, :instruction, :maxrating, :private, :execution_environment_id)
   end
 
-  def user_for_oauth2_request
+  def user_for_api_request
     authorization_header = request.headers['Authorization']
     api_key = authorization_header&.split(' ')&.second
-    user_by_code_harbor_token(api_key)
+    user_by_api_key(api_key)
   end
 
-  def user_by_code_harbor_token(api_key)
-    link = AccountLink.where(api_key: api_key)[0]
-    link&.user
+  def user_by_api_key(api_key)
+    AccountLink.find_by_api_key(api_key)&.user
   end
 
   def handle_proforma_import(zip:, user:)

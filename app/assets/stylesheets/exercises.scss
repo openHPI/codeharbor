@@ -700,6 +700,12 @@ input[type="radio"]:checked+label {
   border-top: 1px solid lightgrey;
 }
 
+.export-success {
+  color: darkgreen;
+  font-size: 14pt;
+  font-weight: 600;
+}
+
 .confirm-icon {
   color: #080;
 }
