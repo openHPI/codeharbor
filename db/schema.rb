@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 2019_09_18_151604) do
     t.integer "user_id"
     t.string "api_key"
     t.string "name"
+    t.string "check_uuid_url"
     t.index ["user_id"], name: "index_account_links_on_user_id"
   end
 
