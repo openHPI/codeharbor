@@ -435,8 +435,8 @@ exportExerciseStart = (exerciseID) ->
   $messageDiv = $exerciseDiv.children('.export-message')
   $actionsDiv = $exerciseDiv.children('.export-exercise-actions')
 
-  $messageDiv.html('requesting status')
-  $actionsDiv.html('spinning')
+  $messageDiv.html('Checking if the exercise exists on Codeocean.')
+  $actionsDiv.html('<div class="spinner-border"></div>')
 
   $.ajax({
     type: 'POST',
