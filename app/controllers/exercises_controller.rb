@@ -178,34 +178,30 @@ class ExercisesController < ApplicationController
       faraday.adapter Faraday.default_adapter
     end
 
-    error = false
-    response_hash = {}
-    message = ''
-    begin
-      response = conn.post do |req|
-        req.headers['Content-Type'] = 'application/json'
-        req.headers['Authorization'] = 'Bearer ' + @account_link.api_key
-        req.body = {uuid: @exercise.uuid}.to_json
-      end
-      response_hash = JSON.parse(response.body, symbolize_names: true)
-      message = response_hash[:message]
-    rescue Faraday::ClientError
-      message = 'an error occured'
-      error = true
-    end
+    external_check = begin
+                       response = conn.post do |req|
+                         req.headers['Content-Type'] = 'application/json'
+                         req.headers['Authorization'] = 'Bearer ' + @account_link.api_key
+                         req.body = {uuid: @exercise.uuid}.to_json
+                       end
+                       response_hash = JSON.parse(response.body, symbolize_names: true)
+
+                       {error: false}.merge(response_hash.slice(:message, :exercise_found, :update_right))
+                     rescue Faraday::Error => e
+                       {error: true, message: t('exercises.export_codeharbor.error', message: e.message)}
+                     end
 
     render json: {
-      message: message,
+      message: external_check[:message],
       actions: render_to_string(
         partial: 'export_actions',
         locals: {
           exercise: @exercise,
-          exercise_found: response_hash[:exercise_found],
-          update_right: response_hash[:update_right],
-          error: error
+          exercise_found: external_check[:exercise_found],
+          update_right: external_check[:update_right],
+          error: external_check[:error]
         }
       )
-
     }, status: 200
   end
 
@@ -226,11 +222,8 @@ class ExercisesController < ApplicationController
     error = ExerciseService::PushExternal.call(zip: ProformaService::ExportTask.call(exercise: @exercise), account_link: account_link)
     if error.nil?
       render json: {status: 'success'}
-      # @exercise, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
     else
-      logger.debug(error)
       render json: {status: 'fail'}
-      # redirect_to @exercise, alert: t('controllers.account_links.not_working', account_link: account_link.readable)
     end
   end
 

@@ -409,7 +409,7 @@ ready =->
       url: '/exercises/' + exercise_id + "/remove_state",
       dataType: 'json',
       success: (response) ->
-        target.parent().parent().hide()
+        target.parents('.state-tag-dropdown').hide()
       error: (a, b, c) ->
         alert("error:" + c);
     })
@@ -420,8 +420,8 @@ ready =->
 
   $('body').on 'click', '.export-action', (event) ->
     exportType = $(this).attr('data-export-type')
-    exerciseID = $(this).parent().parent().attr('data-exercise-id')
-    accountLinkID = $(this).parent().parent().attr('data-account-link')
+    exerciseID = $(this).parents('.export-exercise').attr('data-exercise-id')
+    accountLinkID = $(this).parents('.export-exercise').attr('data-account-link')
     exportExerciseConfirm(exerciseID, accountLinkID, exportType)
 
   if $('.primary-checkbox').length > 0 && $('.primary-checkbox:checked').length < 1
@@ -484,7 +484,6 @@ exportExerciseConfirm = (exerciseID, accountLinkID, pushType) ->
   })
 
 checkExportDialog = () ->
-  console.log 'hier' + $('#export-modal-body').children(':not(.export-success)').length
   if $('#export-modal-body').children(':not(.export-success)').length == 0
     setTimeout (-> $('#export-dialog').modal('hide')), 2000
 

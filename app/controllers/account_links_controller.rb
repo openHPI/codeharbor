@@ -20,7 +20,7 @@ class AccountLinksController < ApplicationController
   def new
     @account_link = AccountLink.new(
       push_url: Settings.codeocean.url + '/import_exercise',
-      check_uuid_url: Settings.codeocean.url + '/check_uuid_url'
+      check_uuid_url: Settings.codeocean.url + '/import_uuid_check'
     )
   end
 
