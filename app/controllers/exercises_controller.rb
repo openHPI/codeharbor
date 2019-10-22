@@ -170,9 +170,8 @@ class ExercisesController < ApplicationController
 
   def export_external_check
     @account_link = AccountLink.find(params[:account_link])
-    url = 'http://localhost:3000/import_uuid_check'
 
-    conn = Faraday.new(url: url) do |faraday|
+    conn = Faraday.new(url: @account_link.check_uuid_url) do |faraday|
       faraday.options[:open_timeout] = 5
       faraday.options[:timeout] = 5
 

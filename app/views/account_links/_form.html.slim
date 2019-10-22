@@ -12,8 +12,11 @@
     = f.label :name, t('account.name'), class: 'form-label'
     = f.text_field :name, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('account.info.name'), class: 'form-control'
   .field-element.form-group
-    = f.label :push_url, t('account.pushURL'), class: 'form-label'
+    = f.label :push_url, t('account.push_url'), class: 'form-label'
     = f.text_field :push_url, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('account.info.push_url'), class: 'form-control'
+  .field-element.form-group
+    = f.label :check_uuid_url, t('account.check_uuid_url'), class: 'form-label'
+    = f.text_field :check_uuid_url, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('account.info.check_uuid_url'), class: 'form-control'
   .field-element.form-group
     = f.label :api_key, t('account.api_key'), class: 'form-label'
     .input-group

@@ -199,7 +199,8 @@ en:
 
   account:
     show_header: "Account Link"
-    pushURL: "Push URL"
+    push_url: "Push URL"
+    check_uuid_url: "Check UUID URL"
     name: "Name"
     api_key: "API key"
     documentation:
@@ -242,6 +243,8 @@ en:
     info:
       push_url: |
         The address on the autograder side your exercise can be exported to. If you don't know what to write here, ask the autograders admins.
+      check_uuid_url: |
+        The address on the autograder side that can be queried to determine if the exercise already exists.
       name: |
         Can be anything to Identify your account link.
       token: |
