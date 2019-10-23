@@ -162,7 +162,7 @@ legend.toggle-next
         = @exercise.in_collections
   .row
     .row-label
-      = 'UUID'
+      = t('exercises.uuid')
     .row-value
       = @exercise.uuid
 legend.toggle-next
@@ -340,7 +340,6 @@ legend.toggle-next
             - else
               li
                 = link_to t('exercises.show.define_account_link'), new_user_account_link_path(current_user)
-      / button_tag class: 'btn btn-default export-test' do
 
   .button-box
     .button-description
@@ -419,21 +418,8 @@ div class=("history-box with-borders") data-exercise=@exercise.id
         = button_tag class: 'close', data: {dismiss: 'modal'} do
           = 'x'
         h4.modal-title
-          = 'Export schtuff'
+          = t('exercises.export_exercise.title')
       .modal-body id='export-modal-body'
-        / .export-exercise id='exercise-100'
-          / .export-message
-          /   = 'Erklaerung if you click here than everything will just do whatever it want, even if you don\'t want it really. Are you sure you want that it does what you don\' want?'
-          / .export-exercise-actions
-            / = button_tag type: 'button', class:'btn btn-default btn-xs pull-right export-action-button' do
-            /   i.fa.fa-check style='color: #080;'
-            /   = ' Overwrite'
-            / = button_tag type: 'button', class:'btn btn-default btn-xs pull-right export-action-button' do
-            /   i.fa.fa-check style='color: #008;'
-            /   = ' Create new'
-            / = button_tag type: 'button', class:'btn btn-default btn-xs pull-right export-action-button' do
-            /   i.fa.fa-remove style='color: #800;'
-            /   = ' Abort'
       .modal-footer
         = button_tag class: 'btn btn-important', data: {dismiss: 'modal'} do
-          = 'Close'
+          = t('exercises.export_exercise.close')

@@ -483,6 +483,7 @@ en:
     downloads: "Downloads"
     in_carts: "In Carts"
     in_collections: "In Collections"
+    uuid: UUID
     files:
       attachment: "Attachment"
       role: "Role"
@@ -606,6 +607,17 @@ en:
       header: "Edit:"
     undefined: "Exercise undefined"
     errorMessage: "prohibited this project from being saved"
+    export_exercise:
+      error: An error occurred.
+      title: Export exercise
+      buttons:
+        retry: Retry
+        export: Export
+        create_new: Create new
+        overwrite: Overwrite
+        abort: Abort
+        close: Close
+
     import_exercise:
       imported_exercise_header: 'Imported exercise:'
       check:
@@ -616,6 +628,7 @@ en:
     updated_tag: updated
     remove_state: remove state
     state_removed: successfully removed state
+    no_execution_environment_selected: no prog-lang
 
   file_types:
     header: "File Types"

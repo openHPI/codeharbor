@@ -188,7 +188,7 @@ class ExercisesController < ApplicationController
 
                        {error: false}.merge(response_hash.slice(:message, :exercise_found, :update_right))
                      rescue Faraday::Error => e
-                       {error: true, message: t('exercises.export_codeharbor.error', message: e.message)}
+                       {error: true, message: t('exercises.export_exercise.error', message: e.message)}
                      end
 
     render json: {
