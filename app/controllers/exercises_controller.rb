@@ -169,28 +169,8 @@ class ExercisesController < ApplicationController
   end
 
   def export_external_check
-    @account_link = AccountLink.find(params[:account_link])
-
-    conn = Faraday.new(url: @account_link.check_uuid_url) do |faraday|
-      faraday.options[:open_timeout] = 5
-      faraday.options[:timeout] = 5
-
-      faraday.adapter Faraday.default_adapter
-    end
-
-    external_check = begin
-                       response = conn.post do |req|
-                         req.headers['Content-Type'] = 'application/json'
-                         req.headers['Authorization'] = 'Bearer ' + @account_link.api_key
-                         req.body = {uuid: @exercise.uuid}.to_json
-                       end
-                       response_hash = JSON.parse(response.body, symbolize_names: true)
-
-                       {error: false}.merge(response_hash.slice(:message, :exercise_found, :update_right))
-                     rescue Faraday::Error => e
-                       {error: true, message: t('exercises.export_exercise.error', message: e.message)}
-                     end
-
+    external_check = ExerciseService::CheckExternal.call(uuid: @exercise.uuid,
+                                                         account_link: AccountLink.find(params[:account_link]))
     render json: {
       message: external_check[:message],
       actions: render_to_string(
