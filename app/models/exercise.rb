@@ -360,21 +360,19 @@ class Exercise < ApplicationRecord
   def duplicate
     Exercise.new(
       private: private,
-
       descriptions: descriptions.map(&:dup)
     ).tap do |exercise|
-      exercise.tests = tests.map { |test| test.duplicate(exercise: exercise) }
-      exercise.exercise_files = exercise_files.reject do |file|
-        file.exercise.tests.map(&:exercise_file).include? file
-      end.map(&:duplicate)
+      exercise.tests = duplicate_tests(exercise)
+      exercise.exercise_files = duplicate_files_without_testfiles
     end
   end
 
-  def initialize_derivate
+  def initialize_derivate(user = nil)
     derivate = duplicate
     derivate.assign_attributes attributes.except('id', 'created_at', 'updated_at', 'uuid', 'predecessor_id')
 
     derivate.clone_relations << ExerciseRelation.new(origin: self, relation: Relation.find_by(name: 'Derivate'))
+    derivate.user = user if user
     derivate
   end
 
@@ -441,7 +439,21 @@ class Exercise < ApplicationRecord
     false
   end
 
+  def updatable_by?(user)
+    Ability.new(user).can?(:update, exercise)
+  end
+
   private
+
+  def duplicate_files_without_testfiles
+    exercise_files.reject do |file|
+      file.exercise.tests.map(&:exercise_file).include? file
+    end.map(&:duplicate)
+  end
+
+  def duplicate_tests(exercise)
+    tests.map { |test| test.duplicate(exercise: exercise) }
+  end
 
   def no_predecessor_loop
     errors.add(:predecessors, 'are looped') if predecessor_loop?

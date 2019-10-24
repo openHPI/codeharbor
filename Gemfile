@@ -60,12 +60,12 @@ gem 'twitter-bootstrap-rails', git: 'git://github.com/seyhunak/twitter-bootstrap
 gem 'acts-as-taggable-on', '~> 6.0'
 gem 'better_errors' # !!!Important!!! move this to the development group before codeharbor goes really productive!!!Important!!!
 gem 'config'
+gem 'faraday'
 gem 'font-awesome-rails'
 gem 'jquery-ui-rails'
 gem 'less-rails' # Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
 gem 'nested_form_fields'
 gem 'nokogiri'
-gem 'faraday'
 gem 'select2-rails', '~> 4.0', '>= 4.0.3'
 
 group :development, :test do

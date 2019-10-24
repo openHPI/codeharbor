@@ -195,7 +195,6 @@ class ExercisesController < ApplicationController
       @exercise.user = current_user
       @exercise.save!
       @exercise.reload
-
     end
 
     account_link = AccountLink.find(params[:account_link])
@@ -222,7 +221,7 @@ class ExercisesController < ApplicationController
 
     return render json: {exercise_found: false, message: t('exercises.import_exercise.check.no_exercise')} if exercise.nil?
 
-    unless Ability.new(user).can?(:update, exercise)
+    unless exercise.updatable_by?(user)
       return render json: {
         exercise_found: true,
         update_right: false,
