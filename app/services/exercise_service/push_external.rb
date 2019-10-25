@@ -10,19 +10,23 @@ module ExerciseService
     def execute
       body = @zip.string
       begin
-        conn = Faraday.new(url: @account_link.push_url) do |faraday|
-          faraday.adapter Faraday.default_adapter
-        end
-
-        conn.post do |req|
+        response = connection.post do |req|
           req.headers['Content-Type'] = 'application/zip'
           req.headers['Content-Length'] = body.length.to_s
           req.headers['Authorization'] = 'Bearer ' + @account_link.api_key
           req.body = body
         end
-        return nil
+        return response.success? ? nil : response.body
       rescue StandardError => e
         return e
+      end
+    end
+
+    private
+
+    def connection
+      Faraday.new(url: @account_link.push_url) do |faraday|
+        faraday.adapter Faraday.default_adapter
       end
     end
   end

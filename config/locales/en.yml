@@ -77,7 +77,7 @@ en:
       report_notice: "You successfully reported this exercise."
       push_external_notice: "Exercise pushed to %{account_link}"
       import_proforma_xml:
-        success: "SUCCESS"
+        success: "success"
         invalid: "Invalid exercise"
         multi_import_successful: "Successfully imported %{count} exercises."
         single_import_successful: "Successfully imported exercise."
@@ -610,6 +610,8 @@ en:
     export_exercise:
       error: An error occurred.
       title: Export exercise
+      successfully_exported: Exercise (%{title}) successfully exported.
+      export_failed: 'Export of exercise (%{title}) failed. <br> Error: %{error}'
       buttons:
         retry: Retry
         export: Export
@@ -617,6 +619,7 @@ en:
         overwrite: Overwrite
         abort: Abort
         close: Close
+        hide: Hide
 
     import_exercise:
       imported_exercise_header: 'Imported exercise:'

@@ -60,7 +60,7 @@ Rails.application.routes.draw do
     delete 'logout' => :destroy
   end
 
-  post 'import_exercise' => 'exercises#import_external'
+  post 'import_exercise' => 'exercises#import_external_exercise'
   post 'import_uuid_check' => 'exercises#import_uuid_check'
 
   get 'sessions/create'

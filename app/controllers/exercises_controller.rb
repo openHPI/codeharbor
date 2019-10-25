@@ -4,12 +4,12 @@ require 'zip'
 
 # rubocop:disable Metrics/ClassLength
 class ExercisesController < ApplicationController
-  load_and_authorize_resource except: %i[import_external import_uuid_check]
+  load_and_authorize_resource except: %i[import_external_exercise import_uuid_check]
   before_action :set_exercise, only: %i[show edit update destroy add_to_cart add_to_collection push_external contribute
                                         remove_state export_external_start export_external_check]
   before_action :set_search, only: [:index]
   before_action :handle_search_params, only: :index
-  skip_before_action :verify_authenticity_token, only: %i[import_external import_uuid_check]
+  skip_before_action :verify_authenticity_token, only: %i[import_external_exercise import_uuid_check]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.exercise.authorization')
@@ -179,7 +179,8 @@ class ExercisesController < ApplicationController
           exercise: @exercise,
           exercise_found: external_check[:exercise_found],
           update_right: external_check[:update_right],
-          error: external_check[:error]
+          error: external_check[:error],
+          exported: false
         }
       )
     }, status: 200
@@ -191,18 +192,26 @@ class ExercisesController < ApplicationController
     return render :fail unless %w[create_new export].include? push_type
 
     if push_type == 'create_new'
-      @exercise = @exercise.initialize_derivate
-      @exercise.user = current_user
+      @exercise = @exercise.initialize_derivate(current_user)
       @exercise.save!
       @exercise.reload
     end
 
     account_link = AccountLink.find(params[:account_link])
     error = ExerciseService::PushExternal.call(zip: ProformaService::ExportTask.call(exercise: @exercise), account_link: account_link)
+
     if error.nil?
-      render json: {status: 'success'}
+      render json: {
+        status: 'success',
+        message: t('exercises.export_exercise.successfully_exported', title: @exercise.title),
+        actions: render_to_string(partial: 'export_actions', locals: {exercise: @exercise, exported: true, error: error})
+      }
     else
-      render json: {status: 'fail'}
+      render json: {
+        status: 'fail',
+        message: t('exercises.export_exercise.export_failed', title: @exercise.title, error: error),
+        actions: render_to_string(partial: 'export_actions', locals: {exercise: @exercise, exported: true, error: error})
+      }
     end
   end
 
@@ -232,7 +241,7 @@ class ExercisesController < ApplicationController
     render json: {exercise_found: true, update_right: true, message: t('exercises.import_exercise.check.exercise_found')}
   end
 
-  def import_external
+  def import_external_exercise
     user = user_for_api_request
     tempfile = tempfile_from_string(request.body.read.force_encoding('UTF-8'))
 

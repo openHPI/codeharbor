@@ -418,7 +418,9 @@ ready =->
     $('.primary-checkbox').prop('checked', false)
     $(event.target).prop('checked', true)
 
+  console.log('register listener')
   $('body').on 'click', '.export-action', (event) ->
+    console.log('fire handler')
     exportType = $(this).attr('data-export-type')
     exerciseID = $(this).parents('.export-exercise').attr('data-exercise-id')
     accountLinkID = $(this).parents('.export-exercise').attr('data-account-link')
@@ -456,13 +458,10 @@ exportExerciseStart = (exerciseID) ->
 
 
 exportExerciseConfirm = (exerciseID, accountLinkID, pushType) ->
+  console.log('export confirm')
   $exerciseDiv = $('#export-exercise-' + exerciseID)
-  # $messageDiv = $exerciseDiv.children('.export-message')
-  # $actionsDiv = $exerciseDiv.children('.export-exercise-actions')
-
-  # $messageDiv.html('requesting status')
-  # $actionsDiv.html('spinning')
-  # console.log 'hello'
+  $messageDiv = $exerciseDiv.children('.export-message')
+  $actionsDiv = $exerciseDiv.children('.export-exercise-actions')
 
   $.ajax({
     type: 'POST',
@@ -470,22 +469,22 @@ exportExerciseConfirm = (exerciseID, accountLinkID, pushType) ->
     data: {account_link: accountLinkID, push_type: pushType},
     dataType: 'json',
     success: (response) ->
+      $messageDiv.html response.message
+      $actionsDiv.html response.actions
 
-      $exerciseDiv.html 'successfully exported'
-      $exerciseDiv.addClass 'export-success'
+      if response.status == 'success'
+        $exerciseDiv.addClass 'export-success'
+      else
+        $exerciseDiv.addClass 'export-failure'
+
       checkExportDialog()
-      # $messageDiv.html(response.message)
-      # $actionsDiv.html(response.actions)
     error: (a, b, c) ->
-      # console.log a
-      # console.log b
-      # console.log c
       alert('error:' + c)
   })
 
 checkExportDialog = () ->
   if $('#export-modal-body').children(':not(.export-success)').length == 0
-    setTimeout (-> $('#export-dialog').modal('hide')), 2000
+    setTimeout (-> $('#export-dialog').modal('hide')), 3000
 
 # export function to make it accessible from outside this scope
 root = exports ? this; root.exportExerciseStart = exportExerciseStart

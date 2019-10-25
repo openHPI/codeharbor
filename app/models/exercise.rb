@@ -440,7 +440,7 @@ class Exercise < ApplicationRecord
   end
 
   def updatable_by?(user)
-    Ability.new(user).can?(:update, exercise)
+    Ability.new(user).can?(:update, self)
   end
 
   private
