@@ -15,14 +15,18 @@ class ExercisesController < ApplicationController
     redirect_to root_path, alert: t('controllers.exercise.authorization')
   end
 
+  # rubocop:disable Metrics/AbcSize will be fixed with ransack
   def index
-    order_param = {average_rating: :desc}
-    order_param = {created_at: :desc} if @order == 'order_created'
-
+    page = params[:page]
     @exercises = Exercise.active
-                         .search(params[:search], params[:settings], @option, current_user).order(order_param)
-                         .paginate(per_page: 5, page: params[:page])
+                         .search(params[:search], params[:settings], @option, current_user)
+                         .order(@order == 'order_created' ? {created_at: :desc} : {average_rating: :desc})
+                         .paginate(per_page: 5, page: page)
+
+    last_page = @exercises.total_pages
+    @exercises = @exercises.page(last_page) if page.to_i > last_page
   end
+  # rubocop:enable Metrics/AbcSize
 
   def show
     exercise_relation = ExerciseRelation.find_by(clone_id: @exercise.id)
