@@ -27,9 +27,8 @@ module ProformaService
 
     def base_exercise
       exercise = Exercise.unscoped.find_by(uuid: @task.uuid)
-      task_checksum = @task.import_checksum || @task.checksum
       if exercise
-        return exercise if exercise.checksum == task_checksum && exercise.can_access(@user)
+        return exercise if exercise.updatable_by?(@user)
 
         return Exercise.new(uuid: SecureRandom.uuid)
       end

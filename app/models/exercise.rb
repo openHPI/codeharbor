@@ -423,10 +423,6 @@ class Exercise < ApplicationRecord
     end
   end
 
-  def checksum
-    ProformaService::ConvertExerciseToTask.call(exercise: self).generate_checksum
-  end
-
   # this needs to be fixed with proper nested forms
   def update_and_version(exercise_params, params_exercise)
     ActiveRecord::Base.transaction do
