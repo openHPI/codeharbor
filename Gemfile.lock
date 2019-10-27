@@ -1,22 +1,23 @@
 GIT
-  remote: git://github.com/openHPI/proforma.git
-  revision: 54a5bdf2bafebb548998c945ee68d099d85108df
+  remote: https://github.com/openHPI/proforma.git
+  revision: 9298e4dbc87b76854f8c98d15918c7ae5e3e3e03
+  tag: v0.3.1
   specs:
-    proforma (0.1.0)
+    proforma (0.3.1)
       activemodel (~> 5.2.3)
       activesupport (~> 5.2.3)
       nokogiri (~> 1.10.2)
       rubyzip (>= 1.2.2, < 2.1.0)
 
 GIT
-  remote: git://github.com/seyhunak/twitter-bootstrap-rails.git
-  revision: 98e3c2aabfbecd0bb2baa1faf979828fb1011f3e
+  remote: https://github.com/seyhunak/twitter-bootstrap-rails.git
+  revision: 8a64089bf4c07c457be40973f1c99923ca8a7ef9
   specs:
     twitter-bootstrap-rails (4.0.0)
-      actionpack (~> 5.0, >= 5.0.1)
+      actionpack (>= 5.0, < 7.0)
       execjs (~> 2.7)
-      less-rails (~> 3.0, >= 3.0.0)
-      railties (~> 5.0, >= 5.0.1)
+      less-rails (>= 3.0, < 5.0)
+      railties (>= 5.0, < 7.0)
 
 GEM
   remote: https://rubygems.org/

@@ -2,7 +2,6 @@
 
 source 'https://rubygems.org'
 
-gem 'proforma', git: 'git://github.com/openHPI/proforma.git' # use version not master
 # Handle file upload
 gem 'paperclip'
 # Create Zip files
@@ -55,7 +54,7 @@ gem 'cancancan'
 gem 'therubyracer', platforms: :ruby
 # Use Bootstrap (app/assets/stylesheets)
 gem 'devise-bootstrap-views', '~> 1.0'
-gem 'twitter-bootstrap-rails', git: 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
+gem 'twitter-bootstrap-rails', git: 'https://github.com/seyhunak/twitter-bootstrap-rails.git'
 
 gem 'acts-as-taggable-on', '~> 6.0'
 gem 'better_errors' # !!!Important!!! move this to the development group before codeharbor goes really productive!!!Important!!!
@@ -66,6 +65,7 @@ gem 'jquery-ui-rails'
 gem 'less-rails' # Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
 gem 'nested_form_fields'
 gem 'nokogiri'
+gem 'proforma', git: 'https://github.com/openHPI/proforma.git', tag: 'v0.3.1'
 gem 'select2-rails', '~> 4.0', '>= 4.0.3'
 
 group :development, :test do
