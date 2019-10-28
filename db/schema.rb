@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_18_151604) do
+ActiveRecord::Schema.define(version: 2019_10_27_093322) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -211,6 +211,18 @@ ActiveRecord::Schema.define(version: 2019_09_18_151604) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "import_file_caches", force: :cascade do |t|
+    t.bigint "user_id"
+    t.jsonb "data"
+    t.string "zip_file_file_name"
+    t.string "zip_file_content_type"
+    t.bigint "zip_file_file_size"
+    t.datetime "zip_file_updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_import_file_caches_on_user_id"
   end
 
   create_table "label_categories", id: :serial, force: :cascade do |t|

@@ -265,6 +265,14 @@ class ExercisesController < ApplicationController
     handle_proforma_import(zip: uploaded_io, user: current_user)
   end
 
+  def import_exercise_start
+    zip_file = params[:zip_file]
+    raise t('controllers.exercise.choose_file') unless zip_file
+
+    ImportFileCache.create!(user: current_user, zip_file: zip_file)
+    render json: {status: 'success'}
+  end
+
   def contribute
     author = @exercise.user
     AccessRequest.send_contribution_request(author, @exercise, current_user).deliver_later

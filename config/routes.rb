@@ -119,7 +119,8 @@ Rails.application.routes.draw do
   resources :exercises do
     collection do
       get :add_label
-      post :import_exercise
+      # post :import_exercise
+      post :import_exercise_start
     end
     resources :comments do
       resources :answers

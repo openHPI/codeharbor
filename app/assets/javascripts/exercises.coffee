@@ -199,10 +199,16 @@ ready =->
 
   $('#xml-import').on 'click', (e) ->
     e.stopPropagation()
-    return
 
-  $('#file_upload').on 'change', ->
-    fullPath = document.getElementById('file_upload').value
+  $('#import-exercise-button').on 'click', (e) ->
+    e.preventDefault()
+    e.stopPropagation()
+    console.log('click')
+    importExerciseStart()
+    # return false
+
+  $('#exercise_import').on 'change', ->
+    fullPath = document.getElementById('exercise_import').value
     if fullPath
       document.getElementById('file-label').innerHTML = get_filename_from_full_path(fullPath)
 
@@ -302,7 +308,7 @@ ready =->
       return
     related_exercises = $(this).siblings('.content').children()
     last_shown_element = $(related_exercises).filter('.displayed').last()
-    console.log(last_shown_element)
+    # console.log(last_shown_element)
     index = $(related_exercises).index(last_shown_element)
     shown_elements = $(related_exercises).slice(index+1)
     if shown_elements.size() > 3
@@ -418,9 +424,7 @@ ready =->
     $('.primary-checkbox').prop('checked', false)
     $(event.target).prop('checked', true)
 
-  console.log('register listener')
   $('body').on 'click', '.export-action', (event) ->
-    console.log('fire handler')
     exportType = $(this).attr('data-export-type')
     exerciseID = $(this).parents('.export-exercise').attr('data-exercise-id')
     accountLinkID = $(this).parents('.export-exercise').attr('data-account-link')
@@ -430,6 +434,23 @@ ready =->
     $('.primary-checkbox')[0].click()
 
 $(document).on('turbolinks:load', ready)
+
+importExerciseStart = () ->
+  console.log('start')
+  formData = new FormData()
+  formData.append('zip_file', document.getElementById('exercise_import').files[0])
+
+  $.ajax({
+    type: 'POST',
+    url: '/exercises/import_exercise_start',
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: (response) ->
+      console.log(response)
+    error: (a, b, c) ->
+      alert('error: ' + c)
+  })
 
 exportExerciseStart = (exerciseID) ->
   $exerciseDiv = $('#export-exercise-' + exerciseID)
@@ -458,7 +479,6 @@ exportExerciseStart = (exerciseID) ->
 
 
 exportExerciseConfirm = (exerciseID, accountLinkID, pushType) ->
-  console.log('export confirm')
   $exerciseDiv = $('#export-exercise-' + exerciseID)
   $messageDiv = $exerciseDiv.children('.export-message')
   $actionsDiv = $exerciseDiv.children('.export-exercise-actions')
