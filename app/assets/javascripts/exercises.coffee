@@ -503,8 +503,8 @@ exportExerciseConfirm = (exerciseID, accountLinkID, pushType) ->
   })
 
 checkExportDialog = () ->
-  if $('#export-modal-body').children(':not(.export-success)').length == 0
-    setTimeout (-> $('#export-dialog').modal('hide')), 3000
+  if $('#import-export-modal-body').children(':not(.export-success)').length == 0
+    setTimeout (-> $('#import-export-dialog').modal('hide')), 3000
 
 # export function to make it accessible from outside this scope
 root = exports ? this; root.exportExerciseStart = exportExerciseStart

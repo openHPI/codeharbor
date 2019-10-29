@@ -1,0 +1,3 @@
+$("#import-export-modal-body").html("<%= escape_javascript(render partial: 'exercises/import_dialog_content', locals: { tasks: @tasks } ) %>");
+$('#import-export-dialog').modal('show');
+

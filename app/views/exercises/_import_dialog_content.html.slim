@@ -1,0 +1,7 @@
+- tasks.each do |uuid, task|
+  .import-exercise uuid="import-task-#{uuid}" data-task-uuid="#{uuid}" data-task-filename="#{task[:filename]}"
+    .import-message
+      = "UUID: #{uuid}"
+      = "filename: #{task[:filename]}"
+    .import-exercise-actions
+      = 'actions'

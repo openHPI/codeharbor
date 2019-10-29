@@ -270,7 +270,12 @@ class ExercisesController < ApplicationController
     raise t('controllers.exercise.choose_file') unless zip_file
 
     ImportFileCache.create!(user: current_user, zip_file: zip_file)
-    render json: {status: 'success'}
+    @tasks = {}
+    ProformaService::ConvertZipToTasks.call(zip: zip_file).each { |task| @tasks[task[:uuid]] = {filename: task[:filename]} } # .map { |hash| {hash[:uuid] => hash[:filename]} }
+    # render json: {status: 'success', tasks: tasks}
+    respond_to do |format|
+      format.js { render layout: false }
+    end
   end
 
   def contribute
