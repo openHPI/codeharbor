@@ -14,27 +14,27 @@ gem 'figaro'
 # Translate
 gem 'i18n'
 # Use slim format
-gem 'slim-rails'
+gem 'slim-rails', '>= 3.2.0'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.3'
 # Use postgres as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use SCSS for stylesheets
-gem 'sass-rails'
+gem 'sass-rails', '>= 6.0.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
 # gem 'yui-compressor'
 
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails'
+gem 'coffee-rails', '>= 5.0.0'
 
 # Use puma instead of WEBrick
 gem 'puma'
 # Use simple_form
-gem 'simple_form'
+gem 'simple_form', '>= 5.0.1'
 # Use jquery as the JavaScript library
-gem 'jquery-rails'
+gem 'jquery-rails', '>= 4.3.5'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -59,10 +59,10 @@ gem 'twitter-bootstrap-rails', git: 'git://github.com/seyhunak/twitter-bootstrap
 
 gem 'acts-as-taggable-on', '~> 6.0'
 gem 'better_errors' # !!!Important!!! move this to the development group before codeharbor goes really productive!!!Important!!!
-gem 'font-awesome-rails'
-gem 'jquery-ui-rails'
-gem 'less-rails' # Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
-gem 'nested_form_fields'
+gem 'font-awesome-rails', '>= 4.7.0.5'
+gem 'jquery-ui-rails', '>= 6.0.1'
+gem 'less-rails', '>= 3.0.0' # Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
+gem 'nested_form_fields', '>= 0.8.2'
 gem 'nokogiri'
 gem 'oauth2', '~> 1.4.0'
 gem 'select2-rails', '~> 4.0', '>= 4.0.3'
@@ -72,10 +72,10 @@ group :development, :test do
   gem 'byebug'
   gem 'factory_bot_rails', '~> 5.1.1'
   gem 'pry-byebug'
-  gem 'rails-controller-testing'
+  gem 'rails-controller-testing', '>= 1.0.4'
   gem 'rspec-collection_matchers', '~> 1.1.3'
-  gem 'rspec-rails'
-  gem 'rubocop', '~> 0.75.0'
+  gem 'rspec-rails', '>= 3.8.2'
+  gem 'rubocop', '~> 0.76.0'
   gem 'rubocop-rails', '~> 2.3.2'
   gem 'rubocop-rspec', '~> 1.36.0'
 end
@@ -85,7 +85,7 @@ group :development do
   gem 'guard-rspec'
   gem 'rack-mini-profiler'
   # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console'
+  gem 'web-console', '>= 3.7.0'
 
   gem 'airbrussh', require: false
   gem 'capistrano', '~> 3.11', require: false
