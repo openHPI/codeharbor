@@ -59,7 +59,7 @@ gem 'twitter-bootstrap-rails', git: 'git://github.com/seyhunak/twitter-bootstrap
 gem 'better_errors' # !!!Important!!! move this to the development group before codeharbor goes really productive!!!Important!!!
 gem 'font-awesome-rails', '>= 4.7.0.5'
 gem 'jquery-ui-rails', '>= 6.0.1'
-gem 'less-rails' , '>= 3.0.0' # Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
+gem 'less-rails', '>= 3.0.0' # Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
 gem 'nested_form_fields', '>= 0.8.2'
 gem 'nokogiri'
 gem 'oauth2', '~> 1.4.0'
