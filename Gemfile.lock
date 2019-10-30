@@ -353,7 +353,7 @@ GEM
     websocket-driver (0.7.1)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.4)
-    will_paginate (3.1.8)
+    will_paginate (3.2.1)
 
 PLATFORMS
   ruby
@@ -394,7 +394,6 @@ DEPENDENCIES
   rails (~> 5.2.3)
   rails-controller-testing (>= 1.0.4)
   rspec-rails (>= 3.8.2)
-  rubocop (~> 0.75.0)
   rubocop (~> 0.76.0)
   rubocop-rails (~> 2.3.2)
   rubocop-rspec (~> 1.36.0)
