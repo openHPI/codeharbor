@@ -426,17 +426,26 @@ ready =->
 
   $('body').on 'click', '.export-action', (event) ->
     exportType = $(this).attr('data-export-type')
-    exerciseID = $(this).parents('.export-exercise').attr('data-exercise-id')
-    accountLinkID = $(this).parents('.export-exercise').attr('data-account-link')
+    exerciseID = $(this).parents('.import-export-exercise').attr('data-exercise-id')
+    accountLinkID = $(this).parents('.import-export-exercise').attr('data-account-link')
     exportExerciseConfirm(exerciseID, accountLinkID, exportType)
+
+  $('body').on 'click', '.export-close-button', (event) ->
+    $(this).parents('.import-export-exercise').remove()
+
+  $('body').on 'click', '.import-action', (event) ->
+    importId = $(this).parents('.import-export-exercise').attr('data-import-id')
+    importType = $(this).attr('import-type')
+    importExerciseConfirm(importId, importType)
+
 
   if $('.primary-checkbox').length > 0 && $('.primary-checkbox:checked').length < 1
     $('.primary-checkbox')[0].click()
 
 $(document).on('turbolinks:load', ready)
 
-importExerciseStart = () ->
-  console.log('start')
+importExerciseStart = () -> #maybe unobstrusive like export?
+  # console.log('start')
   formData = new FormData()
   formData.append('zip_file', document.getElementById('exercise_import').files[0])
 
@@ -446,11 +455,25 @@ importExerciseStart = () ->
     data: formData,
     processData: false,
     contentType: false,
+    # success: (response) ->
+      # console.log(response)
+    error: (a, b, c) ->
+      alert('error: ' + c)
+  })
+
+importExerciseConfirm = (importId, importType) ->
+  $.ajax({
+    type: 'POST',
+    url: '/exercises/import_exercise_confirm',
+    data: {import_id: importId, import_type: importType},
+    dataType: 'json',
     success: (response) ->
+      console.log('Confirm done')
       console.log(response)
     error: (a, b, c) ->
       alert('error: ' + c)
   })
+
 
 exportExerciseStart = (exerciseID) ->
   $exerciseDiv = $('#export-exercise-' + exerciseID)

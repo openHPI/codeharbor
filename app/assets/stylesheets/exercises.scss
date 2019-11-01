@@ -675,7 +675,7 @@ input[type="radio"]:checked+label {
   min-height: 155px;
 }
 
-.export-button {
+.import-export-button {
   width: 100%;
   text-align: left;
 }
@@ -684,21 +684,21 @@ input[type="radio"]:checked+label {
   margin-right: 0.4em;
 }
 
-.export-exercise{
+.import-export-exercise{
   display: flex;
 }
 
-.export-message {
+.import-export-message {
   flex-grow: 1;
   padding-right: 5px;
 }
 
-.export-exercise-actions {
+.import-export-exercise-actions {
   max-width: 100px;
   min-width: 100px;
 }
 
-.export-exercise + .export-exercise {
+.import-export-exercise + .import-export-exercise {
   margin-top: 5px;
   padding-top: 5px;
   border-top: 1px solid lightgrey;

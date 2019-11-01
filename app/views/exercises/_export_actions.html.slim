@@ -1,21 +1,21 @@
 - if error
-    = button_tag type: 'button', class:'btn btn-default btn-xs pull-right export-button', onclick: "exportExerciseStart(#{exercise.id})" do
+    = button_tag type: 'button', class: 'btn btn-default btn-xs pull-right import-export-button', onclick: "exportExerciseStart(#{exercise.id})" do
       i.fa.fa-refresh.confirm-icon.export-button-icon
       = t('exercises.export_exercise.buttons.retry')
 - else
   - unless exported
     - if exercise_found
       - if update_right
-        = button_tag type: 'button', class:'btn btn-default btn-xs pull-right export-action export-button', data: {'export-type' => 'export'} do
+        = button_tag type: 'button', class: 'btn btn-default btn-xs pull-right export-action import-export-button', data: {'export-type' => 'export'} do
           i.fa.fa-check.confirm-icon.export-button-icon
           = t('exercises.export_exercise.buttons.overwrite')
-      = button_tag type: 'button', class:'btn btn-default btn-xs pull-right export-action export-button', data: {'export-type' => 'create_new'} do
+      = button_tag type: 'button', class: 'btn btn-default btn-xs pull-right export-action import-export-button', data: {'export-type' => 'create_new'} do
         i.fa.fa-check.confirm-icon-alt.export-button-icon
         = t('exercises.export_exercise.buttons.create_new')
     - else
-      = button_tag type: 'button', class:'btn btn-default btn-xs pull-right export-action export-button', data: {'export-type' => 'export'} do
+      = button_tag type: 'button', class: 'btn btn-default btn-xs pull-right export-action import-export-button', data: {'export-type' => 'export'} do
         i.fa.fa-check.confirm-icon.export-button-icon
         = t('exercises.export_exercise.buttons.export')
-= button_tag type: 'submit', class:'btn btn-default btn-xs pull-right export-button', data: {dismiss: 'modal'} do
+= button_tag type: 'submit', class: 'btn btn-default btn-xs pull-right import-export-button', data: {dismiss: 'modal'} do
   i.fa.fa-remove.abort-icon.export-button-icon
   = exported ? t('exercises.export_codeharbor.buttons.hide') : t('exercises.export_codeharbor.buttons.abort')

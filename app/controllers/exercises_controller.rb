@@ -269,13 +269,34 @@ class ExercisesController < ApplicationController
     zip_file = params[:zip_file]
     raise t('controllers.exercise.choose_file') unless zip_file
 
-    ImportFileCache.create!(user: current_user, zip_file: zip_file)
-    @tasks = {}
-    ProformaService::ConvertZipToTasks.call(zip: zip_file).each { |task| @tasks[task[:uuid]] = {filename: task[:filename]} } # .map { |hash| {hash[:uuid] => hash[:filename]} }
+    ActiveRecord::Base.transaction do
+      import = ImportFileCache.create!(user: current_user, zip_file: zip_file)
+      @data = {}
+      ProformaService::ConvertZipToTasks.call(zip: zip_file).each do |task|
+        exercise = Exercise.find_by_uuid(task[:uuid])
+
+        @data[task[:uuid]] = {path: task[:path],
+                              exists: exercise.present?,
+                              updatable: exercise&.updatable_by?(current_user),
+                              import_id: import.id,
+                              exercise: exercise}
+      end
+      import.update!(data: @data)
+    end
     # render json: {status: 'success', tasks: tasks}
     respond_to do |format|
       format.js { render layout: false }
     end
+  end
+
+  def import_exercise_confirm #have to select the correct subfile here?!
+    import_from_cached_file(zip: ImportFileCache.find(params[:import_id]).zip_file, user: current_user)
+    # ProformaService::Import.call(zip: ImportFileCache.find(params[:import_id]).zip_file, user: current_user)
+    render json: {hello: 'true'}
+  end
+
+  def import_from_cached_file(zip:, user:)
+    ProformaService::Import.call(zip: ImportFileCache.find(params[:import_id]).zip_file, user: current_user)
   end
 
   def contribute

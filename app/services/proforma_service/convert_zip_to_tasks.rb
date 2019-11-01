@@ -2,19 +2,19 @@
 
 module ProformaService
   class ConvertZipToTasks < ServiceBase
-    def initialize(zip:, depth: 0, filename: nil)
+    def initialize(zip:, depth: 0, path: nil)
       @depth = depth + 1
       raise 'too deep' if depth > 5
 
       @zip = zip
-      @filename = filename || zip.original_filename
+      @path = path || zip.original_filename
     end
 
     def execute
       if xml_present?
         importer = Proforma::Importer.new(@zip)
         task = importer.perform
-        tasks = [{filename: @filename, uuid: task.uuid, task: task}]
+        tasks = [{path: @path, uuid: task.uuid, task: task}]
       else
         tasks = import_multi
       end
@@ -32,7 +32,7 @@ module ProformaService
             store_zip_entry_in_tempfile entry
           end
           zip_files.map do |proforma_hash|
-            ConvertZipToTasks.call(zip: proforma_hash[:file], depth: @depth, filename: proforma_hash[:filename])
+            ConvertZipToTasks.call(zip: proforma_hash[:file], depth: @depth, path: "#{@path}/#{proforma_hash[:filename]}")
           end
         ensure
           zip_files.each { |hash| hash[:file].unlink }
