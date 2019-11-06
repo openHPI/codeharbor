@@ -11,30 +11,13 @@ module ProformaService
       if single_task?
         importer = Proforma::Importer.new(@zip)
         @task = importer.perform
-        exercise = ConvertTaskToExercise.call(task: @task, user: @user, exercise: base_exercise)
-        ActiveRecord::Base.transaction do
-          exercise.save_old_version if exercise.persisted?
-          exercise.save!
-        end
-
-        exercise
+        ProformaService::ImportTask.call(task: @task, user: @user)
       else
         import_multi
       end
     end
 
     private
-
-    def base_exercise
-      exercise = Exercise.unscoped.find_by(uuid: @task.uuid)
-      if exercise
-        return exercise if exercise.updatable_by?(@user)
-
-        return Exercise.new(uuid: SecureRandom.uuid)
-      end
-
-      Exercise.new(uuid: @task.uuid || SecureRandom.uuid)
-    end
 
     def import_multi
       Zip::File.open(@zip.path) do |zip_file|

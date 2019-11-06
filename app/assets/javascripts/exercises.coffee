@@ -435,8 +435,9 @@ ready =->
 
   $('body').on 'click', '.import-action', (event) ->
     importId = $(this).parents('.import-export-exercise').attr('data-import-id')
+    subfileId = $(this).parents('.import-export-exercise').attr('data-import-subfile-id')
     importType = $(this).attr('import-type')
-    importExerciseConfirm(importId, importType)
+    importExerciseConfirm(importId, subfileId, importType)
 
 
   if $('.primary-checkbox').length > 0 && $('.primary-checkbox:checked').length < 1
@@ -461,15 +462,26 @@ importExerciseStart = () -> #maybe unobstrusive like export?
       alert('error: ' + c)
   })
 
-importExerciseConfirm = (importId, importType) ->
+importExerciseConfirm = (importId, subfileId, importType) ->
+  $exerciseDiv = $('[data-import-subfile-id=' + subfileId + ']')
+  $messageDiv = $exerciseDiv.children('.import-export-message')
+  $actionsDiv = $exerciseDiv.children('.import-export-exercise-actions')
+
   $.ajax({
     type: 'POST',
     url: '/exercises/import_exercise_confirm',
-    data: {import_id: importId, import_type: importType},
+    data: {import_id: importId, subfile_id: subfileId, import_type: importType},
     dataType: 'json',
     success: (response) ->
       console.log('Confirm done')
       console.log(response)
+      $messageDiv.html response.message
+      $actionsDiv.html response.actions
+
+      if response.status == 'success'
+        $exerciseDiv.addClass 'import-export-success'
+      else
+        $exerciseDiv.addClass 'import-export-failure'
     error: (a, b, c) ->
       alert('error: ' + c)
   })
@@ -478,8 +490,8 @@ importExerciseConfirm = (importId, importType) ->
 exportExerciseStart = (exerciseID) ->
   $exerciseDiv = $('#export-exercise-' + exerciseID)
   accountLinkID = $exerciseDiv.attr('data-account-link')
-  $messageDiv = $exerciseDiv.children('.export-message')
-  $actionsDiv = $exerciseDiv.children('.export-exercise-actions')
+  $messageDiv = $exerciseDiv.children('.import-export-message')
+  $actionsDiv = $exerciseDiv.children('.import-export-exercise-actions')
 
   $messageDiv.html('Checking if the exercise exists on Codeocean.')
   $actionsDiv.html('<div class="spinner-border"></div>')
@@ -490,9 +502,9 @@ exportExerciseStart = (exerciseID) ->
     data: {account_link: accountLinkID},
     dataType: 'json',
     success: (response) ->
-      if response.error
-        $messageDiv.html(response.error)
-        $actionsDiv.html('Retry?')
+      # if response.error
+      #   $messageDiv.html(response.error)
+      #   $actionsDiv.html('Retry?')
 
       $messageDiv.html(response.message)
       $actionsDiv.html(response.actions)
@@ -503,8 +515,8 @@ exportExerciseStart = (exerciseID) ->
 
 exportExerciseConfirm = (exerciseID, accountLinkID, pushType) ->
   $exerciseDiv = $('#export-exercise-' + exerciseID)
-  $messageDiv = $exerciseDiv.children('.export-message')
-  $actionsDiv = $exerciseDiv.children('.export-exercise-actions')
+  $messageDiv = $exerciseDiv.children('.import-export-message')
+  $actionsDiv = $exerciseDiv.children('.import-export-exercise-actions')
 
   $.ajax({
     type: 'POST',
@@ -516,18 +528,18 @@ exportExerciseConfirm = (exerciseID, accountLinkID, pushType) ->
       $actionsDiv.html response.actions
 
       if response.status == 'success'
-        $exerciseDiv.addClass 'export-success'
+        $exerciseDiv.addClass 'import-export-success'
       else
-        $exerciseDiv.addClass 'export-failure'
+        $exerciseDiv.addClass 'import-export-failure'
 
-      checkExportDialog()
+      # checkExportDialog()
     error: (a, b, c) ->
       alert('error:' + c)
   })
 
-checkExportDialog = () ->
-  if $('#import-export-modal-body').children(':not(.export-success)').length == 0
-    setTimeout (-> $('#import-export-dialog').modal('hide')), 3000
+# checkExportDialog = () ->
+  # if $('#import-export-modal-body').children(':not(.import-export-success)').length == 0
+  #   setTimeout (-> $('#import-export-dialog').modal('hide')), 3000
 
 # export function to make it accessible from outside this scope
 root = exports ? this; root.exportExerciseStart = exportExerciseStart

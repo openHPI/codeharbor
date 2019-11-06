@@ -270,33 +270,46 @@ class ExercisesController < ApplicationController
     raise t('controllers.exercise.choose_file') unless zip_file
 
     ActiveRecord::Base.transaction do
-      import = ImportFileCache.create!(user: current_user, zip_file: zip_file)
+      import_file = ImportFileCache.create!(user: current_user, zip_file: zip_file)
       @data = {}
       ProformaService::ConvertZipToTasks.call(zip: zip_file).each do |task|
         exercise = Exercise.find_by_uuid(task[:uuid])
 
-        @data[task[:uuid]] = {path: task[:path],
-                              exists: exercise.present?,
-                              updatable: exercise&.updatable_by?(current_user),
-                              import_id: import.id,
-                              exercise: exercise}
+        @data[SecureRandom.uuid] = {path: task[:path],
+                                    exists: exercise.present?,
+                                    updatable: exercise&.updatable_by?(current_user),
+                                    import_id: import_file.id,
+                                    exercise_uuid: task[:uuid]}
       end
-      import.update!(data: @data)
+      import_file.update!(data: @data)
     end
-    # render json: {status: 'success', tasks: tasks}
+
     respond_to do |format|
       format.js { render layout: false }
     end
   end
 
-  def import_exercise_confirm #have to select the correct subfile here?!
-    import_from_cached_file(zip: ImportFileCache.find(params[:import_id]).zip_file, user: current_user)
-    # ProformaService::Import.call(zip: ImportFileCache.find(params[:import_id]).zip_file, user: current_user)
-    render json: {hello: 'true'}
-  end
+  def import_exercise_confirm
+    import_cache_file = ImportFileCache.find(params[:import_id])
+    import_tasks = ProformaService::ConvertZipToTasks.call(zip: import_cache_file.zip_file)
+    subfile = import_cache_file.data[params[:subfile_id]]
+    import_task = import_tasks.find { |task| task[:path] == subfile.with_indifferent_access[:path] }
+    task = import_task[:task]
+    task.uuid = nil if params[:import_type] == 'create_new'
 
-  def import_from_cached_file(zip:, user:)
-    ProformaService::Import.call(zip: ImportFileCache.find(params[:import_id]).zip_file, user: current_user)
+    exercise = ProformaService::ImportTask.call(task: task, user: current_user)
+
+    render json: {
+      status: 'success',
+      message: t('exercises.import_exercise.successfully_imported', title: task.title),
+      actions: render_to_string(partial: 'import_actions', locals: {exercise: exercise, imported: true})
+    }
+  rescue StandardError => e
+    render json: {
+      status: 'failure',
+      message: t('exercises.import_exercise.import_failed', title: task.title, error: e.message),
+      actions: ''
+    }
   end
 
   def contribute

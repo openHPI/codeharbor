@@ -622,6 +622,8 @@ en:
         hide: Hide
 
     import_exercise:
+      successfully_imported: Exercise (%{title}) successfully imported.
+      import_failed: 'Import of exercise (%{title}) failed. <br> Error: %{error}'
       imported_exercise_header: 'Imported exercise:'
       check:
         no_exercise: No corresponding exercise found on Codeocean. Pushing this exercise will create a new one on Codeocean, which will be linked to this one on Codeharbor, any changes to either one can be pushed to the respective other platform.

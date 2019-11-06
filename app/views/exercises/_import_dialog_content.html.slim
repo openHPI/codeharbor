@@ -1,8 +1,8 @@
-- data.each do |uuid, task|
-  .import-export-exercise uuid="import-task-#{uuid}" data-task-uuid="#{uuid}" data-import-id="#{task[:import_id]}" data-task-path="#{task[:path]}"
+- data.each do |subfile_id, task|
+  .import-export-exercise data-task-uuid="#{task[:exercise_uuid]}" data-import-subfile-id="#{subfile_id}" data-import-id="#{task[:import_id]}" data-task-path="#{task[:path]}"
     .import-export-message
-      = link_to_unless(task[:exercise].nil?, "UUID: #{uuid}", task[:exercise], {target: '_blank'})
+      = link_to_unless(task[:exercise_uuid].nil?, "Exercise-UUID: #{task[:exercise_uuid]}", Exercise.find_by_uuid(task[:exercise_uuid]), {target: '_blank'})
       br
       = "path: #{task[:path]}"
     .import-export-exercise-actions
-      = render partial: 'import_actions', locals: {exists: task[:exists], updatable: task[:updatable]}
+      = render partial: 'import_actions', locals: {exists: task[:exists], updatable: task[:updatable], imported: false}

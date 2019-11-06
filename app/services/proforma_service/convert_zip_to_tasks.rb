@@ -51,8 +51,8 @@ module ProformaService
       Zip::File.open(@zip.path) do |zip_content|
         return zip_content.map(&:name).select { |f| f[/\.xml$/] }.any?
       end
-    rescue Zip::Error
-      raise Proforma::InvalidZip
+    # rescue Zip::Error
+    #   raise Proforma::InvalidZip
     end
   end
 end
