@@ -3,15 +3,15 @@
 - else
   - if exists
     - if updatable
-      = button_tag type: 'button', class: 'btn btn-default btn-xs pull-right import-action import-export-button', data: {'export-type' => 'import'} do
+      = button_tag type: 'button', class: 'btn btn-default btn-xs pull-right import-action import-export-button', data: {'import-type' => 'import'} do
         i.fa.fa-check.confirm-icon.export-button-icon
         = t('exercises.export_exercise.buttons.overwrite')
-    - else
-      = button_tag type: 'button', class: 'btn btn-default btn-xs pull-right import-action import-export-button', data: {'export-type' => 'create_new'} do
-        i.fa.fa-check.confirm-icon.export-button-icon
-        = 'Import COPY'
+    / - else
+    = button_tag type: 'button', class: 'btn btn-default btn-xs pull-right import-action import-export-button', data: {'import-type' => 'create_new'} do
+      i.fa.fa-check.confirm-icon-alt.export-button-icon
+      = 'Import as Copy'
   - else
-    = button_tag type: 'button', class: 'btn btn-default btn-xs pull-right import-action import-export-button', data: {'export-type' => 'import'} do
+    = button_tag type: 'button', class: 'btn btn-default btn-xs pull-right import-action import-export-button', data: {'import-type' => 'import'} do
       i.fa.fa-check.confirm-icon.export-button-icon
       = 'Import'
 = button_tag type: 'button', class: 'btn btn-default btn-xs pull-right import-export-button export-close-button' do

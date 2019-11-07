@@ -436,7 +436,7 @@ ready =->
   $('body').on 'click', '.import-action', (event) ->
     importId = $(this).parents('.import-export-exercise').attr('data-import-id')
     subfileId = $(this).parents('.import-export-exercise').attr('data-import-subfile-id')
-    importType = $(this).attr('import-type')
+    importType = $(this).attr('data-import-type')
     importExerciseConfirm(importId, subfileId, importType)
 
 
