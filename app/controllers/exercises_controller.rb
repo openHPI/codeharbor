@@ -194,27 +194,23 @@ class ExercisesController < ApplicationController
     push_type = params[:push_type]
 
     return render :fail unless %w[create_new export].include? push_type
-
-    if push_type == 'create_new'
-      @exercise = @exercise.initialize_derivate(current_user)
-      @exercise.save!
-      @exercise.reload
-    end
-
-    account_link = AccountLink.find(params[:account_link])
-    error = ExerciseService::PushExternal.call(zip: ProformaService::ExportTask.call(exercise: @exercise), account_link: account_link)
-
+    #something broken here this time
+    exercise, error = ProformaService::HandleExportConfirm.call(user: current_user,
+                                                                exercise: @exercise,
+                                                                push_type: push_type,
+                                                                account_link_id: params[:account_link])
+    exercise_title = exercise.title
     if error.nil?
       render json: {
         status: 'success',
-        message: t('exercises.export_exercise.successfully_exported', title: @exercise.title),
-        actions: render_to_string(partial: 'export_actions', locals: {exercise: @exercise, exported: true, error: error})
+        message: t('exercises.export_exercise.successfully_exported', title: exercise_title),
+        actions: render_to_string(partial: 'export_actions', locals: {exercise: exercise, exported: true, error: error})
       }
     else
       render json: {
         status: 'fail',
-        message: t('exercises.export_exercise.export_failed', title: @exercise.title, error: error),
-        actions: render_to_string(partial: 'export_actions', locals: {exercise: @exercise, exported: true, error: error})
+        message: t('exercises.export_exercise.export_failed', title: exercise_title, error: error),
+        actions: render_to_string(partial: 'export_actions', locals: {exercise: exercise, exported: true, error: error})
       }
     end
   end
@@ -269,20 +265,7 @@ class ExercisesController < ApplicationController
     zip_file = params[:zip_file]
     raise t('controllers.exercise.choose_file') unless zip_file
 
-    ActiveRecord::Base.transaction do
-      import_file = ImportFileCache.create!(user: current_user, zip_file: zip_file)
-      @data = {}
-      ProformaService::ConvertZipToTasks.call(zip: zip_file).each do |task|
-        exercise = Exercise.find_by_uuid(task[:uuid])
-
-        @data[SecureRandom.uuid] = {path: task[:path],
-                                    exists: exercise.present?,
-                                    updatable: exercise&.updatable_by?(current_user),
-                                    import_id: import_file.id,
-                                    exercise_uuid: task[:uuid]}
-      end
-      import_file.update!(data: @data)
-    end
+    @data = ProformaService::CacheImportFile.call(user: current_user, zip_file: zip_file)
 
     respond_to do |format|
       format.js { render layout: false }
@@ -290,24 +273,20 @@ class ExercisesController < ApplicationController
   end
 
   def import_exercise_confirm
-    import_cache_file = ImportFileCache.find(params[:import_id])
-    import_tasks = ProformaService::ConvertZipToTasks.call(zip: import_cache_file.zip_file)
-    subfile = import_cache_file.data[params[:subfile_id]]
-    import_task = import_tasks.find { |task| task[:path] == subfile.with_indifferent_access[:path] }
-    task = import_task[:task]
-    task.uuid = nil if params[:import_type] == 'create_new'
+    task = ProformaService::TaskFromCachedFile.call(import_exercise_confirm_params.to_hash.symbolize_keys)
 
     exercise = ProformaService::ImportTask.call(task: task, user: current_user)
 
+    task_title = task.title
     render json: {
       status: 'success',
-      message: t('exercises.import_exercise.successfully_imported', title: task.title),
+      message: t('exercises.import_exercise.successfully_imported', title: task_title),
       actions: render_to_string(partial: 'import_actions', locals: {exercise: exercise, imported: true})
     }
   rescue StandardError => e
     render json: {
       status: 'failure',
-      message: t('exercises.import_exercise.import_failed', title: task.title, error: e.message),
+      message: t('exercises.import_exercise.import_failed', title: task_title, error: e.message),
       actions: ''
     }
   end
@@ -429,9 +408,12 @@ class ExercisesController < ApplicationController
     @exercise = Exercise.find(params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def exercise_params
     params.require(:exercise).permit(:title, :instruction, :maxrating, :private, :execution_environment_id)
+  end
+
+  def import_exercise_confirm_params
+    params.permit(:import_id, :subfile_id, :import_type)
   end
 
   def user_for_api_request
