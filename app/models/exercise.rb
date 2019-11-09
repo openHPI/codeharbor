@@ -424,10 +424,10 @@ class Exercise < ApplicationRecord
   end
 
   # this needs to be fixed with proper nested forms
-  def update_and_version(exercise_params, params_exercise)
+  def update_and_version(exercise_params, add_attributes_params)
     ActiveRecord::Base.transaction do
       save_old_version
-      add_attributes(params_exercise)
+      add_attributes(add_attributes_params)
       return true if update(exercise_params)
 
       raise ActiveRecord::Rollback

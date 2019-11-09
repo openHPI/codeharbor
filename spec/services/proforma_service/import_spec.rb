@@ -164,9 +164,7 @@ RSpec.describe ProformaService::Import do
       let(:new_uuid) { SecureRandom.uuid }
 
       before do
-        old_checksum = exercise.checksum
         exercise.update(uuid: new_uuid)
-        allow(exercise).to receive(:checksum).and_return(old_checksum)
       end
 
       it 'creates a new Exercise' do
@@ -190,41 +188,6 @@ RSpec.describe ProformaService::Import do
 
         it 'creates a new Exercise' do
           expect(import_service.id).not_to be exercise.id
-        end
-      end
-
-      context 'when exercise has been changed after export' do
-        before { exercise.update(title: 'new title') }
-
-        it 'creates a new Exercise' do
-          expect(import_service.id).not_to be exercise.id
-        end
-
-        context 'when matching import_checksum is given' do
-          let(:xml) do
-            Zip::File.open(zip_file.path) do |zip_file|
-              return zip_file.glob('task.xml').first.get_input_stream.read
-            end
-          end
-          let(:doc) { Nokogiri::XML(xml, &:noblanks) }
-
-          before do
-            doc.xpath('/xmlns:task/xmlns:meta-data/c:checksum').first
-               .add_next_sibling "<c:import-checksum>#{exercise.checksum}</c:import-checksum>"
-
-            File.open(zip_file.path, 'wb') do |file|
-              file.write(
-                Zip::OutputStream.write_buffer do |zio|
-                  zio.put_next_entry('task.xml')
-                  zio.write doc.to_xml
-                end.string
-              )
-            end
-          end
-
-          it 'updates the old Exercise' do
-            expect(import_service.id).to be exercise.id
-          end
         end
       end
     end

@@ -9,7 +9,7 @@ RSpec.describe AccountLinksController, type: :controller do
 
   let(:valid_attributes) { FactoryBot.attributes_for(:account_link).merge(user: user) }
   let(:invalid_attributes) do
-    {account_name: ''}
+    {api_key: ''}
   end
   let(:valid_session) do
     {user_id: user.id}
@@ -40,7 +40,7 @@ RSpec.describe AccountLinksController, type: :controller do
     end
 
     describe 'GET #edit' do
-      include_examples 'new examples', klass: AccountLink, resource: :account_link
+      include_examples 'edit examples', klass: AccountLink, resource: :account_link
     end
 
     describe 'POST #create' do
@@ -55,7 +55,7 @@ RSpec.describe AccountLinksController, type: :controller do
     describe 'PUT #update' do
       let(:new_attributes) do
         attributes = FactoryBot.attributes_for(:account_link)
-        attributes[:client_secret] = 'secret'
+        attributes[:api_key] = 'secret'
         attributes
       end
 
@@ -66,7 +66,7 @@ RSpec.describe AccountLinksController, type: :controller do
           account_link = AccountLink.create! valid_attributes
           put :update, params: empty_params.merge(id: account_link.to_param, account_link: new_attributes), session: valid_session
           account_link.reload
-          expect(account_link.client_secret).to eq(new_attributes[:client_secret])
+          expect(account_link.api_key).to eq(new_attributes[:api_key])
         end
 
         it 'redirects to the user' do

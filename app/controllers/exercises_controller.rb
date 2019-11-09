@@ -254,12 +254,12 @@ class ExercisesController < ApplicationController
     render json: t('controllers.exercise.import_proforma_xml.internal_error'), status: 500
   end
 
-  def import_exercise
-    uploaded_io = params[:file_upload]
-    raise t('controllers.exercise.choose_file') unless uploaded_io
+  # def import_exercise
+  #   uploaded_io = params[:file_upload]
+  #   raise t('controllers.exercise.choose_file') unless uploaded_io
 
-    handle_proforma_import(zip: uploaded_io, user: current_user)
-  end
+  #   handle_proforma_import(zip: uploaded_io, user: current_user)
+  # end
 
   def import_exercise_start
     zip_file = params[:zip_file]

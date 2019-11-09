@@ -443,7 +443,7 @@ RSpec.describe Exercise, type: :model do
     subject(:duplicate) { exercise.duplicate }
 
     let(:exercise) do
-      build(
+      create(
         :exercise,
         private: private,
         descriptions: descriptions,
@@ -455,7 +455,7 @@ RSpec.describe Exercise, type: :model do
     let(:descriptions) { [description] }
     let(:description) { build(:description, primary: true) }
     let(:tests) { [test] }
-    let(:test) { build(:test, feedback_message: 'duplicatetest') }
+    let(:test) { build(:codeharbor_test) }
     let(:exercise_files) { [exercise_file] }
     let(:exercise_file) { build(:exercise_file) }
 
@@ -596,30 +596,8 @@ RSpec.describe Exercise, type: :model do
     end
   end
 
-  describe '#checksum' do
-    subject(:checksum) { exercise.checksum }
-
-    let(:exercise) { create(:exercise) }
-
-    it { is_expected.to be_a String }
-    it { is_expected.to eql exercise.checksum }
-
-    context 'when there are two identical exercises' do
-      let(:reference_exercise) { create(:exercise) }
-
-      before do
-        FactoryBot.rewind_sequences
-        exercise
-        FactoryBot.rewind_sequences
-        reference_exercise
-      end
-
-      it { is_expected.to eql reference_exercise.checksum }
-    end
-  end
-
   describe '#update_and_version' do
-    subject(:update_and_version) { exercise.update_and_version(params) }
+    subject(:update_and_version) { exercise.update_and_version(params, {}) }
 
     let!(:exercise) { create(:exercise) }
     let(:params) { {title: 'new_title'} }
