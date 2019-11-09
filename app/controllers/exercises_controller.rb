@@ -190,30 +190,30 @@ class ExercisesController < ApplicationController
     }, status: 200
   end
 
+  # rubocop:disable Metrics/AbcSize
   def export_external_confirm
     push_type = params[:push_type]
 
     return render :fail unless %w[create_new export].include? push_type
-    #something broken here this time
-    exercise, error = ProformaService::HandleExportConfirm.call(user: current_user,
-                                                                exercise: @exercise,
-                                                                push_type: push_type,
-                                                                account_link_id: params[:account_link])
+
+    exercise, error = ProformaService::HandleExportConfirm.call(user: current_user, exercise: @exercise,
+                                                                push_type: push_type, account_link_id: params[:account_link])
     exercise_title = exercise.title
+    actions = render_export_actions(exercise, true, error)
+
     if error.nil?
       render json: {
-        status: 'success',
         message: t('exercises.export_exercise.successfully_exported', title: exercise_title),
-        actions: render_to_string(partial: 'export_actions', locals: {exercise: exercise, exported: true, error: error})
+        status: 'success', actions: actions
       }
     else
       render json: {
-        status: 'fail',
         message: t('exercises.export_exercise.export_failed', title: exercise_title, error: error),
-        actions: render_to_string(partial: 'export_actions', locals: {exercise: exercise, exported: true, error: error})
+        status: 'fail', actions: actions
       }
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def download_exercise
     zip_file = ProformaService::ExportTask.call(exercise: @exercise)
@@ -450,6 +450,10 @@ class ExercisesController < ApplicationController
       tempfile.write string
       tempfile.rewind
     end
+  end
+
+  def render_export_actions(exercise, exported, error)
+    render_to_string(partial: 'export_actions', locals: {exercise: exercise, exported: exported, error: error})
   end
 end
 # rubocop:enable Metrics/ClassLength
