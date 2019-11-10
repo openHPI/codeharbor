@@ -88,10 +88,48 @@ RSpec.describe ExercisesController, type: :controller do
 
   describe 'GET #show' do
     let!(:exercise) { create(:simple_exercise, valid_attributes) }
+    let(:get_request) { get :show, params: {id: exercise.to_param}, session: valid_session }
 
-    it 'assigns the requested exercise as @exercise' do
-      get :show, params: {id: exercise.to_param}, session: valid_session
+    it 'assigns the requested exercise to instance variable' do
+      get_request
       expect(assigns(:exercise)).to eq(exercise)
+    end
+
+    context 'when exercise has an exercises_file' do
+      let!(:file) { create(:exercise_file, exercise: exercise) }
+
+      it "assigns exercise's files to instance variable" do
+        get_request
+        expect(assigns(:files)).to include(file)
+      end
+    end
+
+    context 'when exercise has an exercises_file' do
+      let!(:test) { create(:test, exercise: exercise) }
+
+      it "assigns exercise's tests to instance variable" do
+        get_request
+        expect(assigns(:tests)).to include(test)
+      end
+    end
+
+    context 'when user has rated exercise before' do
+      let!(:rating) { create(:rating, user: user, exercise: exercise) }
+
+      it 'assigns user_rating to instance variable' do
+        get_request
+        expect(assigns(:user_rating)).to eq(rating.rating)
+      end
+    end
+
+    context 'when exercise has been cloned' do
+      let!(:cloned_exercise) { create(:simple_exercise) }
+      let!(:relation) { create(:exercise_relation, origin: exercise, clone: cloned_exercise) }
+
+      it 'assigns user_rating to instance variable' do
+        get :show, params: {id: cloned_exercise.to_param}, session: valid_session
+        expect(assigns(:exercise_relation)).to eq(relation).and(be_a(ExerciseRelation))
+      end
     end
   end
 
@@ -453,6 +491,40 @@ RSpec.describe ExercisesController, type: :controller do
           )
         end
       end
+    end
+  end
+
+  describe '#export_external_start' do
+    let(:exercise) { create(:simple_exercise, valid_attributes) }
+    let(:account_link) { create(:account_link, user: user) }
+    let(:get_request) do
+      get :export_external_start, params: {id: exercise.id, account_link: account_link.id}, session: valid_session, format: :js, xhr: true
+    end
+
+    it 'renders export_external_start javascript' do
+      get_request
+      expect(response).to render_template('export_external_start')
+    end
+  end
+
+  fdescribe '#export_external_check' do
+    let!(:exercise) { create(:simple_exercise, valid_attributes).reload }
+    let(:account_link) { create(:account_link, user: user) }
+    let(:post_request) do
+      post :export_external_check, params: {id: exercise.id, account_link: account_link.id}, session: valid_session, format: :js, xhr: true
+    end
+    let(:external_check_hash) do
+      {message: 'bla', exercise_found: true, update_right: true, error: 'an error'}
+    end
+
+    before do
+      allow(ExerciseService::CheckExternal).to receive(:call).with(uuid: exercise.uuid, account_link: account_link)
+                                                             .and_return(external_check_hash)
+    end
+
+    it 'renders export_external_check javascript' do
+      post_request
+      expect(response.body).to eql({message: 'bla', actions: ''}.to_json)
     end
   end
 end

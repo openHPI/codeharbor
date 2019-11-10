@@ -161,7 +161,6 @@ class Exercise < ApplicationRecord
 
   def can_access(user)
     if private
-
       if !user.author?(self)
         if !user.access_through_any_group?(self)
           false
@@ -260,7 +259,6 @@ class Exercise < ApplicationRecord
     end
     predecessors
   end
-
 
   def save_old_version
     root_exercise = Exercise.unscoped.find(id)

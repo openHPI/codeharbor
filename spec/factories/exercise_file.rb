@@ -19,6 +19,8 @@ FactoryBot.define do
     path { '' }
     solution { false }
     file_type { FactoryBot.create(:java_file_type) }
+    hidden { false }
+    read_only { false }
     visibility { true }
   end
 

@@ -29,15 +29,11 @@ class ExercisesController < ApplicationController
   # rubocop:enable Metrics/AbcSize
 
   def show
-    exercise_relation = ExerciseRelation.find_by(clone_id: @exercise.id)
-    @exercise_relation = exercise_relation if exercise_relation
-    if @exercise.ratings
-      user_rating = @exercise.ratings.find_by(user: current_user)
-      @user_rating = user_rating.rating if user_rating
-    end
+    @user_rating = @exercise.ratings&.find_by(user: current_user)&.rating
+    @exercise_relation = ExerciseRelation.find_by(clone_id: @exercise.id)
 
-    @files = ExerciseFile.where(exercise: @exercise)
-    @tests = Test.where(exercise: @exercise)
+    @files = @exercise.exercise_files
+    @tests = @exercise.tests
   end
 
   def new
