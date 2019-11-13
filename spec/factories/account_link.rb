@@ -6,5 +6,6 @@ FactoryBot.define do
     check_uuid_url { 'codecode.de/check' }
     api_key { '123456' }
     name { 'testlink' }
+    user { build(:user) }
   end
 end

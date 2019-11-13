@@ -190,22 +190,21 @@ class ExercisesController < ApplicationController
   def export_external_confirm
     push_type = params[:push_type]
 
-    return render :fail unless %w[create_new export].include? push_type
+    return render json: {}, status: 500 unless %w[create_new export].include? push_type
 
     exercise, error = ProformaService::HandleExportConfirm.call(user: current_user, exercise: @exercise,
                                                                 push_type: push_type, account_link_id: params[:account_link])
     exercise_title = exercise.title
-    actions = render_export_actions(exercise, true, error)
 
     if error.nil?
       render json: {
         message: t('exercises.export_exercise.successfully_exported', title: exercise_title),
-        status: 'success', actions: actions
+        status: 'success', actions: render_export_actions(exercise, true)
       }
     else
       render json: {
         message: t('exercises.export_exercise.export_failed', title: exercise_title, error: error),
-        status: 'fail', actions: actions
+        status: 'fail', actions: render_export_actions(exercise, false, error)
       }
     end
   end
@@ -223,7 +222,6 @@ class ExercisesController < ApplicationController
 
     uuid = params[:uuid]
     exercise = Exercise.find_by(uuid: uuid)
-
     return render json: {exercise_found: false, message: t('exercises.import_exercise.check.no_exercise')} if exercise.nil?
 
     unless exercise.updatable_by?(user)
@@ -448,7 +446,7 @@ class ExercisesController < ApplicationController
     end
   end
 
-  def render_export_actions(exercise, exported, error)
+  def render_export_actions(exercise, exported, error = nil)
     render_to_string(partial: 'export_actions', locals: {exercise: exercise, exported: exported, error: error})
   end
 end

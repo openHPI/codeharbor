@@ -507,24 +507,175 @@ RSpec.describe ExercisesController, type: :controller do
     end
   end
 
-  fdescribe '#export_external_check' do
+  # rubocop:disable RSpec/ExampleLength
+  # rubocop:disable RSpec/MultipleExpectations
+  RSpec::Matchers.define_negated_matcher :not_include, :include
+
+  describe '#export_external_check' do
+    render_views
+
     let!(:exercise) { create(:simple_exercise, valid_attributes).reload }
     let(:account_link) { create(:account_link, user: user) }
     let(:post_request) do
       post :export_external_check, params: {id: exercise.id, account_link: account_link.id}, session: valid_session, format: :js, xhr: true
     end
     let(:external_check_hash) do
-      {message: 'bla', exercise_found: true, update_right: true, error: 'an error'}
+      {message: message, exercise_found: exercise_found, update_right: true, error: error}
     end
+    let(:message) { 'message' }
+    let(:exercise_found) { true }
+    let(:error) { nil }
 
     before do
       allow(ExerciseService::CheckExternal).to receive(:call).with(uuid: exercise.uuid, account_link: account_link)
                                                              .and_return(external_check_hash)
     end
 
-    it 'renders export_external_check javascript' do
+    it 'renders the correct contents as json' do
       post_request
-      expect(response.body).to eql({message: 'bla', actions: ''}.to_json)
+      expect(JSON.parse(response.body).symbolize_keys[:message]).to eq('message')
+      expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+        include('button').and(include('Abort').and(include('Overwrite')).and(include('Create new')))
+      )
+      expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+        not_include('Retry').and(not_include('Hide'))
+      )
+    end
+
+    context 'when there is an error' do
+      let(:error) { 'error' }
+
+      it 'renders the correct contents as json' do
+        post_request
+        expect(JSON.parse(response.body).symbolize_keys[:message]).to eq('message')
+        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+          include('button').and(include('Abort')).and(include('Retry'))
+        )
+        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+          not_include('Overwrite').and(not_include('Create new')).and(not_include('Export')).and(not_include('Hide'))
+        )
+      end
+    end
+
+    context 'when exercise_found is false' do
+      let(:exercise_found) { false }
+
+      it 'renders the correct contents as json' do
+        post_request
+        expect(JSON.parse(response.body).symbolize_keys[:message]).to eq('message')
+        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+          include('button').and(include('Abort')).and(include('Export'))
+        )
+        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+          not_include('Overwrite').and(not_include('Create new')).and(not_include('Hide'))
+        )
+      end
     end
   end
+
+  describe '#export_external_confirm' do
+    render_views
+
+    let(:exercise) { create(:simple_exercise, valid_attributes) }
+    let(:account_link) { create(:account_link, user: user) }
+    let(:post_request) do
+      post :export_external_confirm, params: {push_type: push_type, id: exercise.id, account_link: account_link.id},
+                                     session: valid_session, format: :js, xhr: true
+    end
+    let(:push_type) { 'create_new' }
+    let(:error) {}
+
+    before do
+      allow(ProformaService::HandleExportConfirm).to receive(:call)
+        .with(user: user, exercise: exercise, push_type: push_type, account_link_id: account_link.to_param)
+        .and_return([exercise, error])
+    end
+
+    it 'renders correct response' do
+      post_request
+      expect(response.status).to be 200
+      expect(JSON.parse(response.body).symbolize_keys[:message]).to(include('successfully exported'))
+      expect(JSON.parse(response.body).symbolize_keys[:status]).to(eql('success'))
+      expect(JSON.parse(response.body).symbolize_keys[:actions]).to(include('button').and(include('Hide')))
+      expect(JSON.parse(response.body).symbolize_keys[:actions]).to(not_include('Retry').and(not_include('Abort')))
+    end
+
+    context 'when an error occurs' do
+      let(:error) { 'exampleerror' }
+
+      it 'renders correct response' do
+        post_request
+        expect(response.status).to be 200
+        expect(JSON.parse(response.body).symbolize_keys[:message]).to(include('failed').and(include('exampleerror')))
+        expect(JSON.parse(response.body).symbolize_keys[:status]).to(eql('fail'))
+        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(include('button').and(include('Retry')).and(include('Abort')))
+        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(not_include('Hide'))
+      end
+    end
+
+    context 'without push_type' do
+      let(:push_type) {}
+
+      it 'responds with status 500' do
+        post_request
+        expect(response.status).to be 500
+      end
+    end
+  end
+
+  # RSpec::Support::ObjectFormatter.default_instance.max_formatted_output_length = 99999
+  fdescribe '#import_uuid_check' do
+    let!(:exercise) { create(:simple_exercise, valid_attributes) }
+    let(:account_link) { create(:account_link, user: user) }
+    let(:uuid) { exercise.reload.uuid }
+    let(:post_request) { post :import_uuid_check, params: {uuid: uuid} }
+    let(:headers) { {'Authorization' => "Bearer #{account_link.api_key}"} }
+
+    before { request.headers.merge! headers }
+
+    it 'renders correct response' do
+      post_request
+      expect(response.status).to be 200
+
+      expect(JSON.parse(response.body).symbolize_keys[:exercise_found]).to be true
+      expect(JSON.parse(response.body).symbolize_keys[:update_right]).to be true
+      expect(JSON.parse(response.body).symbolize_keys[:message]).to(include('has been found').and(include('Overwrite')))
+    end
+
+    context 'when api_key is incorrect' do
+      let(:headers) { {'Authorization' => 'Bearer XXXXXX'} }
+
+      it 'renders correct response' do
+        post_request
+        expect(response.status).to be 401
+      end
+    end
+
+    context 'when the user is cannot update the exercise' do
+      let(:account_link) { create(:account_link, api_key: 'anotherkey') }
+
+      it 'renders correct response' do
+        post_request
+        expect(response.status).to be 200
+
+        expect(JSON.parse(response.body).symbolize_keys[:exercise_found]).to be true
+        expect(JSON.parse(response.body).symbolize_keys[:update_right]).to be false
+        expect(JSON.parse(response.body).symbolize_keys[:message]).to(include('has been found').and(not_include('Overwrite')))
+      end
+    end
+
+    context 'when the searched exercise does not exist' do
+      let(:uuid) { 'anotheruuid' }
+
+      it 'renders correct response' do
+        post_request
+        expect(response.status).to be 200
+
+        expect(JSON.parse(response.body).symbolize_keys[:exercise_found]).to be false
+        expect(JSON.parse(response.body).symbolize_keys[:message]).to(include('No corresponding exercise'))
+      end
+    end
+  end
+  # rubocop:enable RSpec/ExampleLength
+  # rubocop:enable RSpec/MultipleExpectations
 end

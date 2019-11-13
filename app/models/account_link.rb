@@ -5,10 +5,10 @@ class AccountLink < ApplicationRecord
   validates :push_url, presence: true
   validates :api_key, presence: true
 
-  belongs_to :user
+  belongs_to :user, optional: false
 
-  has_many :account_link_users, dependent: :destroy
-  has_many :external_users, through: :account_link_users
+  # has_many :account_link_users, dependent: :destroy
+  # has_many :external_users, through: :account_link_users
 
   def readable
     push_url
