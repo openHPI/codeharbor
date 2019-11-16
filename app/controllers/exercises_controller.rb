@@ -242,22 +242,15 @@ class ExercisesController < ApplicationController
     ProformaService::Import.call(zip: tempfile, user: user)
 
     render json: t('controllers.exercise.import_proforma_xml.success'), status: 201
-  rescue Proforma::PreImportValidationError, Proforma::InvalidZip
+  rescue Proforma::ProformaError
     render json: t('controllers.exercise.import_proforma_xml.invalid'), status: 400
   rescue StandardError
     render json: t('controllers.exercise.import_proforma_xml.internal_error'), status: 500
   end
 
-  # def import_exercise
-  #   uploaded_io = params[:file_upload]
-  #   raise t('controllers.exercise.choose_file') unless uploaded_io
-
-  #   handle_proforma_import(zip: uploaded_io, user: current_user)
-  # end
-
   def import_exercise_start
     zip_file = params[:zip_file]
-    raise t('controllers.exercise.choose_file') unless zip_file
+    raise t('controllers.exercise.choose_file') unless zip_file.presence
 
     @data = ProformaService::CacheImportFile.call(user: current_user, zip_file: zip_file)
 
@@ -270,7 +263,6 @@ class ExercisesController < ApplicationController
     task = ProformaService::TaskFromCachedFile.call(import_exercise_confirm_params.to_hash.symbolize_keys)
 
     exercise = ProformaService::ImportTask.call(task: task, user: current_user)
-
     task_title = task.title
     render json: {
       status: 'success',

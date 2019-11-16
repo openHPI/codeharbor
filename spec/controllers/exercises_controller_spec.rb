@@ -330,88 +330,6 @@ RSpec.describe ExercisesController, type: :controller do
     end
   end
 
-  # describe 'POST #import_exercise' do
-  #   let(:post_query) { post :import_exercise, params: params, session: valid_session }
-  #   let(:params) { {} }
-
-  #   before do
-  #     create(:file_type, file_extension: '.java')
-  #   end
-
-  #   it 'returns an error' do
-  #     expect { post_query }.to raise_error(I18n.t('controllers.exercise.choose_file'))
-  #   end
-
-  #   context 'when a valid zip file is submitted' do
-  #     let(:params) { {file_upload: fixture_file_upload('files/proforma_import/testfile.zip', 'application/zip')} }
-
-  #     it 'imports the exercise' do
-  #       expect { post_query }.to change(Exercise, :count).by(1)
-  #     end
-
-  #     it 'redirects to imported exercise' do
-  #       expect(post_query).to redirect_to action: :show, id: Exercise.last.id
-  #     end
-
-  #     it 'flashes import success' do
-  #       expect(post_query.request.flash[:notice]).to eql I18n.t('controllers.exercise.import_proforma_xml.single_import_successful')
-  #     end
-  #   end
-
-  #   context 'when an invalid zip file is submitted' do
-  #     let(:params) { {file_upload: fixture_file_upload('files/proforma_import/testfile_fail.zip', 'application/zip')} }
-
-  #     it 'redirects to index' do
-  #       expect(post_query).to redirect_to action: :index
-  #     end
-
-  #     it 'flashes import error' do
-  #       expect(post_query.request.flash[:alert]).to eql I18n.t('controllers.exercise.import_proforma_xml.no_file_present')
-  #     end
-  #   end
-
-  #   context 'when an zip with an invalid xml file is submitted' do
-  #     let(:params) { {file_upload: fixture_file_upload('files/proforma_import/testfile_fail_xml.zip', 'application/zip')} }
-
-  #     it 'redirects to index' do
-  #       expect(post_query).to redirect_to action: :index
-  #     end
-
-  #     it 'flashes import error' do
-  #       expect(post_query.request.flash[:alert]).to eql I18n.t('controllers.exercise.import_proforma_xml.import_error')
-  #     end
-  #   end
-
-  #   context 'when an invalid file is submitted' do
-  #     let(:params) { {file_upload: fixture_file_upload('files/proforma_import/testfile_fail', 'application/txt')} }
-
-  #     it 'redirects to index' do
-  #       expect(post_query).to redirect_to action: :index
-  #     end
-
-  #     it 'flashes import error' do
-  #       expect(post_query.request.flash[:alert]).to eql I18n.t('controllers.exercise.import_proforma_xml.import_error')
-  #     end
-  #   end
-
-  #   context 'when the zip file includes multiple exercises' do
-  #     let(:params) { {file_upload: fixture_file_upload('files/proforma_import/testfile_multi.zip', 'application/zip')} }
-
-  #     it 'imports the exercises' do
-  #       expect { post_query }.to change(Exercise, :count).by(3)
-  #     end
-
-  #     it 'redirects to index' do
-  #       expect(post_query).to redirect_to action: :index
-  #     end
-
-  #     it 'flashes import success' do
-  #       expect(post_query.request.flash[:notice]).to eql I18n
-  #         .t('controllers.exercise.import_proforma_xml.multi_import_successful', count: 3)
-  #     end
-  #   end
-  # end
-
   describe '#download_exercise' do
     let(:exercise) { create(:simple_exercise) }
 
@@ -593,7 +511,8 @@ RSpec.describe ExercisesController, type: :controller do
 
     it 'renders correct response' do
       post_request
-      expect(response.status).to be 200
+
+      expect(response).to have_http_status(:success)
       expect(JSON.parse(response.body).symbolize_keys[:message]).to(include('successfully exported'))
       expect(JSON.parse(response.body).symbolize_keys[:status]).to(eql('success'))
       expect(JSON.parse(response.body).symbolize_keys[:actions]).to(include('button').and(include('Hide')))
@@ -605,7 +524,7 @@ RSpec.describe ExercisesController, type: :controller do
 
       it 'renders correct response' do
         post_request
-        expect(response.status).to be 200
+        expect(response).to have_http_status(:success)
         expect(JSON.parse(response.body).symbolize_keys[:message]).to(include('failed').and(include('exampleerror')))
         expect(JSON.parse(response.body).symbolize_keys[:status]).to(eql('fail'))
         expect(JSON.parse(response.body).symbolize_keys[:actions]).to(include('button').and(include('Retry')).and(include('Abort')))
@@ -618,13 +537,12 @@ RSpec.describe ExercisesController, type: :controller do
 
       it 'responds with status 500' do
         post_request
-        expect(response.status).to be 500
+        expect(response).to have_http_status(:internal_server_error)
       end
     end
   end
 
-  # RSpec::Support::ObjectFormatter.default_instance.max_formatted_output_length = 99999
-  fdescribe '#import_uuid_check' do
+  describe '#import_uuid_check' do
     let!(:exercise) { create(:simple_exercise, valid_attributes) }
     let(:account_link) { create(:account_link, user: user) }
     let(:uuid) { exercise.reload.uuid }
@@ -635,7 +553,7 @@ RSpec.describe ExercisesController, type: :controller do
 
     it 'renders correct response' do
       post_request
-      expect(response.status).to be 200
+      expect(response).to have_http_status(:success)
 
       expect(JSON.parse(response.body).symbolize_keys[:exercise_found]).to be true
       expect(JSON.parse(response.body).symbolize_keys[:update_right]).to be true
@@ -647,7 +565,7 @@ RSpec.describe ExercisesController, type: :controller do
 
       it 'renders correct response' do
         post_request
-        expect(response.status).to be 401
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -656,7 +574,7 @@ RSpec.describe ExercisesController, type: :controller do
 
       it 'renders correct response' do
         post_request
-        expect(response.status).to be 200
+        expect(response).to have_http_status(:success)
 
         expect(JSON.parse(response.body).symbolize_keys[:exercise_found]).to be true
         expect(JSON.parse(response.body).symbolize_keys[:update_right]).to be false
@@ -669,7 +587,7 @@ RSpec.describe ExercisesController, type: :controller do
 
       it 'renders correct response' do
         post_request
-        expect(response.status).to be 200
+        expect(response).to have_http_status(:success)
 
         expect(JSON.parse(response.body).symbolize_keys[:exercise_found]).to be false
         expect(JSON.parse(response.body).symbolize_keys[:message]).to(include('No corresponding exercise'))
@@ -677,5 +595,202 @@ RSpec.describe ExercisesController, type: :controller do
     end
   end
   # rubocop:enable RSpec/ExampleLength
+
+  describe 'POST #import_external_exercise' do
+    let(:account_link) { create(:account_link, user: user) }
+
+    let(:post_request) { post :import_external_exercise, body: zip_file_content }
+    let(:zip_file_content) { 'zipped task xml' }
+    let(:headers) { {'Authorization' => "Bearer #{account_link.api_key}"} }
+
+    before do
+      request.headers.merge! headers
+      allow(ProformaService::Import).to receive(:call)
+    end
+
+    it 'responds with correct status code' do
+      post_request
+      expect(response).to have_http_status(:created)
+    end
+
+    it 'calls service' do
+      post_request
+      expect(ProformaService::Import).to have_received(:call).with(zip: be_a(Tempfile).and(has_content(zip_file_content)), user: user)
+    end
+
+    context 'when import fails with ProformaError' do
+      before { allow(ProformaService::Import).to receive(:call).and_raise(Proforma::PreImportValidationError) }
+
+      it 'responds with correct status code' do
+        post_request
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+
+    context 'when import fails due to another error' do
+      before { allow(ProformaService::Import).to receive(:call).and_raise(StandardError) }
+
+      it 'responds with correct status code' do
+        post_request
+        expect(response).to have_http_status(:internal_server_error)
+      end
+    end
+  end
+
+  describe 'POST #import_exercise_start' do
+    render_views
+
+    let(:post_request) { post :import_exercise_start, params: {zip_file: zip_file}, session: valid_session, format: :js, xhr: true }
+    let(:zip_file) { fixture_file_upload('files/proforma_import/testfile.zip', 'application/zip') }
+
+    before { allow(ProformaService::CacheImportFile).to receive(:call).and_call_original }
+
+    it 'renders correct views' do
+      post_request
+      expect(response).to render_template('import_exercise_start', 'import_dialog_content')
+    end
+
+    it 'creates an ImportFileCache' do
+      expect { post_request }.to change(ImportFileCache, :count).by(1)
+    end
+
+    it 'calls service' do
+      post_request
+      expect(ProformaService::CacheImportFile).to have_received(:call).with(user: user, zip_file: be_a(ActionDispatch::Http::UploadedFile))
+    end
+
+    it 'renders import view for one exercise' do
+      post_request
+      expect(response.body.scan('data-import-id').count).to be 1
+    end
+
+    context 'when file contains three tasks' do
+      let(:zip_file) { fixture_file_upload('files/proforma_import/testfile_multi.zip', 'application/zip') }
+
+      it 'renders import view for three exercises' do
+        post_request
+        expect(response.body.scan('data-import-id').count).to be 3
+      end
+    end
+
+    context 'when no file is submitted' do
+      let(:zip_file) {}
+
+      it 'raises error' do
+        expect { post_request }.to raise_error('You need to choose a file.')
+      end
+    end
+  end
+
+  # RSpec::Support::ObjectFormatter.default_instance.max_formatted_output_length = 99999
+  describe 'POST #import_exercise_confirm' do
+    render_views
+
+    let(:zip_file) { fixture_file_upload('files/proforma_import/testfile_multi.zip', 'application/zip') }
+    let(:data) { ProformaService::CacheImportFile.call(user: user, zip_file: zip_file) }
+    let(:import_data) { data.first }
+    let(:post_request) do
+      post :import_exercise_confirm,
+           params: {import_id: import_data[1][:import_id], subfile_id: import_data[0], import_type: 'export'},
+           session: valid_session, xhr: true
+    end
+
+    before { create(:file_type, file_extension: '.java') }
+
+    it 'creates the exercise' do
+      expect { post_request }.to change(Exercise, :count).by(1)
+    end
+
+    it 'renders correct json' do
+      post_request
+      expect(response.body).to include('successfully imported').and(include('Show exercise').and(include('Hide')))
+    end
+
+    # FAIL
+  end
+
   # rubocop:enable RSpec/MultipleExpectations
+
+  # describe 'POST #import_exercise' do
+  #   let(:post_query) { post :import_exercise, params: params, session: valid_session }
+  #   let(:params) { {} }
+
+  #   before do
+  #     create(:file_type, file_extension: '.java')
+  #   end
+
+  #   it 'returns an error' do
+  #     expect { post_query }.to raise_error(I18n.t('controllers.exercise.choose_file'))
+  #   end
+
+  #   context 'when a valid zip file is submitted' do
+  #     let(:params) { {file_upload: fixture_file_upload('files/proforma_import/testfile.zip', 'application/zip')} }
+
+  #     it 'imports the exercise' do
+  #       expect { post_query }.to change(Exercise, :count).by(1)
+  #     end
+
+  #     it 'redirects to imported exercise' do
+  #       expect(post_query).to redirect_to action: :show, id: Exercise.last.id
+  #     end
+
+  #     it 'flashes import success' do
+  #       expect(post_query.request.flash[:notice]).to eql I18n.t('controllers.exercise.import_proforma_xml.single_import_successful')
+  #     end
+  #   end
+
+  #   context 'when an invalid zip file is submitted' do
+  #     let(:params) { {file_upload: fixture_file_upload('files/proforma_import/testfile_fail.zip', 'application/zip')} }
+
+  #     it 'redirects to index' do
+  #       expect(post_query).to redirect_to action: :index
+  #     end
+
+  #     it 'flashes import error' do
+  #       expect(post_query.request.flash[:alert]).to eql I18n.t('controllers.exercise.import_proforma_xml.no_file_present')
+  #     end
+  #   end
+
+  #   context 'when an zip with an invalid xml file is submitted' do
+  #     let(:params) { {file_upload: fixture_file_upload('files/proforma_import/testfile_fail_xml.zip', 'application/zip')} }
+
+  #     it 'redirects to index' do
+  #       expect(post_query).to redirect_to action: :index
+  #     end
+
+  #     it 'flashes import error' do
+  #       expect(post_query.request.flash[:alert]).to eql I18n.t('controllers.exercise.import_proforma_xml.import_error')
+  #     end
+  #   end
+
+  #   context 'when an invalid file is submitted' do
+  #     let(:params) { {file_upload: fixture_file_upload('files/proforma_import/testfile_fail', 'application/txt')} }
+
+  #     it 'redirects to index' do
+  #       expect(post_query).to redirect_to action: :index
+  #     end
+
+  #     it 'flashes import error' do
+  #       expect(post_query.request.flash[:alert]).to eql I18n.t('controllers.exercise.import_proforma_xml.import_error')
+  #     end
+  #   end
+
+  #   context 'when the zip file includes multiple exercises' do
+  #     let(:params) { {file_upload: fixture_file_upload('files/proforma_import/testfile_multi.zip', 'application/zip')} }
+
+  #     it 'imports the exercises' do
+  #       expect { post_query }.to change(Exercise, :count).by(3)
+  #     end
+
+  #     it 'redirects to index' do
+  #       expect(post_query).to redirect_to action: :index
+  #     end
+
+  #     it 'flashes import success' do
+  #       expect(post_query.request.flash[:notice]).to eql I18n
+  #         .t('controllers.exercise.import_proforma_xml.multi_import_successful', count: 3)
+  #     end
+  #   end
+  # end
+
 end
