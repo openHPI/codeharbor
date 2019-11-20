@@ -14,8 +14,8 @@ class User < ApplicationRecord
   has_many :collection_users, dependent: :destroy
   has_many :collections, through: :collection_users
 
-  # has_many :account_link_users, dependent: :destroy
-  # has_many :external_account_links, through: :account_link_users, dependent: :destroy, source: :account_link
+  has_many :account_link_users, dependent: :destroy
+  has_many :external_account_links, through: :account_link_users, dependent: :destroy, source: :account_link
 
   has_many :reports, dependent: :destroy
   has_many :account_links, dependent: :destroy

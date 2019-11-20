@@ -7,8 +7,8 @@ class AccountLink < ApplicationRecord
 
   belongs_to :user, optional: false
 
-  # has_many :account_link_users, dependent: :destroy
-  # has_many :external_users, through: :account_link_users
+  has_many :account_link_users, dependent: :destroy
+  has_many :external_users, through: :account_link_users, source: :user
 
   def readable
     push_url

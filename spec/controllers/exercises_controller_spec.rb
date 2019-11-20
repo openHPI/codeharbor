@@ -706,7 +706,14 @@ RSpec.describe ExercisesController, type: :controller do
       expect(response.body).to include('successfully imported').and(include('Show exercise').and(include('Hide')))
     end
 
-    # FAIL
+    context 'when import raises a validation error' do
+      before { allow(ProformaService::ImportTask).to receive(:call).and_raise(ActiveRecord::RecordInvalid) }
+
+      it 'renders correct json' do
+        post_request
+        expect(response.body).to include('failed').and(include('Record invalid').and(include('"actions":""')))
+      end
+    end
   end
 
   # rubocop:enable RSpec/MultipleExpectations

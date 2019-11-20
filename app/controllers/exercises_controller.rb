@@ -269,7 +269,7 @@ class ExercisesController < ApplicationController
       message: t('exercises.import_exercise.successfully_imported', title: task_title),
       actions: render_to_string(partial: 'import_actions', locals: {exercise: exercise, imported: true})
     }
-  rescue StandardError => e
+  rescue Proforma::ProformaError, ActiveRecord::RecordInvalid => e
     render json: {
       status: 'failure',
       message: t('exercises.import_exercise.import_failed', title: task_title, error: e.message),

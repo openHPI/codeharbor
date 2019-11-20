@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe AccountLinksController, type: :controller do
-  let(:user) { FactoryBot.create(:user) }
+  let(:user) { create(:user) }
 
-  let(:account_link) { FactoryBot.create(:account_link) }
+  let(:account_link) { create(:account_link) }
 
   let(:valid_attributes) { FactoryBot.attributes_for(:account_link).merge(user: user) }
   let(:invalid_attributes) do
@@ -83,6 +83,16 @@ RSpec.describe AccountLinksController, type: :controller do
         account_link = AccountLink.create! valid_attributes
         delete :destroy, params: empty_params.merge(id: account_link.to_param), session: valid_session
         expect(response).to redirect_to(user)
+      end
+    end
+
+    describe 'POST remove_account_link' do
+      let(:post_request) { post :remove_account_link, params: {id: account_link.id, user_id: user.id}, session: valid_session }
+
+      before { account_link.account_link_users << AccountLinkUser.new(user: user) }
+
+      it 'removes the account_link_user from the account_link' do
+        expect { post_request }.to change(account_link.account_link_users, :count).by(-1)
       end
     end
   end

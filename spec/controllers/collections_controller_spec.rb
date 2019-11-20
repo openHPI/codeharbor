@@ -161,4 +161,133 @@ RSpec.describe CollectionsController, type: :controller do
       expect(response).to redirect_to(collections_url)
     end
   end
+
+  describe 'GET #remove_exercise' do
+    let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
+    let!(:exercise) { create(:exercise, collections: [collection]) }
+    let(:get_request) { get :remove_exercise, params: {id: collection.id, exercise: exercise.id}, session: valid_session }
+
+    it 'removes exercise from collection' do
+      expect { get_request }.to change(collection.reload.exercises, :count).by(-1)
+    end
+  end
+
+  describe 'GET #remove_all' do
+    let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
+    let(:get_request) { get :remove_all, params: {id: collection.id}, session: valid_session }
+
+    before { create_list(:exercise, 2, collections: [collection]) }
+
+    it 'removes exercise from collection' do
+      expect { get_request }.to change(collection.exercises, :count).by(-2)
+    end
+  end
+
+  describe 'GET #download_all' do
+    let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
+    let(:get_request) { get :download_all, params: {id: collection.id}, session: valid_session }
+    let(:zip) { instance_double('StringIO', string: 'dummy') }
+    let!(:exercises) { create_list(:exercise, 2, collections: [collection]) }
+
+    before { allow(ProformaService::ExportTasks).to receive(:call).with(exercises: collection.reload.exercises).and_return(zip) }
+
+    it do
+      get_request
+      expect(ProformaService::ExportTasks).to have_received(:call)
+    end
+
+    it 'updates download count' do
+      expect { get_request }.to change { exercises.first.reload.downloads }.by(1)
+    end
+
+    it 'sends the correct data' do
+      get_request
+      expect(response.body).to eql 'dummy'
+    end
+
+    it 'sets the correct Content-Type header' do
+      get_request
+      expect(response.header['Content-Type']).to eql 'application/zip'
+    end
+
+    it 'sets the correct Content-Disposition header' do
+      get_request
+      expect(response.header['Content-Disposition']).to eql "attachment; filename=\"#{collection.title}.zip\""
+    end
+  end
+
+  describe 'POST #share' do
+    let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
+    let(:post_request) { post :share, params: params, session: valid_session }
+    let(:params) { {id: collection.id, user: create(:user).email} }
+
+    it 'creates a message' do
+      expect { post_request }.to change(Message, :count).by(1)
+    end
+
+    it 'redirects to collection' do
+      post_request
+      expect(response).to redirect_to collection
+    end
+
+    it 'sets flash message' do
+      expect(post_request.request.flash[:notice]).to eql I18n.t('controllers.collections.share.notice')
+    end
+
+    context 'when no email is given' do
+      let(:params) { {id: collection.id} }
+
+      it 'does not create a message' do
+        expect { post_request }.not_to change(Message, :count)
+      end
+
+      it 'redirects to collection' do
+        post_request
+        expect(response).to redirect_to collection
+      end
+
+      it 'sets flash message' do
+        expect(post_request.request.flash[:alert]).to eql I18n.t('controllers.collections.share.alert')
+      end
+    end
+  end
+
+  describe 'POST #view_shared' do
+    let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
+    let(:post_request) { post :view_shared, params: params, session: valid_session }
+    let(:params) { {id: collection.id, user: create(:user).id} }
+
+    it 'assigns collection' do
+      post_request
+      expect(assigns(:collection)).to eq(collection)
+    end
+
+    it 'renders show' do
+      post_request
+      expect(response).to render_template('show')
+    end
+  end
+
+  describe 'POST #save_shared' do
+    let(:collection) { create(:collection, valid_attributes.merge(users: [create(:user)])) }
+    let(:post_request) { post :save_shared, params: params, session: valid_session }
+    let(:params) { {id: collection.id} }
+
+    it 'increases usercount of collection' do
+      expect { post_request }.to change(collection.reload.users, :count).from(1).to(2)
+    end
+
+    it 'adds user to collection' do
+      post_request
+      expect(collection.reload.users).to include user
+    end
+
+    it 'redirects to collection' do
+      post_request
+      expect(response).to redirect_to collection
+    end
+  end
+
+  # post push_collection later
+  # get collections_all # adminview
 end

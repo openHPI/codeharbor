@@ -91,7 +91,7 @@ class CartsController < ApplicationController
     filename = t('controllers.carts.zip_filename', date: Time.zone.today.strftime)
 
     binary_zip_data = ProformaService::ExportTasks.call(exercises: @cart.exercises)
-
+    @cart.exercises.each { |exercise| exercise.update(downloads: exercise.downloads + 1) }
     send_data(binary_zip_data.string, type: 'application/zip', filename: filename, disposition: 'attachment')
   end
 
@@ -104,7 +104,7 @@ class CartsController < ApplicationController
 
   def push_exercises
     @cart.exercises.each do |exercise|
-      error = push_exercise(exercise, @account_link)
+      error = push_exercise(exercise, @account_link) # TODO implement multi export
       errors << error if error.present?
     end
     errors
