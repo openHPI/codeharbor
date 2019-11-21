@@ -223,7 +223,7 @@ RSpec.describe ExercisesController, type: :controller do
       end
 
       context 'when exercise has a test' do
-        let(:test) { create(:codeharbor_test) }
+        let(:test) { build(:codeharbor_test) }
         let!(:exercise) { create(:simple_exercise, update_attributes.merge(tests: [test], descriptions: [build(:description, :primary)])) }
 
         let(:new_attributes) { {title: 'new title', tests_attributes: tests_attributes} }

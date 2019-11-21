@@ -66,7 +66,7 @@
             = link_to "More Information...", account_link_documentation_path
           - @user.account_links.each do |account_link|
             .table-list
-              = account_link.readable
+              = account_link.name
               .btn-group.pull-right
                 = link_to t('users.show.account_links.show'), user_account_link_path(current_user, account_link), class:'btn btn-default btn-xs'
                 = link_to edit_user_account_link_path(current_user, account_link), class:'btn btn-default btn-xs' do
@@ -84,7 +84,7 @@
         .row-value
           - @user.external_account_links.each do |account_link|
             .table-list
-              = account_link.readable
+              = account_link.name
               .btn-group.pull-right
                 = link_to t('users.show.account_links.show'), user_account_link_path(current_user, account_link), class: 'btn btn-default btn-xs'
                 = link_to remove_account_link_user_account_link_path(current_user, account_link), method: 'post', class: 'btn btn-default btn-xs' do

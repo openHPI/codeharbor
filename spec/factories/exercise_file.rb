@@ -94,9 +94,10 @@ FactoryBot.define do
     name { 'test' }
     path { '' }
     purpose { 'test' }
-    file_type { FactoryBot.create(:java_file_type) }
+    file_type { build(:java_file_type) }
     visibility { true }
     hidden { true }
     read_only { true }
+    role { 'teacher_defined_test' }
   end
 end

@@ -85,12 +85,12 @@ class CollectionsController < ApplicationController
     errors = push_exercises
 
     if errors.empty?
-      redirect_to @collection, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
+      redirect_to @collection, notice: t('controllers.exercise.push_external_notice', account_link: account_link.name)
     else
       errors.each do |error|
         logger.debug(error)
       end
-      redirect_to @collection, alert: "Your account_link #{account_link.readable} does not seem to be working."
+      redirect_to @collection, alert: "Your account_link #{account_link.name} does not seem to be working."
     end
   end
 

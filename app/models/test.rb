@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class Test < ApplicationRecord
-  belongs_to :testing_framework
+  belongs_to :testing_framework, optional: true
   belongs_to :exercise
-  belongs_to :exercise_file
+  belongs_to :exercise_file, inverse_of: :tests
   accepts_nested_attributes_for :exercise_file, allow_destroy: true
 
   def content

@@ -34,12 +34,12 @@ class Exercise < ApplicationRecord
   has_many :cart_exercises, dependent: :destroy
   has_many :carts, through: :cart_exercises
 
-  belongs_to :predecessor, class_name: 'Exercise'
+  belongs_to :predecessor, class_name: 'Exercise', optional: true
   has_one :successor, class_name: 'Exercise', foreign_key: 'predecessor_id'
 
   belongs_to :user
   belongs_to :execution_environment
-  belongs_to :license
+  belongs_to :license, optional: true
   has_many :descriptions, dependent: :destroy
   has_many :origin_relations, class_name: 'ExerciseRelation', foreign_key: 'origin_id', dependent: :destroy, inverse_of: :origin
   has_many :clone_relations, class_name: 'ExerciseRelation', foreign_key: 'clone_id', dependent: :destroy, inverse_of: :clone

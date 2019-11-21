@@ -88,7 +88,7 @@ RSpec.describe Exercise, type: :model do
     context 'when params attributes are set' do
       subject(:add_attributes) do
         exercise.add_attributes(params)
-        exercise.save
+        exercise.save!
       end
 
       let(:params) do
@@ -104,7 +104,7 @@ RSpec.describe Exercise, type: :model do
               },
               feedback_message: 'not_working',
               _destroy: false,
-              testing_framework: {name: 'pytest', id: '12345678'}
+              testing_framework_id: create(:testing_framework).id
             }
           },
           exercise_files_attributes: {
@@ -234,7 +234,7 @@ RSpec.describe Exercise, type: :model do
       end
 
       context 'when description is searched' do
-        let(:exercise) { create(:simple_exercise, user: user, descriptions: [create(:simple_description, :primary, text: 'filtertext')]) }
+        let(:exercise) { create(:simple_exercise, user: user, descriptions: [build(:simple_description, :primary, text: 'filtertext')]) }
         let(:search) { 'filtertext' }
 
         it { is_expected.to include exercise }

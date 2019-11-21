@@ -111,20 +111,20 @@ RSpec.describe ProformaService::Import do
     end
 
     context 'when exercise has multiple files with role reference implementation' do
-      let(:files) { create_list(:codeharbor_solution_file, 2) }
+      let(:files) { build_list(:codeharbor_solution_file, 2) }
 
       it { is_expected.to be_an_equal_exercise_as exercise }
     end
 
     context 'when exercise has a test' do
       let(:tests) { [test] }
-      let(:test) { create(:codeharbor_test) }
+      let(:test) { build(:codeharbor_test) }
 
       it { is_expected.to be_an_equal_exercise_as exercise }
     end
 
     context 'when exercise has multiple tests' do
-      let(:tests) { create_list(:codeharbor_test, 2) }
+      let(:tests) { build_list(:codeharbor_test, 2) }
 
       it { is_expected.to be_an_equal_exercise_as exercise }
     end
@@ -150,8 +150,8 @@ RSpec.describe ProformaService::Import do
       end
 
       context 'when a exercise has files and tests' do
-        let(:files) { [create(:codeharbor_main_file), create(:codeharbor_regular_file)] }
-        let(:tests) { create_list(:codeharbor_test, 2) }
+        let(:files) { [build(:codeharbor_main_file), build(:codeharbor_regular_file)] }
+        let(:tests) { build_list(:codeharbor_test, 2) }
 
         it 'imports the zip exactly how the were exported' do
           expect(import_service).to all be_an_equal_exercise_as(exercise).or be_an_equal_exercise_as(exercise2)

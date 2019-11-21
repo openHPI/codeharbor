@@ -139,7 +139,7 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
     end
 
     context 'when exercise has multiple files with role reference implementation' do
-      let(:files) { create_list(:codeharbor_solution_file, 2) }
+      let(:files) { build_list(:codeharbor_solution_file, 2) }
 
       it 'creates a task with two model-solutions' do
         expect(task.model_solutions).to have(2).items
@@ -148,8 +148,8 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
 
     context 'when exercise has a test' do
       let(:tests) { [test] }
-      let(:test) { create(:codeharbor_test, exercise_file: file) }
-      let(:file) { create(:codeharbor_test_file) }
+      let(:test) { build(:codeharbor_test, exercise_file: file) }
+      let(:file) { build(:codeharbor_test_file) }
 
       it 'creates a task with one test' do
         expect(task.tests).to have(1).item
@@ -189,7 +189,7 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
       end
 
       context 'when exercise_file has a custom role' do
-        let(:file) { create(:codeharbor_test_file, role: 'Very important test') }
+        let(:file) { build(:codeharbor_test_file, role: 'Very important test') }
 
         it 'creates the test file with the correct attribute' do
           expect(task.tests.first.files.first).to have_attributes(internal_description: 'Very important test')
@@ -197,7 +197,7 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
       end
 
       context 'when test has no testing_framework and feedback_message' do
-        let(:test) { create(:codeharbor_test, feedback_message: nil, testing_framework: nil) }
+        let(:test) { build(:codeharbor_test, feedback_message: nil, testing_framework: nil) }
 
         it 'does not add feedback_message to meta_data' do
           expect(task.tests.first).to have_attributes(meta_data: {})
@@ -206,7 +206,7 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
     end
 
     context 'when exercise has multiple tests' do
-      let(:tests) { create_list(:codeharbor_test, 2) }
+      let(:tests) { build_list(:codeharbor_test, 2) }
 
       it 'creates a task with two tests' do
         expect(task.tests).to have(2).items

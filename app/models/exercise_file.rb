@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 
 class ExerciseFile < ApplicationRecord
-  belongs_to :exercise
+  belongs_to :exercise, optional: true
   belongs_to :file_type
-  has_many :tests, dependent: :destroy
+  has_many :tests, dependent: :destroy, inverse_of: :exercise_file # TODO has_one
   has_attached_file :attachment, styles: ->(a) { ['image/jpeg', 'image/png', 'image/giv'].include?(a.content_type) ? {large: '900x'} : {} }
   do_not_validate_attachment_file_type :attachment
   validates :name, presence: true
   validates :hidden, inclusion: [true, false]
   validates :read_only, inclusion: [true, false]
+  validates :exercise, presence: true, unless: -> { purpose == 'test' }
 
   before_save :parse_text_data
 
