@@ -11,6 +11,7 @@ FactoryBot.define do
     hidden { false }
     read_only { false }
     role { 'main_file' }
+    exercise { build(:exercise) }
   end
 
   factory :junit_test_file, class: 'ExerciseFile' do

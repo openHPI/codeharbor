@@ -15,6 +15,8 @@ class ExerciseFile < ApplicationRecord
 
   accepts_nested_attributes_for :tests
 
+  ROLES = %w[main_file reference_implementation regular_file teacher_defined_test].freeze
+
   def full_file_name
     filename = ''
     filename += "#{path}/" if path.present?
@@ -25,7 +27,7 @@ class ExerciseFile < ApplicationRecord
   def full_file_name=(full_file_name)
     extension = File.extname(full_file_name)
     file_type = FileType.find_by(file_extension: extension)
-    raise "Filetype \"#{extension}\" doesn't exist!" if file_type.nil?
+    raise "Filetype \"#{extension}\" does not exist!" if file_type.nil?
 
     path = File.dirname(full_file_name)
     self.path = path == '.' ? '' : path
@@ -33,17 +35,8 @@ class ExerciseFile < ApplicationRecord
     self.file_type = file_type
   end
 
-  ROLES = %w[main_file reference_implementation regular_file teacher_defined_test].freeze
-
-  def parse_text_data
-    return unless %r{(text/)|(application/xml)}.match?(attachment.instance.attachment_content_type)
-
-    self.content = Paperclip.io_adapters.for(attachment.instance.attachment).read
-    self.attachment = nil
-  end
-
   def attached_image?
-    attachment.try(:content_type) =~ %r{(image/jpeg)|(image/gif)|(image/png)}
+    !(attachment.try(:content_type) =~ %r{(image/jpeg)|(image/gif)|(image/png)|(image/bmp)}).nil?
   end
 
   def duplicate(exercise: nil)
@@ -51,5 +44,14 @@ class ExerciseFile < ApplicationRecord
     exercise_file_duplicate.attachment = attachment
     exercise_file_duplicate.exercise = exercise unless exercise.nil?
     exercise_file_duplicate
+  end
+
+  private
+
+  def parse_text_data
+    return unless %r{(text/)|(application/xml)}.match?(attachment.instance.attachment_content_type)
+
+    self.content = Paperclip.io_adapters.for(attachment.instance.attachment).read
+    self.attachment = nil
   end
 end
