@@ -7,9 +7,12 @@ RSpec.describe Exercise, type: :model do
   describe '#valid?' do
     it { is_expected.to validate_presence_of(:descriptions) }
     it { is_expected.to validate_presence_of(:title) }
-    # it { is_expected.to validate_presence_of(:execution_environment) }
     it { is_expected.to validate_uniqueness_of(:uuid).case_insensitive }
+    it { is_expected.to validate_presence_of(:execution_environment) }
+    it { is_expected.to belong_to(:user) }
+    it { is_expected.to belong_to(:predecessor).optional }
 
+    # one_primary_description
     context 'when exercise has a description' do
       subject { build(:exercise, descriptions: descriptions) }
 
@@ -41,6 +44,7 @@ RSpec.describe Exercise, type: :model do
       subject { build(:exercise, private: true) }
 
       it { is_expected.not_to validate_presence_of(:license) }
+      it { is_expected.not_to validate_presence_of(:execution_environment) }
     end
 
     context 'when exercise is public' do
@@ -57,8 +61,23 @@ RSpec.describe Exercise, type: :model do
 
       it { is_expected.to be_valid }
 
+      # no_predecessor_loop
       context 'when predecessor has first exercise as predecessor' do
         before { predecessor.assign_attributes(predecessor: exercise) }
+
+        it { is_expected.not_to be_valid }
+      end
+    end
+
+    context 'with a main_file' do
+      subject { build(:exercise, exercise_files: exercise_files) }
+
+      let(:exercise_files) { [build(:codeharbor_main_file)] }
+
+      it { is_expected.to be_valid }
+
+      context 'with two main_files' do
+        let(:exercise_files) { [build(:codeharbor_main_file), build(:codeharbor_main_file)] }
 
         it { is_expected.not_to be_valid }
       end
@@ -66,7 +85,8 @@ RSpec.describe Exercise, type: :model do
   end
 
   describe '#add_attributes' do
-    let(:exercise) { create(:only_meta_data, :with_primary_description) }
+    let(:exercise) { create(:only_meta_data, :with_primary_description, downloads: downloads) }
+    let(:downloads) { 0 }
     let(:file_type) { create(:file_type) }
     let(:tests) { Test.where(exercise_id: exercise.id) }
     let(:files) { ExerciseFile.where(exercise_id: exercise.id) }
@@ -91,8 +111,15 @@ RSpec.describe Exercise, type: :model do
         exercise.save!
       end
 
+      let(:license) { create(:license) }
+      let(:relation) { create(:relation) }
+      let(:exercise_relation_param) {}
       let(:params) do
         ActionController::Parameters.new(
+          exercise_relation: exercise_relation_param,
+          groups: ['', create(:group).id],
+          labels: ['', create(:label).name],
+          license_id: license.id,
           tests_attributes: {
             '0' => {
               exercise_file_attributes: {
@@ -126,6 +153,43 @@ RSpec.describe Exercise, type: :model do
             }
           }
         )
+      end
+
+      it 'sets the license' do
+        expect { add_attributes }.to change(exercise.reload, :license).to(license)
+      end
+
+      context 'when exercise already has downloads' do
+        let(:downloads) { 1 }
+
+        it 'does not set the license' do
+          expect { add_attributes }.not_to change(exercise.reload, :license)
+        end
+      end
+
+      context 'with exercise_relation param' do
+        let(:origin_exercise) { create(:exercise) }
+        let(:exercise_relation_param) { {relation_id: relation.id, origin_id: origin_exercise.id} }
+
+        # rubocop:disable RSpec/MultipleExpectations
+        it 'sets the exercise_relation' do
+          expect(exercise.clone_relations).to be_empty
+          add_attributes
+          expect(exercise.clone_relations).not_to be_empty
+        end
+        # rubocop:enable RSpec/MultipleExpectations
+
+        it 'does not set the license' do
+          expect { add_attributes }.to change(exercise.reload, :license).to(origin_exercise.license)
+        end
+      end
+
+      it 'sets the label' do
+        expect { add_attributes }.to change(exercise.reload.labels, :size).by(1)
+      end
+
+      it 'sets the group' do
+        expect { add_attributes }.to change(exercise.reload.groups, :size).by(1)
       end
 
       it 'creates a test' do
@@ -633,6 +697,97 @@ RSpec.describe Exercise, type: :model do
 
       it 'does not create new exercise' do
         expect { update_and_version }.not_to change(described_class, :count)
+      end
+    end
+  end
+
+  describe '#soft_delete' do
+    subject(:soft_delete) { exercise.soft_delete }
+
+    let(:group) { create(:group) }
+    let(:cart) { create(:cart) }
+    let(:collection) { create(:collection) }
+    let(:relation) { create(:exercise_relation) }
+    let(:exercise) { create(:exercise, groups: [group], carts: [cart], collections: [collection], clone_relations: [relation]) }
+
+    it 'sets deleted to true' do
+      expect { soft_delete }.to change(exercise.reload, :deleted).to(true)
+    end
+
+    # rubocop:disable RSpec/MultipleExpectations
+    it 'removes group from exercise' do
+      expect(exercise.groups).not_to be_empty
+      soft_delete
+      expect(exercise.groups).to be_empty
+    end
+
+    it 'removes collection from exercise' do
+      expect(exercise.collections).not_to be_empty
+      soft_delete
+      expect(exercise.collections).to be_empty
+    end
+
+    it 'removes cart from exercise' do
+      expect(exercise.carts).not_to be_empty
+      soft_delete
+      expect(exercise.carts).to be_empty
+    end
+
+    it 'removes clone_relation from exercise' do
+      expect(exercise.clone_relations).not_to be_empty
+      soft_delete
+      expect(exercise.clone_relations).to be_empty
+    end
+    # rubocop:enable RSpec/MultipleExpectations
+  end
+
+  describe '#initialize_derivate' do
+    subject(:initialize_derivate) { exercise.initialize_derivate }
+
+    let(:exercise) { create(:exercise ) }
+    let!(:derivate_relation) { create(:relation, name: 'Derivate') }
+
+    it 'copies most attributes from exercise' do
+      expect(initialize_derivate)
+        .to have_attributes(exercise.attributes.except('id', 'created_at', 'updated_at', 'uuid', 'predecessor_id', 'state_list'))
+    end
+
+    it 'sets up a relation' do
+      expect(initialize_derivate.clone_relations).to include have_attributes(origin: exercise, relation: derivate_relation)
+    end
+
+    context 'when user param is set' do
+      subject(:initialize_derivate) { exercise.initialize_derivate(user) }
+
+      let(:user) { create(:user) }
+
+      it 'sets the user' do
+        expect(initialize_derivate.user).to be user
+      end
+    end
+  end
+
+  describe '#updatable_by?' do
+    subject(:updatable_by?) { exercise.updatable_by?(user_param) }
+
+    let(:user_param) { user }
+    let(:user) { create(:user) }
+    let(:exercise) { create(:exercise, user: user) }
+
+    it { is_expected.to be true }
+
+    context 'when user param is another user' do
+      let(:user_param) { create(:user) }
+
+      it { is_expected.to be false }
+
+      context 'when the another user is author' do
+        let(:user_param) { author_user }
+        let(:author_user) { create(:user) }
+
+        before { exercise.authors << author_user }
+
+        it { is_expected.to be true }
       end
     end
   end

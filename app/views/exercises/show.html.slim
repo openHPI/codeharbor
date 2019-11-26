@@ -81,7 +81,7 @@ legend.toggle-next
       = t('exercises.execution_environment')
       | :
     .row-value
-      = @exercise.execution_environment&.language
+      = @exercise.execution_environment&.language || t('exercises.show.none')
   .row
     .row-label
       = t('exercises.created_at')

@@ -9,10 +9,9 @@ class Exercise < ApplicationRecord
   groupify :group_member
   validates :title, presence: true
   validates :descriptions, presence: true
-  # validates :execution_environment, presence: true # same as codeocean, is nil after import...
+  validates :execution_environment, presence: true, unless: :private?
   validates :license, presence: true, unless: :private?
-  validate :no_predecessor_loop, :one_primary_description?
-  validate :valid_main_file?
+  validate :no_predecessor_loop, :one_primary_description?, :valid_main_file?
 
   validates_uniqueness_of :uuid
 
@@ -38,7 +37,7 @@ class Exercise < ApplicationRecord
   has_one :successor, class_name: 'Exercise', foreign_key: 'predecessor_id'
 
   belongs_to :user
-  belongs_to :execution_environment
+  belongs_to :execution_environment, optional: true
   belongs_to :license, optional: true
   has_many :descriptions, dependent: :destroy
   has_many :origin_relations, class_name: 'ExerciseRelation', foreign_key: 'origin_id', dependent: :destroy, inverse_of: :origin

@@ -439,11 +439,31 @@ ready =->
     importType = $(this).attr('data-import-type')
     importExerciseConfirm(importId, subfileId, importType)
 
+  $('#exercise_execution_environment_id').on 'change', ->
+    checkExecutionEnvironment()
+
+  $('input:radio[name="exercise[private]"]').on 'change', ->
+    checkExecutionEnvironment()
 
   if $('.primary-checkbox').length > 0 && $('.primary-checkbox:checked').length < 1
     $('.primary-checkbox')[0].click()
 
 $(document).on('turbolinks:load', ready)
+
+checkExecutionEnvironment = () ->
+  executionEnvironment = $('#exercise_execution_environment_id').val()
+  visibilityPrivate = $('input:radio:checked[name="exercise[private]"]').val()
+
+  if executionEnvironment == '' && visibilityPrivate == 'false'
+    console.log 'show'
+    $('.execution-environment-error').removeClass('hidden')
+    $('.execution-environment-error').addClass('errors')
+    $('.execution-environment-error').parent().find('.form-label').addClass('errors')
+  else
+    console.log 'hide'
+    $('.execution-environment-error').addClass('hidden')
+    $('.execution-environment-error').removeClass('errors')
+    $('.execution-environment-error').parent().find('.form-label').removeClass('errors')
 
 importExerciseStart = () -> #maybe unobstrusive like export?
   # console.log('start')
