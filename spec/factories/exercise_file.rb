@@ -44,6 +44,7 @@ FactoryBot.define do
     file_type { FactoryBot.create(:txt_file_type) }
     hidden { true }
     read_only { true }
+    exercise { build(:exercise) }
 
     trait(:with_attachment) do
       name { 'image' }
@@ -57,6 +58,21 @@ FactoryBot.define do
       attachment_file_name { 'image.bmp' }
       attachment_content_type { 'image/bmp' }
       file_type { FactoryBot.create(:bmp_file_type) }
+    end
+
+    trait(:with_text_attachment) do
+      name { 'text' }
+      content {}
+      attachment do
+        "data:text/plain;base64,#{Base64.encode64('lorem ipsum')}"
+      end
+      attachment_file_name { 'text.txt' }
+      attachment_content_type { 'text/plain' }
+      file_type { FactoryBot.create(:txt_file_type) }
+    end
+
+    trait :with_image_attachment do
+      with_attachment
     end
   end
 

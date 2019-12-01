@@ -19,11 +19,15 @@ class Test < ApplicationRecord
   end
 
   def file_type_id
-    exercise_file.file_type_id || ''
+    exercise_file&.file_type_id || ''
   end
 
   def file_type
     exercise_file&.file_type
+  end
+
+  def full_file_name
+    exercise_file&.full_file_name
   end
 
   def attachment
@@ -32,14 +36,10 @@ class Test < ApplicationRecord
 
   def attached_image?
     if exercise_file
-      exercise_file.attachment.try(:content_type) =~ %r{(image/jpeg)|(image/gif)|(image/png)}
+      exercise_file.attached_image?
     else
       false
     end
-  end
-
-  def full_file_name
-    exercise_file.try(:full_file_name)
   end
 
   def duplicate(exercise: nil)

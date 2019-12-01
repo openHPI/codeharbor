@@ -5,6 +5,7 @@ FactoryBot.define do
     feedback_message { 'Dude... seriously?' }
     testing_framework { build(:junit_testing_framework) }
     exercise_file { build(:junit_test_file, exercise: build(:exercise)) }
+    exercise { build(:exercise) }
   end
 
   factory :codeharbor_test, class: 'Test' do

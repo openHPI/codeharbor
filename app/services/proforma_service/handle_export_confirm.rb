@@ -17,8 +17,8 @@ module ProformaService
       end
 
       account_link = AccountLink.find(@account_link_id)
-      zip = ProformaService::ExportTask.call(exercise: @exercise)
-      error = ExerciseService::PushExternal.call(zip: zip, account_link: account_link)
+      zip_stream = ProformaService::ExportTask.call(exercise: @exercise)
+      error = ExerciseService::PushExternal.call(zip: zip_stream, account_link: account_link)
 
       [@exercise, error]
     end

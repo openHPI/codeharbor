@@ -16,8 +16,8 @@ module ExerciseService
       response_hash = JSON.parse(response.body, symbolize_names: true)
 
       {error: false}.merge(response_hash.slice(:message, :exercise_found, :update_right))
-    rescue Faraday::Error => e
-      {error: true, message: t('exercises.export_exercise.error', message: e.message)}
+    rescue Faraday::Error, JSON::ParserError
+      {error: true, message: I18n.t('exercises.export_exercise.error')}
     end
 
     private

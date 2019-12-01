@@ -6,7 +6,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
   describe '.new' do
     subject(:convert_to_exercise_service) { described_class.new(task: task, user: user, exercise: exercise) }
 
-    let(:task) { ProformaService::ConvertExerciseToTask.call(exercise: exercise) }
+    let(:task) { Proforma::Task.new }
     let(:user) { build(:user) }
     let(:exercise) { build(:exercise) }
 

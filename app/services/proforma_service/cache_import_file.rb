@@ -11,12 +11,12 @@ module ProformaService
       data = {}
       ActiveRecord::Base.transaction do
         import_file = ImportFileCache.create!(user: @user, zip_file: @zip_file)
-        ProformaService::ConvertZipToTasks.call(zip: @zip_file).each do |task|
+        ProformaService::ConvertZipToTasks.call(zip_file: @zip_file).each do |task|
           exercise = Exercise.find_by_uuid(task[:uuid])
 
           data[SecureRandom.uuid] = {path: task[:path],
                                      exists: exercise.present?,
-                                     updatable: exercise&.updatable_by?(@user),
+                                     updatable: exercise&.updatable_by?(@user) || false,
                                      import_id: import_file.id,
                                      exercise_uuid: task[:uuid]}
         end
