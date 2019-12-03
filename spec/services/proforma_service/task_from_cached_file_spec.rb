@@ -52,12 +52,10 @@ RSpec.describe ProformaService::TaskFromCachedFile do
         uuid: be_present
       )
     end
-    # rubocop:enable RSpec/ExampleLength
 
     context 'when import_type is create_new' do
       let(:import_type) { 'create_new' }
 
-      # rubocop:disable RSpec/ExampleLength
       it 'sets the attributes of task but uuid stays nil' do
         expect(task_from_cached_file).to have_attributes(
           checksum: be_present,
