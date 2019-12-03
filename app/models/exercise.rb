@@ -221,7 +221,7 @@ class Exercise < ApplicationRecord
       private: private,
       descriptions: descriptions.map(&:dup)
     ).tap do |exercise|
-      exercise.tests = duplicate_tests(exercise)
+      exercise.tests = duplicate_tests
       exercise.exercise_files = duplicate_files_without_testfiles
     end
   end
@@ -264,9 +264,9 @@ class Exercise < ApplicationRecord
     old_version = root_exercise.duplicate
     old_version.assign_attributes root_exercise.attributes.except('id', 'created_at', 'updated_at', 'uuid')
     ActiveRecord::Base.transaction do
-      update!(predecessor: nil)
+      root_exercise.update!(predecessor: nil)
       old_version.save!
-      update!(predecessor: old_version)
+      root_exercise.update!(predecessor: old_version)
     end
   end
 
@@ -294,8 +294,8 @@ class Exercise < ApplicationRecord
     end.map(&:duplicate)
   end
 
-  def duplicate_tests(exercise)
-    tests.map { |test| test.duplicate(exercise: exercise) }
+  def duplicate_tests
+    tests.map(&:duplicate)
   end
 
   def no_predecessor_loop

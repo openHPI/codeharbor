@@ -39,7 +39,9 @@ br
         - if !current_user.account_links.empty?
           - current_user.account_links.each do |acc_link|
             li
-              = link_to acc_link.name, push_cart_cart_path(account_link: acc_link), method: 'post', class: 'dropdown-item'
+              /= link_to acc_link.name, push_cart_cart_path(account_link: acc_link), method: 'post', class: 'dropdown-item'
+              a.dropdown-item title='Temporary disabled'
+                = acc_link.name
         - else
           li
             = link_to t('exercises.show.define_account_link'), new_user_account_link_path(current_user)

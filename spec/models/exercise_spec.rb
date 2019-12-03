@@ -444,7 +444,7 @@ RSpec.describe Exercise, type: :model do
 
     it 'creates the predecessor with correct attributes' do
       save_old_version
-      expect(exercise.predecessor).to have_attributes(
+      expect(exercise.reload.predecessor).to have_attributes(
         title: exercise.title,
         descriptions: have(exercise.descriptions.count).item.and(include(have_attributes(
                                                                            text: exercise.descriptions.first.text,
@@ -459,12 +459,12 @@ RSpec.describe Exercise, type: :model do
 
     it 'duplicates whole exercise' do
       save_old_version
-      expect(exercise).to be_an_equal_exercise_as exercise.predecessor
+      expect(exercise).to be_an_equal_exercise_as exercise.reload.predecessor
     end
 
     it 'does not copy critical values' do
       save_old_version
-      expect(exercise.predecessor).not_to have_attributes(
+      expect(exercise.reload.predecessor).not_to have_attributes(
         id: exercise.id,
         uuid: exercise.uuid,
         created_at: exercise.created_at,
@@ -476,12 +476,12 @@ RSpec.describe Exercise, type: :model do
       before { exercise.save_old_version }
 
       it 'creates a third exercise for the history' do
-        expect { save_old_version }.to change { exercise.complete_history.count }.from(2).to(3)
+        expect { save_old_version }.to change { exercise.reload.complete_history.count }.from(2).to(3)
       end
 
       it 'creates another predecessor' do
         save_old_version
-        expect(exercise.predecessor.predecessor).to be_a described_class
+        expect(exercise.reload.predecessor.predecessor).to be_a described_class
       end
     end
 
@@ -498,6 +498,20 @@ RSpec.describe Exercise, type: :model do
 
       it 'does not create a new Exercise' do
         expect { save_old_version }.to change(described_class, :count).by(1)
+      end
+    end
+
+    context 'when some values have already been changed' do
+      before { exercise.title = 'new_title' }
+
+      it 'creates the predecessor with the old attributes' do
+        save_old_version
+        expect(exercise.reload.predecessor.title).not_to eql 'new_title'
+      end
+
+      it 'does not change attributes of exercise itself' do
+        save_old_version
+        expect(exercise.title).to eql 'new_title'
       end
     end
   end
@@ -683,7 +697,7 @@ RSpec.describe Exercise, type: :model do
 
     it 'does not change the title of predecessor' do
       update_and_version
-      expect(exercise.predecessor.title).not_to eql('new_title')
+      expect(exercise.reload.predecessor.title).not_to eql('new_title')
     end
 
     context 'when invalid params are given' do

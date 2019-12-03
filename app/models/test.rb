@@ -42,9 +42,9 @@ class Test < ApplicationRecord
     end
   end
 
-  def duplicate(exercise: nil)
+  def duplicate
     test_duplicate = dup
-    test_duplicate.exercise_file = exercise_file.duplicate(exercise: exercise)
+    test_duplicate.exercise_file = exercise_file.duplicate
     test_duplicate
   end
 end
