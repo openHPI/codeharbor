@@ -595,6 +595,7 @@ RSpec.describe ExercisesController, type: :controller do
     end
   end
   # rubocop:enable RSpec/ExampleLength
+  # rubocop:enable RSpec/MultipleExpectations
 
   describe 'POST #import_external_exercise' do
     let(:account_link) { create(:account_link, user: user) }

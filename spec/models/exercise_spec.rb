@@ -758,7 +758,7 @@ RSpec.describe Exercise, type: :model do
   describe '#initialize_derivate' do
     subject(:initialize_derivate) { exercise.initialize_derivate }
 
-    let(:exercise) { create(:exercise ) }
+    let(:exercise) { create(:exercise) }
     let!(:derivate_relation) { create(:relation, name: 'Derivate') }
 
     it 'copies most attributes from exercise' do

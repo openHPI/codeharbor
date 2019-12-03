@@ -104,7 +104,7 @@ class CartsController < ApplicationController
 
   def push_exercises
     @cart.exercises.each do |exercise|
-      error = push_exercise(exercise, @account_link) # TODO implement multi export
+      error = push_exercise(exercise, @account_link) # TODO: implement multi export
       errors << error if error.present?
     end
     errors

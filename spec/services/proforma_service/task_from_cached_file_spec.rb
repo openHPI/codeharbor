@@ -24,7 +24,9 @@ RSpec.describe ProformaService::TaskFromCachedFile do
   end
 
   describe '#execute' do
-    subject(:task_from_cached_file) { described_class.call(import_id: import_file_cache.id, subfile_id: subfile_id, import_type: import_type) }
+    subject(:task_from_cached_file) do
+      described_class.call(import_id: import_file_cache.id, subfile_id: subfile_id, import_type: import_type)
+    end
 
     let!(:data) { ProformaService::CacheImportFile.call(user: user, zip_file: zip_file) }
     let(:user) { build(:user) }
@@ -37,7 +39,7 @@ RSpec.describe ProformaService::TaskFromCachedFile do
       expect(task_from_cached_file).to be_a Proforma::Task
     end
 
-    # rubocop:disable Rspec/ExampleLength
+    # rubocop:disable RSpec/ExampleLength
     it 'sets the attributes of task' do
       expect(task_from_cached_file).to have_attributes(
         checksum: be_present,
@@ -50,12 +52,12 @@ RSpec.describe ProformaService::TaskFromCachedFile do
         uuid: be_present
       )
     end
-    # rubocop:enable Rspec/ExampleLength
+    # rubocop:enable RSpec/ExampleLength
 
     context 'when import_type is create_new' do
       let(:import_type) { 'create_new' }
 
-      # rubocop:disable Rspec/ExampleLength
+      # rubocop:disable RSpec/ExampleLength
       it 'sets the attributes of task but uuid stays nil' do
         expect(task_from_cached_file).to have_attributes(
           checksum: be_present,
@@ -68,7 +70,7 @@ RSpec.describe ProformaService::TaskFromCachedFile do
           uuid: be_nil
         )
       end
-      # rubocop:enable Rspec/ExampleLength
+      # rubocop:enable RSpec/ExampleLength
     end
   end
 end

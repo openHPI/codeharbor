@@ -140,7 +140,7 @@ class CollectionsController < ApplicationController
   def push_exercises
     errors = []
     @collection.exercises.each do |exercise|
-      error = push_exercise(exercise, account_link) # TODO implement multi export
+      error = push_exercise(exercise, account_link) # TODO: implement multi export
       errors << error if error.present?
     end
     errors
