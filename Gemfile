@@ -74,7 +74,7 @@ group :development, :test do
   gem 'rails-controller-testing', '>= 1.0.4'
   gem 'rspec-rails', '>= 3.8.2'
   gem 'rubocop', '~> 0.77.0'
-  gem 'rubocop-rails', '~> 2.3.2'
+  gem 'rubocop-rails', '~> 2.4.0'
   gem 'rubocop-rspec', '~> 1.36.0'
 end
 
