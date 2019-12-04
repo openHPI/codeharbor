@@ -72,7 +72,7 @@ FactoryBot.define do
     end
   end
 
-  factory :complex_exercise, class: Exercise do
+  factory :complex_exercise, class: 'Exercise' do
     title { 'Codeharbor Export Test' }
     descriptions { [FactoryBot.create(:simple_description, :primary)] }
     execution_environment { FactoryBot.create(:java_8_execution_environment) }
