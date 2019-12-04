@@ -67,6 +67,7 @@ gem 'nested_form_fields', '>= 0.8.2'
 gem 'nokogiri'
 gem 'proforma', git: 'https://github.com/openHPI/proforma.git', tag: 'v0.3.2'
 gem 'select2-rails', '~> 4.0', '>= 4.0.3'
+gem 'sprockets', '~> 3.7.2'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -76,9 +77,9 @@ group :development, :test do
   gem 'rails-controller-testing', '>= 1.0.4'
   gem 'rspec-collection_matchers', '~> 1.1.3'
   gem 'rspec-rails', '>= 3.8.2'
-  gem 'rubocop', '~> 0.76.0'
-  gem 'rubocop-rails', '~> 2.3.2'
-  gem 'rubocop-rspec', '~> 1.36.0'
+  gem 'rubocop', '~> 0.77.0'
+  gem 'rubocop-rails', '~> 2.4.0'
+  gem 'rubocop-rspec', '~> 1.37.0'
 end
 
 group :development do
