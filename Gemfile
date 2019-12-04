@@ -64,6 +64,7 @@ gem 'nested_form_fields', '>= 0.8.2'
 gem 'nokogiri'
 gem 'oauth2', '~> 1.4.0'
 gem 'select2-rails', '~> 4.0', '>= 4.0.3'
+gem 'sprockets', '~> 3.7.2'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

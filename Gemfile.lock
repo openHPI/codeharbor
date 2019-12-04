@@ -402,6 +402,7 @@ DEPENDENCIES
   simplecov
   slim-rails (>= 3.2.0)
   spring
+  sprockets (~> 3.7.2)
   therubyracer
   turbolinks
   twitter-bootstrap-rails!
