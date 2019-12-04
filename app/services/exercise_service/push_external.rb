@@ -11,9 +11,9 @@ module ExerciseService
       body = @zip.string
       begin
         response = connection.post { |request| request_parameters(request, body) }
-        return response.success? ? nil : response.body
+        response.success? ? nil : response.body
       rescue StandardError => e
-        return e
+        e
       end
     end
 
