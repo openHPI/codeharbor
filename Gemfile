@@ -29,7 +29,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '>= 5.0.0'
 
 # Use puma instead of WEBrick
-gem 'puma'
+gem 'puma', '>= 4.3.1'
 # Use simple_form
 gem 'simple_form', '>= 5.0.1'
 # Use jquery as the JavaScript library
@@ -90,7 +90,7 @@ group :development do
   gem 'capistrano-rails', '~> 1.4', require: false
   gem 'capistrano-rvm'
   gem 'capistrano-upload-config'
-  gem 'capistrano3-puma'
+  gem 'capistrano3-puma', '>= 4.0.0'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
