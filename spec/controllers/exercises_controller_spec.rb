@@ -437,9 +437,7 @@ RSpec.describe ExercisesController, type: :controller do
     let(:post_request) do
       post :export_external_check, params: {id: exercise.id, account_link: account_link.id}, session: valid_session, format: :js, xhr: true
     end
-    let(:external_check_hash) do
-      {message: message, exercise_found: exercise_found, update_right: true, error: error}
-    end
+    let(:external_check_hash) { {message: message, exercise_found: exercise_found, update_right: true, error: error} }
     let(:message) { 'message' }
     let(:exercise_found) { true }
     let(:error) { nil }
@@ -683,7 +681,6 @@ RSpec.describe ExercisesController, type: :controller do
     end
   end
 
-  # RSpec::Support::ObjectFormatter.default_instance.max_formatted_output_length = 99999
   describe 'POST #import_exercise_confirm' do
     render_views
 

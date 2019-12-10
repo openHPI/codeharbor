@@ -76,7 +76,7 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
           usage_by_lms: 'display',
           visible: 'no',
           binary: false,
-          internal_description: 'Regular File'
+          internal_description: 'regular_file'
         )
       end
 

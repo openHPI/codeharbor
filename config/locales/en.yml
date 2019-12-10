@@ -628,9 +628,9 @@ en:
       import_failed: 'Import of exercise (%{title}) failed. <br> Error: %{error}'
       imported_exercise_header: 'Imported exercise:'
       check:
-        no_exercise: No corresponding exercise found on Codeocean. Pushing this exercise will create a new one on Codeocean, which will be linked to this one on Codeharbor, any changes to either one can be pushed to the respective other platform.
-        exercise_found: A corresponding exercise has been found on Codeocean. You can either <ul><li>Create a new exercise as a duplicate of this one on Codeharbor and push it to Codeocean, using the "Create new" button.</li><li>Overwrite the exercise on Codeocean, by pushing all changes. Only use "Overwrite" for bugfixes or very small changes - it will alter and may break published exercises.</li></ul>
-        exercise_found_no_right: A corresponding exercise has been found on Codeocean, but you don't have the rights to edit it. You can only <ul><li>Create a new exercise as a duplicate of this one on Codeharbor and push it to Codeocean, using the "Create new" button.</li></ul>
+        no_exercise: No corresponding exercise found on Codeharbor. Pushing this exercise will create a new one on Codeharbor, which will be linked to this one on Codeocean, any changes to either one can be pushed to the respective other platform.
+        exercise_found: A corresponding exercise has been found on Codeharbor. You can <ul><li>Export the exercise to Codeharbor, by pushing all changes. Only use "Export" for bugfixes or very small changes. This will overwrite any conflicting information stored on Codeharbor</li></ul>
+        exercise_found_no_right: A corresponding exercise has been found on Codeharbor, but you don't have the rights to edit it. You can only <ul><li>Push this exercise as a new exercise to Codeharbor, using the "Create new" button. This exercise will not be linked to the new one on Codeharbor, you will not be able to push changes in either direction.</li></ul>
       convert_zip:
         nested_too_deep: Zip is nested too deep.
     new_tag: new

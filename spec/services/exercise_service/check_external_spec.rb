@@ -66,7 +66,7 @@ RSpec.describe ExerciseService::CheckExternal do
     end
 
     context 'when the request fails' do
-      before { allow(Faraday).to receive(:new).and_raise(Faraday::Error) }
+      before { allow(Faraday).to receive(:new).and_raise(Faraday::Error, 'error') }
 
       it 'returns the correct hash' do
         expect(check_external_service).to eql(error: true, message: I18n.t('exercises.export_exercise.error'))

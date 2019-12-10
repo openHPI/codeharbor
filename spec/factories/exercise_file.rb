@@ -40,7 +40,7 @@ FactoryBot.define do
     content { '// Please name a java package for basic input/output operations' }
     name { 'explanation' }
     path { '' }
-    role { 'Regular File' }
+    role { 'regular_file' }
     file_type { FactoryBot.create(:txt_file_type) }
     hidden { true }
     read_only { true }
