@@ -42,6 +42,7 @@ secrets.yml
 # simplecov
 coverage
 .idea
+*.iml
 .ssh
 
 # Ignore application configuration
