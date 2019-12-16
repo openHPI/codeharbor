@@ -33,9 +33,9 @@ module ExerciseExport
     xml_document = xml_generator.generate_xml(exercise)
     begin
       token.post(account_link.push_url, body: xml_document, headers: {'Content-Type' => 'text/xml'})
-      return nil
+      nil
     rescue StandardError => e
-      return e
+      e
     end
   end
 
