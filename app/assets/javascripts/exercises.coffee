@@ -203,9 +203,7 @@ ready =->
   $('#import-exercise-button').on 'click', (e) ->
     e.preventDefault()
     e.stopPropagation()
-    console.log('click')
     importExerciseStart()
-    # return false
 
   $('#exercise_import').on 'change', ->
     fullPath = document.getElementById('exercise_import').value
@@ -308,7 +306,6 @@ ready =->
       return
     related_exercises = $(this).siblings('.content').children()
     last_shown_element = $(related_exercises).filter('.displayed').last()
-    # console.log(last_shown_element)
     index = $(related_exercises).index(last_shown_element)
     shown_elements = $(related_exercises).slice(index+1)
     if shown_elements.size() > 3
@@ -455,18 +452,15 @@ checkExecutionEnvironment = () ->
   visibilityPrivate = $('input:radio:checked[name="exercise[private]"]').val()
 
   if executionEnvironment == '' && visibilityPrivate == 'false'
-    console.log 'show'
     $('.execution-environment-error').removeClass('hidden')
     $('.execution-environment-error').addClass('errors')
     $('.execution-environment-error').parent().find('.form-label').addClass('errors')
   else
-    console.log 'hide'
     $('.execution-environment-error').addClass('hidden')
     $('.execution-environment-error').removeClass('errors')
     $('.execution-environment-error').parent().find('.form-label').removeClass('errors')
 
-importExerciseStart = () -> #maybe unobstrusive like export?
-  # console.log('start')
+importExerciseStart = () ->
   formData = new FormData()
   formData.append('zip_file', document.getElementById('exercise_import').files[0])
 
@@ -476,8 +470,6 @@ importExerciseStart = () -> #maybe unobstrusive like export?
     data: formData,
     processData: false,
     contentType: false,
-    # success: (response) ->
-      # console.log(response)
     error: (a, b, c) ->
       alert('error: ' + c)
   })
@@ -493,8 +485,6 @@ importExerciseConfirm = (importId, subfileId, importType) ->
     data: {import_id: importId, subfile_id: subfileId, import_type: importType},
     dataType: 'json',
     success: (response) ->
-      console.log('Confirm done')
-      console.log(response)
       $messageDiv.html response.message
       $actionsDiv.html response.actions
 
@@ -522,10 +512,6 @@ exportExerciseStart = (exerciseID) ->
     data: {account_link: accountLinkID},
     dataType: 'json',
     success: (response) ->
-      # if response.error
-      #   $messageDiv.html(response.error)
-      #   $actionsDiv.html('Retry?')
-
       $messageDiv.html(response.message)
       $actionsDiv.html(response.actions)
     error: (a, b, c) ->
@@ -551,15 +537,9 @@ exportExerciseConfirm = (exerciseID, accountLinkID, pushType) ->
         $exerciseDiv.addClass 'import-export-success'
       else
         $exerciseDiv.addClass 'import-export-failure'
-
-      # checkExportDialog()
     error: (a, b, c) ->
       alert('error:' + c)
   })
-
-# checkExportDialog = () ->
-  # if $('#import-export-modal-body').children(':not(.import-export-success)').length == 0
-  #   setTimeout (-> $('#import-export-dialog').modal('hide')), 3000
 
 # export function to make it accessible from outside this scope
 root = exports ? this; root.exportExerciseStart = exportExerciseStart
