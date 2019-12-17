@@ -122,6 +122,14 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
             attachment_file_size: 7
           )
         end
+
+        context 'when mimetype is not set' do
+          let(:mimetype) {}
+
+          it 'raises an error' do
+            expect { convert_to_exercise_service }.to raise_error Proforma::MimetypeError, I18n.t('exercises.import_exercise.mimetype_error', filename: 'filename.txt')
+          end
+        end
       end
 
       context 'when usage_by_lms is edit' do

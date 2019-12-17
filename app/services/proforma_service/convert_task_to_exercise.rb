@@ -63,7 +63,9 @@ module ProformaService
     end
 
     def file_base64(file)
-      "data:#{file.mimetype || 'image/jpeg'};base64,#{Base64.encode64(file.content)}"
+      raise Proforma::MimetypeError, I18n.t('exercises.import_exercise.mimetype_error', filename: file.filename) unless file.mimetype
+
+      "data:#{file.mimetype};base64,#{Base64.encode64(file.content)}"
     end
 
     def tests

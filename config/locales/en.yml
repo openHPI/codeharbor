@@ -633,6 +633,7 @@ en:
         exercise_found_no_right: A corresponding exercise has been found on Codeharbor, but you don't have the rights to edit it. You can only <ul><li>Push this exercise as a new exercise to Codeharbor, using the "Create new" button. This exercise will not be linked to the new one on Codeharbor, you will not be able to push changes in either direction.</li></ul>
       convert_zip:
         nested_too_deep: Zip is nested too deep.
+      mimetype_error: No mimetype found for %{filename}
     new_tag: new
     updated_tag: updated
     remove_state: remove state
