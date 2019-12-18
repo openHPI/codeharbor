@@ -39,7 +39,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
         language: 'language',
         model_solutions: model_solutions,
         files: files,
-        tests: tests,
+        tests: tests
       )
     end
     let(:user) { build(:user) }
