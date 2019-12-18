@@ -127,7 +127,9 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
           let(:mimetype) {}
 
           it 'raises an error' do
-            expect { convert_to_exercise_service }.to raise_error Proforma::MimetypeError, I18n.t('exercises.import_exercise.mimetype_error', filename: 'filename.txt')
+            expect { convert_to_exercise_service }.to raise_error(
+              Proforma::MimetypeError, I18n.t('exercises.import_exercise.mimetype_error', filename: 'filename.txt')
+            )
           end
         end
       end

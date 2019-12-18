@@ -220,19 +220,11 @@ class ExercisesController < ApplicationController
     user = user_for_api_request
     return render json: {}, status: 401 if user.nil?
 
-    uuid = params[:uuid]
-    exercise = Exercise.find_by(uuid: uuid)
-    return render json: {exercise_found: false, message: t('exercises.import_exercise.check.no_exercise')} if exercise.nil?
+    exercise = Exercise.find_by(uuid: params[:uuid])
+    return render json: {exercise_found: false} if exercise.nil?
+    return render json: {exercise_found: true, update_right: false} unless exercise.updatable_by?(user)
 
-    unless exercise.updatable_by?(user)
-      return render json: {
-        exercise_found: true,
-        update_right: false,
-        message: t('exercises.import_exercise.check.exercise_found_no_right')
-      }
-    end
-
-    render json: {exercise_found: true, update_right: true, message: t('exercises.import_exercise.check.exercise_found')}
+    render json: {exercise_found: true, update_right: true}
   end
 
   def import_external_exercise
