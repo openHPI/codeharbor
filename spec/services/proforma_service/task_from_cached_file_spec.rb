@@ -42,7 +42,6 @@ RSpec.describe ProformaService::TaskFromCachedFile do
     # rubocop:disable RSpec/ExampleLength
     it 'sets the attributes of task' do
       expect(task_from_cached_file).to have_attributes(
-        checksum: be_present,
         description: be_present,
         internal_description: be_present,
         language: be_present,
@@ -58,7 +57,6 @@ RSpec.describe ProformaService::TaskFromCachedFile do
 
       it 'sets the attributes of task but uuid stays nil' do
         expect(task_from_cached_file).to have_attributes(
-          checksum: be_present,
           description: be_present,
           internal_description: be_present,
           language: be_present,

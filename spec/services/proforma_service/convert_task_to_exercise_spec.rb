@@ -40,8 +40,6 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
         model_solutions: model_solutions,
         files: files,
         tests: tests,
-        import_checksum: 'import_checksum',
-        checksum: 'checksum'
       )
     end
     let(:user) { build(:user) }
