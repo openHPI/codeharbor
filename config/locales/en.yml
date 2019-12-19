@@ -19,7 +19,13 @@
 # To learn more, please read the Rails Internationalization guide
 # available at http://guides.rubyonrails.org/i18n.html.
 
+
+# activerecord.errors.models.exercise.attributes.execution_environment.blank
 en:
+  activerecord:
+    attributes:
+      exercise:
+        execution_environment: Programming language
 
   controllers:
     account_links:
@@ -622,15 +628,15 @@ en:
         abort: Abort
         close: Close
         hide: Hide
+      check:
+        no_exercise: No corresponding exercise found on Codeocean. Pushing this exercise will create a new exercise on Codeocean, which will be linked to this one on Codeharbor. Any changes to either one can be pushed to the respective other platform.
+        exercise_found: 'A corresponding exercise has been found on Codeocean. You can: <ul><li><b>Overwrite</b> the exercise on Codeocean. This will transfer all changes made on Codeharbor to Codeocean.<br>Careful: This will overwrite all potential changes made on Codeocean. This will change (and might break) the exercise, even if it is currently in use by a course.</li><li><b>Create a new</b> exercise which copies the current state of this exercise. This will create a copy of this exercise on Codeharbor, which will then be exported as a completly new exercise to Codeocean.</li></ul>'
+        exercise_found_no_right: "A corresponding exercise has been found on Codeocean, but you don't have the rights to edit it. You can: <ul><li><b>Create a new</b> exercise which copies the current state of this exercise. This will create a copy of this exercise on Codeharbor, which will then be exported as a completly new exercise to Codeocean.</li></ul>"
 
     import_exercise:
       successfully_imported: Exercise (%{title}) successfully imported.
       import_failed: 'Import of exercise (%{title}) failed. <br> Error: %{error}'
       imported_exercise_header: 'Imported exercise:'
-      check:
-        no_exercise: No corresponding exercise found on Codeharbor. Pushing this exercise will create a new one on Codeharbor, which will be linked to this one on Codeocean, any changes to either one can be pushed to the respective other platform.
-        exercise_found: A corresponding exercise has been found on Codeharbor. You can <ul><li>Export the exercise to Codeharbor, by pushing all changes. Only use "Export" for bugfixes or very small changes. This will overwrite any conflicting information stored on Codeharbor</li></ul>
-        exercise_found_no_right: A corresponding exercise has been found on Codeharbor, but you don't have the rights to edit it. You can only <ul><li>Push this exercise as a new exercise to Codeharbor, using the "Create new" button. This exercise will not be linked to the new one on Codeharbor, you will not be able to push changes in either direction.</li></ul>
       convert_zip:
         nested_too_deep: Zip is nested too deep.
       mimetype_error: No mimetype found for %{filename}

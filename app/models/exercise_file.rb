@@ -16,6 +16,7 @@ class ExerciseFile < ApplicationRecord
   accepts_nested_attributes_for :tests
 
   ROLES = %w[main_file reference_implementation regular_file teacher_defined_test].freeze
+  TEST_ROLE = %w[teacher_defined_test].freeze
 
   def full_file_name
     filename = ''
