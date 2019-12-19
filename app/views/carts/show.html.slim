@@ -40,7 +40,7 @@ br
           - current_user.account_links.each do |acc_link|
             li
               /= link_to acc_link.name, push_cart_cart_path(account_link: acc_link), method: 'post', class: 'dropdown-item'
-              a.dropdown-item title='Temporary disabled'
+              a.dropdown-item title=t('controllers.carts.temporary_disabled')
                 = acc_link.name
         - else
           li

@@ -43,6 +43,7 @@ en:
       remove_all_success: 'All Exercises were successfully removed'
       remove_all_fail: 'You cannot remove all exercises'
       zip_filename: 'cart_exercises_%{date}.zip'
+      temporary_disabled: Temporary disabled
 
     collections:
       authorization: "You are not authorized to for this action."
@@ -60,6 +61,7 @@ en:
       save_shared:
         notice: "You can now collaborate to collection."
         alert: "Something went wrong."
+      temporary_disabled: Temporary disabled
 
     exercise:
       choose_file: "You need to choose a file."
@@ -90,6 +92,20 @@ en:
         import_error: "Import of submitted ZIP file failed."
         no_file_present: No importable file found in ZIP file
         internal_error: An internal error occurred on Codeharbor while importing the exercise.
+        actions:
+          show_exercise: Show exercise
+          import: Import
+          import_copy: Import as copy
+          overwrite: Overwrite
+        dialog:
+          exercise_with_uuid: 'Exercise-UUID: %{exercise_uuid}'
+          path: 'path: %{path}'
+        choose_file: choose file
+        import: Import
+      execution_environment:
+        not_empty_while_public: Can't be empty while visibility is set to public
+      visibility:
+        not_public_without_exenv: Can't be public while programming language is not set
 
     exercise_file:
       authorization: "You are not authorized to for this action."
@@ -181,6 +197,9 @@ en:
         reference: 'Reference Implementation'
         main: 'Main File'
         regular: 'Regular File'
+    exercise_file:
+      errors:
+        no_filetype: Filetype "%{extension}" does not exist!
 
   error: "error "
   sure: "Are you sure?"

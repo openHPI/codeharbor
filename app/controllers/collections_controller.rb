@@ -90,7 +90,7 @@ class CollectionsController < ApplicationController
       errors.each do |error|
         logger.debug(error)
       end
-      redirect_to @collection, alert: "Your account_link #{account_link.name} does not seem to be working."
+      redirect_to @collection, alert: t('controllers.account_links.not_working', account_link: account_link.name)
     end
   end
 

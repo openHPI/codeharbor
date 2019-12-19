@@ -21,8 +21,8 @@
             li
               = file_field_tag 'exercise_import', accept: '.zip', class: 'inputfile'
               .btn-group style="display:inline-flex"
-                = label_tag 'exercise_import', 'choose file', id: 'file-label', class: 'btn btn-default'
-                = submit_tag 'Import', id: 'import-exercise-button', class: 'btn btn-default'
+                = label_tag 'exercise_import', t('controllers.exercise.import_proforma_xml.choose_file'), id: 'file-label', class: 'btn btn-default'
+                = submit_tag t('controllers.exercise.import_proforma_xml.import'), id: 'import-exercise-button', class: 'btn btn-default'
 
   br
   .search-container

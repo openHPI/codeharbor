@@ -28,7 +28,7 @@ class ExerciseFile < ApplicationRecord
   def full_file_name=(full_file_name)
     extension = File.extname(full_file_name)
     file_type = FileType.find_by(file_extension: extension)
-    raise "Filetype \"#{extension}\" does not exist!" if file_type.nil?
+    raise t('models.exercise_file.errors.no_filetype', extension: extension) if file_type.nil?
 
     path = File.dirname(full_file_name)
     self.path = path == '.' ? '' : path
