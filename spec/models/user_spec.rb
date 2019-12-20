@@ -4,6 +4,15 @@ require 'rails_helper'
 require 'nokogiri'
 
 RSpec.describe User, type: :model do
+  describe '#valid?' do
+    it { is_expected.to validate_presence_of(:email) }
+    it { is_expected.to validate_presence_of(:username) }
+    it { is_expected.to validate_presence_of(:first_name) }
+    it { is_expected.to validate_presence_of(:last_name) }
+    it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
+    it { is_expected.to validate_uniqueness_of(:username).case_insensitive }
+  end
+
   describe 'cart count' do
     let!(:user) { FactoryBot.create(:user) }
     let!(:exercise1) { FactoryBot.create(:simple_exercise) }
