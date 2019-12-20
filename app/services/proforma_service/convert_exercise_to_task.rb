@@ -96,26 +96,28 @@ module ProformaService
     end
 
     def task_file(file)
-      Proforma::TaskFile.new(
-        {
-          id: file.id,
-          filename: file.full_file_name,
-          usage_by_lms: file.read_only ? 'display' : 'edit',
-          visible: file.hidden ? 'no' : 'yes',
-          internal_description: file.role || 'regular_file'
-        }.tap do |params|
-          if file.attachment.exists?
-            params[:content] = attachment_content(file)
-            params[:used_by_grader] = false
-            params[:binary] = true
-            params[:mimetype] = file.attachment_content_type
-          else
-            params[:content] = file.content
-            params[:used_by_grader] = true
-            params[:binary] = false
-          end
-        end
+      task_file = Proforma::TaskFile.new(
+        id: file.id,
+        filename: file.full_file_name,
+        usage_by_lms: file.read_only ? 'display' : 'edit',
+        visible: file.hidden ? 'no' : 'yes',
+        internal_description: file.role || 'regular_file'
       )
+      add_content_to_task_file(file, task_file)
+      task_file
+    end
+
+    def add_content_to_task_file(file, task_file)
+      if file.attachment.exists?
+        task_file.content = attachment_content(file)
+        task_file.used_by_grader = false
+        task_file.binary = true
+        task_file.mimetype = file.attachment_content_type
+      else
+        task_file.content = file.content
+        task_file.used_by_grader = true
+        task_file.binary = false
+      end
     end
 
     def attachment_content(file)
