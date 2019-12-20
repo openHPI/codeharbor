@@ -57,7 +57,6 @@ gem 'devise-bootstrap-views', '~> 1.0'
 gem 'twitter-bootstrap-rails', git: 'https://github.com/seyhunak/twitter-bootstrap-rails.git'
 
 gem 'acts-as-taggable-on', '~> 6.0'
-gem 'better_errors' # !!!Important!!! move this to the development group before codeharbor goes really productive!!!Important!!!
 gem 'config'
 gem 'faraday'
 gem 'font-awesome-rails', '>= 4.7.0.5'
@@ -84,6 +83,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'better_errors'
   gem 'guard'
   gem 'guard-rspec'
   gem 'rack-mini-profiler'
