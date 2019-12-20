@@ -1,41 +1,39 @@
 # frozen_string_literal: true
 
-require 'oauth2'
 require 'zip'
 
 # rubocop:disable Metrics/ClassLength
 class ExercisesController < ApplicationController
-  load_and_authorize_resource except: [:import_proforma_xml]
-  before_action :set_exercise, only: %i[show edit update destroy add_to_cart add_to_collection push_external contribute remove_state]
+  load_and_authorize_resource except: %i[import_external_exercise import_uuid_check]
+  before_action :set_exercise, only: %i[show edit update destroy add_to_cart add_to_collection push_external contribute
+                                        remove_state export_external_start export_external_check]
   before_action :set_search, only: [:index]
   before_action :handle_search_params, only: :index
-  skip_before_action :verify_authenticity_token, only: [:import_proforma_xml]
-
-  include ExerciseExport
+  skip_before_action :verify_authenticity_token, only: %i[import_external_exercise import_uuid_check]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.exercise.authorization')
   end
 
+  # rubocop:disable Metrics/AbcSize will be fixed with ransack
   def index
-    order_param = {average_rating: :desc}
-    order_param = {created_at: :desc} if @order == 'order_created'
-
+    page = params[:page]
     @exercises = Exercise.active
-                         .search(params[:search], params[:settings], @option, current_user).order(order_param)
-                         .paginate(per_page: 5, page: params[:page])
+                         .search(params[:search], params[:settings], @option, current_user)
+                         .order(@order == 'order_created' ? {created_at: :desc} : {average_rating: :desc})
+                         .paginate(per_page: 5, page: page)
+
+    last_page = @exercises.total_pages
+    @exercises = @exercises.page(last_page) if page.to_i > last_page
   end
+  # rubocop:enable Metrics/AbcSize
 
   def show
-    exercise_relation = ExerciseRelation.find_by(clone_id: @exercise.id)
-    @exercise_relation = exercise_relation if exercise_relation
-    if @exercise.ratings
-      user_rating = @exercise.ratings.find_by(user: current_user)
-      @user_rating = user_rating.rating if user_rating
-    end
+    @user_rating = @exercise.ratings&.find_by(user: current_user)&.rating
+    @exercise_relation = ExerciseRelation.find_by(clone_id: @exercise.id)
 
-    @files = ExerciseFile.where(exercise: @exercise)
-    @tests = Test.where(exercise: @exercise)
+    @files = @exercise.exercise_files
+    @tests = @exercise.tests
   end
 
   def new
@@ -90,10 +88,9 @@ class ExercisesController < ApplicationController
   end
 
   def update
-    @exercise.add_attributes(params[:exercise])
     @exercise.state_list = []
     respond_to do |format|
-      if @exercise.update_and_version(exercise_params)
+      if @exercise.update_and_version(exercise_params, params[:exercise])
         format.html { redirect_to @exercise, notice: t('controllers.exercise.updated') }
         format.json { render :show, status: :ok, location: @exercise }
       else
@@ -164,16 +161,54 @@ class ExercisesController < ApplicationController
     end
   end
 
-  def push_external
-    account_link = AccountLink.find(params[:account_link])
-    error = push_exercise(@exercise, account_link)
-    if error.nil?
-      redirect_to @exercise, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
-    else
-      logger.debug(error)
-      redirect_to @exercise, alert: t('controllers.account_links.not_working', account_link: account_link.readable)
+  def export_external_start
+    @account_link = AccountLink.find(params[:account_link])
+    respond_to do |format|
+      format.js { render layout: false }
     end
   end
+
+  def export_external_check
+    external_check = ExerciseService::CheckExternal.call(uuid: @exercise.uuid,
+                                                         account_link: AccountLink.find(params[:account_link]))
+    render json: {
+      message: external_check[:message],
+      actions: render_to_string(
+        partial: 'export_actions',
+        locals: {
+          exercise: @exercise,
+          exercise_found: external_check[:exercise_found],
+          update_right: external_check[:update_right],
+          error: external_check[:error],
+          exported: false
+        }
+      )
+    }, status: 200
+  end
+
+  # rubocop:disable Metrics/AbcSize
+  def export_external_confirm
+    push_type = params[:push_type]
+
+    return render json: {}, status: 500 unless %w[create_new export].include? push_type
+
+    exercise, error = ProformaService::HandleExportConfirm.call(user: current_user, exercise: @exercise,
+                                                                push_type: push_type, account_link_id: params[:account_link])
+    exercise_title = exercise.title
+
+    if error.nil?
+      render json: {
+        message: t('exercises.export_exercise.successfully_exported', title: exercise_title),
+        status: 'success', actions: render_export_actions(exercise, true)
+      }
+    else
+      render json: {
+        message: t('exercises.export_exercise.export_failed', title: exercise_title, error: error),
+        status: 'fail', actions: render_export_actions(exercise, false, error)
+      }
+    end
+  end
+  # rubocop:enable Metrics/AbcSize
 
   def download_exercise
     zip_file = ProformaService::ExportTask.call(exercise: @exercise)
@@ -181,34 +216,57 @@ class ExercisesController < ApplicationController
     send_data(zip_file.string, type: 'application/zip', filename: "task_#{@exercise.id}.zip", disposition: 'attachment')
   end
 
-  # rubocop:disable Metrics/AbcSize
-  def import_proforma_xml
-    user = user_for_oauth2_request
-    exercise = Exercise.new
-    request_body = request.body.read
-    doc = Nokogiri::XML(request_body)
-    importer = Proforma::Importer.new
-    exercise = importer.from_proforma_xml(exercise, doc)
-    exercise.user = user
-    saved = exercise.save
-    if saved
-      render text: t('controllers.exercise.import_proforma_xml.success'), status: 200
-    else
-      logger.info(exercise.errors.full_messages)
-      render text: t('controllers.exercise.import_proforma_xml.invalid'), status: 400
-    end
-  rescue StandardError => e
-    raise e unless e.class == Hash
+  def import_uuid_check
+    user = user_for_api_request
+    return render json: {}, status: 401 if user.nil?
 
-    render text: e.message, status: e.status
+    exercise = Exercise.find_by(uuid: params[:uuid])
+    return render json: {exercise_found: false} if exercise.nil?
+    return render json: {exercise_found: true, update_right: false} unless exercise.updatable_by?(user)
+
+    render json: {exercise_found: true, update_right: true}
   end
-  # rubocop:enable Metrics/AbcSize
 
-  def import_exercise
-    uploaded_io = params[:file_upload]
-    raise t('controllers.exercise.choose_file') unless uploaded_io
+  def import_external_exercise
+    user = user_for_api_request
+    tempfile = tempfile_from_string(request.body.read.force_encoding('UTF-8'))
 
-    handle_proforma_import(zip: uploaded_io, user: current_user)
+    ProformaService::Import.call(zip: tempfile, user: user)
+
+    render json: t('controllers.exercise.import_proforma_xml.success'), status: 201
+  rescue Proforma::ProformaError
+    render json: t('controllers.exercise.import_proforma_xml.invalid'), status: 400
+  rescue StandardError
+    render json: t('controllers.exercise.import_proforma_xml.internal_error'), status: 500
+  end
+
+  def import_exercise_start
+    zip_file = params[:zip_file]
+    raise t('controllers.exercise.choose_file') unless zip_file.presence
+
+    @data = ProformaService::CacheImportFile.call(user: current_user, zip_file: zip_file)
+
+    respond_to do |format|
+      format.js { render layout: false }
+    end
+  end
+
+  def import_exercise_confirm
+    task = ProformaService::TaskFromCachedFile.call(import_exercise_confirm_params.to_hash.symbolize_keys)
+
+    exercise = ProformaService::ImportTask.call(task: task, user: current_user)
+    task_title = task.title
+    render json: {
+      status: 'success',
+      message: t('exercises.import_exercise.successfully_imported', title: task_title),
+      actions: render_to_string(partial: 'import_actions', locals: {exercise: exercise, imported: true})
+    }
+  rescue Proforma::ProformaError, ActiveRecord::RecordInvalid => e
+    render json: {
+      status: 'failure',
+      message: t('exercises.import_exercise.import_failed', title: task_title, error: e.message),
+      actions: ''
+    }
   end
 
   def contribute
@@ -328,31 +386,22 @@ class ExercisesController < ApplicationController
     @exercise = Exercise.find(params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
   def exercise_params
     params.require(:exercise).permit(:title, :instruction, :maxrating, :private, :execution_environment_id)
   end
 
-  def user_for_oauth2_request
+  def import_exercise_confirm_params
+    params.permit(:import_id, :subfile_id, :import_type)
+  end
+
+  def user_for_api_request
     authorization_header = request.headers['Authorization']
-    raise(status: 401, message: t('controllers.exercise.import_proforma_xml.no_header')) if authorization_header.nil?
-
-    oauth2_token = oauth_token_from_header(authorization_header)
-    raise(status: 401, message: t('controllers.exercise.import_proforma_xml.no_token')) if oauth2_token.blank?
-
-    user = user_by_code_harbor_token(oauth2_token)
-    raise(status: 401, message: t('controllers.exercise.import_proforma_xml.unknown_token')) if user.nil?
-
-    user
+    api_key = authorization_header&.split(' ')&.second
+    user_by_api_key(api_key)
   end
 
-  def oauth_token_from_header(header)
-    header.split(' ')[1]
-  end
-
-  def user_by_code_harbor_token(oauth2_token)
-    link = AccountLink.where(oauth2_token: oauth2_token)[0]
-    return link.user unless link.nil?
+  def user_by_api_key(api_key)
+    AccountLink.find_by_api_key(api_key)&.user
   end
 
   def handle_proforma_import(zip:, user:)
@@ -372,6 +421,17 @@ class ExercisesController < ApplicationController
       redirect_to exercises_path,
                   notice: t('controllers.exercise.import_proforma_xml.multi_import_successful', count: result.length)
     end
+  end
+
+  def tempfile_from_string(string)
+    Tempfile.new('codeharbor_import.zip').tap do |tempfile|
+      tempfile.write string
+      tempfile.rewind
+    end
+  end
+
+  def render_export_actions(exercise, exported, error = nil)
+    render_to_string(partial: 'export_actions', locals: {exercise: exercise, exported: exported, error: error})
   end
 end
 # rubocop:enable Metrics/ClassLength

@@ -151,7 +151,7 @@ RSpec.describe ProformaService::ExportTask do
     end
 
     context 'when exercise has multiple files with role reference implementation' do
-      let(:files) { create_list(:codeharbor_solution_file, 2) }
+      let(:files) { build_list(:codeharbor_solution_file, 2) }
 
       it 'adds test node to tests node' do
         expect(xml.xpath('/task/model-solutions/model-solution')).to have(2).items
@@ -160,7 +160,7 @@ RSpec.describe ProformaService::ExportTask do
 
     context 'when exercise has a test' do
       let(:tests) { [test] }
-      let(:test) { create(:codeharbor_test) }
+      let(:test) { build(:codeharbor_test) }
 
       it 'adds test node to tests node' do
         expect(xml.xpath('/task/tests/test')).to have(1).item
@@ -204,7 +204,7 @@ RSpec.describe ProformaService::ExportTask do
     end
 
     context 'when exercise has multiple tests' do
-      let(:tests) { create_list(:codeharbor_test, 2) }
+      let(:tests) { build_list(:codeharbor_test, 2) }
 
       it 'adds test node to tests node' do
         expect(xml.xpath('/task/tests/test')).to have(2).item

@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :collection do
     title { 'Some Collection' }
-    users { [FactoryBot.create(:user)] }
-    exercises { [FactoryBot.create(:simple_exercise), FactoryBot.create(:simple_exercise)] }
+    users { [build(:user)] }
+    exercises { [build(:simple_exercise), build(:simple_exercise)] }
   end
 end

@@ -88,10 +88,48 @@ RSpec.describe ExercisesController, type: :controller do
 
   describe 'GET #show' do
     let!(:exercise) { create(:simple_exercise, valid_attributes) }
+    let(:get_request) { get :show, params: {id: exercise.to_param}, session: valid_session }
 
-    it 'assigns the requested exercise as @exercise' do
-      get :show, params: {id: exercise.to_param}, session: valid_session
+    it 'assigns the requested exercise to instance variable' do
+      get_request
       expect(assigns(:exercise)).to eq(exercise)
+    end
+
+    context 'when exercise has an exercises_file' do
+      let!(:file) { create(:exercise_file, exercise: exercise) }
+
+      it "assigns exercise's files to instance variable" do
+        get_request
+        expect(assigns(:files)).to include(file)
+      end
+    end
+
+    context 'when exercise has an exercises_file' do
+      let!(:test) { create(:test, exercise: exercise) }
+
+      it "assigns exercise's tests to instance variable" do
+        get_request
+        expect(assigns(:tests)).to include(test)
+      end
+    end
+
+    context 'when user has rated exercise before' do
+      let!(:rating) { create(:rating, user: user, exercise: exercise) }
+
+      it 'assigns user_rating to instance variable' do
+        get_request
+        expect(assigns(:user_rating)).to eq(rating.rating)
+      end
+    end
+
+    context 'when exercise has been cloned' do
+      let!(:cloned_exercise) { create(:simple_exercise) }
+      let!(:relation) { create(:exercise_relation, origin: exercise, clone: cloned_exercise) }
+
+      it 'assigns user_rating to instance variable' do
+        get :show, params: {id: cloned_exercise.to_param}, session: valid_session
+        expect(assigns(:exercise_relation)).to eq(relation).and(be_a(ExerciseRelation))
+      end
     end
   end
 
@@ -185,7 +223,7 @@ RSpec.describe ExercisesController, type: :controller do
       end
 
       context 'when exercise has a test' do
-        let(:test) { create(:codeharbor_test) }
+        let(:test) { build(:codeharbor_test) }
         let!(:exercise) { create(:simple_exercise, update_attributes.merge(tests: [test], descriptions: [build(:description, :primary)])) }
 
         let(:new_attributes) { {title: 'new title', tests_attributes: tests_attributes} }
@@ -292,88 +330,6 @@ RSpec.describe ExercisesController, type: :controller do
     end
   end
 
-  describe 'POST #import_exercise' do
-    let(:post_query) { post :import_exercise, params: params, session: valid_session }
-    let(:params) { {} }
-
-    before do
-      create(:file_type, file_extension: '.java')
-    end
-
-    it 'returns an error' do
-      expect { post_query }.to raise_error(I18n.t('controllers.exercise.choose_file'))
-    end
-
-    context 'when a valid zip file is submitted' do
-      let(:params) { {file_upload: fixture_file_upload('files/proforma_import/testfile.zip', 'application/zip')} }
-
-      it 'imports the exercise' do
-        expect { post_query }.to change(Exercise, :count).by(1)
-      end
-
-      it 'redirects to imported exercise' do
-        expect(post_query).to redirect_to action: :show, id: Exercise.last.id
-      end
-
-      it 'flashes import success' do
-        expect(post_query.request.flash[:notice]).to eql I18n.t('controllers.exercise.import_proforma_xml.single_import_successful')
-      end
-    end
-
-    context 'when an invalid zip file is submitted' do
-      let(:params) { {file_upload: fixture_file_upload('files/proforma_import/testfile_fail.zip', 'application/zip')} }
-
-      it 'redirects to index' do
-        expect(post_query).to redirect_to action: :index
-      end
-
-      it 'flashes import error' do
-        expect(post_query.request.flash[:alert]).to eql I18n.t('controllers.exercise.import_proforma_xml.no_file_present')
-      end
-    end
-
-    context 'when an zip with an invalid xml file is submitted' do
-      let(:params) { {file_upload: fixture_file_upload('files/proforma_import/testfile_fail_xml.zip', 'application/zip')} }
-
-      it 'redirects to index' do
-        expect(post_query).to redirect_to action: :index
-      end
-
-      it 'flashes import error' do
-        expect(post_query.request.flash[:alert]).to eql I18n.t('controllers.exercise.import_proforma_xml.import_error')
-      end
-    end
-
-    context 'when an invalid file is submitted' do
-      let(:params) { {file_upload: fixture_file_upload('files/proforma_import/testfile_fail', 'application/txt')} }
-
-      it 'redirects to index' do
-        expect(post_query).to redirect_to action: :index
-      end
-
-      it 'flashes import error' do
-        expect(post_query.request.flash[:alert]).to eql I18n.t('controllers.exercise.import_proforma_xml.import_error')
-      end
-    end
-
-    context 'when the zip file includes multiple exercises' do
-      let(:params) { {file_upload: fixture_file_upload('files/proforma_import/testfile_multi.zip', 'application/zip')} }
-
-      it 'imports the exercises' do
-        expect { post_query }.to change(Exercise, :count).by(3)
-      end
-
-      it 'redirects to index' do
-        expect(post_query).to redirect_to action: :index
-      end
-
-      it 'flashes import success' do
-        expect(post_query.request.flash[:notice]).to eql I18n
-          .t('controllers.exercise.import_proforma_xml.multi_import_successful', count: 3)
-      end
-    end
-  end
-
   describe '#download_exercise' do
     let(:exercise) { create(:simple_exercise) }
 
@@ -452,6 +408,303 @@ RSpec.describe ExercisesController, type: :controller do
                             exercise: exercise.predecessor.predecessor, version: 1)
           )
         end
+      end
+    end
+  end
+
+  describe '#export_external_start' do
+    let(:exercise) { create(:simple_exercise, valid_attributes) }
+    let(:account_link) { create(:account_link, user: user) }
+    let(:get_request) do
+      get :export_external_start, params: {id: exercise.id, account_link: account_link.id}, session: valid_session, format: :js, xhr: true
+    end
+
+    it 'renders export_external_start javascript' do
+      get_request
+      expect(response).to render_template('export_external_start')
+    end
+  end
+
+  # rubocop:disable RSpec/ExampleLength
+  # rubocop:disable RSpec/MultipleExpectations
+  RSpec::Matchers.define_negated_matcher :not_include, :include
+
+  describe '#export_external_check' do
+    render_views
+
+    let!(:exercise) { create(:simple_exercise, valid_attributes).reload }
+    let(:account_link) { create(:account_link, user: user) }
+    let(:post_request) do
+      post :export_external_check, params: {id: exercise.id, account_link: account_link.id}, session: valid_session, format: :js, xhr: true
+    end
+    let(:external_check_hash) { {message: message, exercise_found: exercise_found, update_right: true, error: error} }
+    let(:message) { 'message' }
+    let(:exercise_found) { true }
+    let(:error) { nil }
+
+    before do
+      allow(ExerciseService::CheckExternal).to receive(:call).with(uuid: exercise.uuid, account_link: account_link)
+                                                             .and_return(external_check_hash)
+    end
+
+    it 'renders the correct contents as json' do
+      post_request
+      expect(JSON.parse(response.body).symbolize_keys[:message]).to eq('message')
+      expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+        include('button').and(include('Abort').and(include('Overwrite')).and(include('Create new')))
+      )
+      expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+        not_include('Retry').and(not_include('Hide'))
+      )
+    end
+
+    context 'when there is an error' do
+      let(:error) { 'error' }
+
+      it 'renders the correct contents as json' do
+        post_request
+        expect(JSON.parse(response.body).symbolize_keys[:message]).to eq('message')
+        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+          include('button').and(include('Abort')).and(include('Retry'))
+        )
+        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+          not_include('Overwrite').and(not_include('Create new')).and(not_include('Export')).and(not_include('Hide'))
+        )
+      end
+    end
+
+    context 'when exercise_found is false' do
+      let(:exercise_found) { false }
+
+      it 'renders the correct contents as json' do
+        post_request
+        expect(JSON.parse(response.body).symbolize_keys[:message]).to eq('message')
+        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+          include('button').and(include('Abort')).and(include('Export'))
+        )
+        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+          not_include('Overwrite').and(not_include('Create new')).and(not_include('Hide'))
+        )
+      end
+    end
+  end
+
+  describe '#export_external_confirm' do
+    render_views
+
+    let(:exercise) { create(:simple_exercise, valid_attributes) }
+    let(:account_link) { create(:account_link, user: user) }
+    let(:post_request) do
+      post :export_external_confirm, params: {push_type: push_type, id: exercise.id, account_link: account_link.id},
+                                     session: valid_session, format: :js, xhr: true
+    end
+    let(:push_type) { 'create_new' }
+    let(:error) {}
+
+    before do
+      allow(ProformaService::HandleExportConfirm).to receive(:call)
+        .with(user: user, exercise: exercise, push_type: push_type, account_link_id: account_link.to_param)
+        .and_return([exercise, error])
+    end
+
+    it 'renders correct response' do
+      post_request
+
+      expect(response).to have_http_status(:success)
+      expect(JSON.parse(response.body).symbolize_keys[:message]).to(include('successfully exported'))
+      expect(JSON.parse(response.body).symbolize_keys[:status]).to(eql('success'))
+      expect(JSON.parse(response.body).symbolize_keys[:actions]).to(include('button').and(include('Hide')))
+      expect(JSON.parse(response.body).symbolize_keys[:actions]).to(not_include('Retry').and(not_include('Abort')))
+    end
+
+    context 'when an error occurs' do
+      let(:error) { 'exampleerror' }
+
+      it 'renders correct response' do
+        post_request
+        expect(response).to have_http_status(:success)
+        expect(JSON.parse(response.body).symbolize_keys[:message]).to(include('failed').and(include('exampleerror')))
+        expect(JSON.parse(response.body).symbolize_keys[:status]).to(eql('fail'))
+        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(include('button').and(include('Retry')).and(include('Abort')))
+        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(not_include('Hide'))
+      end
+    end
+
+    context 'without push_type' do
+      let(:push_type) {}
+
+      it 'responds with status 500' do
+        post_request
+        expect(response).to have_http_status(:internal_server_error)
+      end
+    end
+  end
+
+  describe '#import_uuid_check' do
+    let!(:exercise) { create(:simple_exercise, valid_attributes) }
+    let(:account_link) { create(:account_link, user: user) }
+    let(:uuid) { exercise.reload.uuid }
+    let(:post_request) { post :import_uuid_check, params: {uuid: uuid} }
+    let(:headers) { {'Authorization' => "Bearer #{account_link.api_key}"} }
+
+    before { request.headers.merge! headers }
+
+    it 'renders correct response' do
+      post_request
+      expect(response).to have_http_status(:success)
+
+      expect(JSON.parse(response.body).symbolize_keys).to eql(exercise_found: true, update_right: true)
+    end
+
+    context 'when api_key is incorrect' do
+      let(:headers) { {'Authorization' => 'Bearer XXXXXX'} }
+
+      it 'renders correct response' do
+        post_request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'when the user is cannot update the exercise' do
+      let(:account_link) { create(:account_link, api_key: 'anotherkey') }
+
+      it 'renders correct response' do
+        post_request
+        expect(response).to have_http_status(:success)
+
+        expect(JSON.parse(response.body).symbolize_keys).to eql(exercise_found: true, update_right: false)
+      end
+    end
+
+    context 'when the searched exercise does not exist' do
+      let(:uuid) { 'anotheruuid' }
+
+      it 'renders correct response' do
+        post_request
+        expect(response).to have_http_status(:success)
+
+        expect(JSON.parse(response.body).symbolize_keys).to eql(exercise_found: false)
+      end
+    end
+  end
+  # rubocop:enable RSpec/ExampleLength
+  # rubocop:enable RSpec/MultipleExpectations
+
+  describe 'POST #import_external_exercise' do
+    let(:account_link) { create(:account_link, user: user) }
+
+    let(:post_request) { post :import_external_exercise, body: zip_file_content }
+    let(:zip_file_content) { 'zipped task xml' }
+    let(:headers) { {'Authorization' => "Bearer #{account_link.api_key}"} }
+
+    before do
+      request.headers.merge! headers
+      allow(ProformaService::Import).to receive(:call)
+    end
+
+    it 'responds with correct status code' do
+      post_request
+      expect(response).to have_http_status(:created)
+    end
+
+    it 'calls service' do
+      post_request
+      expect(ProformaService::Import).to have_received(:call).with(zip: be_a(Tempfile).and(has_content(zip_file_content)), user: user)
+    end
+
+    context 'when import fails with ProformaError' do
+      before { allow(ProformaService::Import).to receive(:call).and_raise(Proforma::PreImportValidationError) }
+
+      it 'responds with correct status code' do
+        post_request
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+
+    context 'when import fails due to another error' do
+      before { allow(ProformaService::Import).to receive(:call).and_raise(StandardError) }
+
+      it 'responds with correct status code' do
+        post_request
+        expect(response).to have_http_status(:internal_server_error)
+      end
+    end
+  end
+
+  describe 'POST #import_exercise_start' do
+    render_views
+
+    let(:post_request) { post :import_exercise_start, params: {zip_file: zip_file}, session: valid_session, format: :js, xhr: true }
+    let(:zip_file) { fixture_file_upload('files/proforma_import/testfile.zip', 'application/zip') }
+
+    before { allow(ProformaService::CacheImportFile).to receive(:call).and_call_original }
+
+    it 'renders correct views' do
+      post_request
+      expect(response).to render_template('import_exercise_start', 'import_dialog_content')
+    end
+
+    it 'creates an ImportFileCache' do
+      expect { post_request }.to change(ImportFileCache, :count).by(1)
+    end
+
+    it 'calls service' do
+      post_request
+      expect(ProformaService::CacheImportFile).to have_received(:call).with(user: user, zip_file: be_a(ActionDispatch::Http::UploadedFile))
+    end
+
+    it 'renders import view for one exercise' do
+      post_request
+      expect(response.body.scan('data-import-id').count).to be 1
+    end
+
+    context 'when file contains three tasks' do
+      let(:zip_file) { fixture_file_upload('files/proforma_import/testfile_multi.zip', 'application/zip') }
+
+      it 'renders import view for three exercises' do
+        post_request
+        expect(response.body.scan('data-import-id').count).to be 3
+      end
+    end
+
+    context 'when no file is submitted' do
+      let(:zip_file) {}
+
+      it 'raises error' do
+        expect { post_request }.to raise_error('You need to choose a file.')
+      end
+    end
+  end
+
+  describe 'POST #import_exercise_confirm' do
+    render_views
+
+    let(:zip_file) { fixture_file_upload('files/proforma_import/testfile_multi.zip', 'application/zip') }
+    let(:data) { ProformaService::CacheImportFile.call(user: user, zip_file: zip_file) }
+    let(:import_data) { data.first }
+    let(:post_request) do
+      post :import_exercise_confirm,
+           params: {import_id: import_data[1][:import_id], subfile_id: import_data[0], import_type: 'export'},
+           session: valid_session, xhr: true
+    end
+
+    before { create(:file_type, file_extension: '.java') }
+
+    it 'creates the exercise' do
+      expect { post_request }.to change(Exercise, :count).by(1)
+    end
+
+    it 'renders correct json' do
+      post_request
+      expect(response.body).to include('successfully imported').and(include('Show exercise').and(include('Hide')))
+    end
+
+    context 'when import raises a validation error' do
+      before { allow(ProformaService::ImportTask).to receive(:call).and_raise(ActiveRecord::RecordInvalid) }
+
+      it 'renders correct json' do
+        post_request
+        expect(response.body).to include('failed').and(include('Record invalid').and(include('"actions":""')))
       end
     end
   end

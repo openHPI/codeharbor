@@ -10,8 +10,6 @@ class CartsController < ApplicationController
     redirect_to root_path, alert: t('controllers.carts.authorization')
   end
 
-  include ExerciseExport
-
   def index
     @carts = Cart.all
   end
@@ -80,12 +78,12 @@ class CartsController < ApplicationController
     errors = push_exercises
 
     if errors.empty?
-      redirect_to @cart, notice: t('controllers.exercise.push_external_notice', account_link: @account_link.readable)
+      redirect_to @cart, notice: t('controllers.exercise.push_external_notice', account_link: @account_link.name)
     else
       errors.each do |error|
         logger.error(error)
       end
-      redirect_to @cart, alert: t('controllers.account_links.not_working', account_link: @account_link.readable)
+      redirect_to @cart, alert: t('controllers.account_links.not_working', account_link: @account_link.name)
     end
   end
 
@@ -93,7 +91,7 @@ class CartsController < ApplicationController
     filename = t('controllers.carts.zip_filename', date: Time.zone.today.strftime)
 
     binary_zip_data = ProformaService::ExportTasks.call(exercises: @cart.exercises)
-
+    @cart.exercises.each { |exercise| exercise.update(downloads: exercise.downloads + 1) }
     send_data(binary_zip_data.string, type: 'application/zip', filename: filename, disposition: 'attachment')
   end
 
@@ -106,7 +104,7 @@ class CartsController < ApplicationController
 
   def push_exercises
     @cart.exercises.each do |exercise|
-      error = push_exercise(exercise, @account_link)
+      error = push_exercise(exercise, @account_link) # TODO: implement multi export
       errors << error if error.present?
     end
     errors

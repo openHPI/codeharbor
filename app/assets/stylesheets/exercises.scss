@@ -248,11 +248,11 @@ $exercise-color: #006600;
   padding: 5px 10px 5px 10px;
 }
 
-#import-button {
+#import-exercise-button {
   background-color: #d3d3d3;
 }
 
-#import-button:hover {
+#import-exercise-button:hover {
   background-color: #d0d0d0;
 }
 
@@ -378,14 +378,15 @@ input[type="radio"]:checked+label {
 }
 
 .primary-checkbox:checked+label {
-  background-color: #CCC;
+  background-color: #060;
+  color: white;
 }
 
 .primary-checkbox+label {
   border-color: #AAA;
   background-color: #FFF;
   display: inline;
-  padding: 10px 25px;
+  padding: 5px 15px;
 }
 
 .full-window-button{
@@ -672,4 +673,69 @@ input[type="radio"]:checked+label {
 
 .exercise-panel {
   min-height: 155px;
+}
+
+.import-export-button {
+  width: 100%;
+  text-align: left;
+}
+
+.export-button-icon {
+  margin-right: 0.4em;
+}
+
+.import-export-exercise{
+  display: flex;
+}
+
+.import-export-message {
+  flex-grow: 1;
+  padding-right: 5px;
+}
+
+.import-export-exercise-actions {
+  max-width: 110px;
+  min-width: 110px;
+}
+
+.import-export-exercise + .import-export-exercise {
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px solid lightgrey;
+}
+
+.import-export-success {
+  color: darkgreen;
+  font-size: 12pt;
+  font-weight: 600;
+}
+
+.confirm-icon {
+  color: #080;
+}
+
+.confirm-icon-alt {
+  color: #008;
+}
+
+.abort-icon {
+  color: #800;
+}
+
+.spinner-border {
+  border: 8px solid #f3f3f3; /* Light grey */
+  border-top: 8px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.errors {
+  color: darkred;
 }

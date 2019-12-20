@@ -51,6 +51,32 @@ RSpec.describe ProformaService::Import do
       expect(import_service.user).to be user
     end
 
+    it 'sets the uuid' do
+      expect(import_service.uuid).not_to be_blank
+    end
+
+    context 'when no exercise exists' do
+      before { exercise.destroy }
+
+      it { is_expected.to be_valid }
+
+      it 'sets the correct user as owner of the exercise' do
+        expect(import_service.user).to be user
+      end
+
+      it 'sets the uuid' do
+        expect(import_service.uuid).not_to be_blank
+      end
+
+      context 'when task has a uuid' do
+        let(:uuid) { SecureRandom.uuid }
+
+        it 'sets the uuid' do
+          expect(import_service.uuid).to eql uuid
+        end
+      end
+    end
+
     context 'when exercise has a mainfile' do
       let(:files) { [file] }
       let(:file) { build(:codeharbor_main_file) }
@@ -85,20 +111,20 @@ RSpec.describe ProformaService::Import do
     end
 
     context 'when exercise has multiple files with role reference implementation' do
-      let(:files) { create_list(:codeharbor_solution_file, 2) }
+      let(:files) { build_list(:codeharbor_solution_file, 2) }
 
       it { is_expected.to be_an_equal_exercise_as exercise }
     end
 
     context 'when exercise has a test' do
       let(:tests) { [test] }
-      let(:test) { create(:codeharbor_test) }
+      let(:test) { build(:codeharbor_test) }
 
       it { is_expected.to be_an_equal_exercise_as exercise }
     end
 
     context 'when exercise has multiple tests' do
-      let(:tests) { create_list(:codeharbor_test, 2) }
+      let(:tests) { build_list(:codeharbor_test, 2) }
 
       it { is_expected.to be_an_equal_exercise_as exercise }
     end
@@ -124,8 +150,8 @@ RSpec.describe ProformaService::Import do
       end
 
       context 'when a exercise has files and tests' do
-        let(:files) { create_list(:codeharbor_main_file, 2) }
-        let(:tests) { create_list(:codeharbor_test, 2) }
+        let(:files) { [build(:codeharbor_main_file), build(:codeharbor_regular_file)] }
+        let(:tests) { build_list(:codeharbor_test, 2) }
 
         it 'imports the zip exactly how the were exported' do
           expect(import_service).to all be_an_equal_exercise_as(exercise).or be_an_equal_exercise_as(exercise2)
@@ -138,9 +164,7 @@ RSpec.describe ProformaService::Import do
       let(:new_uuid) { SecureRandom.uuid }
 
       before do
-        old_checksum = exercise.checksum
         exercise.update(uuid: new_uuid)
-        allow(exercise).to receive(:checksum).and_return(old_checksum)
       end
 
       it 'creates a new Exercise' do
@@ -164,41 +188,6 @@ RSpec.describe ProformaService::Import do
 
         it 'creates a new Exercise' do
           expect(import_service.id).not_to be exercise.id
-        end
-      end
-
-      context 'when exercise has been changed after export' do
-        before { exercise.update(title: 'new title') }
-
-        it 'creates a new Exercise' do
-          expect(import_service.id).not_to be exercise.id
-        end
-
-        context 'when matching import_checksum is given' do
-          let(:xml) do
-            Zip::File.open(zip_file.path) do |zip_file|
-              return zip_file.glob('task.xml').first.get_input_stream.read
-            end
-          end
-          let(:doc) { Nokogiri::XML(xml, &:noblanks) }
-
-          before do
-            doc.xpath('/xmlns:task/xmlns:meta-data/c:checksum').first
-               .add_next_sibling "<c:import-checksum>#{exercise.checksum}</c:import-checksum>"
-
-            File.open(zip_file.path, 'wb') do |file|
-              file.write(
-                Zip::OutputStream.write_buffer do |zio|
-                  zio.put_next_entry('task.xml')
-                  zio.write doc.to_xml
-                end.string
-              )
-            end
-          end
-
-          it 'updates the old Exercise' do
-            expect(import_service.id).to be exercise.id
-          end
         end
       end
     end

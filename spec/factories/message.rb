@@ -3,5 +3,7 @@
 FactoryBot.define do
   factory :message do
     text { 'Messagetext' }
+    sender { build(:user) }
+    recipient { build(:user) }
   end
 end

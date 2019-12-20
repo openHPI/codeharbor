@@ -16,7 +16,7 @@ table.table
     - @account_links.each do |account_link|
       tr
         td
-          = account_link.readable
+          = account_link.name
         - if account_link.user.first_name.nil?
           td
             = link_to "User#{account_link.user.id}", user_path(account_link.user)

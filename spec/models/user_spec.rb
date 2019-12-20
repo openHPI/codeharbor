@@ -32,7 +32,7 @@ RSpec.describe User, type: :model do
   describe 'is_author' do
     let!(:user1) { FactoryBot.create(:user) }
     let!(:user2) { FactoryBot.create(:user) }
-    let!(:exercise) { FactoryBot.create(:exercise_with_author, authors: [user1]) }
+    let!(:exercise) { FactoryBot.create(:exercise, authors: [user1]) }
 
     it 'returns true for author' do
       expect(user1.author?(exercise)).to be true

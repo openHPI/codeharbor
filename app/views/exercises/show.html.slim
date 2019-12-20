@@ -81,7 +81,7 @@ legend.toggle-next
       = t('exercises.execution_environment')
       | :
     .row-value
-      = @exercise.execution_environment.language
+      = @exercise.execution_environment&.language || t('exercises.show.none')
   .row
     .row-label
       = t('exercises.created_at')
@@ -162,7 +162,7 @@ legend.toggle-next
         = @exercise.in_collections
   .row
     .row-label
-      = 'UUID'
+      = t('exercises.uuid')
     .row-value
       = @exercise.uuid
 legend.toggle-next
@@ -230,7 +230,7 @@ legend.toggle-next
               = t('exercises.files.role')
               | :
             .row-value
-              = file.role
+              = t("exercises.files.roles.#{file.role}")
 
 legend.toggle-next
   span.number = '4'
@@ -336,10 +336,11 @@ legend.toggle-next
             - if !current_user.account_links.empty?
               - current_user.account_links.each do |acc_link|
                 li
-                  = link_to acc_link.account_name, push_external_exercise_path(account_link: acc_link), method: 'post', class: 'dropdown-item'
+                  = link_to acc_link.name, export_external_start_exercise_path(account_link: acc_link), remote: true, class: 'dropdown-item export-test'
             - else
               li
                 = link_to t('exercises.show.define_account_link'), new_user_account_link_path(current_user)
+
   .button-box
     .button-description
       = "Derivate, translate or port this Exercise by duplicating it. The duplicate will be owned by you."
@@ -408,3 +409,6 @@ div class=("history-box with-borders") data-exercise=@exercise.id
 = form_tag report_exercise_path(@exercise), id: 'report'
 
 #page_end style="margin-top: 20px"
+
+
+= render 'import_export_dialog'

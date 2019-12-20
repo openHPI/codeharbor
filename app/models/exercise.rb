@@ -9,9 +9,10 @@ class Exercise < ApplicationRecord
   groupify :group_member
   validates :title, presence: true
   validates :descriptions, presence: true
-  validates :execution_environment, presence: true
+  validates :execution_environment, presence: true, unless: :private?
   validates :license, presence: true, unless: :private?
-  validate :no_predecessor_loop, :one_primary_description?
+  validate :no_predecessor_loop, :one_primary_description?, :valid_main_file?
+
   validates_uniqueness_of :uuid
 
   has_many :exercise_files, dependent: :destroy
@@ -32,12 +33,12 @@ class Exercise < ApplicationRecord
   has_many :cart_exercises, dependent: :destroy
   has_many :carts, through: :cart_exercises
 
-  belongs_to :predecessor, class_name: 'Exercise'
+  belongs_to :predecessor, class_name: 'Exercise', optional: true
   has_one :successor, class_name: 'Exercise', foreign_key: 'predecessor_id'
 
   belongs_to :user
-  belongs_to :execution_environment
-  belongs_to :license
+  belongs_to :execution_environment, optional: true
+  belongs_to :license, optional: true
   has_many :descriptions, dependent: :destroy
   has_many :origin_relations, class_name: 'ExerciseRelation', foreign_key: 'origin_id', dependent: :destroy, inverse_of: :origin
   has_many :clone_relations, class_name: 'ExerciseRelation', foreign_key: 'clone_id', dependent: :destroy, inverse_of: :clone
@@ -210,6 +211,107 @@ class Exercise < ApplicationRecord
   end
   # rubocop:enable Metrics/AbcSize
 
+  def soft_delete
+    delete_dependencies
+    update(deleted: true)
+  end
+
+  def duplicate
+    Exercise.new(
+      private: private,
+      descriptions: descriptions.map(&:dup)
+    ).tap do |exercise|
+      exercise.tests = duplicate_tests
+      exercise.exercise_files = duplicate_files_without_testfiles
+    end
+  end
+
+  def initialize_derivate(user = nil)
+    derivate = duplicate
+    derivate.assign_attributes attributes.except('id', 'created_at', 'updated_at', 'uuid', 'predecessor_id')
+
+    derivate.clone_relations << ExerciseRelation.new(origin: self, relation: Relation.find_by(name: 'Derivate'))
+    derivate.user = user if user
+    derivate
+  end
+
+  def last_successor
+    successor.nil? ? self : successor.last_successor
+  end
+
+  def complete_history
+    latest_exercise = last_successor
+    history = [latest_exercise]
+    return history unless latest_exercise.valid?
+
+    history + latest_exercise.all_predecessors
+  end
+
+  def all_predecessors
+    predecessors = []
+    return predecessors unless valid?
+
+    current = predecessor
+    until current.nil?
+      predecessors << current
+      current = current.predecessor
+    end
+    predecessors
+  end
+
+  def save_old_version
+    root_exercise = Exercise.unscoped.find(id)
+    old_version = root_exercise.duplicate
+    old_version.assign_attributes root_exercise.attributes.except('id', 'created_at', 'updated_at', 'uuid')
+    ActiveRecord::Base.transaction do
+      root_exercise.update!(predecessor: nil)
+      old_version.save!
+      root_exercise.update!(predecessor: old_version)
+    end
+  end
+
+  # this needs to be fixed with proper nested forms
+  def update_and_version(exercise_params, add_attributes_params)
+    ActiveRecord::Base.transaction do
+      save_old_version
+      add_attributes(add_attributes_params)
+      return true if update(exercise_params)
+
+      raise ActiveRecord::Rollback
+    end
+    false
+  end
+
+  def updatable_by?(user)
+    Ability.new(user).can?(:update, self)
+  end
+
+  private
+
+  def duplicate_files_without_testfiles
+    exercise_files.reject do |file|
+      file.exercise.tests.map(&:exercise_file).include? file
+    end.map(&:duplicate)
+  end
+
+  def duplicate_tests
+    tests.map(&:duplicate)
+  end
+
+  def no_predecessor_loop
+    errors.add(:predecessors, 'are looped') if predecessor_loop?
+  end
+
+  def one_primary_description?
+    primary_description_count = descriptions.select(&:primary?).count
+    errors.add(:exercise, 'has more than one primary descriptions') if primary_description_count > 1
+    errors.add(:exercise, 'has no primary description') if primary_description_count < 1
+  end
+
+  def valid_main_file?
+    errors.add(:files, 'max 1 mainfile') if exercise_files.select { |f| f.role == 'main_file' }.count > 1
+  end
+
   def add_relation(relation_array)
     relation = ExerciseRelation.find_by(clone: self)
     if !relation
@@ -252,19 +354,21 @@ class Exercise < ApplicationRecord
     end
   end
 
+  # rubocop:disable Metrics/AbcSize
   def add_descriptions(description_array)
     description_array.try(:each) do |_key, array|
       destroy_param = array[:_destroy]
       id = array[:id]
 
       if id
-        description = Description.find(id)
+        description = descriptions.detect { |desc| desc.id.to_s == id }
         destroy_param ? description.destroy : description.update(text: array[:text], language: array[:language], primary: array[:primary])
       else
         descriptions.new(text: array[:text], language: array[:language], primary: array[:primary]) unless destroy_param
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def add_files(file_array)
     file_array&.each do |_key, params|
@@ -336,11 +440,6 @@ class Exercise < ApplicationRecord
     clone_relations.delete_all
   end
 
-  def soft_delete
-    delete_dependencies
-    update(deleted: true)
-  end
-
   def file_permit(params)
     params = update_file_params(params)
     allowed_params = %i[role content path name hidden read_only file_type_id]
@@ -350,39 +449,6 @@ class Exercise < ApplicationRecord
 
   def test_permit(params)
     params.permit(:feedback_message, :testing_framework_id)
-  end
-
-  def duplicate
-    Exercise.new(
-      private: private,
-      descriptions: descriptions.map(&:dup),
-      tests: tests.map(&:dup),
-      exercise_files: exercise_files.map(&:dup)
-    )
-  end
-
-  def last_successor
-    successor.nil? ? self : successor.last_successor
-  end
-
-  def complete_history
-    latest_exercise = last_successor
-    history = [latest_exercise]
-    return history unless latest_exercise.valid?
-
-    history + latest_exercise.all_predecessors
-  end
-
-  def all_predecessors
-    predecessors = []
-    return predecessors unless valid?
-
-    current = predecessor
-    until current.nil?
-      predecessors << current
-      current = current.predecessor
-    end
-    predecessors
   end
 
   def predecessor_loop?
@@ -395,43 +461,6 @@ class Exercise < ApplicationRecord
       current = current.predecessor
     end
     false
-  end
-
-  def save_old_version
-    root_exercise = Exercise.find(id)
-    old_version = root_exercise.duplicate
-    old_version.assign_attributes root_exercise.attributes.except('id', 'created_at', 'updated_at', 'uuid')
-    ActiveRecord::Base.transaction do
-      update!(predecessor: nil)
-      old_version.save!
-      update!(predecessor: old_version)
-    end
-  end
-
-  def checksum
-    ProformaService::ConvertExerciseToTask.call(exercise: self).generate_checksum
-  end
-
-  def update_and_version(params)
-    ActiveRecord::Base.transaction do
-      save_old_version
-      return true if update(params)
-
-      raise ActiveRecord::Rollback
-    end
-    false
-  end
-
-  private
-
-  def no_predecessor_loop
-    errors.add(:predecessors, 'are looped') if predecessor_loop?
-  end
-
-  def one_primary_description?
-    primary_description_count = descriptions.select(&:primary?).count
-    errors.add(:exercise, 'has more than one primary descriptions') if primary_description_count > 1
-    errors.add(:exercise, 'has no primary description') if primary_description_count < 1
   end
 end
 # rubocop:enable Metrics/ClassLength

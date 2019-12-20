@@ -19,13 +19,14 @@ module ProformaService
       @exercise.assign_attributes(
         user: @user,
         title: @task.title,
-        private: true,
+        private: @exercise.private.nil? ? true : @exercise.private,
         descriptions: new_descriptions,
         instruction: @task.internal_description,
         execution_environment: execution_environment,
         tests: tests,
         exercise_files: task_files.values,
-        state_list: @exercise.persisted? ? 'updated' : 'new'
+        state_list: @exercise.persisted? ? 'updated' : 'new',
+        deleted: false
       )
     end
 
@@ -62,7 +63,9 @@ module ProformaService
     end
 
     def file_base64(file)
-      "data:#{file.mimetype || 'image/jpeg'};base64,#{Base64.encode64(file.content)}"
+      raise Proforma::MimetypeError, I18n.t('exercises.import_exercise.mimetype_error', filename: file.filename) unless file.mimetype
+
+      "data:#{file.mimetype};base64,#{Base64.encode64(file.content)}"
     end
 
     def tests
@@ -83,7 +86,11 @@ module ProformaService
     end
 
     def execution_environment
-      ExecutionEnvironment.where(language: @task.proglang[:name], version: @task.proglang[:version]).first_or_initialize
+      proglang_name = @task.proglang&.dig :name
+      proglang_version = @task.proglang&.dig :version
+      return @exercise.execution_environment if proglang_name.nil? || proglang_version.nil?
+
+      ExecutionEnvironment.where(language: proglang_name, version: proglang_version).first_or_initialize
     end
   end
 end
