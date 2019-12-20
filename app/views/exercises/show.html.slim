@@ -1,11 +1,11 @@
 - model_class = Exercise
 .header
-  .col-md-9
+  .col-md-8
     .std-heading data-toggle="tooltip" data-placement="bottom" title="#{@exercise.title}"
       i.i.fa.fa-file-text-o style=("color: #008000")
       = ' '
       = truncate(@exercise.title, length: 100)
-  .col-md-3
+  .col-md-4
     span.star-rating.pull-right style=("font-size: 2.0em")
       - [*1..5].each do |i|
         - if @exercise.round_avg_rating >= i
@@ -30,9 +30,9 @@
               - else
                 - [*1..5].each do |i|
                   span.fa.fa-star-o data-rating=i
+    = render 'remove_state_tag', exercise: @exercise
 
   br
-
 legend.toggle-next
   span.number = '1'
   = t('exercises.form.basic_info') + ' '
@@ -64,8 +64,8 @@ legend.toggle-next
 
   - @exercise.descriptions.each do |description|
     .row.vertical
-      .row-label
-        = t('exercises.description_in') + ' '
+      .row-label class=(description.primary? ? 'primary-description' : '')
+        = (description.primary? ? t('exercises.primary_description_in') : t('exercises.description_in')) + ' '
         = description.language
         | :
       .row-value
@@ -81,7 +81,7 @@ legend.toggle-next
       = t('exercises.execution_environment')
       | :
     .row-value
-      = @exercise.execution_environment.language
+      = @exercise.execution_environment&.language || t('exercises.show.none')
   .row
     .row-label
       = t('exercises.created_at')
@@ -104,6 +104,7 @@ legend.toggle-next
     - else
       .row-value
         = link_to @exercise.user.name, user_path(@exercise.user)
+
 legend.toggle-next
   span.number = '2'
   = t('exercises.form.additional_info') + ' '
@@ -135,9 +136,13 @@ legend.toggle-next
       = t('exercises.license')
       | :
     .row-value
-      = @exercise.license.name
-      = ': '
-      = link_to @exercise.license.link, @exercise.license.link
+      - if @exercise.license
+        = @exercise.license.name
+        = ': '
+        = link_to @exercise.license.link, @exercise.license.link
+      - else
+        = t('exercises.show.no_license_chosen') + ' '
+        = link_to('Edit', edit_exercise_path(@exercise)) + '.'
   .row
     .row-label
       = t('exercises.impact')
@@ -155,7 +160,11 @@ legend.toggle-next
         = t('exercises.in_collections')
         = ': '
         = @exercise.in_collections
-
+  .row
+    .row-label
+      = t('exercises.uuid')
+    .row-value
+      = @exercise.uuid
 legend.toggle-next
   span.number = '3'
   = t('exercises.files.label') + ' '
@@ -221,7 +230,7 @@ legend.toggle-next
               = t('exercises.files.role')
               | :
             .row-value
-              = file.role
+              = t("exercises.files.roles.#{file.role}")
 
 legend.toggle-next
   span.number = '4'
@@ -327,10 +336,11 @@ legend.toggle-next
             - if !current_user.account_links.empty?
               - current_user.account_links.each do |acc_link|
                 li
-                  = link_to acc_link.account_name, push_external_exercise_path(account_link: acc_link), method: 'post', class: 'dropdown-item'
+                  = link_to acc_link.name, export_external_start_exercise_path(account_link: acc_link), remote: true, class: 'dropdown-item export-test'
             - else
               li
                 = link_to t('exercises.show.define_account_link'), new_user_account_link_path(current_user)
+
   .button-box
     .button-description
       = "Derivate, translate or port this Exercise by duplicating it. The duplicate will be owned by you."
@@ -365,6 +375,14 @@ div class=("comment-box with-borders") data-exercise=@exercise.id
           = f.submit class: 'btn btn-default'
   .comment-body
 
+.history-panel
+  = button_tag type: 'button', class: 'full-window-button history-button' do
+    = t('exercises.all.history_exercises')+ ' '
+    span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
+    span.fa.fa-caret-down.my-caret
+div class=("history-box with-borders") data-exercise=@exercise.id
+  .content
+
 .actions.btn-group[role="group"]
   - if can? :edit, @exercise
     = link_to edit_exercise_path(@exercise),  class: 'btn btn-important' do
@@ -391,3 +409,6 @@ div class=("comment-box with-borders") data-exercise=@exercise.id
 = form_tag report_exercise_path(@exercise), id: 'report'
 
 #page_end style="margin-top: 20px"
+
+
+= render 'import_export_dialog'

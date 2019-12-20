@@ -1,14 +1,17 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :single_java_main_file, class: 'ExerciseFile' do
+  factory :exercise_file, aliases: [:single_java_main_file], class: 'ExerciseFile' do
     content { 'public class AsteriksPattern{ public static void main String[] args) { } }' }
     name { 'Main' }
     path { '' }
     solution { false }
-    file_type { FactoryBot.create(:java_file_type) }
+    file_type { build(:java_file_type) }
     visibility { true }
-    role { 'Main File' }
+    hidden { false }
+    read_only { false }
+    role { 'main_file' }
+    exercise { build(:exercise) }
   end
 
   factory :junit_test_file, class: 'ExerciseFile' do
@@ -17,6 +20,8 @@ FactoryBot.define do
     path { '' }
     solution { false }
     file_type { FactoryBot.create(:java_file_type) }
+    hidden { false }
+    read_only { false }
     visibility { true }
   end
 
@@ -24,24 +29,60 @@ FactoryBot.define do
     content { 'public class ModelSolutionFile { public static void main String[] args) { } }' }
     name { 'ModelSolutionFile' }
     path { '' }
-    role { 'Reference Implementation' }
+    role { 'reference_implementation' }
     file_type { FactoryBot.create(:java_file_type) }
     visibility { false }
+    hidden { false }
+    read_only { true }
   end
 
   factory :codeharbor_regular_file, class: 'ExerciseFile' do
     content { '// Please name a java package for basic input/output operations' }
     name { 'explanation' }
     path { '' }
-    role { 'Regular File' }
+    role { 'regular_file' }
     file_type { FactoryBot.create(:txt_file_type) }
+    hidden { true }
+    read_only { true }
+    exercise { build(:exercise) }
+
+    trait(:with_attachment) do
+      name { 'image' }
+      content {}
+      attachment do
+        "data:image/bmp;base64,#{Base64.encode64("BM:\u0000\u0000\u0000\u0000\u0000\u0000\u00006\u0000\u0000\u0000(\u0000"\
+          "\u0000\u0000\u0001\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0001\u0000\u0018\u0000\u0000\u0000\u0000\u0000\u0004"\
+          "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"\
+          "\u0000\u0000\xFFY")}"
+      end
+      attachment_file_name { 'image.bmp' }
+      attachment_content_type { 'image/bmp' }
+      file_type { FactoryBot.create(:bmp_file_type) }
+    end
+
+    trait(:with_text_attachment) do
+      name { 'text' }
+      content {}
+      attachment do
+        "data:text/plain;base64,#{Base64.encode64('lorem ipsum')}"
+      end
+      attachment_file_name { 'text.txt' }
+      attachment_content_type { 'text/plain' }
+      file_type { FactoryBot.create(:txt_file_type) }
+    end
+
+    trait :with_image_attachment do
+      with_attachment
+    end
   end
 
   factory :codeharbor_main_file, class: 'ExerciseFile' do
     content { 'System.x.print("Hello World");' }
     name { 'hello_world' }
     path { 'source/main' }
-    role { 'Main File' }
+    role { 'main_file' }
+    hidden { false }
+    read_only { false }
     file_type { FactoryBot.create(:java_file_type) }
   end
 
@@ -49,8 +90,9 @@ FactoryBot.define do
     content { 'System.out.print("Hello World");' }
     name { 'solution' }
     path { '' }
-    role { 'Reference Implementation' }
-    hidden { true }
+    role { 'reference_implementation' }
+    hidden { false }
+    read_only { true }
     file_type { FactoryBot.create(:java_file_type) }
   end
 
@@ -59,6 +101,8 @@ FactoryBot.define do
     name { 'user_test' }
     path { '' }
     role { 'User-defined Test' }
+    hidden { false }
+    read_only { false }
     file_type { FactoryBot.create(:java_file_type) }
   end
 
@@ -67,7 +111,10 @@ FactoryBot.define do
     name { 'test' }
     path { '' }
     purpose { 'test' }
-    file_type { FactoryBot.create(:java_file_type) }
+    file_type { build(:java_file_type) }
     visibility { true }
+    hidden { true }
+    read_only { true }
+    role { 'teacher_defined_test' }
   end
 end

@@ -31,7 +31,10 @@
           = f.text_field :title, class:'form-control'
         .field-element
           = f.label :execution_environment, t('exercises.form.environment'), class:'form-label'
-          = f.collection_select :execution_environment_id, ExecutionEnvironment.all, :id, :language, {}, {class: 'form-control'}
+          .div.hidden.execution-environment-error
+            = t('controllers.exercise.execution_environment.not_empty_while_public')
+          = f.collection_select :execution_environment_id, ExecutionEnvironment.all, :id, :language, {include_blank: t('exercises.form.none')}, {class: 'form-control'}
+
 
         .field-element
           = f.nested_fields_for :descriptions do |description|
@@ -40,10 +43,15 @@
                 = f.label :language, class: 'form-label' do
                   = t('exercises.description_in')
                   = ' '
-                  = description.collection_select :language, Description::LANGUAGES, :to_s, :to_s, include_blank: false, class: 'form-control'
+                  = description.collection_select :language, Description::LANGUAGES, :to_s, :to_s, {}, {include_blank: false, class: 'form-control description-lang-select'}
+
+                = description.check_box :primary, {multiple:false, hidden: true, class: 'primary-checkbox'}, 'true', 'false'
+                = description.label :primary, {class: 'radio-base form-label'}
+
                 = description.remove_nested_fields_link :text, class:'btn btn-default btn-xs pull-right' do
                   i.fa.fa-remove style=("color: #800000")
                   = ' ' + t('exercises.form.descriptions.remove')
+
               = description.text_area :text, class:'form-control'
 
           = f.add_nested_fields_link :descriptions, ' ' , class: 'btn btn-main' do
@@ -63,6 +71,8 @@
       .form-content
         .field-element
           = f.label :visibility, t('exercises.visibility.label'), class: 'form-label'
+          .div.hidden.execution-environment-error
+            = t('controllers.exercise.visibility.not_public_without_exenv')
           .radio-switch
             = f.radio_button :private, false, value: false, checked: true
             = label_tag 'exercise_private_false', t('exercises.visibility.public'), class: 'radio-left'

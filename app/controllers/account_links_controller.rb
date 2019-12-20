@@ -18,7 +18,10 @@ class AccountLinksController < ApplicationController
   def show; end
 
   def new
-    @account_link = AccountLink.new
+    @account_link = AccountLink.new(
+      push_url: Settings.codeocean.url + '/import_exercise',
+      check_uuid_url: Settings.codeocean.url + '/import_uuid_check'
+    )
   end
 
   def edit; end
@@ -80,6 +83,6 @@ class AccountLinksController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def account_link_params
-    params.require(:account_link).permit(:push_url, :account_name, :oauth2_token, :client_id, :client_secret)
+    params.require(:account_link).permit(:push_url, :check_uuid_url, :api_key, :name)
   end
 end

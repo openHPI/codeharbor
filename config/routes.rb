@@ -60,7 +60,8 @@ Rails.application.routes.draw do
     delete 'logout' => :destroy
   end
 
-  post 'import_proforma_xml' => 'exercises#import_proforma_xml'
+  post 'import_exercise' => 'exercises#import_external_exercise'
+  post 'import_uuid_check' => 'exercises#import_uuid_check'
 
   get 'sessions/create'
   get 'sessions/destroy'
@@ -118,7 +119,8 @@ Rails.application.routes.draw do
   resources :exercises do
     collection do
       get :add_label
-      post :import_exercise
+      post :import_exercise_start
+      post :import_exercise_confirm
     end
     resources :comments do
       resources :answers
@@ -132,9 +134,13 @@ Rails.application.routes.draw do
       post :report
       get :add_author
       get :decline_author
-      post :push_external
       get :contribute
       get :download_exercise
+      post :remove_state
+      get :history
+      get :export_external_start
+      post :export_external_check
+      post :export_external_confirm
     end
   end
 

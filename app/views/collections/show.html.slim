@@ -72,7 +72,9 @@ br
           - if !current_user.account_links.empty?
             - current_user.account_links.each do |acc_link|
               li
-                = link_to acc_link.account_name, push_collection_collection_path(account_link: acc_link), method: 'post', class: 'dropdown-item'
+                a.dropdown-item title=t('controllers.carts.temporary_disabled')
+                  = acc_link.name
+                /= link_to acc_link.name, push_collection_collection_path(account_link: acc_link), method: 'post', class: 'dropdown-item'
           - else
             li
               = link_to t('exercises.show.define_account_link'), new_user_account_link_path(current_user)

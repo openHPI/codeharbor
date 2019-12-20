@@ -3,23 +3,20 @@
   .header
     .std-heading
       i.fa.fa-user
-      = ' ' + t('account.show_header') +': ' + @account_link.account_name
+      = " #{t('account.show_header')}: #{@account_link.name}"
   .show-table
     .row
       .row-label = t('account.name')
-      .row-value = @account_link.account_name
+      .row-value = @account_link.name
     .row
-      .row-label = t('account.pushURL')
+      .row-label = t('account.push_url')
       .row-value = @account_link.push_url
     .row
-      .row-label = t('account.token')
-      .row-value = @account_link.oauth2_token
+      .row-label = t('account.check_uuid_url')
+      .row-value = @account_link.check_uuid_url
     .row
-      .row-label = t('account.client_id')
-      .row-value = @account_link.client_id
-    .row
-      .row-label = t('account.client_secret')
-      .row-value = @account_link.client_secret
+      .row-label = t('account.api_key')
+      .row-value = @account_link.api_key
   .actions.btn-group
     - if can? :edit, @account_link
       = link_to edit_user_account_link_path(@user, @account_link), class: 'btn btn-important' do

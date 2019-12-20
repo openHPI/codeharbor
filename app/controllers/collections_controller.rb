@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'zip'
-require 'proforma/xml_generator'
 
 class CollectionsController < ApplicationController
   load_and_authorize_resource
@@ -11,8 +10,6 @@ class CollectionsController < ApplicationController
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.collections.authorization')
   end
-
-  include ExerciseExport
 
   # GET /collections
   # GET /collections.json
@@ -59,6 +56,14 @@ class CollectionsController < ApplicationController
     end
   end
 
+  def destroy
+    @collection.destroy
+    respond_to do |format|
+      format.html { redirect_to collections_url, notice: t('controllers.collections.destroyed') }
+      format.json { head :no_content }
+    end
+  end
+
   def remove_exercise
     if @collection.remove_exercise(params[:exercise])
       redirect_to @collection, notice: t('controllers.collections.remove_exercise_success')
@@ -80,40 +85,20 @@ class CollectionsController < ApplicationController
     errors = push_exercises
 
     if errors.empty?
-      redirect_to @collection, notice: t('controllers.exercise.push_external_notice', account_link: account_link.readable)
+      redirect_to @collection, notice: t('controllers.exercise.push_external_notice', account_link: account_link.name)
     else
       errors.each do |error|
         logger.debug(error)
       end
-      redirect_to @collection, alert: "Your account_link #{account_link.readable} does not seem to be working."
+      redirect_to @collection, alert: t('controllers.account_links.not_working', account_link: account_link.name)
     end
   end
 
   def download_all
-    filename = "#{@collection.title}.zip"
+    binary_zip_data = ProformaService::ExportTasks.call(exercises: @collection.exercises)
+    @collection.exercises.each { |exercise| exercise.update(downloads: exercise.downloads + 1) }
 
-    # This is the tricky part
-    # Initialize the temp file as a zip file
-
-    binary_zip_data = send_zip.string
-
-    send_data(binary_zip_data, type: 'application/zip', filename: filename, disposition: 'attachment')
-  end
-
-  def send_zip(exercises)
-    Zip::OutputStream.write_buffer do |zio|
-      exercises.each do |exercise|
-        zip_file = create_exercise_zip(exercise)
-        if zip_file[:errors].any?
-          zip_file[:errors].each do |error|
-            logger.debug(error)
-          end
-        else
-          zio.put_next_entry(zip_file[:filename])
-          zio.write zip_file[:data]
-        end
-      end
-    end
+    send_data(binary_zip_data.string, type: 'application/zip', filename: "#{@collection.title}.zip", disposition: 'attachment')
   end
 
   def share
@@ -133,17 +118,9 @@ class CollectionsController < ApplicationController
     @collection.users << current_user
 
     if @collection.save
-      redirect_to collection_path(@collection), notice: t('controllers.collections.save_shared.notice')
+      redirect_to @collection, notice: t('controllers.collections.save_shared.notice')
     else
       redirect_to users_messages_path, alert: t('controllers.collections.save_shared.alert')
-    end
-  end
-
-  def destroy
-    @collection.destroy
-    respond_to do |format|
-      format.html { redirect_to collections_url, notice: t('controllers.collections.destroyed') }
-      format.json { head :no_content }
     end
   end
 
@@ -163,7 +140,7 @@ class CollectionsController < ApplicationController
   def push_exercises
     errors = []
     @collection.exercises.each do |exercise|
-      error = push_exercise(exercise, account_link)
+      error = push_exercise(exercise, account_link) # TODO: implement multi export
       errors << error if error.present?
     end
     errors

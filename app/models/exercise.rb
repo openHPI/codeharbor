@@ -4,8 +4,16 @@ require 'nokogiri'
 require 'zip'
 # rubocop:disable Metrics/ClassLength
 class Exercise < ApplicationRecord
+  acts_as_taggable_on :state
+
   groupify :group_member
   validates :title, presence: true
+  validates :descriptions, presence: true
+  validates :execution_environment, presence: true, unless: :private?
+  validates :license, presence: true, unless: :private?
+  validate :no_predecessor_loop, :one_primary_description?, :valid_main_file?
+
+  validates_uniqueness_of :uuid
 
   has_many :exercise_files, dependent: :destroy
   has_many :tests, dependent: :destroy
@@ -25,13 +33,15 @@ class Exercise < ApplicationRecord
   has_many :cart_exercises, dependent: :destroy
   has_many :carts, through: :cart_exercises
 
+  belongs_to :predecessor, class_name: 'Exercise', optional: true
+  has_one :successor, class_name: 'Exercise', foreign_key: 'predecessor_id'
+
   belongs_to :user
-  belongs_to :execution_environment
-  belongs_to :license
+  belongs_to :execution_environment, optional: true
+  belongs_to :license, optional: true
   has_many :descriptions, dependent: :destroy
   has_many :origin_relations, class_name: 'ExerciseRelation', foreign_key: 'origin_id', dependent: :destroy, inverse_of: :origin
   has_many :clone_relations, class_name: 'ExerciseRelation', foreign_key: 'clone_id', dependent: :destroy, inverse_of: :clone
-  validates :descriptions, presence: true
 
   attr_reader :tag_tokens
   accepts_nested_attributes_for :descriptions, allow_destroy: true
@@ -40,6 +50,7 @@ class Exercise < ApplicationRecord
 
   default_scope { where(deleted: [nil, false]) }
 
+  scope :active, -> { where('NOT EXISTS (SELECT t2.id FROM exercises t2 WHERE exercises.id = t2.predecessor_id)') }
   scope :timespan, ->(days) { days != 0 ? where('DATE(created_at) >= ?', Time.zone.today - days) : where(nil) }
   scope :text_like, lambda { |text|
     if text.present?
@@ -188,14 +199,117 @@ class Exercise < ApplicationRecord
     collections.count.to_s
   end
 
+  # rubocop:disable Metrics/AbcSize
   def add_attributes(params)
     add_relation(params[:exercise_relation]) if params[:exercise_relation]
-    add_license(params)
+    add_license(params) if params[:license_id]
     add_labels(params[:labels])
     add_groups(params[:groups])
     add_tests(params[:tests_attributes])
     add_files(params[:exercise_files_attributes])
     add_descriptions(params[:descriptions_attributes])
+  end
+  # rubocop:enable Metrics/AbcSize
+
+  def soft_delete
+    delete_dependencies
+    update(deleted: true)
+  end
+
+  def duplicate
+    Exercise.new(
+      private: private,
+      descriptions: descriptions.map(&:dup)
+    ).tap do |exercise|
+      exercise.tests = duplicate_tests
+      exercise.exercise_files = duplicate_files_without_testfiles
+    end
+  end
+
+  def initialize_derivate(user = nil)
+    derivate = duplicate
+    derivate.assign_attributes attributes.except('id', 'created_at', 'updated_at', 'uuid', 'predecessor_id')
+
+    derivate.clone_relations << ExerciseRelation.new(origin: self, relation: Relation.find_by(name: 'Derivate'))
+    derivate.user = user if user
+    derivate
+  end
+
+  def last_successor
+    successor.nil? ? self : successor.last_successor
+  end
+
+  def complete_history
+    latest_exercise = last_successor
+    history = [latest_exercise]
+    return history unless latest_exercise.valid?
+
+    history + latest_exercise.all_predecessors
+  end
+
+  def all_predecessors
+    predecessors = []
+    return predecessors unless valid?
+
+    current = predecessor
+    until current.nil?
+      predecessors << current
+      current = current.predecessor
+    end
+    predecessors
+  end
+
+  def save_old_version
+    root_exercise = Exercise.unscoped.find(id)
+    old_version = root_exercise.duplicate
+    old_version.assign_attributes root_exercise.attributes.except('id', 'created_at', 'updated_at', 'uuid')
+    ActiveRecord::Base.transaction do
+      root_exercise.update!(predecessor: nil)
+      old_version.save!
+      root_exercise.update!(predecessor: old_version)
+    end
+  end
+
+  # this needs to be fixed with proper nested forms
+  def update_and_version(exercise_params, add_attributes_params)
+    ActiveRecord::Base.transaction do
+      save_old_version
+      add_attributes(add_attributes_params)
+      return true if update(exercise_params)
+
+      raise ActiveRecord::Rollback
+    end
+    false
+  end
+
+  def updatable_by?(user)
+    Ability.new(user).can?(:update, self)
+  end
+
+  private
+
+  def duplicate_files_without_testfiles
+    exercise_files.reject do |file|
+      file.exercise.tests.map(&:exercise_file).include? file
+    end.map(&:duplicate)
+  end
+
+  def duplicate_tests
+    tests.map(&:duplicate)
+  end
+
+  def no_predecessor_loop
+    errors.add(:predecessors, 'are looped') if predecessor_loop?
+  end
+
+  def one_primary_description?
+    primary_description_count = descriptions.select(&:primary?).count
+    errors.add(:exercise, 'has more than one primary descriptions') if primary_description_count > 1
+    errors.add(:exercise, 'has no primary description') if primary_description_count < 1
+  end
+
+  def valid_main_file?
+    errors.add(:files, 'max 1 mainfile') if exercise_files.select { |f| f.role == 'main_file' }.count > 1
   end
 
   def add_relation(relation_array)
@@ -240,35 +354,43 @@ class Exercise < ApplicationRecord
     end
   end
 
+  # rubocop:disable Metrics/AbcSize
   def add_descriptions(description_array)
     description_array.try(:each) do |_key, array|
-      destroy = array[:_destroy]
+      destroy_param = array[:_destroy]
       id = array[:id]
 
       if id
-        description = Description.find(id)
-        destroy ? description.destroy : description.update(text: array[:text], language: array[:language])
+        description = descriptions.detect { |desc| desc.id.to_s == id }
+        destroy_param ? description.destroy : description.update(text: array[:text], language: array[:language], primary: array[:primary])
       else
-        descriptions.new(text: array[:text], language: array[:language]) unless destroy
+        descriptions.new(text: array[:text], language: array[:language], primary: array[:primary]) unless destroy_param
+      end
+    end
+  end
+  # rubocop:enable Metrics/AbcSize
+
+  def add_files(file_array)
+    file_array&.each do |_key, params|
+      destroy_file = params[:_destroy]
+      file_id = params[:id]
+      if file_id
+        file = ExerciseFile.find(file_id)
+        if destroy_file
+          file.destroy
+        else
+          file.update(file_permit(params))
+        end
+      else
+        file = exercise_files.new(file_permit(params)) unless destroy_file
+        attachment_from_params(file, params['attachment-base64']) if params['attachment-base64']
       end
     end
   end
 
-  def add_files(file_array)
-    file_array.try(:each) do |_key, array|
-      destroy = array[:_destroy]
-      id = array[:id]
-      if id
-        file = ExerciseFile.find(id)
-        if destroy
-          file.destroy
-        else
-          file.update(file_permit(array))
-        end
-      else
-        exercise_files.new(file_permit(array)) unless destroy
-      end
-    end
+  def attachment_from_params(file, attachment)
+    file.attachment = attachment
+    file.attachment_file_name = file.name + file.file_type.file_extension
   end
 
   def add_tests(test_array)
@@ -318,11 +440,6 @@ class Exercise < ApplicationRecord
     clone_relations.delete_all
   end
 
-  def soft_delete
-    delete_dependencies
-    update(deleted: true)
-  end
-
   def file_permit(params)
     params = update_file_params(params)
     allowed_params = %i[role content path name hidden read_only file_type_id]
@@ -334,13 +451,16 @@ class Exercise < ApplicationRecord
     params.permit(:feedback_message, :testing_framework_id)
   end
 
-  def duplicate
-    Exercise.new(
-      private: private,
-      descriptions: descriptions.map(&:dup),
-      tests: tests.map(&:dup),
-      exercise_files: exercise_files.map(&:dup)
-    )
+  def predecessor_loop?
+    predecessors = []
+    current = predecessor
+    until current.nil?
+      return true if predecessors.include? current
+
+      predecessors << current
+      current = current.predecessor
+    end
+    false
   end
 end
 # rubocop:enable Metrics/ClassLength

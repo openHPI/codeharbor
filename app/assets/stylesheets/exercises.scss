@@ -122,6 +122,18 @@ $exercise-color: #006600;
   padding-bottom: 5px;
 }
 
+.primary-description {
+  background-color: #CCC !important;
+  border-color: #CCC !important;
+}
+
+.description-lang-select {
+  display: unset;
+  width: unset;
+  height: unset;
+  padding: 5px;
+}
+
 .fa-star, .fa-star-o, .fa-star-half-o {
   color: #B79A00;
 }
@@ -189,6 +201,38 @@ $exercise-color: #006600;
   border-radius: 4px;
 }
 
+.state-tag-dropdown {
+  color: #7C0000;
+  font-size: 18px;
+  margin-right: 12px;
+  padding: 2px 4px;
+}
+
+.state-tag-remove-button{
+  color: #000;
+}
+
+.state-tag-dropdown:hover .state-tag-popup {
+  display: block;
+}
+
+.state-tag-popup {
+  cursor: pointer;
+  width: 125px;
+  height: 30px;
+  display: none;
+  background-color: white;
+  position: absolute;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 2;
+  padding: 2px 2px 2px 5px;
+  margin-top: 2px;
+  margin-left: -45px;
+  border: 2px grey solid;
+  border-radius: 4px;
+}
+
+
 .inputfile {
   width: 0.1px;
   height: 0.1px;
@@ -204,11 +248,11 @@ $exercise-color: #006600;
   padding: 5px 10px 5px 10px;
 }
 
-#import-button {
+#import-exercise-button {
   background-color: #d3d3d3;
 }
 
-#import-button:hover {
+#import-exercise-button:hover {
   background-color: #d0d0d0;
 }
 
@@ -294,31 +338,30 @@ legend {
   margin-bottom: 10px;
 }
 
-.radio-left {
+.radio-base {
   border: #CCCCCC 1px solid;
-  box-sizing: border-box;
   padding: 5px;
   font-size: 14px;
   cursor: pointer;
   font-weight: normal;
   text-align: center;
+  box-sizing: border-box;
+  border-radius: 4px;
+}
+
+.radio-left {
+  @extend .radio-base;
   width: 50%;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 
 .radio-right {
-  border: #CCCCCC 1px solid;
-  box-sizing: border-box;
+  @extend .radio-base;
   margin-left: -1px;
-  padding: 5px;
-  font-size: 14px;
-  cursor: pointer;
-  font-weight: normal;
-  text-align: center;
   width: 50%;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
 }
 
 .radio-left.small-radio, .radio-right.small-radio {
@@ -332,6 +375,18 @@ input[type="radio"] {
 
 input[type="radio"]:checked+label {
   background-color: #eeeeee;
+}
+
+.primary-checkbox:checked+label {
+  background-color: #060;
+  color: white;
+}
+
+.primary-checkbox+label {
+  border-color: #AAA;
+  background-color: #FFF;
+  display: inline;
+  padding: 5px 15px;
 }
 
 .full-window-button{
@@ -355,6 +410,26 @@ input[type="radio"]:checked+label {
   width: 100%;
   position: relative;
   margin-bottom: 15px;
+}
+
+.history-box {
+  display: none;
+  width: 100%;
+  position: relative;
+  margin-bottom: 15px;
+  padding: 5px;
+}
+
+.panel.panel-default.history:last-child {
+  margin-bottom: unset !important;
+}
+
+.history.latest {
+  background-color: #EEE;
+}
+
+.history.selected {
+  background-color: #DDD;
 }
 
 .button-panel {
@@ -598,4 +673,69 @@ input[type="radio"]:checked+label {
 
 .exercise-panel {
   min-height: 155px;
+}
+
+.import-export-button {
+  width: 100%;
+  text-align: left;
+}
+
+.export-button-icon {
+  margin-right: 0.4em;
+}
+
+.import-export-exercise{
+  display: flex;
+}
+
+.import-export-message {
+  flex-grow: 1;
+  padding-right: 5px;
+}
+
+.import-export-exercise-actions {
+  max-width: 110px;
+  min-width: 110px;
+}
+
+.import-export-exercise + .import-export-exercise {
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px solid lightgrey;
+}
+
+.import-export-success {
+  color: darkgreen;
+  font-size: 12pt;
+  font-weight: 600;
+}
+
+.confirm-icon {
+  color: #080;
+}
+
+.confirm-icon-alt {
+  color: #008;
+}
+
+.abort-icon {
+  color: #800;
+}
+
+.spinner-border {
+  border: 8px solid #f3f3f3; /* Light grey */
+  border-top: 8px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.errors {
+  color: darkred;
 }

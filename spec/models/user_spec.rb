@@ -32,7 +32,7 @@ RSpec.describe User, type: :model do
   describe 'is_author' do
     let!(:user1) { FactoryBot.create(:user) }
     let!(:user2) { FactoryBot.create(:user) }
-    let!(:exercise) { FactoryBot.create(:exercise_with_author, authors: [user1]) }
+    let!(:exercise) { FactoryBot.create(:exercise, authors: [user1]) }
 
     it 'returns true for author' do
       expect(user1.author?(exercise)).to be true
@@ -252,9 +252,9 @@ RSpec.describe User, type: :model do
     let!(:user) { FactoryBot.create(:user) }
     let!(:user2) { FactoryBot.create(:user) }
     let!(:group) { FactoryBot.create(:group, users: [user]) }
-    let!(:exercise) { FactoryBot.create(:only_meta_data, private: false, authors: [user]) }
-    let!(:exercise2) { FactoryBot.create(:only_meta_data, private: true, authors: [user]) }
-    let!(:exercise3) { FactoryBot.create(:only_meta_data, private: true, authors: [user2], groups: [group]) }
+    let!(:exercise) { FactoryBot.create(:only_meta_data, :with_primary_description, private: false, authors: [user]) }
+    let!(:exercise2) { FactoryBot.create(:only_meta_data, :with_primary_description, private: true, authors: [user]) }
+    let!(:exercise3) { FactoryBot.create(:only_meta_data, :with_primary_description, private: true, authors: [user2], groups: [group]) }
 
     it 'allows access to a public exercise to all users' do
       expect(exercise.can_access(user2)).to be true

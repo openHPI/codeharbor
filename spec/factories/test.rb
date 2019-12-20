@@ -1,25 +1,16 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :single_junit_test, class: 'Test' do
+  factory :test, aliases: [:single_junit_test], class: 'Test' do
     feedback_message { 'Dude... seriously?' }
-
-    after(:create) do |test|
-      create(:junit_testing_framework, tests: [test])
-      test_file = create(:junit_test_file, exercise: test.exercise)
-      test.exercise_file = test_file
-      test.save
-    end
+    testing_framework { build(:junit_testing_framework) }
+    exercise_file { build(:junit_test_file, exercise: build(:exercise)) }
+    exercise { build(:exercise) }
   end
 
   factory :codeharbor_test, class: 'Test' do
     feedback_message { 'Your solution is not correct yet.' }
-
-    after(:create) do |test|
-      create(:junit_testing_framework, tests: [test])
-      test_file = create(:codeharbor_test_file, exercise: test.exercise)
-      test.exercise_file = test_file
-      test.save
-    end
+    exercise_file { build(:codeharbor_test_file, exercise: build(:exercise)) }
+    testing_framework { build(:junit_testing_framework) }
   end
 end

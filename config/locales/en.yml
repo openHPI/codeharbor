@@ -19,7 +19,12 @@
 # To learn more, please read the Rails Internationalization guide
 # available at http://guides.rubyonrails.org/i18n.html.
 
+
 en:
+  activerecord:
+    attributes:
+      exercise:
+        execution_environment: Programming language
 
   controllers:
     account_links:
@@ -36,7 +41,8 @@ en:
       remove_exercise_fail: "You cannot remove this exercise."
       remove_all_success: 'All Exercises were successfully removed'
       remove_all_fail: 'You cannot remove all exercises'
-      zip: 'cart_exercises.zip'
+      zip_filename: 'cart_exercises_%{date}.zip'
+      temporary_disabled: Temporary disabled
 
     collections:
       authorization: "You are not authorized to for this action."
@@ -54,6 +60,7 @@ en:
       save_shared:
         notice: "You can now collaborate to collection."
         alert: "Something went wrong."
+      temporary_disabled: Temporary disabled
 
     exercise:
       choose_file: "You need to choose a file."
@@ -67,9 +74,6 @@ en:
       add_to_collection_success: 'Exercise was successfully added to collection.'
       add_to_collection_fail: "Exercise already is in collection."
       download_error: "An error occurred. Please contact an admin!"
-      xml_not_valid: "Your xml file is not valid"
-      import_success: 'Exercise was successfully imported.'
-      import_fail: "Cannot import your xml file"
       contribute: "%{user} wants to contribute to your Exercise %{exercise}."
       contribute_notice: "Your access request has been sent."
       add_author_text: "%{user} made you co-author of his exercise: %{exercise}."
@@ -80,11 +84,27 @@ en:
       report_notice: "You successfully reported this exercise."
       push_external_notice: "Exercise pushed to %{account_link}"
       import_proforma_xml:
-        success: "SUCCESS"
+        success: "success"
         invalid: "Invalid exercise"
-        no_header: "No Authorization header"
-        no_token: "No token in Authorization header"
-        unknown_token: "Unknown OAuth2 token"
+        multi_import_successful: "Successfully imported %{count} exercises."
+        single_import_successful: "Successfully imported exercise."
+        import_error: "Import of submitted ZIP file failed."
+        no_file_present: No importable file found in ZIP file
+        internal_error: An internal error occurred on Codeharbor while importing the exercise.
+        actions:
+          show_exercise: Show exercise
+          import: Import
+          import_copy: Import as copy
+          overwrite: Overwrite
+        dialog:
+          exercise_with_uuid: 'Exercise-UUID: %{exercise_uuid}'
+          path: 'path: %{path}'
+        choose_file: choose file
+        import: Import
+      execution_environment:
+        not_empty_while_public: Can't be empty while visibility is set to public
+      visibility:
+        not_public_without_exenv: Can't be public while programming language is not set
 
     exercise_file:
       authorization: "You are not authorized to for this action."
@@ -176,6 +196,9 @@ en:
         reference: 'Reference Implementation'
         main: 'Main File'
         regular: 'Regular File'
+    exercise_file:
+      errors:
+        no_filetype: Filetype "%{extension}" does not exist!
 
   error: "error "
   sure: "Are you sure?"
@@ -200,11 +223,10 @@ en:
 
   account:
     show_header: "Account Link"
-    pushURL: "Push URL"
-    name: "Account Name"
-    token: "OAuth2 token"
-    client_id: "Client ID"
-    client_secret: "Client Secret"
+    push_url: "Push URL"
+    check_uuid_url: "Check UUID URL"
+    name: "Name"
+    api_key: "API key"
     documentation:
       header: About autograders and account links
       paragraph_html: |
@@ -245,14 +267,12 @@ en:
     info:
       push_url: |
         The address on the autograder side your exercise can be exported to. If you don't know what to write here, ask the autograders admins.
+      check_uuid_url: |
+        The address on the autograder side that can be queried to determine if the exercise already exists.
       name: |
         Can be anything to Identify your account link.
       token: |
         Will be used to authenticate your export request. Has to be the same on both sides.
-      client_id:
-        Will be sent with your token. Can be automatically generated.
-      client_secret:
-        Will be sent with your token. Can be automatically generated.
 
     admin:
       header: "Account Link Administration"
@@ -464,10 +484,11 @@ en:
       mine: "My Exercises"
       public: "Public"
       private: "Private"
-    import_xml: "Import XML-File"
+    import_zip: "Import ZIP file"
     title: "Title"
     rate: "Rate"
     description_in: "Description in"
+    primary_description_in: "Description (primary) in"
     instructions: "Instructions"
     parent: "Parent"
     parent_deleted: "Parent was deleted"
@@ -486,6 +507,7 @@ en:
     downloads: "Downloads"
     in_carts: "In Carts"
     in_collections: "In Collections"
+    uuid: UUID
     files:
       attachment: "Attachment"
       role: "Role"
@@ -497,6 +519,11 @@ en:
       purpose: "Purpose"
       name: "Name"
       upload_file: "Upload File"
+      roles:
+        main_file: Main File
+        regular_file: Regular File
+        reference_implementation: Reference Implementation
+        teacher_defined_test: Teacher-defined Test
     tests:
       label: "Tests"
       content: "Content"
@@ -561,6 +588,7 @@ en:
         remove: "Remove Test"
       save: "Save Exercise"
       cancel: "Cancel"
+      none: None
 
     admin:
       header: "Exercise Administration"
@@ -594,11 +622,48 @@ en:
       report: "Report"
       report_message: "Report message"
       submit: "Submit"
+      no_license_chosen: No license has been chosen. Please select a license through
+      history:
+        no_history: No history found
+        history_version_name: "Version: %{version_nr} from: %{updated_at}"
+      none: None
+
 
     edit:
       header: "Edit:"
     undefined: "Exercise undefined"
     errorMessage: "prohibited this project from being saved"
+    export_exercise:
+      error: An error occurred.
+      title: Export exercise
+      successfully_exported: Exercise (%{title}) successfully exported.
+      export_failed: 'Export of exercise (%{title}) failed. <br> Error: %{error}'
+      buttons:
+        retry: Retry
+        export: Export
+        create_new: Create new
+        overwrite: Overwrite
+        abort: Abort
+        close: Close
+        hide: Hide
+      check:
+        no_exercise: No corresponding exercise found on Codeocean. Pushing this exercise will create a new exercise on Codeocean, which will be linked to this one on Codeharbor. Any changes to either one can be pushed to the respective other platform.
+        exercise_found: 'A corresponding exercise has been found on Codeocean. You can: <ul><li><b>Overwrite</b> the exercise on Codeocean. This will transfer all changes made on Codeharbor to Codeocean.<br>Careful: This will overwrite all potential changes made on Codeocean. This will change (and might break) the exercise, even if it is currently in use by a course.</li><li><b>Create a new</b> exercise which copies the current state of this exercise. This will create a copy of this exercise on Codeharbor, which will then be exported as a completly new exercise to Codeocean.</li></ul>'
+        exercise_found_no_right: "A corresponding exercise has been found on Codeocean, but you don't have the rights to edit it. You can: <ul><li><b>Create a new</b> exercise which copies the current state of this exercise. This will create a copy of this exercise on Codeharbor, which will then be exported as a completly new exercise to Codeocean.</li></ul>"
+
+    import_exercise:
+      successfully_imported: Exercise (%{title}) successfully imported.
+      import_failed: 'Import of exercise (%{title}) failed. <br> Error: %{error}'
+      imported_exercise_header: 'Imported exercise:'
+      convert_zip:
+        nested_too_deep: Zip is nested too deep.
+      mimetype_error: No mimetype found for %{filename}
+    new_tag: new
+    updated_tag: updated
+    remove_state: remove state
+    state_removed: successfully removed state
+    index:
+      no_execution_environment_selected: No programming language selected
 
   file_types:
     header: "File Types"

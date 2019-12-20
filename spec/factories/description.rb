@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :simple_description, class: 'Description' do
-    text { 'Very descriptive' }
+  factory :description, aliases: [:simple_description], class: 'Description' do
+    sequence(:text) { |n| "Very descriptive #{n}" }
     language { 'en' }
+
+    trait(:primary) do
+      primary { true }
+    end
   end
 
   factory :codeharbor_description, class: 'Description' do

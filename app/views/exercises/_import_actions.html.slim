@@ -1,0 +1,18 @@
+- if imported
+  = link_to t('controllers.exercise.import_proforma_xml.actions.show_exercise'), exercise, class: 'btn btn-default btn-xs pull-right show-action import-export-button', target: '_blank'
+- else
+  - if exists
+    - if updatable
+      = button_tag type: 'button', class: 'btn btn-default btn-xs pull-right import-action import-export-button', data: {'import-type' => 'import'} do
+        i.fa.fa-check.confirm-icon.export-button-icon
+        = t('controllers.exercise.import_proforma_xml.actions.overwrite')
+    = button_tag type: 'button', class: 'btn btn-default btn-xs pull-right import-action import-export-button', data: {'import-type' => 'create_new'} do
+      i.fa.fa-check.confirm-icon-alt.export-button-icon
+      = t('controllers.exercise.import_proforma_xml.actions.import_copy')
+  - else
+    = button_tag type: 'button', class: 'btn btn-default btn-xs pull-right import-action import-export-button', data: {'import-type' => 'import'} do
+      i.fa.fa-check.confirm-icon.export-button-icon
+      = t('controllers.exercise.import_proforma_xml.actions.import')
+= button_tag type: 'button', class: 'btn btn-default btn-xs pull-right import-export-button export-close-button' do
+  i.fa.fa-remove.abort-icon.export-button-icon
+  = imported ? t('exercises.export_codeharbor.buttons.hide') : t('exercises.export_codeharbor.buttons.abort')

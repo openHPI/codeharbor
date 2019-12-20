@@ -15,4 +15,9 @@ FactoryBot.define do
     name { 'Plain Text' }
     file_extension { '.txt' }
   end
+
+  factory :bmp_file_type, class: 'FileType' do
+    name { 'Bitmap' }
+    file_extension { '.bmp' }
+  end
 end

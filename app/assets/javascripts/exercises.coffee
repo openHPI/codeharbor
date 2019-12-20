@@ -199,10 +199,14 @@ ready =->
 
   $('#xml-import').on 'click', (e) ->
     e.stopPropagation()
-    return
 
-  $('#file_upload').on 'change', ->
-    fullPath = document.getElementById('file_upload').value
+  $('#import-exercise-button').on 'click', (e) ->
+    e.preventDefault()
+    e.stopPropagation()
+    importExerciseStart()
+
+  $('#exercise_import').on 'change', ->
+    fullPath = document.getElementById('exercise_import').value
     if fullPath
       document.getElementById('file-label').innerHTML = get_filename_from_full_path(fullPath)
 
@@ -302,7 +306,6 @@ ready =->
       return
     related_exercises = $(this).siblings('.content').children()
     last_shown_element = $(related_exercises).filter('.displayed').last()
-    console.log(last_shown_element)
     index = $(related_exercises).index(last_shown_element)
     shown_elements = $(related_exercises).slice(index+1)
     if shown_elements.size() > 3
@@ -328,6 +331,34 @@ ready =->
     if index = 3
       $(this).removeClass('active').addClass('inactive')
     $(this).siblings('.slide-right').removeClass('inactive').addClass('active')
+
+  $('.history-button').on 'click', ->
+    exercise_id = this.getAttribute("data-exercise")
+    url = window.location.pathname + "/history"
+    $history_box = $(".history-box")
+
+    $caret = $(this).children('.my-caret')
+    $icon = $(this).children('.wait')
+
+    if $caret.hasClass('fa-caret-down')
+      $caret.removeClass('fa-caret-down').addClass('fa-caret-up')
+      $.ajax({
+        type: 'GET',
+        url: url
+        dataType: 'script'
+        beforeSend: ->
+          $icon.show()
+        success: ->
+          $history_box.show()
+          anchor = document.getElementById('page_end')
+          if anchor
+            anchor.scrollIntoView(false)
+        complete: ->
+          $icon.hide()
+      })
+    else
+      $caret.removeClass('fa-caret-up').addClass('fa-caret-down')
+      $history_box.hide()
 
   if document.getElementById('window')
     if document.getElementById('window').value == "true"
@@ -373,4 +404,142 @@ ready =->
     link = option.getAttribute("data-link")
     $('.link').html("<p>Link: <a href='#{link}'>#{link}</a></p>")
 
+  $('.state-tag-remove-button').on 'click', (event) ->
+    target = $(event.target)
+    exercise_id = target.attr('data-id')
+    $.ajax({
+      type: "POST",
+      url: '/exercises/' + exercise_id + "/remove_state",
+      dataType: 'json',
+      success: (response) ->
+        target.parents('.state-tag-dropdown').hide()
+      error: (a, b, c) ->
+        alert("error:" + c);
+    })
+
+  $('body').on 'click', '.primary-checkbox', (event) ->
+    $('.primary-checkbox').prop('checked', false)
+    $(event.target).prop('checked', true)
+
+  $('body').on 'click', '.export-action', (event) ->
+    exportType = $(this).attr('data-export-type')
+    exerciseID = $(this).parents('.import-export-exercise').attr('data-exercise-id')
+    accountLinkID = $(this).parents('.import-export-exercise').attr('data-account-link')
+    exportExerciseConfirm(exerciseID, accountLinkID, exportType)
+
+  $('body').on 'click', '.export-close-button', (event) ->
+    $(this).parents('.import-export-exercise').remove()
+
+  $('body').on 'click', '.import-action', (event) ->
+    importId = $(this).parents('.import-export-exercise').attr('data-import-id')
+    subfileId = $(this).parents('.import-export-exercise').attr('data-import-subfile-id')
+    importType = $(this).attr('data-import-type')
+    importExerciseConfirm(importId, subfileId, importType)
+
+  $('#exercise_execution_environment_id').on 'change', ->
+    checkExecutionEnvironment()
+
+  $('input:radio[name="exercise[private]"]').on 'change', ->
+    checkExecutionEnvironment()
+
+  if $('.primary-checkbox').length > 0 && $('.primary-checkbox:checked').length < 1
+    $('.primary-checkbox')[0].click()
+
 $(document).on('turbolinks:load', ready)
+
+checkExecutionEnvironment = () ->
+  executionEnvironment = $('#exercise_execution_environment_id').val()
+  visibilityPrivate = $('input:radio:checked[name="exercise[private]"]').val()
+
+  if executionEnvironment == '' && visibilityPrivate == 'false'
+    $('.execution-environment-error').removeClass('hidden')
+    $('.execution-environment-error').addClass('errors')
+    $('.execution-environment-error').parent().find('.form-label').addClass('errors')
+  else
+    $('.execution-environment-error').addClass('hidden')
+    $('.execution-environment-error').removeClass('errors')
+    $('.execution-environment-error').parent().find('.form-label').removeClass('errors')
+
+importExerciseStart = () ->
+  formData = new FormData()
+  formData.append('zip_file', document.getElementById('exercise_import').files[0])
+
+  $.ajax({
+    type: 'POST',
+    url: '/exercises/import_exercise_start',
+    data: formData,
+    processData: false,
+    contentType: false,
+    error: (a, b, c) ->
+      alert('error: ' + c)
+  })
+
+importExerciseConfirm = (importId, subfileId, importType) ->
+  $exerciseDiv = $('[data-import-subfile-id=' + subfileId + ']')
+  $messageDiv = $exerciseDiv.children('.import-export-message')
+  $actionsDiv = $exerciseDiv.children('.import-export-exercise-actions')
+
+  $.ajax({
+    type: 'POST',
+    url: '/exercises/import_exercise_confirm',
+    data: {import_id: importId, subfile_id: subfileId, import_type: importType},
+    dataType: 'json',
+    success: (response) ->
+      $messageDiv.html response.message
+      $actionsDiv.html response.actions
+
+      if response.status == 'success'
+        $exerciseDiv.addClass 'import-export-success'
+      else
+        $exerciseDiv.addClass 'import-export-failure'
+    error: (a, b, c) ->
+      alert('error: ' + c)
+  })
+
+
+exportExerciseStart = (exerciseID) ->
+  $exerciseDiv = $('#export-exercise-' + exerciseID)
+  accountLinkID = $exerciseDiv.attr('data-account-link')
+  $messageDiv = $exerciseDiv.children('.import-export-message')
+  $actionsDiv = $exerciseDiv.children('.import-export-exercise-actions')
+
+  $messageDiv.html('Checking if the exercise exists on Codeocean.')
+  $actionsDiv.html('<div class="spinner-border"></div>')
+
+  $.ajax({
+    type: 'POST',
+    url: '/exercises/' + exerciseID + '/export_external_check',
+    data: {account_link: accountLinkID},
+    dataType: 'json',
+    success: (response) ->
+      $messageDiv.html(response.message)
+      $actionsDiv.html(response.actions)
+    error: (a, b, c) ->
+      alert('error:' + c);
+  })
+
+
+exportExerciseConfirm = (exerciseID, accountLinkID, pushType) ->
+  $exerciseDiv = $('#export-exercise-' + exerciseID)
+  $messageDiv = $exerciseDiv.children('.import-export-message')
+  $actionsDiv = $exerciseDiv.children('.import-export-exercise-actions')
+
+  $.ajax({
+    type: 'POST',
+    url: '/exercises/' + exerciseID + '/export_external_confirm',
+    data: {account_link: accountLinkID, push_type: pushType},
+    dataType: 'json',
+    success: (response) ->
+      $messageDiv.html response.message
+      $actionsDiv.html response.actions
+
+      if response.status == 'success'
+        $exerciseDiv.addClass 'import-export-success'
+      else
+        $exerciseDiv.addClass 'import-export-failure'
+    error: (a, b, c) ->
+      alert('error:' + c)
+  })
+
+# export function to make it accessible from outside this scope
+root = exports ? this; root.exportExerciseStart = exportExerciseStart

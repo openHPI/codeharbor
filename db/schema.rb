@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_20_105445) do
+ActiveRecord::Schema.define(version: 2019_10_27_093322) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "account_link_users", id: false, force: :cascade do |t|
@@ -25,11 +26,10 @@ ActiveRecord::Schema.define(version: 2019_04_20_105445) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "push_url"
-    t.string "account_name"
     t.integer "user_id"
-    t.string "oauth2_token"
-    t.string "client_id"
-    t.string "client_secret"
+    t.string "api_key"
+    t.string "name"
+    t.string "check_uuid_url"
     t.index ["user_id"], name: "index_account_links_on_user_id"
   end
 
@@ -98,6 +98,7 @@ ActiveRecord::Schema.define(version: 2019_04_20_105445) do
     t.string "text"
     t.integer "exercise_id"
     t.string "language", default: "EN"
+    t.boolean "primary"
     t.index ["exercise_id"], name: "index_descriptions_on_exercise_id"
   end
 
@@ -175,9 +176,13 @@ ActiveRecord::Schema.define(version: 2019_04_20_105445) do
     t.integer "downloads", default: 0
     t.integer "license_id"
     t.boolean "deleted"
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.bigint "predecessor_id"
     t.index ["execution_environment_id"], name: "index_exercises_on_execution_environment_id"
     t.index ["license_id"], name: "index_exercises_on_license_id"
+    t.index ["predecessor_id"], name: "index_exercises_on_predecessor_id"
     t.index ["user_id"], name: "index_exercises_on_user_id"
+    t.index ["uuid"], name: "index_exercises_on_uuid", unique: true
   end
 
   create_table "file_types", id: :serial, force: :cascade do |t|
@@ -206,6 +211,18 @@ ActiveRecord::Schema.define(version: 2019_04_20_105445) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "import_file_caches", force: :cascade do |t|
+    t.bigint "user_id"
+    t.jsonb "data"
+    t.string "zip_file_file_name"
+    t.string "zip_file_content_type"
+    t.bigint "zip_file_file_size"
+    t.datetime "zip_file_updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_import_file_caches_on_user_id"
   end
 
   create_table "label_categories", id: :serial, force: :cascade do |t|
@@ -266,6 +283,31 @@ ActiveRecord::Schema.define(version: 2019_04_20_105445) do
     t.datetime "updated_at", null: false
     t.index ["exercise_id"], name: "index_reports_on_exercise_id"
     t.index ["user_id"], name: "index_reports_on_user_id"
+  end
+
+  create_table "taggings", id: :serial, force: :cascade do |t|
+    t.integer "tag_id"
+    t.string "taggable_type"
+    t.integer "taggable_id"
+    t.string "tagger_type"
+    t.integer "tagger_id"
+    t.string "context", limit: 128
+    t.datetime "created_at"
+    t.index ["context"], name: "index_taggings_on_context"
+    t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+    t.index ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context"
+    t.index ["taggable_id", "taggable_type", "tagger_id", "context"], name: "taggings_idy"
+    t.index ["taggable_id"], name: "index_taggings_on_taggable_id"
+    t.index ["taggable_type"], name: "index_taggings_on_taggable_type"
+    t.index ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type"
+    t.index ["tagger_id"], name: "index_taggings_on_tagger_id"
+  end
+
+  create_table "tags", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.integer "taggings_count", default: 0
+    t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
   create_table "testing_frameworks", id: :serial, force: :cascade do |t|
