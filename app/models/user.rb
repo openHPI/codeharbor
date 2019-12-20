@@ -7,7 +7,7 @@ class User < ApplicationRecord
   groupify :group_member
 
   validates :email, presence: true, uniqueness: {case_sensitive: false}
-  validates :username, presence: true, uniqueness: {allow_blank: true, case_sensitive: false}
+  validates :username, uniqueness: {allow_blank: true, case_sensitive: false}
   validates :first_name, :last_name, presence: true
   has_secure_password
 
