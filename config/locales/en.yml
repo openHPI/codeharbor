@@ -20,7 +20,6 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 
-# activerecord.errors.models.exercise.attributes.execution_environment.blank
 en:
   activerecord:
     attributes:
