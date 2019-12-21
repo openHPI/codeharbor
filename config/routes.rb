@@ -105,7 +105,7 @@ Rails.application.routes.draw do
     resources :account_links do
       post :remove_account_link, on: :member
     end
-    resources :messages do
+    resources :messages, only: %i[index new create] do
       get :delete, on: :member
       get :reply, on: :collection
     end
@@ -128,7 +128,7 @@ Rails.application.routes.draw do
         get :load_comments
       end
     end
-    resources :ratings
+    resources :ratings, only: :create
     member do
       get :related_exercises
       post :report
