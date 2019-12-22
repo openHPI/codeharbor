@@ -43,13 +43,6 @@ ActiveRecord::Schema.define(version: 2019_10_27_093322) do
     t.index ["user_id"], name: "index_answers_on_user_id"
   end
 
-  create_table "assemblies_parts", id: false, force: :cascade do |t|
-    t.integer "assembly_id"
-    t.integer "part_id"
-    t.index ["assembly_id"], name: "index_assemblies_parts_on_assembly_id"
-    t.index ["part_id"], name: "index_assemblies_parts_on_part_id"
-  end
-
   create_table "cart_exercises", id: :serial, force: :cascade do |t|
     t.integer "exercise_id"
     t.integer "cart_id"
