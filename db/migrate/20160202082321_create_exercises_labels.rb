@@ -1,6 +1,6 @@
-class CreateExercisesLabels < ActiveRecord::Migration
+class CreateExercisesLabels < ActiveRecord::Migration[4.2]
   def change
-    create_table :exercises_labels, id: false do |t|
+    create_table :exercises_labels do |t|
       t.belongs_to :exercise, index: true
       t.belongs_to :label, index: true
     end
