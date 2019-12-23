@@ -6,35 +6,35 @@ class Ability
   def initialize(user)
     return unless user
 
-    # AccountLink
-    account_link_abilities user
+    # # AccountLink
+    # account_link_abilities user
 
-    # Answer
-    answer_abilities user
+    # # Answer
+    # answer_abilities user
 
-    # Cart
-    cart_abilities user
+    # # Cart
+    # cart_abilities user
 
-    # Collection
-    collection_abilities user
+    # # Collection
+    # collection_abilities user
 
-    # Exercise
-    exercise_abilities user
+    # # Exercise
+    # exercise_abilities user
 
-    # Comment
-    comment_abilities user
+    # # Comment
+    # comment_abilities user
 
-    # Rating
-    can %i[read create], Rating
+    # # Rating
+    # can %i[read create], Rating
 
-    # Groups
-    group_abilities user
+    # # Groups
+    # group_abilities user
 
-    # User
-    user_abilities user
+    # # User
+    # user_abilities user
 
-    # Message
-    message_abilities user
+    # # Message
+    # message_abilities user
 
     # Admin abilities in the end to take precedence
     admin_abilities user
@@ -42,6 +42,9 @@ class Ability
 
   def admin_abilities(user)
     return unless user.role == 'admin'
+
+    can :access, :rails_admin
+    can :read, :dashboard
 
     can :manage, :all
     # Define Abilities admins cannot do

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   resources :relations
   resources :exercise_relations
   # You can have the root of your site routed with "root"
@@ -144,6 +143,8 @@ Rails.application.routes.draw do
       post :export_external_confirm
     end
   end
+
+  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
