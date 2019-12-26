@@ -11,7 +11,6 @@ class AccountLinksController < ApplicationController
   end
 
   def index
-    authorize! :view_all, current_user
     @account_links = AccountLink.all.paginate(per_page: 10, page: params[:page])
   end
 

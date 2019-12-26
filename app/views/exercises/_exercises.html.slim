@@ -67,7 +67,7 @@
               .exercise_label style=("background-color: #{'#' + label.color.to_s}; color: #{'#' + label.font_color.to_s};")
                 = label.name
       .exercise-buttons.btn-group-vertical.pull-right aria-label="..." role="group"
-        - if can? :read, exercise
+        - if can? :show, exercise
           = link_to t('exercises.all.view'), exercise_path(exercise), class:'btn btn-default'
           = link_to t('exercises.all.duplicate'), duplicate_exercise_path(exercise), class:'btn btn-default'
         - if can? :edit, exercise

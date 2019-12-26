@@ -6,35 +6,37 @@ class Ability
   def initialize(user)
     return unless user
 
-    # # AccountLink
-    # account_link_abilities user
+    alias_action :create, :show, :update, :destroy, to: :crud
 
-    # # Answer
-    # answer_abilities user
+    # AccountLink
+    account_link_abilities user
 
-    # # Cart
-    # cart_abilities user
+    # Answer
+    answer_abilities user
 
-    # # Collection
-    # collection_abilities user
+    # Cart
+    cart_abilities user
 
-    # # Exercise
-    # exercise_abilities user
+    # Collection
+    collection_abilities user
 
-    # # Comment
-    # comment_abilities user
+    # Exercise
+    exercise_abilities user
 
-    # # Rating
-    # can %i[read create], Rating
+    # Comment
+    comment_abilities user
 
-    # # Groups
-    # group_abilities user
+    # Rating
+    can %i[read create], Rating
 
-    # # User
-    # user_abilities user
+    # Groups
+    group_abilities user
 
-    # # Message
-    # message_abilities user
+    # User
+    user_abilities user
+
+    # Message
+    message_abilities user
 
     # Admin abilities in the end to take precedence
     admin_abilities user
@@ -56,76 +58,67 @@ class Ability
 
   def account_link_abilities(user)
     can %i[create new], AccountLink
-    # can [:manage], AccountLink, :user_id => user.id
+
+    can [:crud], AccountLink, user_id: user.id
     can [:view, :remove_account_link], AccountLink do |account_link|
       account_link.external_users.include?(user)
-    end
-    can [:manage], AccountLink do |account_link|
-      account_link.user == user
     end
   end
 
   def answer_abilities(user)
     can [:new], Answer
-    can [:manage], Answer do |answer|
-      answer.user == user
-    end
+    can [:crud], Answer, user_id: user.id
   end
 
   def cart_abilities(user)
     can [:create], Cart
-    can [:my_cart, :show, :remove_all, :download_all, :push_cart, :export, :remove_exercise], Cart do |cart|
-      cart.user == user
-    end
+    can %i[my_cart show remove_all download_all push_cart export remove_exercise], user_id: user.id
   end
 
   def collection_abilities(user)
-    can %i[create view_shared save_shared show], Collection
-    can [:manage], Collection do |collection|
+    can %i[create view_shared save_shared index], Collection
+    can [:crud, :remove_exercise, :remove_all, :push_collection, :download_all, :share], Collection do |collection|
       collection.users.include?(user)
     end
-    cannot :collections_all, Collection
   end
 
   def exercise_abilities(user)
     can %i[index create contribute read_comments related_exercises], Exercise
-    can [:read, :add_to_cart, :add_to_collection, :push_external, :duplicate, :download_exercise, :report], Exercise do |exercise|
+    can [:show, :add_to_cart, :add_to_collection, :push_external, :duplicate, :download_exercise], Exercise do |exercise|
       exercise.can_access(user)
     end
-    can [:manage], Exercise do |exercise|
+    can [:crud, :export_external_start, :export_external_check, :export_external_confirm, :import_exercise_start,
+         :import_exercise_confirm, :history], Exercise do |exercise|
       ExerciseAuthor.where(user: user, exercise: exercise).any? || exercise.user == user
     end
-    cannot [:report], Exercise do |exercise|
-      ExerciseAuthor.where(user: user, exercise: exercise).any? || exercise.user == user
+    can [:report], Exercise do |exercise|
+      ExerciseAuthor.where(user: user, exercise: exercise).empty? && exercise.user != user
     end
-    cannot :exercises_all, Exercise
   end
 
   def comment_abilities(user)
     can %i[show create read answer], Comment
-    can [:manage], Comment do |comment|
+    can [:crud], Comment do |comment|
       comment.user == user
     end
-
-    cannot :comments_all, Comment
   end
 
   def group_abilities(user)
-    can %i[create request_access], Group
-    can [:view, :read, :members, :admins, :leave], Group do |group|
+    can %i[create], Group
+    can [:request_access], Group do |group|
+      !user.in_group?(group)
+    end
+    can [:view, :show, :members, :admins, :leave], Group do |group|
       user.in_group?(group, as: 'member')
     end
-    can [:manage], Group do |group|
+    can [:crud, :remove_exercise, :grant_access, :delete_from_group, :deny_access, :make_admin], Group do |group|
+      # :add_account_link_from_member, :remove_account_link_from_member
       user.in_group?(group, as: 'admin')
     end
-    cannot [:request_access], Group do |group|
-      user.in_group?(group)
-    end
-    cannot :groups_all, Group
   end
 
   def user_abilities(user)
-    can %i[create view show], User
+    can %i[create show], User
     can [:message], User do |this_user|
       this_user != user
     end
@@ -136,7 +129,7 @@ class Ability
 
   def message_abilities(user)
     can [:create], Message
-    can [:show, :reply, :delete, :add_author], Message do |message|
+    can [:show, :reply, :delete], Message do |message|
       message.recipient == user
     end
     can [:show, :delete], Message do |message|
