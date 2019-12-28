@@ -11,9 +11,6 @@ class Ability
     # AccountLink
     account_link_abilities user
 
-    # Answer
-    answer_abilities user
-
     # Cart
     cart_abilities user
 
@@ -60,11 +57,6 @@ class Ability
 
     can %i[crud view], AccountLink, user_id: user.id
     can %i[view show remove_account_link], AccountLink, external_users: {id: user.id}
-  end
-
-  def answer_abilities(user)
-    can %i[new], Answer
-    can %i[crud], Answer, user_id: user.id
   end
 
   def cart_abilities(user)

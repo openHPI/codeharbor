@@ -123,7 +123,6 @@ Rails.application.routes.draw do
       post :import_exercise_confirm
     end
     resources :comments do
-      resources :answers
       collection do
         get :load_comments
       end

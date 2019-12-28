@@ -33,16 +33,6 @@ ActiveRecord::Schema.define(version: 2019_10_27_093322) do
     t.index ["user_id"], name: "index_account_links_on_user_id"
   end
 
-  create_table "answers", id: :serial, force: :cascade do |t|
-    t.integer "comment_id"
-    t.integer "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.text "text"
-    t.index ["comment_id"], name: "index_answers_on_comment_id"
-    t.index ["user_id"], name: "index_answers_on_user_id"
-  end
-
   create_table "cart_exercises", id: :serial, force: :cascade do |t|
     t.integer "exercise_id"
     t.integer "cart_id"
@@ -356,8 +346,6 @@ ActiveRecord::Schema.define(version: 2019_10_27_093322) do
   end
 
   add_foreign_key "account_links", "users"
-  add_foreign_key "answers", "comments"
-  add_foreign_key "answers", "users"
   add_foreign_key "carts", "users"
   add_foreign_key "comments", "exercises"
   add_foreign_key "comments", "users"

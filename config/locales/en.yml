@@ -293,15 +293,15 @@ en:
       header: "New Account Link"
     errorMessage: " prohibited this account_link from being saved."
 
-  answers:
-    comment: "Comment"
-    user: "User"
-    button:
-      new: "New Answer"
-      show: "Show"
-      edit: "Edit"
-      destroy: "Destroy"
-      back: "Back"
+  # answers:
+  #   comment: "Comment"
+  #   user: "User"
+  #   button:
+  #     new: "New Answer"
+  #     show: "Show"
+  #     edit: "Edit"
+  #     destroy: "Destroy"
+  #     back: "Back"
 
     new:
       header: "New Answer"
