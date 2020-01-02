@@ -56,7 +56,7 @@ gem 'therubyracer', platforms: :ruby
 gem 'devise-bootstrap-views', '~> 1.0'
 gem 'twitter-bootstrap-rails', git: 'https://github.com/seyhunak/twitter-bootstrap-rails.git'
 
-gem 'acts-as-taggable-on', '~> 6.0'
+gem 'acts-as-taggable-on', '~> 6.5'
 gem 'config'
 gem 'faraday'
 gem 'font-awesome-rails', '>= 4.7.0.5'
