@@ -74,7 +74,7 @@ group :development, :test do
   gem 'factory_bot_rails', '~> 5.1.1'
   gem 'pry-byebug'
   gem 'rails-controller-testing', '>= 1.0.4'
-  gem 'rspec-collection_matchers', '~> 1.1.3'
+  gem 'rspec-collection_matchers', '~> 1.2.0'
   gem 'rspec-rails', '>= 3.8.2'
   gem 'rubocop', '~> 0.78.0'
   gem 'rubocop-performance', '~> 1.5.1'
