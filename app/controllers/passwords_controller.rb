@@ -2,7 +2,7 @@
 
 class PasswordsController < ApplicationController
   before_action :set_email_if_present, only: :forgot
-  before_action :set_token_if_present, only: :forgot
+  before_action :set_token_if_present, only: :reset
 
   def forgot
     user = User.find_by(email: @email.downcase)
