@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class LabelsController < ApplicationController
+  load_and_authorize_resource
   before_action :set_label, only: %i[show edit update destroy]
 
   rescue_from CanCan::AccessDenied do |_exception|

@@ -13,9 +13,18 @@ RSpec.describe 'users', type: :request do
     end
 
     describe 'GET /users' do
-      it 'has http 200' do
+      it 'redirects to root' do
         get users_path
-        expect(response).to have_http_status(:ok)
+        expect(response).to redirect_to '/'
+      end
+
+      context 'when user is admin' do
+        let(:user) { create(:admin) }
+
+        it 'has http 200' do
+          get users_path
+          expect(response).to have_http_status(:ok)
+        end
       end
     end
 

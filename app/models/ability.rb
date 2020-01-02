@@ -6,8 +6,6 @@ class Ability
   def initialize(user)
     return unless user
 
-    admin_abilities user
-
     # AccountLink
     account_link_abilities user
 
@@ -37,6 +35,9 @@ class Ability
 
     # Message
     message_abilities user
+
+    # Admin abilities in the end to take precedence
+    admin_abilities user
   end
 
   def admin_abilities(user)
@@ -48,8 +49,6 @@ class Ability
     cannot :leave, Group do |group|
       !user.in_group?(group)
     end
-
-    can :view_all, User
   end
 
   def account_link_abilities(user)
@@ -82,11 +81,12 @@ class Ability
     can [:manage], Collection do |collection|
       collection.users.include?(user)
     end
+    cannot :collections_all, Collection
   end
 
   def exercise_abilities(user)
-    can %i[create contribute read_comments related_exercises], Exercise
-    can [:show, :read, :add_to_cart, :add_to_collection, :push_external, :duplicate, :download_exercise, :report], Exercise do |exercise|
+    can %i[index create contribute read_comments related_exercises], Exercise
+    can [:read, :add_to_cart, :add_to_collection, :push_external, :duplicate, :download_exercise, :report], Exercise do |exercise|
       exercise.can_access(user)
     end
     can [:manage], Exercise do |exercise|
@@ -95,6 +95,7 @@ class Ability
     cannot [:report], Exercise do |exercise|
       ExerciseAuthor.where(user: user, exercise: exercise).any? || exercise.user == user
     end
+    cannot :exercises_all, Exercise
   end
 
   def comment_abilities(user)
@@ -102,6 +103,8 @@ class Ability
     can [:manage], Comment do |comment|
       comment.user == user
     end
+
+    cannot :comments_all, Comment
   end
 
   def group_abilities(user)
@@ -115,10 +118,11 @@ class Ability
     cannot [:request_access], Group do |group|
       user.in_group?(group)
     end
+    cannot :groups_all, Group
   end
 
   def user_abilities(user)
-    can %i[create view show read], User
+    can %i[create view show], User
     can [:message], User do |this_user|
       this_user != user
     end

@@ -278,9 +278,18 @@ RSpec.describe ExercisesController, type: :controller do
   describe 'GET #exercises_all' do
     let!(:exercise) { create(:simple_exercise, valid_attributes) }
 
-    it 'assigns all exercises as @exercises' do
+    it 'redirects to root' do
       get :exercises_all, params: {}, session: valid_session
-      expect(assigns(:exercises)).to eq([exercise])
+      expect(response).to redirect_to '/'
+    end
+
+    context 'when user is admin' do
+      let(:user) { create(:admin) }
+
+      it 'assigns all exercises as @exercises' do
+        get :exercises_all, params: {}, session: valid_session
+        expect(assigns(:exercises)).to eq([exercise])
+      end
     end
   end
 

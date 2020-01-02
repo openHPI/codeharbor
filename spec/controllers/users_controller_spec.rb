@@ -39,14 +39,21 @@ RSpec.describe UsersController, type: :controller do
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # UsersController. Be sure to keep this updated too.
-  let(:valid_session) do
-    {user_id: user.id}
-  end
+  let(:valid_session) { {user_id: user.id} }
 
   describe 'GET #index' do
     it 'assigns all users as @users' do
       get :index, params: {}, session: valid_session
-      expect(assigns(:users)).to eq([user])
+      expect(assigns(:users)).to eq([])
+    end
+
+    context 'when user is admin' do
+      let!(:user) { create(:admin) }
+
+      it 'assigns all users as @users' do
+        get :index, params: {}, session: valid_session
+        expect(assigns(:users)).to eq([user])
+      end
     end
   end
 
