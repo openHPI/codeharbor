@@ -74,6 +74,10 @@ RSpec.describe User, type: :model do
       expect { soft_delete }.to change(user, :deleted).to true
     end
 
+    it 'removes username' do
+      expect { soft_delete }.to change(user, :username).to nil
+    end
+
     context 'when user is in a group' do
       before { group }
 

@@ -39,7 +39,7 @@ class User < ApplicationRecord
 
     email = self.email
     new_email = Digest::MD5.hexdigest email
-    update(first_name: 'deleted', last_name: 'user', email: new_email, deleted: true)
+    update(first_name: 'deleted', last_name: 'user', email: new_email, deleted: true, username: nil)
   end
 
   def last_admin?(group)
