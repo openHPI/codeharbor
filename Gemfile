@@ -56,7 +56,7 @@ gem 'therubyracer', platforms: :ruby
 gem 'devise-bootstrap-views', '~> 1.0'
 gem 'twitter-bootstrap-rails', git: 'https://github.com/seyhunak/twitter-bootstrap-rails.git'
 
-gem 'acts-as-taggable-on', '~> 6.0'
+gem 'acts-as-taggable-on', '~> 6.5'
 gem 'config'
 gem 'faraday'
 gem 'font-awesome-rails', '>= 4.7.0.5'
@@ -75,11 +75,11 @@ group :development, :test do
   gem 'factory_bot_rails', '~> 5.1.1'
   gem 'pry-byebug'
   gem 'rails-controller-testing', '>= 1.0.4'
-  gem 'rspec-collection_matchers', '~> 1.1.3'
+  gem 'rspec-collection_matchers', '~> 1.2.0'
   gem 'rspec-rails', '>= 3.8.2'
   gem 'rubocop', '~> 0.78.0'
-  gem 'rubocop-performance', '~> 1.5.1'
-  gem 'rubocop-rails', '~> 2.4.0'
+  gem 'rubocop-performance', '~> 1.5.2'
+  gem 'rubocop-rails', '~> 2.4.1'
   gem 'rubocop-rspec', '~> 1.37.1'
 end
 
