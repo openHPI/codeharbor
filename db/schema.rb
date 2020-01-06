@@ -10,15 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_27_093322) do
+ActiveRecord::Schema.define(version: 2020_01_06_165428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
-  create_table "account_link_users", id: :serial, force: :cascade do |t|
-    t.integer "account_link_id"
-    t.integer "user_id"
+  create_table "account_link_users", force: :cascade do |t|
+    t.integer "account_link_id", null: false
+    t.integer "user_id", null: false
     t.index ["account_link_id", "user_id"], name: "index_account_link_users_on_account_link_id_and_user_id"
   end
 
@@ -132,7 +132,7 @@ ActiveRecord::Schema.define(version: 2019_10_27_093322) do
     t.index ["group_id"], name: "index_exercise_group_accesses_on_group_id"
   end
 
-  create_table "exercise_labels", id: :serial, force: :cascade do |t|
+  create_table "exercise_labels", force: :cascade do |t|
     t.integer "exercise_id"
     t.integer "label_id"
     t.index ["exercise_id"], name: "index_exercise_labels_on_exercise_id"
