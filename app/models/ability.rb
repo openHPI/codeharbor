@@ -75,8 +75,8 @@ class Ability
       exercise.can_access(user)
     end
     alias_action :export_external_start, :export_external_check, :export_external_confirm, to: :export
-    can %i[crud export history], Exercise, user: {id: user.id}
-    can %i[crud export history], Exercise, exercise_authors: {user: {id: user.id}}
+    can %i[crud export history remove_state], Exercise, user: {id: user.id}
+    can %i[crud export history remove_state], Exercise, exercise_authors: {user: {id: user.id}}
     can %i[report], Exercise do |exercise|
       ExerciseAuthor.where(user: user, exercise: exercise).empty? && exercise.user != user
     end
