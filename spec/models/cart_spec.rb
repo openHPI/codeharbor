@@ -41,15 +41,7 @@ RSpec.describe Cart, type: :model do
         let(:user) { create(:admin) }
 
         it { is_expected.to be_able_to(:manage, described_class) }
-
         it { is_expected.to be_able_to(:manage, cart) }
-        it { is_expected.to be_able_to(:my_cart, cart) }
-        it { is_expected.to be_able_to(:show, cart) }
-        it { is_expected.to be_able_to(:remove_all, cart) }
-        it { is_expected.to be_able_to(:download_all, cart) }
-        it { is_expected.to be_able_to(:push_cart, cart) }
-        it { is_expected.to be_able_to(:export, cart) }
-        it { is_expected.to be_able_to(:remove_exercise, cart) }
       end
 
       context 'when cart is from user' do
