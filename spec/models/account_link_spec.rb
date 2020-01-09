@@ -8,7 +8,8 @@ RSpec.describe AccountLink, type: :model do
 
     let(:user) { nil }
     let(:account_link_user) { create(:user) }
-    let(:account_link) { create(:account_link, user: account_link_user) }
+    let(:account_link) { create(:account_link, user: account_link_user, external_users: external_users) }
+    let(:external_users) { [] }
 
     it { is_expected.not_to be_able_to(:create, described_class) }
     it { is_expected.not_to be_able_to(:new, described_class) }
@@ -24,6 +25,14 @@ RSpec.describe AccountLink, type: :model do
       it { is_expected.not_to be_able_to(:manage, described_class) }
       it { is_expected.not_to be_able_to(:view, account_link) }
       it { is_expected.not_to be_able_to(:remove_account_link, account_link) }
+
+      context 'when user is listed as external_user' do
+        let(:external_users) { [user] }
+
+        it { is_expected.to be_able_to(:view, account_link) }
+        it { is_expected.to be_able_to(:show, account_link) }
+        it { is_expected.to be_able_to(:remove_account_link, account_link) }
+      end
 
       context 'when user is admin' do
         let(:user) { create(:admin) }
