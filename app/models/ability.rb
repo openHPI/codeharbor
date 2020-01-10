@@ -102,7 +102,7 @@ class Ability
   end
 
   def user_abilities(user)
-    can %i[create show view], User
+    can %i[show view], User
     can %i[message], User do |this_user|
       this_user != user
     end

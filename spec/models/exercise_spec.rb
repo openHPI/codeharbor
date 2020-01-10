@@ -150,8 +150,8 @@ RSpec.describe Exercise, type: :model do
         let(:exercise_user) { user }
 
         it { is_expected.not_to be_able_to(:manage, described_class) }
-
         it { is_expected.not_to be_able_to(:manage, exercise) }
+
         it { is_expected.to be_able_to(:show, exercise) }
         it { is_expected.to be_able_to(:add_to_cart, exercise) }
         it { is_expected.to be_able_to(:add_to_collection, exercise) }
