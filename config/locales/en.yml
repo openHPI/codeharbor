@@ -293,16 +293,6 @@ en:
       header: "New Account Link"
     errorMessage: " prohibited this account_link from being saved."
 
-  # answers:
-  #   comment: "Comment"
-  #   user: "User"
-  #   button:
-  #     new: "New Answer"
-  #     show: "Show"
-  #     edit: "Edit"
-  #     destroy: "Destroy"
-  #     back: "Back"
-
     new:
       header: "New Answer"
     listing:
@@ -789,6 +779,7 @@ en:
       testing_framework: "Testing Frameworks Administration"
       lables: "Lables Administration"
       license: "License Administration"
+      rails_admin: 'Rails admin'
     cart: "Cart"
     logout: "Log out"
 

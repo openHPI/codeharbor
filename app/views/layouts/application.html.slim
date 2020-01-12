@@ -24,6 +24,9 @@ html
               = menu_divider
               - if current_user.role === 'admin'
                 = drop_down t('layouts.admin') do
+                  li
+                    = link_to rails_admin.dashboard_path, 'data-turbolinks': false
+                      = t('layouts.admin_nav.rails_admin')
                   = menu_item t('layouts.admin_nav.user'), users_path
                   = menu_item t('layouts.admin_nav.exercise'), exercises_exercises_all_path
                   = menu_item t('layouts.admin_nav.comments'), comments_comments_all_path
