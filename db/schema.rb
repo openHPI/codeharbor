@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_27_093322) do
+ActiveRecord::Schema.define(version: 2020_01_13_130441) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
-  create_table "account_link_users", id: false, force: :cascade do |t|
+  create_table "account_link_users", force: :cascade do |t|
     t.integer "account_link_id", null: false
     t.integer "user_id", null: false
     t.index ["account_link_id", "user_id"], name: "index_account_link_users_on_account_link_id_and_user_id"
@@ -31,23 +31,6 @@ ActiveRecord::Schema.define(version: 2019_10_27_093322) do
     t.string "name"
     t.string "check_uuid_url"
     t.index ["user_id"], name: "index_account_links_on_user_id"
-  end
-
-  create_table "answers", id: :serial, force: :cascade do |t|
-    t.integer "comment_id"
-    t.integer "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.text "text"
-    t.index ["comment_id"], name: "index_answers_on_comment_id"
-    t.index ["user_id"], name: "index_answers_on_user_id"
-  end
-
-  create_table "assemblies_parts", id: false, force: :cascade do |t|
-    t.integer "assembly_id"
-    t.integer "part_id"
-    t.index ["assembly_id"], name: "index_assemblies_parts_on_assembly_id"
-    t.index ["part_id"], name: "index_assemblies_parts_on_part_id"
   end
 
   create_table "cart_exercises", id: :serial, force: :cascade do |t|
@@ -149,7 +132,7 @@ ActiveRecord::Schema.define(version: 2019_10_27_093322) do
     t.index ["group_id"], name: "index_exercise_group_accesses_on_group_id"
   end
 
-  create_table "exercise_labels", id: false, force: :cascade do |t|
+  create_table "exercise_labels", force: :cascade do |t|
     t.integer "exercise_id"
     t.integer "label_id"
     t.index ["exercise_id"], name: "index_exercise_labels_on_exercise_id"
@@ -190,6 +173,7 @@ ActiveRecord::Schema.define(version: 2019_10_27_093322) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "file_extension"
+    t.string "editor_mode"
   end
 
   create_table "group_memberships", id: :serial, force: :cascade do |t|
@@ -363,8 +347,6 @@ ActiveRecord::Schema.define(version: 2019_10_27_093322) do
   end
 
   add_foreign_key "account_links", "users"
-  add_foreign_key "answers", "comments"
-  add_foreign_key "answers", "users"
   add_foreign_key "carts", "users"
   add_foreign_key "comments", "exercises"
   add_foreign_key "comments", "users"
