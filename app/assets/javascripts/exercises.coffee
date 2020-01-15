@@ -430,6 +430,12 @@ ready =->
   $('body').on 'click', '.export-close-button', (event) ->
     $(this).parents('.import-export-exercise').remove()
 
+  $('body').on 'change', '.file-type', (event) ->
+    editor = $($('.file-type')[0]).parent().parent().parent().find('.editor')[0]
+    mode = $(this).find('option:selected').attr('data-editor-mode')
+    ace.edit(editor).getSession().setMode(mode)
+
+
   $('body').on 'click', '.import-action', (event) ->
     importId = $(this).parents('.import-export-exercise').attr('data-import-id')
     subfileId = $(this).parents('.import-export-exercise').attr('data-import-subfile-id')
