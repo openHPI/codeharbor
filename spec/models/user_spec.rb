@@ -4,6 +4,74 @@ require 'rails_helper'
 require 'nokogiri'
 
 RSpec.describe User, type: :model do
+  describe 'abilities' do
+    subject(:ability) { Ability.new(current_user) }
+
+    let(:current_user) { nil }
+    let(:user) { create(:user) }
+    let(:role) { 'member' }
+
+    it { is_expected.not_to be_able_to(:index, described_class) }
+    it { is_expected.not_to be_able_to(:create, described_class) }
+    it { is_expected.not_to be_able_to(:new, described_class) }
+    it { is_expected.not_to be_able_to(:manage, described_class) }
+
+    it { is_expected.not_to be_able_to(:show, user) }
+    it { is_expected.not_to be_able_to(:view, user) }
+    it { is_expected.not_to be_able_to(:message, user) }
+    it { is_expected.not_to be_able_to(:edit, user) }
+    it { is_expected.not_to be_able_to(:update, user) }
+    it { is_expected.not_to be_able_to(:soft_delete, user) }
+    it { is_expected.not_to be_able_to(:delete, user) }
+    it { is_expected.not_to be_able_to(:manage_accountlinks, user) }
+    it { is_expected.not_to be_able_to(:remove_account_link, user) }
+
+    context 'with a current_user' do
+      let(:current_user) { create(:user) }
+
+      it { is_expected.not_to be_able_to(:index, described_class) }
+      it { is_expected.not_to be_able_to(:create, described_class) }
+      it { is_expected.not_to be_able_to(:new, described_class) }
+      it { is_expected.not_to be_able_to(:manage, described_class) }
+
+      it { is_expected.to be_able_to(:show, user) }
+      it { is_expected.to be_able_to(:view, user) }
+      it { is_expected.to be_able_to(:message, user) }
+      it { is_expected.not_to be_able_to(:edit, user) }
+      it { is_expected.not_to be_able_to(:update, user) }
+      it { is_expected.not_to be_able_to(:soft_delete, user) }
+      it { is_expected.not_to be_able_to(:delete, user) }
+      it { is_expected.not_to be_able_to(:manage_accountlinks, user) }
+      it { is_expected.not_to be_able_to(:remove_account_link, user) }
+
+      context 'when current_user is admin' do
+        let(:current_user) { create(:admin) }
+
+        it { is_expected.to be_able_to(:manage, described_class) }
+        it { is_expected.to be_able_to(:manage, user) }
+      end
+
+      context 'when current_user is user' do
+        let(:user) { current_user }
+
+        it { is_expected.not_to be_able_to(:index, described_class) }
+        it { is_expected.not_to be_able_to(:create, described_class) }
+        it { is_expected.not_to be_able_to(:new, described_class) }
+        it { is_expected.not_to be_able_to(:manage, described_class) }
+
+        it { is_expected.to be_able_to(:show, user) }
+        it { is_expected.to be_able_to(:view, user) }
+        it { is_expected.not_to be_able_to(:message, user) }
+        it { is_expected.to be_able_to(:edit, user) }
+        it { is_expected.to be_able_to(:update, user) }
+        it { is_expected.to be_able_to(:soft_delete, user) }
+        it { is_expected.to be_able_to(:delete, user) }
+        it { is_expected.to be_able_to(:manage_accountlinks, user) }
+        it { is_expected.to be_able_to(:remove_account_link, user) }
+      end
+    end
+  end
+
   describe '#valid?' do
     it { is_expected.to validate_presence_of(:email) }
     it { is_expected.to validate_presence_of(:first_name) }

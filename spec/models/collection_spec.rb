@@ -3,6 +3,68 @@
 require 'rails_helper'
 
 RSpec.describe Collection, type: :model do
+  describe 'abilities' do
+    subject(:ability) { Ability.new(user) }
+
+    let(:user) { nil }
+    let(:collection_user) { create(:user) }
+    let(:collection) { create(:collection, users: users) }
+    let(:users) { [collection_user] }
+
+    it { is_expected.not_to be_able_to(:create, described_class) }
+    it { is_expected.not_to be_able_to(:new, described_class) }
+    it { is_expected.not_to be_able_to(:manage, described_class) }
+
+    it { is_expected.not_to be_able_to(:show, collection) }
+    it { is_expected.not_to be_able_to(:update, collection) }
+    it { is_expected.not_to be_able_to(:destroy, collection) }
+    it { is_expected.not_to be_able_to(:remove_exercise, collection) }
+    it { is_expected.not_to be_able_to(:remove_all, collection) }
+    it { is_expected.not_to be_able_to(:push_collection, collection) }
+    it { is_expected.not_to be_able_to(:download_all, collection) }
+    it { is_expected.not_to be_able_to(:share, collection) }
+
+    context 'with a user' do
+      let(:user) { create(:user) }
+
+      it { is_expected.to be_able_to(:create, described_class) }
+      it { is_expected.to be_able_to(:new, described_class) }
+      it { is_expected.not_to be_able_to(:manage, described_class) }
+
+      it { is_expected.not_to be_able_to(:show, collection) }
+      it { is_expected.not_to be_able_to(:update, collection) }
+      it { is_expected.not_to be_able_to(:destroy, collection) }
+      it { is_expected.not_to be_able_to(:remove_exercise, collection) }
+      it { is_expected.not_to be_able_to(:remove_all, collection) }
+      it { is_expected.not_to be_able_to(:push_collection, collection) }
+      it { is_expected.not_to be_able_to(:download_all, collection) }
+      it { is_expected.not_to be_able_to(:share, collection) }
+
+      context 'when user is admin' do
+        let(:user) { create(:admin) }
+
+        it { is_expected.to be_able_to(:manage, described_class) }
+        it { is_expected.to be_able_to(:manage, collection) }
+      end
+
+      context 'when collection is from user' do
+        let(:collection_user) { user }
+
+        it { is_expected.not_to be_able_to(:manage, described_class) }
+
+        it { is_expected.not_to be_able_to(:manage, collection) }
+        it { is_expected.to be_able_to(:show, collection) }
+        it { is_expected.to be_able_to(:update, collection) }
+        it { is_expected.to be_able_to(:destroy, collection) }
+        it { is_expected.to be_able_to(:remove_exercise, collection) }
+        it { is_expected.to be_able_to(:remove_all, collection) }
+        it { is_expected.to be_able_to(:push_collection, collection) }
+        it { is_expected.to be_able_to(:download_all, collection) }
+        it { is_expected.to be_able_to(:share, collection) }
+      end
+    end
+  end
+
   describe '#add_exercise' do
     subject(:add_exercise) { collection.add_exercise(exercise) }
 
