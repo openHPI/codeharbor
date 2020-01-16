@@ -68,6 +68,12 @@ gem 'proforma', git: 'https://github.com/openHPI/proforma.git', tag: 'v0.4'
 gem 'select2-rails', '~> 4.0', '>= 4.0.3'
 gem 'sprockets', '~> 3.7.2'
 
+# Error Tracing
+gem 'concurrent-ruby'
+gem 'mnemosyne-ruby'
+gem 'newrelic_rpm'
+gem 'sentry-raven'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
