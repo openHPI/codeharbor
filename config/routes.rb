@@ -123,7 +123,6 @@ Rails.application.routes.draw do
       post :import_exercise_confirm
     end
     resources :comments do
-      resources :answers
       collection do
         get :load_comments
       end
@@ -143,6 +142,8 @@ Rails.application.routes.draw do
       post :export_external_confirm
     end
   end
+
+  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

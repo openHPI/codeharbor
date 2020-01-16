@@ -51,21 +51,7 @@ class MessagesController < ApplicationController
       end
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
-  def update
-    respond_to do |format|
-      if @message.update(message_params)
-        format.html { redirect_to @message, notice: t('controllers.message.updated') }
-        format.json { render :show, status: :ok, location: @message }
-      else
-        format.html { render :edit }
-        format.json { render json: @message.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # rubocop:disable Metrics/AbcSize
   def delete
     if @message.sender == current_user
       @message.sender_status = 'd'

@@ -4,6 +4,176 @@ require 'rails_helper'
 require 'nokogiri'
 
 RSpec.describe Exercise, type: :model do
+  describe 'abilities' do
+    subject(:ability) { Ability.new(user) }
+
+    let(:user) { nil }
+    let(:exercise_user) { create(:user) }
+    let(:exercise) { create(:exercise, user: exercise_user, private: private?, authors: authors) }
+    let(:private?) { false }
+    let(:authors) { [] }
+
+    it { is_expected.not_to be_able_to(:index, described_class) }
+    it { is_expected.not_to be_able_to(:create, described_class) }
+    it { is_expected.not_to be_able_to(:contribute, described_class) }
+    it { is_expected.not_to be_able_to(:read_comments, described_class) }
+    it { is_expected.not_to be_able_to(:related_exercises, described_class) }
+    it { is_expected.not_to be_able_to(:import_exercise_start, described_class) }
+    it { is_expected.not_to be_able_to(:import_exercise_confirm, described_class) }
+
+    it { is_expected.not_to be_able_to(:show, exercise) }
+    it { is_expected.not_to be_able_to(:update, exercise) }
+    it { is_expected.not_to be_able_to(:destroy, exercise) }
+    it { is_expected.not_to be_able_to(:add_to_cart, exercise) }
+    it { is_expected.not_to be_able_to(:add_to_collection, exercise) }
+    it { is_expected.not_to be_able_to(:push_external, exercise) }
+    it { is_expected.not_to be_able_to(:duplicate, exercise) }
+    it { is_expected.not_to be_able_to(:download_exercise, exercise) }
+    it { is_expected.not_to be_able_to(:contribute, exercise) }
+    it { is_expected.not_to be_able_to(:read_comments, exercise) }
+    it { is_expected.not_to be_able_to(:related_exercises, exercise) }
+
+    it { is_expected.not_to be_able_to(:export_external_start, exercise) }
+    it { is_expected.not_to be_able_to(:export_external_check, exercise) }
+    it { is_expected.not_to be_able_to(:export_external_confirm, exercise) }
+    it { is_expected.not_to be_able_to(:history, exercise) }
+    it { is_expected.not_to be_able_to(:remove_state, exercise) }
+    it { is_expected.not_to be_able_to(:report, exercise) }
+
+    context 'with a user' do
+      let(:user) { create(:user) }
+
+      it { is_expected.to be_able_to(:index, described_class) }
+      it { is_expected.to be_able_to(:create, described_class) }
+      it { is_expected.to be_able_to(:contribute, described_class) }
+      it { is_expected.to be_able_to(:read_comments, described_class) }
+      it { is_expected.to be_able_to(:related_exercises, described_class) }
+      it { is_expected.to be_able_to(:import_exercise_start, described_class) }
+      it { is_expected.to be_able_to(:import_exercise_confirm, described_class) }
+
+      it { is_expected.to be_able_to(:show, exercise) }
+      it { is_expected.to be_able_to(:add_to_cart, exercise) }
+      it { is_expected.to be_able_to(:add_to_collection, exercise) }
+      it { is_expected.to be_able_to(:push_external, exercise) }
+      it { is_expected.to be_able_to(:duplicate, exercise) }
+      it { is_expected.to be_able_to(:download_exercise, exercise) }
+      it { is_expected.to be_able_to(:contribute, exercise) }
+      it { is_expected.to be_able_to(:read_comments, exercise) }
+      it { is_expected.to be_able_to(:related_exercises, exercise) }
+
+      it { is_expected.not_to be_able_to(:update, exercise) }
+      it { is_expected.not_to be_able_to(:destroy, exercise) }
+      it { is_expected.not_to be_able_to(:export_external_start, exercise) }
+      it { is_expected.not_to be_able_to(:export_external_check, exercise) }
+      it { is_expected.not_to be_able_to(:export_external_confirm, exercise) }
+      it { is_expected.not_to be_able_to(:history, exercise) }
+      it { is_expected.not_to be_able_to(:remove_state, exercise) }
+      it { is_expected.to be_able_to(:report, exercise) }
+
+      context 'when exercise is private' do
+        let(:private?) { true }
+
+        it { is_expected.not_to be_able_to(:show, exercise) }
+        it { is_expected.not_to be_able_to(:add_to_cart, exercise) }
+        it { is_expected.not_to be_able_to(:add_to_collection, exercise) }
+        it { is_expected.not_to be_able_to(:push_external, exercise) }
+        it { is_expected.not_to be_able_to(:duplicate, exercise) }
+        it { is_expected.not_to be_able_to(:download_exercise, exercise) }
+        it { is_expected.to be_able_to(:contribute, exercise) }
+        it { is_expected.to be_able_to(:read_comments, exercise) }
+        it { is_expected.to be_able_to(:related_exercises, exercise) }
+
+        it { is_expected.not_to be_able_to(:update, exercise) }
+        it { is_expected.not_to be_able_to(:destroy, exercise) }
+        it { is_expected.not_to be_able_to(:export_external_start, exercise) }
+        it { is_expected.not_to be_able_to(:export_external_check, exercise) }
+        it { is_expected.not_to be_able_to(:export_external_confirm, exercise) }
+        it { is_expected.not_to be_able_to(:history, exercise) }
+        it { is_expected.not_to be_able_to(:remove_state, exercise) }
+        it { is_expected.to be_able_to(:report, exercise) }
+
+        context 'when user is an author' do
+          let(:authors) { [user] }
+
+          it { is_expected.to be_able_to(:show, exercise) }
+          it { is_expected.to be_able_to(:add_to_cart, exercise) }
+          it { is_expected.to be_able_to(:add_to_collection, exercise) }
+          it { is_expected.to be_able_to(:push_external, exercise) }
+          it { is_expected.to be_able_to(:duplicate, exercise) }
+          it { is_expected.to be_able_to(:download_exercise, exercise) }
+          it { is_expected.to be_able_to(:contribute, exercise) }
+          it { is_expected.to be_able_to(:read_comments, exercise) }
+          it { is_expected.to be_able_to(:related_exercises, exercise) }
+
+          it { is_expected.to be_able_to(:update, exercise) }
+          it { is_expected.to be_able_to(:destroy, exercise) }
+          it { is_expected.to be_able_to(:export_external_start, exercise) }
+          it { is_expected.to be_able_to(:export_external_check, exercise) }
+          it { is_expected.to be_able_to(:export_external_confirm, exercise) }
+          it { is_expected.to be_able_to(:history, exercise) }
+          it { is_expected.to be_able_to(:remove_state, exercise) }
+          it { is_expected.not_to be_able_to(:report, exercise) }
+        end
+
+        context 'when exercise and user are member of a group' do
+          before { create(:group, users: [user], exercises: [exercise]) }
+
+          it { is_expected.to be_able_to(:show, exercise) }
+          it { is_expected.to be_able_to(:add_to_cart, exercise) }
+          it { is_expected.to be_able_to(:add_to_collection, exercise) }
+          it { is_expected.to be_able_to(:push_external, exercise) }
+          it { is_expected.to be_able_to(:duplicate, exercise) }
+          it { is_expected.to be_able_to(:download_exercise, exercise) }
+          it { is_expected.to be_able_to(:contribute, exercise) }
+          it { is_expected.to be_able_to(:read_comments, exercise) }
+          it { is_expected.to be_able_to(:related_exercises, exercise) }
+
+          it { is_expected.not_to be_able_to(:update, exercise) }
+          it { is_expected.not_to be_able_to(:destroy, exercise) }
+          it { is_expected.not_to be_able_to(:export_external_start, exercise) }
+          it { is_expected.not_to be_able_to(:export_external_check, exercise) }
+          it { is_expected.not_to be_able_to(:export_external_confirm, exercise) }
+          it { is_expected.not_to be_able_to(:history, exercise) }
+          it { is_expected.not_to be_able_to(:remove_state, exercise) }
+          it { is_expected.to be_able_to(:report, exercise) }
+        end
+      end
+
+      context 'when user is admin' do
+        let(:user) { create(:admin) }
+
+        it { is_expected.to be_able_to(:manage, described_class) }
+        it { is_expected.to be_able_to(:manage, exercise) }
+      end
+
+      context 'when exercise is from user' do
+        let(:exercise_user) { user }
+
+        it { is_expected.not_to be_able_to(:manage, described_class) }
+        it { is_expected.not_to be_able_to(:manage, exercise) }
+
+        it { is_expected.to be_able_to(:show, exercise) }
+        it { is_expected.to be_able_to(:add_to_cart, exercise) }
+        it { is_expected.to be_able_to(:add_to_collection, exercise) }
+        it { is_expected.to be_able_to(:push_external, exercise) }
+        it { is_expected.to be_able_to(:duplicate, exercise) }
+        it { is_expected.to be_able_to(:download_exercise, exercise) }
+        it { is_expected.to be_able_to(:contribute, exercise) }
+        it { is_expected.to be_able_to(:read_comments, exercise) }
+        it { is_expected.to be_able_to(:related_exercises, exercise) }
+
+        it { is_expected.to be_able_to(:update, exercise) }
+        it { is_expected.to be_able_to(:destroy, exercise) }
+        it { is_expected.to be_able_to(:export_external_start, exercise) }
+        it { is_expected.to be_able_to(:export_external_check, exercise) }
+        it { is_expected.to be_able_to(:export_external_confirm, exercise) }
+        it { is_expected.to be_able_to(:history, exercise) }
+        it { is_expected.to be_able_to(:remove_state, exercise) }
+        it { is_expected.not_to be_able_to(:report, exercise) }
+      end
+    end
+  end
+
   describe '#valid?' do
     it { is_expected.to validate_presence_of(:descriptions) }
     it { is_expected.to validate_presence_of(:title) }

@@ -21,14 +21,6 @@ class GroupsController < ApplicationController
     @groups = Group.all.paginate(per_page: 10, page: params[:page])
   end
 
-  def search
-    @groups = current_user.groups
-    respond_to do |format|
-      format.html
-      format.json { render json: @groups.where('name ilike ?', "%#{params[:term]}%") }
-    end
-  end
-
   def show; end
 
   def new

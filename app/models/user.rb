@@ -22,7 +22,7 @@ class User < ApplicationRecord
   has_many :exercises, dependent: :nullify
   has_one :cart, dependent: :destroy
   has_many :exercise_authors, dependent: :destroy
-  has_many :exercises, through: :exercise_authors
+  has_many :authored_exercises, through: :exercise_authors, source: :exercise
   has_many :sent_messages, class_name: 'Message', foreign_key: 'sender_id', dependent: :nullify, inverse_of: :sender
   has_many :received_messages, class_name: 'Message', foreign_key: 'recipient_id', dependent: :nullify, inverse_of: :recipient
 

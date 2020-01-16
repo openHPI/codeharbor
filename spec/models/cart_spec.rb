@@ -3,6 +3,64 @@
 require 'rails_helper'
 
 RSpec.describe Cart, type: :model do
+  describe 'abilities' do
+    subject(:ability) { Ability.new(user) }
+
+    let(:user) { nil }
+    let(:cart_user) { create(:user) }
+    let(:cart) { create(:cart, user: cart_user) }
+
+    it { is_expected.not_to be_able_to(:create, described_class) }
+    it { is_expected.not_to be_able_to(:new, described_class) }
+    it { is_expected.not_to be_able_to(:manage, described_class) }
+
+    it { is_expected.not_to be_able_to(:my_cart, cart) }
+    it { is_expected.not_to be_able_to(:show, cart) }
+    it { is_expected.not_to be_able_to(:remove_all, cart) }
+    it { is_expected.not_to be_able_to(:download_all, cart) }
+    it { is_expected.not_to be_able_to(:push_cart, cart) }
+    it { is_expected.not_to be_able_to(:export, cart) }
+    it { is_expected.not_to be_able_to(:remove_exercise, cart) }
+
+    context 'with a user' do
+      let(:user) { create(:user) }
+
+      it { is_expected.to be_able_to(:create, described_class) }
+      it { is_expected.to be_able_to(:new, described_class) }
+      it { is_expected.not_to be_able_to(:manage, described_class) }
+
+      it { is_expected.not_to be_able_to(:my_cart, cart) }
+      it { is_expected.not_to be_able_to(:show, cart) }
+      it { is_expected.not_to be_able_to(:remove_all, cart) }
+      it { is_expected.not_to be_able_to(:download_all, cart) }
+      it { is_expected.not_to be_able_to(:push_cart, cart) }
+      it { is_expected.not_to be_able_to(:export, cart) }
+      it { is_expected.not_to be_able_to(:remove_exercise, cart) }
+
+      context 'when user is admin' do
+        let(:user) { create(:admin) }
+
+        it { is_expected.to be_able_to(:manage, described_class) }
+        it { is_expected.to be_able_to(:manage, cart) }
+      end
+
+      context 'when cart is from user' do
+        let(:cart_user) { user }
+
+        it { is_expected.not_to be_able_to(:manage, described_class) }
+
+        it { is_expected.not_to be_able_to(:manage, cart) }
+        it { is_expected.to be_able_to(:my_cart, cart) }
+        it { is_expected.to be_able_to(:show, cart) }
+        it { is_expected.to be_able_to(:remove_all, cart) }
+        it { is_expected.to be_able_to(:download_all, cart) }
+        it { is_expected.to be_able_to(:push_cart, cart) }
+        it { is_expected.to be_able_to(:export, cart) }
+        it { is_expected.to be_able_to(:remove_exercise, cart) }
+      end
+    end
+  end
+
   describe '#add_exercise' do
     subject(:add_exercise) { cart.add_exercise(exercise) }
 

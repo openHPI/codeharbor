@@ -69,7 +69,7 @@ FileType.create(name: 'CSS', file_extension: '.css', editor_mode: 'ace/mode/css'
 FileType.create(name: 'CoffeeScript', file_extension: '.coffee', editor_mode: 'ace/mode/coffee')
 FileType.create(name: 'GIF', file_extension: '.gif')
 FileType.create(name: 'HTML', file_extension: '.html', editor_mode: 'ace/mode/html')
-FileType.create(name: 'Java', file_extension: '.java', editor_mode: 'ace/mode/java')
+java_file = FileType.create(name: 'Java', file_extension: '.java', editor_mode: 'ace/mode/java')
 FileType.create(name: 'Jar', file_extension: '.jar')
 FileType.create(name: 'JavaScript', file_extension: '.js', editor_mode: 'ace/mode/javascript')
 FileType.create(name: 'JPEG', file_extension: '.jpg')

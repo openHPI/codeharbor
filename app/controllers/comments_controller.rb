@@ -76,10 +76,6 @@ class CommentsController < ApplicationController
     @comments = Comment.all.paginate(per_page: 10, page: params[:page])
   end
 
-  def answer
-    redirect_to new_exercises_comments_answers_path(@exercise, @comment)
-  end
-
   private
 
   def new_comment
