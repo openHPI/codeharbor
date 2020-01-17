@@ -116,7 +116,8 @@ Rails.application.configure do
 
   # which to precompile
   # , '*.woff', '*.ttf', '*.svg', '*.eot', '.woff2', '*.otf'
-  config.assets.precompile = ['*.js', '*.css', '*.css.erb', '*.coffee', '*.scss']
+  # FixMe: Check styling and what is needed for production
+  # config.assets.precompile = ['*.js', '*.css', '*.css.erb', '*.coffee', '*.scss']
 
   # use relative URL path while compiling, maybe?
   config.assets.initialize_on_precompile = true
