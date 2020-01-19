@@ -368,7 +368,7 @@ RSpec.describe ExercisesController, type: :controller do
 
     it 'sets the correct Content-Disposition header' do
       get_request
-      expect(response.header['Content-Disposition']).to eql "attachment; filename=\"task_#{exercise.id}.zip\""
+      expect(response.header['Content-Disposition']).to include "attachment; filename=\"task_#{exercise.id}.zip\""
     end
   end
 
