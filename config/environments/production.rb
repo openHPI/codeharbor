@@ -4,7 +4,7 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   ### !!! Important: remove this line before this goes anywhere near productive !!!
-  config.consider_all_requests_local = true
+  # config.consider_all_requests_local = true
 
   # Code is not reloaded between requests.
   config.cache_classes = true
@@ -117,7 +117,7 @@ Rails.application.configure do
   # which to precompile
   # , '*.woff', '*.ttf', '*.svg', '*.eot', '.woff2', '*.otf'
   # FixMe: Check styling and what is needed for production
-  # config.assets.precompile = ['*.js', '*.css', '*.css.erb', '*.coffee', '*.scss']
+  config.assets.precompile = ['*.js', '*.css.erb', '*.coffee', '*.scss']
 
   # use relative URL path while compiling, maybe?
   config.assets.initialize_on_precompile = true
