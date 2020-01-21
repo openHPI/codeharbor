@@ -22,6 +22,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    ace-rails-ap (4.2)
     actioncable (5.2.4.1)
       actionpack (= 5.2.4.1)
       nio4r (~> 2.0)
@@ -466,6 +467,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  ace-rails-ap
   acts-as-taggable-on (~> 6.5)
   airbrussh
   bcrypt (~> 3.1.13)
