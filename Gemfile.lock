@@ -85,7 +85,7 @@ GEM
     builder (3.2.4)
     bunny (2.14.3)
       amq-protocol (~> 2.3, >= 2.3.0)
-    byebug (11.0.1)
+    byebug (11.1.0)
     cancancan (3.0.2)
     capistrano (3.11.2)
       airbrussh (>= 1.0.0)
