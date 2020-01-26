@@ -109,4 +109,59 @@ RSpec.describe Group, type: :model do
       end
     end
   end
+
+  describe '#remove_member' do
+    let(:group) { create(:group, users: group_users) }
+    let(:group_users) { [admin, user] }
+    let(:admin) { create(:user) }
+    let(:user) { create(:user) }
+
+    it 'deletes member' do
+      expect { group.remove_member(user) }.to change(group.users, :count).by(-1)
+    end
+
+    it 'does not delete admin' do
+      expect { group.remove_member(admin) }.to raise_error(ActiveRecord::RecordInvalid).and change(group.users, :count).by(0)
+    end
+
+    context 'when group has another admin' do
+      before { group.make_admin(create(:user)) }
+
+      it 'allows deletion of admin' do
+        expect { group.remove_member(admin) }.to change(group.users, :count).by(-1)
+      end
+    end
+  end
+
+  describe '.create_with_admin' do
+    subject(:create_with_admin) { described_class.create_with_admin(params, user) }
+
+    let(:params) { {name: name} }
+    let(:user) { create(:user) }
+    let(:name) { 'name' }
+
+    it 'creates a group' do
+      expect { create_with_admin }.to change(described_class, :count).by(1)
+    end
+
+    it 'sets user as admin of created group' do
+      expect(create_with_admin.admin?(user)).to be true
+    end
+
+    context 'without user' do
+      let(:user) {}
+
+      it 'does not create a group' do
+        expect { create_with_admin }.not_to change(described_class, :count)
+      end
+    end
+
+    context 'without name' do
+      let(:name) {}
+
+      it 'does not create a group' do
+        expect { create_with_admin }.not_to change(described_class, :count)
+      end
+    end
+  end
 end

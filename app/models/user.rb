@@ -43,10 +43,7 @@ class User < ApplicationRecord
   end
 
   def last_admin?(group)
-    if in_group?(group, as: 'admin')
-      true if group.admins.size == 1
-    end
-    false
+    in_group?(group, as: 'admin') && group.admins.size == 1
   end
 
   def cart_count

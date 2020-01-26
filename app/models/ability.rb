@@ -50,6 +50,8 @@ class Ability
     # Group
     cannot :leave, Group
     can :leave, Group, members: {id: user.id}
+
+    cannot :request_access, Group, users: {id: user.id}
   end
 
   def account_link_abilities(user)

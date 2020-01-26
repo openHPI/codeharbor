@@ -9,6 +9,8 @@ class GroupsController < ApplicationController
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.group.authorization')
   end
+
+
   def index
     @groups = if @option == 'mine'
                 current_user.groups.paginate(per_page: 5, page: params[:page])
@@ -29,31 +31,24 @@ class GroupsController < ApplicationController
 
   def edit; end
 
-  # rubocop:disable Metrics/AbcSize
   def create
-    @group = Group.new(group_params)
-
     respond_to do |format|
-      if @group.save
-        @group.make_admin(current_user)
+
+      @group = Group.create_with_admin(group_params, current_user)
+      if @group&.persisted?
         format.html { redirect_to @group, notice: t('controllers.group.created') }
-        format.json { render :index, status: :created, location: @group }
       else
         format.html { render :new }
-        format.json { render json: @group.errors, status: :unprocessable_entity }
       end
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
   def update
     respond_to do |format|
       if @group.update(group_params)
         format.html { redirect_to @group, notice: t('controllers.group.updated') }
-        format.json { render :index, status: :ok, location: @group }
       else
         format.html { render :edit }
-        format.json { render json: @group.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -62,7 +57,6 @@ class GroupsController < ApplicationController
     @group.destroy
     respond_to do |format|
       format.html { redirect_to groups_url, notice: t('controllers.group.destroyed') }
-      format.json { head :no_content }
     end
   end
 

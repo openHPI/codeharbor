@@ -43,7 +43,7 @@ RSpec.describe GroupsController, type: :controller do
     {user_id: user.id}
   end
 
-  let(:group) { create(:group) }
+  let!(:group) { create(:group) }
 
   before { group.grant_access(user) }
 

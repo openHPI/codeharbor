@@ -149,12 +149,20 @@ RSpec.describe User, type: :model do
     context 'when user is in a group' do
       before { group }
 
-      let(:group) { create(:group, users: [user]) }
+      let(:group) { create(:group, users: [create(:user), user]) }
 
       it { is_expected.to be true }
 
-      it 'deletes group' do
-        expect { soft_delete }.to change(Group, :count).by(-1)
+      it 'does not delete group' do
+        expect { soft_delete }.not_to change(Group, :count)
+      end
+
+      context 'when user is admin and only user in group' do
+        let(:group) { create(:group, users: [user]) }
+
+        it 'deletes group' do
+          expect { soft_delete }.to change(Group, :count).by(-1)
+        end
       end
 
       context 'when another user is in the group' do
@@ -168,8 +176,8 @@ RSpec.describe User, type: :model do
           expect { soft_delete }.not_to change(Group, :count)
         end
 
-        context 'when user is admin of group' do
-          before { group.make_admin user }
+        context 'when user is the only admin of group' do
+          let(:group) { create(:group, users: [user, create(:user)]) }
 
           it { is_expected.to be false }
 
@@ -307,10 +315,10 @@ RSpec.describe User, type: :model do
 
   describe 'groups_sorted_by_admin_state_and_name' do
     let!(:user) { FactoryBot.create(:user) }
-    let!(:group1) { FactoryBot.create(:group, users: [user], name: 'C') }
-    let!(:group2) { FactoryBot.create(:group, users: [user], name: 'B') }
-    let!(:group3) { FactoryBot.create(:group, users: [user], name: 'D') }
-    let!(:group4) { FactoryBot.create(:group, users: [user], name: 'A') }
+    let!(:group1) { FactoryBot.create(:group, users: [create(:user), user], name: 'C') }
+    let!(:group2) { FactoryBot.create(:group, users: [create(:user), user], name: 'B') }
+    let!(:group3) { FactoryBot.create(:group, users: [create(:user), user], name: 'D') }
+    let!(:group4) { FactoryBot.create(:group, users: [create(:user), user], name: 'A') }
 
     before do
       # UserGroup.set_is_admin(group1.id, user.id, true)

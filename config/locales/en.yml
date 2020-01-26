@@ -334,7 +334,7 @@ en:
       edit: "Edit"
       destroy: "Destroy"
       back: "Back"
-      create: "Create Collection"
+      save: "Save Collection"
     admin:
       header: "Collection Administration"
     edit:
@@ -371,7 +371,7 @@ en:
         destroy: "Destroy"
         delete: "Delete"
         back: "Back"
-        create: "Create Group"
+        save: "Save Group"
         leave: "Leave Group"
         request: "Request Membership"
         grant: "Grant Access"
