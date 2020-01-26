@@ -110,6 +110,29 @@ RSpec.describe Group, type: :model do
     end
   end
 
+  describe 'validations' do
+    let(:group) { create(:group, users: users) }
+    let(:users) { [user] }
+    let(:user) { create(:user) }
+
+    it 'is valid' do
+      expect(group.valid?).to be true
+    end
+
+    context 'when user get removed from group' do
+      before { group.users.destroy(user) }
+
+      it 'is not valid' do
+        expect(group.valid?).to be false
+      end
+
+      it 'has correct error' do
+        group.validate
+        expect(group.errors.full_messages).to include I18n.t('groups.no_admin_validation')
+      end
+    end
+  end
+
   describe '#remove_member' do
     let(:group) { create(:group, users: group_users) }
     let(:group_users) { [admin, user] }

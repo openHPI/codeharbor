@@ -394,6 +394,7 @@ en:
       authorization_error: "You need to request membership to view this group!"
       errorMessage: "prohibited this group from being saved."
       noExercisesAdded: "No Exercises Added"
+      no_admin_validation: No admin in group
 
   comments:
     header: "Comments for %{title}"
