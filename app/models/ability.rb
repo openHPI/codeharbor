@@ -8,6 +8,9 @@ class Ability
 
     alias_action :create, :show, :update, :destroy, to: :crud
 
+    # Admin abilities
+    admin_abilities user
+
     # AccountLink
     account_link_abilities user
 
@@ -34,9 +37,6 @@ class Ability
 
     # Message
     message_abilities user
-
-    # Admin abilities in the end to take precedence
-    admin_abilities user
   end
 
   def admin_abilities(user)
@@ -46,12 +46,6 @@ class Ability
     can :read, :dashboard
 
     can :manage, :all
-    # Define Abilities admins cannot do
-    # Group
-    cannot :leave, Group
-    can :leave, Group, members: {id: user.id}
-
-    cannot :request_access, Group, users: {id: user.id}
   end
 
   def account_link_abilities(user)
@@ -91,6 +85,7 @@ class Ability
 
   def group_abilities(user)
     can %i[create index], Group
+    cannot %i[request_access], Group
     can %i[request_access], Group do |group|
       !user.in_group?(group)
     end

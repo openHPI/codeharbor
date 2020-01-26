@@ -10,7 +10,6 @@ class GroupsController < ApplicationController
     redirect_to root_path, alert: t('controllers.group.authorization')
   end
 
-
   def index
     @groups = if @option == 'mine'
                 current_user.groups.paginate(per_page: 5, page: params[:page])
@@ -33,7 +32,6 @@ class GroupsController < ApplicationController
 
   def create
     respond_to do |format|
-
       @group = Group.create_with_admin(group_params, current_user)
       if @group&.persisted?
         format.html { redirect_to @group, notice: t('controllers.group.created') }
