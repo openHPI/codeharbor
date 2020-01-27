@@ -46,6 +46,10 @@ class User < ApplicationRecord
     in_group?(group, as: 'admin') && group.admins.size == 1
   end
 
+  def member_groups
+    groups - groups.as(:pending)
+  end
+
   def cart_count
     if cart
       cart.exercises.size

@@ -131,6 +131,7 @@ legend.toggle-next
     .row-value
       - @exercise.groups.each do |group|
         = link_to group.name, group_path(group)
+        = ' '
   .row
     .row-label
       = t('exercises.license')

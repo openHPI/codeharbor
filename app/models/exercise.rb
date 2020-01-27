@@ -200,11 +200,11 @@ class Exercise < ApplicationRecord
   end
 
   # rubocop:disable Metrics/AbcSize
-  def add_attributes(params)
+  def add_attributes(params, user)
     add_relation(params[:exercise_relation]) if params[:exercise_relation]
     add_license(params) if params[:license_id]
     add_labels(params[:labels])
-    add_groups(params[:groups])
+    add_groups(params[:groups], user)
     add_tests(params[:tests_attributes])
     add_files(params[:exercise_files_attributes])
     add_descriptions(params[:descriptions_attributes])
@@ -271,10 +271,10 @@ class Exercise < ApplicationRecord
   end
 
   # this needs to be fixed with proper nested forms
-  def update_and_version(exercise_params, add_attributes_params)
+  def update_and_version(exercise_params, add_attributes_params, user)
     ActiveRecord::Base.transaction do
       save_old_version
-      add_attributes(add_attributes_params)
+      add_attributes(add_attributes_params, user)
       return true if update(exercise_params)
 
       raise ActiveRecord::Rollback
@@ -342,16 +342,31 @@ class Exercise < ApplicationRecord
     end
   end
 
-  def add_groups(groups_array)
-    if groups_array
-      groups_array.delete_at(0)
-      groups.clear
+  def add_groups(groups_array, user)
+    # if groups_array
+    # end
+    new_groups = groups_array.drop(1).map do |group_id|
+      Group.find(group_id)
     end
 
-    groups_array.try(:each) do |array|
-      group = Group.find(array)
-      groups << group
+    groups_to_add = new_groups - groups
+    groups_to_remove = groups - new_groups
+
+    groups_to_add.each do |new_group|
+      groups << new_group if new_group.member?(user)
     end
+
+    groups_to_remove.each do |remove_group|
+      groups.destroy(remove_group)
+    end
+
+    # new_groups.each do |new_group|
+    #   groups.clear
+    #   groups_array.try(:each) do |array|
+    #     group = Group.find(array)
+    #     groups << group if group.member?(user)
+    #   end
+    # end
   end
 
   # rubocop:disable Metrics/AbcSize

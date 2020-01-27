@@ -364,6 +364,9 @@ en:
       actions: "Actions"
       name: "Name"
       allow_push: "Allow push to..."
+      admin_label: Admin
+      member_label: Member
+      pending_label: Pending
       button:
         new: "New Group"
         show: "Show"
