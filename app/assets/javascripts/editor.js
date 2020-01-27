@@ -20,7 +20,8 @@ ready = function() {
   for (var i=0, max=all.length; i < max; i++) {
     var editor = ace.edit(all[i]);
     editor.setTheme("ace/theme/chrome");
-    editor.getSession().setMode("ace/mode/java");
+    var mode = $(all[i]).attr('data-editor-mode');
+    editor.getSession().setMode(mode);
     editor.setReadOnly(true);
     all[i].style.fontSize='14px';
   }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_06_165428) do
+ActiveRecord::Schema.define(version: 2020_01_13_130441) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -173,6 +173,7 @@ ActiveRecord::Schema.define(version: 2020_01_06_165428) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "file_extension"
+    t.string "editor_mode"
   end
 
   create_table "group_memberships", id: :serial, force: :cascade do |t|

@@ -17,6 +17,7 @@
 //= require twitter/bootstrap
 //= require turbolinks
 //= require_tree .
-//= require ace/ace
+//= require ace-rails-ap
+//= require ace/theme-monokai
 //= require nested_form_fields
 //= require labels
