@@ -10,7 +10,6 @@ Bundler.require(*Rails.groups)
 
 module Codeharbour
   class Application < Rails::Application
-    # config.load_defaults 5.0
     config.load_defaults 6.0
 
     # Settings in config/environments/* take precedence over those specified here.
