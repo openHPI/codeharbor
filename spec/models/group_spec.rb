@@ -60,6 +60,14 @@ RSpec.describe Group, type: :model do
 
         it { is_expected.to be_able_to(:manage, described_class) }
         it { is_expected.to be_able_to(:manage, group) }
+        it { is_expected.not_to be_able_to(:leave, group) }
+
+        context 'when admin is in group' do
+          before { group.add(user) }
+
+          it { is_expected.not_to be_able_to(:request_access, group) }
+          it { is_expected.to be_able_to(:leave, group) }
+        end
       end
 
       context 'when group is from user' do

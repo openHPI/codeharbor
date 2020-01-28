@@ -89,12 +89,17 @@ class Ability
     can %i[request_access], Group do |group|
       !user.in_group?(group)
     end
-    can %i[view show members leave], Group do |group|
-      user.in_group?(group, as: 'member') || user.in_group?(group, as: 'admin')
+    cannot %i[leave], Group
+    can %i[leave], Group do |group|
+      user.in_group?(group)
+    end
+
+    can %i[view show members], Group do |group|
+      group.member?(user)
     end
     can %i[crud remove_exercise grant_access delete_from_group deny_access make_admin add_account_link_to_member
            remove_account_link_from_member], Group do |group|
-      user.in_group?(group, as: 'admin')
+      group.admin?(user)
     end
   end
 

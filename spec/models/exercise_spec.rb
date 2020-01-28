@@ -288,11 +288,12 @@ RSpec.describe Exercise, type: :model do
       let(:license) { create(:license) }
       let(:relation) { create(:relation) }
       let(:group) { create(:group) }
+      let(:group_params) { ['', group.id] }
       let(:exercise_relation_param) {}
       let(:params) do
         ActionController::Parameters.new(
           exercise_relation: exercise_relation_param,
-          groups: ['', group.id],
+          groups: group_params,
           labels: ['', create(:label).name],
           license_id: license.id,
           tests_attributes: {
@@ -365,6 +366,14 @@ RSpec.describe Exercise, type: :model do
 
       it 'sets the group' do
         expect { add_attributes }.to change(exercise.reload.groups, :size).by(1)
+      end
+
+      context 'when user tries to add a group he has no access to' do
+        let(:group_params) { ['', group.id, create(:group).id] }
+
+        it 'only adds one group' do
+          expect { add_attributes }.to change(exercise.reload.groups, :size).by(1)
+        end
       end
 
       it 'creates a test' do
@@ -849,11 +858,14 @@ RSpec.describe Exercise, type: :model do
     end
   end
 
-  describe '#update_and_version' do
-    subject(:update_and_version) { exercise.update_and_version(params, {}, user) }
+  fdescribe '#update_and_version' do
+    subject(:update_and_version) { exercise.update_and_version(params, add_attributes_params, user) }
 
-    let!(:exercise) { create(:exercise) }
+    let(:groups) { [] }
+    let!(:exercise) { create(:exercise, groups: groups) }
     let(:params) { {title: 'new_title'} }
+    let(:add_attributes_params) { {groups: group_params} }
+    let(:group_params) { [''] }
 
     it { is_expected.to be true }
 
@@ -873,6 +885,52 @@ RSpec.describe Exercise, type: :model do
     it 'does not change the title of predecessor' do
       update_and_version
       expect(exercise.reload.predecessor.title).not_to eql('new_title')
+    end
+
+    context 'when a group id is contained in the group_params' do
+      let(:group_params) { ['', group.id] }
+      let(:group) { create(:group) }
+
+      it 'does not add a group, because the user has no access to the group' do
+        expect { update_and_version }.not_to change(exercise.groups, :count)
+      end
+
+      context 'when user is member of group' do
+        before { group.add(user, as: :member) }
+
+        it 'adds the group' do
+          expect { update_and_version }.to change(exercise.groups, :count).by(1)
+        end
+      end
+    end
+
+    context 'when exercise has a group' do
+      let(:group) { create(:group) }
+      let(:groups) { [group] }
+      let(:group_params) { ['', group.id] }
+
+      it 'does not delete the group even though the user has no access' do
+        expect { update_and_version }.not_to change(exercise.groups, :count)
+      end
+
+      context 'when the group is not in group_params' do
+        let(:group_params) { [''] }
+
+        it 'removes the group' do
+          expect { update_and_version }.to change(exercise.groups, :count).by(-1)
+        end
+      end
+
+      context 'when another group is added' do
+        let(:group_2) { create(:group) }
+        let(:group_params) { ['', group.id, group_2.id] }
+
+        before { group_2.add(user, as: :member) }
+
+        it 'adds the group and keeps the old one' do
+          expect { update_and_version }.to change(exercise.groups, :count).by(1)
+        end
+      end
     end
 
     context 'when invalid params are given' do
