@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery
 
+  before_action :set_raven_context
   after_action :flash_to_headers
 
   # http://www.rubydoc.info/docs/rails/AbstractController/Helpers/ClassMethods:helper_method
@@ -15,6 +16,12 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def set_raven_context
+    context = {ip_address: request.remote_ip}
+    context.merge!(id: current_user.id, email: current_user.email, username: current_user.username) unless current_user.blank?
+    Raven.user_context(context)
+  end
 
   def flash_to_headers
     return unless request.xhr?
