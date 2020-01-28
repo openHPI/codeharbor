@@ -18,9 +18,8 @@ class ApplicationController < ActionController::Base
   private
 
   def set_raven_context
-    context = {ip_address: request.remote_ip}
-    context.merge!(id: current_user.id, email: current_user.email, username: current_user.username) unless current_user.blank?
-    Raven.user_context(context)
+    return if current_user.blank?
+    Raven.user_context(id: current_user.id, email: current_user.email, username: current_user.username, name: current_user.name)
   end
 
   def flash_to_headers
