@@ -4,6 +4,8 @@ require 'rails_helper'
 require 'nokogiri'
 
 RSpec.describe Exercise, type: :model do
+  let(:user) { create(:user) }
+
   describe 'abilities' do
     subject(:ability) { Ability.new(user) }
 
@@ -264,7 +266,7 @@ RSpec.describe Exercise, type: :model do
 
     context 'when params attributes are nil' do
       subject(:add_empty_attributes) do
-        exercise.add_attributes(params)
+        exercise.add_attributes(params, user)
         exercise.save
       end
 
@@ -277,17 +279,20 @@ RSpec.describe Exercise, type: :model do
 
     context 'when params attributes are set' do
       subject(:add_attributes) do
-        exercise.add_attributes(params)
+        exercise.add_attributes(params, user)
         exercise.save!
       end
 
+      before { group.add(user, as: :member) }
+
       let(:license) { create(:license) }
       let(:relation) { create(:relation) }
+      let(:group) { create(:group) }
       let(:exercise_relation_param) {}
       let(:params) do
         ActionController::Parameters.new(
           exercise_relation: exercise_relation_param,
-          groups: ['', create(:group).id],
+          groups: ['', group.id],
           labels: ['', create(:label).name],
           license_id: license.id,
           tests_attributes: {
@@ -845,7 +850,7 @@ RSpec.describe Exercise, type: :model do
   end
 
   describe '#update_and_version' do
-    subject(:update_and_version) { exercise.update_and_version(params, {}) }
+    subject(:update_and_version) { exercise.update_and_version(params, {}, user) }
 
     let!(:exercise) { create(:exercise) }
     let(:params) { {title: 'new_title'} }

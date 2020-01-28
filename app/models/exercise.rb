@@ -343,8 +343,8 @@ class Exercise < ApplicationRecord
   end
 
   def add_groups(groups_array, user)
-    # if groups_array
-    # end
+    return unless groups_array
+
     new_groups = groups_array.drop(1).map do |group_id|
       Group.find(group_id)
     end
@@ -359,14 +359,6 @@ class Exercise < ApplicationRecord
     groups_to_remove.each do |remove_group|
       groups.destroy(remove_group)
     end
-
-    # new_groups.each do |new_group|
-    #   groups.clear
-    #   groups_array.try(:each) do |array|
-    #     group = Group.find(array)
-    #     groups << group if group.member?(user)
-    #   end
-    # end
   end
 
   # rubocop:disable Metrics/AbcSize
