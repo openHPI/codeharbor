@@ -19,6 +19,7 @@ class ApplicationController < ActionController::Base
 
   def set_raven_context
     return if current_user.blank?
+
     Raven.user_context(id: current_user.id, email: current_user.email, username: current_user.username, name: current_user.name)
   end
 
