@@ -12,7 +12,6 @@ class FileTypesController < ApplicationController
     @file_types = FileType.all
     respond_to do |format|
       format.html
-      format.json { render json: @file_types.where('type ilike ?', "%#{params[:term]}%") }
     end
   end
 
@@ -42,10 +41,8 @@ class FileTypesController < ApplicationController
     respond_to do |format|
       if @file_type.save
         format.html { redirect_to @file_type, notice: t('controllers.file_type.created') }
-        format.json { render :show, status: :created, location: @file_type }
       else
         format.html { render :new }
-        format.json { render json: @file_type.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -56,10 +53,8 @@ class FileTypesController < ApplicationController
     respond_to do |format|
       if @file_type.update(file_type_params)
         format.html { redirect_to @file_type, notice: t('controllers.file_type.updated') }
-        format.json { render :show, status: :ok, location: @file_type }
       else
         format.html { render :edit }
-        format.json { render json: @file_type.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -70,7 +65,6 @@ class FileTypesController < ApplicationController
     @file_type.destroy
     respond_to do |format|
       format.html { redirect_to file_types_url, notice: t('controllers.file_type.destroyed') }
-      format.json { head :no_content }
     end
   end
 
