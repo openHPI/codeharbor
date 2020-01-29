@@ -6,15 +6,15 @@ class Group < ApplicationRecord
   validate :admin_in_group
 
   def self.create_with_admin(params, user)
-    Group.new(params).tap do |group|
-      return group unless user
+    group = Group.new(params)
+    return group unless user
 
-      ActiveRecord::Base.transaction do
-        group.save(validate: false)
-        group.make_admin(user)
-        raise ActiveRecord::Rollback unless group.valid?
-      end
+    ActiveRecord::Base.transaction do
+      group.save(validate: false)
+      group.make_admin(user)
+      raise ActiveRecord::Rollback unless group.valid?
     end
+    group
   end
 
   def admins
