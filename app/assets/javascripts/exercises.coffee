@@ -430,6 +430,12 @@ ready =->
   $('body').on 'click', '.export-close-button', (event) ->
     $(this).parents('.import-export-exercise').remove()
 
+  $('body').on 'change', '.file-type', (event) ->
+    changeEditorMode(this)
+
+  $('.file-type').each ->
+    changeEditorMode(this)
+
   $('body').on 'click', '.import-action', (event) ->
     importId = $(this).parents('.import-export-exercise').attr('data-import-id')
     subfileId = $(this).parents('.import-export-exercise').attr('data-import-subfile-id')
@@ -446,6 +452,11 @@ ready =->
     $('.primary-checkbox')[0].click()
 
 $(document).on('turbolinks:load', ready)
+
+changeEditorMode = (element) ->
+  editor = $(element).parents('.file-container').find('.editor')[0]
+  mode = $(element).find('option:selected').attr('data-editor-mode')
+  ace.edit(editor).getSession().setMode(mode)
 
 checkExecutionEnvironment = () ->
   executionEnvironment = $('#exercise_execution_environment_id').val()
@@ -542,4 +553,6 @@ exportExerciseConfirm = (exerciseID, accountLinkID, pushType) ->
   })
 
 # export function to make it accessible from outside this scope
-root = exports ? this; root.exportExerciseStart = exportExerciseStart
+root = exports ? this;
+root.exportExerciseStart = exportExerciseStart
+root.changeEditorMode = changeEditorMode

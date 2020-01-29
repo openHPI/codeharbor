@@ -15,7 +15,7 @@ gem 'i18n'
 # Use slim format
 gem 'slim-rails', '>= 3.2.0'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.3'
+gem 'rails', '~> 6.0.2'
 # Use postgres as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use SCSS for stylesheets
@@ -56,6 +56,7 @@ gem 'therubyracer', platforms: :ruby
 gem 'devise-bootstrap-views', '~> 1.0'
 gem 'twitter-bootstrap-rails', git: 'https://github.com/seyhunak/twitter-bootstrap-rails.git'
 
+gem 'ace-rails-ap'
 gem 'acts-as-taggable-on', '~> 6.5'
 gem 'config'
 gem 'faraday'
@@ -82,10 +83,10 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'rails-controller-testing', '>= 1.0.4'
   gem 'rspec-collection_matchers', '~> 1.2.0'
-  gem 'rspec-rails', '>= 3.8.2'
+  gem 'rspec-rails', '4.0.0.beta4'
   gem 'rubocop', '~> 0.79.0'
   gem 'rubocop-performance', '~> 1.5.2'
-  gem 'rubocop-rails', '~> 2.4.1'
+  gem 'rubocop-rails', '~> 2.4.2'
   gem 'rubocop-rspec', '~> 1.37.1'
 end
 

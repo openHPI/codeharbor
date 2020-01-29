@@ -173,10 +173,10 @@ RSpec.describe CollectionsController, type: :controller do
   end
 
   describe 'GET #remove_all' do
-    let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
-    let(:get_request) { get :remove_all, params: {id: collection.id}, session: valid_session }
+    let(:collection) { create(:collection, valid_attributes.merge(users: [user], exercises: exercises)) }
+    let(:exercises) { create_list(:exercise, 2) }
 
-    before { create_list(:exercise, 2, collections: [collection]) }
+    let(:get_request) { get :remove_all, params: {id: collection.id}, session: valid_session }
 
     it 'removes exercise from collection' do
       expect { get_request }.to change(collection.exercises, :count).by(-2)
@@ -184,10 +184,11 @@ RSpec.describe CollectionsController, type: :controller do
   end
 
   describe 'GET #download_all' do
-    let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
-    let(:get_request) { get :download_all, params: {id: collection.id}, session: valid_session }
+    let(:collection) { create(:collection, valid_attributes.merge(users: [user], exercises: exercises)) }
+    let(:exercises) { create_list(:exercise, 2) }
     let(:zip) { instance_double('StringIO', string: 'dummy') }
-    let!(:exercises) { create_list(:exercise, 2, collections: [collection]) }
+
+    let(:get_request) { get :download_all, params: {id: collection.id}, session: valid_session }
 
     before { allow(ProformaService::ExportTasks).to receive(:call).with(exercises: collection.reload.exercises).and_return(zip) }
 
@@ -212,7 +213,7 @@ RSpec.describe CollectionsController, type: :controller do
 
     it 'sets the correct Content-Disposition header' do
       get_request
-      expect(response.header['Content-Disposition']).to eql "attachment; filename=\"#{collection.title}.zip\""
+      expect(response.header['Content-Disposition']).to include "attachment; filename=\"#{collection.title}.zip\""
     end
   end
 

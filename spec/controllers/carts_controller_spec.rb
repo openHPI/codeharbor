@@ -15,7 +15,8 @@ RSpec.describe CartsController, type: :controller do
   let(:valid_session) do
     {user_id: user.id}
   end
-  let(:cart) { create(:cart) }
+  let(:cart) { create(:cart, exercises: exercises) }
+  let(:exercises) { [] }
 
   describe 'GET #show' do
     it 'assigns the requested cart as @cart' do
@@ -34,7 +35,8 @@ RSpec.describe CartsController, type: :controller do
   end
 
   describe 'GET #remove_exercise' do
-    let!(:exercise) { create(:exercise, carts: [cart]) }
+    let(:exercises) { [exercise] }
+    let(:exercise) { create(:exercise) }
     let(:get_request) { get :remove_exercise, params: {id: cart.id, exercise: exercise.id}, session: valid_session }
 
     it 'removes exercise from cart' do
@@ -43,9 +45,8 @@ RSpec.describe CartsController, type: :controller do
   end
 
   describe 'GET #remove_all' do
+    let(:exercises) { create_list(:exercise, 2) }
     let(:get_request) { get :remove_all, params: {id: cart.id}, session: valid_session }
-
-    before { create_list(:exercise, 2, carts: [cart]) }
 
     it 'removes exercise from cart' do
       expect { get_request }.to change(cart.exercises, :count).by(-2)
@@ -65,13 +66,13 @@ RSpec.describe CartsController, type: :controller do
   # end
 
   describe 'GET #download_all' do
+    let(:exercises) { create_list(:exercise, 2) }
     let(:get_request) { get :download_all, params: {id: cart.id}, session: valid_session }
     let(:zip) { instance_double('StringIO', string: 'dummy') }
-    let!(:exercises) { create_list(:exercise, 2, carts: [cart]) }
 
     before { allow(ProformaService::ExportTasks).to receive(:call).with(exercises: cart.reload.exercises).and_return(zip) }
 
-    it do
+    it 'calls ExportTasks service' do
       get_request
       expect(ProformaService::ExportTasks).to have_received(:call)
     end
@@ -93,7 +94,7 @@ RSpec.describe CartsController, type: :controller do
     it 'sets the correct Content-Disposition header' do
       get_request
       expect(response.header['Content-Disposition'])
-        .to eql "attachment; filename=\"#{I18n.t('controllers.carts.zip_filename', date: Time.zone.today.strftime)}\""
+        .to include "attachment; filename=\"#{I18n.t('controllers.carts.zip_filename', date: Time.zone.today.strftime)}\""
     end
   end
 end
