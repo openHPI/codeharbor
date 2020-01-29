@@ -858,7 +858,7 @@ RSpec.describe Exercise, type: :model do
     end
   end
 
-  fdescribe '#update_and_version' do
+  describe '#update_and_version' do
     subject(:update_and_version) { exercise.update_and_version(params, add_attributes_params, user) }
 
     let(:groups) { [] }
