@@ -42,10 +42,6 @@ class User < ApplicationRecord
     update(first_name: 'deleted', last_name: 'user', email: new_email, deleted: true, username: nil)
   end
 
-  def last_admin?(group)
-    in_group?(group, as: 'admin') && group.admins.size == 1
-  end
-
   def member_groups
     groups - groups.as(:pending)
   end

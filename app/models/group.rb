@@ -57,6 +57,10 @@ class Group < ApplicationRecord
     end
   end
 
+  def last_admin?(user)
+    user.in_group?(self, as: 'admin') && admins.size == 1
+  end
+
   private
 
   def admin_in_group

@@ -59,7 +59,7 @@ class GroupsController < ApplicationController
   end
 
   def leave
-    if current_user.last_admin?(@group)
+    if @group.last_admin?(current_user)
       redirect_to @group, alert: t('controllers.group.leave.alert')
     else
       @group.users.delete(current_user)
