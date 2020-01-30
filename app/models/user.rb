@@ -42,11 +42,8 @@ class User < ApplicationRecord
     update(first_name: 'deleted', last_name: 'user', email: new_email, deleted: true, username: nil)
   end
 
-  def last_admin?(group)
-    if in_group?(group, as: 'admin')
-      true if group.admins.size == 1
-    end
-    false
+  def member_groups
+    groups - groups.as(:pending)
   end
 
   def cart_count

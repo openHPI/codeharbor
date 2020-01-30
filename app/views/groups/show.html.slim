@@ -109,7 +109,7 @@
         i.fa.fa-trash style=("color:#800000")
         = ' ' + t('groups.button.delete')
     - if can? :leave, @group
-      = link_to t('groups.button.leave'), leave_group_path(@group), class: 'btn btn-important', data: {confirm: 'Are you sure?'}
+      = link_to t('groups.button.leave'), leave_group_path(@group), class: "leave-btn btn btn-important #{@group.last_admin?(current_user) ? 'disabled' : ''}", data: {confirm: 'Are you sure?'}
     = link_to t('groups.button.back'), :back, class: 'btn btn-important'
 
 - else

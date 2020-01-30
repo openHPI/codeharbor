@@ -43,7 +43,7 @@ RSpec.describe GroupsController, type: :controller do
     {user_id: user.id}
   end
 
-  let(:group) { create(:group) }
+  let!(:group) { create(:group) }
 
   before { group.grant_access(user) }
 
@@ -148,6 +148,11 @@ RSpec.describe GroupsController, type: :controller do
       it 'redirects to the created group' do
         post :create, params: {group: valid_post_attributes}, session: valid_session
         expect(response).to redirect_to(Group.last)
+      end
+
+      it 'adds user as admin to the group' do
+        post :create, params: {group: valid_post_attributes}, session: valid_session
+        expect(Group.last.admin?(user)).to be true
       end
     end
 

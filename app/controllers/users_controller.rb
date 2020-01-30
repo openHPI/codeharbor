@@ -21,7 +21,6 @@ class UsersController < ApplicationController
 
   def edit; end
 
-  # rubocop:disable Metrics/AbcSize
   def create
     @user = User.new(user_params)
     Cart.create(user: @user)
@@ -30,24 +29,19 @@ class UsersController < ApplicationController
       if @user.save
         UserMailer.registration_confirmation(@user).deliver_now
         format.html { redirect_to home_index_path, notice: t('controllers.user.confirm_email') }
-        format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
   def update
     set_avatar
     respond_to do |format|
       if @user.update(user_params)
         format.html { redirect_to @user, notice: t('controllers.user.updated') }
-        format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -59,7 +53,6 @@ class UsersController < ApplicationController
       else
         format.html { redirect_to users_url, alert: t('controllers.user.last_admin') }
       end
-      format.json { head :no_content }
     end
   end
 

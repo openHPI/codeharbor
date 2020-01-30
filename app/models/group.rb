@@ -3,6 +3,19 @@
 class Group < ApplicationRecord
   groupify :group, members: %i[users exercises], default_members: :users
   validates :name, presence: true
+  validate :admin_in_group
+
+  def self.create_with_admin(params, user)
+    group = Group.new(params)
+    return group unless user
+
+    ActiveRecord::Base.transaction do
+      group.save(validate: false)
+      group.make_admin(user)
+      raise ActiveRecord::Rollback unless group.valid?
+    end
+    group
+  end
 
   def admins
     User.in_group(self).as(:admin)
@@ -35,5 +48,22 @@ class Group < ApplicationRecord
 
   def pending_users
     User.in_group(self).as(:pending)
+  end
+
+  def remove_member(member)
+    ActiveRecord::Base.transaction do
+      users.destroy(member)
+      validate!
+    end
+  end
+
+  def last_admin?(user)
+    user.in_group?(self, as: 'admin') && admins.size == 1
+  end
+
+  private
+
+  def admin_in_group
+    errors.add(:base, I18n.t('groups.no_admin_validation')) if admins.empty?
   end
 end

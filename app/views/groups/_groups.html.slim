@@ -16,7 +16,7 @@
         span= group.name
         span.pull-right
           - unless @option == 'all'
-            = group.admin?(current_user) ? 'Admin' : 'Member'
+            = group.admin?(current_user) ? t('groups.admin_label') : group.member?(current_user) ? t('groups.member_label') : t('groups.pending_label')
     .panel-body
       .col-md-9 style=("overflow-wrap: break-word;")
         - if group.description

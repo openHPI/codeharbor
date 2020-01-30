@@ -69,7 +69,7 @@ class ExercisesController < ApplicationController
   # rubocop:disable Metrics/AbcSize
   def create
     @exercise = Exercise.new(exercise_params)
-    @exercise.add_attributes(params[:exercise])
+    @exercise.add_attributes(params[:exercise], current_user)
     @exercise.user = current_user
 
     respond_to do |format|
@@ -90,7 +90,7 @@ class ExercisesController < ApplicationController
   def update
     @exercise.state_list = []
     respond_to do |format|
-      if @exercise.update_and_version(exercise_params, params[:exercise])
+      if @exercise.update_and_version(exercise_params, params[:exercise], current_user)
         format.html { redirect_to @exercise, notice: t('controllers.exercise.updated') }
         format.json { render :show, status: :ok, location: @exercise }
       else
