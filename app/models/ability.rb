@@ -43,7 +43,6 @@ class Ability
     return unless user.role == 'admin'
 
     can :access, :rails_admin
-    can :read, :dashboard
 
     can :manage, :all
   end
