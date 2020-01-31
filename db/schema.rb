@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_19_104152) do
+ActiveRecord::Schema.define(version: 2020_01_31_141048) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -121,15 +121,6 @@ ActiveRecord::Schema.define(version: 2020_01_19_104152) do
     t.datetime "attachment_updated_at"
     t.index ["exercise_id"], name: "index_exercise_files_on_exercise_id"
     t.index ["file_type_id"], name: "index_exercise_files_on_file_type_id"
-  end
-
-  create_table "exercise_group_accesses", id: :serial, force: :cascade do |t|
-    t.integer "exercise_id"
-    t.integer "group_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["exercise_id"], name: "index_exercise_group_accesses_on_exercise_id"
-    t.index ["group_id"], name: "index_exercise_group_accesses_on_group_id"
   end
 
   create_table "exercise_labels", force: :cascade do |t|
@@ -355,8 +346,6 @@ ActiveRecord::Schema.define(version: 2020_01_19_104152) do
   add_foreign_key "exercise_authors", "users"
   add_foreign_key "exercise_files", "exercises"
   add_foreign_key "exercise_files", "file_types"
-  add_foreign_key "exercise_group_accesses", "exercises"
-  add_foreign_key "exercise_group_accesses", "groups"
   add_foreign_key "exercises", "execution_environments"
   add_foreign_key "exercises", "licenses"
   add_foreign_key "exercises", "users"
