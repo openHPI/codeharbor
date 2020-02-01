@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_31_141048) do
+ActiveRecord::Schema.define(version: 2020_02_01_122720) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -200,19 +200,11 @@ ActiveRecord::Schema.define(version: 2020_01_31_141048) do
     t.index ["user_id"], name: "index_import_file_caches_on_user_id"
   end
 
-  create_table "label_categories", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "labels", id: :serial, force: :cascade do |t|
     t.string "name"
-    t.integer "label_category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "color"
-    t.index ["label_category_id"], name: "index_labels_on_label_category_id"
   end
 
   create_table "licenses", id: :serial, force: :cascade do |t|
@@ -349,7 +341,6 @@ ActiveRecord::Schema.define(version: 2020_01_31_141048) do
   add_foreign_key "exercises", "execution_environments"
   add_foreign_key "exercises", "licenses"
   add_foreign_key "exercises", "users"
-  add_foreign_key "labels", "label_categories"
   add_foreign_key "ratings", "exercises"
   add_foreign_key "ratings", "users"
   add_foreign_key "reports", "exercises"

@@ -53,14 +53,10 @@ Relation.create(name: 'Derivate')
 Relation.create(name: 'Translate')
 Relation.create(name: 'Port')
 
-category1 = LabelCategory.create(name: 'Languages')
-category2 = LabelCategory.create(name: 'Level')
-category3 = LabelCategory.create(name: 'Target Group')
-
-l1 = Label.create(name: 'Java', color: '006600', label_category: category1)
-l2 = Label.create(name: 'basic-users', color: 'DF0101', label_category: category2)
-l3 = Label.create(name: 'pupils', color: '3333CC', label_category: category3)
-Label.create(name: 'Python', color: 'FFA500', label_category: category1)
+l1 = Label.create(name: 'Java', color: '006600')
+l2 = Label.create(name: 'basic-users', color: 'DF0101')
+l3 = Label.create(name: 'pupils', color: '3333CC')
+Label.create(name: 'Python', color: 'FFA500')
 
 test_framework = TestingFramework.create(name: 'JUnit 4')
 TestingFramework.create(name: 'Pytest')

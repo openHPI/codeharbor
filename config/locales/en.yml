@@ -731,28 +731,9 @@ en:
     header: "About CodeHarbor"
     paragraph: ""
 
-  label_categories:
-    header: "Listing Label Categories"
-    name: "Name"
-    button:
-      new: "New Label Category"
-      show: "Show"
-      edit: "Edit"
-      destroy: "Destroy"
-      back: "Back"
-      #submit:
-
-    edit:
-      header: "Editing Label Category"
-    new:
-      header: "New Label Category"
-    errorMessage: "prohibited this label_category from being saved."
-
   labels:
     header: "Listing Labels"
     name: "Name"
-    category: "Label category"
-    #categoryID:
     button:
       new: "New Label"
       show: "Show"
