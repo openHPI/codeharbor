@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
   end
 
   def email_link
-    if current_user == params[:user]
+    if current_user.to_param == params[:user]
       redirect_to user_messages_path(current_user)
     else
       session[:user_id] = nil

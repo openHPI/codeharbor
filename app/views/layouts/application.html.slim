@@ -28,7 +28,7 @@ html
                     = link_to rails_admin.dashboard_path, 'data-turbolinks': false
                       = t('layouts.admin_nav.rails_admin')
                   = menu_item t('layouts.admin_nav.user'), users_path
-                  = menu_item t('layouts.admin_nav.exercise'), exercises_exercises_all_path
+                  = menu_item t('layouts.admin_nav.exercise'), exercises_all_exercises_path
                   = menu_item t('layouts.admin_nav.comments'), comments_comments_all_path
                   = menu_item t('layouts.admin_nav.collections'), collections_all_collections_path
                   = menu_item t('layouts.admin_nav.groups'), groups_all_groups_path
@@ -94,7 +94,7 @@ html
         .col-md-6
           h4
             = t('layouts.footer.more.header')
-          = link_to t('layouts.footer.more.link'), about_path
+          = link_to t('layouts.footer.more.link'), about_home_index_path
           br
           br
           | &copy;

@@ -1,21 +1,27 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :relations
-  resources :exercise_relations
   # You can have the root of your site routed with "root"
   root 'home#index'
+  resources :home, only: :index do
+    collection do
+      get :reset_password
+      get :confirm_email
+      get :forgot_password
+      get :resend_confirmation
+      get :about
+    end
+  end
 
-  get 'account_links' => 'account_links#index'
-
-  resources :licenses
-  resources :execution_environments
-  resources :carts do
+  resources :licenses # admin
+  resources :execution_environments # admin
+  resources :carts, only: [] do
     member do
       get :download_all
       post :push_cart
     end
   end
+
   resources :collections do
     member do
       post :push_collection
@@ -24,33 +30,22 @@ Rails.application.routes.draw do
       get :view_shared
       post :save_shared
     end
+
     collection do
-      get :collections_all
+      get :collections_all # admin
     end
   end
   resources :groups do
-    get :search, on: :collection
     member do
       get :remove_exercise
       get :leave
       get :deny_access
-      post :add_account_link_to_member
-      post :remove_account_link_from_member
+      post :add_account_link_to_member # ???
+      post :remove_account_link_from_member # ???
     end
-    collection do
-      get :groups_all
-    end
-  end
 
-  resources :home do
     collection do
-      get :index
-      get :reset_password
-      get :confirm_email
-      get :email_link
-      get :forgot_password
-      get :resend_confirmation
-      # post :send_confirmation
+      get :groups_all # admin
     end
   end
 
@@ -58,20 +53,22 @@ Rails.application.routes.draw do
     get 'login' => :new
     post 'login' => :create
     delete 'logout' => :destroy
+    get 'sessions/email_link'
   end
 
-  post 'import_exercise' => 'exercises#import_external_exercise'
-  post 'import_uuid_check' => 'exercises#import_uuid_check'
+  controller :exercises do # import-api endpoints
+    post 'import_exercise' => 'import_external_exercise'
+    post 'import_uuid_check'
+  end
 
-  get 'sessions/create'
-  get 'sessions/destroy'
-  get 'sessions/email_link'
+  controller :comments do
+    get 'comments/comments_all'
+  end
 
-  get 'comments/comments_all'
-  get 'exercises/exercises_all'
-
-  get 'my_cart', to: 'carts#my_cart', as: 'my_cart'
-  get 'about', to: 'home#about', as: 'about'
+  controller :carts do
+    get 'my_cart'
+  end
+##########
   get 'account_link_documentation', to: 'home#account_link_documentation', as: 'account_link_documentation'
 
   get 'exercises/:id/duplicate', to: 'exercises#duplicate', as: 'duplicate_exercise'
@@ -97,6 +94,8 @@ Rails.application.routes.draw do
   post 'passwords/forgot', to: 'passwords#forgot'
   post 'passwords/reset', to: 'passwords#reset'
 
+  get 'account_links' => 'account_links#index' # admin
+
   resources :labels do
     get :search, on: :collection
   end
@@ -121,6 +120,7 @@ Rails.application.routes.draw do
       get :add_label
       post :import_exercise_start
       post :import_exercise_confirm
+      get :exercises_all # admin
     end
     resources :comments do
       collection do
