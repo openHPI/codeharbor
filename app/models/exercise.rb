@@ -337,7 +337,7 @@ class Exercise < ApplicationRecord
       if label
         labels << label
       else
-        labels.new(name: array, color: '006600', label_category: nil)
+        labels.new(name: array, color: '006600')
       end
     end
   end
