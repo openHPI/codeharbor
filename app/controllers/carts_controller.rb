@@ -33,9 +33,6 @@ class CartsController < ApplicationController
     if errors.empty?
       redirect_to my_cart_path, notice: t('controllers.exercise.push_external_notice', account_link: @account_link.name)
     else
-      errors.each do |error|
-        logger.error(error)
-      end
       redirect_to my_cart_path, alert: t('controllers.account_links.not_working', account_link: @account_link.name)
     end
   end
