@@ -4,10 +4,6 @@ p
   strong
     = t('labels.name')+ ':'
   = @label.name
-p
-  strong
-    = t('labels.category')+ ':'
-  = @label.label_category
 = link_to t('labels.button.edit'), edit_label_path(@label)
 |  \
 = link_to t('labels.button.back'), labels_path

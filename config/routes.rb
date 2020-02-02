@@ -96,7 +96,6 @@ Rails.application.routes.draw do
   resources :labels do
     get :search, on: :collection
   end
-  resources :label_categories
   resources :users do
     resources :account_links do
       post :remove_account_link, on: :member

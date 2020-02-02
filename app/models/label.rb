@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class Label < ApplicationRecord
-  belongs_to :label_category
-
   has_many :exercise_labels, dependent: :destroy
   has_many :exercises, through: :exercise_labels
+
+  validates :name, presence: true
 
   before_create :choose_random_color
 
