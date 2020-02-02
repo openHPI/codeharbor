@@ -7,6 +7,7 @@ class LabelsController < ApplicationController
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized for this action.'
   end
+
   def index
     @labels = Label.all.paginate(per_page: 10, page: params[:page])
   end

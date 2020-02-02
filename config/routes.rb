@@ -71,8 +71,6 @@ Rails.application.routes.draw do
   end
 ##########
 
-  get 'labels/autocomplete' => 'labels#autocomplete'
-
   get 'groups/:id/request_access', to: 'groups#request_access', as: 'request_access'
   get 'groups/:id/confirm_request', to: 'groups#confirm_request', as: 'confirm_request'
   get 'groups/:id/grant_access', to: 'groups#grant_access', as: 'grant_access'
@@ -93,7 +91,7 @@ Rails.application.routes.draw do
 
   get 'account_links' => 'account_links#index' # admin
 
-  resources :labels do
+  resources :labels do # admin
     get :search, on: :collection
   end
   resources :users do
