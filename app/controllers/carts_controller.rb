@@ -12,17 +12,17 @@ class CartsController < ApplicationController
 
   def remove_exercise
     if @cart.remove_exercise(params[:exercise])
-      redirect_to @cart, notice: t('controllers.carts.remove_exercise_success')
+      redirect_to my_cart_path, notice: t('controllers.carts.remove_exercise_success')
     else
-      redirect_to @cart, alert: t('controllers.carts.remove_exercise_fail')
+      redirect_to my_cart_path, alert: t('controllers.carts.remove_exercise_fail')
     end
   end
 
   def remove_all
     if @cart.remove_all
-      redirect_to @cart, notice: t('controllers.carts.remove_all_success')
+      redirect_to my_cart_path, notice: t('controllers.carts.remove_all_success')
     else
-      redirect_to @cart, alert: t('controllers.carts.remove_all_fail')
+      redirect_to my_cart_path, alert: t('controllers.carts.remove_all_fail')
     end
   end
 
@@ -31,12 +31,12 @@ class CartsController < ApplicationController
     errors = push_exercises
 
     if errors.empty?
-      redirect_to @cart, notice: t('controllers.exercise.push_external_notice', account_link: @account_link.name)
+      redirect_to my_cart_path, notice: t('controllers.exercise.push_external_notice', account_link: @account_link.name)
     else
       errors.each do |error|
         logger.error(error)
       end
-      redirect_to @cart, alert: t('controllers.account_links.not_working', account_link: @account_link.name)
+      redirect_to my_cart_path, alert: t('controllers.account_links.not_working', account_link: @account_link.name)
     end
   end
 

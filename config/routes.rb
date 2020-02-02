@@ -16,10 +16,13 @@ Rails.application.routes.draw do
 
   resources :licenses # admin
   resources :execution_environments # admin
+
   resources :carts, only: [] do
     member do
       get :download_all
       post :push_cart
+      get :remove_exercise
+      get :remove_all
     end
   end
 
@@ -30,17 +33,25 @@ Rails.application.routes.draw do
       post :share
       get :view_shared
       post :save_shared
+      get :remove_exercise
+      get :remove_all
     end
 
     collection do
       get :collections_all # admin
     end
   end
+
   resources :groups do
     member do
       get :remove_exercise
       get :leave
       get :deny_access
+      get :request_access
+      get :grant_access
+      get :delete_from_group
+      get :make_admin
+
       post :add_account_link_to_member # ???
       post :remove_account_link_from_member # ???
     end
@@ -69,20 +80,9 @@ Rails.application.routes.draw do
   controller :carts do
     get 'my_cart'
   end
-##########
 
-  get 'groups/:id/request_access', to: 'groups#request_access', as: 'request_access'
-  get 'groups/:id/confirm_request', to: 'groups#confirm_request', as: 'confirm_request'
-  get 'groups/:id/grant_access', to: 'groups#grant_access', as: 'grant_access'
-  get 'groups/:id/delete_from_group', to: 'groups#delete_from_group', as: 'delete_from_group'
-  get 'groups/:id/make_admin', to: 'groups#make_admin', as: 'make_admin'
+  ##########
 
-  get 'collections/:id/remove_exercise', to: 'collections#remove_exercise', as: 'remove_exercise_collection'
-  get 'carts/:id/remove_exercise', to: 'carts#remove_exercise', as: 'remove_exercise_cart'
-  get 'collections/:id/remove_all', to: 'collections#remove_all', as: 'remove_all_collection'
-  get 'carts/:id/remove_all', to: 'carts#remove_all', as: 'remove_all_cart'
-
-  post 'user/:id/messages/:id/add_author', to: 'messages#add_author', as: 'add_author'
 
   get 'exercise_files/:id/download_attachment', to: 'exercise_files#download_attachment', as: 'download_attachment'
 
@@ -94,15 +94,18 @@ Rails.application.routes.draw do
   resources :labels do # admin
     get :search, on: :collection
   end
+
   resources :users do
     resources :account_links do
       post :remove_account_link, on: :member
     end
+
     resources :messages, only: %i[index new create] do
       get :delete, on: :member
       get :reply, on: :collection
     end
   end
+
   resources :tests
 
   resources :file_types do
@@ -149,56 +152,4 @@ Rails.application.routes.draw do
   end
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
-
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
-
-  # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
-
-  # Example of named route that can be invoked with purchase_url(id: product.id)
-  #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
-
-  # Example resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
-
-  # Example resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
-
-  # Example resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Example resource route with more complex sub-resources:
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', on: :collection
-  #     end
-  #   end
-
-  # Example resource route with concerns:
-  #   concern :toggleable do
-  #     post 'toggle'
-  #   end
-  #   resources :posts, concerns: :toggleable
-  #   resources :photos, concerns: :toggleable
-
-  # Example resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
 end

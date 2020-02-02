@@ -60,7 +60,7 @@ br
                 = link_to t('message.index.save_collection'), save_shared_collection_path(message.param_id), method: 'post', class: 'btn btn-default btn-xs'
               - if message.param_type == 'group'
                 = link_to t('message.index.view'), group_path(message.param_id), class: 'btn btn-default btn-xs'
-                = link_to grant_access_path(message.param_id, user: message.sender.id), class: 'btn btn-default btn-xs' do
+                = link_to grant_access_group_path(message.param_id, user: message.sender.id), class: 'btn btn-default btn-xs' do
                   i.fa.fa-plus style=("color:#008000")
                   = ' ' + t('message.index.grant_access')
                 = link_to deny_access_group_path(message.param_id, user: message.sender.id), class: 'btn btn-default btn-xs' do
