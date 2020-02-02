@@ -81,14 +81,6 @@ Rails.application.routes.draw do
     get 'my_cart'
   end
 
-  ##########
-
-
-  get 'exercise_files/:id/download_attachment', to: 'exercise_files#download_attachment', as: 'download_attachment'
-
-  post 'passwords/forgot', to: 'passwords#forgot'
-  post 'passwords/reset', to: 'passwords#reset'
-
   get 'account_links' => 'account_links#index' # admin
 
   resources :labels do # admin
@@ -112,7 +104,10 @@ Rails.application.routes.draw do
     get :search, on: :collection
   end
 
-  resources :exercise_files
+  resources :exercise_files, only: [] do
+    get :download_attachment
+  end
+
   resources :testing_frameworks
 
   resources :exercises do
