@@ -309,7 +309,7 @@ legend.toggle-next
     .button-description
       = "Save Exercises for later by adding them to your cart or a collection."
     .wrapper
-      = link_to t('exercises.show.add_to_cart'), add_to_cart_path(@exercise), method: 'post', class: 'btn btn-default'
+      = link_to t('exercises.show.add_to_cart'), add_to_cart_exercise_path(@exercise), method: 'post', class: 'btn btn-default'
       .dropdown.btn-group
         = button_tag class: 'btn btn-default dropdown-toggle', data: {toggle: 'dropdown'} do
           = t('exercises.show.add_to_collection') + ' '
@@ -318,7 +318,7 @@ legend.toggle-next
           - if !current_user.collections.empty?
             - current_user.collections.each do |collection|
               li
-                = link_to collection.title, add_to_collection_path(collection: collection), method: 'post', class: 'dropdown-item'
+                = link_to collection.title, add_to_collection_exercise_path(collection: collection), method: 'post', class: 'dropdown-item'
           - else
             li
               = link_to t('exercises.show.add_collection'), new_collection_path(current_user)

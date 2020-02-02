@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       get :forgot_password
       get :resend_confirmation
       get :about
+      get :account_link_documentation
     end
   end
 
@@ -69,11 +70,7 @@ Rails.application.routes.draw do
     get 'my_cart'
   end
 ##########
-  get 'account_link_documentation', to: 'home#account_link_documentation', as: 'account_link_documentation'
 
-  get 'exercises/:id/duplicate', to: 'exercises#duplicate', as: 'duplicate_exercise'
-  post 'exercises/:id/add_to_cart', to: 'exercises#add_to_cart', as: 'add_to_cart'
-  post 'exercises/:id/add_to_collection', to: 'exercises#add_to_collection', as: 'add_to_collection'
   get 'labels/autocomplete' => 'labels#autocomplete'
 
   get 'groups/:id/request_access', to: 'groups#request_access', as: 'request_access'
@@ -110,23 +107,34 @@ Rails.application.routes.draw do
     end
   end
   resources :tests
+
   resources :file_types do
     get :search, on: :collection
   end
+
   resources :exercise_files
   resources :testing_frameworks
+
   resources :exercises do
+    member do
+      get :duplicate, as: 'duplicate'
+      post :add_to_cart
+      post :add_to_collection
+    end
+
     collection do
       get :add_label
       post :import_exercise_start
       post :import_exercise_confirm
       get :exercises_all # admin
     end
+
     resources :comments do
       collection do
         get :load_comments
       end
     end
+
     resources :ratings, only: :create
     member do
       get :related_exercises
