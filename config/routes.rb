@@ -22,9 +22,6 @@ Rails.application.routes.draw do
     get 'sessions/email_link' # ???
   end
 
-  resources :licenses # admin
-  resources :execution_environments # admin
-
   resources :carts, only: [] do
     member do
       get :download_all
@@ -46,10 +43,6 @@ Rails.application.routes.draw do
       post :save_shared # ???
       post :share
     end
-
-    collection do
-      get :collections_all # admin
-    end
   end
 
   resources :groups do
@@ -64,10 +57,6 @@ Rails.application.routes.draw do
 
       post :add_account_link_to_member # ???
       post :remove_account_link_from_member # ???
-    end
-
-    collection do
-      get :groups_all # admin
     end
   end
 
@@ -84,9 +73,7 @@ Rails.application.routes.draw do
     get 'my_cart'
   end
 
-  resources :account_links, only: :index # admin
-
-  resources :labels do # admin
+  resources :labels, only: [] do
     get :search, on: :collection
   end
 
@@ -101,17 +88,13 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :tests # admin
-
-  resources :file_types do # admin
+  resources :file_types, only: [] do
     get :search, on: :collection
   end
 
   resources :exercise_files, only: [] do
     get :download_attachment
   end
-
-  resources :testing_frameworks # admin
 
   resources :exercises do
     member do
@@ -120,7 +103,7 @@ Rails.application.routes.draw do
       get :decline_author # POST
       get :download_exercise
       get :duplicate
-      get :export_external_start  # POST
+      get :export_external_start # POST
       get :history
       get :related_exercises
 
@@ -133,14 +116,12 @@ Rails.application.routes.draw do
     end
 
     collection do
-      get :exercises_all # admin
-
       post :import_exercise_start
       post :import_exercise_confirm
     end
 
-    resources :comments do # AJAX-API?
-      get :load_comments, on: :collection
+    resources :comments do # AJAX-API
+      get :load_comments, on: :collection # index???
     end
 
     resources :ratings, only: :create
