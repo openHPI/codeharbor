@@ -5,13 +5,21 @@ Rails.application.routes.draw do
   root 'home#index'
   resources :home, only: :index do
     collection do
-      get :reset_password
+      get :about
+      get :account_link_documentation
       get :confirm_email
       get :forgot_password
       get :resend_confirmation
-      get :about
-      get :account_link_documentation
+      get :reset_password
     end
+  end
+
+  controller :sessions do
+    get 'login' => :new
+    post 'login' => :create
+    delete 'logout' => :destroy
+
+    get 'sessions/email_link' # ???
   end
 
   resources :licenses # admin
@@ -20,21 +28,23 @@ Rails.application.routes.draw do
   resources :carts, only: [] do
     member do
       get :download_all
-      post :push_cart
-      get :remove_exercise
-      get :remove_all
+      get :remove_all # PATCH/POST?
+      get :remove_exercise # PATCH/POST?
+
+      post :push_cart # later
     end
   end
 
   resources :collections do
     member do
-      post :push_collection
       get :download_all
+      get :remove_all # PATCH/POST?
+      get :remove_exercise # PATCH/POST?
+      get :view_shared # ???
+
+      post :push_collection # later
+      post :save_shared # ???
       post :share
-      get :view_shared
-      post :save_shared
-      get :remove_exercise
-      get :remove_all
     end
 
     collection do
@@ -44,13 +54,13 @@ Rails.application.routes.draw do
 
   resources :groups do
     member do
-      get :remove_exercise
-      get :leave
-      get :deny_access
-      get :request_access
-      get :grant_access
-      get :delete_from_group
-      get :make_admin
+      get :delete_from_group # PATCH/POST? User/Exercise?
+      get :deny_access # POST
+      get :grant_access # POST
+      get :leave # POST
+      get :make_admin # POST
+      get :remove_exercise # POST
+      get :request_access # POST
 
       post :add_account_link_to_member # ???
       post :remove_account_link_from_member # ???
@@ -61,27 +71,20 @@ Rails.application.routes.draw do
     end
   end
 
-  controller :sessions do
-    get 'login' => :new
-    post 'login' => :create
-    delete 'logout' => :destroy
-    get 'sessions/email_link'
-  end
-
   controller :exercises do # import-api endpoints
-    post 'import_exercise' => 'import_external_exercise'
-    post 'import_uuid_check'
+    post 'import_exercise' => :import_external_exercise
+    post :import_uuid_check
   end
 
   controller :comments do
-    get 'comments/comments_all'
+    get 'comments/comments_all' # ???
   end
 
   controller :carts do
     get 'my_cart'
   end
 
-  get 'account_links' => 'account_links#index' # admin
+  resources :account_links, only: :index # admin
 
   resources :labels do # admin
     get :search, on: :collection
@@ -89,18 +92,18 @@ Rails.application.routes.draw do
 
   resources :users do
     resources :account_links do
-      post :remove_account_link, on: :member
+      post :remove_account_link, on: :member # check, test. Should remove shared accountlinks?
     end
 
     resources :messages, only: %i[index new create] do
-      get :delete, on: :member
+      get :delete, on: :member # ? POST?
       get :reply, on: :collection
     end
   end
 
-  resources :tests
+  resources :tests # admin
 
-  resources :file_types do
+  resources :file_types do # admin
     get :search, on: :collection
   end
 
@@ -108,42 +111,39 @@ Rails.application.routes.draw do
     get :download_attachment
   end
 
-  resources :testing_frameworks
+  resources :testing_frameworks # admin
 
   resources :exercises do
     member do
-      get :duplicate, as: 'duplicate'
+      get :add_author # POST
+      get :contribute # POST
+      get :decline_author # POST
+      get :download_exercise
+      get :duplicate
+      get :export_external_start  # POST
+      get :history
+      get :related_exercises
+
       post :add_to_cart
       post :add_to_collection
+      post :export_external_check
+      post :export_external_confirm
+      post :remove_state
+      post :report
     end
 
     collection do
-      get :add_label
+      get :exercises_all # admin
+
       post :import_exercise_start
       post :import_exercise_confirm
-      get :exercises_all # admin
     end
 
-    resources :comments do
-      collection do
-        get :load_comments
-      end
+    resources :comments do # AJAX-API?
+      get :load_comments, on: :collection
     end
 
     resources :ratings, only: :create
-    member do
-      get :related_exercises
-      post :report
-      get :add_author
-      get :decline_author
-      get :contribute
-      get :download_exercise
-      post :remove_state
-      get :history
-      get :export_external_start
-      post :export_external_check
-      post :export_external_confirm
-    end
   end
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
