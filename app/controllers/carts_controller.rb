@@ -4,7 +4,7 @@ require 'zip'
 
 class CartsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_cart, only: %i[show edit update destroy remove_exercise remove_all download_all]
+  before_action :set_cart, only: %i[remove_exercise remove_all download_all]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.carts.authorization')

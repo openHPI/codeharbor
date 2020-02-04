@@ -131,10 +131,6 @@ class ExercisesController < ApplicationController
     end
   end
 
-  def exercises_all
-    @exercises = Exercise.paginate(per_page: 10, page: params[:page])
-  end
-
   def related_exercises
     @related_exercises = Exercise.find(ExerciseRelation.where(origin_id: @exercise.id).collect(&:clone_id))
     respond_to do |format|
