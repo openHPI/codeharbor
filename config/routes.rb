@@ -19,7 +19,7 @@ Rails.application.routes.draw do
     post 'login' => :create
     delete 'logout' => :destroy
 
-    get 'sessions/email_link' # ???
+    get 'sessions/email_link'
   end
 
   resources :carts, only: [] do
@@ -63,10 +63,6 @@ Rails.application.routes.draw do
   controller :exercises do # import-api endpoints
     post 'import_exercise' => :import_external_exercise
     post :import_uuid_check
-  end
-
-  controller :comments do
-    get 'comments/comments_all' # ???
   end
 
   controller :carts do
