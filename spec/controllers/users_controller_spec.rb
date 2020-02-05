@@ -117,14 +117,12 @@ RSpec.describe UsersController, type: :controller do
 
   describe 'PUT #update' do
     context 'with valid params' do
-      let(:new_attributes) do
-        skip('Add a hash of attributes valid for your model')
-      end
+      let(:new_attributes) { {username: 'new_name'} }
 
       it 'updates the requested user' do
         put :update, params: {id: user.to_param, user: new_attributes}, session: valid_session
         user.reload
-        skip('Add assertions for updated state')
+        expect(user.username).to eql('new_name')
       end
 
       it 'assigns the requested user as @user' do
