@@ -116,11 +116,9 @@ Rails.application.routes.draw do
       post :import_exercise_confirm
     end
 
-    resources :comments do # AJAX-API
-      get :load_comments, on: :collection # index???
-    end
+    resources :comments # AJAX-API
 
-    resources :ratings, only: :create
+    resources :ratings, only: :create #update?
   end
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'

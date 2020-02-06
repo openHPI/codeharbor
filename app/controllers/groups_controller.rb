@@ -18,10 +18,6 @@ class GroupsController < ApplicationController
               end
   end
 
-  def groups_all
-    @groups = Group.all.paginate(per_page: 10, page: params[:page])
-  end
-
   def show; end
 
   def new

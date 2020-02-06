@@ -22,13 +22,9 @@ class MessagesController < ApplicationController
     end
   end
 
-  def show; end
-
   def new
     @message = Message.new
   end
-
-  def edit; end
 
   # rubocop:disable Metrics/AbcSize
   def create
@@ -70,14 +66,6 @@ class MessagesController < ApplicationController
     end
   end
   # rubocop:enable Metrics/AbcSize
-
-  def destroy
-    @message.destroy
-    respond_to do |format|
-      format.html { redirect_to user_messages_path, notice: t('controllers.message.destroyed') }
-      format.json { head :no_content }
-    end
-  end
 
   def reply
     @recipient = User.find(params[:recipient])

@@ -18,7 +18,6 @@ class CommentsController < ApplicationController
 
   def edit
     respond_to do |format|
-      format.html { render :edit }
       format.js { render 'edit_comment.js.erb' }
     end
   end
@@ -27,11 +26,9 @@ class CommentsController < ApplicationController
   def create
     respond_to do |format|
       if @comment.save
-        format.html { redirect_to exercise_comments_path(@exercise), notice: 'Comment was successfully created.' }
         format.json { render :index, status: :created, location: @comment }
         format.js { index }
       else
-        format.html { render :new }
         format.json { render json: @comment.errors, status: :unprocessable_entity }
         flash[:alert] = 'An error ocurred while creating your comment.'
         format.js { render nothing: true, status: 200 }
@@ -42,11 +39,9 @@ class CommentsController < ApplicationController
   def update
     respond_to do |format|
       if @comment.update(comment_params)
-        format.html { redirect_to @comment, notice: 'Comment was successfully updated.' }
         format.json { render :show, status: :ok, location: @comment }
         format.js { index }
       else
-        format.html { render :edit }
         format.json { render json: @comment.errors, status: :unprocessable_entity }
         flash[:alert] = 'An error ocurred while updating your comment.'
         format.js { render nothing: true, status: 200 }
@@ -58,7 +53,6 @@ class CommentsController < ApplicationController
   def destroy
     @comment.destroy
     respond_to do |format|
-      format.html { redirect_to exercise_comments_path(@exercise), notice: 'Comment was successfully destroyed.' }
       format.json { head :no_content }
       format.js { index }
     end
@@ -67,13 +61,8 @@ class CommentsController < ApplicationController
   def index
     @comments = Comment.where(exercise: @exercise).paginate(per_page: 5, page: params[:page]).order('created_at DESC')
     respond_to do |format|
-      format.html { render :index }
-      format.js { render 'comments/load_comments.js.erb' }
+      format.js { render 'load_comments.js.erb' }
     end
-  end
-
-  def comments_all
-    @comments = Comment.all.paginate(per_page: 10, page: params[:page])
   end
 
   private
