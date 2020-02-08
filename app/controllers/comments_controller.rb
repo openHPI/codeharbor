@@ -2,67 +2,44 @@
 
 class CommentsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_exercise, except: [:comments_all]
-  before_action :set_comment, only: %i[show edit update destroy]
+  before_action :set_exercise
+  before_action :set_comment, only: %i[edit update destroy]
   before_action :new_comment, only: :create
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized to comment.'
   end
 
-  def show; end
-
-  def new
-    @comment = Comment.new
-  end
-
   def edit
-    respond_to do |format|
-      format.js { render 'edit_comment.js.erb' }
-    end
+    render 'edit_comment.js.erb'
   end
 
-  # rubocop:disable Metrics/AbcSize
   def create
-    respond_to do |format|
-      if @comment.save
-        format.json { render :index, status: :created, location: @comment }
-        format.js { index }
-      else
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
-        flash[:alert] = 'An error ocurred while creating your comment.'
-        format.js { render nothing: true, status: 200 }
-      end
+    if @comment.save
+      index
+    else
+      flash[:alert] = 'An error ocurred while creating your comment.'
+      render nothing: true, status: 200
     end
   end
 
   def update
-    respond_to do |format|
-      if @comment.update(comment_params)
-        format.json { render :show, status: :ok, location: @comment }
-        format.js { index }
-      else
-        format.json { render json: @comment.errors, status: :unprocessable_entity }
-        flash[:alert] = 'An error ocurred while updating your comment.'
-        format.js { render nothing: true, status: 200 }
-      end
+    if @comment.update(comment_params)
+      index
+    else
+      flash[:alert] = 'An error ocurred while updating your comment.'
+      render nothing: true, status: 200
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
   def destroy
     @comment.destroy
-    respond_to do |format|
-      format.json { head :no_content }
-      format.js { index }
-    end
+    index
   end
 
   def index
     @comments = Comment.where(exercise: @exercise).paginate(per_page: 5, page: params[:page]).order('created_at DESC')
-    respond_to do |format|
-      format.js { render 'load_comments.js.erb' }
-    end
+    render 'load_comments.js.erb'
   end
 
   private

@@ -118,7 +118,7 @@ Rails.application.routes.draw do
 
     resources :comments # AJAX-API
 
-    resources :ratings, only: :create #update?
+    resources :ratings, only: :create
   end
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
