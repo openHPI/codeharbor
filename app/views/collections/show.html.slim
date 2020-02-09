@@ -38,7 +38,7 @@
               - if cannot? :read, exercise
                 span.fa.fa-lock.lock
                 = ' '
-                = link_to t('collections.show.contribute'), contribute_exercise_path(exercise), class: 'btn btn-default'
+                = link_to t('collections.show.contribute'), contribute_exercise_path(exercise), method: :post, class: 'btn btn-default'
               = link_to remove_exercise_collection_path(@collection, exercise: exercise), method: :patch, class: 'pull-right' do
                 i.fa.fa-remove style=("color: #800000; font-size: 20px;")
 br

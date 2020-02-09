@@ -28,7 +28,7 @@
                     i.fa.fa-remove style=("color: gray")
                 - else
                   = link_to exercise.title, exercise_path(exercise), class: 'btn btn-default disabled', style: "border-right: none"
-                  = link_to contribute_exercise_path(exercise), class: 'btn btn-default', style: "border-left: none; margin-right: 5px;" do
+                  = link_to contribute_exercise_path(exercise), method: :post, class: 'btn btn-default', style: "border-left: none; margin-right: 5px;" do
                     i.fa.fa-lock style=("color: gray")
       .col-md-3
         .btn-group.pull-right aria-label="..." role="group"

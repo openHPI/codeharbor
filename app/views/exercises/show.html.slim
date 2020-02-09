@@ -336,7 +336,7 @@ legend.toggle-next
             - if !current_user.account_links.empty?
               - current_user.account_links.each do |acc_link|
                 li
-                  = link_to acc_link.name, export_external_start_exercise_path(account_link: acc_link), remote: true, class: 'dropdown-item export-test'
+                  = link_to acc_link.name, export_external_start_exercise_path(account_link: acc_link), method: :post, remote: true, class: 'dropdown-item export-test'
             - else
               li
                 = link_to t('exercises.show.define_account_link'), new_user_account_link_path(current_user)

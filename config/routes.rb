@@ -77,12 +77,11 @@ Rails.application.routes.draw do
   end
 
   resources :users, only: %i[new show create edit update destroy] do
-    resources :account_links, only: %i[new create edit update destroy] do
+    resources :account_links, only: %i[new show create edit update destroy] do
       post :remove_account_link, on: :member # check, test. Should remove shared accountlinks?
     end
 
     resources :messages, only: %i[index new create destroy] do
-      # get :delete, on: :member # ? POST?
       get :reply, on: :collection
     end
   end
@@ -97,15 +96,15 @@ Rails.application.routes.draw do
 
   resources :exercises do
     member do
-      get :add_author # POST
-      get :contribute # POST
-      get :decline_author # POST
       get :download_exercise
       get :duplicate
-      get :export_external_start # POST
       get :history
       get :related_exercises
 
+      post :export_external_start
+      post :add_author
+      post :contribute
+      post :decline_author
       post :add_to_cart
       post :add_to_collection
       post :export_external_check

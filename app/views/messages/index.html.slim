@@ -49,10 +49,10 @@ br
             .btn-group
               -if message.param_type == 'exercise'
                 = link_to  t('message.index.view'), exercise_path(message.param_id), class: 'btn btn-default btn-xs'
-                = link_to add_author_exercise_path(message.param_id, user: message.sender.id), class: 'btn btn-default btn-xs' do
+                = link_to add_author_exercise_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-default btn-xs' do
                   i.fa.fa-plus style=("color:#008000")
                   = ' ' + t('message.index.make_co_author')
-                = link_to decline_author_exercise_path(message.param_id, user: message.sender.id), class: 'btn btn-default btn-xs' do
+                = link_to decline_author_exercise_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-default btn-xs' do
                   i.fa.fa-remove style=("color:#800000")
                   = ' ' + t('message.index.deny_access')
               - if message.param_type == 'collection'
