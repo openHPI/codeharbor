@@ -22,22 +22,6 @@ RSpec.describe UsersController, type: :controller do
   # UsersController. Be sure to keep this updated too.
   let(:valid_session) { {user_id: user.id} }
 
-  describe 'GET #index' do
-    it 'assigns all users as @users' do
-      get :index, params: {}, session: valid_session
-      expect(assigns(:users)).to eq([])
-    end
-
-    context 'when user is admin' do
-      let!(:user) { create(:admin) }
-
-      it 'assigns all users as @users' do
-        get :index, params: {}, session: valid_session
-        expect(assigns(:users)).to eq([user])
-      end
-    end
-  end
-
   describe 'GET #show' do
     it 'assigns the requested user as @user' do
       get :show, params: {id: user.to_param}, session: valid_session

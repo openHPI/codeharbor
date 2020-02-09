@@ -76,7 +76,7 @@ Rails.application.routes.draw do
     get :search, on: :collection
   end
 
-  resources :users do
+  resources :users, only: %i[new show create edit update destroy] do
     resources :account_links, only: %i[new create edit update destroy] do
       post :remove_account_link, on: :member # check, test. Should remove shared accountlinks?
     end
