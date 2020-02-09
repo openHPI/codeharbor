@@ -1,4 +1,3 @@
-- model_class = Cart
 .header
   .std-heading
     i.fa.fa-shopping-cart style=("color:#444444")
@@ -23,7 +22,7 @@ table.table
           td
             = link_to exercise.title, exercise_path(exercise)
           td
-            = link_to remove_exercise_cart_path(@cart, exercise: exercise), class: 'btn btn-default btn-xs' do
+            = link_to remove_exercise_cart_path(@cart, exercise: exercise), method: :patch, class: 'btn btn-default btn-xs' do
               i.fa.fa-remove style=("color: #800000")
 br
 .btn-group[role="group"]
@@ -45,7 +44,7 @@ br
         - else
           li
             = link_to t('exercises.show.define_account_link'), new_user_account_link_path(current_user)
-  = link_to remove_all_cart_path(@cart), class: 'btn btn-important' do
+  = link_to remove_all_cart_path(@cart), method: :patch, class: 'btn btn-important' do
     i.fa.fa-trash style=("color: #800000")
     = ' ' + t('carts.show.remove_all')
 

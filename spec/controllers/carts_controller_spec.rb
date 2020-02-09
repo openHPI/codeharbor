@@ -27,22 +27,22 @@ RSpec.describe CartsController, type: :controller do
     end
   end
 
-  describe 'GET #remove_exercise' do
+  describe 'PATCH #remove_exercise' do
     let(:exercises) { [exercise] }
     let(:exercise) { create(:exercise) }
-    let(:get_request) { get :remove_exercise, params: {id: cart.id, exercise: exercise.id}, session: valid_session }
+    let(:patch_request) { patch :remove_exercise, params: {id: cart.id, exercise: exercise.id}, session: valid_session }
 
     it 'removes exercise from cart' do
-      expect { get_request }.to change(cart.reload.exercises, :count).by(-1)
+      expect { patch_request }.to change(cart.reload.exercises, :count).by(-1)
     end
   end
 
-  describe 'GET #remove_all' do
+  describe 'PATCH #remove_all' do
     let(:exercises) { create_list(:exercise, 2) }
-    let(:get_request) { get :remove_all, params: {id: cart.id}, session: valid_session }
+    let(:patch_request) { patch :remove_all, params: {id: cart.id}, session: valid_session }
 
     it 'removes exercise from cart' do
-      expect { get_request }.to change(cart.exercises, :count).by(-2)
+      expect { patch_request }.to change(cart.exercises, :count).by(-2)
     end
   end
 

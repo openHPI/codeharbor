@@ -10,10 +10,14 @@ class Message < ApplicationRecord
   scope :sent_by, ->(user) { where(sender: user).where('sender_status != ?', 'd') }
 
   def deleted_by_sender?
-    @message.sender_status == 'd'
+    sender_status == 'd'
   end
 
   def deleted_by_recipient?
-    @message.recipient_status == 'd'
+    recipient_status == 'd'
+  end
+
+  def deleted_by_both?
+    deleted_by_recipient? && deleted_by_sender?
   end
 end

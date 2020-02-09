@@ -25,8 +25,9 @@ Rails.application.routes.draw do
   resources :carts, only: [] do
     member do
       get :download_all
-      get :remove_all # PATCH/POST?
-      get :remove_exercise # PATCH/POST?
+
+      patch :remove_all
+      patch :remove_exercise
 
       post :push_cart # later
     end
@@ -35,9 +36,10 @@ Rails.application.routes.draw do
   resources :collections do
     member do
       get :download_all
-      get :remove_all # PATCH/POST?
-      get :remove_exercise # PATCH/POST?
       get :view_shared # ???
+
+      patch :remove_all
+      patch :remove_exercise
 
       post :push_collection # later
       post :save_shared # ???
@@ -47,13 +49,14 @@ Rails.application.routes.draw do
 
   resources :groups do
     member do
-      get :delete_from_group # PATCH/POST? User/Exercise?
-      get :deny_access # POST
-      get :grant_access # POST
-      get :leave # POST
-      get :make_admin # POST
-      get :remove_exercise # POST
-      get :request_access # POST
+      post :deny_access
+      post :grant_access
+      post :leave
+      post :make_admin
+      post :request_access
+
+      patch :delete_from_group
+      patch :remove_exercise
 
       post :add_account_link_to_member # ???
       post :remove_account_link_from_member # ???
@@ -74,12 +77,12 @@ Rails.application.routes.draw do
   end
 
   resources :users do
-    resources :account_links do
+    resources :account_links, only: %i[new create edit update destroy] do
       post :remove_account_link, on: :member # check, test. Should remove shared accountlinks?
     end
 
-    resources :messages, only: %i[index new create] do
-      get :delete, on: :member # ? POST?
+    resources :messages, only: %i[index new create destroy] do
+      # get :delete, on: :member # ? POST?
       get :reply, on: :collection
     end
   end
