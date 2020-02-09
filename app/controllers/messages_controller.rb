@@ -43,23 +43,17 @@ class MessagesController < ApplicationController
       render :new
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def destroy
-    if @message.sender == current_user
-      @message.sender_status = 'd'
-    else
-      @message.recipient_status = 'd'
-    end
+    @message.mark_as_deleted(current_user)
 
-    @message.destroy if @message.deleted_by_both?
-
-    if @message.destroyed? || @message.save
+    if @message.save
       redirect_to user_messages_path(@user, option: params[:option]), notice: t('controllers.message.deleted_notice')
     else
       redirect_to user_messages_path(@user, option: params[:option]), alert: t('controllers.message.deleted_alert')
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
   def reply
     @recipient = User.find(params[:recipient])
