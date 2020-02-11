@@ -19,7 +19,7 @@ class CommentsController < ApplicationController
       index
     else
       flash[:alert] = 'An error ocurred while creating your comment.'
-      render nothing: true, status: 200
+      render nothing: true, status: :ok
     end
   end
 
@@ -28,7 +28,7 @@ class CommentsController < ApplicationController
       index
     else
       flash[:alert] = 'An error ocurred while updating your comment.'
-      render nothing: true, status: 200
+      render nothing: true, status: :ok
     end
   end
 
