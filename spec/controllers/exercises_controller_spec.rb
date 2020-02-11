@@ -104,7 +104,7 @@ RSpec.describe ExercisesController, type: :controller do
       end
     end
 
-    context 'when exercise has an exercises_file' do
+    context 'when exercise has a test' do
       let!(:test) { create(:test, exercise: exercise) }
 
       it "assigns exercise's tests to instance variable" do

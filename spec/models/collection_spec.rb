@@ -71,7 +71,7 @@ RSpec.describe Collection, type: :model do
     let(:user) { create(:user) }
     let(:exercise) { create(:simple_exercise) }
 
-    context 'when exercise not in collection' do
+    context 'when exercise is not in collection' do
       let(:collection) { create(:collection, users: [user], exercises: []) }
 
       it { is_expected.to be_truthy }
@@ -81,7 +81,7 @@ RSpec.describe Collection, type: :model do
       end
     end
 
-    context 'when exercise not in collection' do
+    context 'when exercise is in collection' do
       let(:collection) { create(:collection, users: [user], exercises: [exercise]) }
 
       it { is_expected.to be_falsey }
