@@ -67,7 +67,7 @@ RSpec.describe Cart, type: :model do
     let(:user) { create(:user) }
     let(:exercise) { create(:simple_exercise) }
 
-    context 'when exercise not in cart' do
+    context 'when exercise is not in cart' do
       let(:cart) { create(:cart, user: user, exercises: []) }
 
       it { is_expected.to be_truthy }
@@ -77,7 +77,7 @@ RSpec.describe Cart, type: :model do
       end
     end
 
-    context 'when exercise not in cart' do
+    context 'when exercise is in cart' do
       let(:cart) { create(:cart, user: user, exercises: [exercise]) }
 
       it { is_expected.to be_falsey }

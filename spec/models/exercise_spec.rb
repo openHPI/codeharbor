@@ -594,7 +594,7 @@ RSpec.describe Exercise, type: :model do
       end
     end
 
-    context 'when exercise has tests' do
+    context 'when exercise has exercise_files' do
       let(:exercise1) { build(:exercise, exercise_files: [build(:exercise_file, purpose: 'purpose')]) }
       let(:exercise2) { build(:exercise, exercise_files: [build(:exercise_file, purpose: 'purpose')]) }
 
