@@ -8,43 +8,27 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-user1 = User.create(first_name: 'Manfred',
-                    last_name: 'Anderson',
-                    email: 'manfredAnderson@bhak1.de',
+user1 = User.create(first_name: 'Firstname1',
+                    last_name: 'Lastname1',
+                    email: 'user1@example.org',
                     email_confirmed: true,
                     password: 'pwd',
                     role: 'admin')
-user2 = User.create(first_name: 'Johannes',
-                    last_name: 'Maier',
-                    email: 'j.maier@waldschule.de',
+user2 = User.create(first_name: 'Firstname2',
+                    last_name: 'Lastname2',
+                    email: 'user2@example.org',
                     email_confirmed: true,
                     password: 'pwd')
-user3 = User.create(first_name: 'Denise',
-                    last_name: 'Feler',
-                    email: 'denise.feler@gmx.de',
+user3 = User.create(first_name: 'Firstname3',
+                    last_name: 'Lastname3',
+                    email: 'user3@example.org',
                     email_confirmed: true,
                     password: 'pwd')
-user4 = User.create(first_name: 'Theresa',
-                    last_name: 'Zobel',
-                    email: 'theresa.zobel@student.hpi.de',
+user4 = User.create(first_name: 'Firstname4',
+                    last_name: 'Lastname4',
+                    email: 'user4@example.org',
                     email_confirmed: true,
                     password: '1234')
-User.create(first_name: 'Theresa',
-            last_name: 'Zobel',
-            email: 'theresa.zobel@aon.at',
-            email_confirmed: true,
-            password: '1234')
-User.create(first_name: 'Adrian',
-            last_name: 'Steppat',
-            email: 'adrian.steppat@student.hpi.de',
-            email_confirmed: true,
-            password: 'harbor',
-            role: 'admin')
-User.create(first_name: 'Adrian',
-            last_name: 'Steppat',
-            email: 'adrian.steppat@web.de',
-            email_confirmed: true,
-            password: 'harbor')
 
 license1 = License.create(name: 'MIT License', link: 'https://opensource.org/licenses/MIT')
 License.create(name: 'Creative Common Attribution', link: 'https://creativecommons.org/licenses/by/4.0/')
