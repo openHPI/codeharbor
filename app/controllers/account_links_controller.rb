@@ -3,15 +3,11 @@
 class AccountLinksController < ApplicationController
   load_and_authorize_resource
 
-  before_action :set_user, except: [:index]
+  before_action :set_user
   before_action :set_account_link, only: %i[show edit update destroy remove_account_link]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.user.authorization')
-  end
-
-  def index
-    @account_links = AccountLink.all.paginate(per_page: 10, page: params[:page])
   end
 
   def show; end

@@ -3,23 +3,10 @@
 class RatingsController < ApplicationController
   load_and_authorize_resource
   before_action :set_exercise
-  before_action :set_rating, only: %i[show edit update destroy]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: 'You are not authorized to rate.'
   end
-
-  def index
-    @ratings = Rating.all
-  end
-
-  def show; end
-
-  def new
-    @rating = Rating.new
-  end
-
-  def edit; end
 
   def create
     return handle_own_rating if @exercise.user == current_user
@@ -36,32 +23,7 @@ class RatingsController < ApplicationController
     end
   end
 
-  def update
-    respond_to do |format|
-      if @rating.update(rating_params)
-        format.html { redirect_to @rating, notice: 'Rating was successfully updated.' }
-        format.json { render :show, status: :ok, location: @rating }
-      else
-        format.html { render :edit }
-        format.json { render json: @rating.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  def destroy
-    @rating.destroy
-    respond_to do |format|
-      format.html { redirect_to ratings_url, notice: 'Rating was successfully destroyed.' }
-      format.json { head :no_content }
-    end
-  end
-
   private
-
-  # Use callbacks to share common setup or constraints between actions.
-  def set_rating
-    @rating = Rating.find(params[:id])
-  end
 
   def set_exercise
     @exercise = Exercise.find(params[:exercise_id])

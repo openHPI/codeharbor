@@ -1,4 +1,3 @@
-- model_class = Exercise
 .header
   .col-md-8
     .std-heading data-toggle="tooltip" data-placement="bottom" title="#{@exercise.title}"
@@ -207,7 +206,7 @@ legend.toggle-next
                 - if file.attached_image?
                   = image_tag(file.attachment.url(:large))
                 - else
-                  = link_to file.attachment.original_filename, download_attachment_path(file), 'data-turbolinks': false
+                  = link_to file.attachment.original_filename, exercise_file_download_attachment_path(file), 'data-turbolinks': false
           .row
             .row-label
               = t('exercises.files.name')
@@ -273,7 +272,7 @@ legend.toggle-next
               - if test.attached_image?
                 = image_tag(test.attachment.url(:large))
               - else
-                = link_to test.attachment.original_filename, download_attachment_path(test.exercise_file), 'data-turbolinks': false
+                = link_to test.attachment.original_filename, exercise_file_download_attachment_path(test.exercise_file), 'data-turbolinks': false
         .row
           .row-label
             = t('exercises.files.name')
@@ -309,7 +308,7 @@ legend.toggle-next
     .button-description
       = "Save Exercises for later by adding them to your cart or a collection."
     .wrapper
-      = link_to t('exercises.show.add_to_cart'), add_to_cart_path(@exercise), method: 'post', class: 'btn btn-default'
+      = link_to t('exercises.show.add_to_cart'), add_to_cart_exercise_path(@exercise), method: 'post', class: 'btn btn-default'
       .dropdown.btn-group
         = button_tag class: 'btn btn-default dropdown-toggle', data: {toggle: 'dropdown'} do
           = t('exercises.show.add_to_collection') + ' '
@@ -318,7 +317,7 @@ legend.toggle-next
           - if !current_user.collections.empty?
             - current_user.collections.each do |collection|
               li
-                = link_to collection.title, add_to_collection_path(collection: collection), method: 'post', class: 'dropdown-item'
+                = link_to collection.title, add_to_collection_exercise_path(collection: collection), method: 'post', class: 'dropdown-item'
           - else
             li
               = link_to t('exercises.show.add_collection'), new_collection_path(current_user)
@@ -337,7 +336,7 @@ legend.toggle-next
             - if !current_user.account_links.empty?
               - current_user.account_links.each do |acc_link|
                 li
-                  = link_to acc_link.name, export_external_start_exercise_path(account_link: acc_link), remote: true, class: 'dropdown-item export-test'
+                  = link_to acc_link.name, export_external_start_exercise_path(account_link: acc_link), method: :post, remote: true, class: 'dropdown-item export-test'
             - else
               li
                 = link_to t('exercises.show.define_account_link'), new_user_account_link_path(current_user)

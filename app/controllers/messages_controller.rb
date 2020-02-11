@@ -2,7 +2,7 @@
 
 class MessagesController < ApplicationController
   before_action :set_user
-  before_action :set_message, only: %i[show edit update destroy delete]
+  before_action :set_message, only: %i[show edit update destroy]
   before_action :set_option, only: [:index]
 
   rescue_from CanCan::AccessDenied do |_exception|
@@ -22,13 +22,9 @@ class MessagesController < ApplicationController
     end
   end
 
-  def show; end
-
   def new
     @message = Message.new
   end
-
-  def edit; end
 
   # rubocop:disable Metrics/AbcSize
   def create
@@ -41,41 +37,21 @@ class MessagesController < ApplicationController
                            User.find(params[:message][:recipient_hidden])
                          end
 
-    respond_to do |format|
-      if @message.save
-        format.html { redirect_to user_messages_path(@user), notice: t('controllers.message.created') }
-        format.json { render :show, status: :created, location: @message }
-      else
-        format.html { render :new }
-        format.json { render json: @message.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  def delete
-    if @message.sender == current_user
-      @message.sender_status = 'd'
-      @message.delete if @message.deleted_by_recipient?
-    else
-      @message.recipient_status = 'd'
-      @message.delete if @message.deleted_by_sender?
-    end
-
-    option = params[:option]
-
     if @message.save
-      redirect_to user_messages_path(@user, option: option), notice: t('controllers.message.deleted_notice')
+      redirect_to user_messages_path(@user), notice: t('controllers.message.created')
     else
-      redirect_to user_messages_path(@user, option: option), alert: t('controllers.message.deleted_alert')
+      render :new
     end
   end
   # rubocop:enable Metrics/AbcSize
 
   def destroy
-    @message.destroy
-    respond_to do |format|
-      format.html { redirect_to user_messages_path, notice: t('controllers.message.destroyed') }
-      format.json { head :no_content }
+    @message.mark_as_deleted(current_user)
+
+    if @message.save
+      redirect_to user_messages_path(@user, option: params[:option]), notice: t('controllers.message.deleted_notice')
+    else
+      redirect_to user_messages_path(@user, option: params[:option]), alert: t('controllers.message.deleted_alert')
     end
   end
 

@@ -18,38 +18,31 @@ RSpec.describe CartsController, type: :controller do
   let(:cart) { create(:cart, exercises: exercises) }
   let(:exercises) { [] }
 
-  describe 'GET #show' do
-    it 'assigns the requested cart as @cart' do
-      get :show, params: {id: cart.to_param}, session: valid_session
-      expect(assigns(:cart)).to eq(cart)
-    end
-  end
-
   describe 'GET #my_cart' do
     let(:get_request) { get :my_cart, session: valid_session }
 
-    it 'redirects to show' do
+    it 'renders my_cart' do
       get_request
-      expect(response).to redirect_to(cart)
+      expect(response).to render_template :my_cart
     end
   end
 
-  describe 'GET #remove_exercise' do
+  describe 'PATCH #remove_exercise' do
     let(:exercises) { [exercise] }
     let(:exercise) { create(:exercise) }
-    let(:get_request) { get :remove_exercise, params: {id: cart.id, exercise: exercise.id}, session: valid_session }
+    let(:patch_request) { patch :remove_exercise, params: {id: cart.id, exercise: exercise.id}, session: valid_session }
 
     it 'removes exercise from cart' do
-      expect { get_request }.to change(cart.reload.exercises, :count).by(-1)
+      expect { patch_request }.to change(cart.reload.exercises, :count).by(-1)
     end
   end
 
-  describe 'GET #remove_all' do
+  describe 'PATCH #remove_all' do
     let(:exercises) { create_list(:exercise, 2) }
-    let(:get_request) { get :remove_all, params: {id: cart.id}, session: valid_session }
+    let(:patch_request) { patch :remove_all, params: {id: cart.id}, session: valid_session }
 
     it 'removes exercise from cart' do
-      expect { get_request }.to change(cart.exercises, :count).by(-2)
+      expect { patch_request }.to change(cart.exercises, :count).by(-2)
     end
   end
 

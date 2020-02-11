@@ -19,22 +19,7 @@ RSpec.describe AccountLinksController, type: :controller do
   end
   let(:empty_params) { {user_id: user.id} }
 
-  context 'when not logged in' do
-    include_examples 'logged out examples', klass: AccountLink, resource: :account_link
-  end
-
   context 'when logged in as a User' do
-    describe 'GET #index' do
-      it 'redirects to home' do
-        get :index, params: {user_id: user.id}, session: valid_session
-        expect(response).to redirect_to(root_url)
-      end
-    end
-
-    describe 'GET #show' do
-      include_examples 'show examples', klass: AccountLink, resource: :account_link
-    end
-
     describe 'GET #new' do
       include_examples 'new examples', klass: AccountLink, resource: :account_link
     end

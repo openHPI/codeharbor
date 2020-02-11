@@ -1,56 +1,16 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  resources :relations
-  resources :exercise_relations
   # You can have the root of your site routed with "root"
   root 'home#index'
-
-  get 'account_links' => 'account_links#index'
-
-  resources :licenses
-  resources :execution_environments
-  resources :carts do
-    member do
-      get :download_all
-      post :push_cart
-    end
-  end
-  resources :collections do
-    member do
-      post :push_collection
-      get :download_all
-      post :share
-      get :view_shared
-      post :save_shared
-    end
+  resources :home, only: :index do
     collection do
-      get :collections_all
-    end
-  end
-  resources :groups do
-    get :search, on: :collection
-    member do
-      get :remove_exercise
-      get :leave
-      get :deny_access
-      post :add_account_link_to_member
-      post :remove_account_link_from_member
-    end
-    collection do
-      get :groups_all
-    end
-  end
-
-  resources :home do
-    collection do
-      get :index
-      get :reset_password
+      get :about
+      get :account_link_documentation
       get :confirm_email
-      get :email_link
       get :forgot_password
       get :resend_confirmation
-      # post :send_confirmation
+      get :reset_password
     end
   end
 
@@ -58,141 +18,110 @@ Rails.application.routes.draw do
     get 'login' => :new
     post 'login' => :create
     delete 'logout' => :destroy
+
+    get 'sessions/email_link'
   end
 
-  post 'import_exercise' => 'exercises#import_external_exercise'
-  post 'import_uuid_check' => 'exercises#import_uuid_check'
+  resources :carts, only: [] do
+    member do
+      get :download_all
 
-  get 'sessions/create'
-  get 'sessions/destroy'
-  get 'sessions/email_link'
+      patch :remove_all
+      patch :remove_exercise
 
-  get 'comments/comments_all'
-  get 'exercises/exercises_all'
+      post :push_cart # later
+    end
+  end
 
-  get 'my_cart', to: 'carts#my_cart', as: 'my_cart'
-  get 'about', to: 'home#about', as: 'about'
-  get 'account_link_documentation', to: 'home#account_link_documentation', as: 'account_link_documentation'
+  resources :collections do
+    member do
+      get :download_all
+      get :view_shared # ???
 
-  get 'exercises/:id/duplicate', to: 'exercises#duplicate', as: 'duplicate_exercise'
-  post 'exercises/:id/add_to_cart', to: 'exercises#add_to_cart', as: 'add_to_cart'
-  post 'exercises/:id/add_to_collection', to: 'exercises#add_to_collection', as: 'add_to_collection'
-  get 'labels/autocomplete' => 'labels#autocomplete'
+      patch :remove_all
+      patch :remove_exercise
 
-  get 'groups/:id/request_access', to: 'groups#request_access', as: 'request_access'
-  get 'groups/:id/confirm_request', to: 'groups#confirm_request', as: 'confirm_request'
-  get 'groups/:id/grant_access', to: 'groups#grant_access', as: 'grant_access'
-  get 'groups/:id/delete_from_group', to: 'groups#delete_from_group', as: 'delete_from_group'
-  get 'groups/:id/make_admin', to: 'groups#make_admin', as: 'make_admin'
+      post :push_collection # later
+      post :save_shared # ???
+      post :share
+    end
+  end
 
-  get 'collections/:id/remove_exercise', to: 'collections#remove_exercise', as: 'remove_exercise_collection'
-  get 'carts/:id/remove_exercise', to: 'carts#remove_exercise', as: 'remove_exercise_cart'
-  get 'collections/:id/remove_all', to: 'collections#remove_all', as: 'remove_all_collection'
-  get 'carts/:id/remove_all', to: 'carts#remove_all', as: 'remove_all_cart'
+  resources :groups do
+    member do
+      post :deny_access
+      post :grant_access
+      post :leave
+      post :make_admin
+      post :request_access
 
-  post 'user/:id/messages/:id/add_author', to: 'messages#add_author', as: 'add_author'
+      patch :delete_from_group
+      patch :remove_exercise
 
-  get 'exercise_files/:id/download_attachment', to: 'exercise_files#download_attachment', as: 'download_attachment'
+      post :add_account_link_to_member # ???
+      post :remove_account_link_from_member # ???
+    end
+  end
 
-  post 'passwords/forgot', to: 'passwords#forgot'
-  post 'passwords/reset', to: 'passwords#reset'
+  controller :exercises do # import-api endpoints
+    post 'import_exercise' => :import_external_exercise
+    post :import_uuid_check
+  end
 
-  resources :labels do
+  controller :carts do
+    get 'my_cart'
+  end
+
+  resources :labels, only: [] do
     get :search, on: :collection
   end
-  resources :users do
-    resources :account_links do
-      post :remove_account_link, on: :member
+
+  resources :users, only: %i[new show create edit update destroy] do
+    resources :account_links, only: %i[new show create edit update destroy] do
+      post :remove_account_link, on: :member # check, test. Should remove shared accountlinks?
     end
-    resources :messages, only: %i[index new create] do
-      get :delete, on: :member
+
+    resources :messages, only: %i[index new create destroy] do
       get :reply, on: :collection
     end
   end
-  resources :tests
-  resources :file_types do
+
+  resources :file_types, only: [] do
     get :search, on: :collection
   end
-  resources :exercise_files
-  resources :testing_frameworks
+
+  resources :exercise_files, only: [] do
+    get :download_attachment
+  end
+
   resources :exercises do
+    member do
+      get :download_exercise
+      get :duplicate
+      get :history
+      get :related_exercises
+
+      post :export_external_start
+      post :add_author
+      post :contribute
+      post :decline_author
+      post :add_to_cart
+      post :add_to_collection
+      post :export_external_check
+      post :export_external_confirm
+      post :remove_state
+      post :report
+    end
+
     collection do
-      get :add_label
       post :import_exercise_start
       post :import_exercise_confirm
     end
-    resources :comments do
-      collection do
-        get :load_comments
-      end
-    end
+
+    resources :comments # AJAX-API
+
     resources :ratings, only: :create
-    member do
-      get :related_exercises
-      post :report
-      get :add_author
-      get :decline_author
-      get :contribute
-      get :download_exercise
-      post :remove_state
-      get :history
-      get :export_external_start
-      post :export_external_check
-      post :export_external_confirm
-    end
   end
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
-
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
-
-  # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
-
-  # Example of named route that can be invoked with purchase_url(id: product.id)
-  #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
-
-  # Example resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
-
-  # Example resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
-
-  # Example resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Example resource route with more complex sub-resources:
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', on: :collection
-  #     end
-  #   end
-
-  # Example resource route with concerns:
-  #   concern :toggleable do
-  #     post 'toggle'
-  #   end
-  #   resources :posts, concerns: :toggleable
-  #   resources :photos, concerns: :toggleable
-
-  # Example resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
 end

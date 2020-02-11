@@ -131,10 +131,6 @@ class ExercisesController < ApplicationController
     end
   end
 
-  def exercises_all
-    @exercises = Exercise.paginate(per_page: 10, page: params[:page])
-  end
-
   def related_exercises
     @related_exercises = Exercise.find(ExerciseRelation.where(origin_id: @exercise.id).collect(&:clone_id))
     respond_to do |format|
@@ -183,14 +179,14 @@ class ExercisesController < ApplicationController
           exported: false
         }
       )
-    }, status: 200
+    }, status: :ok
   end
 
   # rubocop:disable Metrics/AbcSize
   def export_external_confirm
     push_type = params[:push_type]
 
-    return render json: {}, status: 500 unless %w[create_new export].include? push_type
+    return render json: {}, status: :internal_server_error unless %w[create_new export].include? push_type
 
     exercise, error = ProformaService::HandleExportConfirm.call(user: current_user, exercise: @exercise,
                                                                 push_type: push_type, account_link_id: params[:account_link])
@@ -218,7 +214,7 @@ class ExercisesController < ApplicationController
 
   def import_uuid_check
     user = user_for_api_request
-    return render json: {}, status: 401 if user.nil?
+    return render json: {}, status: :unauthorized if user.nil?
 
     exercise = Exercise.find_by(uuid: params[:uuid])
     return render json: {exercise_found: false} if exercise.nil?
@@ -233,11 +229,11 @@ class ExercisesController < ApplicationController
 
     ProformaService::Import.call(zip: tempfile, user: user)
 
-    render json: t('controllers.exercise.import_proforma_xml.success'), status: 201
+    render json: t('controllers.exercise.import_proforma_xml.success'), status: :created
   rescue Proforma::ProformaError
-    render json: t('controllers.exercise.import_proforma_xml.invalid'), status: 400
+    render json: t('controllers.exercise.import_proforma_xml.invalid'), status: :bad_request
   rescue StandardError
-    render json: t('controllers.exercise.import_proforma_xml.internal_error'), status: 500
+    render json: t('controllers.exercise.import_proforma_xml.internal_error'), status: :internal_server_error
   end
 
   def import_exercise_start

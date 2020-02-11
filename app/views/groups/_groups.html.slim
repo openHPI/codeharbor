@@ -31,5 +31,5 @@
           - elsif group.pending_users.include?(current_user)
             = 'Wait to get accepted'
           - else
-            = link_to 'Request Membership', request_access_path(group), class: 'btn btn-default'
+            = link_to 'Request Membership', request_access_group_path(group), method: :post, class: 'btn btn-default'
 = will_paginate @groups

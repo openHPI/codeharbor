@@ -1,4 +1,3 @@
-- model_class = Collection
 .header
   .std-heading
     i.fa.fa-folder-open
@@ -39,8 +38,8 @@
               - if cannot? :read, exercise
                 span.fa.fa-lock.lock
                 = ' '
-                = link_to t('collections.show.contribute'), contribute_exercise_path(exercise), class: 'btn btn-default'
-              = link_to remove_exercise_collection_path(@collection, exercise: exercise), class: 'pull-right' do
+                = link_to t('collections.show.contribute'), contribute_exercise_path(exercise), method: :post, class: 'btn btn-default'
+              = link_to remove_exercise_collection_path(@collection, exercise: exercise), method: :patch, class: 'pull-right' do
                 i.fa.fa-remove style=("color: #800000; font-size: 20px;")
 br
 .actions.btn-group[role="group"]
@@ -78,7 +77,7 @@ br
           - else
             li
               = link_to t('exercises.show.define_account_link'), new_user_account_link_path(current_user)
-    = link_to remove_all_collection_path(@collection), class: 'btn btn-important' do
+    = link_to remove_all_collection_path(@collection), method: :patch, class: 'btn btn-important' do
       i.fa.fa-remove style=("color: #800000")
       = ' ' + t('collections.show.remove_all')
     = link_to edit_collection_path(@collection), class:'btn btn-important' do
