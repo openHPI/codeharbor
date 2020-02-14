@@ -24,7 +24,7 @@ RSpec.describe GroupMembership, type: :model do
         expect(group_membership).not_to be_valid
       end
 
-      context 'when member is different' do
+      context 'when member of copy is different' do
         let(:member_copy) { create(:user) }
 
         it 'is valid' do
@@ -32,7 +32,7 @@ RSpec.describe GroupMembership, type: :model do
         end
       end
 
-      context 'when group is different' do
+      context 'when group of copy is different' do
         let(:group_copy) { create(:group) }
 
         it 'is valid' do
@@ -40,11 +40,39 @@ RSpec.describe GroupMembership, type: :model do
         end
       end
 
-      context 'when membership_type is different' do
+      context 'when membership_type of copy is different' do
         let(:type_copy) { 'admin' }
+
+        it 'is not valid' do
+          expect(group_membership).not_to be_valid
+        end
+      end
+
+      context 'when membership_type of copy is nil' do
+        let(:type_copy) { nil }
 
         it 'is valid' do
           expect(group_membership).to be_valid
+        end
+      end
+
+      context 'when membership_type is nil' do
+        let(:type) { nil }
+
+        context 'when membership_type of copy is nil' do
+          let(:type_copy) { nil }
+
+          it 'is not valid' do
+            expect(group_membership).not_to be_valid
+          end
+        end
+
+        context 'when membership_type of copy is set' do
+          let(:type_copy) { 'member' }
+
+          it 'is valid' do
+            expect(group_membership).to be_valid
+          end
         end
       end
     end
