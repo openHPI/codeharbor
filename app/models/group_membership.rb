@@ -17,6 +17,6 @@ class GroupMembership < ApplicationRecord
     end
     return unless similar_memberships.any?
 
-    errors.add(:base, 'cannot have multiple memberships')
+    errors.add(:base, I18n.t('group_memberships.duplicate_validation_error'))
   end
 end
