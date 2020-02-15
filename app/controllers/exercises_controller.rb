@@ -172,7 +172,7 @@ class ExercisesController < ApplicationController
     render json: {
       message: external_check[:message],
       actions: render_to_string(
-        partial: 'export_actions',
+        partial: 'export_actions.html.slim',
         locals: {
           exercise: @exercise,
           exercise_found: external_check[:exercise_found],
@@ -429,12 +429,15 @@ class ExercisesController < ApplicationController
   end
 
   def render_export_actions(exercise, exported, error = nil)
-    render_to_string(partial: 'export_actions', locals: {exercise: exercise, exported: exported, error: error})
+    render_to_string(partial: 'export_actions.html.slim', locals: {exercise: exercise, exported: exported, error: error})
   end
 
   def validate_account_link_usage
-    unless AccountLink.find(params[:account_link]).usable_by?(current_user)
-      redirect_to @exercise, alert: t('controllers.exercise.account_link_authorization')
+    return if AccountLink.find(params[:account_link]).usable_by?(current_user)
+
+    respond_to do |format|
+      format.js { redirect_to @exercise, alert: t('controllers.exercise.account_link_authorization') }
+      format.json { render json: {error: t('controllers.exercise.account_link_authorization')} }
     end
   end
 end

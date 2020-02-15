@@ -385,7 +385,8 @@ RSpec.describe ExercisesController, type: :controller do
 
   describe '#export_external_start' do
     let(:exercise) { create(:simple_exercise, valid_attributes) }
-    let(:account_link) { create(:account_link, user: user) }
+    let(:account_link) { create(:account_link, user: account_link_user) }
+    let(:account_link_user) { user }
     let(:get_request) do
       get :export_external_start, params: {id: exercise.id, account_link: account_link.id}, session: valid_session, format: :js, xhr: true
     end
@@ -393,6 +394,29 @@ RSpec.describe ExercisesController, type: :controller do
     it 'renders export_external_start javascript' do
       get_request
       expect(response).to render_template('export_external_start')
+    end
+
+    context 'when account link has another user' do
+      let(:account_link_user) { create(:user) }
+
+      it 'redirects back to exercise' do
+        get_request
+        expect(response).to redirect_to(exercise)
+      end
+
+      it 'shows flash message' do
+        get_request
+        expect(get_request.request.flash[:alert]).to eql I18n.t('controllers.exercise.account_link_authorization')
+      end
+
+      context 'when account_link is shared' do
+        before { create(:account_link_user, account_link: account_link, user: user) }
+
+        it 'renders export_external_start javascript' do
+          get_request
+          expect(response).to render_template('export_external_start')
+        end
+      end
     end
   end
 
@@ -404,16 +428,20 @@ RSpec.describe ExercisesController, type: :controller do
     render_views
 
     let!(:exercise) { create(:simple_exercise, valid_attributes).reload }
-    let(:account_link) { create(:account_link, user: user) }
+    let(:account_link) { create(:account_link, user: account_link_user) }
+    let(:account_link_user) { user }
     let(:post_request) do
-      post :export_external_check, params: {id: exercise.id, account_link: account_link.id}, session: valid_session, format: :js, xhr: true
+      post :export_external_check, params: {id: exercise.id, account_link: account_link.id}, session: valid_session,
+                                   format: :json, xhr: true
     end
     let(:external_check_hash) { {message: message, exercise_found: exercise_found, update_right: true, error: error} }
     let(:message) { 'message' }
     let(:exercise_found) { true }
     let(:error) { nil }
+    # let(:headers) { {'Accept' => 'application/json', 'Content-Type' => 'application/json'} }
 
     before do
+      # request.headers.merge! headers
       allow(ExerciseService::CheckExternal).to receive(:call).with(uuid: exercise.uuid, account_link: account_link)
                                                              .and_return(external_check_hash)
     end
@@ -458,16 +486,41 @@ RSpec.describe ExercisesController, type: :controller do
         )
       end
     end
+
+    context 'when account link has another user' do
+      let(:account_link_user) { create(:user) }
+
+      it 'reponds with the error' do
+        post_request
+        expect(JSON.parse(response.body).symbolize_keys[:error]).to eq(I18n.t('controllers.exercise.account_link_authorization'))
+      end
+
+      context 'when account_link is shared' do
+        before { create(:account_link_user, account_link: account_link, user: user) }
+
+        it 'renders the correct contents as json' do
+          post_request
+          expect(JSON.parse(response.body).symbolize_keys[:message]).to eq('message')
+          expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+            include('button').and(include('Abort').and(include('Overwrite')).and(include('Create new')))
+          )
+          expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+            not_include('Retry').and(not_include('Hide'))
+          )
+        end
+      end
+    end
   end
 
   describe '#export_external_confirm' do
     render_views
 
     let(:exercise) { create(:simple_exercise, valid_attributes) }
-    let(:account_link) { create(:account_link, user: user) }
+    let(:account_link) { create(:account_link, user: account_link_user) }
+    let(:account_link_user) { user }
     let(:post_request) do
       post :export_external_confirm, params: {push_type: push_type, id: exercise.id, account_link: account_link.id},
-                                     session: valid_session, format: :js, xhr: true
+                                     session: valid_session, format: :json, xhr: true
     end
     let(:push_type) { 'create_new' }
     let(:error) {}
@@ -507,6 +560,29 @@ RSpec.describe ExercisesController, type: :controller do
       it 'responds with status 500' do
         post_request
         expect(response).to have_http_status(:internal_server_error)
+      end
+    end
+
+    context 'when account link has another user' do
+      let(:account_link_user) { create(:user) }
+
+      it 'reponds with the error' do
+        post_request
+        expect(JSON.parse(response.body).symbolize_keys[:error]).to eq(I18n.t('controllers.exercise.account_link_authorization'))
+      end
+
+      context 'when account_link is shared' do
+        before { create(:account_link_user, account_link: account_link, user: user) }
+
+        it 'renders correct response' do
+          post_request
+
+          expect(response).to have_http_status(:success)
+          expect(JSON.parse(response.body).symbolize_keys[:message]).to(include('successfully exported'))
+          expect(JSON.parse(response.body).symbolize_keys[:status]).to(eql('success'))
+          expect(JSON.parse(response.body).symbolize_keys[:actions]).to(include('button').and(include('Hide')))
+          expect(JSON.parse(response.body).symbolize_keys[:actions]).to(not_include('Retry').and(not_include('Abort')))
+        end
       end
     end
   end

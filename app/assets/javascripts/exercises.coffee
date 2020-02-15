@@ -521,6 +521,7 @@ exportExerciseStart = (exerciseID) ->
     type: 'POST',
     url: '/exercises/' + exerciseID + '/export_external_check',
     data: {account_link: accountLinkID},
+    accepts: 'application/json'
     dataType: 'json',
     success: (response) ->
       $messageDiv.html(response.message)
