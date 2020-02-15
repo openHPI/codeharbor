@@ -7,6 +7,7 @@ class ExercisesController < ApplicationController
   load_and_authorize_resource except: %i[import_external_exercise import_uuid_check]
   before_action :set_exercise, only: %i[show edit update destroy add_to_cart add_to_collection push_external contribute
                                         remove_state export_external_start export_external_check]
+  before_action :validate_account_link_usage, only: %i[export_external_start export_external_check export_external_confirm]
   before_action :set_search, only: [:index]
   before_action :handle_search_params, only: :index
   skip_before_action :verify_authenticity_token, only: %i[import_external_exercise import_uuid_check]
@@ -159,6 +160,7 @@ class ExercisesController < ApplicationController
 
   def export_external_start
     @account_link = AccountLink.find(params[:account_link])
+
     respond_to do |format|
       format.js { render layout: false }
     end
@@ -428,6 +430,12 @@ class ExercisesController < ApplicationController
 
   def render_export_actions(exercise, exported, error = nil)
     render_to_string(partial: 'export_actions', locals: {exercise: exercise, exported: exported, error: error})
+  end
+
+  def validate_account_link_usage
+    unless AccountLink.find(params[:account_link]).usable_by?(current_user)
+      redirect_to @exercise, alert: t('controllers.exercise.account_link_authorization')
+    end
   end
 end
 # rubocop:enable Metrics/ClassLength
