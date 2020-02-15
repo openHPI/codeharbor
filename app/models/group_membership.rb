@@ -12,8 +12,10 @@ class GroupMembership < ApplicationRecord
   private
 
   def membership_unique
-    similar_memberships = GroupMembership.unscoped.similars(self)
-    return unless similar_memberships.filter { |gm| membership_type.nil? ? gm.membership_type.nil? : !gm.membership_type.nil? }.any?
+    similar_memberships = GroupMembership.unscoped.similars(self).filter do |gm|
+      membership_type.nil? ? gm.membership_type.nil? : !gm.membership_type.nil?
+    end
+    return unless similar_memberships.any?
 
     errors.add(:base, 'cannot have multiple memberships')
   end
