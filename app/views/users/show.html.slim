@@ -80,7 +80,7 @@
         = t('users.account_links.other')
         |:
       .row-value
-        - @user.external_account_links.each do |account_link|
+        - @user.shared_account_links.each do |account_link|
           .table-list
             = account_link.name
             .btn-group.pull-right

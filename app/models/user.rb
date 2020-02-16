@@ -15,7 +15,7 @@ class User < ApplicationRecord
   has_many :collections, through: :collection_users
 
   has_many :account_link_users, dependent: :destroy
-  has_many :external_account_links, through: :account_link_users, dependent: :destroy, source: :account_link
+  has_many :shared_account_links, through: :account_link_users, dependent: :destroy, source: :account_link
 
   has_many :reports, dependent: :destroy
   has_many :account_links, dependent: :destroy
@@ -142,7 +142,7 @@ class User < ApplicationRecord
   end
 
   def available_account_links
-    account_links + external_account_links
+    account_links + shared_account_links
   end
 
   private

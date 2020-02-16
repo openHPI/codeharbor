@@ -63,7 +63,7 @@ RSpec.describe AccountLink, type: :model do
   describe '#usable_by?' do
     subject(:usable_by) { account_link.usable_by?(user) }
 
-    let(:account_link) { create(:account_link, another_user) }
+    let(:account_link) { create(:account_link, user: another_user) }
 
     let(:another_user) { create(:user) }
     let(:user) { create(:user) }

@@ -108,13 +108,13 @@ class GroupsController < ApplicationController
 
   def add_account_link_to_member
     account_link = AccountLink.find(params[:account_link])
-    @user.external_account_links << account_link
+    @user.shared_account_links << account_link
     redirect_to @group, notice: t('controllers.group.granted_push')
   end
 
   def remove_account_link_from_member
     account_link = AccountLink.find(params[:account_link])
-    @user.external_account_links.delete(account_link)
+    @user.shared_account_links.delete(account_link)
     redirect_to @group, notice: t('controllers.group.removed_push')
   end
 

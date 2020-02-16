@@ -22,7 +22,7 @@
                 ul.scrollable.dropdown-menu[role="menu"]
                   - current_user.account_links.each do |account_link|
                     li
-                      - if admin.external_account_links.include?(account_link)
+                      - if admin.shared_account_links.include?(account_link)
                         = link_to remove_account_link_from_member_group_path(@group, user: admin, account_link: account_link), method: 'post', class: 'dropdown-item remove_account_link' do
                           i.fa.fa-check
                           = ' '
@@ -50,7 +50,7 @@
                   ul.scrollable.dropdown-menu[role="menu"]
                     - current_user.account_links.each do |account_link|
                       li
-                        - if member.external_account_links.include?(account_link)
+                        - if member.shared_account_links.include?(account_link)
                           = link_to remove_account_link_from_member_group_path(@group, user: member, account_link: account_link), method: 'post', class: 'dropdown-item remove_account_link' do
                             i.fa.fa-check
                             = ' '
