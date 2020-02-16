@@ -438,10 +438,8 @@ RSpec.describe ExercisesController, type: :controller do
     let(:message) { 'message' }
     let(:exercise_found) { true }
     let(:error) { nil }
-    # let(:headers) { {'Accept' => 'application/json', 'Content-Type' => 'application/json'} }
 
     before do
-      # request.headers.merge! headers
       allow(ExerciseService::CheckExternal).to receive(:call).with(uuid: exercise.uuid, account_link: account_link)
                                                              .and_return(external_check_hash)
     end

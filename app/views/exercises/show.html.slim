@@ -333,8 +333,8 @@ legend.toggle-next
             .caret
           ul.scrollable.dropdown-menu[role="menu"]
             li.dropdown-header = t('.export_to') + ': '
-            - if !(current_user.account_links + current_user.external_account_links).empty?
-              - (current_user.account_links + current_user.external_account_links).each do |acc_link|
+            - if !(current_user.available_account_links).empty?
+              - (current_user.available_account_links).each do |acc_link|
                 li
                   = link_to acc_link.name + (acc_link.user != current_user ? ' (shared)' : ''), export_external_start_exercise_path(account_link: acc_link), method: :post, remote: true, class: 'dropdown-item export-test'
             - else
