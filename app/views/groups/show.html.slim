@@ -37,36 +37,35 @@
 
     .row-value
       - @group.members.each do |member|
-        - unless @group.admin?(member)
-          .table-list
-            = member.email
-            = ' '
-            - if can? :view, @group
-              .btn-group.pull-right
-                .dropdown.btn-group
-                  = button_tag class: 'btn btn-default btn-xs dropdown-toggle', data: {toggle: 'dropdown'} do
-                    = t('groups.allow_push') + ' '
-                    span.fa.fa-caret-down
-                  ul.scrollable.dropdown-menu[role="menu"]
-                    - current_user.account_links.each do |account_link|
-                      li
-                        - if member.shared_account_links.include?(account_link)
-                          = link_to remove_account_link_from_member_group_path(@group, user: member, account_link: account_link), method: 'post', class: 'dropdown-item remove_account_link' do
-                            i.fa.fa-check
-                            = ' '
-                            = account_link.name
-                        - else
-                          = link_to add_account_link_to_member_group_path(@group, user: member, account_link: account_link), method: 'post', class: 'dropdown-item add_account_link' do
-                            i.fa.fa-close
-                            = ' '
-                            = account_link.name
-              - if can? :edit, @group
-                = link_to make_admin_group_path(group: @group, user: member), method: :post, class: 'btn btn-default btn-xs' do
-                  i.fa.fa-plus style=("color:#008000")
-                  = ' ' + t('groups.button.make_admin')
-                = link_to delete_from_group_group_path(group: @group, user: member), method: :patch, class: 'btn btn-default btn-xs' do
-                  i.fa.fa-remove style=("color:#800000")
-                  = ' ' + t('groups.button.delete')
+        .table-list
+          = member.email
+          = ' '
+          - if can? :view, @group
+            .btn-group.pull-right
+              .dropdown.btn-group
+                = button_tag class: 'btn btn-default btn-xs dropdown-toggle', data: {toggle: 'dropdown'} do
+                  = t('groups.allow_push') + ' '
+                  span.fa.fa-caret-down
+                ul.scrollable.dropdown-menu[role="menu"]
+                  - current_user.account_links.each do |account_link|
+                    li
+                      - if member.shared_account_links.include?(account_link)
+                        = link_to remove_account_link_from_member_group_path(@group, user: member, account_link: account_link), method: 'post', class: 'dropdown-item remove_account_link' do
+                          i.fa.fa-check
+                          = ' '
+                          = account_link.name
+                      - else
+                        = link_to add_account_link_to_member_group_path(@group, user: member, account_link: account_link), method: 'post', class: 'dropdown-item add_account_link' do
+                          i.fa.fa-close
+                          = ' '
+                          = account_link.name
+            - if can? :edit, @group
+              = link_to make_admin_group_path(group: @group, user: member), method: :post, class: 'btn btn-default btn-xs' do
+                i.fa.fa-plus style=("color:#008000")
+                = ' ' + t('groups.button.make_admin')
+              = link_to delete_from_group_group_path(group: @group, user: member), method: :patch, class: 'btn btn-default btn-xs' do
+                i.fa.fa-remove style=("color:#800000")
+                = ' ' + t('groups.button.delete')
 
 
 
