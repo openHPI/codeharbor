@@ -58,8 +58,8 @@ Rails.application.routes.draw do
       patch :delete_from_group
       patch :remove_exercise
 
-      post :add_account_link_to_member # ???
-      post :remove_account_link_from_member # ???
+      post :add_account_link_to_member
+      post :remove_account_link_from_member
     end
   end
 
@@ -78,7 +78,7 @@ Rails.application.routes.draw do
 
   resources :users, only: %i[new show create edit update destroy] do
     resources :account_links, only: %i[new show create edit update destroy] do
-      post :remove_account_link, on: :member # check, test. Should remove shared accountlinks?
+      post :remove_shared_user, on: :member
     end
 
     resources :messages, only: %i[index new create destroy] do

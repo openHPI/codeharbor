@@ -8,9 +8,9 @@ class AccountLink < ApplicationRecord
   belongs_to :user
 
   has_many :account_link_users, dependent: :destroy
-  has_many :external_users, through: :account_link_users, source: :user
+  has_many :shared_users, through: :account_link_users, source: :user
 
   def usable_by?(user)
-    self.user == user || user.in?(external_users)
+    self.user == user || user.in?(shared_users)
   end
 end

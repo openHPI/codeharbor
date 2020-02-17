@@ -51,7 +51,7 @@ class Ability
     can %i[create new], AccountLink
 
     can %i[crud view], AccountLink, user_id: user.id
-    can %i[view show remove_account_link], AccountLink, external_users: {id: user.id}
+    can %i[view show remove_account_link], AccountLink, shared_users: {id: user.id}
   end
 
   def cart_abilities(user)

@@ -55,14 +55,19 @@ class AccountLinksController < ApplicationController
     end
   end
 
-  def remove_account_link
-    respond_to do |format|
-      if @account_link.external_users.delete(@user)
-        format.html { redirect_to @user, notice: t('controllers.user.remove_account_link.success') }
-      else
-        format.html { redirect_to @user, alert: t('controllers.user.remove_account_link.fail') }
-      end
-    end
+  # def remove_account_link
+  #   respond_to do |format|
+  #     if @account_link.shared_users.delete(@user)
+  #       format.html { redirect_to @user, notice: t('controllers.user.remove_account_link.success') }
+  #     else
+  #       format.html { redirect_to @user, alert: t('controllers.user.remove_account_link.fail') }
+  #     end
+  #   end
+  # end
+
+  def remove_shared_user
+    @account_link.shared_users.destroy(@user)
+    redirect_to @account_link, notice: t('controllers.group.removed_push')
   end
 
   private
