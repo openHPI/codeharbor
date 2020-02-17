@@ -21,7 +21,7 @@ class Group < ApplicationRecord
     user.in_group?(self, as: 'admin')
   end
 
-  def full_member?(user)
+  def confirmed_member?(user)
     user.in_group?(self) unless user.in_group?(self, as: 'pending')
   end
 
@@ -47,7 +47,7 @@ class Group < ApplicationRecord
     User.in_group(self).as(:admin)
   end
 
-  def full_members
+  def confirmed_members
     User.in_group(self).as(:member) | User.in_group(self).as(:admin)
   end
 
