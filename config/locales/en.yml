@@ -399,6 +399,8 @@ en:
       noExercisesAdded: "No Exercises Added"
       no_admin_validation: No admin in group
 
+  group_memberships:
+    duplicate_validation_error: cannot have multiple memberships for same member and group
   comments:
     header: "Comments for %{title}"
     text: "Text"

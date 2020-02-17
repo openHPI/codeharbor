@@ -17,29 +17,38 @@ class Group < ApplicationRecord
     group
   end
 
-  def admins
-    User.in_group(self).as(:admin)
-  end
-
   def admin?(user)
     user.in_group?(self, as: 'admin')
   end
 
-  def member?(user)
+  def confirmed_member?(user)
     user.in_group?(self) unless user.in_group?(self, as: 'pending')
   end
 
+  def member?(user)
+    user.in_group?(self, as: 'member')
+  end
+
   def make_admin(user)
+    users.delete(user)
     add(user, as: 'admin')
   end
 
   def grant_access(user)
-    users.delete(user, as: 'pending')
+    users.delete(user)
     add(user, as: 'member')
   end
 
   def add_pending_user(user)
     add(user, as: 'pending')
+  end
+
+  def admins
+    User.in_group(self).as(:admin)
+  end
+
+  def confirmed_members
+    User.in_group(self).as(:member) | User.in_group(self).as(:admin)
   end
 
   def members
