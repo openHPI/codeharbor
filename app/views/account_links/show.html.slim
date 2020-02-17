@@ -24,7 +24,7 @@
             .table-list
               = shared_user.email
               .btn-group.pull-right
-                = link_to remove_shared_user_user_account_link_path(user: shared_user), method: :post, data: { confirm: 'Are you sure?' }, class:'btn btn-default btn-xs' do
+                = button_to remove_shared_user_user_account_link_path, method: :post, params: {shared_user: shared_user.id}, data: { confirm: 'Are you sure?' }, class:'btn btn-default btn-xs' do
                   i.fa.fa-trash
                   = ' '
                   = t('account.account_links.button.destroy')

@@ -133,8 +133,8 @@ en:
       remove_exercise_notice: "Exercise successfully removed"
       delete_from_group_notice: "User deleted from group."
       make_admin_notice: "Made user to admin."
-      granted_push: "Granted push privileges to user."
-      removed_push: "Removed push privileges for user."
+      granted_push: "Granted push privileges to %{user}."
+      removed_push: "Removed push privileges for %{user}."
 
     home:
       email_confirmed: "Welcome to the CodeHarbor! Your email has been confirmed. Please sign in to continue."
@@ -396,6 +396,8 @@ en:
         users: "Users"
         pending: "Pending users"
         exercises: "Exercises"
+        add_account_link_user: Share Account Link with %{user}
+        remove_account_link_user: Remove shared Account Link for %{user}
       admin:
         header: "Group Administration"
 

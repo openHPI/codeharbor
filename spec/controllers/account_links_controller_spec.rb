@@ -71,10 +71,13 @@ RSpec.describe AccountLinksController, type: :controller do
       end
     end
 
-    describe 'POST remove_account_link' do
-      let(:post_request) { post :remove_account_link, params: {id: account_link.id, user_id: user.id}, session: valid_session }
+    describe 'POST remove_shared_user' do
+      let(:account_link) { create(:account_link, user: user) }
+      let(:shared_user) { create(:user) }
 
-      before { account_link.account_link_users << AccountLinkUser.new(user: user) }
+      let(:post_request) { post :remove_shared_user, params: {id: account_link.id, user_id: user.id, shared_user: shared_user.id}, session: valid_session }
+
+      before { account_link.account_link_users << AccountLinkUser.new(user: shared_user) }
 
       it 'removes the account_link_user from the account_link' do
         expect { post_request }.to change(account_link.account_link_users, :count).by(-1)

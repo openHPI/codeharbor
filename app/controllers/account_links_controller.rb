@@ -56,8 +56,9 @@ class AccountLinksController < ApplicationController
   end
 
   def remove_shared_user
-    @account_link.shared_users.destroy(@user)
-    redirect_to @account_link, notice: t('controllers.group.removed_push')
+    shared_user = User.find(params[:shared_user])
+    @account_link.shared_users.destroy(shared_user)
+    redirect_to user_account_link_path(shared_user, @account_link), notice: t('controllers.group.removed_push', user: shared_user.email)
   end
 
   private

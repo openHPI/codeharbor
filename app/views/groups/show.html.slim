@@ -23,12 +23,12 @@
                   - current_user.account_links.each do |account_link|
                     li
                       - if admin.shared_account_links.include?(account_link)
-                        = link_to remove_account_link_from_member_group_path(@group, user: admin, account_link: account_link), method: 'post', class: 'dropdown-item remove_account_link' do
+                        = link_to remove_account_link_from_member_group_path(@group, user: admin, account_link: account_link), method: 'post', class: 'dropdown-item remove_account_link', title: t('.remove_account_link_user', user: admin.email) do
                           i.fa.fa-check
                           = ' '
                           = account_link.name
                       - else
-                        = link_to add_account_link_to_member_group_path(@group, user: admin, account_link: account_link), method: 'post', class: 'dropdown-item add_account_link' do
+                        = link_to add_account_link_to_member_group_path(@group, user: admin, account_link: account_link), method: 'post', class: 'dropdown-item add_account_link', title: t('.add_account_link_user', user: admin.email) do
                           i.fa.fa-close
                           = ' '
                           = account_link.name
@@ -50,12 +50,12 @@
                   - current_user.account_links.each do |account_link|
                     li
                       - if member.shared_account_links.include?(account_link)
-                        = link_to remove_account_link_from_member_group_path(@group, user: member, account_link: account_link), method: 'post', class: 'dropdown-item remove_account_link' do
+                        = link_to remove_account_link_from_member_group_path(@group, user: member, account_link: account_link), method: 'post', class: 'dropdown-item remove_account_link', title: t('.remove_account_link_user', user: member.email) do
                           i.fa.fa-check
                           = ' '
                           = account_link.name
                       - else
-                        = link_to add_account_link_to_member_group_path(@group, user: member, account_link: account_link), method: 'post', class: 'dropdown-item add_account_link' do
+                        = link_to add_account_link_to_member_group_path(@group, user: member, account_link: account_link), method: 'post', class: 'dropdown-item add_account_link', title: t('.add_account_link_user', user: member.email) do
                           i.fa.fa-close
                           = ' '
                           = account_link.name
