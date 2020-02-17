@@ -286,7 +286,7 @@ en:
         show: "Show TEST"
         edit: "Edit"
         delete: "Delete"
-        destroy: "Destroy"
+        destroy: Remove
         back: "Back"
         save: "Save Account Link"
 
