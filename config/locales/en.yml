@@ -628,6 +628,7 @@ en:
         no_history: No history found
         history_version_name: "Version: %{version_nr} from: %{updated_at}"
       none: None
+      account_link_shared: shared
 
 
     edit:
