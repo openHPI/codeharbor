@@ -75,7 +75,9 @@ RSpec.describe AccountLinksController, type: :controller do
       let(:account_link) { create(:account_link, user: user) }
       let(:shared_user) { create(:user) }
 
-      let(:post_request) { post :remove_shared_user, params: {id: account_link.id, user_id: user.id, shared_user: shared_user.id}, session: valid_session }
+      let(:post_request) do
+        post :remove_shared_user, params: {id: account_link.id, user_id: user.id, shared_user: shared_user.id}, session: valid_session
+      end
 
       before { account_link.account_link_users << AccountLinkUser.new(user: shared_user) }
 
