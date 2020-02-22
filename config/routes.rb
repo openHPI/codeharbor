@@ -57,9 +57,6 @@ Rails.application.routes.draw do
 
       patch :delete_from_group
       patch :remove_exercise
-
-      post :add_account_link_to_member
-      post :remove_account_link_from_member
     end
   end
 

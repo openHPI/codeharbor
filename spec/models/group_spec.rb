@@ -30,8 +30,6 @@ RSpec.describe Group, type: :model do
     it { is_expected.not_to be_able_to(:delete_from_group, group) }
     it { is_expected.not_to be_able_to(:deny_access, group) }
     it { is_expected.not_to be_able_to(:make_admin, group) }
-    it { is_expected.not_to be_able_to(:add_account_link_to_member, group) }
-    it { is_expected.not_to be_able_to(:remove_account_link_from_member, group) }
 
     context 'with a user' do
       let(:user) { create(:user) }
@@ -52,8 +50,6 @@ RSpec.describe Group, type: :model do
       it { is_expected.not_to be_able_to(:delete_from_group, group) }
       it { is_expected.not_to be_able_to(:deny_access, group) }
       it { is_expected.not_to be_able_to(:make_admin, group) }
-      it { is_expected.not_to be_able_to(:add_account_link_to_member, group) }
-      it { is_expected.not_to be_able_to(:remove_account_link_from_member, group) }
 
       context 'when user is admin' do
         let(:user) { create(:admin) }
@@ -89,8 +85,6 @@ RSpec.describe Group, type: :model do
         it { is_expected.not_to be_able_to(:delete_from_group, group) }
         it { is_expected.not_to be_able_to(:deny_access, group) }
         it { is_expected.not_to be_able_to(:make_admin, group) }
-        it { is_expected.not_to be_able_to(:add_account_link_to_member, group) }
-        it { is_expected.not_to be_able_to(:remove_account_link_from_member, group) }
 
         context 'when user is admin of the group' do
           let(:role) { 'admin' }
@@ -111,8 +105,6 @@ RSpec.describe Group, type: :model do
           it { is_expected.to be_able_to(:delete_from_group, group) }
           it { is_expected.to be_able_to(:deny_access, group) }
           it { is_expected.to be_able_to(:make_admin, group) }
-          it { is_expected.to be_able_to(:add_account_link_to_member, group) }
-          it { is_expected.to be_able_to(:remove_account_link_from_member, group) }
         end
       end
     end

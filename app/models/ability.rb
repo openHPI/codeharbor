@@ -96,8 +96,7 @@ class Ability
     can %i[view show members], Group do |group|
       group.confirmed_member?(user)
     end
-    can %i[crud remove_exercise grant_access delete_from_group deny_access make_admin add_account_link_to_member
-           remove_account_link_from_member], Group do |group|
+    can %i[crud remove_exercise grant_access delete_from_group deny_access make_admin], Group do |group|
       group.admin?(user)
     end
   end
