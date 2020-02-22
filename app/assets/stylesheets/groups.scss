@@ -22,3 +22,19 @@ $group-color: #660000;
     border-color: $group-color;
   }
 }
+
+.dropdown-item {
+  width: 100%;
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.42857143;
+  color: #333333;
+  white-space: nowrap;
+  background: none;
+  border: none;
+}
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}

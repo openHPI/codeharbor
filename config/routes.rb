@@ -79,6 +79,7 @@ Rails.application.routes.draw do
   resources :users, only: %i[new show create edit update destroy] do
     resources :account_links, only: %i[new show create edit update destroy] do
       post :remove_shared_user, on: :member
+      post :add_shared_user, on: :member
     end
 
     resources :messages, only: %i[index new create destroy] do

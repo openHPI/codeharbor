@@ -72,6 +72,8 @@ RSpec.describe AccountLinksController, type: :controller do
     end
 
     describe 'POST remove_shared_user' do
+      render_views
+
       let(:account_link) { create(:account_link, user: user) }
       let(:shared_user) { create(:user) }
 
@@ -83,6 +85,39 @@ RSpec.describe AccountLinksController, type: :controller do
 
       it 'removes the account_link_user from the account_link' do
         expect { post_request }.to change(account_link.account_link_users, :count).by(-1)
+      end
+
+      it 'sets flash message' do
+        expect { post_request }.to change { flash[:notice] }.to(I18n.t('controllers.group.removed_push', user: shared_user.email))
+      end
+
+      it 'response with correct button' do
+        post_request
+        expect(response.body).to include('add_shared_user')
+      end
+    end
+
+    describe 'POST add_shared_user' do
+      render_views
+
+      let(:account_link) { create(:account_link, user: user) }
+      let(:shared_user) { create(:user) }
+
+      let(:post_request) do
+        post :add_shared_user, params: {id: account_link.id, user_id: user.id, shared_user: shared_user.id}, session: valid_session
+      end
+
+      it 'adds the account_link_user to account_link' do
+        expect { post_request }.to change(account_link.account_link_users, :count).by(1)
+      end
+
+      it 'sets flash message' do
+        expect { post_request }.to change { flash[:notice] }.to(I18n.t('controllers.group.granted_push', user: shared_user.email))
+      end
+
+      it 'response with correct button' do
+        post_request
+        expect(response.body).to include('remove_shared_user')
       end
     end
   end

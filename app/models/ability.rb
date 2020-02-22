@@ -50,7 +50,7 @@ class Ability
   def account_link_abilities(user)
     can %i[create new], AccountLink
 
-    can %i[crud view remove_shared_user], AccountLink, user_id: user.id
+    can %i[crud view remove_shared_user add_shared_user], AccountLink, user_id: user.id
     can %i[view show], AccountLink, shared_users: {id: user.id}
   end
 

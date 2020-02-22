@@ -7,4 +7,7 @@ ready =->
   if option = document.getElementById('option')
     $(document.getElementById(option.value)).addClass('selected')
 
+  $(document).on 'ajax:success', '.share-form', (e, data) ->
+    $(e.currentTarget.parentElement).html(data["button"])
+
 $(document).on('turbolinks:load', ready)
