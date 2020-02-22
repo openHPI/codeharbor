@@ -222,6 +222,9 @@ en:
       destroy: "Destroy"
       deleteX: "X"
 
+  account_links:
+    share_tooltip: Share account link for %{account_link} with %{user}
+    unshare_tooltip: Stop sharing account link for %{account_link} with %{user}
   account:
     account_links:
       show_header: "Account Link"
@@ -368,7 +371,7 @@ en:
       title: "Title"
       actions: "Actions"
       name: "Name"
-      allow_push: "Allow push to..."
+      manage_shared_account_links: Manage shared account links
       admin_label: Admin
       member_label: Member
       pending_label: Pending

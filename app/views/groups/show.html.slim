@@ -17,7 +17,7 @@
             .btn-group.pull-right
               .dropdown.btn-group
                 = button_tag class: 'btn btn-default btn-xs dropdown-toggle', data: {toggle: 'dropdown'} do
-                  = t('groups.allow_push') + ' '
+                  = t('groups.manage_shared_account_links') + ' '
                   span.fa.fa-caret-down
                 ul.scrollable.dropdown-menu[role="menu"]
                   - current_user.account_links.each do |account_link|
@@ -36,7 +36,7 @@
             .btn-group.pull-right
               .dropdown.btn-group
                 = button_tag class: 'btn btn-default btn-xs dropdown-toggle', data: {toggle: 'dropdown'} do
-                  = t('groups.allow_push') + ' '
+                  = t('groups.manage_shared_account_links') + ' '
                   span.fa.fa-caret-down
                 ul.scrollable.dropdown-menu[role="menu"]
                   - current_user.account_links.each do |account_link|
