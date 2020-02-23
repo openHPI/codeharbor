@@ -88,7 +88,7 @@ RSpec.describe AccountLinksController, type: :controller do
       end
 
       it 'sets flash message' do
-        expect { post_request }.to change { flash[:notice] }.to(I18n.t('controllers.group.removed_push', user: shared_user.email))
+        expect { post_request }.to change { flash[:notice] }.to(I18n.t('controllers.account_links.removed_push', user: shared_user.email))
       end
 
       it 'response with correct button' do
@@ -112,12 +112,31 @@ RSpec.describe AccountLinksController, type: :controller do
       end
 
       it 'sets flash message' do
-        expect { post_request }.to change { flash[:notice] }.to(I18n.t('controllers.group.granted_push', user: shared_user.email))
+        expect { post_request }.to change { flash[:notice] }.to(I18n.t('controllers.account_links.granted_push', user: shared_user.email))
       end
 
       it 'response with correct button' do
         post_request
         expect(response.body).to include('remove_shared_user')
+      end
+
+      context 'when account_link is already shared' do
+        before { account_link.shared_users << shared_user }
+
+        it 'does not add account_link_user to account_link' do
+          expect { post_request }.not_to change(account_link.account_link_users, :count)
+        end
+
+        it 'sets flash message' do
+          expect { post_request }.to change { flash[:alert] }.to(
+            I18n.t('controllers.account_links.share_duplicate', user: shared_user.email)
+          )
+        end
+
+        it 'response with correct button' do
+          post_request
+          expect(response.body).to include('remove_shared_user')
+        end
       end
     end
   end

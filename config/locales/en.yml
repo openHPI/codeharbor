@@ -31,7 +31,10 @@ en:
       created: 'Account link was successfully created.'
       updated: 'Account link was successfully updated.'
       destroyed: 'Account link was successfully destroyed.'
-      not_working: "Your account_link %{account_link} does not seem to be working."
+      not_working: "Your account link %{account_link} does not seem to be working."
+      share_duplicate: This account link is already shared with %{user}.
+      granted_push: "Granted push privileges to %{user}."
+      removed_push: "Removed push privileges for %{user}."
     carts:
       authorization: 'You are not authorized for this action.'
       created: 'Cart was successfully created.'
@@ -133,8 +136,6 @@ en:
       remove_exercise_notice: "Exercise successfully removed"
       delete_from_group_notice: "User deleted from group."
       make_admin_notice: "Made user to admin."
-      granted_push: "Granted push privileges to %{user}."
-      removed_push: "Removed push privileges for %{user}."
 
     home:
       email_confirmed: "Welcome to the CodeHarbor! Your email has been confirmed. Please sign in to continue."

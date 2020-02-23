@@ -58,20 +58,24 @@ class AccountLinksController < ApplicationController
 
   def remove_shared_user
     @account_link.shared_users.destroy(@shared_user)
-    flash[:notice] = t('controllers.group.removed_push', user: @shared_user.email)
+    flash[:notice] = t('controllers.account_links.removed_push', user: @shared_user.email)
     render_shared_user_json
   end
 
   def add_shared_user
     @account_link.shared_users << @shared_user
-    flash[:notice] = t('controllers.group.granted_push', user: @shared_user.email)
+    flash[:notice] = t('controllers.account_links.granted_push', user: @shared_user.email)
+  rescue ActiveRecord::RecordInvalid
+    flash[:alert] = t('controllers.account_links.share_duplicate', user: @shared_user.email)
+  ensure
     render_shared_user_json
   end
 
   private
 
   def render_shared_user_json
-    render json: {button: render_to_string(partial: 'groups/share_button', locals: {shared_user: @shared_user, account_link: @account_link})}
+    render json: {button: render_to_string(partial: 'groups/share_button',
+                                           locals: {shared_user: @shared_user, account_link: @account_link})}
   end
 
   # Use callbacks to share common setup or constraints between actions.
