@@ -5,6 +5,7 @@ class AccountLinksController < ApplicationController
 
   before_action :set_user
   before_action :set_account_link, only: %i[show edit update destroy remove_account_link]
+  before_action :set_shared_user, only: %i[remove_shared_user add_shared_user]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.user.authorization')
@@ -56,24 +57,30 @@ class AccountLinksController < ApplicationController
   end
 
   def remove_shared_user
-    shared_user = User.find(params[:shared_user])
-    @account_link.shared_users.destroy(shared_user)
-    flash[:notice] = t('controllers.group.removed_push', user: shared_user.email)
-    render json: {button: render_to_string(partial: 'groups/share_button', locals: {shared_user: shared_user, account_link: @account_link})}
+    @account_link.shared_users.destroy(@shared_user)
+    flash[:notice] = t('controllers.group.removed_push', user: @shared_user.email)
+    render_shared_user_json
   end
 
   def add_shared_user
-    shared_user = User.find(params[:shared_user])
-    @account_link.shared_users << shared_user
-    flash[:notice] = t('controllers.group.granted_push', user: shared_user.email)
-    render json: {button: render_to_string(partial: 'groups/share_button', locals: {shared_user: shared_user, account_link: @account_link})}
+    @account_link.shared_users << @shared_user
+    flash[:notice] = t('controllers.group.granted_push', user: @shared_user.email)
+    render_shared_user_json
   end
 
   private
 
+  def render_shared_user_json
+    render json: {button: render_to_string(partial: 'groups/share_button', locals: {shared_user: @shared_user, account_link: @account_link})}
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_account_link
     @account_link = AccountLink.find(params[:id])
+  end
+
+  def set_shared_user
+    @shared_user = User.find(params[:shared_user])
   end
 
   def set_user
