@@ -286,8 +286,6 @@ en:
       admin:
         header: "Account Link Administration"
       button:
-        new: "New Account Link"
-        show: "Show TEST"
         edit: "Edit"
         delete: "Delete"
         destroy: Remove
