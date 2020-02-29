@@ -3,29 +3,29 @@
     #error_explanation
       h2
         = pluralize(@account_link.errors.count, t('error'))
-        = t('account.errorMessage')
+        = t('account.account_links.errorMessage')
       ul
         - @account_link.errors.full_messages.each do |message|
           li
             = message
   .field-element.form-group
-    = f.label :name, t('account.name'), class: 'form-label'
-    = f.text_field :name, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('account.info.name'), class: 'form-control'
+    = f.label :name, t('account.account_links.name'), class: 'form-label'
+    = f.text_field :name, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('account.account_links.info.name'), class: 'form-control'
   .field-element.form-group
-    = f.label :push_url, t('account.push_url'), class: 'form-label'
-    = f.text_field :push_url, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('account.info.push_url'), class: 'form-control'
+    = f.label :push_url, t('account.account_links.push_url'), class: 'form-label'
+    = f.text_field :push_url, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('account.account_links.info.push_url'), class: 'form-control'
   .field-element.form-group
-    = f.label :check_uuid_url, t('account.check_uuid_url'), class: 'form-label'
-    = f.text_field :check_uuid_url, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('account.info.check_uuid_url'), class: 'form-control'
+    = f.label :check_uuid_url, t('account.account_links.check_uuid_url'), class: 'form-label'
+    = f.text_field :check_uuid_url, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('account.account_links.info.check_uuid_url'), class: 'form-control'
   .field-element.form-group
-    = f.label :api_key, t('account.api_key'), class: 'form-label'
+    = f.label :api_key, t('account.account_links.api_key'), class: 'form-label'
     .input-group
-      = f.text_field :api_key, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('account.info.token'), class: 'form-control'
+      = f.text_field :api_key, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('account.account_links.info.token'), class: 'form-control'
       .input-group-btn
         = button_tag "Generate", type: 'button', class: 'generate-api-key-token btn btn-default'
   .form-group
     .actions.btn-group[role="group"]
-      = f.submit t('account.button.save'), class: 'btn btn-important'
+      = f.submit t('account.account_links.button.save'), class: 'btn btn-important'
       = link_to :back, class: 'btn btn-important' do
         i.fa.fa-remove style=("color: gray")
         = ' ' + t('exercises.form.cancel')

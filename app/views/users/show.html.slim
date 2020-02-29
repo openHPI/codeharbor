@@ -60,11 +60,14 @@
           i.fa.fa-question
         .account-link-description.info-box
           span.fa.fa-info-circle
-          = t('account.description_html')
+          = t('account.account_links.description_html')
           = link_to "More Information...", account_link_documentation_home_index_path
         - @user.account_links.each do |account_link|
           .table-list
             = account_link.name
+            - if account_link.shared_users.any?
+              span title=t('account.account_links.shared_with_users', count: account_link.shared_users.count)
+                = " (#{t('account.account_links.shared')})"
             .btn-group.pull-right
               = link_to t('users.show.account_links.show'), user_account_link_path(current_user, account_link), class:'btn btn-default btn-xs'
               = link_to edit_user_account_link_path(current_user, account_link), class:'btn btn-default btn-xs' do
@@ -75,20 +78,21 @@
                 i.fa.fa-trash
                 = ' '
                 = t('users.show.account_links.destroy')
-    .row.vertical
-      .row-label
-        = t('users.account_links.other')
-        |:
-      .row-value
-        - @user.external_account_links.each do |account_link|
-          .table-list
-            = account_link.name
-            .btn-group.pull-right
-              = link_to t('users.show.account_links.show'), user_account_link_path(current_user, account_link), class: 'btn btn-default btn-xs'
-              = link_to remove_account_link_user_account_link_path(current_user, account_link), method: 'post', class: 'btn btn-default btn-xs' do
-                i.fa.fa-remove
-                = ' '
-                = t('shared.remove')
+    - if @user.shared_account_links.any?
+      .row.vertical
+        .row-label
+          = t('users.account_links.other')
+          |:
+        .row-value
+          - @user.shared_account_links.each do |account_link|
+            .table-list
+              = account_link.name
+              .btn-group.pull-right
+                = link_to t('users.show.account_links.show'), user_account_link_path(current_user, account_link), class: 'btn btn-default btn-xs'
+                = button_to remove_shared_user_user_account_link_path(account_link.user.id, account_link.id),  method: :post, params: {shared_user: current_user.id}, data: { confirm: 'Are you sure?' }, class:'btn btn-default btn-xs', remote: true, form_class: 'remove-account-link-form' do
+                  i.fa.fa-remove
+                  = ' '
+                  = t('shared.remove')
 .actions.btn-group[role="group"]
   - if can? :message, @user
     = link_to reply_user_messages_path(current_user, recipient: @user), class: 'btn btn-important' do
