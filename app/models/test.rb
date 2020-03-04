@@ -3,7 +3,7 @@
 class Test < ApplicationRecord
   belongs_to :testing_framework, optional: true
   belongs_to :exercise
-  belongs_to :exercise_file, inverse_of: :tests
+  has_one :exercise_file, inverse_of: :test, dependent: :destroy
   accepts_nested_attributes_for :exercise_file, allow_destroy: true
 
   def content

@@ -2,18 +2,19 @@
 
 class ExerciseFile < ApplicationRecord
   belongs_to :exercise, optional: true
+  belongs_to :test, optional: true, inverse_of: :exercise_file
   belongs_to :file_type
-  has_many :tests, dependent: :destroy, inverse_of: :exercise_file # TODO: has_one
   has_attached_file :attachment, styles: ->(a) { ['image/jpeg', 'image/png', 'image/giv'].include?(a.content_type) ? {large: '900x'} : {} }
   do_not_validate_attachment_file_type :attachment
   validates :name, presence: true
   validates :hidden, inclusion: [true, false]
   validates :read_only, inclusion: [true, false]
   validates :exercise, presence: true, unless: -> { purpose == 'test' }
+  validates :test, presence: true, if: -> { purpose == 'test' }
 
   before_save :parse_text_data
 
-  accepts_nested_attributes_for :tests
+  accepts_nested_attributes_for :test
 
   ROLES = %w[main_file reference_implementation regular_file teacher_defined_test].freeze
   TEST_ROLE = %w[teacher_defined_test].freeze
