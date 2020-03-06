@@ -97,7 +97,7 @@ GEM
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
     builder (3.2.4)
-    bunny (2.14.3)
+    bunny (2.14.4)
       amq-protocol (~> 2.3, >= 2.3.0)
     byebug (11.1.1)
     cancancan (3.0.2)
@@ -248,7 +248,7 @@ GEM
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.14.0)
-    mnemosyne-ruby (1.9.0)
+    mnemosyne-ruby (1.10.0)
       activesupport (>= 4)
       bunny
     multipart-post (2.1.1)
@@ -455,7 +455,7 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.4)
     will_paginate (3.3.0)
-    zeitwerk (2.2.2)
+    zeitwerk (2.3.0)
 
 PLATFORMS
   ruby
