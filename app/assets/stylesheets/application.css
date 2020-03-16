@@ -13,5 +13,8 @@
 */
 .fa {
     color: #444444;
+}
 
+.disabled-cursor {
+  cursor: not-allowed;
 }

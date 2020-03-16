@@ -15,7 +15,7 @@ class User < ApplicationRecord
   has_many :collections, through: :collection_users
 
   has_many :account_link_users, dependent: :destroy
-  has_many :external_account_links, through: :account_link_users, dependent: :destroy, source: :account_link
+  has_many :shared_account_links, through: :account_link_users, dependent: :destroy, source: :account_link
 
   has_many :reports, dependent: :destroy
   has_many :account_links, dependent: :destroy
@@ -114,15 +114,6 @@ class User < ApplicationRecord
     Message.where(sender: self, param_type: %w[exercise group collection]).destroy_all
   end
 
-  def shared_account_link_with(user)
-    account_link = AccountLink.find_by(user: self)
-    if account_link.users.include?(user)
-      true
-    else
-      false
-    end
-  end
-
   def unread_messages_count
     Message.where(recipient: self, recipient_status: 'u').count.to_s
   end
@@ -148,6 +139,10 @@ class User < ApplicationRecord
     self.password = password
     self.password_confirmation = password_confirmation
     save
+  end
+
+  def available_account_links
+    account_links + shared_account_links
   end
 
   private

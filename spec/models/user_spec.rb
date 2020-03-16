@@ -358,4 +358,35 @@ RSpec.describe User, type: :model do
       expect(exercise3.can_access(user)).to be true
     end
   end
+
+  describe '#available_account_links' do
+    subject(:available_account_links) { user.available_account_links }
+
+    let(:user) { create(:user) }
+
+    it { is_expected.to be_empty }
+
+    context 'when an account_link exists' do
+      let!(:account_link) { create(:account_link, user: another_user) }
+      let(:another_user) { create(:user) }
+
+      it { is_expected.to be_empty }
+
+      context 'when user owns account_link' do
+        let(:another_user) { user }
+
+        it 'contains account_link' do
+          expect(available_account_links).to include(account_link)
+        end
+      end
+
+      context 'when account_link is shared' do
+        before { create(:account_link_user, user: user, account_link: account_link) }
+
+        it 'contains account_link' do
+          expect(available_account_links).to include(account_link)
+        end
+      end
+    end
+  end
 end

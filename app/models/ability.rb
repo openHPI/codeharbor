@@ -50,8 +50,8 @@ class Ability
   def account_link_abilities(user)
     can %i[create new], AccountLink
 
-    can %i[crud view], AccountLink, user_id: user.id
-    can %i[view show remove_account_link], AccountLink, external_users: {id: user.id}
+    can %i[crud view remove_shared_user add_shared_user], AccountLink, user_id: user.id
+    can %i[view show remove_shared_user], AccountLink, shared_users: {id: user.id}
   end
 
   def cart_abilities(user)
@@ -96,8 +96,7 @@ class Ability
     can %i[view show members], Group do |group|
       group.confirmed_member?(user)
     end
-    can %i[crud remove_exercise grant_access delete_from_group deny_access make_admin add_account_link_to_member
-           remove_account_link_from_member], Group do |group|
+    can %i[crud remove_exercise grant_access delete_from_group deny_access make_admin], Group do |group|
       group.admin?(user)
     end
   end

@@ -35,11 +35,11 @@ br
         li = link_to t('shared.download_zip'), download_all_cart_path(@cart), 'data-turbolinks': false
         li.divider
         li.dropdown-header = t('shared.export_to') + ': '
-        - if !current_user.account_links.empty?
-          - current_user.account_links.each do |acc_link|
+        - if !current_user.available_account_links.empty?
+          - current_user.available_account_links.each do |acc_link|
             li
               /= link_to acc_link.name, push_cart_cart_path(account_link: acc_link), method: 'post', class: 'dropdown-item'
-              a.dropdown-item title=t('controllers.carts.temporary_disabled')
+              a.dropdown-item.disabled-cursor title=t('controllers.carts.temporary_disabled')
                 = acc_link.name
         - else
           li

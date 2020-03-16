@@ -68,12 +68,11 @@ br
           li = link_to t('shared.download_zip'), download_all_collection_path(@collection), 'data-turbolinks': false
           li.divider
           li.dropdown-header = t('shared.export_to') + ': '
-          - if !current_user.account_links.empty?
-            - current_user.account_links.each do |acc_link|
+          - if !current_user.available_account_links.empty?
+            - current_user.available_account_links.each do |acc_link|
               li
-                a.dropdown-item title=t('controllers.carts.temporary_disabled')
+                a.dropdown-item.disabled-cursor title=t('controllers.carts.temporary_disabled')
                   = acc_link.name
-                /= link_to acc_link.name, push_collection_collection_path(account_link: acc_link), method: 'post', class: 'dropdown-item'
           - else
             li
               = link_to t('exercises.show.define_account_link'), new_user_account_link_path(current_user)
