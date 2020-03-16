@@ -5,8 +5,9 @@ require 'rails_helper'
 RSpec.describe Test, type: :model do
   describe 'validations' do
     it { is_expected.to belong_to(:exercise) }
-    it { is_expected.to belong_to(:exercise_file) }
     it { is_expected.to belong_to(:testing_framework).optional }
+
+    it { is_expected.to validate_presence_of(:exercise_file) }
   end
 
   describe '#content' do
@@ -156,7 +157,7 @@ RSpec.describe Test, type: :model do
     end
 
     it 'creates a new exercise_file with the same attribute' do
-      expect(duplicate.exercise_file).to have_attributes(test.exercise_file.attributes.except('created_at', 'updated_at', 'id'))
+      expect(duplicate.exercise_file).to have_attributes(test.exercise_file.attributes.except('created_at', 'updated_at', 'id', 'test_id'))
     end
   end
 end
