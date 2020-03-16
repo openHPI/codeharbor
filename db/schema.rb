@@ -292,7 +292,6 @@ ActiveRecord::Schema.define(version: 2020_03_01_101107) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "exercise_id"
-    t.integer "exercise_file_id"
     t.float "score"
     t.index ["exercise_id"], name: "index_tests_on_exercise_id"
     t.index ["testing_framework_id"], name: "index_tests_on_testing_framework_id"
@@ -346,7 +345,6 @@ ActiveRecord::Schema.define(version: 2020_03_01_101107) do
   add_foreign_key "ratings", "users"
   add_foreign_key "reports", "exercises"
   add_foreign_key "reports", "users"
-  add_foreign_key "tests", "exercise_files"
   add_foreign_key "tests", "exercises"
   add_foreign_key "tests", "testing_frameworks"
   add_foreign_key "user_groups", "groups", on_delete: :cascade
