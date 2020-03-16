@@ -11,7 +11,7 @@ class FixExerciseFileTestRelationship < ActiveRecord::Migration[6.0]
     duplicates.each do |exercise_file_id|
       tests_with_duplicates = Test.where(exercise_file_id: exercise_file_id).drop(1)
       tests_with_duplicates.each do |test|
-        # create new ExerciseFile do be referenced, instead of the duplicate
+        # create new ExerciseFile to be referenced instead of the duplicate
         new_exercise_file = ExerciseFile.find(test.exercise_file_id).duplicate
         new_exercise_file.save!(validate: false)
         test.update(exercise_file_id: new_exercise_file.id)
