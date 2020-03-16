@@ -31,7 +31,10 @@ en:
       created: 'Account link was successfully created.'
       updated: 'Account link was successfully updated.'
       destroyed: 'Account link was successfully destroyed.'
-      not_working: "Your account_link %{account_link} does not seem to be working."
+      not_working: "Your account link %{account_link} does not seem to be working."
+      share_duplicate: This account link is already shared with %{user}.
+      granted_push: "Granted push privileges to %{user}."
+      removed_push: "Removed push privileges for %{user}."
     carts:
       authorization: 'You are not authorized for this action.'
       created: 'Cart was successfully created.'
@@ -105,6 +108,7 @@ en:
         not_empty_while_public: Can't be empty while visibility is set to public
       visibility:
         not_public_without_exenv: Can't be public while programming language is not set
+      account_link_authorization: You are not allowed to use this account link.
 
     exercise_file:
       authorization: "You are not authorized to for this action."
@@ -132,8 +136,6 @@ en:
       remove_exercise_notice: "Exercise successfully removed"
       delete_from_group_notice: "User deleted from group."
       make_admin_notice: "Made user to admin."
-      granted_push: "Granted push privileges to user."
-      removed_push: "Removed push privileges for user."
 
     home:
       email_confirmed: "Welcome to the CodeHarbor! Your email has been confirmed. Please sign in to continue."
@@ -221,77 +223,82 @@ en:
       destroy: "Destroy"
       deleteX: "X"
 
+  account_links:
+    share_tooltip: Share account link for %{account_link} with %{user}
+    unshare_tooltip: Stop sharing account link for %{account_link} with %{user}
   account:
-    show_header: "Account Link"
-    push_url: "Push URL"
-    check_uuid_url: "Check UUID URL"
-    name: "Name"
-    api_key: "API key"
-    documentation:
-      header: About autograders and account links
-      paragraph_html: |
-        <h3>About account links:</h3>
-        <p>
-          Account links define a connection to an autograder. <br/>
-          If you have an account link you can simply export exercises available to you into the autograder. <br/>
-          You can create your own account link if you have the push_url of an autograder that can handle OAuth2 post requests.</br>
-        </p>
-        <h3>You want to connect an autograder that already has OAuth2 and ProFormA-XML support:</h3>
-        <p>
-          If the autograder can import exercises sent via OAuth2 request in the ProFormA-XML format you will need the following things: <br/>
-          1. Push-url: The autograder needs to have an ULR codeharbor can post the exercise to. <br/>
-          2. OAuth2-token: The autograder must be able to link a token to your account to authorize exercises that will be pushed there. <br/>
-             If you do not need a specific token you can generate a token when creating an account link on codeharbor side or use whatever you want <br/>
-             as long as it is the same token on codeharbor and the autograders side.<br>
-          You also have to create a client-id and client-secret for an account link on codeharbor side. <br/>
-          If the autograder does not require a specific one you can auto-generate them.<br/>
-        </p>
-        <h3>How to prepare your own autograder:</h3>
-        <p>
-          Codeharbor uses the OAuth 2.0 protocol to send exercises via a post request. <a href="https://oauth.net/2/">https://oauth.net/2/</a><br/>
-          Codeharbor is the client in this case, your autograder the resource server and you are the resource owner.
-          When you are exporting an exercise, codeharbor first generates an XML-file complying with the ProFormA-XML standard for exchanging exercises. <a href="https://github.com/ProFormA/taskxml">https://github.com/ProFormA/taskxml</a>
-          Then it will make a post request to the URL you chose as the push_url. The XML-file will be in the request body and the OAuth2 token in the request headers ("request.headers['Authorization']"). <br/>
-          In your autograder you need to make sure that the OAuth2 token is validated and the corresponding user found. We recommend to add an interface for users to add an OAuth2-token. <br/>
-          The XML-file in the request-body needs to be parsed into the database. Since we are using the ProFormA-XML format you can parse the xml using xpath. <br/>
-          Finally, please respond with a 200 status code if everything went okay or a 400 if it did not. <br/>
-        </p>
+    account_links:
+      show_header: "Account Link"
+      push_url: "Push URL"
+      check_uuid_url: "Check UUID URL"
+      name: "Name"
+      api_key: "API key"
+      shared: 'shared'
+      shared_with_users: Shared with %{count} other users.
+      shared_users: Users you have shared access with
+      documentation:
+        header: About autograders and account links
+        paragraph_html: |
+          <h3>About account links:</h3>
+          <p>
+            Account links define a connection to an autograder. <br/>
+            If you have an account link you can simply export exercises available to you into the autograder. <br/>
+            You can create your own account link if you have the push_url of an autograder that can handle OAuth2 post requests.</br>
+          </p>
+          <h3>You want to connect an autograder that already has OAuth2 and ProFormA-XML support:</h3>
+          <p>
+            If the autograder can import exercises sent via OAuth2 request in the ProFormA-XML format you will need the following things: <br/>
+            1. Push-url: The autograder needs to have an ULR codeharbor can post the exercise to. <br/>
+            2. OAuth2-token: The autograder must be able to link a token to your account to authorize exercises that will be pushed there. <br/>
+               If you do not need a specific token you can generate a token when creating an account link on codeharbor side or use whatever you want <br/>
+               as long as it is the same token on codeharbor and the autograders side.<br>
+            You also have to create a client-id and client-secret for an account link on codeharbor side. <br/>
+            If the autograder does not require a specific one you can auto-generate them.<br/>
+          </p>
+          <h3>How to prepare your own autograder:</h3>
+          <p>
+            Codeharbor uses the OAuth 2.0 protocol to send exercises via a post request. <a href="https://oauth.net/2/">https://oauth.net/2/</a><br/>
+            Codeharbor is the client in this case, your autograder the resource server and you are the resource owner.
+            When you are exporting an exercise, codeharbor first generates an XML-file complying with the ProFormA-XML standard for exchanging exercises. <a href="https://github.com/ProFormA/taskxml">https://github.com/ProFormA/taskxml</a>
+            Then it will make a post request to the URL you chose as the push_url. The XML-file will be in the request body and the OAuth2 token in the request headers ("request.headers['Authorization']"). <br/>
+            In your autograder you need to make sure that the OAuth2 token is validated and the corresponding user found. We recommend to add an interface for users to add an OAuth2-token. <br/>
+            The XML-file in the request-body needs to be parsed into the database. Since we are using the ProFormA-XML format you can parse the xml using xpath. <br/>
+            Finally, please respond with a 200 status code if everything went okay or a 400 if it did not. <br/>
+          </p>
 
 
-    description_html: |
-      Account links define a connection to an autograder. <br/>
-      If you have an account link you can simply export exercises available to you into the autograder. <br/>
-      You can create your own account link if you have the push_url of an autograder that can handle OAuth2 post requests.</br>
-      For more information on how to establish a connection to an autograder please click the following link:</br>
+      description_html: |
+        Account links define a connection to an autograder. <br/>
+        If you have an account link you can simply export exercises available to you into the autograder. <br/>
+        You can create your own account link if you have the push_url of an autograder that can handle OAuth2 post requests.</br>
+        For more information on how to establish a connection to an autograder please click the following link:</br>
 
-    info:
-      push_url: |
-        The address on the autograder side your exercise can be exported to. If you don't know what to write here, ask the autograders admins.
-      check_uuid_url: |
-        The address on the autograder side that can be queried to determine if the exercise already exists.
-      name: |
-        Can be anything to Identify your account link.
-      token: |
-        Will be used to authenticate your export request. Has to be the same on both sides.
+      info:
+        push_url: |
+          The address on the autograder side your exercise can be exported to. If you don't know what to write here, ask the autograders admins.
+        check_uuid_url: |
+          The address on the autograder side that can be queried to determine if the exercise already exists.
+        name: |
+          Can be anything to Identify your account link.
+        token: |
+          Will be used to authenticate your export request. Has to be the same on both sides.
 
-    admin:
-      header: "Account Link Administration"
-    button:
-      new: "New Account Link"
-      show: "Show TEST"
-      edit: "Edit"
-      delete: "Delete"
-      destroy: "Destroy"
-      back: "Back"
-      save: "Save Account Link"
+      admin:
+        header: "Account Link Administration"
+      button:
+        edit: "Edit"
+        delete: "Delete"
+        destroy: Remove
+        back: "Back"
+        save: "Save Account Link"
 
-    edit:
-      header: "Editing Account Link"
-    links:
-      header: "Listing Account Links"
-    new:
-      header: "New Account Link"
-    errorMessage: " prohibited this account_link from being saved."
+      edit:
+        header: "Editing Account Link"
+      links:
+        header: "Listing Account Links"
+      new:
+        header: "New Account Link"
+      errorMessage: " prohibited this account_link from being saved."
 
     new:
       header: "New Answer"
@@ -363,7 +370,7 @@ en:
       title: "Title"
       actions: "Actions"
       name: "Name"
-      allow_push: "Allow push to..."
+      manage_shared_account_links: Manage shared account links
       admin_label: Admin
       member_label: Member
       pending_label: Pending
@@ -391,6 +398,8 @@ en:
         users: "Users"
         pending: "Pending users"
         exercises: "Exercises"
+        add_account_link_user: Share Account Link with %{user}
+        remove_account_link_user: Remove shared Account Link for %{user}
       admin:
         header: "Group Administration"
 
@@ -623,6 +632,7 @@ en:
         no_history: No history found
         history_version_name: "Version: %{version_nr} from: %{updated_at}"
       none: None
+      account_link_shared: shared
 
 
     edit:

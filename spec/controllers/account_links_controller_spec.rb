@@ -71,13 +71,72 @@ RSpec.describe AccountLinksController, type: :controller do
       end
     end
 
-    describe 'POST remove_account_link' do
-      let(:post_request) { post :remove_account_link, params: {id: account_link.id, user_id: user.id}, session: valid_session }
+    describe 'POST remove_shared_user' do
+      render_views
 
-      before { account_link.account_link_users << AccountLinkUser.new(user: user) }
+      let(:account_link) { create(:account_link, user: user) }
+      let(:shared_user) { create(:user) }
+
+      let(:post_request) do
+        post :remove_shared_user, params: {id: account_link.id, user_id: user.id, shared_user: shared_user.id}, session: valid_session
+      end
+
+      before { account_link.account_link_users << AccountLinkUser.new(user: shared_user) }
 
       it 'removes the account_link_user from the account_link' do
         expect { post_request }.to change(account_link.account_link_users, :count).by(-1)
+      end
+
+      it 'sets flash message' do
+        expect { post_request }.to change { flash[:notice] }.to(I18n.t('controllers.account_links.removed_push', user: shared_user.email))
+      end
+
+      it 'response with correct button' do
+        post_request
+        expect(response.body).to include('add_shared_user')
+      end
+    end
+
+    describe 'POST add_shared_user' do
+      render_views
+
+      let(:account_link) { create(:account_link, user: user) }
+      let(:shared_user) { create(:user) }
+
+      let(:post_request) do
+        post :add_shared_user, params: {id: account_link.id, user_id: user.id, shared_user: shared_user.id}, session: valid_session
+      end
+
+      it 'adds the account_link_user to account_link' do
+        expect { post_request }.to change(account_link.account_link_users, :count).by(1)
+      end
+
+      it 'sets flash message' do
+        expect { post_request }.to change { flash[:notice] }.to(I18n.t('controllers.account_links.granted_push', user: shared_user.email))
+      end
+
+      it 'response with correct button' do
+        post_request
+        expect(response.body).to include('remove_shared_user')
+      end
+
+      context 'when account_link is already shared' do
+        before { account_link.shared_users << shared_user }
+
+        it 'does not add account_link_user to account_link' do
+          expect { post_request }.not_to change(account_link.account_link_users, :count)
+        end
+
+        it 'sets flash message' do
+          expect { post_request }.to change { flash[:alert] }.to(
+            I18n.t('controllers.account_links.share_duplicate', user: shared_user.email)
+          )
+        end
+
+        it 'response with correct button' do
+          post_request
+          expect(response.body).to include('remove_shared_user')
+        end
       end
     end
   end

@@ -5,6 +5,7 @@ class AccountLinksController < ApplicationController
 
   before_action :set_user
   before_action :set_account_link, only: %i[show edit update destroy remove_account_link]
+  before_action :set_shared_user, only: %i[remove_shared_user add_shared_user]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.user.authorization')
@@ -55,21 +56,35 @@ class AccountLinksController < ApplicationController
     end
   end
 
-  def remove_account_link
-    respond_to do |format|
-      if @account_link.external_users.delete(@user)
-        format.html { redirect_to @user, notice: t('controllers.user.remove_account_link.success') }
-      else
-        format.html { redirect_to @user, alert: t('controllers.user.remove_account_link.fail') }
-      end
-    end
+  def remove_shared_user
+    @account_link.shared_users.destroy(@shared_user)
+    flash[:notice] = t('controllers.account_links.removed_push', user: @shared_user.email)
+    render_shared_user_json
+  end
+
+  def add_shared_user
+    @account_link.shared_users << @shared_user
+    flash[:notice] = t('controllers.account_links.granted_push', user: @shared_user.email)
+  rescue ActiveRecord::RecordInvalid
+    flash[:alert] = t('controllers.account_links.share_duplicate', user: @shared_user.email)
+  ensure
+    render_shared_user_json
   end
 
   private
 
+  def render_shared_user_json
+    render json: {button: render_to_string(partial: 'groups/share_account_link_button',
+                                           locals: {shared_user: @shared_user, account_link: @account_link})}
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_account_link
     @account_link = AccountLink.find(params[:id])
+  end
+
+  def set_shared_user
+    @shared_user = User.find(params[:shared_user])
   end
 
   def set_user

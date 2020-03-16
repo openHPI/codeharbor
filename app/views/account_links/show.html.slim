@@ -1,26 +1,40 @@
 .header
   .std-heading
     i.fa.fa-user
-    = " #{t('account.show_header')}: #{@account_link.name}"
+    = " #{t('account.account_links.show_header')}: #{@account_link.name}"
 .show-table
   .row
-    .row-label = t('account.name')
+    .row-label = t('account.account_links.name')
     .row-value = @account_link.name
   .row
-    .row-label = t('account.push_url')
+    .row-label = t('account.account_links.push_url')
     .row-value = @account_link.push_url
-  .row
-    .row-label = t('account.check_uuid_url')
-    .row-value = @account_link.check_uuid_url
-  .row
-    .row-label = t('account.api_key')
-    .row-value = @account_link.api_key
+  - if current_user == @account_link.user
+    .row
+      .row-label = t('account.account_links.check_uuid_url')
+      .row-value = @account_link.check_uuid_url
+    .row
+      .row-label = t('account.account_links.api_key')
+      .row-value = @account_link.api_key
+    - if @account_link.shared_users.any?
+      .row.vertical
+        .row-label = t('account.account_links.shared_users')
+        .row-value
+          - @account_link.shared_users.each do |shared_user|
+            .table-list
+              = shared_user.email
+              .btn-group.pull-right
+                = button_to remove_shared_user_user_account_link_path, method: :post, params: {shared_user: shared_user.id}, data: { confirm: 'Are you sure?' }, class:'btn btn-default btn-xs', remote: true, form_class: 'remove-account-link-form' do
+                  i.fa.fa-trash
+                  = ' '
+                  = t('account.account_links.button.destroy')
+
 .actions.btn-group
   - if can? :edit, @account_link
     = link_to edit_user_account_link_path(@user, @account_link), class: 'btn btn-important' do
       i.fa.fa-edit
-      = ' ' + t('account.button.edit')
+      = ' ' + t('account.account_links.button.edit')
     = link_to user_account_link_path(@user, @account_link), class: 'btn btn-important', method: :delete, data: {confirm: 'Are you sure?'} do
       i.fa.fa-trash style=("color:#800000")
-      = ' ' + t('account.button.delete')
-  = link_to t('account.button.back'), user_path(@user), class: 'btn btn-important'
+      = ' ' + t('account.account_links.button.delete')
+  = link_to t('account.account_links.button.back'), user_path(@user), class: 'btn btn-important'
