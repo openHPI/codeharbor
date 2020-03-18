@@ -230,7 +230,7 @@ legend.toggle-next
               = t('exercises.files.role')
               | :
             .row-value
-              = t("exercises.files.roles.#{file.role}")
+              = t("exercises.files.roles.#{file.role || 'none'}")
 
 legend.toggle-next
   span.number = '4'
