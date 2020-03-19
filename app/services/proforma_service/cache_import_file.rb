@@ -14,7 +14,7 @@ module ProformaService
         ProformaService::ConvertZipToTasks.call(zip_file: @zip_file).each do |task|
           exercise = Exercise.find_by_uuid(task[:uuid])
 
-          data[SecureRandom.uuid] = {path: task[:path],
+          data[SecureRandom.uuid] = {path: task[:path].tr(' ', '_'),
                                      exists: exercise.present?,
                                      updatable: exercise&.updatable_by?(@user) || false,
                                      import_id: import_file.id,
