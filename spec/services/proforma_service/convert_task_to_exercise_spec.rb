@@ -193,7 +193,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
             used_by_grader: 'used_by_grader',
             visible: 'yes',
             usage_by_lms: 'display',
-            binary: false,
+            binary: false
           )
         end
 
