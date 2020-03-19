@@ -50,7 +50,7 @@ module ProformaService
         full_file_name: task_file.filename,
         read_only: task_file.usage_by_lms.in?(%w[display download]),
         hidden: task_file.visible == 'no',
-        role: model_solution_files.include?(task_file) ? 'reference_solution' : task_file.internal_description
+        role: role(task_file)
       }.tap do |params|
         if task_file.binary
           params[:attachment] = file_base64(task_file)
@@ -60,6 +60,10 @@ module ProformaService
           params[:content] = task_file.content
         end
       end)
+    end
+
+    def role(task_file)
+      model_solution_files.include?(task_file) ? 'reference_implementation' : task_file.internal_description
     end
 
     def file_base64(file)
@@ -75,13 +79,17 @@ module ProformaService
         ).tap do |test|
           if test_object.meta_data
             test.feedback_message = test_object.meta_data['feedback-message']
-            test.testing_framework = TestingFramework.where(
-              name: test_object.meta_data['testing-framework'],
-              version: test_object.meta_data['testing-framework-version']
-            ).first_or_initialize
+            test.testing_framework = testing_framework(test_object)
           end
         end
       end
+    end
+
+    def testing_framework(test_object)
+      TestingFramework.where(
+        name: test_object.meta_data['testing-framework'],
+        version: test_object.meta_data['testing-framework-version']
+      ).first_or_initialize
     end
 
     def test_file(test_object)
