@@ -181,7 +181,7 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
       end
 
       context 'when exercise_file is not hidden' do
-        let(:file) { create(:codeharbor_test_file, hidden: false) }
+        let(:file) { build(:codeharbor_test_file, hidden: false) }
 
         it 'creates the test file with the correct attribute' do
           expect(task.tests.first.files.first).to have_attributes(visible: 'yes')

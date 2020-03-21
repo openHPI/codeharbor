@@ -94,9 +94,9 @@ class GroupsController < ApplicationController
 
   def deny_access
     @group.users.delete(@user)
-    send_deny_access_message(user, @group)
+    send_deny_access_message(@user, @group)
 
-    Message.where(sender: user, recipient: current_user, param_type: 'group', param_id: @group.id).delete_all
+    Message.where(sender: @user, recipient: current_user, param_type: 'group', param_id: @group.id).delete_all
     redirect_to @group, notice: t('controllers.group.deny_access.notice')
   end
 

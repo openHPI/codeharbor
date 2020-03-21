@@ -6,8 +6,6 @@ class Cart < ApplicationRecord
   has_many :cart_exercises, dependent: :destroy
   has_many :exercises, through: :cart_exercises
 
-  validates :user, presence: true
-
   def self.find_cart_of(user)
     cart = find_by(user: user)
     cart || create(user: user)
