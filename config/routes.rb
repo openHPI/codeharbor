@@ -44,6 +44,7 @@ Rails.application.routes.draw do
       post :push_collection # later
       post :save_shared # ???
       post :share
+      post :leave
     end
   end
 

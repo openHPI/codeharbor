@@ -61,7 +61,8 @@ class Ability
 
   def collection_abilities(user)
     can %i[create view_shared save_shared index], Collection
-    can %i[crud remove_exercise remove_all push_collection download_all share], Collection, users: {id: user.id}
+    cannot %i[leave], Collection
+    can %i[crud leave remove_exercise remove_all push_collection download_all share], Collection, users: {id: user.id}
   end
 
   def exercise_abilities(user)
