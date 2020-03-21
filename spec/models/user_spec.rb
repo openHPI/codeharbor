@@ -202,18 +202,16 @@ RSpec.describe User, type: :model do
     end
 
     context 'when user has a collection' do
-      before { user.collections << collection }
+      before { create(:collection, users: users) }
 
-      let(:collection) { create(:collection, users: []) }
+      let(:users) { [user] }
 
       it 'deletes collection' do
         expect { soft_delete }.to change(Collection, :count).by(-1)
       end
 
       context 'when another user also has that collection' do
-        before { create(:user).collections << collection }
-
-        let(:collection) { create(:collection) }
+        let(:users) { [user, create(:user)] }
 
         it 'deletes collection' do
           expect { soft_delete }.not_to change(Collection, :count)
