@@ -9,7 +9,7 @@
   .field-row
     .field-element-10
       = f.label :file_types_id, t('exercises.files.extension'), class: 'form-label'
-      = file.select :file_type_id, options_for_select(FileType.all.map { |ft| [ft.name_with_extension, ft.id, {'data-extension' => ft.file_extension}] }, file.object.file_type_id), {}, class: 'file-type'
+      = file.select :file_type_id, options_for_select(FileType.all.map {|ft| [ft.name_with_extension, ft.id, {'data-extension' => ft.file_extension, 'data-editor-mode' => ft.editor_mode || 'ace/mode/java' }]}, file.object.file_type_id), {}, class: 'file-type'
     .field-element-2
       = render 'permissions', file: file
 .field-element
