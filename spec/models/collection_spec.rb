@@ -17,7 +17,7 @@ RSpec.describe Collection, type: :model do
 
     it { is_expected.not_to be_able_to(:show, collection) }
     it { is_expected.not_to be_able_to(:update, collection) }
-    it { is_expected.not_to be_able_to(:destroy, collection) }
+    it { is_expected.not_to be_able_to(:leave, collection) }
     it { is_expected.not_to be_able_to(:remove_exercise, collection) }
     it { is_expected.not_to be_able_to(:remove_all, collection) }
     it { is_expected.not_to be_able_to(:push_collection, collection) }
@@ -33,7 +33,7 @@ RSpec.describe Collection, type: :model do
 
       it { is_expected.not_to be_able_to(:show, collection) }
       it { is_expected.not_to be_able_to(:update, collection) }
-      it { is_expected.not_to be_able_to(:destroy, collection) }
+      it { is_expected.not_to be_able_to(:leave, collection) }
       it { is_expected.not_to be_able_to(:remove_exercise, collection) }
       it { is_expected.not_to be_able_to(:remove_all, collection) }
       it { is_expected.not_to be_able_to(:push_collection, collection) }
@@ -45,6 +45,7 @@ RSpec.describe Collection, type: :model do
 
         it { is_expected.to be_able_to(:manage, described_class) }
         it { is_expected.to be_able_to(:manage, collection) }
+        it { is_expected.not_to be_able_to(:leave, collection) }
       end
 
       context 'when collection is from user' do
@@ -55,7 +56,7 @@ RSpec.describe Collection, type: :model do
         it { is_expected.not_to be_able_to(:manage, collection) }
         it { is_expected.to be_able_to(:show, collection) }
         it { is_expected.to be_able_to(:update, collection) }
-        it { is_expected.to be_able_to(:destroy, collection) }
+        it { is_expected.to be_able_to(:leave, collection) }
         it { is_expected.to be_able_to(:remove_exercise, collection) }
         it { is_expected.to be_able_to(:remove_all, collection) }
         it { is_expected.to be_able_to(:push_collection, collection) }

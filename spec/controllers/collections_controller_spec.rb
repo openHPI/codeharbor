@@ -256,6 +256,57 @@ RSpec.describe CollectionsController, type: :controller do
     end
   end
 
+  describe 'POST #leave' do
+    let!(:collection) { create(:collection, valid_attributes.merge(users: users)) }
+    let(:users) { [create(:user), user] }
+    let(:post_request) { post :leave, params: params, session: valid_session }
+    let(:params) { {id: collection.id} }
+
+    it 'removes user from collection' do
+      post_request
+      expect(collection.reload.users).not_to include user
+    end
+
+    it 'decreases usercount of collection' do
+      expect { post_request }.to change(collection.reload.users, :count).from(2).to(1)
+    end
+
+    it 'redirects to the collections list' do
+      post_request
+      expect(response).to redirect_to(collections_url)
+    end
+
+    context 'when there is only one user in collection' do
+      let(:users) { [user] }
+
+      it 'deletes collection' do
+        expect { post_request }.to change(Collection, :count).by(-1)
+      end
+
+      it 'redirects to the collections list' do
+        post_request
+        expect(response).to redirect_to(collections_url)
+      end
+    end
+  end
+
   # post push_collection later
   # get collections_all # adminview
 end
+
+
+# -  describe 'DELETE #destroy' do
+# -    let!(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
+# -
+# -    it 'destroys the requested collection' do
+# -      expect do
+# -        delete :destroy, params: {id: collection.to_param}, session: valid_session
+# -      end.to change(Collection, :count).by(-1)
+# -    end
+# -
+# -    it 'redirects to the collections list' do
+# -      delete :destroy, params: {id: collection.to_param}, session: valid_session
+# -      expect(response).to redirect_to(collections_url)
+# -    end
+# -  end
+# -
