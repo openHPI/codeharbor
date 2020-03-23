@@ -261,7 +261,7 @@ legend.toggle-next
       .file-content
         - if !test.attachment.present?
           .row
-            .editor_readonly
+            .editor_readonly data-editor-mode="#{test.exercise_file.file_type.editor_mode}"
               = test.content
         - else
           .row.vertical

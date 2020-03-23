@@ -9,7 +9,7 @@ ready = function() {
     var hidden = all[i].getElementsByClassName("hidden")[0];
 
     var editor = ace.edit(elem);
-    editor.setTheme("ace/theme/monokai");
+    editor.setTheme("ace/theme/chrome");
     editor.getSession().setMode("ace/mode/java");
     elem.style.fontSize='16px';
 
