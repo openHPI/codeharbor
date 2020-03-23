@@ -293,20 +293,3 @@ RSpec.describe CollectionsController, type: :controller do
   # post push_collection later
   # get collections_all # adminview
 end
-
-
-# -  describe 'DELETE #destroy' do
-# -    let!(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
-# -
-# -    it 'destroys the requested collection' do
-# -      expect do
-# -        delete :destroy, params: {id: collection.to_param}, session: valid_session
-# -      end.to change(Collection, :count).by(-1)
-# -    end
-# -
-# -    it 'redirects to the collections list' do
-# -      delete :destroy, params: {id: collection.to_param}, session: valid_session
-# -      expect(response).to redirect_to(collections_url)
-# -    end
-# -  end
-# -
