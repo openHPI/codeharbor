@@ -67,7 +67,7 @@ en:
       leave:
         confirm_leave: You successfully left the collection.
         confirm_destroy: The collection has successfully been deleted.
-        deletion_warning: You are the last users in this collection. If you leave, this collection will be permanently deleted! Are you sure?
+        deletion_warning: You are the last user in this collection. If you leave, this collection will be permanently deleted! Are you sure?
         button: Leave
 
     exercise:
