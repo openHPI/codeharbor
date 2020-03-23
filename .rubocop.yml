@@ -21,6 +21,9 @@ Metrics/BlockLength:
     - Guardfile
     - config/environments/*
 
+Metrics/ClassLength:
+  Max: 150
+
 Metrics/MethodLength:
   Max: 20
 
@@ -30,21 +33,23 @@ Layout/LineLength:
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
-RSpec/NestedGroups:
-  Max: 5
-
-
 RSpec/ExampleLength:
   Exclude:
     - spec/services/proforma_service/convert_exercise_to_task_spec.rb
     - spec/services/proforma_service/convert_task_to_exercise_spec.rb
 
-RSpec/RepeatedDescription:
-  Enabled: false
+RSpec/NestedGroups:
+  Max: 5
 
 Style/Documentation:
   Enabled: false
 
-Metrics/ClassLength:
-  Max: 150
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
 
