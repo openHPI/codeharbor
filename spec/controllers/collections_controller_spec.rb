@@ -129,21 +129,6 @@ RSpec.describe CollectionsController, type: :controller do
     end
   end
 
-  describe 'DELETE #destroy' do
-    let!(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
-
-    it 'destroys the requested collection' do
-      expect do
-        delete :destroy, params: {id: collection.to_param}, session: valid_session
-      end.to change(Collection, :count).by(-1)
-    end
-
-    it 'redirects to the collections list' do
-      delete :destroy, params: {id: collection.to_param}, session: valid_session
-      expect(response).to redirect_to(collections_url)
-    end
-  end
-
   describe 'PATCH #remove_exercise' do
     let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
     let!(:exercise) { create(:exercise, collections: [collection]) }
