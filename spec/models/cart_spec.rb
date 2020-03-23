@@ -61,6 +61,10 @@ RSpec.describe Cart, type: :model do
     end
   end
 
+  describe '#valid?' do
+    it { is_expected.to belong_to(:user) }
+  end
+
   describe '#add_exercise' do
     subject(:add_exercise) { cart.add_exercise(exercise) }
 

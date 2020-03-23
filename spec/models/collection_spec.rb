@@ -66,6 +66,11 @@ RSpec.describe Collection, type: :model do
     end
   end
 
+  describe '#valid?' do
+    it { is_expected.to validate_presence_of(:title) }
+    it { is_expected.to validate_presence_of(:users) }
+  end
+
   describe '#add_exercise' do
     subject(:add_exercise) { collection.add_exercise(exercise) }
 

@@ -3,8 +3,10 @@
 class Test < ApplicationRecord
   belongs_to :testing_framework, optional: true
   belongs_to :exercise
-  belongs_to :exercise_file, inverse_of: :tests
+  has_one :exercise_file, inverse_of: :test, dependent: :destroy
   accepts_nested_attributes_for :exercise_file, allow_destroy: true
+
+  validates :exercise_file, presence: true
 
   def content
     exercise_file&.content || ''
@@ -44,7 +46,7 @@ class Test < ApplicationRecord
 
   def duplicate
     test_duplicate = dup
-    test_duplicate.exercise_file = exercise_file.duplicate
+    test_duplicate.exercise_file = exercise_file.duplicate(test: test_duplicate)
     test_duplicate
   end
 end
