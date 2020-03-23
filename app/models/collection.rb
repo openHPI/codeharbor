@@ -2,6 +2,7 @@
 
 class Collection < ApplicationRecord
   validates :title, presence: true
+  validates :users, presence: true
 
   has_many :collection_users, dependent: :destroy
   has_many :users, through: :collection_users
