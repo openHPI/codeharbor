@@ -35,5 +35,4 @@
           - if can? :edit, collection
             = link_to 'View', collection_path(collection), class:'btn btn-default'
             = link_to 'Edit', edit_collection_path(collection), class:'btn btn-default'
-            = link_to 'Delete', collection_path(collection), class:'btn btn-default', method: :delete, data: { confirm: t('sure') }
 = will_paginate @collections
