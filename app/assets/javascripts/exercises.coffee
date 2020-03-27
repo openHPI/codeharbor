@@ -77,10 +77,7 @@ toggleHideShowMore = (element) ->
 
 initCollapsable = (collapsables, max_height) ->
   collapsables.each ->
-    if $(this).prop('scrollHeight') > $(this).prop('clientHeight')
-      # $(this).css 'height', 'unset'
-      # $(this).css 'max-height', max_height
-    else
+    if $(this).prop('scrollHeight') <= $(this).prop('clientHeight')
       $(this).siblings('.more-btn-wrapper').hide()
     addAnimatedSliding()
 
