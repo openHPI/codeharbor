@@ -14,24 +14,26 @@
               = t('exercises.defaults.no_description')
           - else
             = exercise.descriptions.first.text
-        .more-btn-wrapper
-          = link_to t('exercises.all.open_exercise'), exercise, class: 'open-link'
+        .small-exercise-footer
+          .more-btn-wrapper
+            = link_to t('exercises.all.open_exercise'), exercise, class: 'open-link'
 
-        span.star-rating
-          small.number-rating
-            = exercise.avg_rating.round(1)
-          - [*1..5].each do |i|
-            - if exercise.rating_star(exercise.avg_rating.round(1)) >= i
-              span.fa.fa-star data-rating=i
-            - elsif (exercise.rating_star(exercise.avg_rating.round(1)) + 0.5) >= i
-              span.fa.fa-star-half-o data-rating=i
-            - else
-              span.fa.fa-star-o data-rating=i
-          small
-            = ' ('
-            = exercise.ratings.count
-            = 'x)'
+          span.star-rating
+            small.number-rating
+              = exercise.avg_rating.round(1)
+            - [*1..5].each do |i|
+              - if exercise.rating_star(exercise.avg_rating.round(1)) >= i
+                span.fa.fa-star data-rating=i
+              - elsif (exercise.rating_star(exercise.avg_rating.round(1)) + 0.5) >= i
+                span.fa.fa-star-half-o data-rating=i
+              - else
+                span.fa.fa-star-o data-rating=i
+            small
+              = ' ('
+              = exercise.ratings.count
+              = 'x)'
 
-        - exercise.labels.each do |label|
-          .small-label style=("background-color: #{'#' + label.color.to_s}; color: white;")
-            = label.name
+          .labels
+            - exercise.labels.each do |label|
+              .small_label style=("background-color: #{'#' + label.color.to_s}; color: white;")
+                = label.name

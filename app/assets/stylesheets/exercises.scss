@@ -27,6 +27,19 @@ $exercise-color: #006600;
   margin-left: 2px;
 }
 
+.small_label {
+  padding: 0.5em 1.5em;
+  font-size: 80%;
+  display: inline;
+  font-weight: bold;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  border-radius: 0.25em;
+  margin-left: 2px;
+}
+
 .exercise_label:first-child {
   margin-left: 0;
 }
@@ -547,9 +560,8 @@ input[type="radio"]:checked+label {
   }
 
   .content {
-    height: 200px;
     margin: 0 40px;
-    display: block;
+    display: flex;
     position: relative;
 
     .panel.displayed {
@@ -558,18 +570,22 @@ input[type="radio"]:checked+label {
       margin: 1%;
 
       .small-exercise-content {
-        display: inline-block;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         width: 100%;
-        height: 90px;
+        max-height: 219px;
 
         .small-description {
           width: 100%;
-          height: 76px;
           padding-bottom: 5px;
-          border-bottom: 1px lightgrey solid;
-          display: block;
           word-wrap: break-word;
           overflow: hidden;
+          margin-bottom: 3px;
+        }
+
+        .small-exercise-footer {
+          border-top: 1px lightgrey solid;
         }
       }
     }
@@ -669,6 +685,11 @@ input[type="radio"]:checked+label {
 
 .more-btn-wrapper[style*='display: none'] ~ .labels {
   margin-top: 5px;
+}
+
+.labels {
+  line-height: 24px;
+  overflow-wrap: break-word;
 }
 
 .exercise-panel {
