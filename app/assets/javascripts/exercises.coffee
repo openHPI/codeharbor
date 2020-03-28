@@ -291,7 +291,6 @@ ready =->
             anchor.scrollIntoView(false)
         complete: ->
           $icon.hide()
-          initCollapsable($('.small-description'), '58px')
       })
     else
       $caret.removeClass('fa-caret-up').addClass('fa-caret-down')
