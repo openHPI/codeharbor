@@ -4,6 +4,7 @@ class AccountLink < ApplicationRecord
   validates :check_uuid_url, presence: true
   validates :push_url, presence: true
   validates :api_key, presence: true
+  validates :name, presence: true
 
   belongs_to :user
 
