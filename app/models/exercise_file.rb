@@ -14,8 +14,6 @@ class ExerciseFile < ApplicationRecord
 
   before_save :parse_text_data
 
-  accepts_nested_attributes_for :exercise_test
-
   ROLES = %w[main_file reference_implementation regular_file teacher_defined_test].freeze
   TEST_ROLE = %w[teacher_defined_test].freeze
 
