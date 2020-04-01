@@ -33,6 +33,12 @@ Layout/LineLength:
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
 RSpec/ExampleLength:
   Exclude:
     - spec/services/proforma_service/convert_exercise_to_task_spec.rb
