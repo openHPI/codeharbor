@@ -47,6 +47,15 @@ RailsAdmin.config do |config|
     end
   end
 
+  config.model AccountLinkUser do
+    list do
+      field :id
+      field :user
+      field :account_link
+      field :valid?, :boolean
+    end
+  end
+
   config.model Cart do
     list do
       field :id
@@ -87,6 +96,7 @@ RailsAdmin.config do |config|
       field :user
     end
   end
+
   config.model Description do
     list do
       field :id
@@ -98,6 +108,17 @@ RailsAdmin.config do |config|
 
       field :language
       field :primary?
+    end
+  end
+
+  config.model ExecutionEnvironment do
+    list do
+      field :id
+      field :language
+      field :version
+      field :valid?, :boolean
+      field :created_at
+      field :updated_at
     end
   end
 
@@ -142,6 +163,98 @@ RailsAdmin.config do |config|
       field :maxrating
       field :origin_relations
       field :clone_relations
+    end
+  end
+
+  config.model ExerciseAuthor do
+    list do
+      field :id
+      field :exercise
+      field :user
+      field :valid?, :boolean
+      field :created_at
+      field :updated_at
+    end
+  end
+
+  config.model ExerciseFile do
+    list do
+      field :id
+      field :content
+      field :path
+      field :name
+      field :valid?, :boolean
+      field :created_at
+
+      field :solution, :boolean
+      field :visibility, :boolean
+      field :hidden, :boolean
+      field :exercise
+      field :role
+      field :updated_at
+
+      field :read_only, :boolean
+      field :file_type
+      field :attachment
+      field :exercise_test
+      field :purpose
+    end
+  end
+
+  config.model ExerciseRelation do
+    list do
+      field :id
+      field :origin
+      field :clone
+      field :valid?, :boolean
+      field :updated_at
+      field :created_at
+
+      field :relation
+    end
+  end
+
+  config.model FileType do
+    list do
+      field :id
+      field :name
+      field :editor_mode
+      field :valid?, :boolean
+      field :updated_at
+      field :created_at
+
+      field :file_extension
+      field :exercise_files
+    end
+  end
+
+  config.model Group do
+    list do
+      field :id
+      field :name
+      field :description
+      field :valid?, :boolean
+      field :updated_at
+      field :created_at
+
+      field :group_memberships_as_group
+      field :users
+      field :members
+      field :exercises
+    end
+  end
+
+  config.model GroupMembership do
+    list do
+      field :id
+      field :member
+      field :group
+      field :valid?, :boolean
+      field :updated_at
+      field :created_at
+
+      field :group_name
+      field :membership_type
     end
   end
 
