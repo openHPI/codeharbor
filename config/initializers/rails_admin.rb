@@ -258,6 +258,180 @@ RailsAdmin.config do |config|
     end
   end
 
+  config.model ImportFileCache do
+    list do
+      field :id
+      field :user
+      field :data
+      field :valid?, :boolean
+      field :updated_at
+      field :created_at
+
+      field :zip_file
+    end
+  end
+
+  config.model Label do
+    list do
+      field :id
+      field :name
+      field :color
+      field :valid?, :boolean
+      field :updated_at
+      field :created_at
+
+      field :exercise_labels
+      field :exercises
+    end
+  end
+
+  config.model License do
+    list do
+      field :id
+      field :name
+      field :link
+      field :valid?, :boolean
+      field :updated_at
+      field :created_at
+    end
+  end
+
+  config.model Message do
+    list do
+      field :id
+      field :text
+      field :sender
+      field :recipient
+      field :valid?, :boolean
+      field :created_at
+
+      field :param_type
+      field :param_id
+      field :sender_status
+      field :recipient_status
+      field :updated_at
+    end
+  end
+
+  config.model Rating do
+    list do
+      field :id
+      field :rating
+      field :exercise
+      field :user
+      field :valid?, :boolean
+      field :created_at
+
+      field :updated_at
+    end
+  end
+
+  config.model Relation do
+    list do
+      field :id
+      field :name
+      field :exercise_relations
+      field :valid?, :boolean
+      field :created_at
+      field :updated_at
+    end
+  end
+
+  config.model Report do
+    list do
+      field :id
+      field :exercise
+      field :user
+      field :text
+      field :valid?, :boolean
+      field :created_at
+
+      field :updated_at
+    end
+  end
+
+  config.model Test do
+    list do
+      field :id
+      field :feedback_message
+      field :testing_framework
+      field :exercise
+      field :valid?, :boolean
+      field :created_at
+
+      field :score
+      field :exercise_file
+      field :updated_at
+    end
+  end
+
+  config.model TestingFramework do
+    list do
+      field :id
+      field :name
+      field :version
+      field :tests
+      field :valid?, :boolean
+      field :created_at
+
+      field :updated_at
+    end
+  end
+
+  config.model User do
+    list do
+      field :id
+      field :first_name
+      field :last_name
+      field :email
+      field :valid?, :boolean
+      field :created_at
+
+      field :role
+      field :deleted, :boolean
+      field :avatar
+      field :username
+      field :description
+      field :updated_at
+
+      field :email_confirmed
+      field :confirm_token
+      field :reset_password_token
+      field :reset_password_sent_at
+      field :group_memberships_as_member
+      field :groups
+
+      field :collection_users
+      field :collections
+      field :account_link_users
+      field :shared_account_links
+      field :reports
+      field :account_links
+
+      field :password_digest
+      field :exercises
+      field :cart
+      field :exercise_authors
+      field :authored_exercises
+      field :sent_messages
+
+      field :received_messages
+    end
+  end
+
+  # config.model UserGroup do
+  #   list do
+  #     field :id
+  #     field :is_admin
+  #     field :is_active
+  #     field :user
+  #     field :valid?, :boolean
+  #     field :created_at
+
+  #     field :updated_at
+  #   end
+  # end
+
   config.actions do
     dashboard                     # mandatory
     index                         # mandatory
