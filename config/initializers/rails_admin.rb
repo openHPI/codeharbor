@@ -419,19 +419,6 @@ RailsAdmin.config do |config|
     end
   end
 
-  # config.model UserGroup do
-  #   list do
-  #     field :id
-  #     field :is_admin
-  #     field :is_active
-  #     field :user
-  #     field :valid?, :boolean
-  #     field :created_at
-
-  #     field :updated_at
-  #   end
-  # end
-
   config.actions do
     dashboard                     # mandatory
     index                         # mandatory
