@@ -46,6 +46,7 @@ en:
       remove_all_fail: 'You cannot remove all exercises'
       zip_filename: 'cart_exercises_%{date}.zip'
       temporary_disabled: Temporary disabled
+      download_no_exercises: Download not possible without exercises
 
     collections:
       authorization: "You are not authorized to for this action."
@@ -64,6 +65,7 @@ en:
         notice: "You can now collaborate to collection."
         alert: "Something went wrong."
       temporary_disabled: Temporary disabled
+      download_no_exercises: Download not possible without exercises
       leave:
         confirm_leave: You successfully left the collection.
         confirm_destroy: The collection has successfully been deleted.
