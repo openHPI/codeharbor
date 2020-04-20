@@ -99,7 +99,7 @@ GEM
     builder (3.2.4)
     bunny (2.14.4)
       amq-protocol (~> 2.3, >= 2.3.0)
-    byebug (11.1.1)
+    byebug (11.1.2)
     cancancan (3.1.0)
     climate_control (0.2.0)
     codeclimate-test-reporter (1.0.9)
