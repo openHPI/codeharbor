@@ -85,7 +85,7 @@ group :development, :test do
   gem 'rspec-collection_matchers', '~> 1.2.0'
   gem 'rspec-rails', '4.0.1'
   gem 'rubocop', '~> 0.81.0'
-  gem 'rubocop-performance', '~> 1.5.2'
+  gem 'rubocop-performance', '~> 1.6.0'
   gem 'rubocop-rails', '~> 2.5.2'
   gem 'rubocop-rspec', '~> 1.39.0'
 end
