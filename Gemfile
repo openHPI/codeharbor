@@ -67,7 +67,7 @@ gem 'nested_form_fields', '>= 0.8.2'
 gem 'nokogiri'
 gem 'proforma', git: 'https://github.com/openHPI/proforma.git', tag: 'v0.4'
 gem 'rails_admin', '~> 2.0'
-gem 'select2-rails', '~> 4.0', '>= 4.0.3'
+gem 'select2-rails', '~> 4.0'
 gem 'sprockets', '~> 3.7.2'
 
 # Error Tracing

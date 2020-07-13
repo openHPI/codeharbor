@@ -396,8 +396,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    select2-rails (4.0.3)
-      thor (~> 0.14)
+    select2-rails (4.0.13)
     sentry-raven (3.0.0)
       faraday (>= 1.0)
     shellany (0.0.1)
@@ -432,7 +431,7 @@ GEM
     therubyracer (0.12.3)
       libv8 (~> 3.16.14.15)
       ref
-    thor (0.20.3)
+    thor (1.0.1)
     thread_safe (0.3.6)
     tilt (2.0.10)
     turbolinks (5.2.1)
@@ -508,7 +507,7 @@ DEPENDENCIES
   rubocop-rspec (~> 1.41.0)
   rubyzip
   sass-rails (>= 6.0.0)
-  select2-rails (~> 4.0, >= 4.0.3)
+  select2-rails (~> 4.0)
   sentry-raven
   shoulda-matchers
   simple_form (>= 5.0.1)
