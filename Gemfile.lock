@@ -254,7 +254,7 @@ GEM
     multipart-post (2.1.1)
     nenv (0.3.0)
     nested_form (0.3.2)
-    nested_form_fields (0.8.2)
+    nested_form_fields (0.8.3)
       coffee-rails (>= 3.2.1)
       jquery-rails
       rails (>= 3.2.0)
@@ -451,11 +451,11 @@ GEM
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    websocket-driver (0.7.2)
+    websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     will_paginate (3.3.0)
-    zeitwerk (2.3.1)
+    zeitwerk (2.4.0)
 
 PLATFORMS
   ruby
