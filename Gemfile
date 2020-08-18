@@ -15,7 +15,7 @@ gem 'i18n'
 # Use slim format
 gem 'slim-rails', '>= 3.2.0'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.0.2'
+gem 'rails', '~> 6.0.3'
 # Use postgres as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use SCSS for stylesheets
@@ -42,7 +42,7 @@ gem 'jbuilder', '~> 2.10'
 # gem 'sdoc', '~> 1.0', group: :doc
 
 # Use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.13'
+gem 'bcrypt', '~> 3.1.15'
 
 # pagination
 gem 'will_paginate'
@@ -67,7 +67,7 @@ gem 'nested_form_fields', '>= 0.8.2'
 gem 'nokogiri'
 gem 'proforma', git: 'https://github.com/openHPI/proforma.git', tag: 'v0.4'
 gem 'rails_admin', '~> 2.0'
-gem 'select2-rails', '~> 4.0', '>= 4.0.3'
+gem 'select2-rails', '~> 4.0'
 gem 'sprockets', '~> 3.7.2'
 
 # Error Tracing
@@ -79,15 +79,15 @@ gem 'sentry-raven'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-  gem 'factory_bot_rails', '~> 5.1.1'
+  gem 'factory_bot_rails', '~> 5.2.0'
   gem 'pry-byebug'
   gem 'rails-controller-testing', '>= 1.0.4'
   gem 'rspec-collection_matchers', '~> 1.2.0'
-  gem 'rspec-rails', '4.0.0'
+  gem 'rspec-rails', '4.0.1'
   gem 'rubocop', '~> 0.81.0'
-  gem 'rubocop-performance', '~> 1.5.2'
+  gem 'rubocop-performance', '~> 1.6.1'
   gem 'rubocop-rails', '~> 2.5.2'
-  gem 'rubocop-rspec', '~> 1.38.1'
+  gem 'rubocop-rspec', '~> 1.41.0'
 end
 
 group :development do
