@@ -1,5 +1,5 @@
 class FixExerciseFileTestRelationship < ActiveRecord::Migration[6.0]
-  def change
+  def up
     add_reference :exercise_files, :test, index: true
     remove_index :tests, name: :index_tests_on_exercise_file_id, column: :exercise_file_id #TODO TEMP
 
@@ -24,5 +24,16 @@ class FixExerciseFileTestRelationship < ActiveRecord::Migration[6.0]
     end
 
     remove_column :tests, :exercise_file_id
+  end
+
+  def down
+    add_reference :tests, :exercise_file, index: true, foreign_key: true
+
+    exercise_files = ExerciseFile.all.reject { |exercise_file| exercise_file.test_id.nil? }
+    exercise_files.each do |exercise_file|
+      Test.find(exercise_file.test_id).update(exercise_file_id: exercise_file.id)
+    end
+
+    remove_reference :exercise_files, :test, index: true
   end
 end

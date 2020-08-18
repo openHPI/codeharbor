@@ -61,12 +61,5 @@ RSpec.describe 'Collections', type: :request do
         expect(response).to have_http_status(:found)
       end
     end
-
-    describe 'DELETE /collection/:id' do
-      it 'has http 200' do
-        delete collection_path(collection)
-        expect(response).to have_http_status(:found)
-      end
-    end
   end
 end

@@ -42,11 +42,6 @@ class CollectionsController < ApplicationController
     end
   end
 
-  def destroy
-    @collection.destroy
-    redirect_to collections_url, notice: t('controllers.collections.destroyed')
-  end
-
   def remove_exercise
     if @collection.remove_exercise(params[:exercise])
       redirect_to @collection, notice: t('controllers.collections.remove_exercise_success')
@@ -104,6 +99,16 @@ class CollectionsController < ApplicationController
       redirect_to @collection, notice: t('controllers.collections.save_shared.notice')
     else
       redirect_to users_messages_path, alert: t('controllers.collections.save_shared.alert')
+    end
+  end
+
+  def leave
+    if @collection.users.count == 1
+      @collection.destroy
+      redirect_to collections_path, notice: t('controllers.collection.leave.confirm_destroy')
+    else
+      @collection.users.delete(current_user)
+      redirect_to collections_path, notice: t('controllers.collection.leave.confirm_leave')
     end
   end
 
