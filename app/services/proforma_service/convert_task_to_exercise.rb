@@ -50,7 +50,7 @@ module ProformaService
         full_file_name: task_file.filename,
         read_only: task_file.usage_by_lms.in?(%w[display download]),
         hidden: task_file.visible == 'no',
-        role: task_file.internal_description
+        role: role(task_file)
       }.tap do |params|
         if task_file.binary
           params[:attachment] = file_base64(task_file)
@@ -62,6 +62,10 @@ module ProformaService
       end)
     end
 
+    def role(task_file)
+      model_solution_files.include?(task_file) ? 'reference_implementation' : task_file.internal_description
+    end
+
     def file_base64(file)
       raise Proforma::MimetypeError, I18n.t('exercises.import_exercise.mimetype_error', filename: file.filename) unless file.mimetype
 
@@ -69,16 +73,23 @@ module ProformaService
     end
 
     def tests
-      @task.tests.map do |test_object|
+      @task.tests.select { |test_object| test_object.files.count == 1 }.map do |test_object|
         Test.new(
-          feedback_message: test_object.meta_data['feedback-message'],
-          testing_framework: TestingFramework.where(
-            name: test_object.meta_data['testing-framework'],
-            version: test_object.meta_data['testing-framework-version']
-          ).first_or_initialize,
           exercise_file: test_file(test_object)
-        )
+        ).tap do |test|
+          if test_object.meta_data
+            test.feedback_message = test_object.meta_data['feedback-message']
+            test.testing_framework = testing_framework(test_object)
+          end
+        end
       end
+    end
+
+    def testing_framework(test_object)
+      TestingFramework.where(
+        name: test_object.meta_data['testing-framework'],
+        version: test_object.meta_data['testing-framework-version']
+      ).first_or_initialize
     end
 
     def test_file(test_object)
@@ -91,6 +102,10 @@ module ProformaService
       return @exercise.execution_environment if proglang_name.nil? || proglang_version.nil?
 
       ExecutionEnvironment.where(language: proglang_name, version: proglang_version).first_or_initialize
+    end
+
+    def model_solution_files
+      @task.model_solutions.map(&:files).filter(&:present?).flatten
     end
   end
 end

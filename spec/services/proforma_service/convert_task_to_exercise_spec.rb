@@ -166,8 +166,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
           used_by_grader: 'used_by_grader',
           visible: 'yes',
           usage_by_lms: 'display',
-          binary: false,
-          internal_description: 'reference_implementation'
+          binary: false
         )
       end
 
@@ -194,8 +193,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
             used_by_grader: 'used_by_grader',
             visible: 'yes',
             usage_by_lms: 'display',
-            binary: false,
-            internal_description: 'reference_implementation'
+            binary: false
           )
         end
 
@@ -259,6 +257,73 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
             purpose: 'test'
           )
         )
+      end
+
+      context 'when test has no meta_data' do
+        let(:test) do
+          Proforma::Test.new(
+            id: 'test-id',
+            title: 'title',
+            description: 'description',
+            internal_description: 'internal_description',
+            test_type: 'test_type',
+            files: test_files
+          )
+        end
+
+        it 'creates an exercise with a test' do
+          expect(convert_to_exercise_service.tests).to have(1).item
+        end
+
+        it 'creates an exercise with a test with correct attributes' do
+          expect(convert_to_exercise_service.tests.first).to have_attributes(
+            exercise_file: have_attributes(
+              content: 'testfile-content',
+              name: 'testfile',
+              role: 'teacher_defined_test',
+              hidden: true,
+              read_only: true,
+              file_type: be_a(FileType).and(have_attributes(file_extension: '.txt')),
+              purpose: 'test'
+            )
+          )
+        end
+      end
+
+      context 'when test has no files' do
+        let(:test_files) { [test_file, test_file2] }
+        let(:test_file2) do
+          Proforma::TaskFile.new(
+            id: 'test_file2_id',
+            content: 'testfile2-content',
+            filename: 'testfile2.txt',
+            used_by_grader: 'yes',
+            visible: 'no',
+            usage_by_lms: 'display',
+            binary: false,
+            internal_description: 'teacher_defined_test'
+          )
+        end
+
+        it 'creates an exercise without a test' do
+          expect(convert_to_exercise_service.tests).to have(0).item
+        end
+
+        it 'creates an exercise with two exercise_files' do
+          expect(convert_to_exercise_service.exercise_files).to have(2).item
+        end
+      end
+
+      context 'when test has multiple files' do
+        let(:test_files) { [] }
+
+        it 'creates an exercise without a test' do
+          expect(convert_to_exercise_service.tests).to have(0).item
+        end
+
+        it 'creates an exercise without exercise_files' do
+          expect(convert_to_exercise_service.exercise_files).to have(0).item
+        end
       end
 
       context 'when task has multiple tests' do
