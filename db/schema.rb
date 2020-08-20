@@ -82,8 +82,6 @@ ActiveRecord::Schema.define(version: 2020_04_07_150946) do
     t.integer "exercise_id"
     t.string "language", default: "EN"
     t.boolean "primary"
-    t.datetime "created_at", precision: 6
-    t.datetime "updated_at", precision: 6
     t.index ["exercise_id"], name: "index_descriptions_on_exercise_id"
   end
 
