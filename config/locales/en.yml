@@ -534,6 +534,7 @@ en:
         regular_file: Regular File
         reference_implementation: Reference Implementation
         teacher_defined_test: Teacher-defined Test
+        none: None
     tests:
       label: "Tests"
       content: "Content"
