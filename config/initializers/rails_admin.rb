@@ -30,393 +30,116 @@ RailsAdmin.config do |config|
   ## To disable Gravatar integration in Navigation Bar set to false
   # config.show_gravatar = true
 
-  config.model AccountLink do
-    list do
-      field :id
-      field :user
-      field :name
-      field :valid?, :boolean
-      field :created_at
-      field :updated_at
+  def get_default_columns(model)
+    RailsAdmin::Config::Fields.factory(model).map { |i| {i.name.to_sym => i.class} }
+  end
 
-      field :push_url
-      field :check_uuid_url
-      field :account_link_users
-      field :shared_users
-      field :api_key
+  def add_valid_column(model)
+    columns = get_default_columns(model)
+    columns.insert(1, {valid?: RailsAdmin::Config::Fields::Types::Boolean})
+
+    list do
+      columns.each do |hash|
+        key = hash.keys.first
+        field(key, hash[key].to_s.demodulize.underscore)
+      end
     end
+  end
+
+  config.model AccountLink do
+    add_valid_column(self)
   end
 
   config.model AccountLinkUser do
-    list do
-      field :id
-      field :user
-      field :account_link
-      field :valid?, :boolean
-    end
+    add_valid_column(self)
   end
 
   config.model Cart do
-    list do
-      field :id
-      field :user
-      field :exercises
-      field :valid?, :boolean
-      field :created_at
-      field :updated_at
-
-      field :cart_exercises
-    end
+    add_valid_column(self)
   end
 
   config.model Collection do
-    list do
-      field :id
-      field :title
-      field :users
-      field :valid?, :boolean
-      field :created_at
-      field :updated_at
-
-      field :collection_users
-      field :exercises
-      field :collection_exercises
-    end
+    add_valid_column(self)
   end
 
   config.model Comment do
-    list do
-      field :id
-      field :text
-      field :exercise
-      field :valid?, :boolean
-      field :created_at
-      field :updated_at
-
-      field :user
-    end
+    add_valid_column(self)
   end
 
   config.model Description do
-    list do
-      field :id
-      field :text
-      field :exercise
-      field :valid?, :boolean
-      field :created_at
-      field :updated_at
-
-      field :language
-      field :primary?
-    end
+    add_valid_column(self)
   end
 
   config.model ExecutionEnvironment do
-    list do
-      field :id
-      field :language
-      field :version
-      field :valid?, :boolean
-      field :created_at
-      field :updated_at
-    end
+    add_valid_column(self)
   end
 
   config.model Exercise do
-    list do
-      field :id
-      field :title
-      field :instruction
-      field :private?, :boolean
-      field :valid?, :boolean
-      field :created_at
-
-      field :deleted, :boolean
-      field :downloads
-      field :user
-      field :descriptions
-      field :execution_environment
-      field :updated_at
-
-      field :exercise_files
-      field :tests
-      field :uuid
-      field :predecessor
-      field :successor
-      field :license
-
-      field :groups
-      field :group_memberships_as_member
-      field :labels
-      field :exercise_labels
-      field :comments
-      field :ratings
-
-      field :authors
-      field :exercise_authors
-      field :collections
-      field :collection_exercises
-      field :carts
-      field :cart_exercises
-
-      field :reports
-      field :maxrating
-      field :origin_relations
-      field :clone_relations
-    end
+    add_valid_column(self)
   end
 
   config.model ExerciseAuthor do
-    list do
-      field :id
-      field :exercise
-      field :user
-      field :valid?, :boolean
-      field :created_at
-      field :updated_at
-    end
+    add_valid_column(self)
   end
 
   config.model ExerciseFile do
-    list do
-      field :id
-      field :content
-      field :path
-      field :name
-      field :valid?, :boolean
-      field :created_at
-
-      field :solution, :boolean
-      field :visibility, :boolean
-      field :hidden, :boolean
-      field :exercise
-      field :role
-      field :updated_at
-
-      field :read_only, :boolean
-      field :file_type
-      field :attachment
-      field :exercise_test
-      field :purpose
-    end
+    add_valid_column(self)
   end
 
   config.model ExerciseRelation do
-    list do
-      field :id
-      field :origin
-      field :clone
-      field :valid?, :boolean
-      field :updated_at
-      field :created_at
-
-      field :relation
-    end
+    add_valid_column(self)
   end
 
   config.model FileType do
-    list do
-      field :id
-      field :name
-      field :editor_mode
-      field :valid?, :boolean
-      field :updated_at
-      field :created_at
-
-      field :file_extension
-      field :exercise_files
-    end
+    add_valid_column(self)
   end
 
   config.model Group do
-    list do
-      field :id
-      field :name
-      field :description
-      field :valid?, :boolean
-      field :updated_at
-      field :created_at
-
-      field :group_memberships_as_group
-      field :users
-      field :members
-      field :exercises
-    end
+    add_valid_column(self)
   end
 
   config.model GroupMembership do
-    list do
-      field :id
-      field :member
-      field :group
-      field :valid?, :boolean
-      field :updated_at
-      field :created_at
-
-      field :group_name
-      field :membership_type
-    end
+    add_valid_column(self)
   end
 
   config.model ImportFileCache do
-    list do
-      field :id
-      field :user
-      field :data
-      field :valid?, :boolean
-      field :updated_at
-      field :created_at
-
-      field :zip_file
-    end
+    add_valid_column(self)
   end
 
   config.model Label do
-    list do
-      field :id
-      field :name
-      field :color
-      field :valid?, :boolean
-      field :updated_at
-      field :created_at
-
-      field :exercise_labels
-      field :exercises
-    end
+    add_valid_column(self)
   end
 
   config.model License do
-    list do
-      field :id
-      field :name
-      field :link
-      field :valid?, :boolean
-      field :updated_at
-      field :created_at
-    end
+    add_valid_column(self)
   end
 
   config.model Message do
-    list do
-      field :id
-      field :text
-      field :sender
-      field :recipient
-      field :valid?, :boolean
-      field :created_at
-
-      field :param_type
-      field :param_id
-      field :sender_status
-      field :recipient_status
-      field :updated_at
-    end
+    add_valid_column(self)
   end
 
   config.model Rating do
-    list do
-      field :id
-      field :rating
-      field :exercise
-      field :user
-      field :valid?, :boolean
-      field :created_at
-
-      field :updated_at
-    end
+    add_valid_column(self)
   end
 
   config.model Relation do
-    list do
-      field :id
-      field :name
-      field :exercise_relations
-      field :valid?, :boolean
-      field :created_at
-      field :updated_at
-    end
+    add_valid_column(self)
   end
 
   config.model Report do
-    list do
-      field :id
-      field :exercise
-      field :user
-      field :text
-      field :valid?, :boolean
-      field :created_at
-
-      field :updated_at
-    end
+    add_valid_column(self)
   end
 
   config.model Test do
-    list do
-      field :id
-      field :feedback_message
-      field :testing_framework
-      field :exercise
-      field :valid?, :boolean
-      field :created_at
-
-      field :score
-      field :exercise_file
-      field :updated_at
-    end
+    add_valid_column(self)
   end
 
   config.model TestingFramework do
-    list do
-      field :id
-      field :name
-      field :version
-      field :tests
-      field :valid?, :boolean
-      field :created_at
-
-      field :updated_at
-    end
+    add_valid_column(self)
   end
 
   config.model User do
-    list do
-      field :id
-      field :first_name
-      field :last_name
-      field :email
-      field :valid?, :boolean
-      field :created_at
-
-      field :role
-      field :deleted, :boolean
-      field :avatar
-      field :username
-      field :description
-      field :updated_at
-
-      field :email_confirmed
-      field :confirm_token
-      field :reset_password_token
-      field :reset_password_sent_at
-      field :group_memberships_as_member
-      field :groups
-
-      field :collection_users
-      field :collections
-      field :account_link_users
-      field :shared_account_links
-      field :reports
-      field :account_links
-
-      field :password_digest
-      field :exercises
-      field :cart
-      field :exercise_authors
-      field :authored_exercises
-      field :sent_messages
-
-      field :received_messages
-    end
+    add_valid_column(self)
   end
 
   config.actions do
