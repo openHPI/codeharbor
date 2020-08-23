@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_07_150946) do
+ActiveRecord::Schema.define(version: 2020_04_04_103206) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -297,6 +297,17 @@ ActiveRecord::Schema.define(version: 2020_04_07_150946) do
     t.float "score"
     t.index ["exercise_id"], name: "index_tests_on_exercise_id"
     t.index ["testing_framework_id"], name: "index_tests_on_testing_framework_id"
+  end
+
+  create_table "user_groups", force: :cascade do |t|
+    t.boolean "is_admin", default: false
+    t.boolean "is_active", default: false
+    t.integer "user_id"
+    t.integer "group_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_user_groups_on_group_id"
+    t.index ["user_id"], name: "index_user_groups_on_user_id"
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
