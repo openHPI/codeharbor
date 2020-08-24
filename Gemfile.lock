@@ -397,7 +397,7 @@ GEM
       sprockets-rails
       tilt
     select2-rails (4.0.13)
-    sentry-raven (3.0.0)
+    sentry-raven (3.0.2)
       faraday (>= 1.0)
     shellany (0.0.1)
     shoulda-matchers (4.3.0)
