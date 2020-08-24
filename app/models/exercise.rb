@@ -199,7 +199,6 @@ class Exercise < ApplicationRecord
     collections.count.to_s
   end
 
-  # rubocop:disable Metrics/AbcSize
   def add_attributes(params, user)
     add_relation(params[:exercise_relation]) if params[:exercise_relation]
     add_license(params) if params[:license_id]
@@ -209,7 +208,6 @@ class Exercise < ApplicationRecord
     add_files(params[:exercise_files_attributes])
     add_descriptions(params[:descriptions_attributes])
   end
-  # rubocop:enable Metrics/AbcSize
 
   def soft_delete
     delete_dependencies
@@ -377,6 +375,7 @@ class Exercise < ApplicationRecord
   end
   # rubocop:enable Metrics/AbcSize
 
+  # rubocop:disable Metrics/PerceivedComplexity
   def add_files(file_array)
     file_array&.each do |_key, params|
       destroy_file = params[:_destroy]
@@ -394,6 +393,7 @@ class Exercise < ApplicationRecord
       end
     end
   end
+  # rubocop:enable Metrics/PerceivedComplexity
 
   def attachment_from_params(file, attachment)
     file.attachment = attachment
