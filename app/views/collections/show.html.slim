@@ -65,12 +65,12 @@ br
           = t('shared.export') + ' '
           span.caret
         ul.scrollable.dropdown-menu[role="menu"]
-
-          - if @collection.exercises.empty?
-              a.dropdown-item.disabled-cursor title=t('controllers.collections.download_no_exercises')
-                = t('shared.download_zip')
-          - else
-            = link_to t('shared.download_zip'), download_all_collection_path(@collection), 'data-turbolinks': false
+          li
+            - if @collection.exercises.empty?
+                a.dropdown-item.disabled-cursor title=t('controllers.collections.download_no_exercises')
+                  = t('shared.download_zip')
+            - else
+              = link_to t('shared.download_zip'), download_all_collection_path(@collection), 'data-turbolinks': false
 
 
           li.divider
