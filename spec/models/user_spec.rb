@@ -319,8 +319,6 @@ RSpec.describe User, type: :model do
     let!(:group4) { FactoryBot.create(:group, users: [create(:user), user], name: 'A') }
 
     before do
-      # UserGroup.set_is_admin(group1.id, user.id, true)
-      # UserGroup.set_is_admin(group2.id, user.id, true)
       group1.make_admin(user)
       group2.make_admin(user)
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_01_101107) do
+ActiveRecord::Schema.define(version: 2020_04_07_150946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -297,17 +297,6 @@ ActiveRecord::Schema.define(version: 2020_03_01_101107) do
     t.index ["testing_framework_id"], name: "index_tests_on_testing_framework_id"
   end
 
-  create_table "user_groups", id: :serial, force: :cascade do |t|
-    t.boolean "is_admin", default: false
-    t.boolean "is_active", default: false
-    t.integer "user_id"
-    t.integer "group_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["group_id"], name: "index_user_groups_on_group_id"
-    t.index ["user_id"], name: "index_user_groups_on_user_id"
-  end
-
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -347,6 +336,4 @@ ActiveRecord::Schema.define(version: 2020_03_01_101107) do
   add_foreign_key "reports", "users"
   add_foreign_key "tests", "exercises"
   add_foreign_key "tests", "testing_frameworks"
-  add_foreign_key "user_groups", "groups", on_delete: :cascade
-  add_foreign_key "user_groups", "users"
 end
