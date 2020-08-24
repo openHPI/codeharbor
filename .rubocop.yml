@@ -20,6 +20,7 @@ Metrics/BlockLength:
     - config/routes.rb
     - Guardfile
     - config/environments/*
+    - config/initializers/rails_admin.rb
 
 Metrics/ClassLength:
   Max: 150

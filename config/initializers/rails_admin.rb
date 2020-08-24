@@ -30,6 +30,118 @@ RailsAdmin.config do |config|
   ## To disable Gravatar integration in Navigation Bar set to false
   # config.show_gravatar = true
 
+  def get_default_columns(model)
+    RailsAdmin::Config::Fields.factory(model).map { |i| {i.name.to_sym => i.class} }
+  end
+
+  def add_valid_column(model)
+    columns = get_default_columns(model)
+    columns.insert(1, {valid?: RailsAdmin::Config::Fields::Types::Boolean})
+
+    list do
+      columns.each do |hash|
+        key = hash.keys.first
+        field(key, hash[key].to_s.demodulize.underscore)
+      end
+    end
+  end
+
+  config.model AccountLink do
+    add_valid_column(self)
+  end
+
+  config.model AccountLinkUser do
+    add_valid_column(self)
+  end
+
+  config.model Cart do
+    add_valid_column(self)
+  end
+
+  config.model Collection do
+    add_valid_column(self)
+  end
+
+  config.model Comment do
+    add_valid_column(self)
+  end
+
+  config.model Description do
+    add_valid_column(self)
+  end
+
+  config.model ExecutionEnvironment do
+    add_valid_column(self)
+  end
+
+  config.model Exercise do
+    add_valid_column(self)
+  end
+
+  config.model ExerciseAuthor do
+    add_valid_column(self)
+  end
+
+  config.model ExerciseFile do
+    add_valid_column(self)
+  end
+
+  config.model ExerciseRelation do
+    add_valid_column(self)
+  end
+
+  config.model FileType do
+    add_valid_column(self)
+  end
+
+  config.model Group do
+    add_valid_column(self)
+  end
+
+  config.model GroupMembership do
+    add_valid_column(self)
+  end
+
+  config.model ImportFileCache do
+    add_valid_column(self)
+  end
+
+  config.model Label do
+    add_valid_column(self)
+  end
+
+  config.model License do
+    add_valid_column(self)
+  end
+
+  config.model Message do
+    add_valid_column(self)
+  end
+
+  config.model Rating do
+    add_valid_column(self)
+  end
+
+  config.model Relation do
+    add_valid_column(self)
+  end
+
+  config.model Report do
+    add_valid_column(self)
+  end
+
+  config.model Test do
+    add_valid_column(self)
+  end
+
+  config.model TestingFramework do
+    add_valid_column(self)
+  end
+
+  config.model User do
+    add_valid_column(self)
+  end
+
   config.actions do
     dashboard                     # mandatory
     index                         # mandatory
