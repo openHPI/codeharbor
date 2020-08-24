@@ -48,7 +48,7 @@ module ProformaService
     def exercise_file_from_task_file(task_file)
       ExerciseFile.new({
         full_file_name: task_file.filename,
-        read_only: task_file.usage_by_lms.in?(%w[display download]),
+        read_only: read_only(task_file),
         hidden: task_file.visible == 'no',
         role: role(task_file)
       }.tap do |params|
@@ -60,6 +60,10 @@ module ProformaService
           params[:content] = task_file.content
         end
       end)
+    end
+
+    def read_only(task_file)
+      task_file.usage_by_lms.in?(%w[display download])
     end
 
     def role(task_file)

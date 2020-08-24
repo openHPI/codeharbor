@@ -16,7 +16,6 @@ class ExercisesController < ApplicationController
     redirect_to root_path, alert: t('controllers.exercise.authorization')
   end
 
-  # rubocop:disable Metrics/AbcSize will be fixed with ransack
   def index
     page = params[:page]
     @exercises = Exercise.active
@@ -27,7 +26,6 @@ class ExercisesController < ApplicationController
     last_page = @exercises.total_pages
     @exercises = @exercises.page(last_page) if page.to_i > last_page
   end
-  # rubocop:enable Metrics/AbcSize
 
   def show
     @user_rating = @exercise.ratings&.find_by(user: current_user)&.rating
@@ -184,7 +182,6 @@ class ExercisesController < ApplicationController
     }, status: :ok
   end
 
-  # rubocop:disable Metrics/AbcSize
   def export_external_confirm
     push_type = params[:push_type]
 
@@ -206,7 +203,6 @@ class ExercisesController < ApplicationController
       }
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
   def download_exercise
     zip_file = ProformaService::ExportTask.call(exercise: @exercise)

@@ -4,6 +4,8 @@ Rails:
   Enabled: true
 
 AllCops:
+  NewCops: disable
+
   TargetRubyVersion: 2.6
   Exclude:
     - bin/*
@@ -59,4 +61,3 @@ Style/HashTransformKeys:
 
 Style/HashTransformValues:
   Enabled: true
-

@@ -10,7 +10,7 @@ module ExerciseService
     def execute
       response = connection.post do |req|
         req.headers['Content-Type'] = 'application/json'
-        req.headers['Authorization'] = 'Bearer ' + @account_link.api_key
+        req.headers['Authorization'] = authorization_header
         req.body = {uuid: @uuid}.to_json
       end
       response_hash = JSON.parse(response.body, symbolize_names: true).slice(:exercise_found, :update_right)
@@ -21,6 +21,10 @@ module ExerciseService
     end
 
     private
+
+    def authorization_header
+      'Bearer ' + @account_link.api_key
+    end
 
     def message(response_hash)
       if response_hash[:exercise_found]
