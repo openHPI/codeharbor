@@ -50,6 +50,13 @@ RSpec/ExampleLength:
 RSpec/NestedGroups:
   Max: 5
 
+RSpec/MultipleMemoizedHelpers:
+  Max: 14
+
+RSpec/EmptyExampleGroup:
+  Exclude:
+    - spec/models/file_type_spec.rb
+
 Style/Documentation:
   Enabled: false
 
