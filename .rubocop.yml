@@ -36,6 +36,10 @@ Layout/LineLength:
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
+Lint/MissingSuper:
+  Exclude:
+    - 'app/services/**/*'
+
 Lint/RaiseException:
   Enabled: true
 
