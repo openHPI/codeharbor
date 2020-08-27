@@ -23,7 +23,7 @@ module ExerciseService
     private
 
     def authorization_header
-      'Bearer ' + @account_link.api_key
+      "Bearer #{@account_link.api_key}"
     end
 
     def message(response_hash)

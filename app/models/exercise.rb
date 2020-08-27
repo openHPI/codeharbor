@@ -44,6 +44,7 @@ class Exercise < ApplicationRecord
   has_many :clone_relations, class_name: 'ExerciseRelation', foreign_key: 'clone_id', dependent: :destroy, inverse_of: :clone
 
   attr_reader :tag_tokens
+
   accepts_nested_attributes_for :descriptions, allow_destroy: true
   accepts_nested_attributes_for :exercise_files, allow_destroy: true
   accepts_nested_attributes_for :tests, allow_destroy: true
@@ -109,10 +110,11 @@ class Exercise < ApplicationRecord
   # rubocop:disable Metrics/AbcSize
   # rubocop:disable Metrics/MethodLength
   def self.search(search, settings, option, user_param)
-    if option == 'private'
+    case option
+    when 'private'
       priv = true
       user = nil
-    elsif option == 'public'
+    when 'public'
       priv = false
       user = nil
     else

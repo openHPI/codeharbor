@@ -4,7 +4,7 @@ Rails:
   Enabled: true
 
 AllCops:
-  NewCops: disable
+  NewCops: enable
 
   TargetRubyVersion: 2.6
   Exclude:
@@ -36,6 +36,10 @@ Layout/LineLength:
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
+Lint/MissingSuper:
+  Exclude:
+    - 'app/services/**/*'
+
 Lint/RaiseException:
   Enabled: true
 
@@ -59,12 +63,3 @@ RSpec/EmptyExampleGroup:
 
 Style/Documentation:
   Enabled: false
-
-Style/HashEachMethods:
-  Enabled: true
-
-Style/HashTransformKeys:
-  Enabled: true
-
-Style/HashTransformValues:
-  Enabled: true

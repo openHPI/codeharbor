@@ -23,7 +23,7 @@ module ExerciseService
       request.tap do |req|
         req.headers['Content-Type'] = 'application/zip'
         req.headers['Content-Length'] = body.length.to_s
-        req.headers['Authorization'] = 'Bearer ' + @account_link.api_key
+        req.headers['Authorization'] = "Bearer #{@account_link.api_key}"
         req.body = body
       end
     end
