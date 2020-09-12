@@ -398,15 +398,15 @@ class ExercisesController < ApplicationController
     AccountLink.find_by_api_key(api_key)&.user
   end
 
-  def handle_proforma_import(zip:, user:)
-    result = ProformaService::Import.call(zip: zip, user: user)
+  # def handle_proforma_import(zip:, user:)
+  #   result = ProformaService::Import.call(zip: zip, user: user)
 
-    return handle_proforma_multi_import(result) if result.is_a?(Array)
+  #   return handle_proforma_multi_import(result) if result.is_a?(Array)
 
-    redirect_to result, notice: t('controllers.exercise.import_proforma_xml.single_import_successful')
-  rescue Proforma::PreImportValidationError, Proforma::InvalidZip
-    redirect_to exercises_path, alert: t('controllers.exercise.import_proforma_xml.import_error')
-  end
+  #   redirect_to result, notice: t('controllers.exercise.import_proforma_xml.single_import_successful')
+  # rescue Proforma::PreImportValidationError, Proforma::InvalidZip
+  #   redirect_to exercises_path, alert: t('controllers.exercise.import_proforma_xml.import_error')
+  # end
 
   def handle_proforma_multi_import(result)
     if result.empty?
