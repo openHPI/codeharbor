@@ -77,7 +77,7 @@ module ProformaService
     end
 
     def tests
-      @task.tests.select { |test_object| test_object.files.count == 1 }.map do |test_object|
+      @task.tests.select { |test_object| test_object.files.count > 1 }.map do |test_object|
         Test.new(
           exercise_file: test_file(test_object)
         ).tap do |test|
@@ -97,7 +97,9 @@ module ProformaService
     end
 
     def test_file(test_object)
-      task_files.delete(test_object.files.first.id).tap { |file| file.purpose = 'test' }
+      files = test_object.files
+
+      # task_files.delete(test_object.files.first.id).tap { |file| file.purpose = 'test' }
     end
 
     def execution_environment
