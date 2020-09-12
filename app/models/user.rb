@@ -84,9 +84,7 @@ class User < ApplicationRecord
 
     groups.each do |group|
       if group.users.size > 1
-        if in_group?(group, as: 'admin')
-          return false if group.admins.size == 1
-        end
+        return false if in_group?(group, as: 'admin') && group.admins.size == 1
       else
         group.destroy
       end
