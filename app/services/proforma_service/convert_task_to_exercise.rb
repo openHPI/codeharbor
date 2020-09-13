@@ -77,7 +77,7 @@ module ProformaService
     end
 
     def tests
-      @task.tests.select { |test_object| test_object.files.count > 1 }.map do |test_object|
+      @task.tests.select { |test_object| test_object.files.count.positive? }.map do |test_object|
         Test.new(
           exercise_file: test_file(test_object)
         ).tap do |test|
@@ -97,9 +97,11 @@ module ProformaService
     end
 
     def test_file(test_object)
-      files = test_object.files
+      file = test_object.files.first
+      entry_point = test_object.configuration&.dig('entry-point')
+      file = test_object.files.select { |file| file.filename == entry_point }.first || file if entry_point.present?
 
-      # task_files.delete(test_object.files.first.id).tap { |file| file.purpose = 'test' }
+      task_files.delete(file.id).tap { |file| file.purpose = 'test' }
     end
 
     def execution_environment

@@ -204,6 +204,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
     end
 
     context 'when task has a test' do
+
       let(:tests) { [test] }
       let(:test) do
         Proforma::Test.new(
@@ -213,6 +214,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
           internal_description: 'internal_description',
           test_type: 'test_type',
           files: test_files,
+          configuration: configuration,
           meta_data: {
             'feedback-message' => 'feedback-message',
             'testing-framework' => 'testing-framework',
@@ -221,6 +223,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
         )
       end
 
+      let(:configuration) {}
       let(:test_files) { [test_file] }
       let(:test_file) do
         Proforma::TaskFile.new(
@@ -291,6 +294,18 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
       end
 
       context 'when test has no files' do
+        let(:test_files) { [] }
+
+        it 'creates an exercise without a test' do
+          expect(convert_to_exercise_service.tests).to have(0).item
+        end
+
+        # it 'creates an exercise with two exercise_files' do
+        #   expect(convert_to_exercise_service.exercise_files).to have(2).item
+        # end
+      end
+
+      context 'when test has multiple files' do
         let(:test_files) { [test_file, test_file2] }
         let(:test_file2) do
           Proforma::TaskFile.new(
@@ -305,24 +320,28 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
           )
         end
 
-        it 'creates an exercise without a test' do
-          expect(convert_to_exercise_service.tests).to have(0).item
+        it 'creates an exercise with a test' do
+          expect(convert_to_exercise_service.tests).to have(1).item
         end
 
-        it 'creates an exercise with two exercise_files' do
-          expect(convert_to_exercise_service.exercise_files).to have(2).item
-        end
-      end
-
-      context 'when test has multiple files' do
-        let(:test_files) { [] }
-
-        it 'creates an exercise without a test' do
-          expect(convert_to_exercise_service.tests).to have(0).item
+        it 'uses test_file as main-file for the test' do
+          expect(convert_to_exercise_service.tests.first).to have_attributes content: test_file.content
         end
 
-        it 'creates an exercise without exercise_files' do
-          expect(convert_to_exercise_service.exercise_files).to have(0).item
+        it 'creates an exercise_file for the remaining task_file (test_file2)' do
+          expect(convert_to_exercise_service.exercise_files.first).to have_attributes content: test_file2.content
+        end
+
+        context 'when test has unittest configuration' do
+          let(:configuration) { {'version' => '1.23', 'framework' => 'rspec', 'entry-point' => test_file2.filename} }
+
+          it 'uses test_file2 as main-file for the test' do
+            expect(convert_to_exercise_service.tests.first).to have_attributes content: test_file2.content
+          end
+
+          it 'creates an exercise_file for the remaining task_file (test_file)' do
+            expect(convert_to_exercise_service.exercise_files.first).to have_attributes content: test_file.content
+          end
         end
       end
 
