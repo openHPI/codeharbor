@@ -204,7 +204,6 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
     end
 
     context 'when task has a test' do
-
       let(:tests) { [test] }
       let(:test) do
         Proforma::Test.new(
@@ -262,6 +261,23 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
         )
       end
 
+      context 'when test has unittest configuration' do
+        let(:configuration) { {'version' => '1.23', 'framework' => 'rspec', 'entry-point' => entry_point} }
+        let(:entry_point) { test_file.filename }
+
+        it 'uses test_file as main-file for the test' do
+          expect(convert_to_exercise_service.tests.first).to have_attributes content: test_file.content
+        end
+
+        context 'when entry_point does not refer to included file' do
+          let(:entry_point) { 'something_else.rb' }
+
+          it 'ignores entry_point and uses test_file as main-file for the test' do
+            expect(convert_to_exercise_service.tests.first).to have_attributes content: test_file.content
+          end
+        end
+      end
+
       context 'when test has no meta_data' do
         let(:test) do
           Proforma::Test.new(
@@ -299,10 +315,6 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
         it 'creates an exercise without a test' do
           expect(convert_to_exercise_service.tests).to have(0).item
         end
-
-        # it 'creates an exercise with two exercise_files' do
-        #   expect(convert_to_exercise_service.exercise_files).to have(2).item
-        # end
       end
 
       context 'when test has multiple files' do

@@ -99,9 +99,9 @@ module ProformaService
     def test_file(test_object)
       file = test_object.files.first
       entry_point = test_object.configuration&.dig('entry-point')
-      file = test_object.files.select { |file| file.filename == entry_point }.first || file if entry_point.present?
+      file = test_object.files.select { |f| f.filename == entry_point }.first || file if entry_point.present?
 
-      task_files.delete(file.id).tap { |file| file.purpose = 'test' }
+      task_files.delete(file.id).tap { |f| f.purpose = 'test' }
     end
 
     def execution_environment
