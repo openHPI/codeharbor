@@ -101,7 +101,13 @@ module ProformaService
       entry_point = test_object.configuration&.dig('entry-point')
       file = test_object.files.select { |f| f.filename == entry_point }.first || file if entry_point.present?
 
+      hide_unused_test_files(file, test_object)
+
       task_files.delete(file.id).tap { |f| f.purpose = 'test' }
+    end
+
+    def hide_unused_test_files(file, test_object)
+      test_object.files.reject { |f| f == file }.each { |f| f.visible = 'no' }
     end
 
     def execution_environment

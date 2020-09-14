@@ -17,13 +17,7 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
     subject(:task) { convert_to_task.execute }
 
     let(:convert_to_task) { described_class.new(exercise: exercise) }
-    let(:exercise) do
-      create(:exercise,
-             instruction: 'instruction',
-             uuid: SecureRandom.uuid,
-             exercise_files: files,
-             tests: tests)
-    end
+    let(:exercise) { create(:exercise, instruction: 'instruction', uuid: SecureRandom.uuid, exercise_files: files, tests: tests) }
     let(:files) { [] }
     let(:tests) { [] }
 
@@ -155,11 +149,16 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
         expect(task.tests).to have(1).item
       end
 
-      it 'creates a test with one file' do
+      it 'creates a test with correct attributes and one file' do
         expect(task.tests.first).to have_attributes(
           id: test.id,
           title: file.name,
           files: have(1).item,
+          configuration: {
+            'entry-point' => file.full_file_name,
+            'framework' => test.testing_framework.name,
+            'version' => test.testing_framework.version
+          },
           meta_data: {
             'feedback-message' => test.feedback_message,
             'testing-framework' => test.testing_framework.name,

@@ -340,8 +340,16 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
           expect(convert_to_exercise_service.tests.first).to have_attributes content: test_file.content
         end
 
-        it 'creates an exercise_file for the remaining task_file (test_file2)' do
+        it 'creates an exercise_file for the remaining task_file (test_file2) and sets hidden' do
           expect(convert_to_exercise_service.exercise_files.first).to have_attributes content: test_file2.content
+        end
+
+        context 'when test_file is visible' do
+          before { test_file2.visible = 'yes' }
+
+          it 'creates a hidden exercise_file' do
+            expect(convert_to_exercise_service.exercise_files.first).to have_attributes hidden: true
+          end
         end
 
         context 'when test has unittest configuration' do

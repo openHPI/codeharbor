@@ -63,21 +63,35 @@ module ProformaService
 
     def tests
       @exercise.tests.map do |test|
+        file = test_file test.exercise_file
         Proforma::Test.new(
           id: test.id,
           title: test.exercise_file.name,
-          files: test_file(test.exercise_file),
-          meta_data: {
-            'feedback-message' => test.feedback_message,
-            'testing-framework' => test.testing_framework&.name,
-            'testing-framework-version' => test.testing_framework&.version
-          }.compact
+          files: [file],
+          configuration: test_configuration(test, file),
+          meta_data: test_meta_data(test)
         )
       end
     end
 
+    def test_configuration(test, file)
+      {
+        'entry-point' => file.filename,
+        'framework' => test.testing_framework&.name,
+        'version' => test.testing_framework&.version
+      }
+    end
+
+    def test_meta_data(test)
+      {
+        'feedback-message' => test.feedback_message,
+        'testing-framework' => test.testing_framework&.name,
+        'testing-framework-version' => test.testing_framework&.version
+      }.compact
+    end
+
     def test_file(file)
-      [Proforma::TaskFile.new(
+      Proforma::TaskFile.new(
         id: file.id,
         content: file.content,
         filename: file.full_file_name,
@@ -85,7 +99,7 @@ module ProformaService
         visible: file.hidden ? 'no' : 'yes',
         binary: false,
         internal_description: file.role || 'teacher_defined_test'
-      )]
+      )
     end
 
     def task_files
