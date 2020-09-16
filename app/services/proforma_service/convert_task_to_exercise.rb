@@ -77,7 +77,7 @@ module ProformaService
     end
 
     def tests
-      @task.tests.select { |test_object| test_object.files.count.positive? }.map do |test_object|
+      @task.tests.select { |proforma_test| proforma_test.files.count.positive? }.map do |test_object|
         Test.new(
           exercise_file: test_file(test_object)
         ).tap do |test|
