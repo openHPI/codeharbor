@@ -49,7 +49,7 @@ module ProformaService
       ExerciseFile.new({
         full_file_name: task_file.filename,
         read_only: read_only(task_file),
-        hidden: task_file.visible == 'no',
+        hidden: task_file.visible != 'yes',
         role: role(task_file)
       }.tap do |params|
         if task_file.binary

@@ -67,6 +67,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
     end
 
     context 'when task has a file' do
+
       let(:files) { [file] }
       let(:file) do
         Proforma::TaskFile.new(
@@ -74,7 +75,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
           content: content,
           filename: 'filename.txt',
           used_by_grader: 'used_by_grader',
-          visible: 'yes',
+          visible: visible,
           usage_by_lms: usage_by_lms,
           binary: binary,
           internal_description: 'internal_description',
@@ -85,6 +86,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
       let(:mimetype) { 'mimetype' }
       let(:binary) { false }
       let(:content) { 'content' }
+      let(:visible) { 'yes' }
 
       it 'creates an exercise with a file that has the correct attributes' do
         expect(convert_to_exercise_service.exercise_files.first).to have_attributes(
@@ -99,6 +101,22 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
 
       it 'creates a new Exercise on save' do
         expect { convert_to_exercise_service.save }.to change(Exercise, :count).by(1)
+      end
+
+      context 'when visible is no' do
+        let(:visible) { 'no' }
+
+        it 'creates an exercise with a hidden file' do
+          expect(convert_to_exercise_service.exercise_files.first).to have_attributes(hidden: true)
+        end
+      end
+
+      context 'when visible is delayed' do
+        let(:visible) { 'delayed' }
+
+        it 'creates an exercise with a hidden file' do
+          expect(convert_to_exercise_service.exercise_files.first).to have_attributes(hidden: true)
+        end
       end
 
       context 'when file is very large' do
