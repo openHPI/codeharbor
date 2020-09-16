@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/openHPI/proforma.git
-  revision: 6646887f5a6df9d2830b6fa2f71e603e4c7c6010
-  branch: bump_version_0_5
+  revision: b9e8769e797f501e19bbfc00ed38946efe6ecf82
+  tag: v0.5
   specs:
     proforma (0.5)
       activemodel (>= 5.2.3, < 6.1.0)
