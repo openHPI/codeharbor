@@ -125,7 +125,7 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
           filename: file.full_file_name,
           used_by_grader: false,
           usage_by_lms: 'display',
-          visible: 'delayed',
+          visible: 'yes',
           binary: false,
           internal_description: 'reference_implementation'
         )

@@ -67,7 +67,6 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
     end
 
     context 'when task has a file' do
-
       let(:files) { [file] }
       let(:file) do
         Proforma::TaskFile.new(

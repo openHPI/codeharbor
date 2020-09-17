@@ -52,7 +52,7 @@ module ProformaService
               filename: file.full_file_name,
               used_by_grader: false,
               usage_by_lms: 'display',
-              visible: 'delayed',
+              visible: file.hidden ? 'no' : 'yes',
               binary: false,
               internal_description: file.role
             )
