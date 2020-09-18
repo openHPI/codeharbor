@@ -257,7 +257,7 @@ GEM
       coffee-rails (>= 3.2.1)
       jquery-rails
       rails (>= 3.2.0)
-    newrelic_rpm (6.12.0.367)
+    newrelic_rpm (6.13.0)
     nio4r (2.5.3)
     nokogiri (1.10.10)
       mini_portile2 (~> 2.4.0)
