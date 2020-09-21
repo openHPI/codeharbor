@@ -31,7 +31,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
     let(:task) do
       Proforma::Task.new(
         title: 'title',
-        description: 'description',
+        description: description,
         internal_description: 'internal_description',
         proglang: {name: 'proglang-name', version: 'proglang-version'},
         uuid: 'uuid',
@@ -42,6 +42,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
         tests: tests
       )
     end
+    let(:description) { 'description' }
     let(:user) { build(:user) }
     let(:files) { [] }
     let(:tests) { [] }
@@ -51,7 +52,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
     it 'creates an exercise with the correct attributes' do
       expect(convert_to_exercise_service).to have_attributes(
         title: 'title',
-        descriptions: have(1).item.and(include(have_attributes(text: 'description',
+        descriptions: have(1).item.and(include(have_attributes(text: "description\n\n",
                                                                primary: true,
                                                                language: 'language'))),
         instruction: 'internal_description',
@@ -64,6 +65,26 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
         tests: be_empty,
         state_list: ['new']
       )
+    end
+
+    context 'when description contains html' do
+      let(:description) { '<p>description</p>' }
+
+      it 'creates an exercise with a correct description' do
+        expect(convert_to_exercise_service).to have_attributes(
+          descriptions: include(have_attributes(text: "description\n\n"))
+        )
+      end
+
+      context 'with a html entity' do
+        let(:description) { '<p>descr&uuml;ption</p>' }
+
+        it 'creates an exercise with a correct description' do
+          expect(convert_to_exercise_service).to have_attributes(
+            descriptions: include(have_attributes(text: "descrüption\n\n"))
+          )
+        end
+      end
     end
 
     context 'when task has a file' do
@@ -431,7 +452,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
         expect(exercise.reload).to have_attributes(
           id: exercise.id,
           title: task.title,
-          descriptions: include(have_attributes(primary: true, text: task.description)),
+          descriptions: include(have_attributes(primary: true, text: Kramdown::Document.new(task.description, html_to_native: true).to_kramdown)),
           instruction: task.internal_description,
           execution_environment: have_attributes(language: task.proglang[:name], version: task.proglang[:version]),
           uuid: exercise.uuid,
