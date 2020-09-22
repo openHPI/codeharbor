@@ -142,7 +142,7 @@ RSpec.describe ProformaService::ExportTask do
       end
 
       it 'adds correct visible attribute to the referenced file node' do
-        expect(xml.xpath('/task/files/file').attribute('visible').value).to eql 'delayed'
+        expect(xml.xpath('/task/files/file').attribute('visible').value).to eql 'yes'
       end
 
       it 'adds correct role to internal-description of the  referenced file node' do

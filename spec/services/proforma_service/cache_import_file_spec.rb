@@ -86,7 +86,7 @@ RSpec.describe ProformaService::CacheImportFile do
         expect { cache_import_file }.to change(ImportFileCache, :count).by(1)
       end
 
-      it 'returns a hash with data for three tasks' do
+      it 'returns a hash with data for 100 tasks' do
         expect(cache_import_file.values).to have(100).items
       end
     end

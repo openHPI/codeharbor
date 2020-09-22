@@ -49,7 +49,7 @@ module ProformaService
       ExerciseFile.new({
         full_file_name: task_file.filename,
         read_only: read_only(task_file),
-        hidden: task_file.visible == 'no',
+        hidden: task_file.visible != 'yes',
         role: role(task_file)
       }.tap do |params|
         if task_file.binary
@@ -77,7 +77,7 @@ module ProformaService
     end
 
     def tests
-      @task.tests.select { |test_object| test_object.files.count == 1 }.map do |test_object|
+      @task.tests.select { |proforma_test| proforma_test.files.count.positive? }.map do |test_object|
         Test.new(
           exercise_file: test_file(test_object)
         ).tap do |test|
@@ -97,7 +97,17 @@ module ProformaService
     end
 
     def test_file(test_object)
-      task_files.delete(test_object.files.first.id).tap { |file| file.purpose = 'test' }
+      file = test_object.files.first
+      entry_point = test_object.configuration&.dig('entry-point')
+      file = test_object.files.select { |f| f.filename == entry_point }.first || file if entry_point.present?
+
+      hide_unused_test_files(file, test_object)
+
+      task_files.delete(file.id).tap { |f| f.purpose = 'test' }
+    end
+
+    def hide_unused_test_files(file, test_object)
+      test_object.files.reject { |f| f == file }.each { |f| f.visible = 'no' }
     end
 
     def execution_environment
