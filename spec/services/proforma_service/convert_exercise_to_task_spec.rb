@@ -24,7 +24,7 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
     it 'creates a task with all basic attributes' do
       expect(task).to have_attributes(
         title: exercise.title,
-        description: Kramdown::Document.new(exercise.descriptions.select(&:primary?).first.text).to_html,
+        description: Kramdown::Document.new(exercise.descriptions.select(&:primary?).first.text).to_html.strip,
         internal_description: exercise.instruction,
         proglang: {
           name: exercise.execution_environment.language,
@@ -217,7 +217,7 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
       let(:description) { '# H1 header' }
 
       it 'creates a task with description and language from primary description' do
-        expect(task).to have_attributes(description: "<h1 id=\"h1-header\">H1 header</h1>\n")
+        expect(task).to have_attributes(description: "<h1 id=\"h1-header\">H1 header</h1>")
       end
     end
 
@@ -233,7 +233,7 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
 
       it 'creates a task with description and language from primary description' do
         expect(task).to have_attributes(
-          description: "<p>primary desc</p>\n",
+          description: "<p>primary desc</p>",
           language: 'en'
         )
       end

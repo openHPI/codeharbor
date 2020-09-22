@@ -52,7 +52,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
     it 'creates an exercise with the correct attributes' do
       expect(convert_to_exercise_service).to have_attributes(
         title: 'title',
-        descriptions: have(1).item.and(include(have_attributes(text: "description\n\n",
+        descriptions: have(1).item.and(include(have_attributes(text: "description",
                                                                primary: true,
                                                                language: 'language'))),
         instruction: 'internal_description',
@@ -72,7 +72,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
 
       it 'creates an exercise with a correct description' do
         expect(convert_to_exercise_service).to have_attributes(
-          descriptions: include(have_attributes(text: "description\n\n"))
+          descriptions: include(have_attributes(text: 'description'))
         )
       end
 
@@ -81,7 +81,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
 
         it 'creates an exercise with a correct description' do
           expect(convert_to_exercise_service).to have_attributes(
-            descriptions: include(have_attributes(text: "descrüption\n\n"))
+            descriptions: include(have_attributes(text: 'descrüption'))
           )
         end
       end
@@ -452,7 +452,7 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
         expect(exercise.reload).to have_attributes(
           id: exercise.id,
           title: task.title,
-          descriptions: include(have_attributes(primary: true, text: Kramdown::Document.new(task.description, html_to_native: true).to_kramdown)),
+          descriptions: include(have_attributes(primary: true, text: Kramdown::Document.new(task.description, html_to_native: true).to_kramdown.strip)),
           instruction: task.internal_description,
           execution_environment: have_attributes(language: task.proglang[:name], version: task.proglang[:version]),
           uuid: exercise.uuid,

@@ -16,7 +16,7 @@ module ProformaService
       Proforma::Task.new(
         {
           title: @exercise.title,
-          description: Kramdown::Document.new(primary_description.text).to_html,
+          description: Kramdown::Document.new(primary_description.text).to_html.strip,
           internal_description: @exercise.instruction,
           proglang: proglang,
           files: task_files,

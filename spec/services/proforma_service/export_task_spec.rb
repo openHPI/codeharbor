@@ -46,7 +46,7 @@ RSpec.describe ProformaService::ExportTask do
     end
 
     it 'adds description node with correct content to task node' do
-      expect(xml.xpath('/task/description').text).to eql Kramdown::Document.new(exercise.descriptions.select(&:primary).first.text).to_html
+      expect(xml.xpath('/task/description').text).to eql Kramdown::Document.new(exercise.descriptions.select(&:primary).first.text).to_html.strip
     end
 
     it 'adds proglang node with correct content to task node' do

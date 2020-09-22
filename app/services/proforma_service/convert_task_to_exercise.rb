@@ -38,7 +38,7 @@ module ProformaService
     end
 
     def transform_description(description)
-      Kramdown::Document.new(description || '', html_to_native: true).to_kramdown
+      Kramdown::Document.new(description || '', html_to_native: true).to_kramdown.strip
     end
 
     def task_files
