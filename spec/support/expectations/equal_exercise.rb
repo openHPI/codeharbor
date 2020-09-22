@@ -14,7 +14,6 @@ RSpec::Matchers.define :be_an_equal_exercise_as do |exercise|
     return false unless object.class == other.class
     return attributes_equal?(object, other) if object.is_a?(ApplicationRecord)
     return array_equal?(object, other) if object.is_a?(Array) || object.is_a?(ActiveRecord::Associations::CollectionProxy)
-    # return object.strip == other.strip if object.is_a?(String)
 
     object == other
   end

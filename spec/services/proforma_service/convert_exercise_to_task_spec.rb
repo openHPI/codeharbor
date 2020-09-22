@@ -217,7 +217,7 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
       let(:description) { '# H1 header' }
 
       it 'creates a task with description and language from primary description' do
-        expect(task).to have_attributes(description: "<h1 id=\"h1-header\">H1 header</h1>")
+        expect(task).to have_attributes(description: '<h1 id="h1-header">H1 header</h1>')
       end
     end
 
@@ -233,7 +233,7 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
 
       it 'creates a task with description and language from primary description' do
         expect(task).to have_attributes(
-          description: "<p>primary desc</p>",
+          description: '<p>primary desc</p>',
           language: 'en'
         )
       end
