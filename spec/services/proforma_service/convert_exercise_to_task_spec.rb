@@ -39,6 +39,12 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
       )
     end
 
+    context 'with options' do
+      let(:convert_to_task) { described_class.new(exercise: exercise, options: options) }
+      let(:options) {{}} # TODO descriptions
+
+    end
+
     context 'when exercise has a mainfile' do
       let(:files) { [file] }
       let(:file) { build(:codeharbor_main_file) }

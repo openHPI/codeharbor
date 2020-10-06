@@ -45,7 +45,7 @@ RSpec.describe ProformaService::ExportTask do
       expect(xml.xpath('/task/title').text).to eql exercise.title
     end
 
-    it 'adds description node with correct content to task node' do
+    it 'adds description node with correct content (html) to task node' do
       expect(xml.xpath('/task/description').text).to eql Kramdown::Document.new(
         exercise.descriptions.select(&:primary).first.text
       ).to_html.strip
@@ -65,6 +65,19 @@ RSpec.describe ProformaService::ExportTask do
 
     it 'adds uuid attribute to task node' do
       expect(xml.xpath('/task').attribute('uuid').value).to eql exercise.uuid
+    end
+
+    context 'with options' do
+      let(:export_service) { described_class.new(exercise: exercise, options: options) }
+      let(:options) { {} }
+
+      context 'when options contain description_format md' do
+        let(:options) { {description_format: 'md'} }
+
+        it 'adds description node with correct content to task node' do
+          expect(xml.xpath('/task/description').text).to eql exercise.descriptions.select(&:primary).first.text
+        end
+      end
     end
 
     context 'when exercise is minimal' do
