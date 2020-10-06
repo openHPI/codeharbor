@@ -41,8 +41,15 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
 
     context 'with options' do
       let(:convert_to_task) { described_class.new(exercise: exercise, options: options) }
-      let(:options) {{}} # TODO descriptions
+      let(:options) { {} } # TODO: descriptions
 
+      context 'when options contain description_format md' do
+        let(:options) { {description_format: 'md'} }
+
+        it 'creates a task with all basic attributes' do
+          expect(task).to have_attributes(description: exercise.descriptions.select(&:primary?).first.text)
+        end
+      end
     end
 
     context 'when exercise has a mainfile' do
