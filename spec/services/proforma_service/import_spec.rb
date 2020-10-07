@@ -23,7 +23,7 @@ RSpec.describe ProformaService::Import do
 
     let(:user) { build(:user) }
     let(:import_user) { user }
-    let(:zip_file) { Tempfile.new('proforma_test_zip_file') }
+    let(:zip_file) { Tempfile.new('proforma_test_zip_file', encoding: 'ascii-8bit') }
     let(:exercise) do
       create(:exercise,
              instruction: 'instruction',
