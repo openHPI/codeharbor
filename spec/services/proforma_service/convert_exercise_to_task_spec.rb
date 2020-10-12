@@ -24,7 +24,7 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
     it 'creates a task with all basic attributes' do
       expect(task).to have_attributes(
         title: exercise.title,
-        description: exercise.descriptions.select(&:primary?).first.text,
+        description: Kramdown::Document.new(exercise.descriptions.select(&:primary?).first.text).to_html.strip,
         internal_description: exercise.instruction,
         proglang: {
           name: exercise.execution_environment.language,
@@ -37,6 +37,19 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
         tests: [],
         model_solutions: []
       )
+    end
+
+    context 'with options' do
+      let(:convert_to_task) { described_class.new(exercise: exercise, options: options) }
+      let(:options) { {} } # TODO: descriptions
+
+      context 'when options contain description_format md' do
+        let(:options) { {description_format: 'md'} }
+
+        it 'creates a task with all basic attributes' do
+          expect(task).to have_attributes(description: exercise.descriptions.select(&:primary?).first.text)
+        end
+      end
     end
 
     context 'when exercise has a mainfile' do
@@ -212,6 +225,15 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
       end
     end
 
+    context 'when exercise has description formatted in markdown' do
+      let(:exercise) { create(:exercise, descriptions: [build(:description, :primary, text: description, language: 'de')]) }
+      let(:description) { '# H1 header' }
+
+      it 'creates a task with description and language from primary description' do
+        expect(task).to have_attributes(description: '<h1 id="h1-header">H1 header</h1>')
+      end
+    end
+
     context 'when exercise has multiple descriptions' do
       let(:exercise) do
         create(:exercise,
@@ -224,7 +246,7 @@ RSpec.describe ProformaService::ConvertExerciseToTask do
 
       it 'creates a task with description and language from primary description' do
         expect(task).to have_attributes(
-          description: 'primary desc',
+          description: '<p>primary desc</p>',
           language: 'en'
         )
       end

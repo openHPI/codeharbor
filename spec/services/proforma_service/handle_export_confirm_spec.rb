@@ -51,7 +51,7 @@ RSpec.describe ProformaService::HandleExportConfirm do
 
     it 'calls ExportTask-service with correct arguments' do
       handle_export_confirm
-      expect(ProformaService::ExportTask).to have_received(:call).with(exercise: exercise)
+      expect(ProformaService::ExportTask).to have_received(:call).with(exercise: exercise, options: {description_format: 'md'})
     end
 
     it 'calls PushExternal-service with correct arguments' do
@@ -80,12 +80,16 @@ RSpec.describe ProformaService::HandleExportConfirm do
 
       it 'does not call ExportTask-service with old exercise' do
         handle_export_confirm
-        expect(ProformaService::ExportTask).to have_received(:call).with(exercise: not_have_attributes(uuid: exercise.uuid))
+        expect(ProformaService::ExportTask).to have_received(:call).with(
+          exercise: not_have_attributes(uuid: exercise.uuid), options: {description_format: 'md'}
+        )
       end
 
       it 'only calls ExportTask-service after uuid has been set' do
         handle_export_confirm
-        expect(ProformaService::ExportTask).to have_received(:call).with(exercise: not_have_attributes(uuid: nil))
+        expect(ProformaService::ExportTask).to have_received(:call).with(
+          exercise: not_have_attributes(uuid: nil), options: {description_format: 'md'}
+        )
       end
 
       # it 'calls PushExternal-service with correct arguments' do

@@ -33,8 +33,12 @@ module ProformaService
     def new_descriptions
       descriptions = @exercise.descriptions.presence || [Description.new(primary: true)]
       primary = descriptions.select(&:primary?).first
-      primary.assign_attributes(text: @task.description, language: @task.language)
+      primary.assign_attributes(text: transform_description(@task.description), language: @task.language)
       descriptions
+    end
+
+    def transform_description(description)
+      Kramdown::Document.new(description || '', html_to_native: true).to_kramdown.strip
     end
 
     def task_files

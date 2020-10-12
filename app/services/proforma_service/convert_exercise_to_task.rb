@@ -2,8 +2,9 @@
 
 module ProformaService
   class ConvertExerciseToTask < ServiceBase
-    def initialize(exercise: nil)
+    def initialize(exercise: nil, options: {})
       @exercise = exercise
+      @options = options
     end
 
     def execute
@@ -16,7 +17,7 @@ module ProformaService
       Proforma::Task.new(
         {
           title: @exercise.title,
-          description: primary_description.text,
+          description: description,
           internal_description: @exercise.instruction,
           proglang: proglang,
           files: task_files,
@@ -27,6 +28,12 @@ module ProformaService
           model_solutions: model_solutions
         }.compact
       )
+    end
+
+    def description
+      return primary_description.text if @options[:description_format] == 'md'
+
+      Kramdown::Document.new(primary_description.text).to_html.strip
     end
 
     def parent_uuid
