@@ -2,7 +2,7 @@
 
 ## current status (master branch)
 
-[![Build Status](https://travis-ci.org/openHPI/codeharbor.svg?branch=master)](https://travis-ci.org/openHPI/codeharbor)
+[![Build Status](https://travis-ci.com/openHPI/codeharbor.svg?branch=master)](https://travis-ci.com/openHPI/codeharbor)
 [![Code Climate](https://codeclimate.com/github/openHPI/codeharbor/badges/gpa.svg)](https://codeclimate.com/github/openHPI/codeharbor)
 [![Test Coverage](https://codeclimate.com/github/openHPI/codeharbor/badges/coverage.svg)](https://codeclimate.com/github/openHPI/codeharbor)
 
