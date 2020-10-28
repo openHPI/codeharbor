@@ -288,6 +288,101 @@ class Exercise < ApplicationRecord
 
   private
 
+  def lom
+    {
+      general: {
+        identifier: {
+          catalog: '',
+          entry: ''
+        },
+        title: '',
+        language: '',
+        description: '',
+        keywords: '',
+        structure: '',
+        coverage: '',
+        aggregationLevel: ''
+      },
+      lifeCycle: {
+        version: '',
+        status: '',
+        contribute: {
+          role: '',
+          entity: '',
+          date: ''
+        }
+      },
+      metaMetadata: {
+        identifier: {
+          catalog: '',
+          entry: ''
+        },
+        contribute: {
+          role: '',
+          entity: '',
+          date: ''
+        },
+        metadataschema: '',
+        language: ''
+      },
+      technical: {
+        size: '',
+        requirement: {
+          orComposite: {
+            type: '',
+            name: '',
+            minimumVersion: '',
+            maximumVersion: ''
+          }
+        },
+        installationRemarks: '',
+        location: '',
+        format: '',
+        otherPlattformRequirements: '',
+        duration: ''
+      },
+      educational: {
+        learningResource: '',
+        intendedEndUserRole: '',
+        context: '',
+        difficulty: '',
+        typicalLearningTime: '',
+        description: '',
+        interactivity: '',
+        interactivityLevel: '',
+        semanticDensity: '',
+        typicalAgeRange: '',
+        language: ''
+      },
+      rights: {
+        copyrightAndOtherRestrictions: '',
+        description: '',
+        cost: ''
+      },
+      relation: {
+        kind: '',
+        resource: {
+          identifier: {
+            catalog: '',
+            entry: ''
+          },
+          description: ''
+        }
+      },
+      annotation: {
+        entity: '',
+        date: '',
+        description: ''
+      },
+      classification: {
+        purpose: '',
+        description: '',
+        taxonPath: '',
+        keyword: ''
+      }
+    }
+  end
+
   def duplicate_files_without_testfiles
     exercise_files.reject do |file|
       file.exercise.tests.map(&:exercise_file).include? file
