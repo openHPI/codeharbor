@@ -230,7 +230,8 @@ class ExercisesController < ApplicationController
     render json: t('controllers.exercise.import_proforma_xml.success'), status: :created
   rescue Proforma::ProformaError
     render json: t('controllers.exercise.import_proforma_xml.invalid'), status: :bad_request
-  rescue StandardError
+  rescue StandardError => e
+    Raven.capture_exception(e)
     render json: t('controllers.exercise.import_proforma_xml.internal_error'), status: :internal_server_error
   end
 
