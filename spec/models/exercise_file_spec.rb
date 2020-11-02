@@ -85,10 +85,15 @@ RSpec.describe ExerciseFile, type: :model do
     end
 
     context 'with an unknown file_type' do
-      let(:argument) { 'folder/foo.baz' }
+      let(:argument) { 'foo.baz' }
 
       it 'sets the correct path' do
-        expect { set_full_file_name }.to raise_error 'Filetype ".baz" does not exist!'
+        set_full_file_name
+        expect(exercise_file.path).to eql ''
+      end
+
+      it 'creates missing unknown file_type' do
+        expect { set_full_file_name }.to change(FileType, :count).by(1)
       end
     end
   end

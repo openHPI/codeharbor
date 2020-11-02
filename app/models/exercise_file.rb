@@ -26,7 +26,7 @@ class ExerciseFile < ApplicationRecord
 
   def full_file_name=(full_file_name)
     extension = File.extname(full_file_name)
-    file_type = FileType.find_by(file_extension: extension)
+    file_type = file_type_by_extension(extension)
     raise I18n.t('models.exercise_file.errors.no_filetype', extension: extension) if file_type.nil?
 
     path = File.dirname(full_file_name)
@@ -54,5 +54,11 @@ class ExerciseFile < ApplicationRecord
 
     self.content = Paperclip.io_adapters.for(attachment.instance.attachment).read
     self.attachment = nil
+  end
+
+  def file_type_by_extension(extension)
+    FileType.find_or_create_by(file_extension: extension) do |filetype|
+      filetype.name = extension[1..]
+    end
   end
 end
