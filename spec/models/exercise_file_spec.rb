@@ -47,7 +47,7 @@ RSpec.describe ExerciseFile, type: :model do
   describe '#full_file_name=' do
     subject(:set_full_file_name) { exercise_file.full_file_name = argument }
 
-    let(:exercise_file) { build(:exercise_file) }
+    let!(:exercise_file) { build(:exercise_file) }
     let(:argument) { 'foo.bar' }
     let!(:file_type) { create(:file_type, file_extension: '.bar') }
 
