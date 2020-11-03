@@ -8,4 +8,3 @@ RSpec.describe FileType, type: :model do
     it { is_expected.to validate_uniqueness_of(:file_extension) }
   end
 end
-
