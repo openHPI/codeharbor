@@ -3,5 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe FileType, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe '#valid?' do
+    it { is_expected.to validate_presence_of(:file_extension) }
+    it { is_expected.to validate_uniqueness_of(:file_extension) }
+  end
 end
