@@ -4,6 +4,6 @@
 
 require ::File.expand_path('config/environment', __dir__)
 
-map Codeharbour::Application.config.relative_url_root || '/' do
+map Codeharbor::Application.config.relative_url_root || '/' do
   run Rails.application
 end
