@@ -1,0 +1,2 @@
+class ModelSolution < ApplicationRecord
+end

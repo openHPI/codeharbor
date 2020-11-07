@@ -1,0 +1,2 @@
+class TaskFile < ApplicationRecord
+end
