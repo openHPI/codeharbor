@@ -11,10 +11,10 @@
             = message
   .field-element
     = f.label :avatar, class: 'form-label'
-    = f.hidden_field :avatar_present, value: f.object.avatar.exists?, class: 'hidden-avatar-present'
-    - if f.object.avatar.exists?
+    = f.hidden_field :avatar_present, value: f.object.avatar.attached?, class: 'hidden-avatar-present'
+    - if f.object.avatar.attached?
       .file-show
-        = image_tag f.object.avatar.url(:thumb)
+        = image_tag f.object.avatar.variant(resize_to_limit: [200, 200])a
         br
         = link_to t('users.remove_avatar'), '#', class: 'btn btn-default btn-sm remove-avatar', style: 'margin-top: 10px'
       .file-input style="display: none"

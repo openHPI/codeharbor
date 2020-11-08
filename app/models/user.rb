@@ -26,8 +26,13 @@ class User < ApplicationRecord
   has_many :sent_messages, class_name: 'Message', foreign_key: 'sender_id', dependent: :nullify, inverse_of: :sender
   has_many :received_messages, class_name: 'Message', foreign_key: 'recipient_id', dependent: :nullify, inverse_of: :recipient
 
-  has_attached_file :avatar, styles: {medium: '300x300>', thumb: '100x100#'}, default_url: '/images/:style/missing.png'
-  validates_attachment_content_type :avatar, content_type: %r{\Aimage/.*\Z}
+  # has_attached_file :avatar, styles: {medium: '300x300>', thumb: '100x100#'}, default_url: '/images/:style/missing.png'
+  has_one_attached :avatar
+  # validates_attachment_content_type :avatar, content_type: %r{\Aimage/.*\Z}
+  # validates :avatar, file_content_type: {
+  #   allow: %w[image/jpeg image/png],
+  #   if: -> { avatar.attached? }
+  # }
 
   default_scope { where(deleted: [nil, false]) }
 

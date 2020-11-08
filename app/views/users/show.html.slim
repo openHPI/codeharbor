@@ -9,7 +9,10 @@
   .row
     .inner-section style="width: 15%"
       .avatar
-        = image_tag(@user.avatar.url(:thumb))
+        - if @user.avatar.attached?
+          = image_tag(@user.avatar.variant(resize_to_limit: [150, 150]))
+        - else
+          = image_tag('/images/thumb/missing.png')
     .inner-section style="width: 80%"
       .row
         .row-label
