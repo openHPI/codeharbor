@@ -64,6 +64,7 @@ gem 'font-awesome-rails', '>= 4.7.0.5'
 gem 'jquery-ui-rails', '>= 6.0.1'
 gem 'kramdown', '~> 2.3'
 gem 'less-rails', '>= 3.0.0' # Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
+gem 'mini_magick'
 gem 'nested_form_fields', '>= 0.8.2'
 gem 'nokogiri'
 gem 'proforma', git: 'https://github.com/openHPI/proforma.git', tag: 'v0.5'
