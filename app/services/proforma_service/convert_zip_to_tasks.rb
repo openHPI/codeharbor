@@ -6,8 +6,15 @@ module ProformaService
       @depth = depth + 1
       raise I18n.t('exercises.import_exercise.convert_zip.nested_too_deep') if depth > 5
 
-      @zip_file = zip_file
-      @path = path || zip_file.original_filename
+      if zip_file.is_a?(ActiveStorage::Attached::One)
+        @zip_file = Tempfile.new
+        @zip_file.write zip_file.blob.download.force_encoding('UTF-8')
+        @zip_file.rewind
+        @path = path || zip_file.filename
+      else
+        @zip_file = zip_file
+        @path = path || zip_file.original_filename
+      end
     end
 
     def execute
