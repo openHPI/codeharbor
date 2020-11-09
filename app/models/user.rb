@@ -26,13 +26,8 @@ class User < ApplicationRecord
   has_many :sent_messages, class_name: 'Message', foreign_key: 'sender_id', dependent: :nullify, inverse_of: :sender
   has_many :received_messages, class_name: 'Message', foreign_key: 'recipient_id', dependent: :nullify, inverse_of: :recipient
 
-  # has_attached_file :avatar, styles: {medium: '300x300>', thumb: '100x100#'}, default_url: '/images/:style/missing.png'
   has_one_attached :avatar
-  # validates_attachment_content_type :avatar, content_type: %r{\Aimage/.*\Z}
-  # validates :avatar, file_content_type: {
-  #   allow: %w[image/jpeg image/png],
-  #   if: -> { avatar.attached? }
-  # }
+  validate :avatar_format
 
   default_scope { where(deleted: [nil, false]) }
 
@@ -156,5 +151,18 @@ class User < ApplicationRecord
 
   def generate_token
     SecureRandom.hex(10)
+  end
+
+  def avatar_format
+    return unless avatar.attached?
+
+    avatar_blob = avatar.blob
+    if avatar_blob.content_type.start_with? 'image/'
+      if avatar_blob.byte_size > 10.megabytes
+        errors.add(:avatar, 'size needs to be less than 10MB')
+      end
+    else
+      errors.add(:avatar, 'needs to be an image')
+    end
   end
 end
