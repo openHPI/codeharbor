@@ -129,7 +129,7 @@ module ProformaService
     end
 
     def add_content_to_task_file(file, task_file)
-      if file.attachment.exists?
+      if file.attachment.attached?
         task_file.content = attachment_content(file)
         task_file.used_by_grader = false
         task_file.binary = true
