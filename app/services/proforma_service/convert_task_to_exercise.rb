@@ -57,13 +57,17 @@ module ProformaService
         role: role(task_file)
       }.tap do |params|
         if task_file.binary
-          params[:attachment] = file_base64(task_file)
-          params[:attachment_file_name] = task_file.filename
-          params[:attachment_content_type] = task_file.mimetype
+          # params[:attachment] = file_base64(task_file)
+          # params[:attachment_file_name] = task_file.filename
+          # params[:attachment_content_type] = task_file.mimetype
         else
           params[:content] = task_file.content
         end
-      end)
+      end).tap do |file|
+        if task_file.binary
+          file.attachment.attach(io: StringIO.new(task_file.content), filename: task_file.filename, content_type: task_file.mimetype)
+        end
+      end
     end
 
     def read_only(task_file)
