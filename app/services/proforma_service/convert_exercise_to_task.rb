@@ -133,7 +133,7 @@ module ProformaService
         task_file.content = attachment_content(file)
         task_file.used_by_grader = false
         task_file.binary = true
-        task_file.mimetype = file.attachment_content_type
+        task_file.mimetype = file.attachment.content_type
       else
         task_file.content = file.content
         task_file.used_by_grader = true
@@ -142,7 +142,7 @@ module ProformaService
     end
 
     def attachment_content(file)
-      Paperclip.io_adapters.for(file.attachment).read
+      file.attachment.blob.download
     end
   end
 end
