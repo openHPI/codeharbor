@@ -158,9 +158,7 @@ class User < ApplicationRecord
 
     avatar_blob = avatar.blob
     if avatar_blob.content_type.start_with? 'image/'
-      if avatar_blob.byte_size > 10.megabytes
-        errors.add(:avatar, 'size needs to be less than 10MB')
-      end
+      errors.add(:avatar, 'size needs to be less than 10MB') if avatar_blob.byte_size > 10.megabytes
     else
       errors.add(:avatar, 'needs to be an image')
     end

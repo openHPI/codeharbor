@@ -272,7 +272,7 @@ legend.toggle-next
               - if test.attached_image?
                 = image_tag(test.attachment.url(:large))
               - else
-                = link_to test.attachment.original_filename, exercise_file_download_attachment_path(test.exercise_file), 'data-turbolinks': false
+                = link_to test.attachment.filename, exercise_file_download_attachment_path(test.exercise_file), 'data-turbolinks': false
         .row
           .row-label
             = t('exercises.files.name')
