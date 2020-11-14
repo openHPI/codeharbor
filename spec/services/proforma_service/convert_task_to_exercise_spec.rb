@@ -151,22 +151,8 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
         let(:mimetype) { 'image/png' }
         let(:binary) { true }
 
-        it 'creates an exercise with a file with attachment and the correct attributes' do
-          expect(convert_to_exercise_service.exercise_files.first).to have_attributes(
-            attachment_file_name: 'filename.txt',
-            attachment_content_type: 'image/png',
-            attachment_file_size: 7
-          )
-        end
-
-        context 'when mimetype is not set' do
-          let(:mimetype) {}
-
-          it 'raises an error' do
-            expect { convert_to_exercise_service }.to raise_error(
-              Proforma::MimetypeError, I18n.t('exercises.import_exercise.mimetype_error', filename: 'filename.txt')
-            )
-          end
+        it 'creates an exercise with an exercise_file with has the file attached' do
+          expect(convert_to_exercise_service.exercise_files.first.attachment).to be_attached
         end
       end
 

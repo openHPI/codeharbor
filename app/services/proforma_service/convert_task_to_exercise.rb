@@ -61,6 +61,7 @@ module ProformaService
       else
         exercise_file.content = task_file.content unless task_file.binary
       end
+      exercise_file
     end
 
     # def exercise_file_from_task_file(task_file)
@@ -84,12 +85,6 @@ module ProformaService
 
     def role(task_file)
       model_solution_files.include?(task_file) ? 'reference_implementation' : task_file.internal_description
-    end
-
-    def file_base64(file)
-      raise Proforma::MimetypeError, I18n.t('exercises.import_exercise.mimetype_error', filename: file.filename) unless file.mimetype
-
-      "data:#{file.mimetype};base64,#{Base64.encode64(file.content)}"
     end
 
     def tests

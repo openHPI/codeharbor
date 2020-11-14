@@ -98,11 +98,11 @@ RSpec.describe ExerciseFile, type: :model do
     end
   end
 
-  describe 'parse_text_data' do
-    subject(:exercise_file) { build(:exercise_file, attachment: "data:text/plain;base64,#{Base64.encode64('lorem ipsum')}", content: '') }
+  describe 'extract_text_data' do
+    subject(:exercise_file) { build(:codeharbor_regular_file, :with_text_attachment) }
 
     it 'sets content' do
-      expect { exercise_file.save }.to change(exercise_file, :content).from('').to 'lorem ipsum'
+      expect { exercise_file.save }.to change(exercise_file, :content).to "beipsieltext\n"
     end
   end
 
@@ -120,7 +120,7 @@ RSpec.describe ExerciseFile, type: :model do
     end
 
     context 'with text attachment' do
-      let(:exercise_file) { build(:exercise_file, attachment: "data:text/plain;base64,#{Base64.encode64('lorem ipsum')}") }
+      let(:exercise_file) { build(:codeharbor_regular_file, :with_text_attachment) }
 
       it { is_expected.to be false }
     end
