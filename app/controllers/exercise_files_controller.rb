@@ -10,7 +10,6 @@ class ExerciseFilesController < ApplicationController
 
   def download_attachment
     redirect_to rails_blob_path(@exercise_file.attachment, disposition: 'attachment')
-    # send_file @exercise_file.attachment.path
   end
 
   private

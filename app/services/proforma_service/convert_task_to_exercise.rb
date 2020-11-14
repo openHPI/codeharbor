@@ -50,25 +50,33 @@ module ProformaService
     end
 
     def exercise_file_from_task_file(task_file)
-      ExerciseFile.new({
-        full_file_name: task_file.filename,
-        read_only: read_only(task_file),
-        hidden: task_file.visible != 'yes',
-        role: role(task_file)
-      }.tap do |params|
-        if task_file.binary
-          # params[:attachment] = file_base64(task_file)
-          # params[:attachment_file_name] = task_file.filename
-          # params[:attachment_content_type] = task_file.mimetype
-        else
-          params[:content] = task_file.content
-        end
-      end).tap do |file|
-        if task_file.binary
-          file.attachment.attach(io: StringIO.new(task_file.content), filename: task_file.filename, content_type: task_file.mimetype)
-        end
+      exercise_file = ExerciseFile.new({
+                                         full_file_name: task_file.filename,
+                                         read_only: read_only(task_file),
+                                         hidden: task_file.visible != 'yes',
+                                         role: role(task_file)
+                                       })
+      if task_file.binary
+        exercise_file.attachment.attach(io: StringIO.new(task_file.content), filename: task_file.filename, content_type: task_file.mimetype)
+      else
+        exercise_file.content = task_file.content unless task_file.binary
       end
     end
+
+    # def exercise_file_from_task_file(task_file)
+    #   ExerciseFile.new({
+    #     full_file_name: task_file.filename,
+    #     read_only: read_only(task_file),
+    #     hidden: task_file.visible != 'yes',
+    #     role: role(task_file)
+    #   }.tap do |params|
+    #     params[:content] = task_file.content unless task_file.binary
+    #   end).tap do |file|
+    #     if task_file.binary
+    #       file.attachment.attach(io: StringIO.new(task_file.content), filename: task_file.filename, content_type: task_file.mimetype)
+    #     end
+    #   end
+    # end
 
     def read_only(task_file)
       task_file.usage_by_lms.in?(%w[display download])
