@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_08_164104) do
+ActiveRecord::Schema.define(version: 2020_11_13_152530) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -138,10 +138,6 @@ ActiveRecord::Schema.define(version: 2020_11_08_164104) do
     t.boolean "hidden"
     t.boolean "read_only"
     t.integer "file_type_id"
-    t.string "attachment_file_name"
-    t.string "attachment_content_type"
-    t.integer "attachment_file_size"
-    t.datetime "attachment_updated_at"
     t.bigint "test_id"
     t.index ["exercise_id"], name: "index_exercise_files_on_exercise_id"
     t.index ["file_type_id"], name: "index_exercise_files_on_file_type_id"
