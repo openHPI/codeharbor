@@ -41,6 +41,7 @@ class UsersController < ApplicationController
       if @user.update(user_params)
         format.html { redirect_to @user, notice: t('controllers.user.updated') }
       else
+        @user.avatar = nil
         format.html { render :edit }
       end
     end
