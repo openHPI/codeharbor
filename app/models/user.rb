@@ -27,7 +27,7 @@ class User < ApplicationRecord
   has_many :received_messages, class_name: 'Message', foreign_key: 'recipient_id', dependent: :nullify, inverse_of: :recipient
 
   has_one_attached :avatar
-  validate :avatar_format
+  validate :avatar_format, if: -> { avatar.attached? }
 
   default_scope { where(deleted: [nil, false]) }
 
@@ -92,12 +92,6 @@ class User < ApplicationRecord
     true
   end
 
-  def groups_sorted_by_admin_state_and_name(groups_to_sort = groups)
-    groups_to_sort.sort_by do |group|
-      [group.admins.include?(self) ? 0 : 1, group.name]
-    end
-  end
-
   def handle_collection_membership
     collections.each do |collection|
       collection.delete if collection.users.count == 1
@@ -149,13 +143,7 @@ class User < ApplicationRecord
     self.confirm_token = SecureRandom.urlsafe_base64.to_s if confirm_token.blank?
   end
 
-  def generate_token
-    SecureRandom.hex(10)
-  end
-
   def avatar_format
-    return unless avatar.attached?
-
     avatar_blob = avatar.blob
     if avatar_blob.content_type.start_with? 'image/'
       errors.add(:avatar, 'size needs to be less than 10MB') if avatar_blob.byte_size > 10.megabytes
