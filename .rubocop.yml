@@ -2,9 +2,6 @@ require:
   - rubocop-rspec
   - rubocop-rails
 
-#Rails:
-#  Enabled: true
-
 AllCops:
   NewCops: enable
 
