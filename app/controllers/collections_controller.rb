@@ -4,7 +4,7 @@ require 'zip'
 
 class CollectionsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_collection, only: %i[show edit update destroy remove_exercise remove_all download_all share view_shared save_shared]
+  before_action :set_collection, only: %i[show edit update remove_exercise remove_all download_all share view_shared save_shared]
   before_action :new_collection, only: :create
 
   rescue_from CanCan::AccessDenied do |_exception|

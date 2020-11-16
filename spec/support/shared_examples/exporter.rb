@@ -76,7 +76,7 @@ RSpec.shared_examples 'task node with file' do
   end
 
   it 'adds visible-attribute to file node' do
-    expect(xml.xpath("/task/files/file[@id!='ms-placeholder-file']").attribute('visible').value).to eql !file.hidden ? 'yes' : 'no'
+    expect(xml.xpath("/task/files/file[@id!='ms-placeholder-file']").attribute('visible').value).to eql file.hidden ? 'no' : 'yes'
   end
 
   it 'adds usage-by-lms-attribute to file node' do

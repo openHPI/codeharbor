@@ -12,7 +12,7 @@ module ProformaService
       ActiveRecord::Base.transaction do
         import_file = ImportFileCache.create!(user: @user, zip_file: @zip_file)
         ProformaService::ConvertZipToTasks.call(zip_file: @zip_file).each do |task|
-          exercise = Exercise.find_by_uuid(task[:uuid])
+          exercise = Exercise.find_by(uuid: task[:uuid])
 
           data[SecureRandom.uuid] = {path: task[:path].tr(' ', '_'),
                                      exists: exercise.present?,

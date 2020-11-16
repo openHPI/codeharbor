@@ -5,7 +5,7 @@ require 'zip'
 # rubocop:disable Metrics/ClassLength
 class ExercisesController < ApplicationController
   load_and_authorize_resource except: %i[import_external_exercise import_uuid_check]
-  before_action :set_exercise, only: %i[show edit update destroy add_to_cart add_to_collection push_external contribute
+  before_action :set_exercise, only: %i[show edit update destroy add_to_cart add_to_collection contribute
                                         remove_state export_external_start export_external_check]
   before_action :validate_account_link_usage, only: %i[export_external_start export_external_check export_external_confirm]
   before_action :set_search, only: [:index]
@@ -76,10 +76,10 @@ class ExercisesController < ApplicationController
         format.html { redirect_to @exercise, notice: t('controllers.exercise.created') }
         format.json { render :show, status: :created, location: @exercise }
       else
-        if !params[:exercise][:exercise_relation] # Exercise Relation is set if form is for duplicate exercise, otherwise it's not.
-          format.html { render :new }
-        else
+        if params[:exercise][:exercise_relation] # Exercise Relation is set if form is for duplicate exercise, otherwise it's not.
           format.html { redirect_to duplicate_exercise_path(params[:exercise][:exercise_relation][:origin_id]) }
+        else
+          format.html { render :new }
         end
         format.json { render json: @exercise.errors, status: :unprocessable_entity }
       end
@@ -266,7 +266,7 @@ class ExercisesController < ApplicationController
 
   def contribute
     author = @exercise.user
-    AccessRequest.send_contribution_request(author, @exercise, current_user).deliver_later
+    AccessRequestMailer.send_contribution_request(author, @exercise, current_user).deliver_later
     text = t('controllers.exercise.contribute', user: current_user.name, exercise: @exercise.title)
     Message.create(sender: current_user, recipient: author, param_type: 'exercise', param_id: @exercise.id, text: text, sender_status: 'd')
     redirect_to exercises_path, notice: t('controllers.exercise.contribute_notice')
@@ -396,7 +396,7 @@ class ExercisesController < ApplicationController
   end
 
   def user_by_api_key(api_key)
-    AccountLink.find_by_api_key(api_key)&.user
+    AccountLink.find_by(api_key: api_key)&.user
   end
 
   def handle_proforma_multi_import(result)
