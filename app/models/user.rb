@@ -65,13 +65,13 @@ class User < ApplicationRecord
 
   def handle_destroy
     destroy = handle_group_memberships
-    if !destroy
-      false
-    else
+    if destroy
       handle_collection_membership
       handle_exercises
       handle_messages
       true
+    else
+      false
     end
   end
 

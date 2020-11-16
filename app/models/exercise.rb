@@ -13,7 +13,7 @@ class Exercise < ApplicationRecord
   validates :license, presence: true, unless: :private?
   validate :no_predecessor_loop, :one_primary_description?, :valid_main_file?
 
-  validates_uniqueness_of :uuid
+  validates :uuid, uniqueness: true
 
   has_many :exercise_files, dependent: :destroy
   has_many :tests, dependent: :destroy
@@ -34,7 +34,7 @@ class Exercise < ApplicationRecord
   has_many :carts, through: :cart_exercises
 
   belongs_to :predecessor, class_name: 'Exercise', optional: true
-  has_one :successor, class_name: 'Exercise', foreign_key: 'predecessor_id'
+  has_one :successor, class_name: 'Exercise', foreign_key: 'predecessor_id', inverse_of: :predecessor, dependent: :nullify
 
   belongs_to :user
   belongs_to :execution_environment, optional: true
@@ -52,7 +52,7 @@ class Exercise < ApplicationRecord
   default_scope { where(deleted: [nil, false]) }
 
   scope :active, -> { where('NOT EXISTS (SELECT t2.id FROM exercises t2 WHERE exercises.id = t2.predecessor_id)') }
-  scope :timespan, ->(days) { days != 0 ? where('DATE(created_at) >= ?', Time.zone.today - days) : where(nil) }
+  scope :timespan, ->(days) { days.zero? ? where(nil) : where('DATE(created_at) >= ?', Time.zone.today - days) }
   scope :text_like, lambda { |text|
     if text.present?
       joins(:descriptions).where('title ILIKE ? OR descriptions.text ILIKE ?', "%#{text.downcase}%", "%#{text.downcase}%")
@@ -61,13 +61,13 @@ class Exercise < ApplicationRecord
     end
   }
   scope :mine, lambda { |user|
-    if !user.nil?
-      where('user_id = ? OR (exercises.id in (select exercise_id from exercise_authors where user_id = ?))', user.id, user.id)
-    else
+    if user.nil?
       where(nil)
+    else
+      where('user_id = ? OR (exercises.id in (select exercise_id from exercise_authors where user_id = ?))', user.id, user.id)
     end
   }
-  scope :visibility, ->(priv) { !priv.nil? ? where(private: priv) : where(nil) }
+  scope :visibility, ->(priv) { priv.nil? ? where(nil) : where(private: priv) }
   scope :languages, lambda { |languages|
     if languages.present?
       where('(select count(language) from descriptions where exercises.id = descriptions.exercise_id AND '\
@@ -94,10 +94,10 @@ class Exercise < ApplicationRecord
 
   def self.rating(stars)
     if stars.present?
-      if stars != '0'
-        where('average_rating >= ?', stars)
-      else
+      if stars == '0'
         where('average_rating >= ? OR average_rating IS NULL', stars)
+      else
+        where('average_rating >= ?', stars)
       end
     else
       where('average_rating IS NULL')
@@ -162,14 +162,10 @@ class Exercise < ApplicationRecord
 
   def can_access(user)
     if private
-      if !user.author?(self)
-        if !user.access_through_any_group?(self)
-          false
-        else
-          true
-        end
-      else
+      if user.author?(self)
         true
+      else
+        user.access_through_any_group?(self)
       end
     else
       true
@@ -314,10 +310,10 @@ class Exercise < ApplicationRecord
 
   def add_relation(relation_array)
     relation = ExerciseRelation.find_by(clone: self)
-    if !relation
-      clone_relations.new(origin_id: relation_array[:origin_id], relation_id: relation_array[:relation_id])
-    else
+    if relation
       relation.update(relation_id: relation_array[:relation_id])
+    else
+      clone_relations.new(origin_id: relation_array[:origin_id], relation_id: relation_array[:relation_id])
     end
   end
 
