@@ -24,28 +24,28 @@ RSpec.describe AccountLinkUser, type: :model do
     end
 
     context 'with another account_link_user' do
-      before { create(:account_link_user, user: user_2, account_link: account_link_2) }
+      before { create(:account_link_user, user: user2, account_link: account_link2) }
 
-      let(:account_link_2) { build(:account_link) }
-      let(:user_2) { build(:user) }
+      let(:account_link2) { build(:account_link) }
+      let(:user2) { build(:user) }
 
       it { is_expected.to be true }
 
       context 'when user is the same' do
-        let(:user_2) { user }
+        let(:user2) { user }
 
         it { is_expected.to be true }
       end
 
       context 'when account_link is the same' do
-        let(:account_link_2) { account_link }
+        let(:account_link2) { account_link }
 
         it { is_expected.to be true }
       end
 
       context 'when account_link and user are the same' do
-        let(:user_2) { user }
-        let(:account_link_2) { account_link }
+        let(:user2) { user }
+        let(:account_link2) { account_link }
 
         it { is_expected.to be false }
       end

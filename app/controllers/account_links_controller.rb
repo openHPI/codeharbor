@@ -4,7 +4,7 @@ class AccountLinksController < ApplicationController
   load_and_authorize_resource
 
   before_action :set_user
-  before_action :set_account_link, only: %i[show edit update destroy remove_account_link]
+  before_action :set_account_link, only: %i[show edit update destroy]
   before_action :set_shared_user, only: %i[remove_shared_user add_shared_user]
 
   rescue_from CanCan::AccessDenied do |_exception|
