@@ -243,6 +243,20 @@ ActiveRecord::Schema.define(version: 2020_11_13_152530) do
     t.string "recipient_status", default: "u"
   end
 
+  create_table "model_solutions", force: :cascade do |t|
+    t.string "description"
+    t.string "internal_description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "programming_languages", force: :cascade do |t|
+    t.string "language"
+    t.string "version"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "ratings", id: :serial, force: :cascade do |t|
     t.integer "rating"
     t.integer "exercise_id"
@@ -292,6 +306,34 @@ ActiveRecord::Schema.define(version: 2020_11_13_152530) do
     t.string "name"
     t.integer "taggings_count", default: 0
     t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
+  create_table "task_files", force: :cascade do |t|
+    t.text "content"
+    t.string "path"
+    t.string "name"
+    t.string "internal_description"
+    t.string "mime_type"
+    t.boolean "used_by_grader"
+    t.string "visible"
+    t.string "usage_by_lms"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "tasks", id: :serial, force: :cascade do |t|
+    t.string "title"
+    t.string "description"
+    t.string "internal_description"
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.uuid "parent_uuid"
+    t.string "language"
+    t.bigint "programming_language_id"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["programming_language_id"], name: "index_tasks_on_programming_language_id"
+    t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
   create_table "testing_frameworks", id: :serial, force: :cascade do |t|
