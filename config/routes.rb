@@ -93,6 +93,8 @@ Rails.application.routes.draw do
     get :download_attachment
   end
 
+  resources :tasks
+
   resources :exercises do
     member do
       get :download_exercise

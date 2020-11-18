@@ -1,0 +1,39 @@
+- @related_exercises.each do |exercise|
+  .panel.panel-default.related-exercises
+    .panel-heading
+      span
+        = link_to truncate(exercise.title, length: 40), exercise_path(exercise), data: {toggle: "tooltip"}, title: exercise.title
+      - if can? :read, exercise
+        span.pull-right
+          = link_to t('exercises.all.view'), exercise_path(exercise), class: 'btn btn-xs btn-default'
+    .panel-body
+      .small-exercise-content
+        .small-description
+          - if exercise.descriptions.first.text == ''
+            span style=("color: gray")
+              = t('exercises.defaults.no_description')
+          - else
+            = exercise.descriptions.first.text
+        .small-exercise-footer
+          .more-btn-wrapper
+            = link_to t('exercises.all.open_exercise'), exercise, class: 'open-link'
+
+          span.star-rating
+            small.number-rating
+              = exercise.avg_rating.round(1)
+            - [*1..5].each do |i|
+              - if exercise.rating_star(exercise.avg_rating.round(1)) >= i
+                span.fa.fa-star data-rating=i
+              - elsif (exercise.rating_star(exercise.avg_rating.round(1)) + 0.5) >= i
+                span.fa.fa-star-half-o data-rating=i
+              - else
+                span.fa.fa-star-o data-rating=i
+            small
+              = ' ('
+              = exercise.ratings.count
+              = 'x)'
+
+          .labels
+            - exercise.labels.each do |label|
+              .small_label style=("background-color: #{'#' + label.color.to_s}; color: white;")
+                = label.name

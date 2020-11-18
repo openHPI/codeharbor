@@ -1,0 +1,121 @@
+- if @tasks.empty?
+  - if current_user.authored_exercises.empty? && (@option == 'mine')
+    .panel.panel-default style=("margin-top: 40px")
+      .panel-body
+        .col-md-10
+          h3 style=("color: #777777")
+            = t('exercises.search.no_exercises')
+          br
+          p style=("color: #777777")
+            = t('exercises.search.no_exercises_description')
+          br
+          br
+  - else
+    .panel.panel-default style=("margin-top: 40px")
+      .panel-body
+        .col-md-10
+          h3 style=("color: #777777")
+            = t('exercises.search.no_results')
+          br
+          p style=("color: #777777")
+            = t('exercises.search.no_results_description')
+          br
+          br
+- @tasks.each do |task|
+  .panel.panel-default style=("margin-top: 20px")
+    .panel-heading
+      h3.panel-title
+        span data-toggle="tooltip" data-placement="bottom" title="#{task.title}"
+          = truncate(task.title, length: 100)
+        /span.star-rating.pull-right
+          small.number-rating
+            = task.average_rating.round(1)
+          - [*1..5].each do |i|
+            - if task.rating_star(task.average_rating.round(1)) >= i
+              span.fa.fa-star data-rating=i
+            - elsif (task.rating_star(task.average_rating.round(1)) + 0.5) >= i
+              span.fa.fa-star-half-o data-rating=i
+            - else
+              span.fa.fa-star-o data-rating=i
+          small
+            = ' '
+            = exercise.ratings.count
+            = ' ' + t('exercises.all.ratings')
+        span.programming-language.pull-right
+          = task.programming_language&.language || t('exercises.index.no_execution_environment_selected')
+        = render 'remove_state_tag', exercise: exercise
+    .panel-body.exercise-panel
+      .exercise-content
+        .description.collapsable
+          - if task.description == ''
+            span style=("color: gray")
+              = t('exercises.defaults.no_description')
+          - else
+            = task.description
+        .more-btn-wrapper
+          = link_to task, class: 'more-btn' do
+            span class=("more-tag")
+              = t('exercises.all.show_more')
+            span class=("less-tag hidden")
+              = t('exercises.all.show_less')
+        /.labels
+          - if exercise.labels.empty?
+            span style=("color: gray")
+              = t('exercises.defaults.no_labels')
+          - else
+            - exercise.labels.each do |label|
+              .exercise_label style=("background-color: #{'#' + label.color.to_s}; color: #{'#' + label.font_color.to_s};")
+                = label.name
+      .exercise-buttons.btn-group-vertical.pull-right aria-label="..." role="group"
+        - if can? :show, task
+          = link_to t('exercises.all.view'), task_path(task), class:'btn btn-default'
+          = link_to t('exercises.all.duplicate'), duplicate_task_path(task), class:'btn btn-default'
+        - if can? :edit, task
+          = link_to t('exercises.all.edit'), edit_task_path(task), class:'btn btn-default'
+          = link_to t('exercises.all.delete'), task_path(task), class:'btn btn-default', method: :delete, data: { confirm: t('sure') }
+        / - if cannot? :edit, task
+          = link_to 'Contribute', contribute_task_path(task), method: :post, class: 'btn btn-default'
+    .panel-footer
+      = button_tag type: 'button', class: 'btn no-border comment-button', data: {task: task.id} do
+        = t('exercises.all.comments') + ' '
+        span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
+        span.fa.fa-caret-down.my-caret
+      = ' '
+      = button_tag type: 'button', class: 'btn no-border related-button', data: {task: task.id} do
+        = t('exercises.all.related_exercises') + ' '
+        span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
+        span.fa.fa-caret-down.my-caret
+      /.pull-right.stats
+        p.impact
+          = t('exercises.downloads')
+          = ': '
+          = task.downloads.to_s
+        p.impact
+          = t('exercises.in_carts')
+          = ': '
+          = task.in_carts
+        p.impact
+          = t('exercises.in_collections')
+          = ': '
+          = exercise.in_collections
+
+    /div class=("related-box") data-exercise=exercise.id
+
+      .slide-left.inactive
+        = button_tag do
+          i.fa.fa-caret-left
+      .content
+      .slide-right.inactive
+        = button_tag do
+          i.fa.fa-caret-right
+
+    /div class=("comment-box") data-exercise=exercise.id
+      = form_for :comment, url: exercise_comments_path(exercise), remote: true do |f|
+        .write-comment
+          .input-group
+            = f.label_tag 'new_comment_label', t('exercises.all.new_comment'), class: 'input-group-addon'
+            = f.text_field :text, class: 'form-control'
+            span.input-group-btn
+              = f.submit class: 'btn btn-default'
+      .comment-body
+= will_paginate @tasks

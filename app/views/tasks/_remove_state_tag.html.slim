@@ -1,0 +1,7 @@
+- if exercise.state_list.any?
+  span.state-tag-dropdown.pull-right
+    = t("exercises.#{exercise.state_list.first}_tag")
+    - if can? :remove_state, exercise
+      .state-tag-popup
+        .state-tag-remove-button data = {id: exercise.id}
+          = t('exercises.remove_state')
