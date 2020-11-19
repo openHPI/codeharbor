@@ -5,7 +5,7 @@
         .panel-heading
           h3.panel-title
             = pluralize(@task.errors.count, t('error'))
-            = t('exercises.errorMessage')
+            = t('tasks.error')
         .panel-body
           ul
             - @task.errors.full_messages.each do |msg|
@@ -14,7 +14,7 @@
     fieldset.form-group
       legend.toggle-next
         span.number = '1'
-        = t('exercises.form.basic_info') + ' '
+        = t('tasks.form.basic_information')
         span.fa.fa-caret-up
       .form-content
         /- if @task_relation.present?
@@ -27,16 +27,17 @@
               .controls
                 = relation.collection_select :relation_id, Relation.all, :id, :name, {}, {class: 'form-control'}
         .field-element
-          = f.label :title, t('exercises.title'), class:'form-label'
+          = f.label :title, t('tasks.title'), class:'form-label'
           = f.text_field :title, class:'form-control'
         .field-element
-          = f.label :execution_environment, t('exercises.form.environment'), class:'form-label'
+          = f.label :programming_language, t('tasks.programming_language'), class:'form-label'
           .div.hidden.execution-environment-error
-            = t('controllers.exercise.execution_environment.not_empty_while_public')
-          = f.collection_select :programming_language_id, ProgrammingLanguage.all, :id, :language, {include_blank: t('exercises.form.none')}, {class: 'form-control'}
+            = t('tasks.form.errors.programming_language.not_empty_while_public')
+          = f.collection_select :programming_language_id, ProgrammingLanguage.all, :id, :language_with_version, {include_blank: t('tasks.form.none')}, {class: 'form-control'}
 
 
         .field-element
+          = f.label :description, t('tasks.description'), class:'form-label'
           = f.text_area :description, class:'form-control'
 
           /= f.nested_fields_for :descriptions do |description|
@@ -55,10 +56,6 @@
                   = ' ' + t('exercises.form.descriptions.remove')
 
               = description.text_area :text, class:'form-control'
-
-          = f.add_nested_fields_link :descriptions, ' ' , class: 'btn btn-main' do
-            i.fa.fa-plus style=("color: #008000")
-            = ' ' + t('exercises.form.descriptions.add')
         /.field-element
           .form-description
             .top-label
@@ -68,9 +65,18 @@
     fieldset.form-group
       legend.toggle-next
         span.number = '2'
-        = t('exercises.form.additional_info') + ' '
+        = t('tasks.form.additional_info') + ' '
         span.fa.fa-caret-up
       .form-content
+        .field-element
+          = f.label :internal_description, t('tasks.internal_description'), class:'form-label'
+          = f.text_area :internal_description, class:'form-control'
+        .field-element
+          = f.label :parent_uuid, t('tasks.parent_uuid'), class:'form-label'
+          = f.text_field :parent_uuid, class:'form-control'
+        .field-element
+          = f.label :language, t('tasks.language'), class:'form-label'
+          = f.text_field :language, class:'form-control'
         /.field-element
           = f.label :visibility, t('exercises.visibility.label'), class: 'form-label'
           .div.hidden.execution-environment-error
@@ -92,7 +98,7 @@
             .select
               = f.select :license_id, options_for_select(License.all.collect{ |l| [l.name, l.id, {'data-link'=> l.link}] }, @license_default), {}, {class: 'form-control', disabled: @license_hidden}
             .link
-    fieldset.form-group
+    /fieldset.form-group
       legend.toggle-next
         span.number = '3'
         = t('exercises.files.label') + ' '
@@ -155,7 +161,7 @@
       .actions.btn-group[role="group"]
         = button_tag type: 'submit', class: 'btn btn-important' do
           i.fa.fa-file-text-o
-          = ' ' + t('exercises.form.save')
+          = ' ' + t('tasks.form.save')
         = link_to :back, class: 'btn btn-important' do
           i.fa.fa-remove style=("color: gray")
-          = ' ' + t('exercises.form.cancel')
+          = ' ' + t('tasks.form.cancel')

@@ -1,10 +1,10 @@
 .header
   .col-md-8
-    .std-heading data-toggle="tooltip" data-placement="bottom" title="#{@exercise.title}"
+    .std-heading data-toggle="tooltip" data-placement="bottom" title="#{@task.title}"
       i.i.fa.fa-file-text-o style=("color: #008000")
       = ' '
-      = truncate(@exercise.title, length: 100)
-  .col-md-4
+      = truncate(@task.title, length: 100)
+  /.col-md-4
     span.star-rating.pull-right style=("font-size: 2.0em")
       - [*1..5].each do |i|
         - if @exercise.round_avg_rating >= i
@@ -41,10 +41,10 @@ legend.toggle-next
     .row-label
       = t('exercises.title')
       | :
-    .row-value data-toggle="tooltip" data-placement="bottom" title="#{@exercise.title}"
-      = truncate(@exercise.title, length: 120)
+    .row-value data-toggle="tooltip" data-placement="bottom" title="#{@task.title}"
+      = truncate(@task.title, length: 120)
 
-  - if @exercise_relation
+  /- if @exercise_relation
     .row
       .row-label
         = t('exercises.parent')
@@ -61,61 +61,76 @@ legend.toggle-next
       .row-value
         = @exercise_relation.relation.name
 
-  - @exercise.descriptions.each do |description|
-    .row.vertical
-      .row-label class=(description.primary? ? 'primary-description' : '')
-        = (description.primary? ? t('exercises.primary_description_in') : t('exercises.description_in')) + ' '
-        = description.language
-        | :
-      .row-value
-        = description.text
+  .row
+    .row-label
+      = t('tasks.programming_language')
+      | :
+    .row-value
+      = @task.programming_language&.language_with_version || t('tasks.form.none')
   .row.vertical
     .row-label
-      = t('exercises.instructions')
+      = t('tasks.description')
       | :
     .row-value
-      = @exercise.instruction
-  .row
-    .row-label
-      = t('exercises.execution_environment')
-      | :
-    .row-value
-      = @exercise.execution_environment&.language || t('exercises.show.none')
-  .row
-    .row-label
-      = t('exercises.created_at')
-      | :
-    .row-value
-      = @exercise.created_at
-  .row
-    .row-label
-      = t('exercises.created_by')
-      | :
-    - if !@exercise.user
-      .row-value
-        = t('users.undefined')
-    - elsif @exercise.user == current_user
-      .row-value
-        = t('users.yourself')
-    - elsif @exercise.user.first_name.nil?
-      .row-value
-        = "User#{@exercise.user.id}"
-    - else
-      .row-value
-        = link_to @exercise.user.name, user_path(@exercise.user)
+      = @task.description
+
 
 legend.toggle-next
   span.number = '2'
-  = t('exercises.form.additional_info') + ' '
+  = t('tasks.form.additional_info') + ' '
   span.fa.fa-caret-up
 .show-table.exercise-show
+  .row.vertical
+    .row-label
+      = t('tasks.internal_description')
+      | :
+    .row-value
+      = @task.internal_description
+
   .row
+    .row-label
+      = t('common.created_at')
+      | :
+    .row-value
+      = @task.created_at
+  .row
+    .row-label
+      = t('common.created_by')
+      | :
+    - if !@task.user
+      .row-value
+        = t('users.undefined')
+    - elsif @task.user == current_user
+      .row-value
+        = t('users.yourself')
+    - elsif @task.user.first_name.nil?
+      .row-value
+        = "User#{@task.user.id}"
+    - else
+      .row-value
+        = link_to @task.user.name, user_path(@task.user)
+  .row
+    .row-label
+      = t('tasks.uuid')
+    .row-value
+      = @task.uuid
+  .row
+    .row-label
+      = t('tasks.parent_uuid')
+    .row-value
+      = @task.parent_uuid
+  .row
+    .row-label
+      = t('tasks.language')
+    .row-value
+      = @task.language
+  /.row
     .row-label
       = t('exercises.visibility.label')
       | :
     .row-value
       = @exercise.private ? t('exercises.visibility.private') : t('exercises.visibility.public')
-  .row
+  /.row
     .row-label
       = t('exercises.labels')
       | :
@@ -123,7 +138,7 @@ legend.toggle-next
       - @exercise.labels.each do |label|
         .exercise_label style=("background-color: #{'#' + label.color.to_s}; color: #{'#' + label.font_color.to_s};")
           = label.name
-  .row
+  /.row
     .row-label
       = t('exercises.groups')
       | :
@@ -131,7 +146,7 @@ legend.toggle-next
       - @exercise.groups.each do |group|
         = link_to group.name, group_path(group)
         = ' '
-  .row
+  /.row
     .row-label
       = t('exercises.license')
       | :
@@ -143,7 +158,7 @@ legend.toggle-next
       - else
         = t('exercises.show.no_license_chosen') + ' '
         = link_to('Edit', edit_exercise_path(@exercise)) + '.'
-  .row
+  /.row
     .row-label
       = t('exercises.impact')
       | :
@@ -160,19 +175,15 @@ legend.toggle-next
         = t('exercises.in_collections')
         = ': '
         = @exercise.in_collections
-  .row
-    .row-label
-      = t('exercises.uuid')
-    .row-value
-      = @exercise.uuid
-legend.toggle-next
+
+/legend.toggle-next
   span.number = '3'
   = t('exercises.files.label') + ' '
   span.fa.fa-caret-up
-- if @files.empty?
+/- if @files.empty?
   p style="margin-left: 10px; margin-bottom: 30px"
     = t('exercises.show.no_files')
-.files
+/.files
   - @files.each do |file|
     - if file.purpose != 'test'
       .show-table.exercise-show
@@ -232,14 +243,14 @@ legend.toggle-next
             .row-value
               = t("exercises.files.roles.#{file.role || 'none'}")
 
-legend.toggle-next
+/legend.toggle-next
   span.number = '4'
   = t('exercises.tests.label') + ' '
   span.fa.fa-caret-up
-- if @tests.empty?
+/- if @tests.empty?
   p style="margin-left: 10px; margin-bottom: 30px"
     = t('exercises.show.no_tests')
-.files
+/.files
   - @tests.each do |test|
     .show-table.exercise-show
       .table-header.closed.toggle-next
@@ -304,7 +315,7 @@ legend.toggle-next
           .row-value
             = test.testing_framework&.name
 .button-panel
-  .button-box
+  /.button-box
     .button-description
       = "Save Exercises for later by adding them to your cart or a collection."
     .wrapper
@@ -321,7 +332,7 @@ legend.toggle-next
           - else
             li
               = link_to t('exercises.show.add_collection'), new_collection_path(current_user)
-  .button-box
+  /.button-box
     .button-description
       = "Download your Exercise as a zip file or export them directly to an autograder."
     - if can? :push_external, Exercise
@@ -341,18 +352,18 @@ legend.toggle-next
               li
                 = link_to t('exercises.show.define_account_link'), new_user_account_link_path(current_user)
 
-  .button-box
+  /.button-box
     .button-description
       = "Derivate, translate or port this Exercise by duplicating it. The duplicate will be owned by you."
     .wrapper
       = link_to t('exercises.all.duplicate'), duplicate_exercise_path(@exercise), class:'btn btn-default'
 
-.related-panel
+/.related-panel
   = button_tag type: 'button', class: 'full-window-button related-button' do
     = t('exercises.all.related_exercises')+ ' '
     span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
     span.fa.fa-caret-down.my-caret
-div class=("related-box with-borders") data-exercise=@exercise.id
+/div class=("related-box with-borders") data-exercise=@exercise.id
   .slide-left.inactive
     = button_tag do
       i.fa.fa-caret-left
@@ -360,12 +371,12 @@ div class=("related-box with-borders") data-exercise=@exercise.id
   .slide-right.inactive
     = button_tag do
       i.fa.fa-caret-right
-.comments-panel
+/.comments-panel
   = button_tag type: 'button', class: 'full-window-button comment-button' do
     = t('exercises.all.comments') + ' '
     span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
     span.fa.fa-caret-down.my-caret
-div class=("comment-box with-borders") data-exercise=@exercise.id
+/div class=("comment-box with-borders") data-exercise=@exercise.id
   = form_for :comment, url: exercise_comments_path(@exercise), remote: true do |f|
     .write-comment
       .input-group
@@ -375,24 +386,24 @@ div class=("comment-box with-borders") data-exercise=@exercise.id
           = f.submit class: 'btn btn-default'
   .comment-body
 
-.history-panel
+/.history-panel
   = button_tag type: 'button', class: 'full-window-button history-button' do
     = t('exercises.all.history_exercises')+ ' '
     span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
     span.fa.fa-caret-down.my-caret
-div class=("history-box with-borders") data-exercise=@exercise.id
+/div class=("history-box with-borders") data-exercise=@exercise.id
   .content
 
 .actions.btn-group[role="group"]
-  - if can? :edit, @exercise
-    = link_to edit_exercise_path(@exercise),  class: 'btn btn-important' do
+  - if can? :edit, @task
+    = link_to edit_task_path(@task),  class: 'btn btn-important' do
       i.fa.fa-edit
       = ' ' + t('exercises.show.edit')
-    = link_to exercise_path(@exercise), class:'btn btn-important', method: :delete, data: { confirm: t('sure') } do
+    = link_to task_path(@task), class:'btn btn-important', method: :delete, data: { confirm: t('sure') } do
       i.fa.fa-trash
       = ' ' + t('exercises.show.delete')
-  - if can? :report, @exercise
-    .btn-group
+  - if can? :report, @task
+    /.btn-group
       = button_tag type: 'button', data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}, class: 'btn btn-important nav-btn-exercise dropdown-toggle dropdown-toggle split' do
         = t('exercises.show.report')+ ' '
         span.caret
@@ -404,11 +415,11 @@ div class=("history-box with-borders") data-exercise=@exercise.id
             = text_field_tag 'text', nil, form: 'report', class: 'form-control'
             .input-group-btn
               = submit_tag t('exercises.show.submit'), form: 'report', class: 'btn btn-default'
-  = link_to t('exercises.show.back'), exercises_path, class: 'btn btn-important'
+  = link_to t('exercises.show.back'), tasks_path, class: 'btn btn-important'
 
-= form_tag report_exercise_path(@exercise), id: 'report'
+/= form_tag report_exercise_path(@exercise), id: 'report'
 
 #page_end style="margin-top: 20px"
 
 
-= render 'import_export_dialog'
+/= render 'import_export_dialog'

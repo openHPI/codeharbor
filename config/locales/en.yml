@@ -196,6 +196,9 @@ en:
       remove_account_link:
         success: "Account Link was successfully removed."
         fail: "Account Link could not be removed."
+    tasks:
+      created: "Task successfully created."
+      updated: "Task successfully updated."
 
 
   models:
@@ -945,3 +948,24 @@ en:
       paragraph1: You have requested a password reset for CodeHarbor, please follow the link below to reset your password.
       paragraph2: Please ignore this email if you did not request a password change.
       button: 'Reset Password'
+  tasks:
+    form:
+      basic_information: "Basic Information"
+      errors:
+        programming_language:
+          not_empty_while_public: "Can't be empty while visibility is set to public"
+      none: "None"
+      additional_info: "Additional Information"
+      save: "Save Task"
+      cancel: "Cancel"
+    error: "prohibited this project from being saved"
+    title: "Title"
+    programming_language: "Programming language"
+    description: "Description"
+    internal_description: "Internal Description"
+    parent_uuid: "Parent UUID"
+    language: "Language"
+    uuid: "UUID"
+  common:
+    created_at: "Created at"
+    created_by: "Created by"

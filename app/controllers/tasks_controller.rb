@@ -31,16 +31,15 @@ class TasksController < ApplicationController
     # @user_rating = @task.ratings&.find_by(user: current_user)&.rating
     # @exercise_relation = ExerciseRelation.find_by(clone_id: @task.id)
 
-    @files = @task.exercise_files
-    @tests = @task.tests
+    # @files = @task.exercise_files
+    # @tests = @task.tests
   end
 
   def new
     @task = Task.new
     # @task.descriptions << Description.new
-    @license_default = 1
-    @license_hidden = false
-    @form_action
+    # @license_default = 1
+    # @license_hidden = false
   end
 
   def duplicate
@@ -60,41 +59,39 @@ class TasksController < ApplicationController
   def edit
     # exercise_relation = ExerciseRelation.find_by(clone_id: params[:id])
     # @exercise_relation = exercise_relation if exercise_relation
-    @license_default = @exercise.license_id
-    @license_hidden = false
-    @license_hidden = true if @exercise.downloads.positive?
+    # @license_default = @exercise.license_id
+    # @license_hidden = false
+    # @license_hidden = true if @exercise.downloads.positive?
   end
 
   # rubocop:disable Metrics/AbcSize
   def create
-    @task = Task.new(exercise_params)
-    @task.add_attributes(params[:exercise], current_user)
+    @task = Task.new(task_params)
+    # @task.add_attributes(params[:exercise], current_user)
     @task.user = current_user
 
     respond_to do |format|
       if @task.save
-        format.html { redirect_to @task, notice: t('controllers.exercise.created') }
+        format.html { redirect_to @task, notice: t('controllers.tasks.created') }
         format.json { render :show, status: :created, location: @task }
       else
-        if params[:exercise][:exercise_relation] # Exercise Relation is set if form is for duplicate exercise, otherwise it's not.
-          format.html { redirect_to duplicate_exercise_path(params[:exercise][:exercise_relation][:origin_id]) }
-        else
+        # if params[:exercise][:exercise_relation] # Exercise Relation is set if form is for duplicate exercise, otherwise it's not.
+        #   format.html { redirect_to duplicate_exercise_path(params[:exercise][:exercise_relation][:origin_id]) }
+        # else
           format.html { render :new }
-        end
-        format.json { render json: @task.errors, status: :unprocessable_entity }
+        # end
+        # format.json { render json: @task.errors, status: :unprocessable_entity }
       end
     end
   end
 
   def update
-    @exercise.state_list = []
+    # @task.state_list = []
     respond_to do |format|
-      if @exercise.update_and_version(exercise_params, params[:exercise], current_user)
-        format.html { redirect_to @exercise, notice: t('controllers.exercise.updated') }
-        format.json { render :show, status: :ok, location: @exercise }
+      if @task.update(task_params)
+        format.html { redirect_to @task, notice: t('controllers.tasks.updated') }
       else
         format.html { render :edit }
-        format.json { render json: @exercise.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -382,7 +379,7 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:title, :instruction, :maxrating, :private, :execution_environment_id)
+    params.require(:task).permit(:title, :description, :internal_description, :parent_uuid, :language, :programming_language_id)
   end
 
   def import_exercise_confirm_params
