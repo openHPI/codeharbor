@@ -176,72 +176,96 @@ legend.toggle-next
         = ': '
         = @exercise.in_collections
 
-/legend.toggle-next
+legend.toggle-next
   span.number = '3'
   = t('exercises.files.label') + ' '
   span.fa.fa-caret-up
-/- if @files.empty?
+- if @files.empty?
   p style="margin-left: 10px; margin-bottom: 30px"
     = t('exercises.show.no_files')
-/.files
+.files
   - @files.each do |file|
-    - if file.purpose != 'test'
-      .show-table.exercise-show
-        .table-header.closed.toggle-next
-          = file.full_file_name
-          = ' '
-          span.fa.fa-caret-down
-          - if file.hidden
-            span.fa-stack.crossed-out.small-slash.pull-right
-              i class="fa-stack-1x fa fa-eye"
-          - else
-            span.fa-stack.pull-right
-              i.fa.fa-stack-1x.fa-eye
-          - if file.read_only
-            span.fa-stack.crossed-out.small-slash.pull-right
-              i class="fa-stack-1x fa fa-pencil"
-          - else
-            span.fa-stack.pull-right
-              i.fa.fa-stack-1x.fa-pencil
-        .file-content
-          - if !file.attachment.present?
-            .row
-              .editor_readonly data-editor-mode="#{file.file_type.editor_mode}"
-                = file.content
-          - else
-            .row.vertical
-              .row-label
-                = t('exercises.files.attachment')
-                | :
-              .row-value
-                - if file.attached_image?
-                  = image_tag(file.attachment.variant(resize_to_limit: [900, 900]))
-                - else
-                  = link_to file.attachment.filename, exercise_file_download_attachment_path(file), 'data-turbolinks': false
-          .row
-            .row-label
-              = t('exercises.files.name')
-              | :
-            .row-value
-              = file.name
-          .row
-            .row-label
-              = t('exercises.files.path')
-              | :
-            .row-value
-              = file.path
-          .row
-            .row-label
-              = t('exercises.files.extension')
-              | :
-            .row-value
-              = file.file_type.name_with_extension if file.file_type
-          .row
-            .row-label
-              = t('exercises.files.role')
-              | :
-            .row-value
-              = t("exercises.files.roles.#{file.role || 'none'}")
+    .show-table.exercise-show
+      .table-header.closed.toggle-next
+        = file.full_file_name
+        = ' '
+        span.fa.fa-caret-down
+        / - if file.hidden
+        /   span.fa-stack.crossed-out.small-slash.pull-right
+        /     i class="fa-stack-1x fa fa-eye"
+        / - else
+        /   span.fa-stack.pull-right
+        /     i.fa.fa-stack-1x.fa-eye
+        / - if file.read_only
+        /   span.fa-stack.crossed-out.small-slash.pull-right
+        /     i class="fa-stack-1x fa fa-pencil"
+        / - else
+        /   span.fa-stack.pull-right
+        /     i.fa.fa-stack-1x.fa-pencil
+      .file-content
+        .row
+          .row-label
+            = t('tasks.files.name')
+            | :
+          .row-value
+            = file.name
+        .row
+          .row-label
+            = t('tasks.files.path')
+            | :
+          .row-value
+            = file.path
+        .row
+          .row-label
+            = t('tasks.files.internal_description')
+            | :
+          .row-value
+            = file.internal_description
+
+        / - if !file.attachment.present?
+        .row
+          .editor_readonly data-editor-mode="#{TaskFileService::AceModeByFilename.call(filename: file.name)}"
+            = file.content
+        / - else
+        /   .row.vertical
+        /     .row-label
+        /       = t('exercises.files.attachment')
+        /       | :
+        /     .row-value
+        /       - if file.attached_image?
+        /         = image_tag(file.attachment.variant(resize_to_limit: [900, 900]))
+        /       - else
+        /         = link_to file.attachment.filename, exercise_file_download_attachment_path(file), 'data-turbolinks': false
+        .row
+          .row-label
+            = t('tasks.files.used_by_grader')
+            | :
+          .row-value
+            = file.used_by_grader
+        .row
+          .row-label
+            = t('tasks.files.visible')
+            | :
+          .row-value
+            = file.visible
+        .row
+          .row-label
+            = t('tasks.files.usage_by_lms')
+            | :
+          .row-value
+            = file.usage_by_lms
+        /.row
+          .row-label
+            = t('exercises.files.extension')
+            | :
+          .row-value
+            = file.file_type.name_with_extension if file.file_type
+        /.row
+          .row-label
+            = t('exercises.files.role')
+            | :
+          .row-value
+            = t("exercises.files.roles.#{file.role || 'none'}")
 
 /legend.toggle-next
   span.number = '4'

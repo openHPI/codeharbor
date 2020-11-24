@@ -2,17 +2,17 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-validateForm = (e) ->
-  title = document.getElementById('exercise_title')
-  if title.value == ''
-    if $('#error').length
-
-    else
-      title.style.borderColor = "red"
-      $("<p id='error' style='color: red'>Title can't be blank</p>").insertAfter(title)
-    document.body.scrollTop = document.documentElement.scrollTop = 0;
-    e.preventDefault()
-    false
+#validateForm = (e) ->
+#  title = document.getElementById('exercise_title')
+#  if title.value == ''
+#    if $('#error').length
+#
+#    else
+#      title.style.borderColor = "red"
+#      $("<p id='error' style='color: red'>Title can't be blank</p>").insertAfter(title)
+#    document.body.scrollTop = document.documentElement.scrollTop = 0;
+#    e.preventDefault()
+#    false
 
 loadSelect2 = ->
 
@@ -390,7 +390,7 @@ ready =->
     $('#order_rating').removeClass('active')
     document.getElementById('order_param').value = 'order_created'
 
-  $('.exercise-validation').on('submit', validateForm)
+#  $('.exercise-validation').on('submit', validateForm)
 
   #Set link for license
   if select = document.getElementById('exercise_license_id')

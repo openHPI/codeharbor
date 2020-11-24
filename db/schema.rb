@@ -317,8 +317,11 @@ ActiveRecord::Schema.define(version: 2020_11_13_152530) do
     t.boolean "used_by_grader"
     t.string "visible"
     t.string "usage_by_lms"
+    t.string "fileable_type"
+    t.bigint "fileable_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["fileable_type", "fileable_id"], name: "index_task_files_on_fileable_type_and_fileable_id"
   end
 
   create_table "tasks", id: :serial, force: :cascade do |t|

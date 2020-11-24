@@ -371,7 +371,6 @@ en:
       delete: 'Delete'
       header: "Collection:"
       download_all: "Download All"
-      remove_all: "Remove All"
     errorMessage: "prohibited this collection from being saved."
     noExercisesAdded: "No Exercises Added"
 
@@ -626,7 +625,6 @@ en:
         solution: "Solution file"
       export: "Export"
       export_to: "Export to"
-      submit: "Submit"
       define_account_link: "Please define an account link first"
       add_to_cart: "Add to cart"
       add_to_collection: "Add to collection"
@@ -966,6 +964,15 @@ en:
     parent_uuid: "Parent UUID"
     language: "Language"
     uuid: "UUID"
+    files:
+      label: "Files"
+      name: "Name"
+      path: "Path"
+      internal_description: "Internal description"
+      used_by_grader: "Used by grader"
+      visible: "Visible"
+      usage_by_lms: "Usage by LMS"
+      configuration: "Configuration"
   common:
     created_at: "Created at"
     created_by: "Created by"

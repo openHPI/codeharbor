@@ -9,7 +9,7 @@ class CreateTaskFiles < ActiveRecord::Migration[6.0]
       t.boolean 'used_by_grader'
       t.string 'visible'
       t.string 'usage_by_lms'
-
+      t.references :fileable, polymorphic: true
 
       t.timestamps
     end

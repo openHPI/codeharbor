@@ -15,7 +15,8 @@ class Task < ApplicationRecord
   #
   # validates :uuid, uniqueness: true
 
-  has_many :files, class_name: 'TaskFile', dependent: :destroy
+  has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy
+
   has_many :tests, dependent: :destroy
 
   # has_many :exercise_labels, dependent: :destroy

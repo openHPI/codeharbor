@@ -31,7 +31,7 @@ class TasksController < ApplicationController
     # @user_rating = @task.ratings&.find_by(user: current_user)&.rating
     # @exercise_relation = ExerciseRelation.find_by(clone_id: @task.id)
 
-    # @files = @task.exercise_files
+    @files = @task.files
     # @tests = @task.tests
   end
 
@@ -378,8 +378,13 @@ class TasksController < ApplicationController
     @exercise = Task.find(params[:id])
   end
 
+  def file_params
+    %i[id content path name internal_description mime_type used_by_grader visible usage_by_lms _destroy]
+  end
+
   def task_params
-    params.require(:task).permit(:title, :description, :internal_description, :parent_uuid, :language, :programming_language_id)
+    params.require(:task).permit(:title, :description, :internal_description, :parent_uuid, :language,
+                                 :programming_language_id, files_attributes: file_params)
   end
 
   def import_exercise_confirm_params

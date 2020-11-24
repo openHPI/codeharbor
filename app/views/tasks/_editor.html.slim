@@ -10,6 +10,7 @@
   = file.object.attachment.attached? ? t('shared.back') : t('exercises.files.upload_file')
 .toggle-divs
   .edit style=editor_display
+    = file.text_area :content, class: 'hidden form-control'
     .editor
       = file.text_area :content
     /= file.text_area :content, disabled: attachment_present, class: 'hidden form-control'

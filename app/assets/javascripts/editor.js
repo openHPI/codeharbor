@@ -6,14 +6,14 @@ ready = function() {
 
   for (var i=0, max=all.length; i < max; i++) {
     var elem = all[i].getElementsByClassName("editor")[0];
-    var hidden = all[i].getElementsByClassName("hidden")[0];
+    var formElement = all[i].getElementsByClassName("hidden")[0];
 
     var editor = ace.edit(elem);
     editor.setTheme("ace/theme/chrome");
     editor.getSession().setMode("ace/mode/java");
     elem.style.fontSize='16px';
 
-    initACE(editor,hidden);
+    initACE(editor, formElement);
   }
 
   var all = document.getElementsByClassName("editor_readonly");
