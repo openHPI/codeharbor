@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_07_150946) do
+ActiveRecord::Schema.define(version: 2020_11_13_152530) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -31,6 +31,27 @@ ActiveRecord::Schema.define(version: 2020_04_07_150946) do
     t.string "name"
     t.string "check_uuid_url"
     t.index ["user_id"], name: "index_account_links_on_user_id"
+  end
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
   create_table "cart_exercises", id: :serial, force: :cascade do |t|
@@ -117,10 +138,6 @@ ActiveRecord::Schema.define(version: 2020_04_07_150946) do
     t.boolean "hidden"
     t.boolean "read_only"
     t.integer "file_type_id"
-    t.string "attachment_file_name"
-    t.string "attachment_content_type"
-    t.integer "attachment_file_size"
-    t.datetime "attachment_updated_at"
     t.bigint "test_id"
     t.index ["exercise_id"], name: "index_exercise_files_on_exercise_id"
     t.index ["file_type_id"], name: "index_exercise_files_on_file_type_id"
@@ -195,10 +212,6 @@ ActiveRecord::Schema.define(version: 2020_04_07_150946) do
   create_table "import_file_caches", force: :cascade do |t|
     t.bigint "user_id"
     t.jsonb "data"
-    t.string "zip_file_file_name"
-    t.string "zip_file_content_type"
-    t.bigint "zip_file_file_size"
-    t.datetime "zip_file_updated_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_import_file_caches_on_user_id"
@@ -308,10 +321,6 @@ ActiveRecord::Schema.define(version: 2020_04_07_150946) do
     t.datetime "updated_at", null: false
     t.string "role", default: "user"
     t.boolean "deleted"
-    t.string "avatar_file_name"
-    t.string "avatar_content_type"
-    t.integer "avatar_file_size"
-    t.datetime "avatar_updated_at"
     t.string "username"
     t.text "description"
     t.boolean "email_confirmed", default: false
@@ -321,6 +330,7 @@ ActiveRecord::Schema.define(version: 2020_04_07_150946) do
   end
 
   add_foreign_key "account_links", "users"
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "carts", "users"
   add_foreign_key "comments", "exercises"
   add_foreign_key "comments", "users"

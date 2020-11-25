@@ -50,20 +50,18 @@ module ProformaService
     end
 
     def exercise_file_from_task_file(task_file)
-      ExerciseFile.new({
-        full_file_name: task_file.filename,
-        read_only: read_only(task_file),
-        hidden: task_file.visible != 'yes',
-        role: role(task_file)
-      }.tap do |params|
-        if task_file.binary
-          params[:attachment] = file_base64(task_file)
-          params[:attachment_file_name] = task_file.filename
-          params[:attachment_content_type] = task_file.mimetype
-        else
-          params[:content] = task_file.content
-        end
-      end)
+      exercise_file = ExerciseFile.new({
+                                         full_file_name: task_file.filename,
+                                         read_only: read_only(task_file),
+                                         hidden: task_file.visible != 'yes',
+                                         role: role(task_file)
+                                       })
+      if task_file.binary
+        exercise_file.attachment.attach(io: StringIO.new(task_file.content), filename: task_file.filename, content_type: task_file.mimetype)
+      else
+        exercise_file.content = task_file.content unless task_file.binary
+      end
+      exercise_file
     end
 
     def read_only(task_file)
@@ -72,12 +70,6 @@ module ProformaService
 
     def role(task_file)
       model_solution_files.include?(task_file) ? 'reference_implementation' : task_file.internal_description
-    end
-
-    def file_base64(file)
-      raise Proforma::MimetypeError, I18n.t('exercises.import_exercise.mimetype_error', filename: file.filename) unless file.mimetype
-
-      "data:#{file.mimetype};base64,#{Base64.encode64(file.content)}"
     end
 
     def tests

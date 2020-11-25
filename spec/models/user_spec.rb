@@ -311,27 +311,6 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe 'groups_sorted_by_admin_state_and_name' do
-    let!(:user) { FactoryBot.create(:user) }
-    let!(:group1) { FactoryBot.create(:group, users: [create(:user), user], name: 'C') }
-    let!(:group2) { FactoryBot.create(:group, users: [create(:user), user], name: 'B') }
-    let!(:group3) { FactoryBot.create(:group, users: [create(:user), user], name: 'D') }
-    let!(:group4) { FactoryBot.create(:group, users: [create(:user), user], name: 'A') }
-
-    before do
-      group1.make_admin(user)
-      group2.make_admin(user)
-    end
-
-    it 'returns all groups' do
-      expect(user.groups_sorted_by_admin_state_and_name).to match_array([group1, group2, group3, group4])
-    end
-
-    it 'returns the groups where the user is admin sorted by name and following by a sorted list of groups where the user is no admin' do
-      expect(user.groups_sorted_by_admin_state_and_name).to match([group2, group1, group4, group3])
-    end
-  end
-
   describe 'exercise visible for user' do
     let!(:user) { FactoryBot.create(:user) }
     let!(:user2) { FactoryBot.create(:user) }

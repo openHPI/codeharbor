@@ -14,15 +14,21 @@ module ProformaService
         ProformaService::ConvertZipToTasks.call(zip_file: @zip_file).each do |task|
           exercise = Exercise.find_by(uuid: task[:uuid])
 
-          data[SecureRandom.uuid] = {path: task[:path].tr(' ', '_'),
-                                     exists: exercise.present?,
-                                     updatable: exercise&.updatable_by?(@user) || false,
-                                     import_id: import_file.id,
-                                     exercise_uuid: task[:uuid]}
+          data[SecureRandom.uuid] = file_data_hash(exercise, import_file, task)
         end
         import_file.update!(data: data)
       end
       data
+    end
+
+    private
+
+    def file_data_hash(exercise, import_file, task)
+      {path: task[:path].tr(' ', '_'),
+       exists: exercise.present?,
+       updatable: exercise&.updatable_by?(@user) || false,
+       import_id: import_file.id,
+       exercise_uuid: task[:uuid]}
     end
   end
 end

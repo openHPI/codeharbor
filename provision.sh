@@ -24,11 +24,11 @@ apt-get -y install nodejs
 apt-get -y install libgmp-dev
 gem install rails -v 4.2.4
 
-# codeharbour app
+# codeharbor app
 cd /vagrant
 bundle
 
 # http://stackoverflow.com/questions/22268669/deprecation-warning-you-didnt-set-config-secret-key-base
-# echo -n "Codeharbour::Application.config.secret_key_base = '" > config/initializers/secret_token.rb
+# echo -n "Codeharbor::Application.config.secret_key_base = '" > config/initializers/secret_token.rb
 # rake secret >> config/initializers/secret_token.rb
 # echo "'" >> config/initializers/secret_token.rb

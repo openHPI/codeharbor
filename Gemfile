@@ -2,8 +2,6 @@
 
 source 'https://rubygems.org'
 
-# Handle file upload
-gem 'paperclip'
 # Create Zip files
 gem 'rubyzip'
 # Handle Group Access
@@ -61,6 +59,7 @@ gem 'acts-as-taggable-on', '~> 6.5'
 gem 'config'
 gem 'faraday'
 gem 'font-awesome-rails', '>= 4.7.0.5'
+gem 'image_processing'
 gem 'jquery-ui-rails', '>= 6.0.1'
 gem 'kramdown', '~> 2.3'
 gem 'less-rails', '>= 3.0.0' # Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS

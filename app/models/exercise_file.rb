@@ -4,15 +4,15 @@ class ExerciseFile < ApplicationRecord
   belongs_to :exercise, optional: true
   belongs_to :exercise_test, optional: true, inverse_of: :exercise_file, foreign_key: 'test_id', class_name: 'Test'
   belongs_to :file_type
-  has_attached_file :attachment, styles: ->(a) { ['image/jpeg', 'image/png', 'image/giv'].include?(a.content_type) ? {large: '900x'} : {} }
-  do_not_validate_attachment_file_type :attachment
+
   validates :name, presence: true
   validates :hidden, inclusion: [true, false]
   validates :read_only, inclusion: [true, false]
   validates :exercise, presence: true, unless: -> { purpose == 'test' }
   validates :exercise_test, presence: true, if: -> { purpose == 'test' }
 
-  before_save :parse_text_data
+  after_create_commit :extract_text_data
+  has_one_attached :attachment
 
   ROLES = %w[main_file reference_implementation regular_file teacher_defined_test].freeze
   TEST_ROLE = %w[teacher_defined_test].freeze
@@ -41,7 +41,7 @@ class ExerciseFile < ApplicationRecord
 
   def duplicate(exercise: nil, test: nil)
     exercise_file_duplicate = dup
-    exercise_file_duplicate.attachment = attachment
+    exercise_file_duplicate.attachment.attach(attachment.blob) if attachment.attached?
     exercise_file_duplicate.exercise = exercise unless exercise.nil?
     exercise_file_duplicate.exercise_test = test unless test.nil?
     exercise_file_duplicate
@@ -49,11 +49,14 @@ class ExerciseFile < ApplicationRecord
 
   private
 
-  def parse_text_data
-    return unless %r{(text/)|(application/xml)}.match?(attachment.instance.attachment_content_type)
+  def extract_text_data
+    return unless attachment.attached?
 
-    self.content = Paperclip.io_adapters.for(attachment.instance.attachment).read
-    self.attachment = nil
+    return unless %r{(text/)|(application/xml)}.match?(attachment.content_type)
+
+    self.content = attachment.blob.download
+    attachment.purge
+    save!
   end
 
   def file_type_by_extension(extension)

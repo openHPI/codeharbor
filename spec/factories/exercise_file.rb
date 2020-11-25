@@ -49,26 +49,21 @@ FactoryBot.define do
     trait(:with_attachment) do
       name { 'image' }
       content {}
-      attachment do
-        "data:image/bmp;base64,#{Base64.encode64("BM:\u0000\u0000\u0000\u0000\u0000\u0000\u00006\u0000\u0000\u0000(\u0000"\
-          "\u0000\u0000\u0001\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0001\u0000\u0018\u0000\u0000\u0000\u0000\u0000\u0004"\
-          "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000"\
-          "\u0000\u0000\xFFY")}"
-      end
-      attachment_file_name { 'image.bmp' }
-      attachment_content_type { 'image/bmp' }
       file_type { FactoryBot.create(:bmp_file_type) }
+      after(:build) do |exercise_file|
+        exercise_file.attachment.attach(io: File.open('spec/fixtures/files/red.bmp'), filename: 'red.bmp', content_type: 'image/bmp')
+      end
     end
 
     trait(:with_text_attachment) do
       name { 'text' }
       content {}
-      attachment do
-        "data:text/plain;base64,#{Base64.encode64('lorem ipsum')}"
-      end
-      attachment_file_name { 'text.txt' }
-      attachment_content_type { 'text/plain' }
       file_type { FactoryBot.create(:txt_file_type) }
+      after(:build) do |exercise_file|
+        exercise_file.attachment.attach(io: File.open('spec/fixtures/files/example-filename.txt'),
+                                        filename: 'example-filename.txt',
+                                        content_type: 'text/plain')
+      end
     end
 
     trait :with_image_attachment do

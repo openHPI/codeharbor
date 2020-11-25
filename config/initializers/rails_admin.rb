@@ -46,99 +46,99 @@ RailsAdmin.config do |config|
     end
   end
 
-  config.model AccountLink do
+  config.model 'AccountLink' do
     add_valid_column(self)
   end
 
-  config.model AccountLinkUser do
+  config.model 'AccountLinkUser' do
     add_valid_column(self)
   end
 
-  config.model Cart do
+  config.model 'Cart' do
     add_valid_column(self)
   end
 
-  config.model Collection do
+  config.model 'Collection' do
     add_valid_column(self)
   end
 
-  config.model Comment do
+  config.model 'Comment' do
     add_valid_column(self)
   end
 
-  config.model Description do
+  config.model 'Description' do
     add_valid_column(self)
   end
 
-  config.model ExecutionEnvironment do
+  config.model 'ExecutionEnvironment' do
     add_valid_column(self)
   end
 
-  config.model Exercise do
+  config.model 'Exercise' do
     add_valid_column(self)
   end
 
-  config.model ExerciseAuthor do
+  config.model 'ExerciseAuthor' do
     add_valid_column(self)
   end
 
-  config.model ExerciseFile do
+  config.model 'ExerciseFile' do
     add_valid_column(self)
   end
 
-  config.model ExerciseRelation do
+  config.model 'ExerciseRelation' do
     add_valid_column(self)
   end
 
-  config.model FileType do
+  config.model 'FileType' do
     add_valid_column(self)
   end
 
-  config.model Group do
+  config.model 'Group' do
     add_valid_column(self)
   end
 
-  config.model GroupMembership do
+  config.model 'GroupMembership' do
     add_valid_column(self)
   end
 
-  config.model ImportFileCache do
+  config.model 'ImportFileCache' do
     add_valid_column(self)
   end
 
-  config.model Label do
+  config.model 'Label' do
     add_valid_column(self)
   end
 
-  config.model License do
+  config.model 'License' do
     add_valid_column(self)
   end
 
-  config.model Message do
+  config.model 'Message' do
     add_valid_column(self)
   end
 
-  config.model Rating do
+  config.model 'Rating' do
     add_valid_column(self)
   end
 
-  config.model Relation do
+  config.model 'Relation' do
     add_valid_column(self)
   end
 
-  config.model Report do
+  config.model 'Report' do
     add_valid_column(self)
   end
 
-  config.model Test do
+  config.model 'Test' do
     add_valid_column(self)
   end
 
-  config.model TestingFramework do
+  config.model 'TestingFramework' do
     add_valid_column(self)
   end
 
-  config.model User do
+  config.model 'User' do
     add_valid_column(self)
   end
 

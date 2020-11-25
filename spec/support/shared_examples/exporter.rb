@@ -72,7 +72,7 @@ RSpec.shared_examples 'task node with file' do
   it 'adds used-by-grader-attribute to file node' do
     expect(
       xml.xpath("/task/files/file[@id!='ms-placeholder-file']").attribute('used-by-grader').value
-    ).to eql((!file.attachment.exists?).to_s)
+    ).to eql((!file.attachment.attached?).to_s)
   end
 
   it 'adds visible-attribute to file node' do
