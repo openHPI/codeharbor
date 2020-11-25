@@ -205,11 +205,11 @@ RSpec.describe ProformaService::ConvertTaskToExercise do
         let(:model_solution2) do
           Proforma::ModelSolution.new(
             id: 'ms-id-2',
-            files: ms_files_2
+            files: ms_files2
           )
         end
-        let(:ms_files_2) { [ms_file_2] }
-        let(:ms_file_2) do
+        let(:ms_files2) { [ms_file2] }
+        let(:ms_file2) do
           Proforma::TaskFile.new(
             id: 'ms-file-2',
             content: 'content',

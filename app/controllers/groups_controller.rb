@@ -67,7 +67,7 @@ class GroupsController < ApplicationController
     @group.admins.each do |admin|
       send_access_request_message(admin, @group)
 
-      AccessRequest.send_access_request(current_user, admin, @group).deliver_now
+      AccessRequestMailer.send_access_request(current_user, admin, @group).deliver_now
     end
     @group.add_pending_user(current_user)
     redirect_to groups_path

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AccessRequest < ApplicationMailer
+class AccessRequestMailer < ApplicationMailer
   def send_access_request(user, admin, group)
     @user = user
     @admin = admin

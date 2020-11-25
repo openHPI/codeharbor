@@ -1,7 +1,6 @@
-require: rubocop-rspec
-
-Rails:
-  Enabled: true
+require:
+  - rubocop-rspec
+  - rubocop-rails
 
 AllCops:
   NewCops: enable
@@ -36,6 +35,10 @@ Layout/LineLength:
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
+Lint/EmptyBlock:
+  Exclude:
+    - 'spec/**/*'
+
 Lint/MissingSuper:
   Exclude:
     - 'app/services/**/*'
@@ -45,6 +48,22 @@ Lint/RaiseException:
 
 Lint/StructNewOverride:
   Enabled: true
+
+Rails/ActiveRecordAliases:
+  Exclude:
+    - 'spec/**/*'
+
+Rails/HelperInstanceVariable:
+  Exclude:
+    - app/helpers/will_paginate_helper.rb
+
+Rails/OutputSafety:
+  Exclude:
+    - app/helpers/will_paginate_helper.rb
+
+Rails/UniqueValidationWithoutIndex:
+  Enabled:
+    false
 
 RSpec/ExampleLength:
   Exclude:

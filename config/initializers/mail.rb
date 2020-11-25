@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-options = YAML.load_file(Rails.root.join('config', 'action_mailer.yml'))[Rails.env]
+options = YAML.load_file(Rails.root.join('config/action_mailer.yml'))[Rails.env]
 
 Rails.configuration.action_mailer.delivery_method = options.delete('delivery_method')
 

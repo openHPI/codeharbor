@@ -32,7 +32,7 @@ module Codeharbor
     config.assets.version = '1.0'
 
     # Configure asset paths
-    config.assets.paths << Rails.root.join('public', 'assets', 'vendor')
+    config.assets.paths << Rails.root.join('public/assets/vendor')
     config.active_record.belongs_to_required_by_default = true
   end
 end

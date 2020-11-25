@@ -3,7 +3,7 @@
 class Test < ApplicationRecord
   belongs_to :testing_framework, optional: true
   belongs_to :exercise
-  has_one :exercise_file, inverse_of: :exercise_test, dependent: :destroy, foreign_key: 'test_id'
+  has_one :exercise_file, inverse_of: :exercise_test, dependent: :destroy
   accepts_nested_attributes_for :exercise_file, allow_destroy: true
 
   validates :exercise_file, presence: true

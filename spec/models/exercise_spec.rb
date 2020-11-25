@@ -922,10 +922,10 @@ RSpec.describe Exercise, type: :model do
       end
 
       context 'when another group is added' do
-        let(:group_2) { create(:group) }
-        let(:group_params) { ['', group.id, group_2.id] }
+        let(:group2) { create(:group) }
+        let(:group_params) { ['', group.id, group2.id] }
 
-        before { group_2.add(user, as: :member) }
+        before { group2.add(user, as: :member) }
 
         it 'adds the group and keeps the old one' do
           expect { update_and_version }.to change(exercise.groups, :count).by(1)
