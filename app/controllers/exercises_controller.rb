@@ -40,7 +40,6 @@ class ExercisesController < ApplicationController
     @exercise.descriptions << Description.new
     @license_default = 1
     @license_hidden = false
-    @form_action
   end
 
   def duplicate
@@ -53,8 +52,6 @@ class ExercisesController < ApplicationController
     @exercise.errors[:base] = params[:errors].inspect if params[:errors]
     @license_default = @exercise_relation.origin.license_id
     @license_hidden = true
-
-    @form_action
   end
 
   def edit
