@@ -93,6 +93,10 @@ Rails.application.routes.draw do
     get :download_attachment
   end
 
+  resources :task_files, only: [] do
+    get :download_attachment
+  end
+
   resources :tasks
 
   resources :exercises do

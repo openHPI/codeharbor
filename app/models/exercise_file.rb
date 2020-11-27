@@ -59,7 +59,7 @@ class ExerciseFile < ApplicationRecord
     save!
   end
 
-  def file_type__extension(extension)
+  def file_type_by_extension(extension)
     FileType.find_or_create_by(file_extension: extension) do |filetype|
       filetype.name = extension[1..]
     end

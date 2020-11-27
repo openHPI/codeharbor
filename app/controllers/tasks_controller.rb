@@ -379,7 +379,7 @@ class TasksController < ApplicationController
   end
 
   def file_params
-    %i[id content path name internal_description mime_type used_by_grader visible usage_by_lms _destroy]
+    %i[id content attachment path name internal_description mime_type used_by_grader visible usage_by_lms _destroy]
   end
 
   def task_params

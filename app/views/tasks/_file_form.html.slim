@@ -7,13 +7,6 @@
 .field-element
   = file.label :internal_description, t('tasks.files.internal_description'), class:'form-label'
   = file.text_area :internal_description, class:'form-control'
-
-  /.field-element-5
-    = file.label :file_types_id, t('exercises.files.extension'), class:'form-label'
-    = file.select :file_type_id, options_for_select(FileType.all.map {|ft| [ft.name_with_extension, ft.id, {'data-extension' => ft.file_extension, 'data-editor-mode' => ft.editor_mode || 'ace/mode/java' }]}, file.object.file_type_id), {}, class: 'file-type'
-  /.field-element-5
-    = file.label :role, 'Role', class:'form-label'
-    = file.select :role, ExerciseFile::ROLES - ExerciseFile::TEST_ROLE, {}, class: 'file-role'
 .field-element
   = render 'file_config', file: file
 .field-element

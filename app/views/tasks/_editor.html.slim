@@ -1,28 +1,27 @@
-/- attachment_present = file.object.attachment.attached?
-/- if attachment_present
+- attachment_present = file.object.attachment.attached?
+- if attachment_present
   - editor_display = "display: none"
   - attachment_display = "display: block"
-/- else
-- editor_display = "display: block"
-/  - attachment_display = "display: none"
+- else
+  - editor_display = "display: block"
+  - attachment_display = "display: none"
 = f.label :content, t('exercises.files.content'), class: 'form-label', style: 'margin-bottom: 15px'
-/a.btn.btn-main.btn-xs.toggle-input data={text_initial: t('exercises.files.upload_file'), text_toggled: t('shared.back')} href='#'
+a.btn.btn-main.btn-xs.toggle-input data={text_initial: t('exercises.files.upload_file'), text_toggled: t('shared.back')} href='#'
   = file.object.attachment.attached? ? t('shared.back') : t('exercises.files.upload_file')
 .toggle-divs
   .edit style=editor_display
-    = file.text_area :content, class: 'hidden form-control'
+    = file.text_area :content, disabled: attachment_present, class: 'hidden form-control'
     .editor
       = file.text_area :content
-    /= file.text_area :content, disabled: attachment_present, class: 'hidden form-control'
-  /.attachment style=attachment_display
-    = file.hidden_field :attachment_present, value: attachment_present, class: 'hidden-attachment-present'
+  .attachment style=attachment_display
+    / = file.hidden_field :attachment_present, value: attachment_present, class: 'hidden-attachment-present'
     - if attachment_present
       .btn-group
-        - if file.object.attached_image?
+        - if file.object.attachment.image?
           = image_tag file.object.attachment.variant(resize_to_limit: [600, 600])
         - else
           = link_to file.object.attachment.filename, exercise_file_download_attachment_path(file), class: 'btn btn-default', style: "border-right: none", 'data-turbolinks' => false
         = link_to '#', class: 'btn btn-default remove-attachment', style: "border-left: none; margin-right: 5px;" do
           i.fa.fa-remove style=("color: gray")
     .alternative style=editor_display
-      = file.file_field :content, disabled: !attachment_present, class: 'alternative-input form-control'
+      = file.file_field :attachment, disabled: !attachment_present, class: 'alternative-input form-control'
