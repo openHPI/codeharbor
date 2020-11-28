@@ -2,11 +2,14 @@
 
 class Test < ApplicationRecord
   belongs_to :testing_framework, optional: true
-  belongs_to :exercise
+  belongs_to :exercise, optional: true
+  belongs_to :task, optional: true
   has_one :exercise_file, inverse_of: :exercise_test, dependent: :destroy
+  has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy
   accepts_nested_attributes_for :exercise_file, allow_destroy: true
+  accepts_nested_attributes_for :files, allow_destroy: true
 
-  validates :exercise_file, presence: true
+  # validates :exercise_file, presence: true
 
   def content
     exercise_file&.content || ''

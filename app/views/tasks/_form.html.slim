@@ -82,22 +82,23 @@
         = t('tasks.files.label') + ' '
         span.fa.fa-caret-up
       .form-content
-        .field-element
+        = render 'nested_file_form', f: f
+        /.field-element
           = f.nested_fields_for :files, style: 'margin-left: 10px' do |file|
             .show-table.exercise-show
-              /- if file.object.new_record?
-              - display_container = "display: block"
-              .table-header
-                = file.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
-                  i.fa.fa-remove style=("color: #800000")
-                  = ' ' + t('exercises.form.files.remove')
-              /- else
+              - if file.object.new_record?
+                - display_container = "display: block"
+                .table-header
+                  = file.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
+                    i.fa.fa-remove style=("color: #800000")
+                    = ' ' + t('exercises.form.files.remove')
+              - else
                 - display_container = "display: none"
                 .table-header.closed.toggle-next
                   = file.object.full_file_name
                   = ' '
                   span.fa.fa-caret-down
-                  = file.remove_nested_fields_link do #:text, class: 'btn btn-main btn-xs pull-right' do
+                  = file.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
                     i.fa.fa-remove style=("color: #800000")
                     = ' ' + t('exercises.form.files.remove')
               .file-container style="margin-left: 10px; #{display_container}"
@@ -105,7 +106,7 @@
           = f.add_nested_fields_link :files, ' ', class:'btn btn-main', id: 'addFileButton' do
             i.fa.fa-plus style=("color: #008000")
             = ' ' + t('exercises.form.files.add')
-    /fieldset.form-group
+    fieldset.form-group
       legend.toggle-next
         span.number = '4'
         = t('exercises.tests.label') + ' '
@@ -123,18 +124,18 @@
               - else
                 - display_container = "display: none"
                 .table-header.closed.toggle-next
-                  = test.object.full_file_name
+                  = test.object.title
                   = ' '
                   span.fa.fa-caret-down
                   = test.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
                     i.fa.fa-remove style=("color: #800000")
-                    = ' ' + t('exercises.form.files.remove')
+                    = ' ' + t('tasks.form.tests.remove')
               .file-container style="margin-left: 10px; #{display_container}"
                 = render 'test_form', f: f, test: test
-          .field-element
-            = f.add_nested_fields_link :tests, ' ', class:'btn btn-main', id: 'addTestButton' do
-              i.fa.fa-plus style=("color: #008000")
-              = ' ' + t('exercises.form.tests.add')
+          / .field-element
+          = f.add_nested_fields_link :tests, ' ', class:'btn btn-main', id: 'addTestButton' do
+            i.fa.fa-plus style=("color: #008000")
+            = ' ' + t('exercises.form.tests.add')
     .form-group
       .actions.btn-group[role="group"]
         = button_tag type: 'submit', class: 'btn btn-important' do

@@ -25,18 +25,9 @@ ready = function() {
     editor.setReadOnly(true);
     all[i].style.fontSize='14px';
   }
-
-  $("#addFileButton").click(function() {
-    setTimeout(function() {
-      $(ready);
-    }, 10);
-  });
-
-  $("#addTestButton").click(function() {
-    setTimeout(function() {
-      $(ready);
-    }, 10);
-  });
+  $(document).on("fields_added.nested_form_fields", function () {
+    $(ready);
+  })
 
 };
 

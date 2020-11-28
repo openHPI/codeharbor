@@ -1,23 +1,49 @@
-- test.object.build_file unless test.object.file
-= test.fields_for :file do |file|
-  .field-element
-    = f.label :name, t('exercises.files.name'), class: 'form-label'
-    = file.text_field :name, class: 'form-control file-name'
-  .field-element
-    = f.label :path, t('exercises.files.path'), class: 'form-label'
-    = file.text_field :path, size: 40, class: 'form-control'
-  .field-row
-    .field-element-10
-      = f.label :file_types_id, t('exercises.files.extension'), class: 'form-label'
-      = file.select :file_type_id, options_for_select(FileType.all.map {|ft| [ft.name_with_extension, ft.id, {'data-extension' => ft.file_extension, 'data-editor-mode' => ft.editor_mode || 'ace/mode/java' }]}, file.object.file_type_id), {}, class: 'file-type'
-    .field-element-2
-      = render 'file_config', file: file
 .field-element
-  = f.label :feedback_message, t('exercises.tests.feedback'), class: 'form-label'
-  = test.text_area :feedback_message, class: 'form-control'
+  = test.label :title, t('tasks.tests.title'), class: 'form-label'
+  = test.text_field :title, class: 'form-control'
 .field-element
-  = f.label :testing_framework, t('exercises.tests.framework'), class: 'form-label'
-  = test.collection_select :testing_framework_id, TestingFramework.all, :id, :name, {}, {class: 'form-control'}
+  = test.label :description, t('tasks.tests.description'), class: 'form-label'
+  = test.text_field :description, class: 'form-control'
 .field-element
-  = test.fields_for :file do |file|
-    = render 'editor', f:f, file: file
+  = test.label :internal_description, t('tasks.tests.internal_description'), class: 'form-label'
+  = test.text_field :internal_description, class: 'form-control'
+.field-element
+  = test.label :test_type, t('tasks.tests.test_type'), class: 'form-label'
+  = test.text_field :test_type, class: 'form-control'
+.field-element
+  = test.label :xml_id, t('tasks.tests.xml_id'), class: 'form-label'
+  = test.text_field :xml_id, class: 'form-control'
+.field-element
+  = test.label :validity, t('tasks.tests.validity'), class: 'form-label'
+  = test.number_field :validity, class: 'form-control', in: 0.0..1.0, step: 0.01
+.field-element
+  = test.label :timeout, t('tasks.tests.timeout'), class: 'form-label'
+  = test.number_field :timeout, class: 'form-control', min: 1, step: 1
+  / = test.fields_for :file do |file|
+= render 'nested_file_form', f: test
+
+/ .show-table.exercise-show
+  = test.nested_fields_for :files, style: 'margin-left: 10px' do |file|
+    .field-element
+      = test.label :name, t('exercises.files.name'), class: 'form-label'
+      = file.text_field :name, class: 'form-control file-name'
+    .field-element
+      = test.label :path, t('exercises.files.path'), class: 'form-label'
+      = file.text_field :path, size: 40, class: 'form-control'
+    .field-row
+      /.field-element-10
+        = test.label :file_types_id, t('exercises.files.extension'), class: 'form-label'
+        = file.select :file_type_id, options_for_select(FileType.all.map {|ft| [ft.name_with_extension, ft.id, {'data-extension' => ft.file_extension, 'data-editor-mode' => ft.editor_mode || 'ace/mode/java' }]}, file.object.file_type_id), {}, class: 'file-type'
+      .field-element-2
+        = render 'file_config', file: file
+    .field-element
+      = render 'editor', f: test, file: file
+    = file.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
+      i.fa.fa-remove style=("color: #800000")
+      = ' ' + t('exercises.form.files.remove')
+
+  = test.add_nested_fields_link :files, ' ', class:'btn btn-main', id: 'addTestFileButton' do
+    i.fa.fa-plus style=("color: #008000")
+    = ' ' + t('tasks.form.tests.add_file')
+
+

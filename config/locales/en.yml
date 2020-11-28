@@ -956,6 +956,9 @@ en:
       additional_info: "Additional Information"
       save: "Save Task"
       cancel: "Cancel"
+      tests:
+        remove: "Remove test"
+        add_file: "Add file to test"
     error: "prohibited this project from being saved"
     title: "Title"
     programming_language: "Programming language"
@@ -973,6 +976,14 @@ en:
       visible: "Visible"
       usage_by_lms: "Usage by LMS"
       configuration: "Configuration"
+    tests:
+      title: "Title"
+      description: "Description"
+      internal_description: "Internal description"
+      test_type: "Test type"
+      xml_id: "XML ID"
+      validity: "Validity"
+      timeout: "Timeout"
   common:
     created_at: "Created at"
     created_by: "Created by"

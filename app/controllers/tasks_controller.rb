@@ -382,9 +382,13 @@ class TasksController < ApplicationController
     %i[id content attachment path name internal_description mime_type used_by_grader visible usage_by_lms _destroy]
   end
 
+  def test_params
+    [:id, :title, :description, :internal_description, :test_type, :xml_id, :validity, :timeout, :_destroy, {files_attributes: file_params}]
+  end
+
   def task_params
     params.require(:task).permit(:title, :description, :internal_description, :parent_uuid, :language,
-                                 :programming_language_id, files_attributes: file_params)
+                                 :programming_language_id, files_attributes: file_params, tests_attributes: test_params)
   end
 
   def import_exercise_confirm_params

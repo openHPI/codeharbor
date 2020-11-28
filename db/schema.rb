@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_13_152530) do
+ActiveRecord::Schema.define(version: 2020_11_27_153334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -353,6 +353,14 @@ ActiveRecord::Schema.define(version: 2020_11_13_152530) do
     t.datetime "updated_at", null: false
     t.integer "exercise_id"
     t.float "score"
+    t.string "title"
+    t.string "description"
+    t.string "internal_description"
+    t.string "test_type"
+    t.string "xml_id"
+    t.string "validity"
+    t.string "timeout"
+    t.bigint "task_id"
     t.index ["exercise_id"], name: "index_tests_on_exercise_id"
     t.index ["testing_framework_id"], name: "index_tests_on_testing_framework_id"
   end
