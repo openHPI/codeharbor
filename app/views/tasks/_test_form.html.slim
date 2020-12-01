@@ -20,6 +20,8 @@
   = test.label :timeout, t('tasks.tests.timeout'), class: 'form-label'
   = test.number_field :timeout, class: 'form-control', min: 1, step: 1
   / = test.fields_for :file do |file|
+.files-header
+  = label_tag nil, t('tasks.files.label') + ':'
 = render 'nested_file_form', f: test
 
 / .show-table.exercise-show

@@ -130,7 +130,7 @@
                   = test.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
                     i.fa.fa-remove style=("color: #800000")
                     = ' ' + t('tasks.form.tests.remove')
-              .file-container style="margin-left: 10px; #{display_container}"
+              .test-container style="margin-left: 10px; #{display_container}"
                 = render 'test_form', f: f, test: test
           / .field-element
           = f.add_nested_fields_link :tests, ' ', class:'btn btn-main', id: 'addTestButton' do

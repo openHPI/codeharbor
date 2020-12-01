@@ -190,18 +190,6 @@ legend.toggle-next
         = file.full_file_name
         = ' '
         span.fa.fa-caret-down
-        / - if file.hidden
-        /   span.fa-stack.crossed-out.small-slash.pull-right
-        /     i class="fa-stack-1x fa fa-eye"
-        / - else
-        /   span.fa-stack.pull-right
-        /     i.fa.fa-stack-1x.fa-eye
-        / - if file.read_only
-        /   span.fa-stack.crossed-out.small-slash.pull-right
-        /     i class="fa-stack-1x fa fa-pencil"
-        / - else
-        /   span.fa-stack.pull-right
-        /     i.fa.fa-stack-1x.fa-pencil
       .file-content
         .row
           .row-label
@@ -267,77 +255,183 @@ legend.toggle-next
           .row-value
             = t("exercises.files.roles.#{file.role || 'none'}")
 
-/legend.toggle-next
+legend.toggle-next
   span.number = '4'
   = t('exercises.tests.label') + ' '
   span.fa.fa-caret-up
-/- if @tests.empty?
+- if @tests.empty?
   p style="margin-left: 10px; margin-bottom: 30px"
     = t('exercises.show.no_tests')
-/.files
+.tests
   - @tests.each do |test|
     .show-table.exercise-show
       .table-header.closed.toggle-next
-        = test.full_file_name
+        = test.title
         = ' '
         span.fa.fa-caret-down
-        - if test.exercise_file.hidden
-          span.fa-stack.crossed-out.small-slash.pull-right
-            i class="fa-stack-1x fa fa-eye"
-        - else
-          span.fa-stack.pull-right
-            i.fa.fa-stack-1x.fa-eye
-        - if test.exercise_file.read_only
-          span.fa-stack.crossed-out.small-slash.pull-right
-            i class="fa-stack-1x fa fa-pencil"
-        - else
-          span.fa-stack.pull-right
-            i.fa.fa-stack-1x.fa-pencil
-      .file-content
-        - if !test.attachment.present?
-          .row
-            .editor_readonly data-editor-mode="#{test.exercise_file.file_type.editor_mode}"
-              = test.content
-        - else
-          .row.vertical
-            .row-label
-              = t('exercises.files.attachment')
-              | :
-            .row-value
-              - if test.attached_image?
-                = image_tag(test.attachment.url(:large))
-              - else
-                = link_to test.attachment.filename, exercise_file_download_attachment_path(test.exercise_file), 'data-turbolinks': false
+      .test-content
         .row
           .row-label
-            = t('exercises.files.name')
+            = t('tasks.tests.title')
             | :
           .row-value
-            = test.name
+            = test.title
         .row
           .row-label
-            = t('exercises.files.path')
+            = t('tasks.tests.description')
             | :
           .row-value
-            = test.path
+            = test.description
         .row
           .row-label
-            = t('exercises.files.extension')
+            = t('tasks.tests.internal_description')
             | :
           .row-value
-            = test.file_type.name_with_extension if test.file_type
-        .row.vertical
-          .row-label
-            = t('exercises.tests.feedback')
-            | :
-          .row-value
-            = test.feedback_message
+            = test.internal_description
         .row
           .row-label
-            = t('exercises.tests.framework')
+            = t('tasks.tests.test_type')
             | :
           .row-value
-            = test.testing_framework&.name
+            = test.test_type
+        .row
+          .row-label
+            = t('tasks.tests.xml_id')
+            | :
+          .row-value
+            = test.xml_id
+        .row
+          .row-label
+            = t('tasks.tests.validity')
+            | :
+          .row-value
+            = test.validity
+        .row
+          .row-label
+            = t('tasks.tests.timeout')
+            | :
+          .row-value
+            = test.timeout
+
+        .files-header
+          = label_tag nil, t('tasks.files.label') + ':'
+        .files
+          - test.files.each do |file|
+            .show-table.exercise-show
+              .table-header.closed.toggle-next
+                = file.full_file_name
+                = ' '
+                span.fa.fa-caret-down
+              .file-content
+                .row
+                  .row-label
+                    = t('tasks.files.name')
+                    | :
+                  .row-value
+                    = file.name
+                .row
+                  .row-label
+                    = t('tasks.files.path')
+                    | :
+                  .row-value
+                    = file.path
+                .row
+                  .row-label
+                    = t('tasks.files.internal_description')
+                    | :
+                  .row-value
+                    = file.internal_description
+
+                - if !file.attachment.present?
+                  .row
+                    .editor_readonly data-editor-mode="#{TaskFileService::AceModeByFilename.call(filename: file.name)}"
+                      = file.content
+                - else
+                  .row.vertical
+                    .row-label
+                      = t('exercises.files.attachment')
+                      | :
+                    .row-value
+                      - if file.attachment.image?
+                        = image_tag(file.attachment.variant(resize_to_limit: [900, 900]))
+                      - else
+                        = link_to file.attachment.filename, task_file_download_attachment_path(file), 'data-turbolinks': false
+                .row
+                  .row-label
+                    = t('tasks.files.used_by_grader')
+                    | :
+                  .row-value
+                    = file.used_by_grader
+                .row
+                  .row-label
+                    = t('tasks.files.visible')
+                    | :
+                  .row-value
+                    = file.visible
+                .row
+                  .row-label
+                    = t('tasks.files.usage_by_lms')
+                    | :
+                  .row-value
+                    = file.usage_by_lms
+
+      /   - if test.exercise_file.hidden
+      /     span.fa-stack.crossed-out.small-slash.pull-right
+      /       i class="fa-stack-1x fa fa-eye"
+      /   - else
+      /     span.fa-stack.pull-right
+      /       i.fa.fa-stack-1x.fa-eye
+      /   - if test.exercise_file.read_only
+      /     span.fa-stack.crossed-out.small-slash.pull-right
+      /       i class="fa-stack-1x fa fa-pencil"
+      /   - else
+      /     span.fa-stack.pull-right
+      /       i.fa.fa-stack-1x.fa-pencil
+      / .file-content
+      /   - if !test.attachment.present?
+      /     .row
+      /       .editor_readonly data-editor-mode="#{test.exercise_file.file_type.editor_mode}"
+      /         = test.content
+      /   - else
+      /     .row.vertical
+      /       .row-label
+      /         = t('exercises.files.attachment')
+      /         | :
+      /       .row-value
+      /         - if test.attached_image?
+      /           = image_tag(test.attachment.url(:large))
+      /         - else
+      /           = link_to test.attachment.filename, exercise_file_download_attachment_path(test.exercise_file), 'data-turbolinks': false
+      /   .row
+      /     .row-label
+      /       = t('exercises.files.name')
+      /       | :
+      /     .row-value
+      /       = test.name
+      /   .row
+      /     .row-label
+      /       = t('exercises.files.path')
+      /       | :
+      /     .row-value
+      /       = test.path
+      /   .row
+      /     .row-label
+      /       = t('exercises.files.extension')
+      /       | :
+      /     .row-value
+      /       = test.file_type.name_with_extension if test.file_type
+      /   .row.vertical
+      /     .row-label
+      /       = t('exercises.tests.feedback')
+      /       | :
+      /     .row-value
+      /       = test.feedback_message
+      /   .row
+      /     .row-label
+      /       = t('exercises.tests.framework')
+      /       | :
+      /     .row-value
+      /       = test.testing_framework&.name
 .button-panel
   /.button-box
     .button-description

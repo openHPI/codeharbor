@@ -32,7 +32,7 @@ class TasksController < ApplicationController
     # @exercise_relation = ExerciseRelation.find_by(clone_id: @task.id)
 
     @files = @task.files
-    # @tests = @task.tests
+    @tests = @task.tests
   end
 
   def new
