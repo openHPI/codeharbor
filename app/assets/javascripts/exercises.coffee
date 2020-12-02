@@ -430,10 +430,10 @@ ready =->
     $(this).parents('.import-export-exercise').remove()
 
   $('body').on 'change', '.file-type', (event) ->
-    changeEditorMode(this)
+    changeEditorModeByFiletype(this)
 
   $('.file-type').each ->
-    changeEditorMode(this)
+    changeEditorModeByFiletype(this)
 
   $('body').on 'click', '.import-action', (event) ->
     importId = $(this).parents('.import-export-exercise').attr('data-import-id')
@@ -452,7 +452,7 @@ ready =->
 
 $(document).on('turbolinks:load', ready)
 
-changeEditorMode = (element) ->
+changeEditorModeByFiletype = (element) ->
   editor = $(element).parents('.file-container').find('.editor')[0]
   mode = $(element).find('option:selected').attr('data-editor-mode')
   ace.edit(editor).getSession().setMode(mode)
@@ -555,4 +555,4 @@ exportExerciseConfirm = (exerciseID, accountLinkID, pushType) ->
 # export function to make it accessible from outside this scope
 root = exports ? this;
 root.exportExerciseStart = exportExerciseStart
-root.changeEditorMode = changeEditorMode
+root.changeEditorModeByFiletype = changeEditorModeByFiletype
