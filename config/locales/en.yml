@@ -544,6 +544,7 @@ en:
       content: "Content"
       feedback: "Feedback Message"
       framework: "Testing Framework"
+      model_solution: "Model solution"
 
     defaults:
       no_description: "No Description"
@@ -604,6 +605,8 @@ en:
       save: "Save Exercise"
       cancel: "Cancel"
       none: None
+      model_solutions:
+        add: "Add Model solution"
 
     admin:
       header: "Exercise Administration"
@@ -679,6 +682,8 @@ en:
     state_removed: successfully removed state
     index:
       no_execution_environment_selected: No programming language selected
+    model_solution:
+      label: "Model solution"
 
   file_types:
     header: "File Types"
@@ -957,8 +962,12 @@ en:
       save: "Save Task"
       cancel: "Cancel"
       tests:
-        remove: "Remove test"
+        remove: "Remove Test"
         add_file: "Add file to test"
+      model_solutions:
+        add: "Add Model solution"
+      model_solution:
+        remove: "Remove Model solution"
     error: "prohibited this project from being saved"
     title: "Title"
     programming_language: "Programming language"
@@ -984,6 +993,11 @@ en:
       xml_id: "XML ID"
       validity: "Validity"
       timeout: "Timeout"
+    model_solution:
+      label: "Model solutions"
+      plural: "Model solutions"
+      singular: "Model solution"
+      none_present: "No Model solutions present"
   common:
     created_at: "Created at"
     created_by: "Created by"

@@ -120,7 +120,7 @@
                 .table-header
                   = test.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
                     i.fa.fa-remove style=("color: #800000")
-                    = ' ' + t('exercises.form.files.remove')
+                    = ' ' + t('tasks.form.tests.remove')
               - else
                 - display_container = "display: none"
                 .table-header.closed.toggle-next
@@ -136,6 +136,37 @@
           = f.add_nested_fields_link :tests, ' ', class:'btn btn-main', id: 'addTestButton' do
             i.fa.fa-plus style=("color: #008000")
             = ' ' + t('exercises.form.tests.add')
+    fieldset.form-group
+      legend.toggle-next
+        span.number = '5'
+        = t('tasks.model_solution.plural') + ' '
+        span.fa.fa-caret-up
+      .form-content
+        .field-element
+          = f.nested_fields_for :model_solutions, style: 'margin-left: 10px' do |model_solution|
+            .show-table.exercise-show
+              - if model_solution.object.new_record?
+                - display_container = "display: block"
+                .table-header
+                  = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
+                    i.fa.fa-remove style=("color: #800000")
+                    = ' ' + t('tasks.form.model_solution.remove')
+              - else
+                - display_container = "display: none"
+                .table-header.closed.toggle-next
+                  = t('tasks.model_solution.singular')
+                  = ' '
+                  = model_solution.object.task.model_solutions.find_index(model_solution.object) + 1
+                  span.fa.fa-caret-down
+                  = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
+                    i.fa.fa-remove style=("color: #800000")
+                    = ' ' + t('tasks.form.model_solution.remove')
+              .model-solution-container style="margin-left: 10px; #{display_container}"
+                = render 'model_solution_form', f: f, model_solution: model_solution
+          / .field-element
+          = f.add_nested_fields_link :model_solutions, ' ', class:'btn btn-main', id: 'addTestButton' do
+            i.fa.fa-plus style=("color: #008000")
+            = ' ' + t('tasks.form.model_solutions.add')
     .form-group
       .actions.btn-group[role="group"]
         = button_tag type: 'submit', class: 'btn btn-important' do

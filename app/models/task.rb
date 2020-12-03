@@ -18,6 +18,7 @@ class Task < ApplicationRecord
   has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy
 
   has_many :tests, dependent: :destroy
+  has_many :model_solutions, dependent: :destroy
 
   # has_many :exercise_labels, dependent: :destroy
   # has_many :labels, through: :exercise_labels
@@ -49,6 +50,7 @@ class Task < ApplicationRecord
   # accepts_nested_attributes_for :descriptions, allow_destroy: true
   accepts_nested_attributes_for :files, allow_destroy: true
   accepts_nested_attributes_for :tests, allow_destroy: true
+  accepts_nested_attributes_for :model_solutions, allow_destroy: true
 
   # default_scope { where(deleted: [nil, false]) }
 

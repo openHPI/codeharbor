@@ -246,8 +246,11 @@ ActiveRecord::Schema.define(version: 2020_11_27_153334) do
   create_table "model_solutions", force: :cascade do |t|
     t.string "description"
     t.string "internal_description"
+    t.string "xml_id"
+    t.bigint "task_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["task_id"], name: "index_model_solutions_on_task_id"
   end
 
   create_table "programming_languages", force: :cascade do |t|

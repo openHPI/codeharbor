@@ -33,6 +33,7 @@ class TasksController < ApplicationController
 
     @files = @task.files
     @tests = @task.tests
+    @model_solutions = @task.model_solutions
   end
 
   def new
@@ -386,9 +387,14 @@ class TasksController < ApplicationController
     [:id, :title, :description, :internal_description, :test_type, :xml_id, :validity, :timeout, :_destroy, {files_attributes: file_params}]
   end
 
+  def model_solution_params
+    [:id, :description, :internal_description, :xml_id, :_destroy, {files_attributes: file_params}]
+  end
+
   def task_params
     params.require(:task).permit(:title, :description, :internal_description, :parent_uuid, :language,
-                                 :programming_language_id, files_attributes: file_params, tests_attributes: test_params)
+                                 :programming_language_id, files_attributes: file_params, tests_attributes: test_params,
+                                 model_solutions_attributes: model_solution_params)
   end
 
   def import_exercise_confirm_params

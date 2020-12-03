@@ -35,14 +35,14 @@ loadFileScript =->
     event.preventDefault()
     fullPath = this.value
     fullName = get_filename_from_full_path(fullPath)
-    name = fullName.split('.')[0]
-    extension = '.' + fullName.split('.')[1]
+#    name = fullName.split('.')[0]
+#    extension = '.' + fullName.split('.')[1]
     if fullPath
-      console.log(name)
-      $(this).parents('.file-container').find('.file-name').val(name)
-      index = $(this).parents('.file-container').find('.file-type option[data-extension="' + extension + '"]').val()
-      $(this).parents('.file-container').find('.file-type').val(index)
-      $(this).parents('.file-container').find('.file-type').trigger('change')
+#      console.log(name)
+      $(this).parents('.file-container').find('.file-name').val(fullName)
+#      index = $(this).parents('.file-container').find('.file-type option[data-extension="' + extension + '"]').val()
+#      $(this).parents('.file-container').find('.file-type').val(index)
+#      $(this).parents('.file-container').find('.file-type').trigger('change')
       
 ready =->
     loadFileScript()

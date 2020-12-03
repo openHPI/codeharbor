@@ -375,63 +375,103 @@ legend.toggle-next
                   .row-value
                     = file.usage_by_lms
 
-      /   - if test.exercise_file.hidden
-      /     span.fa-stack.crossed-out.small-slash.pull-right
-      /       i class="fa-stack-1x fa fa-eye"
-      /   - else
-      /     span.fa-stack.pull-right
-      /       i.fa.fa-stack-1x.fa-eye
-      /   - if test.exercise_file.read_only
-      /     span.fa-stack.crossed-out.small-slash.pull-right
-      /       i class="fa-stack-1x fa fa-pencil"
-      /   - else
-      /     span.fa-stack.pull-right
-      /       i.fa.fa-stack-1x.fa-pencil
-      / .file-content
-      /   - if !test.attachment.present?
-      /     .row
-      /       .editor_readonly data-editor-mode="#{test.exercise_file.file_type.editor_mode}"
-      /         = test.content
-      /   - else
-      /     .row.vertical
-      /       .row-label
-      /         = t('exercises.files.attachment')
-      /         | :
-      /       .row-value
-      /         - if test.attached_image?
-      /           = image_tag(test.attachment.url(:large))
-      /         - else
-      /           = link_to test.attachment.filename, exercise_file_download_attachment_path(test.exercise_file), 'data-turbolinks': false
-      /   .row
-      /     .row-label
-      /       = t('exercises.files.name')
-      /       | :
-      /     .row-value
-      /       = test.name
-      /   .row
-      /     .row-label
-      /       = t('exercises.files.path')
-      /       | :
-      /     .row-value
-      /       = test.path
-      /   .row
-      /     .row-label
-      /       = t('exercises.files.extension')
-      /       | :
-      /     .row-value
-      /       = test.file_type.name_with_extension if test.file_type
-      /   .row.vertical
-      /     .row-label
-      /       = t('exercises.tests.feedback')
-      /       | :
-      /     .row-value
-      /       = test.feedback_message
-      /   .row
-      /     .row-label
-      /       = t('exercises.tests.framework')
-      /       | :
-      /     .row-value
-      /       = test.testing_framework&.name
+legend.toggle-next
+  span.number = '5'
+  = t('tasks.model_solution.plural') + ' '
+  span.fa.fa-caret-up
+- if @model_solutions.empty?
+  p style="margin-left: 10px; margin-bottom: 30px"
+    = t('tasks.model_solution.none_present')
+.model_solutions
+  - @model_solutions.each do |model_solution|
+    .show-table.exercise-show
+      .table-header.closed.toggle-next
+        = t('tasks.model_solution.singular')
+        = ' '
+        = @model_solutions.find_index(model_solution) + 1
+        = ' '
+        span.fa.fa-caret-down
+      .test-content
+        .row
+          .row-label
+            = t('tasks.tests.description')
+            | :
+          .row-value
+            = model_solution.description
+        .row
+          .row-label
+            = t('tasks.tests.internal_description')
+            | :
+          .row-value
+            = model_solution.internal_description
+        .row
+          .row-label
+            = t('tasks.tests.xml_id')
+            | :
+          .row-value
+            = model_solution.xml_id
+
+        .files-header
+          = label_tag nil, t('tasks.files.label') + ':'
+        .files
+          - model_solution.files.each do |file|
+            .show-table.exercise-show
+              .table-header.closed.toggle-next
+                = file.full_file_name
+                = ' '
+                span.fa.fa-caret-down
+              .file-content
+                .row
+                  .row-label
+                    = t('tasks.files.name')
+                    | :
+                  .row-value
+                    = file.name
+                .row
+                  .row-label
+                    = t('tasks.files.path')
+                    | :
+                  .row-value
+                    = file.path
+                .row
+                  .row-label
+                    = t('tasks.files.internal_description')
+                    | :
+                  .row-value
+                    = file.internal_description
+
+                - if !file.attachment.present?
+                  .row
+                    .editor_readonly data-editor-mode="#{TaskFileService::AceModeByFilename.call(filename: file.name)}"
+                      = file.content
+                - else
+                  .row.vertical
+                    .row-label
+                      = t('exercises.files.attachment')
+                      | :
+                    .row-value
+                      - if file.attachment.image?
+                        = image_tag(file.attachment.variant(resize_to_limit: [900, 900]))
+                      - else
+                        = link_to file.attachment.filename, task_file_download_attachment_path(file), 'data-turbolinks': false
+                .row
+                  .row-label
+                    = t('tasks.files.used_by_grader')
+                    | :
+                  .row-value
+                    = file.used_by_grader
+                .row
+                  .row-label
+                    = t('tasks.files.visible')
+                    | :
+                  .row-value
+                    = file.visible
+                .row
+                  .row-label
+                    = t('tasks.files.usage_by_lms')
+                    | :
+                  .row-value
+                    = file.usage_by_lms
 .button-panel
   /.button-box
     .button-description
@@ -520,7 +560,7 @@ legend.toggle-next
     = link_to task_path(@task), class:'btn btn-important', method: :delete, data: { confirm: t('sure') } do
       i.fa.fa-trash
       = ' ' + t('exercises.show.delete')
-  - if can? :report, @task
+  /- if can? :report, @task
     /.btn-group
       = button_tag type: 'button', data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}, class: 'btn btn-important nav-btn-exercise dropdown-toggle dropdown-toggle split' do
         = t('exercises.show.report')+ ' '
