@@ -1,4 +1,4 @@
-$("#import-export-modal-body").html("<%= escape_javascript(render partial: 'exercises/export_dialog_content', locals: { exercise: @exercise, account_link: @account_link } ) %>");
+$("#import-export-modal-body").html("<%= escape_javascript(render partial: 'exercises/export_dialog_content', locals: { exercise: @task, account_link: @account_link } ) %>");
 $('#import-export-dialog').modal('show');
 
-exportExerciseStart(<%= @exercise.id %>)
+exportExerciseStart(<%= @task.id %>)

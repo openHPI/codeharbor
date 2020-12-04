@@ -4,10 +4,10 @@
       .panel-body
         .col-md-10
           h3 style=("color: #777777")
-            = t('exercises.search.no_exercises')
+            = t('tasks.index.search.no_exercises')
           br
           p style=("color: #777777")
-            = t('exercises.search.no_exercises_description')
+            = t('tasks.index.search.no_exercises_description')
           br
           br
   - else
@@ -15,10 +15,10 @@
       .panel-body
         .col-md-10
           h3 style=("color: #777777")
-            = t('exercises.search.no_results')
+            = t('tasks.index.search.no_results')
           br
           p style=("color: #777777")
-            = t('exercises.search.no_results_description')
+            = t('tasks.index.search.no_results_description')
           br
           br
 - @tasks.each do |task|
@@ -42,14 +42,14 @@
             = exercise.ratings.count
             = ' ' + t('exercises.all.ratings')
         span.programming-language.pull-right
-          = task.programming_language&.language || t('exercises.index.no_execution_environment_selected')
+          = task.programming_language&.language || t('tasks.index.no_execution_environment_selected')
         / = render 'remove_state_tag', exercise: exercise
     .panel-body.exercise-panel
       .exercise-content
         .description.collapsable
           - if task.description == ''
             span style=("color: gray")
-              = t('exercises.defaults.no_description')
+              = t('tasks.index.no_description')
           - else
             = task.description
         .more-btn-wrapper
@@ -61,28 +61,28 @@
         /.labels
           - if exercise.labels.empty?
             span style=("color: gray")
-              = t('exercises.defaults.no_labels')
+              = t('tasks.defaults.no_labels')
           - else
             - exercise.labels.each do |label|
               .exercise_label style=("background-color: #{'#' + label.color.to_s}; color: #{'#' + label.font_color.to_s};")
                 = label.name
       .exercise-buttons.btn-group-vertical.pull-right aria-label="..." role="group"
         - if can? :show, task
-          = link_to t('exercises.all.view'), task_path(task), class:'btn btn-default'
+          = link_to t('tasks.index.view'), task_path(task), class:'btn btn-default'
           / = link_to t('exercises.all.duplicate'), duplicate_task_path(task), class:'btn btn-default'
         - if can? :edit, task
-          = link_to t('exercises.all.edit'), edit_task_path(task), class:'btn btn-default'
-          = link_to t('exercises.all.delete'), task_path(task), class:'btn btn-default', method: :delete, data: { confirm: t('sure') }
+          = link_to t('tasks.index.edit'), edit_task_path(task), class:'btn btn-default'
+          = link_to t('tasks.index.delete'), task_path(task), class:'btn btn-default', method: :delete, data: { confirm: t('sure') }
         / - if cannot? :edit, task
           = link_to 'Contribute', contribute_task_path(task), method: :post, class: 'btn btn-default'
     .panel-footer
       = button_tag type: 'button', class: 'btn no-border comment-button', data: {task: task.id} do
-        = t('exercises.all.comments') + ' '
+        = t('tasks.index.show_comments') + ' '
         span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
         span.fa.fa-caret-down.my-caret
       = ' '
       = button_tag type: 'button', class: 'btn no-border related-button', data: {task: task.id} do
-        = t('exercises.all.related_exercises') + ' '
+        = t('tasks.index.related_exercises') + ' '
         span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
         span.fa.fa-caret-down.my-caret
       /.pull-right.stats

@@ -7,9 +7,9 @@
   /.col-md-4
     span.star-rating.pull-right style=("font-size: 2.0em")
       - [*1..5].each do |i|
-        - if @exercise.round_avg_rating >= i
+        - if @task.round_avg_rating >= i
           span.fa.fa-star.overall-rating data-rating=i
-        - elsif (@exercise.round_avg_rating + 0.5) >= i
+        - elsif (@task.round_avg_rating + 0.5) >= i
           span.fa.fa-star-half-o.overall-rating data-rating=i
         - else
           span.fa.fa-star-o.overall-rating data-rating=i
@@ -29,7 +29,7 @@
               - else
                 - [*1..5].each do |i|
                   span.fa.fa-star-o data-rating=i
-    = render 'remove_state_tag', exercise: @exercise
+    = render 'remove_state_tag', exercise: @task
 
   br
 legend.toggle-next
@@ -44,14 +44,14 @@ legend.toggle-next
     .row-value data-toggle="tooltip" data-placement="bottom" title="#{@task.title}"
       = truncate(@task.title, length: 120)
 
-  /- if @exercise_relation
+  /- if @task_relation
     .row
       .row-label
         = t('exercises.parent')
         | :
       .row-value
-        - if @exercise_relation.origin
-          = link_to @exercise_relation.origin.title, exercise_path(@exercise_relation.origin)
+        - if @task_relation.origin
+          = link_to @task_relation.origin.title, exercise_path(@task_relation.origin)
         - else
           = t('exercises.parent_deleted')
     .row
@@ -59,7 +59,7 @@ legend.toggle-next
         = t('exercises.relation')
         | :
       .row-value
-        = @exercise_relation.relation.name
+        = @task_relation.relation.name
 
   .row
     .row-label
@@ -129,13 +129,13 @@ legend.toggle-next
       = t('exercises.visibility.label')
       | :
     .row-value
-      = @exercise.private ? t('exercises.visibility.private') : t('exercises.visibility.public')
+      = @task.private ? t('exercises.visibility.private') : t('exercises.visibility.public')
   /.row
     .row-label
       = t('exercises.labels')
       | :
     .row-value
-      - @exercise.labels.each do |label|
+      - @task.labels.each do |label|
         .exercise_label style=("background-color: #{'#' + label.color.to_s}; color: #{'#' + label.font_color.to_s};")
           = label.name
   /.row
@@ -143,7 +143,7 @@ legend.toggle-next
       = t('exercises.groups')
       | :
     .row-value
-      - @exercise.groups.each do |group|
+      - @task.groups.each do |group|
         = link_to group.name, group_path(group)
         = ' '
   /.row
@@ -151,13 +151,13 @@ legend.toggle-next
       = t('exercises.license')
       | :
     .row-value
-      - if @exercise.license
-        = @exercise.license.name
+      - if @task.license
+        = @task.license.name
         = ': '
-        = link_to @exercise.license.link, @exercise.license.link
+        = link_to @task.license.link, @task.license.link
       - else
         = t('exercises.show.no_license_chosen') + ' '
-        = link_to('Edit', edit_exercise_path(@exercise)) + '.'
+        = link_to('Edit', edit_exercise_path(@task)) + '.'
   /.row
     .row-label
       = t('exercises.impact')
@@ -166,15 +166,15 @@ legend.toggle-next
       p.impact
         = t('exercises.downloads')
         = ': '
-        = @exercise.downloads.to_s
+        = @task.downloads.to_s
       p.impact
         = t('exercises.in_carts')
         = ': '
-        = @exercise.in_carts
+        = @task.in_carts
       p.impact
         = t('exercises.in_collections')
         = ': '
-        = @exercise.in_collections
+        = @task.in_collections
 
 legend.toggle-next
   span.number = '3'
@@ -477,7 +477,7 @@ legend.toggle-next
     .button-description
       = "Save Exercises for later by adding them to your cart or a collection."
     .wrapper
-      = link_to t('exercises.show.add_to_cart'), add_to_cart_exercise_path(@exercise), method: 'post', class: 'btn btn-default'
+      = link_to t('exercises.show.add_to_cart'), add_to_cart_exercise_path(@task), method: 'post', class: 'btn btn-default'
       .dropdown.btn-group
         = button_tag class: 'btn btn-default dropdown-toggle', data: {toggle: 'dropdown'} do
           = t('exercises.show.add_to_collection') + ' '
@@ -495,7 +495,7 @@ legend.toggle-next
       = "Download your Exercise as a zip file or export them directly to an autograder."
     - if can? :push_external, Exercise
       .wrapper
-        = link_to t('shared.download_zip'), download_exercise_exercise_url(@exercise), class: 'btn btn-default', 'data-turbolinks'=> false
+        = link_to t('shared.download_zip'), download_exercise_exercise_url(@task), class: 'btn btn-default', 'data-turbolinks'=> false
         .dropdown.btn-group
           = button_tag class: 'btn btn-default dropdown-toggle', data: {toggle: 'dropdown'} do
             = t('exercises.show.export') + ' '
@@ -514,14 +514,14 @@ legend.toggle-next
     .button-description
       = "Derivate, translate or port this Exercise by duplicating it. The duplicate will be owned by you."
     .wrapper
-      = link_to t('exercises.all.duplicate'), duplicate_exercise_path(@exercise), class:'btn btn-default'
+      = link_to t('exercises.all.duplicate'), duplicate_exercise_path(@task), class:'btn btn-default'
 
 /.related-panel
   = button_tag type: 'button', class: 'full-window-button related-button' do
     = t('exercises.all.related_exercises')+ ' '
     span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
     span.fa.fa-caret-down.my-caret
-/div class=("related-box with-borders") data-exercise=@exercise.id
+/div class=("related-box with-borders") data-exercise=@task.id
   .slide-left.inactive
     = button_tag do
       i.fa.fa-caret-left
@@ -534,8 +534,8 @@ legend.toggle-next
     = t('exercises.all.comments') + ' '
     span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
     span.fa.fa-caret-down.my-caret
-/div class=("comment-box with-borders") data-exercise=@exercise.id
-  = form_for :comment, url: exercise_comments_path(@exercise), remote: true do |f|
+/div class=("comment-box with-borders") data-exercise=@task.id
+  = form_for :comment, url: exercise_comments_path(@task), remote: true do |f|
     .write-comment
       .input-group
         = f.label_tag 'new_comment_label', 'New Comment', class: 'input-group-addon'
@@ -549,7 +549,7 @@ legend.toggle-next
     = t('exercises.all.history_exercises')+ ' '
     span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
     span.fa.fa-caret-down.my-caret
-/div class=("history-box with-borders") data-exercise=@exercise.id
+/div class=("history-box with-borders") data-exercise=@task.id
   .content
 
 .actions.btn-group[role="group"]
@@ -575,7 +575,7 @@ legend.toggle-next
               = submit_tag t('exercises.show.submit'), form: 'report', class: 'btn btn-default'
   = link_to t('exercises.show.back'), tasks_path, class: 'btn btn-important'
 
-/= form_tag report_exercise_path(@exercise), id: 'report'
+/= form_tag report_exercise_path(@task), id: 'report'
 
 #page_end style="margin-top: 20px"
 

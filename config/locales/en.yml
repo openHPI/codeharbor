@@ -196,10 +196,6 @@ en:
       remove_account_link:
         success: "Account Link was successfully removed."
         fail: "Account Link could not be removed."
-    tasks:
-      created: "Task successfully created."
-      updated: "Task successfully updated."
-
 
   models:
     exercise:
@@ -994,10 +990,53 @@ en:
       validity: "Validity"
       timeout: "Timeout"
     model_solution:
-      label: "Model solutions"
-      plural: "Model solutions"
-      singular: "Model solution"
-      none_present: "No Model solutions present"
+      plural: "Model Solutions"
+      singular: "Model Solution"
+      none_present: "No Model Solutions present"
+    menu_button:
+      mine: "My Tasks"
+      public: "Public"
+      private: "Private"
+    index:
+      new: "New Task"
+      search:
+        label: "Search"
+        advanced: "Advanced"
+        order: "Order By"
+        rating: "Rating"
+        created_at: "Created At"
+        stars: "Stars"
+        all_stars: "All Stars"
+        unrated_only: "Unrated Only"
+        languages: "Languages"
+        proglanguages: "Programming Languages"
+        created: "Created"
+        all_time: "All Time"
+        today: "Today"
+        last_week: "Last Week"
+        last_month: "Last Month"
+        all_languages: "All Languages"
+        no_exercises: "You do not have tasks yet"
+        no_exercises_description: "Search tasks by clicking on private or public or add your own tasks."
+        no_results: "No results"
+        no_results_description: "Try different options by clicking on Advanced."
+        reset: "Reset"
+        placeholder: "Search for task or label"
+      no_execution_environment_selected: "No programming language selected"
+      no_description: "No Description"
+      view: "View"
+      edit: "Edit"
+      delete: "Delete"
+      show_comments: "Show Comments"
+      related_exercises: "Show Related Exercises"
+
+    notification:
+      created: "Task successfully created"
+      updated: "Task successfully updated"
+      destroyed: "Task successfully destroyed"
   common:
     created_at: "Created at"
     created_by: "Created by"
+  task:
+    index:
+      import_zip: "Import ZIP file"

@@ -4,20 +4,20 @@
   .nav-container
     .col-md-9
       .btn-group[role="group"]
-        = button_tag t('exercises.menu_button.mine'), type: 'button', class: 'btn btn-main change-hidden-field', id: 'mine'
-        = button_tag t('exercises.menu_button.private'), type: 'button', class: 'btn btn-main change-hidden-field', id: 'private'
-        = button_tag t('exercises.menu_button.public'), type: 'button', class: 'btn btn-main change-hidden-field', id: 'public'
+        = button_tag t('tasks.menu_button.mine'), type: 'button', class: 'btn btn-main change-hidden-field', id: 'mine'
+        = button_tag t('tasks.menu_button.private'), type: 'button', class: 'btn btn-main change-hidden-field', id: 'private'
+        = button_tag t('tasks.menu_button.public'), type: 'button', class: 'btn btn-main change-hidden-field', id: 'public'
     .col-md-3
       - if can? :create, Task
         .btn-group.pull-right
           = link_to new_task_path, class: 'btn btn-main nav-btn-exercise' do
             i.fa.fa-plus style=("color: #008000")
-            = ' ' + t('exercises.all.new')
+            = ' ' + t('tasks.index.new')
           = button_tag type: 'button', data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}, class: 'btn btn-main nav-btn-exercise dropdown-toggle dropdown-toggle split' do
             span.caret
           ul.dropdown-menu#xml-import
             li.dropdown-header style="padding-left: 2px;"
-              = t('exercises.import_zip')
+              = t('task.index.import_zip')
             li
               = file_field_tag 'exercise_import', accept: '.zip', class: 'inputfile'
               .btn-group style="display:inline-flex"
@@ -27,44 +27,44 @@
   br
   .search-container
     .input-group
-      = text_field_tag :search, params[:search], class: 'form-control', type: 'text', placeholder: t('exercises.all.placeholder')
+      = text_field_tag :search, params[:search], class: 'form-control', type: 'text', placeholder: t('tasks.index.search.placeholder')
       span.input-group-btn
-        = submit_tag t('exercises.all.search'), type: 'submit', name: nil, class: 'btn btn-default'
-        = submit_tag t('exercises.all.reset'), id: 'reset-btn', type: 'button', name: nil, class: 'btn btn-default'
+        = submit_tag t('tasks.index.search.label'), type: 'submit', name: nil, class: 'btn btn-default'
+        = submit_tag t('tasks.index.search.reset'), id: 'reset-btn', type: 'button', name: nil, class: 'btn btn-default'
         = button_tag type: 'button', id: 'advanced', class: 'btn btn-default' do
           small
-            = t('exercises.search.advanced') + ' '
+            = t('tasks.index.search.advanced') + ' '
           span.fa.fa-caret-down#drop style="color:#333333"
     .dropdown-content
       = hidden_field_tag 'window', @dropdown
       = fields_for 'settings' do |advanced|
         .order.section
           p
-            b = t('exercises.search.order')
+            b = t('tasks.index.search.order')
           .btn-group[role="group"]
             = advanced.hidden_field_tag 'order_param', @order
-            = button_tag t('exercises.search.rating'), type: 'button', id: 'order_rating', class: 'btn btn-default'
-            = button_tag t('exercises.search.created_at'), type: 'button', id: 'order_created', class: 'btn btn-default'
+            = button_tag t('tasks.index.search.rating'), type: 'button', id: 'order_rating', class: 'btn btn-default'
+            = button_tag t('tasks.index.search.created_at'), type: 'button', id: 'order_created', class: 'btn btn-default'
         .stars.section
           p
-            b = t('exercises.search.stars')
+            b = t('tasks.index.search.stars')
           div.form-group
-            = advanced.select 'stars', options_for_select({t('exercises.search.all_stars') => "0", "5" => "5", "4+" => "4", "3+" => "3", "2+" => "2", t('exercises.search.unrated_only') => ""}, selected: @stars), {}, class: 'form-control'
+            = advanced.select 'stars', options_for_select({t('tasks.index.search.all_stars') => "0", "5" => "5", "4+" => "4", "3+" => "3", "2+" => "2", t('tasks.index.search.unrated_only') => ""}, selected: @stars), {}, class: 'form-control'
         .proglanguages.section
           p
-            b = t('exercises.search.proglanguages')
+            b = t('tasks.index.search.proglanguages')
           span.form-group
             = advanced.select 'proglanguage', options_for_select(ExecutionEnvironment.all.collect{|l| [l.language, l.language]}, selected: @proglanguages), {}, {multiple: true, class: 'form-control language-box'}
 
         .languages.section
           p
-            b = t('exercises.search.languages')
+            b = t('tasks.index.search.languages')
           = advanced.select 'language', options_for_select(Description::LANGUAGES, @languages), {}, {multiple: true, class: 'form-control language-box'}
         .other.section
           p
-            b = t('exercises.search.created')
+            b = t('tasks.index.search.created')
           span.form-group
-            = advanced.select 'created', options_for_select({t('exercises.search.all_time') => "0", t('exercises.search.today') => "1", t('exercises.search.last_week') => "7", t('exercises.search.last_month') => "30"}, selected: @created), {}, class: 'form-control'
+            = advanced.select 'created', options_for_select({t('tasks.index.search.all_time') => "0", t('tasks.index.search.today') => "1", t('tasks.index.search.last_week') => "7", t('tasks.index.search.last_month') => "30"}, selected: @created), {}, class: 'form-control'
       .clear style=("clear: both")
 
     br

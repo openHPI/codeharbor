@@ -202,10 +202,10 @@ class Task < ApplicationRecord
     # add_descriptions(params[:descriptions_attributes])
   end
 
-  def soft_delete
-    delete_dependencies
-    update(deleted: true)
-  end
+  # def soft_delete
+  #   delete_dependencies
+  #   update(deleted: true)
+  # end
 
   # def duplicate
   #   Task.new(
@@ -433,12 +433,12 @@ class Task < ApplicationRecord
     file_attributes
   end
 
-  def delete_dependencies
-    groups.delete_all
-    carts.delete_all
-    collections.delete_all
-    clone_relations.delete_all
-  end
+  # def delete_dependencies
+  #   groups.delete_all
+  #   carts.delete_all
+  #   collections.delete_all
+  #   clone_relations.delete_all
+  # end
 
   def file_permit(params)
     params = update_file_params(params)
