@@ -802,6 +802,7 @@ en:
 
 
    # ratings: will be added with implementation
+    tasks: "Tasks"
 
   licenses:
     header: "Licenses"

@@ -7,7 +7,7 @@ module TaskFileService
     end
 
     def execute
-      file_type_by_extension(File.extname(@filename)).editor_mode || 'ace/mode/java'
+      file_type_by_extension(File.extname(@filename))&.editor_mode || 'ace/mode/java'
     end
 
     private

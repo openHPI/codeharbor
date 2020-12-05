@@ -23,6 +23,8 @@ class Ability
     # Exercise
     exercise_abilities user
 
+    task_abilities user
+
     # Comment
     comment_abilities user
 
@@ -76,6 +78,19 @@ class Ability
     can %i[report], Exercise do |exercise|
       ExerciseAuthor.where(user: user, exercise: exercise).empty? && exercise.user != user
     end
+  end
+
+  def task_abilities(user)
+    can %i[index create], Task
+    # can %i[show add_to_cart add_to_collection push_external duplicate download_exercise], Task do |exercise|
+    #   exercise.can_access(user)
+    # end
+    # alias_action :export_external_start, :export_external_check, :export_external_confirm, to: :export
+    can %i[crud], Task, user: {id: user.id}
+    # can %i[crud export history remove_state], Task, exercise_authors: {user: {id: user.id}}
+    # can %i[report], Task do |exercise|
+    #   ExerciseAuthor.where(user: user, exercise: exercise).empty? && exercise.user != user
+    # end
   end
 
   def comment_abilities(user)

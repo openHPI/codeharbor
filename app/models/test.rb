@@ -9,7 +9,7 @@ class Test < ApplicationRecord
   accepts_nested_attributes_for :exercise_file, allow_destroy: true
   accepts_nested_attributes_for :files, allow_destroy: true
 
-  # validates :exercise_file, presence: true
+  validates :title, presence: true
 
   def content
     exercise_file&.content || ''

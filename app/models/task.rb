@@ -7,13 +7,13 @@ class Task < ApplicationRecord
   acts_as_taggable_on :state
 
   groupify :group_member
-  # validates :title, presence: true
+  validates :title, presence: true
   # validates :descriptions, presence: true
   # validates :execution_environment, presence: true, unless: :private?
   # validates :license, presence: true, unless: :private?
   # validate :no_predecessor_loop, :one_primary_description?, :valid_main_file?
-  #
-  # validates :uuid, uniqueness: true
+
+  validates :uuid, uniqueness: true
 
   has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy
 
