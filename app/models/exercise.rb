@@ -76,7 +76,7 @@ class Exercise < ApplicationRecord
       where(nil)
     end
   }
-  scope :proglanguage, ->(prog) { prog.present? ? where('execution_environment_id IN (?)', prog) : where(nil) }
+  scope :proglanguage, ->(prog) { prog.present? ? where(execution_environment_id: prog) : where(nil) }
   scope :not_deleted, -> { where('(select count(*) from reports where exercises.id = reports.exercise_id) < 3') }
   scope :search_query, lambda { |stars, languages, proglanguages, priv, user, search, intervall|
     joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS average_rating FROM ratings GROUP BY exercise_id) AS ratings ON '\
@@ -100,7 +100,7 @@ class Exercise < ApplicationRecord
         where('average_rating >= ?', stars)
       end
     else
-      where('average_rating IS NULL')
+      where(average_rating: nil)
     end
   end
 
