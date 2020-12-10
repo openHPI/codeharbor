@@ -14,3 +14,9 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 # application.js, application.css, and all non-JS/CSS in the app/assets
 # folder are already added.
 # Rails.application.config.assets.precompile += %w( admin.js admin.css )
+
+# Disable concurrent asset compilation to prevent segfault # https://github.com/sass/sassc-ruby/issues/197
+# Reproduce: `rake assets:clobber`, `rake assets:precompile`. If the command succeeds, it worked
+Rails.application.config.assets.configure do |env|
+  env.export_concurrent = false
+end
