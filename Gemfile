@@ -68,7 +68,7 @@ gem 'nokogiri'
 gem 'proforma', git: 'https://github.com/openHPI/proforma.git', tag: 'v0.5'
 gem 'rails_admin', '~> 2.0'
 gem 'select2-rails', '~> 4.0'
-gem 'sprockets', '~> 3.7.2'
+gem 'sprockets', '~> 4.0.2'
 
 # Error Tracing
 gem 'concurrent-ruby'
