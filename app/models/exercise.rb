@@ -100,7 +100,7 @@ class Exercise < ApplicationRecord
         where('average_rating >= ?', stars)
       end
     else
-      where(average_rating: nil)
+      where('average_rating IS NULL') # rubocop:disable Rails/WhereEquals
     end
   end
 

@@ -52,7 +52,7 @@ gem 'cancancan'
 gem 'therubyracer', platforms: :ruby
 # Use Bootstrap (app/assets/stylesheets)
 gem 'devise-bootstrap-views', '~> 1.0'
-gem 'twitter-bootstrap-rails', git: 'https://github.com/seyhunak/twitter-bootstrap-rails.git'
+gem 'twitter-bootstrap-rails'
 
 gem 'ace-rails-ap'
 gem 'acts-as-taggable-on', '~> 6.5'
@@ -62,13 +62,12 @@ gem 'font-awesome-rails', '>= 4.7.0.5'
 gem 'image_processing'
 gem 'jquery-ui-rails', '>= 6.0.1'
 gem 'kramdown', '~> 2.3'
-gem 'less-rails', '>= 3.0.0' # Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
 gem 'nested_form_fields', '>= 0.8.2'
 gem 'nokogiri'
 gem 'proforma', git: 'https://github.com/openHPI/proforma.git', tag: 'v0.5'
 gem 'rails_admin', '~> 2.0'
 gem 'select2-rails', '~> 4.0'
-gem 'sprockets', '~> 3.7.2'
+gem 'sprockets', '~> 4.0.2'
 
 # Error Tracing
 gem 'concurrent-ruby'
