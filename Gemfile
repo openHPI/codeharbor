@@ -13,7 +13,7 @@ gem 'i18n'
 # Use slim format
 gem 'slim-rails', '>= 3.2.0'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.0.3'
+gem 'rails', '~> 6.0.3', '>= 6.0.3.4'
 # Use postgres as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use SCSS for stylesheets
@@ -29,9 +29,9 @@ gem 'coffee-rails', '>= 5.0.0'
 # Use puma instead of WEBrick
 gem 'puma'
 # Use simple_form
-gem 'simple_form', '>= 5.0.1'
+gem 'simple_form', '>= 5.0.3'
 # Use jquery as the JavaScript library
-gem 'jquery-rails', '>= 4.3.5'
+gem 'jquery-rails', '>= 4.4.0'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -52,7 +52,7 @@ gem 'cancancan'
 gem 'therubyracer', platforms: :ruby
 # Use Bootstrap (app/assets/stylesheets)
 gem 'devise-bootstrap-views', '~> 1.0'
-gem 'twitter-bootstrap-rails'
+gem 'twitter-bootstrap-rails', '>= 3.2.2'
 
 gem 'ace-rails-ap'
 gem 'acts-as-taggable-on', '~> 6.5'
@@ -62,10 +62,10 @@ gem 'font-awesome-rails', '>= 4.7.0.5'
 gem 'image_processing'
 gem 'jquery-ui-rails', '>= 6.0.1'
 gem 'kramdown', '~> 2.3'
-gem 'nested_form_fields', '>= 0.8.2'
-gem 'nokogiri'
+gem 'nested_form_fields', '>= 0.8.4'
+gem 'nokogiri', '>= 1.11.0'
 gem 'proforma', git: 'https://github.com/openHPI/proforma.git', tag: 'v0.5'
-gem 'rails_admin', '~> 2.0'
+gem 'rails_admin', '~> 2.0', '>= 2.0.2'
 gem 'select2-rails', '~> 4.0'
 gem 'sprockets', '~> 4.0.2'
 
@@ -80,7 +80,7 @@ group :development, :test do
   gem 'byebug'
   gem 'factory_bot_rails', '~> 6.1.0'
   gem 'pry-byebug'
-  gem 'rails-controller-testing', '>= 1.0.4'
+  gem 'rails-controller-testing', '>= 1.0.5'
   gem 'rspec-collection_matchers', '~> 1.2.0'
   gem 'rspec-rails', '4.0.1'
   gem 'rubocop', '~> 1.6.1'
@@ -96,7 +96,7 @@ group :development do
   gem 'guard-rspec'
   gem 'rack-mini-profiler'
   # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '>= 3.7.0'
+  gem 'web-console', '>= 4.1.0'
 
   gem 'pry-rails'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
