@@ -72,8 +72,8 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
       zeitwerk (~> 2.2, >= 2.2.2)
-    acts-as-taggable-on (6.5.0)
-      activerecord (>= 5.0, < 6.1)
+    acts-as-taggable-on (7.0.0)
+      activerecord (>= 5.0, < 6.2)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
     amq-protocol (2.3.2)
@@ -241,7 +241,7 @@ GEM
     mini_magick (4.11.0)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
-    minitest (5.14.2)
+    minitest (5.14.3)
     mnemosyne-ruby (1.11.0)
       activesupport (>= 4)
       bunny
@@ -461,7 +461,7 @@ PLATFORMS
 
 DEPENDENCIES
   ace-rails-ap
-  acts-as-taggable-on (~> 6.5)
+  acts-as-taggable-on (~> 7.0)
   bcrypt (~> 3.1.16)
   better_errors
   binding_of_caller
