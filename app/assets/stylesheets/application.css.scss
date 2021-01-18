@@ -11,6 +11,11 @@
  * file per style scope.
  *
  *= require_self
+ *= require jquery-ui
+ *= require select2
+ *= require select2-bootstrap
+ *= require twitter-bootstrap-static/bootstrap
+ *= require font-awesome
  *= require_tree .
  */
 
@@ -91,4 +96,12 @@
 #flash-message {
   margin-top:30px;
   margin-bottom: -20px;
+}
+
+.fa {
+  color: #444444;
+}
+
+.disabled-cursor {
+  cursor: not-allowed;
 }
