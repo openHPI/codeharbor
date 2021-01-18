@@ -10,7 +10,7 @@ class TaskFile < ApplicationRecord
   after_create_commit :extract_text_data # TODO make this manually initiatable and not based on type?
 
   def full_file_name
-    "#{path.present? ? "#{path}/" : ''}#{name}"
+    File.join(path.to_s, name)
   end
 
   private
