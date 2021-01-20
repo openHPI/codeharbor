@@ -208,7 +208,7 @@ ready =->
   $('#exercise_import').on 'change', ->
     fullPath = document.getElementById('exercise_import').value
     if fullPath
-      document.getElementById('file-label').innerHTML = get_filensame_from_full_path(fullPath)
+      document.getElementById('file-label').innerHTML = get_filename_from_full_path(fullPath)
 
   $('.toggle-next').on 'click', ->
     $next = $(this).next()

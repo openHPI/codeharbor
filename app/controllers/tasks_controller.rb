@@ -2,15 +2,15 @@
 
 require 'zip'
 
-# rubocop:disable Metrics/ClassLength
 class TasksController < ApplicationController
   load_and_authorize_resource except: %i[import_external_exercise import_uuid_check]
-  before_action :set_task, only: %i[show edit update destroy add_to_cart add_to_collection contribute
-                                        remove_state export_external_start export_external_check]
-  before_action :validate_account_link_usage, only: %i[export_external_start export_external_check export_external_confirm]
+  before_action :set_task, only: %i[show edit update destroy] # add_to_cart add_to_collection contribute
+  # remove_state export_external_start export_external_check]
+
+  # before_action :validate_account_link_usage, only: %i[export_external_start export_external_check export_external_confirm]
   before_action :set_search, only: [:index]
   before_action :handle_search_params, only: :index
-  skip_before_action :verify_authenticity_token, only: %i[import_external_exercise import_uuid_check]
+  # skip_before_action :verify_authenticity_token, only: %i[import_external_exercise import_uuid_check]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.exercise.authorization')
@@ -18,10 +18,10 @@ class TasksController < ApplicationController
 
   def index
     page = params[:page]
-    @tasks = Task#.active
-                         .search(params[:search], params[:settings], @option, current_user)
-                         .paginate(per_page: 5, page: page)
-                         # .order(@order == 'order_created' ? {created_at: :desc} : {average_rating: :desc})
+    @tasks = Task # .active
+             .search(params[:search], params[:settings], @option, current_user)
+             .paginate(per_page: 5, page: page)
+    # .order(@order == 'order_created' ? {created_at: :desc} : {average_rating: :desc})
 
     last_page = @tasks.total_pages
     @tasks = @tasks.page(last_page) if page.to_i > last_page
@@ -65,7 +65,6 @@ class TasksController < ApplicationController
     # @license_hidden = true if @task.downloads.positive?
   end
 
-  # rubocop:disable Metrics/AbcSize
   def create
     @task = Task.new(task_params)
     # @task.add_attributes(params[:exercise], current_user)
@@ -79,7 +78,7 @@ class TasksController < ApplicationController
         # if params[:exercise][:exercise_relation] # Exercise Relation is set if form is for duplicate exercise, otherwise it's not.
         #   format.html { redirect_to duplicate_exercise_path(params[:exercise][:exercise_relation][:origin_id]) }
         # else
-          format.html { render :new }
+        format.html { render :new }
         # end
         # format.json { render json: @task.errors, status: :unprocessable_entity }
       end
@@ -96,7 +95,6 @@ class TasksController < ApplicationController
       end
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
   def destroy
     @task.destroy!
@@ -287,7 +285,6 @@ class TasksController < ApplicationController
   #   redirect_to user_messages_path(current_user), notice: t('controllers.exercise.decline_author_notice')
   # end
 
-  # rubocop:disable Metrics/AbcSize
   # def report
   #   report = Report.find_by(user: current_user, exercise: @task)
   #   if report
@@ -304,7 +301,6 @@ class TasksController < ApplicationController
   #     redirect_to exercise_path(@task), notice: t('controllers.exercise.report_notice')
   #   end
   # end
-  # rubocop:enable Metrics/AbcSize
 
   private
 
@@ -370,6 +366,7 @@ class TasksController < ApplicationController
                  '0'
                end
   end
+
   # rubocop:enable Metrics/AbcSize
   # rubocop:enable Metrics/CyclomaticComplexity
   # rubocop:enable Metrics/PerceivedComplexity
@@ -384,7 +381,8 @@ class TasksController < ApplicationController
   end
 
   def test_params
-    [:id, :title, :description, :internal_description, :test_type, :xml_id, :validity, :timeout, :_destroy, {files_attributes: file_params}]
+    [:id, :title, :description, :internal_description, :test_type, :xml_id, :validity, :timeout, :_destroy,
+     {files_attributes: file_params}]
   end
 
   def model_solution_params
@@ -394,7 +392,7 @@ class TasksController < ApplicationController
   def task_params
     params.require(:task).permit(:title, :description, :internal_description, :parent_uuid, :language,
                                  :programming_language_id, files_attributes: file_params, tests_attributes: test_params,
-                                 model_solutions_attributes: model_solution_params)
+                                                           model_solutions_attributes: model_solution_params)
   end
 
   # def import_exercise_confirm_params
@@ -440,4 +438,3 @@ class TasksController < ApplicationController
   #   end
   # end
 end
-# rubocop:enable Metrics/ClassLength

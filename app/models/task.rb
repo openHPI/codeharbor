@@ -2,7 +2,6 @@
 
 require 'nokogiri'
 require 'zip'
-# rubocop:disable Metrics/ClassLength
 class Task < ApplicationRecord
   acts_as_taggable_on :state
 
@@ -81,18 +80,18 @@ class Task < ApplicationRecord
   # }
   # scope :proglanguage, ->(prog) { prog.present? ? where('execution_environment_id IN (?)', prog) : where(nil) }
   # scope :not_deleted, -> { where('(select count(*) from reports where exercises.id = reports.exercise_id) < 3') }
-  scope :search_query, lambda { |stars, languages, proglanguages, priv, user, search, intervall|
+  scope :search_query, lambda { |_stars, _languages, _proglanguages, _priv, _user, search, _intervall|
     # joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS average_rating FROM ratings GROUP BY exercise_id) AS ratings ON '\
     # 'ratings.exercise_id = exercises.id')
-        # .mine(user)
-        # .visibility(priv)
-        # .rating(stars)
-        # .languages(languages)
-        # .proglanguage(proglanguages)
-        text_like(search)
-        # .timespan(intervall)
-        # .not_deleted
-        # .select('exercises.*, coalesce(average_rating, 0) AS average_rating').distinct
+    # .mine(user)
+    # .visibility(priv)
+    # .rating(stars)
+    # .languages(languages)
+    # .proglanguage(proglanguages)
+    text_like(search)
+    # .timespan(intervall)
+    # .not_deleted
+    # .select('exercises.*, coalesce(average_rating, 0) AS average_rating').distinct
   }
 
   # def self.rating(stars)
@@ -108,6 +107,9 @@ class Task < ApplicationRecord
   # end
 
   # will be replaced with ransack
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength
   def self.search(search, settings, option, user_param)
     case option
     when 'private'
@@ -136,8 +138,11 @@ class Task < ApplicationRecord
         proglanguages = proglanguages.collect { |x| ProgrammingLanguage.find_by(language: x).id }
       end
     end
+    # rubocop:enable Metrics/CyclomaticComplexity
+    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/MethodLength
 
-    return search_query(stars, languages, proglanguages, priv, user, search, intervall)# unless search
+    search_query(stars, languages, proglanguages, priv, user, search, intervall) # unless search
 
     # results = search_query(stars, languages, proglanguages, priv, user, search, intervall)
     # label = Label.find_by('lower(name) = ?', search.downcase)
@@ -352,7 +357,6 @@ class Task < ApplicationRecord
     end
   end
 
-  # # rubocop:disable Metrics/AbcSize
   # def add_descriptions(description_array)
   #   description_array.try(:each) do |_key, array|
   #     destroy_param = array[:_destroy]
@@ -366,8 +370,6 @@ class Task < ApplicationRecord
   #     end
   #   end
   # end
-  # # rubocop:enable Metrics/AbcSize
-
   # rubocop:disable Metrics/PerceivedComplexity
   def add_files(file_array)
     file_array&.each do |_key, params|
@@ -463,4 +465,3 @@ class Task < ApplicationRecord
   #   false
   # end
 end
-# rubocop:enable Metrics/ClassLength
