@@ -1,3 +1,0 @@
-id = <%= @task.id %>
-historyBox =  $(".history-box[data-exercise=" + id +"] > .content")
-$(historyBox).html("<%= escape_javascript(render :partial => 'history', :locals => {:history_exercises => @history_exercises}) %>");

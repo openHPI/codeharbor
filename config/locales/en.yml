@@ -961,6 +961,9 @@ en:
       tests:
         remove: "Remove Test"
         add_file: "Add file to test"
+      files:
+        remove: 'Remove file'
+        add: 'Add file'
       model_solutions:
         add: "Add Model solution"
       model_solution:

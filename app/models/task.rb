@@ -57,7 +57,7 @@ class Task < ApplicationRecord
   # scope :timespan, ->(days) { days.zero? ? where(nil) : where('DATE(created_at) >= ?', Time.zone.today - days) }
   scope :text_like, lambda { |text|
     if text.present?
-      joins(:descriptions).where('title ILIKE ? OR descriptions.text ILIKE ?', "%#{text.downcase}%", "%#{text.downcase}%")
+      where('title ILIKE ? OR description ILIKE ?', "%#{text}%", "%#{text}%")
     else
       where(nil)
     end
@@ -138,9 +138,6 @@ class Task < ApplicationRecord
         proglanguages = proglanguages.collect { |x| ProgrammingLanguage.find_by(language: x).id }
       end
     end
-    # rubocop:enable Metrics/CyclomaticComplexity
-    # rubocop:enable Metrics/AbcSize
-    # rubocop:enable Metrics/MethodLength
 
     search_query(stars, languages, proglanguages, priv, user, search, intervall) # unless search
 
@@ -159,6 +156,9 @@ class Task < ApplicationRecord
     # end
     # results
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
 
   def can_access(user)
     if private
@@ -197,15 +197,15 @@ class Task < ApplicationRecord
   #   collections.count.to_s
   # end
 
-  def add_attributes(params, user)
-    # add_relation(params[:exercise_relation]) if params[:exercise_relation]
-    # add_license(params) if params[:license_id]
-    # add_labels(params[:labels])
-    add_groups(params[:groups], user)
-    add_tests(params[:tests_attributes])
-    add_files(params[:exercise_files_attributes])
-    # add_descriptions(params[:descriptions_attributes])
-  end
+  # def add_attributes(params, user)
+  #   # add_relation(params[:exercise_relation]) if params[:exercise_relation]
+  #   # add_license(params) if params[:license_id]
+  #   # add_labels(params[:labels])
+  #   add_groups(params[:groups], user)
+  #   add_tests(params[:tests_attributes])
+  #   add_files(params[:exercise_files_attributes])
+  #   # add_descriptions(params[:descriptions_attributes])
+  # end
 
   # def soft_delete
   #   delete_dependencies
@@ -338,24 +338,24 @@ class Task < ApplicationRecord
   #   end
   # end
 
-  def add_groups(groups_array, user)
-    return unless groups_array
-
-    new_groups = groups_array.drop(1).map do |group_id|
-      Group.find(group_id)
-    end
-
-    groups_to_add = new_groups - groups
-    groups_to_remove = groups - new_groups
-
-    groups_to_add.each do |new_group|
-      groups << new_group if new_group.member?(user)
-    end
-
-    groups_to_remove.each do |remove_group|
-      groups.destroy(remove_group)
-    end
-  end
+  # def add_groups(groups_array, user)
+  #   return unless groups_array
+  #
+  #   new_groups = groups_array.drop(1).map do |group_id|
+  #     Group.find(group_id)
+  #   end
+  #
+  #   groups_to_add = new_groups - groups
+  #   groups_to_remove = groups - new_groups
+  #
+  #   groups_to_add.each do |new_group|
+  #     groups << new_group if new_group.member?(user)
+  #   end
+  #
+  #   groups_to_remove.each do |remove_group|
+  #     groups.destroy(remove_group)
+  #   end
+  # end
 
   # def add_descriptions(description_array)
   #   description_array.try(:each) do |_key, array|
@@ -370,70 +370,68 @@ class Task < ApplicationRecord
   #     end
   #   end
   # end
-  # rubocop:disable Metrics/PerceivedComplexity
-  def add_files(file_array)
-    file_array&.each do |_key, params|
-      destroy_file = params[:_destroy]
-      file_id = params[:id]
-      if file_id
-        file = TaskFile.find(file_id)
-        if destroy_file
-          file.destroy
-        else
-          file.update(file_permit(params))
-        end
-      else
-        file = files.new(file_permit(params)) unless destroy_file
-        attachment_from_params(file, params['attachment-base64']) if params['attachment-base64']
-      end
-    end
-  end
-  # rubocop:enable Metrics/PerceivedComplexity
+  # def add_files(file_array)
+  #   file_array&.each do |_key, params|
+  #     destroy_file = params[:_destroy]
+  #     file_id = params[:id]
+  #     if file_id
+  #       file = TaskFile.find(file_id)
+  #       if destroy_file
+  #         file.destroy
+  #       else
+  #         file.update(file_permit(params))
+  #       end
+  #     else
+  #       file = files.new(file_permit(params)) unless destroy_file
+  #       attachment_from_params(file, params['attachment-base64']) if params['attachment-base64']
+  #     end
+  #   end
+  # end
 
-  def attachment_from_params(file, attachment)
-    file.attachment = attachment
-    file.attachment_file_name = file.name + file.file_type.file_extension
-  end
+  # def attachment_from_params(file, attachment)
+  #   file.attachment = attachment
+  #   file.attachment_file_name = file.name + file.file_type.file_extension
+  # end
 
-  def add_tests(test_array)
-    test_array.try(:each) do |_key, array|
-      id = array[:id]
-      destroy = array[:_destroy]
+  # def add_tests(test_array)
+  #   test_array.try(:each) do |_key, array|
+  #     id = array[:id]
+  #     destroy = array[:_destroy]
+  #
+  #     if id
+  #       test = Test.find(id)
+  #       if destroy
+  #         test.exercise_file.destroy
+  #         test.destroy
+  #       else
+  #         test.update(test_permit(array))
+  #         test.exercise_file.update(file_permit(array[:exercise_file_attributes]))
+  #       end
+  #     else
+  #       create_new_test array
+  #     end
+  #   end
+  # end
 
-      if id
-        test = Test.find(id)
-        if destroy
-          test.exercise_file.destroy
-          test.destroy
-        else
-          test.update(test_permit(array))
-          test.exercise_file.update(file_permit(array[:exercise_file_attributes]))
-        end
-      else
-        create_new_test array
-      end
-    end
-  end
+  # def create_new_test(array)
+  #   return if array[:_destroy]
+  #
+  #   file = exercise_files.new(file_permit(array[:exercise_file_attributes]))
+  #   file.purpose = 'test'
+  #   test = Test.new(test_permit(array))
+  #   test.exercise_file = file
+  #   tests << test
+  # end
 
-  def create_new_test(array)
-    return if array[:_destroy]
-
-    file = exercise_files.new(file_permit(array[:exercise_file_attributes]))
-    file.purpose = 'test'
-    test = Test.new(test_permit(array))
-    test.exercise_file = file
-    tests << test
-  end
-
-  def update_file_params(file_attributes)
-    if file_attributes[:content].respond_to?(:read)
-      file_attributes[:attachment] = file_attributes[:content]
-      file_attributes[:content] = nil
-    else
-      file_attributes[:attachment] = nil
-    end
-    file_attributes
-  end
+  # def update_file_params(file_attributes)
+  #   if file_attributes[:content].respond_to?(:read)
+  #     file_attributes[:attachment] = file_attributes[:content]
+  #     file_attributes[:content] = nil
+  #   else
+  #     file_attributes[:attachment] = nil
+  #   end
+  #   file_attributes
+  # end
 
   # def delete_dependencies
   #   groups.delete_all
@@ -442,16 +440,16 @@ class Task < ApplicationRecord
   #   clone_relations.delete_all
   # end
 
-  def file_permit(params)
-    params = update_file_params(params)
-    allowed_params = %i[role content path name hidden read_only file_type_id]
-    allowed_params << :attachment if params[:attachment_present] == 'false'
-    params.permit(allowed_params)
-  end
-
-  def test_permit(params)
-    params.permit(:feedback_message, :testing_framework_id)
-  end
+  # def file_permit(params)
+  #   params = update_file_params(params)
+  #   allowed_params = %i[role content path name hidden read_only file_type_id]
+  #   allowed_params << :attachment if params[:attachment_present] == 'false'
+  #   params.permit(allowed_params)
+  # end
+  #
+  # def test_permit(params)
+  #   params.permit(:feedback_message, :testing_framework_id)
+  # end
 
   # def predecessor_loop?
   #   predecessors = []
