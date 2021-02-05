@@ -13,4 +13,8 @@ FactoryBot.define do
     exercise_file { build(:codeharbor_test_file, exercise: build(:exercise)) }
     testing_framework { build(:junit_testing_framework) }
   end
+
+  factory :task_test, class: 'Test' do
+    title { 'title' }
+  end
 end

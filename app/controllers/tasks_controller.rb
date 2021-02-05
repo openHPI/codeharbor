@@ -3,7 +3,7 @@
 require 'zip'
 
 class TasksController < ApplicationController
-  load_and_authorize_resource except: %i[import_external_exercise import_uuid_check]
+  # load_and_authorize_resource except: %i[import_external_exercise import_uuid_check]
   before_action :set_task, only: %i[show edit update destroy] # add_to_cart add_to_collection contribute
   # remove_state export_external_start export_external_check]
 
@@ -70,38 +70,29 @@ class TasksController < ApplicationController
     # @task.add_attributes(params[:exercise], current_user)
     @task.user = current_user
 
-    respond_to do |format|
-      if @task.save
-        format.html { redirect_to @task, notice: t('tasks.notification.created') }
-        format.json { render :show, status: :created, location: @task }
-      else
-        # if params[:exercise][:exercise_relation] # Exercise Relation is set if form is for duplicate exercise, otherwise it's not.
-        #   format.html { redirect_to duplicate_exercise_path(params[:exercise][:exercise_relation][:origin_id]) }
-        # else
-        format.html { render :new }
-        # end
-        # format.json { render json: @task.errors, status: :unprocessable_entity }
-      end
+    if @task.save
+      redirect_to @task, notice: t('tasks.notification.created')
+    else
+      # if params[:exercise][:exercise_relation] # Exercise Relation is set if form is for duplicate exercise, otherwise it's not.
+      #    redirect_to duplicate_exercise_path(params[:exercise][:exercise_relation][:origin_id])
+      # else
+      render :new
+      # end
     end
   end
 
   def update
     # @task.state_list = []
-    respond_to do |format|
-      if @task.update(task_params)
-        format.html { redirect_to @task, notice: t('tasks.notification.updated') }
-      else
-        format.html { render :edit }
-      end
+    if @task.update(task_params)
+      redirect_to @task, notice: t('tasks.notification.updated')
+    else
+      render :edit
     end
   end
 
   def destroy
     @task.destroy!
-    respond_to do |format|
-      format.html { redirect_to tasks_url, notice: t('tasks.notification.destroyed') }
-      format.json { head :no_content }
-    end
+    redirect_to tasks_url, notice: t('tasks.notification.destroyed')
   end
 
   # def remove_state

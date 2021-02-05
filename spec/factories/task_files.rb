@@ -2,5 +2,6 @@
 
 FactoryBot.define do
   factory :task_file do
+    name { 'name' }
   end
 end

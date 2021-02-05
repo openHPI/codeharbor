@@ -282,7 +282,7 @@ class Task < ApplicationRecord
   #   Ability.new(user).can?(:update, self)
   # end
 
-  private
+  # private
 
   # def duplicate_files_without_testfiles
   #   exercise_files.reject do |file|
