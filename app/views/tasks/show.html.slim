@@ -223,7 +223,7 @@ legend.toggle-next
               - if file.attachment.image?
                 = image_tag(file.attachment.variant(resize_to_limit: [900, 900]))
               - else
-                = link_to file.attachment.filename, task_file_download_attachment_path(file), 'data-turbolinks': false
+                = link_to file.attachment.filename, download_attachment_task_file_path(file), 'data-turbolinks': false
         .row
           .row-label
             = t('tasks.files.used_by_grader')
@@ -355,7 +355,7 @@ legend.toggle-next
                       - if file.attachment.image?
                         = image_tag(file.attachment.variant(resize_to_limit: [900, 900]))
                       - else
-                        = link_to file.attachment.filename, task_file_download_attachment_path(file), 'data-turbolinks': false
+                        = link_to file.attachment.filename, download_attachment_task_file_path(file), 'data-turbolinks': false
                 .row
                   .row-label
                     = t('tasks.files.used_by_grader')
@@ -453,7 +453,7 @@ legend.toggle-next
                       - if file.attachment.image?
                         = image_tag(file.attachment.variant(resize_to_limit: [900, 900]))
                       - else
-                        = link_to file.attachment.filename, task_file_download_attachment_path(file), 'data-turbolinks': false
+                        = link_to file.attachment.filename, download_attachment_task_file_path(file), 'data-turbolinks': false
                 .row
                   .row-label
                     = t('tasks.files.used_by_grader')

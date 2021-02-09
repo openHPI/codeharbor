@@ -3,8 +3,8 @@
 require 'zip'
 
 class TasksController < ApplicationController
-  # load_and_authorize_resource except: %i[import_external_exercise import_uuid_check]
-  before_action :set_task, only: %i[show edit update destroy] # add_to_cart add_to_collection contribute
+  load_and_authorize_resource #except: %i[import_external_exercise import_uuid_check]
+  # before_action :set_task, only: %i[show edit update destroy] # add_to_cart add_to_collection contribute
   # remove_state export_external_start export_external_check]
 
   # before_action :validate_account_link_usage, only: %i[export_external_start export_external_check export_external_confirm]
@@ -363,9 +363,9 @@ class TasksController < ApplicationController
   # rubocop:enable Metrics/PerceivedComplexity
 
   # Use callbacks to share common setup or constraints between actions.
-  def set_task
-    @task = Task.find(params[:id])
-  end
+  # def set_task
+  #   @task = Task.find(params[:id])
+  # end
 
   def file_params
     %i[id content attachment path name internal_description mime_type used_by_grader visible usage_by_lms _destroy]

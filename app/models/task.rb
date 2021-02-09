@@ -161,15 +161,16 @@ class Task < ApplicationRecord
   # rubocop:enable Metrics/MethodLength
 
   def can_access(user)
-    if private
-      if user.author?(self)
-        true
-      else
-        user.access_through_any_group?(self)
-      end
-    else
-      true
-    end
+    self.user == user
+    # if private
+    #   if user.author?(self)
+    #     true
+    #   else
+    #     user.access_through_any_group?(self)
+    #   end
+    # else
+    #   true
+    # end
   end
 
   # def avg_rating

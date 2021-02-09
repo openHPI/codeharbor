@@ -20,7 +20,7 @@ a.btn.btn-main.btn-xs.toggle-input data={text_initial: t('exercises.files.upload
         - if file.object.attachment.image?
           = image_tag file.object.attachment.variant(resize_to_limit: [600, 600])
         - else
-          = link_to file.object.attachment.filename, task_file_download_attachment_path(file.object), class: 'btn btn-default', style: "border-right: none", 'data-turbolinks' => false
+          = link_to file.object.attachment.filename, download_attachment_task_file_path(file.object), class: 'btn btn-default', style: "border-right: none", 'data-turbolinks' => false
         = link_to '#', class: 'btn btn-default remove-attachment', style: "border-left: none; margin-right: 5px;" do
           i.fa.fa-remove style=("color: gray")
     .alternative style=editor_display

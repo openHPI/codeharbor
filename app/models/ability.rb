@@ -25,6 +25,8 @@ class Ability
 
     task_abilities user
 
+    task_file_abilities user
+
     # Comment
     comment_abilities user
 
@@ -91,6 +93,18 @@ class Ability
     # can %i[report], Task do |exercise|
     #   ExerciseAuthor.where(user: user, exercise: exercise).empty? && exercise.user != user
     # end
+  end
+
+  def task_file_abilities(user)
+    can %i[download_attachment], TaskFile do |task_file|
+      fileable = task_file.fileable
+      task = if fileable.is_a? Task
+               fileable
+             else
+               fileable.task
+             end
+      task.can_access(user)
+    end
   end
 
   def comment_abilities(user)
