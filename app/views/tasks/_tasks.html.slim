@@ -1,5 +1,5 @@
 - if @tasks.empty?
-  - if current_user.authored_exercises.empty? && (@option == 'mine')
+  - if Task.mine(current_user).empty? && (@option == 'mine')
     .panel.panel-default style=("margin-top: 40px")
       .panel-body
         .col-md-10
