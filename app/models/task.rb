@@ -62,13 +62,14 @@ class Task < ApplicationRecord
       where(nil)
     end
   }
-  # scope :mine, lambda { |user|
-  #   if user.nil?
-  #     where(nil)
-  #   else
-  #     where('user_id = ? OR (exercises.id in (select exercise_id from exercise_authors where user_id = ?))', user.id, user.id)
-  #   end
-  # }
+  scope :mine, lambda { |user|
+    if user.nil?
+      where(nil)
+    else
+      # where('user_id = ? OR (exercises.id in (select exercise_id from exercise_authors where user_id = ?))', user.id, user.id)
+      where(user_id: user.id)
+    end
+  }
   # scope :visibility, ->(priv) { priv.nil? ? where(nil) : where(private: priv) }
   # scope :languages, lambda { |languages|
   #   if languages.present?
@@ -80,15 +81,15 @@ class Task < ApplicationRecord
   # }
   # scope :proglanguage, ->(prog) { prog.present? ? where('execution_environment_id IN (?)', prog) : where(nil) }
   # scope :not_deleted, -> { where('(select count(*) from reports where exercises.id = reports.exercise_id) < 3') }
-  scope :search_query, lambda { |_stars, _languages, _proglanguages, _priv, _user, search, _intervall|
+  scope :search_query, lambda { |_stars, _languages, _proglanguages, _priv, user, search, _intervall|
     # joins('LEFT JOIN (SELECT exercise_id, AVG(rating) AS average_rating FROM ratings GROUP BY exercise_id) AS ratings ON '\
     # 'ratings.exercise_id = exercises.id')
-    # .mine(user)
+    mine(user)
+      .text_like(search)
     # .visibility(priv)
     # .rating(stars)
     # .languages(languages)
     # .proglanguage(proglanguages)
-    text_like(search)
     # .timespan(intervall)
     # .not_deleted
     # .select('exercises.*, coalesce(average_rating, 0) AS average_rating').distinct

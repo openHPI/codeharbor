@@ -12,16 +12,34 @@ RSpec.describe TasksController, type: :controller do
 
   let(:valid_session) { {user_id: user.id} }
 
-  describe 'GET #index (My Tasks)' do
+  describe 'GET #index' do
     subject(:get_request) { get :index, params: params, session: valid_session }
 
     let(:get_request_without_params) { get :index, params: {}, session: valid_session }
     let!(:task) { create(:task, valid_attributes) }
     let(:params) { {} }
 
-    it 'shows all Tasks of that user' do
+    it 'shows the task' do
       get_request
       expect(assigns(:tasks)).to contain_exactly task
+    end
+
+    context 'with a task of a different user' do
+      before { create(:task, user: build(:user)) }
+
+      it 'shows all Tasks of that user' do
+        get_request
+        expect(assigns(:tasks)).to contain_exactly task
+      end
+
+      context 'when option is public' do
+        let(:params) { {option: 'public'} }
+
+        it 'shows all Tasks' do
+          get_request
+          expect(assigns(:tasks).size).to eq 2
+        end
+      end
     end
 
     context 'when user has multiple tasks' do

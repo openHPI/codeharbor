@@ -3,7 +3,7 @@
 require 'zip'
 
 class TasksController < ApplicationController
-  load_and_authorize_resource #except: %i[import_external_exercise import_uuid_check]
+  load_and_authorize_resource # except: %i[import_external_exercise import_uuid_check]
   # before_action :set_task, only: %i[show edit update destroy] # add_to_cart add_to_collection contribute
   # remove_state export_external_start export_external_check]
 
