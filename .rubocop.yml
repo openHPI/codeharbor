@@ -69,6 +69,7 @@ RSpec/ExampleLength:
   Exclude:
     - spec/services/proforma_service/convert_exercise_to_task_spec.rb
     - spec/services/proforma_service/convert_task_to_exercise_spec.rb
+    - spec/services/proforma_service/convert_task_to_proforma_task_spec.rb
 
 RSpec/NestedGroups:
   Max: 5
