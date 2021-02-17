@@ -10,8 +10,8 @@ updates:
     labels:
       - dependencies
       - ruby
-     # Disable all pull requests
-     open-pull-requests-limit: 0
+    # Disable all pull requests
+    open-pull-requests-limit: 0
 
   - package-ecosystem: npm
     directory: "/"
