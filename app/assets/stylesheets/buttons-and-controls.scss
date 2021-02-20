@@ -1,0 +1,65 @@
+// Place all the styles related to the Exercises controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.radio-switch {
+  display: inline-block;
+}
+
+.radio-half {
+  width: 50%;
+}
+
+.radio-third {
+  width: 33%;
+}
+
+.radio-base {
+  border: #CCCCCC 1px solid;
+  padding: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: normal;
+  text-align: center;
+  box-sizing: border-box;
+  border-radius: 4px;
+}
+
+.radio-left {
+  @extend .radio-base;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.radio-right {
+  @extend .radio-base;
+  margin-left: -1px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
+.radio-left.small-radio, .radio-right.small-radio {
+  font-size: 10px;
+  padding: 3px;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"]:checked+label {
+  background-color: #eeeeee;
+}
+
+.primary-checkbox:checked+label {
+  background-color: #060;
+  color: white;
+}
+
+.primary-checkbox+label {
+  border-color: #AAA;
+  background-color: #FFF;
+  display: inline;
+  padding: 5px 15px;
+}
+

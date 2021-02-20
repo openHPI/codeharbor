@@ -54,12 +54,8 @@
           p
             b = t('tasks.index.search.proglanguages')
           span.form-group
-            = advanced.select 'proglanguage', options_for_select(ExecutionEnvironment.all.collect{|l| [l.language, l.language]}, selected: @proglanguages), {}, {multiple: true, class: 'form-control language-box'}
+            = advanced.select 'proglanguage', options_for_select(ProgrammingLanguage.all.collect{|l| [l.language, l.language]}, selected: @proglanguages), {}, {multiple: true, class: 'form-control language-box'}
 
-        .languages.section
-          p
-            b = t('tasks.index.search.languages')
-          = advanced.select 'language', options_for_select(Description::LANGUAGES, @languages), {}, {multiple: true, class: 'form-control language-box'}
         .other.section
           p
             b = t('tasks.index.search.created')

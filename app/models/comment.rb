@@ -3,7 +3,7 @@
 class Comment < ApplicationRecord
   validates :text, presence: true
 
-  belongs_to :exercise
+  belongs_to :task
   belongs_to :user
 
   def self.search(search)

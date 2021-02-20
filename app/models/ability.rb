@@ -14,14 +14,8 @@ class Ability
     # AccountLink
     account_link_abilities user
 
-    # Cart
-    cart_abilities user
-
     # Collection
     collection_abilities user
-
-    # Exercise
-    exercise_abilities user
 
     task_abilities user
 
@@ -58,41 +52,15 @@ class Ability
     can %i[view show remove_shared_user], AccountLink, shared_users: {id: user.id}
   end
 
-  def cart_abilities(user)
-    can %i[create], Cart
-    can %i[my_cart show remove_all download_all push_cart export remove_exercise], Cart, user_id: user.id
-  end
-
   def collection_abilities(user)
     can %i[create view_shared save_shared index], Collection
     cannot %i[leave], Collection
     can %i[crud leave remove_exercise remove_all push_collection download_all share], Collection, users: {id: user.id}
   end
 
-  def exercise_abilities(user)
-    can %i[index create contribute read_comments related_exercises import_exercise_start import_exercise_confirm], Exercise
-    can %i[show add_to_cart add_to_collection push_external duplicate download_exercise], Exercise do |exercise|
-      exercise.can_access(user)
-    end
-    alias_action :export_external_start, :export_external_check, :export_external_confirm, to: :export
-    can %i[crud export history remove_state], Exercise, user: {id: user.id}
-    can %i[crud export history remove_state], Exercise, exercise_authors: {user: {id: user.id}}
-    can %i[report], Exercise do |exercise|
-      ExerciseAuthor.where(user: user, exercise: exercise).empty? && exercise.user != user
-    end
-  end
-
   def task_abilities(user)
     can %i[index create], Task
-    # can %i[show add_to_cart add_to_collection push_external duplicate download_exercise], Task do |exercise|
-    #   exercise.can_access(user)
-    # end
-    # alias_action :export_external_start, :export_external_check, :export_external_confirm, to: :export
     can %i[crud], Task, user: {id: user.id}
-    # can %i[crud export history remove_state], Task, exercise_authors: {user: {id: user.id}}
-    # can %i[report], Task do |exercise|
-    #   ExerciseAuthor.where(user: user, exercise: exercise).empty? && exercise.user != user
-    # end
   end
 
   def task_file_abilities(user)

@@ -42,7 +42,7 @@
             = exercise.ratings.count
             = ' ' + t('exercises.all.ratings')
         span.programming-language.pull-right
-          = task.programming_language&.language || t('tasks.index.no_execution_environment_selected')
+          = task.programming_language&.language || t('tasks.index.no_programming_language_selected')
         / = render 'remove_state_tag', exercise: exercise
     .panel-body.exercise-panel
       .exercise-content

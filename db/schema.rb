@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_27_153334) do
+ActiveRecord::Schema.define(version: 2021_02_19_161631) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -54,27 +54,6 @@ ActiveRecord::Schema.define(version: 2020_11_27_153334) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "cart_exercises", id: :serial, force: :cascade do |t|
-    t.integer "exercise_id"
-    t.integer "cart_id"
-    t.index ["cart_id"], name: "index_cart_exercises_on_cart_id"
-    t.index ["exercise_id"], name: "index_cart_exercises_on_exercise_id"
-  end
-
-  create_table "carts", id: :serial, force: :cascade do |t|
-    t.integer "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_carts_on_user_id"
-  end
-
-  create_table "collection_exercises", id: :serial, force: :cascade do |t|
-    t.integer "exercise_id"
-    t.integer "collection_id"
-    t.index ["collection_id"], name: "index_collection_exercises_on_collection_id"
-    t.index ["exercise_id"], name: "index_collection_exercises_on_exercise_id"
-  end
-
   create_table "collection_users", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.integer "collection_id"
@@ -90,58 +69,12 @@ ActiveRecord::Schema.define(version: 2020_11_27_153334) do
 
   create_table "comments", id: :serial, force: :cascade do |t|
     t.text "text"
-    t.integer "exercise_id"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["exercise_id"], name: "index_comments_on_exercise_id"
+    t.bigint "task_id"
+    t.index ["task_id"], name: "index_comments_on_task_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
-  end
-
-  create_table "descriptions", id: :serial, force: :cascade do |t|
-    t.string "text"
-    t.integer "exercise_id"
-    t.string "language", default: "EN"
-    t.boolean "primary"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["exercise_id"], name: "index_descriptions_on_exercise_id"
-  end
-
-  create_table "execution_environments", id: :serial, force: :cascade do |t|
-    t.string "language"
-    t.string "version"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "exercise_authors", id: :serial, force: :cascade do |t|
-    t.integer "exercise_id"
-    t.integer "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["exercise_id"], name: "index_exercise_authors_on_exercise_id"
-    t.index ["user_id"], name: "index_exercise_authors_on_user_id"
-  end
-
-  create_table "exercise_files", id: :serial, force: :cascade do |t|
-    t.text "content"
-    t.string "path"
-    t.boolean "solution"
-    t.integer "exercise_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "visibility"
-    t.string "name"
-    t.string "purpose"
-    t.string "role"
-    t.boolean "hidden"
-    t.boolean "read_only"
-    t.integer "file_type_id"
-    t.bigint "test_id"
-    t.index ["exercise_id"], name: "index_exercise_files_on_exercise_id"
-    t.index ["file_type_id"], name: "index_exercise_files_on_file_type_id"
-    t.index ["test_id"], name: "index_exercise_files_on_test_id"
   end
 
   create_table "exercise_labels", force: :cascade do |t|
@@ -149,35 +82,6 @@ ActiveRecord::Schema.define(version: 2020_11_27_153334) do
     t.integer "label_id"
     t.index ["exercise_id"], name: "index_exercise_labels_on_exercise_id"
     t.index ["label_id"], name: "index_exercise_labels_on_label_id"
-  end
-
-  create_table "exercise_relations", id: :serial, force: :cascade do |t|
-    t.integer "origin_id"
-    t.integer "clone_id"
-    t.integer "relation_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "exercises", id: :serial, force: :cascade do |t|
-    t.string "title"
-    t.string "instruction"
-    t.integer "maxrating"
-    t.boolean "private"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "user_id"
-    t.integer "execution_environment_id"
-    t.integer "downloads", default: 0
-    t.integer "license_id"
-    t.boolean "deleted"
-    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
-    t.bigint "predecessor_id"
-    t.index ["execution_environment_id"], name: "index_exercises_on_execution_environment_id"
-    t.index ["license_id"], name: "index_exercises_on_license_id"
-    t.index ["predecessor_id"], name: "index_exercises_on_predecessor_id"
-    t.index ["user_id"], name: "index_exercises_on_user_id"
-    t.index ["uuid"], name: "index_exercises_on_uuid", unique: true
   end
 
   create_table "file_types", id: :serial, force: :cascade do |t|
@@ -262,11 +166,11 @@ ActiveRecord::Schema.define(version: 2020_11_27_153334) do
 
   create_table "ratings", id: :serial, force: :cascade do |t|
     t.integer "rating"
-    t.integer "exercise_id"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["exercise_id"], name: "index_ratings_on_exercise_id"
+    t.bigint "task_id"
+    t.index ["task_id"], name: "index_ratings_on_task_id"
     t.index ["user_id"], name: "index_ratings_on_user_id"
   end
 
@@ -277,12 +181,12 @@ ActiveRecord::Schema.define(version: 2020_11_27_153334) do
   end
 
   create_table "reports", id: :serial, force: :cascade do |t|
-    t.integer "exercise_id"
     t.integer "user_id"
     t.text "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["exercise_id"], name: "index_reports_on_exercise_id"
+    t.bigint "task_id"
+    t.index ["task_id"], name: "index_reports_on_task_id"
     t.index ["user_id"], name: "index_reports_on_user_id"
   end
 
@@ -309,6 +213,15 @@ ActiveRecord::Schema.define(version: 2020_11_27_153334) do
     t.string "name"
     t.integer "taggings_count", default: 0
     t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
+  create_table "task_authors", id: :serial, force: :cascade do |t|
+    t.bigint "task_id"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["task_id"], name: "index_task_authors_on_task_id"
+    t.index ["user_id"], name: "index_task_authors_on_user_id"
   end
 
   create_table "task_files", force: :cascade do |t|
@@ -354,7 +267,6 @@ ActiveRecord::Schema.define(version: 2020_11_27_153334) do
     t.integer "testing_framework_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "exercise_id"
     t.float "score"
     t.string "title"
     t.string "description"
@@ -364,7 +276,6 @@ ActiveRecord::Schema.define(version: 2020_11_27_153334) do
     t.string "validity"
     t.string "timeout"
     t.bigint "task_id"
-    t.index ["exercise_id"], name: "index_tests_on_exercise_id"
     t.index ["testing_framework_id"], name: "index_tests_on_testing_framework_id"
   end
 
@@ -387,21 +298,14 @@ ActiveRecord::Schema.define(version: 2020_11_27_153334) do
 
   add_foreign_key "account_links", "users"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "carts", "users"
-  add_foreign_key "comments", "exercises"
+  add_foreign_key "comments", "tasks"
   add_foreign_key "comments", "users"
-  add_foreign_key "descriptions", "exercises"
-  add_foreign_key "exercise_authors", "exercises"
-  add_foreign_key "exercise_authors", "users"
-  add_foreign_key "exercise_files", "exercises"
-  add_foreign_key "exercise_files", "file_types"
-  add_foreign_key "exercises", "execution_environments"
-  add_foreign_key "exercises", "licenses"
-  add_foreign_key "exercises", "users"
-  add_foreign_key "ratings", "exercises"
+  add_foreign_key "model_solutions", "tasks"
+  add_foreign_key "ratings", "tasks"
   add_foreign_key "ratings", "users"
-  add_foreign_key "reports", "exercises"
+  add_foreign_key "reports", "tasks"
   add_foreign_key "reports", "users"
-  add_foreign_key "tests", "exercises"
+  add_foreign_key "task_authors", "tasks"
+  add_foreign_key "tests", "tasks"
   add_foreign_key "tests", "testing_frameworks"
 end

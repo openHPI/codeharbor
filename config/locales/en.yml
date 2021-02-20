@@ -1026,7 +1026,7 @@ en:
         no_results_description: "Try different options by clicking on Advanced."
         reset: "Reset"
         placeholder: "Search for task or label"
-      no_execution_environment_selected: "No programming language selected"
+      no_programming_language_selected: "No programming language selected"
       no_description: "No Description"
       view: "View"
       edit: "Edit"

@@ -22,17 +22,6 @@ Rails.application.routes.draw do
     get 'sessions/email_link'
   end
 
-  resources :carts, only: [] do
-    member do
-      get :download_all
-
-      patch :remove_all
-      patch :remove_exercise
-
-      post :push_cart # later
-    end
-  end
-
   resources :collections do
     member do
       get :download_all
@@ -61,15 +50,6 @@ Rails.application.routes.draw do
     end
   end
 
-  controller :exercises do # import-api endpoints
-    post 'import_exercise' => :import_external_exercise
-    post :import_uuid_check
-  end
-
-  controller :carts do
-    get 'my_cart'
-  end
-
   resources :labels, only: [] do
     get :search, on: :collection
   end
@@ -89,10 +69,6 @@ Rails.application.routes.draw do
     get :search, on: :collection
   end
 
-  resources :exercise_files, only: [] do
-    get :download_attachment
-  end
-
   resources :task_files, only: [] do
     member do
       get :download_attachment
@@ -100,35 +76,6 @@ Rails.application.routes.draw do
   end
 
   resources :tasks
-
-  resources :exercises do
-    member do
-      get :download_exercise
-      get :duplicate
-      get :history
-      get :related_exercises
-
-      post :export_external_start
-      post :add_author
-      post :contribute
-      post :decline_author
-      post :add_to_cart
-      post :add_to_collection
-      post :export_external_check
-      post :export_external_confirm
-      post :remove_state
-      post :report
-    end
-
-    collection do
-      post :import_exercise_start
-      post :import_exercise_confirm
-    end
-
-    resources :comments # AJAX-API
-
-    resources :ratings, only: :create
-  end
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 end

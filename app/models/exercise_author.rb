@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ExerciseAuthor < ApplicationRecord
-  belongs_to :exercise
+class TaskAuthor < ApplicationRecord
+  belongs_to :task
   belongs_to :user
 end
