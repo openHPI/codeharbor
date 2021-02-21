@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ProformaService::ConvertTaskToExercise do
+xdescribe ProformaService::ConvertTaskToExercise do
   describe '.new' do
     subject(:convert_to_exercise_service) { described_class.new(task: task, user: user, exercise: exercise) }
 

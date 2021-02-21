@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ProformaService::HandleExportConfirm do
+xdescribe ProformaService::HandleExportConfirm do
   describe '.new' do
     subject(:handle_export_confirm) do
       described_class.new(user: user, exercise: exercise, push_type: push_type, account_link_id: account_link_id)
