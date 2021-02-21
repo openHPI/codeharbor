@@ -140,7 +140,7 @@ en:
       deny_access:
         text: "%{user} did not accept you to his group: %{group}."
         notice: "User declined."
-      remove_exercise_notice: "Exercise successfully removed"
+      remove_task_notice: "Task successfully removed"
       delete_from_group_notice: "User deleted from group."
       make_admin_notice: "Made user to admin."
 
@@ -368,7 +368,7 @@ en:
       header: "Collection:"
       download_all: "Download All"
     errorMessage: "prohibited this collection from being saved."
-    noExercisesAdded: "No Exercises Added"
+    noTasksAdded: "No Tasks Added"
 
   groups:
       header: "Your Groups"

@@ -74,9 +74,9 @@ class GroupsController < ApplicationController
   end
 
   def remove_exercise
-    exercise = Exercise.find(params[:exercise])
-    @group.exercises.delete(exercise)
-    redirect_to @group, notice: t('controllers.group.remove_exercise_notice')
+    exercise = Task.find(params[:exercise])
+    @group.tasks.delete(exercise)
+    redirect_to @group, notice: t('controllers.group.remove_task_notice')
   end
 
   def grant_access

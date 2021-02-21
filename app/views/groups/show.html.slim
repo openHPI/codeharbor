@@ -70,10 +70,10 @@
   .row.vertical
     .row-label = t('groups.show.exercises')
     .row-value
-      - @group.exercises.each do |exercise|
+      - @group.tasks.each do |exercise|
         .table-list
           .btn-group
-            = link_to exercise.title, exercise_path(exercise), class: 'btn btn-default', style: "border-right: none"
+            = link_to exercise.title, task_path(exercise), class: 'btn btn-default', style: "border-right: none"
             = link_to remove_exercise_group_path(exercise: exercise), method: :patch, class: 'btn btn-default', style: "border-left: none; margin-right: 5px;"  do
               i.fa.fa-remove style=("color:gray;")
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_19_161631) do
+ActiveRecord::Schema.define(version: 2021_02_21_104627) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -54,6 +54,13 @@ ActiveRecord::Schema.define(version: 2021_02_19_161631) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
+  create_table "collection_tasks", force: :cascade do |t|
+    t.bigint "task_id"
+    t.bigint "collection_id"
+    t.index ["collection_id"], name: "index_collection_tasks_on_collection_id"
+    t.index ["task_id"], name: "index_collection_tasks_on_task_id"
+  end
+
   create_table "collection_users", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.integer "collection_id"
@@ -75,13 +82,6 @@ ActiveRecord::Schema.define(version: 2021_02_19_161631) do
     t.bigint "task_id"
     t.index ["task_id"], name: "index_comments_on_task_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
-  end
-
-  create_table "exercise_labels", force: :cascade do |t|
-    t.integer "exercise_id"
-    t.integer "label_id"
-    t.index ["exercise_id"], name: "index_exercise_labels_on_exercise_id"
-    t.index ["label_id"], name: "index_exercise_labels_on_label_id"
   end
 
   create_table "file_types", id: :serial, force: :cascade do |t|
@@ -240,6 +240,13 @@ ActiveRecord::Schema.define(version: 2021_02_19_161631) do
     t.index ["fileable_type", "fileable_id"], name: "index_task_files_on_fileable_type_and_fileable_id"
   end
 
+  create_table "task_labels", force: :cascade do |t|
+    t.integer "label_id"
+    t.bigint "task_id"
+    t.index ["label_id"], name: "index_task_labels_on_label_id"
+    t.index ["task_id"], name: "index_task_labels_on_task_id"
+  end
+
   create_table "tasks", id: :serial, force: :cascade do |t|
     t.string "title"
     t.string "description"
@@ -298,6 +305,8 @@ ActiveRecord::Schema.define(version: 2021_02_19_161631) do
 
   add_foreign_key "account_links", "users"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "collection_tasks", "collections"
+  add_foreign_key "collection_tasks", "tasks"
   add_foreign_key "comments", "tasks"
   add_foreign_key "comments", "users"
   add_foreign_key "model_solutions", "tasks"
@@ -306,6 +315,7 @@ ActiveRecord::Schema.define(version: 2021_02_19_161631) do
   add_foreign_key "reports", "tasks"
   add_foreign_key "reports", "users"
   add_foreign_key "task_authors", "tasks"
+  add_foreign_key "task_labels", "tasks"
   add_foreign_key "tests", "tasks"
   add_foreign_key "tests", "testing_frameworks"
 end

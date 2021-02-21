@@ -7,8 +7,8 @@ class Collection < ApplicationRecord
   has_many :collection_users, dependent: :destroy
   has_many :users, through: :collection_users
 
-  # has_many :collection_exercises, dependent: :destroy
-  # has_many :exercises, through: :collection_exercises
+  has_many :collection_tasks, dependent: :destroy
+  has_many :tasks, through: :collection_tasks
 
   # def add_exercise(exercise)
   #   exercises << exercise unless exercises.find_by(id: exercise.id)

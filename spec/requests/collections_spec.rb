@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe 'Collections', type: :request do
   context 'when logged in' do
     let(:user) { FactoryBot.create(:user) }
-    let(:collection) { FactoryBot.create(:collection, title: 'Some Collection', users: [user], exercises: []) }
+    let(:collection) { FactoryBot.create(:collection, title: 'Some Collection', users: [user], tasks: []) }
     let(:collection_params) { FactoryBot.attributes_for(:collection) }
 
     before do
