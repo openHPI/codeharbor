@@ -1,16 +1,18 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
+ready =->
+  initializeUploadedFileDeletion()
+  initializeToggleEditorAttachment()
+  initializeSetNameOnUpload()
 
+$(document).on('turbolinks:load', ready)
 
-loadFileScript =->
-
+initializeUploadedFileDeletion =->
   $('form').on 'click', '.remove-attachment', (event) ->
     event.preventDefault()
     $(this).parent().hide()
     $(this).parents('.attachment').find('.alternative').show()
     $(this).parents('.attachment').find('.hidden-attachment-present').val(false)
 
+initializeToggleEditorAttachment =->
   $('form').on 'click','.toggle-input', (event) ->
     event.preventDefault()
     $content = $(this).next()
@@ -31,20 +33,10 @@ loadFileScript =->
       $editor.show()
     return
 
+initializeSetNameOnUpload =->
   $('form').on 'change', '.alternative-input', (event) ->
     event.preventDefault()
     fullPath = this.value
     fullName = get_filename_from_full_path(fullPath)
-#    name = fullName.split('.')[0]
-#    extension = '.' + fullName.split('.')[1]
     if fullPath
-#      console.log(name)
       $(this).parents('.file-container').find('.file-name').val(fullName)
-#      index = $(this).parents('.file-container').find('.file-type option[data-extension="' + extension + '"]').val()
-#      $(this).parents('.file-container').find('.file-type').val(index)
-#      $(this).parents('.file-container').find('.file-type').trigger('change')
-      
-ready =->
-    loadFileScript()
-
-$(document).on('turbolinks:load', ready)

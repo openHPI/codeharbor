@@ -36,7 +36,7 @@
             = t('tasks.index.search.advanced') + ' '
           span.fa.fa-caret-down#drop style="color:#333333"
     .dropdown-content
-      = hidden_field_tag 'window', @dropdown
+      = hidden_field_tag 'dropdownWindowActive', @dropdown
       = fields_for 'settings' do |advanced|
         .order.section
           p
@@ -49,18 +49,18 @@
           p
             b = t('tasks.index.search.stars')
           div.form-group
-            = advanced.select 'stars', options_for_select({t('tasks.index.search.all_stars') => "0", "5" => "5", "4+" => "4", "3+" => "3", "2+" => "2", t('tasks.index.search.unrated_only') => ""}, selected: @stars), {}, class: 'form-control'
+            = advanced.select 'stars', options_for_select({t('tasks.index.search.all_stars') => "0", "5" => "5", "4+" => "4", "3+" => "3", "2+" => "2", t('tasks.index.search.unrated_only') => ""}, selected: @stars), {}, class: 'form-control defaultSelect2'
         .proglanguages.section
           p
             b = t('tasks.index.search.proglanguages')
           span.form-group
-            = advanced.select 'proglanguage', options_for_select(ProgrammingLanguage.all.collect{|l| [l.language, l.language]}, selected: @proglanguages), {}, {multiple: true, class: 'form-control language-box'}
+            = advanced.select 'proglanguage', options_for_select(ProgrammingLanguage.all.collect{|l| [l.language_with_version, l.language_with_version]}, selected: @proglanguages), {}, {multiple: true, class: 'form-control language-box'}
 
         .other.section
           p
             b = t('tasks.index.search.created')
           span.form-group
-            = advanced.select 'created', options_for_select({t('tasks.index.search.all_time') => "0", t('tasks.index.search.today') => "1", t('tasks.index.search.last_week') => "7", t('tasks.index.search.last_month') => "30"}, selected: @created), {}, class: 'form-control'
+            = advanced.select 'created', options_for_select({t('tasks.index.search.all_time') => "0", t('tasks.index.search.today') => "1", t('tasks.index.search.last_week') => "7", t('tasks.index.search.last_month') => "30"}, selected: @created), {}, class: 'form-control defaultSelect2'
       .clear style=("clear: both")
 
     br
