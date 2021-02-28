@@ -70,10 +70,6 @@ RailsAdmin.config do |config|
     add_valid_column(self)
   end
 
-  config.model 'FileType' do
-    add_valid_column(self)
-  end
-
   config.model 'Group' do
     add_valid_column(self)
   end
