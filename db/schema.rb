@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_28_104206) do
+ActiveRecord::Schema.define(version: 2021_02_28_104514) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -166,12 +166,6 @@ ActiveRecord::Schema.define(version: 2021_02_28_104206) do
     t.index ["user_id"], name: "index_ratings_on_user_id"
   end
 
-  create_table "relations", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "reports", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.text "text"
@@ -205,15 +199,6 @@ ActiveRecord::Schema.define(version: 2021_02_28_104206) do
     t.string "name"
     t.integer "taggings_count", default: 0
     t.index ["name"], name: "index_tags_on_name", unique: true
-  end
-
-  create_table "task_authors", id: :serial, force: :cascade do |t|
-    t.bigint "task_id"
-    t.bigint "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["task_id"], name: "index_task_authors_on_task_id"
-    t.index ["user_id"], name: "index_task_authors_on_user_id"
   end
 
   create_table "task_files", force: :cascade do |t|
@@ -262,11 +247,8 @@ ActiveRecord::Schema.define(version: 2021_02_28_104206) do
   end
 
   create_table "tests", id: :serial, force: :cascade do |t|
-    t.string "feedback_message"
-    t.integer "testing_framework_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.float "score"
     t.string "title"
     t.string "description"
     t.string "internal_description"
@@ -275,7 +257,6 @@ ActiveRecord::Schema.define(version: 2021_02_28_104206) do
     t.string "validity"
     t.string "timeout"
     t.bigint "task_id"
-    t.index ["testing_framework_id"], name: "index_tests_on_testing_framework_id"
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
@@ -306,8 +287,6 @@ ActiveRecord::Schema.define(version: 2021_02_28_104206) do
   add_foreign_key "ratings", "users"
   add_foreign_key "reports", "tasks"
   add_foreign_key "reports", "users"
-  add_foreign_key "task_authors", "tasks"
   add_foreign_key "task_labels", "tasks"
   add_foreign_key "tests", "tasks"
-  add_foreign_key "tests", "testing_frameworks"
 end
