@@ -1,19 +1,3 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
-
-#validateForm = (e) ->
-#  title = document.getElementById('exercise_title')
-#  if title.value == ''
-#    if $('#error').length
-#
-#    else
-#      title.style.borderColor = "red"
-#      $("<p id='error' style='color: red'>Title can't be blank</p>").insertAfter(title)
-#    document.body.scrollTop = document.documentElement.scrollTop = 0;
-#    e.preventDefault()
-#    false
-
 ready =->
   initializeSelect2()
   initCollapsable($('.description'), '95px')

@@ -14,7 +14,7 @@ class TasksController < ApplicationController
 
   def index
     page = params[:page]
-    @tasks = Task # .active
+    @tasks = Task
              .search(params[:search], params[:settings], @option, current_user)
              .paginate(per_page: 5, page: page)
 

@@ -212,7 +212,7 @@ legend.toggle-next
 
         - if !file.attachment.present?
           .row
-            .editor_readonly data-editor-mode="#{TaskFileService::AceModeByFilename.call(filename: file.name)}"
+            .editor.readonly data-file-name="#{file.name}"
               = file.content
         - else
           .row.vertical
@@ -344,7 +344,7 @@ legend.toggle-next
 
                 - if !file.attachment.present?
                   .row
-                    .editor_readonly data-editor-mode="#{TaskFileService::AceModeByFilename.call(filename: file.name)}"
+                    .editor.readonly data-file-name="#{file.name}"
                       = file.content
                 - else
                   .row.vertical
@@ -442,7 +442,7 @@ legend.toggle-next
 
                 - if !file.attachment.present?
                   .row
-                    .editor_readonly data-editor-mode="#{TaskFileService::AceModeByFilename.call(filename: file.name)}"
+                    .editor.readonly data-file-name="#{file.name}"
                       = file.content
                 - else
                   .row.vertical

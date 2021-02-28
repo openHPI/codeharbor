@@ -11,6 +11,8 @@ class User < ApplicationRecord
   validates :first_name, :last_name, presence: true
   has_secure_password
 
+  has_many :tasks, dependent: :nullify
+
   has_many :collection_users, dependent: :destroy
   has_many :collections, through: :collection_users
 
@@ -51,7 +53,6 @@ class User < ApplicationRecord
     destroy = handle_group_memberships
     if destroy
       handle_collection_membership
-      # handle_exercises
       handle_messages
       true
     else
@@ -77,10 +78,6 @@ class User < ApplicationRecord
       collection.delete if collection.users.count == 1
     end
   end
-
-  # def handle_exercises
-  #   Exercise.where(user: self).find_each { |e| e.update(user: nil) }
-  # end
 
   def handle_messages
     Message.where(sender: self, param_type: %w[group collection]).destroy_all
