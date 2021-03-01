@@ -12,7 +12,7 @@
   = test.text_field :test_type, class: 'form-control'
 .field-element
   = test.label :xml_id, t('tasks.tests.xml_id'), class: 'form-label'
-  = test.text_field :xml_id, class: 'form-control'
+  = test.text_field :xml_id, class: 'form-control', value: test.object.xml_id.presence || '__nested_field_for_replace_with_index__'
 .field-element
   = test.label :validity, t('tasks.tests.validity'), class: 'form-label'
   = test.number_field :validity, class: 'form-control', in: 0.0..1.0, step: 0.01

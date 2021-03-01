@@ -3,11 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe Test, type: :model do
-  # describe 'validations' do
-  # it { is_expected.to belong_to(:exercise) }
+  describe 'validations' do
+    it { is_expected.to belong_to(:task) }
+    it { is_expected.to validate_presence_of(:title) }
+    it { is_expected.to validate_presence_of(:xml_id) }
+    it { is_expected.to validate_uniqueness_of(:xml_id).scoped_to(:task_id) }
 
-  # it { is_expected.to validate_presence_of(:exercise_file) }
-  # end
+  end
 
   xdescribe '#content' do
     subject { test.content }
