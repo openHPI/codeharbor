@@ -1,0 +1,13 @@
+.field-element
+  = file.label :name, t('tasks.files.name'), class:'form-label'
+  = file.text_field :name, class: 'form-control file-name'
+.field-element
+  = file.label :path, t('tasks.files.path'), class:'form-label'
+  = file.text_field :path, size: 40, class: 'form-control'
+.field-element
+  = file.label :internal_description, t('tasks.files.internal_description'), class:'form-label'
+  = file.text_area :internal_description, class:'form-control'
+.field-element
+  = render 'file_config', file: file
+.field-element
+  = render 'editor', f: f, file: file

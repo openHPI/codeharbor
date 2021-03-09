@@ -57,6 +57,5 @@ RSpec.describe Comment, type: :model do
   describe '#valid?' do
     it { is_expected.to validate_presence_of(:text) }
     it { is_expected.to belong_to(:user) }
-    it { is_expected.to belong_to(:exercise) }
   end
 end

@@ -1,3 +1,0 @@
-id = <%= @exercise.id %>
-    commentBox =  $(".related-box[data-exercise=" + id +"] > .content")
-$(commentBox).html("<%= escape_javascript(render :partial => 'related_exercises', :locals => {:related_exercises => @related_exercises}) %>");

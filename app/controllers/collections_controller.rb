@@ -73,8 +73,8 @@ class CollectionsController < ApplicationController
   end
 
   def download_all
-    binary_zip_data = ProformaService::ExportTasks.call(exercises: @collection.exercises)
-    @collection.exercises.each { |exercise| exercise.update(downloads: exercise.downloads + 1) }
+    binary_zip_data = ProformaService::ExportTasks.call(exercises: @collection.tasks)
+    @collection.tasks.each { |exercise| exercise.update(downloads: exercise.downloads + 1) }
 
     send_data(binary_zip_data.string, type: 'application/zip', filename: "#{@collection.title}.zip", disposition: 'attachment')
   end
@@ -127,7 +127,7 @@ class CollectionsController < ApplicationController
 
   def push_exercises
     errors = []
-    @collection.exercises.each do |exercise|
+    @collection.tasks.each do |exercise|
       error = push_exercise(exercise, account_link) # TODO: implement multi export
       errors << error if error.present?
     end

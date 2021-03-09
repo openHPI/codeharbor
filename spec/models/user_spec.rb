@@ -80,45 +80,6 @@ RSpec.describe User, type: :model do
     it { is_expected.to validate_uniqueness_of(:username).case_insensitive }
   end
 
-  describe 'cart count' do
-    let!(:user) { FactoryBot.create(:user) }
-    let!(:exercise1) { FactoryBot.create(:simple_exercise) }
-    let!(:exercise2) { FactoryBot.create(:simple_exercise) }
-    let(:cart) { FactoryBot.create(:cart, user: user, exercises: [exercise1]) }
-
-    it 'return +1 when exercise is added' do
-      count = user.cart_count
-      cart.add_exercise(exercise1)
-      expect(user.cart_count).to be_eql(count + 1)
-    end
-
-    it 'return -1 when exercise is removed' do
-      cart.add_exercise(exercise2)
-      count = user.cart_count
-      cart.remove_exercise(exercise2)
-      expect(user.cart_count).to be_eql(count - 1)
-    end
-
-    it 'return 0 when cart got destroyed' do
-      cart.destroy
-      expect(user.reload.cart_count).to be_eql(0)
-    end
-  end
-
-  describe 'is_author' do
-    let!(:user1) { FactoryBot.create(:user) }
-    let!(:user2) { FactoryBot.create(:user) }
-    let!(:exercise) { FactoryBot.create(:exercise, authors: [user1]) }
-
-    it 'returns true for author' do
-      expect(user1.author?(exercise)).to be true
-    end
-
-    it 'return false for not author' do
-      expect(user2.author?(exercise)).to be false
-    end
-  end
-
   describe '#soft_delete' do
     subject(:soft_delete) { user.soft_delete }
 
@@ -219,7 +180,7 @@ RSpec.describe User, type: :model do
       end
     end
 
-    context 'when user has an exercise' do
+    xcontext 'when user has an exercise' do
       before { user.exercises << exercise }
 
       let(:exercise) { create(:simple_exercise, user: user) }
@@ -236,7 +197,7 @@ RSpec.describe User, type: :model do
         expect { soft_delete }.not_to change(Message, :count)
       end
 
-      context 'when message has type exercise' do
+      xcontext 'when message has type exercise' do
         before do
           create(:message, sender: user, param_type: 'exercise')
           create(:message, sender: user, param_type: 'group')
@@ -246,20 +207,6 @@ RSpec.describe User, type: :model do
         it 'deletes message' do
           expect { soft_delete }.to change(Message, :count).by(-3)
         end
-      end
-    end
-  end
-
-  describe '#destroy' do
-    subject(:destroy) { user.destroy }
-
-    let(:user) { create(:user) }
-
-    context 'when user has a cart' do
-      before { create(:cart, user: user) }
-
-      it 'deletes cart' do
-        expect { destroy }.to change(Cart, :count).by(-1)
       end
     end
   end
@@ -283,7 +230,7 @@ RSpec.describe User, type: :model do
 
     it 'uses the provided primary email for created users' do
       email = 'test@example.com'
-      user = FactoryBot.create(:user, email: 'test@example.com')
+      user = create(:user, email: 'test@example.com')
       user.email = email
     end
 
@@ -311,13 +258,13 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe 'exercise visible for user' do
-    let!(:user) { FactoryBot.create(:user) }
-    let!(:user2) { FactoryBot.create(:user) }
-    let!(:group) { FactoryBot.create(:group, users: [user]) }
-    let!(:exercise) { FactoryBot.create(:only_meta_data, :with_primary_description, private: false, authors: [user]) }
-    let!(:exercise2) { FactoryBot.create(:only_meta_data, :with_primary_description, private: true, authors: [user]) }
-    let!(:exercise3) { FactoryBot.create(:only_meta_data, :with_primary_description, private: true, authors: [user2], groups: [group]) }
+  xdescribe 'exercise visible for user' do
+    let!(:user) { create(:user) }
+    let!(:user2) { create(:user) }
+    let!(:group) { create(:group, users: [user]) }
+    let!(:exercise) { create(:only_meta_data, :with_primary_description, private: false, authors: [user]) }
+    let!(:exercise2) { create(:only_meta_data, :with_primary_description, private: true, authors: [user]) }
+    let!(:exercise3) { create(:only_meta_data, :with_primary_description, private: true, authors: [user2], groups: [group]) }
 
     it 'allows access to a public exercise to all users' do
       expect(exercise.can_access(user2)).to be true

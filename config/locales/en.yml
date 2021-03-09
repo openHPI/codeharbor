@@ -140,7 +140,7 @@ en:
       deny_access:
         text: "%{user} did not accept you to his group: %{group}."
         notice: "User declined."
-      remove_exercise_notice: "Exercise successfully removed"
+      remove_task_notice: "Task successfully removed"
       delete_from_group_notice: "User deleted from group."
       make_admin_notice: "Made user to admin."
 
@@ -196,7 +196,6 @@ en:
       remove_account_link:
         success: "Account Link was successfully removed."
         fail: "Account Link could not be removed."
-
 
   models:
     exercise:
@@ -368,9 +367,8 @@ en:
       delete: 'Delete'
       header: "Collection:"
       download_all: "Download All"
-      remove_all: "Remove All"
     errorMessage: "prohibited this collection from being saved."
-    noExercisesAdded: "No Exercises Added"
+    noTasksAdded: "No Tasks Added"
 
   groups:
       header: "Your Groups"
@@ -542,6 +540,7 @@ en:
       content: "Content"
       feedback: "Feedback Message"
       framework: "Testing Framework"
+      model_solution: "Model solution"
 
     defaults:
       no_description: "No Description"
@@ -602,6 +601,8 @@ en:
       save: "Save Exercise"
       cancel: "Cancel"
       none: None
+      model_solutions:
+        add: "Add Model solution"
 
     admin:
       header: "Exercise Administration"
@@ -623,7 +624,6 @@ en:
         solution: "Solution file"
       export: "Export"
       export_to: "Export to"
-      submit: "Submit"
       define_account_link: "Please define an account link first"
       add_to_cart: "Add to cart"
       add_to_collection: "Add to collection"
@@ -678,6 +678,8 @@ en:
     state_removed: successfully removed state
     index:
       no_execution_environment_selected: No programming language selected
+    model_solution:
+      label: "Model solution"
 
   file_types:
     header: "File Types"
@@ -800,6 +802,7 @@ en:
 
 
    # ratings: will be added with implementation
+    tasks: "Tasks"
 
   licenses:
     header: "Licenses"
@@ -945,3 +948,99 @@ en:
       paragraph1: You have requested a password reset for CodeHarbor, please follow the link below to reset your password.
       paragraph2: Please ignore this email if you did not request a password change.
       button: 'Reset Password'
+  tasks:
+    form:
+      basic_information: "Basic Information"
+      errors:
+        programming_language:
+          not_empty_while_public: "Can't be empty while visibility is set to public"
+      none: "None"
+      additional_info: "Additional Information"
+      save: "Save Task"
+      cancel: "Cancel"
+      tests:
+        remove: "Remove Test"
+        add_file: "Add file to test"
+      files:
+        remove: 'Remove file'
+        add: 'Add file'
+      model_solutions:
+        add: "Add Model solution"
+      model_solution:
+        remove: "Remove Model solution"
+    error: "prohibited this project from being saved"
+    title: "Title"
+    programming_language: "Programming language"
+    description: "Description"
+    internal_description: "Internal Description"
+    parent_uuid: "Parent UUID"
+    language: "Language"
+    uuid: "UUID"
+    files:
+      label: "Files"
+      name: "Name"
+      path: "Path"
+      internal_description: "Internal description"
+      used_by_grader: "Used by grader"
+      visible: "Visible"
+      usage_by_lms: "Usage by LMS"
+      configuration: "Configuration"
+    tests:
+      title: "Title"
+      description: "Description"
+      internal_description: "Internal description"
+      test_type: "Test type"
+      xml_id: "XML ID"
+      validity: "Validity"
+      timeout: "Timeout"
+    model_solution:
+      plural: "Model Solutions"
+      singular: "Model Solution"
+      none_present: "No Model Solutions present"
+    menu_button:
+      mine: "My Tasks"
+      public: "Public"
+      private: "Private"
+    index:
+      new: "New Task"
+      search:
+        label: "Search"
+        advanced: "Advanced"
+        order: "Order By"
+        rating: "Rating"
+        created_at: "Created At"
+        stars: "Stars"
+        all_stars: "All Stars"
+        unrated_only: "Unrated Only"
+        languages: "Languages"
+        proglanguages: "Programming Languages"
+        created: "Created"
+        all_time: "All Time"
+        today: "Today"
+        last_week: "Last Week"
+        last_month: "Last Month"
+        all_languages: "All Languages"
+        no_exercises: "You do not have tasks yet"
+        no_exercises_description: "Search tasks by clicking on private or public or add your own tasks."
+        no_results: "No results"
+        no_results_description: "Try different options by clicking on Advanced."
+        reset: "Reset"
+        placeholder: "Search for task or label"
+      no_programming_language_selected: "No programming language selected"
+      no_description: "No Description"
+      view: "View"
+      edit: "Edit"
+      delete: "Delete"
+      show_comments: "Show Comments"
+      related_exercises: "Show Related Exercises"
+
+    notification:
+      created: "Task successfully created"
+      updated: "Task successfully updated"
+      destroyed: "Task successfully destroyed"
+  common:
+    created_at: "Created at"
+    created_by: "Created by"
+  task:
+    index:
+      import_zip: "Import ZIP file"

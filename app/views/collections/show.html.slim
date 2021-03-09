@@ -16,18 +16,16 @@
     thead
       tr
         th
-          = t('carts.exercises')
-        th
           = ''
     tbody
-      - if @collection.exercises.empty?
+      - if @collection.tasks.empty?
         tr
           td
             = t('carts.noExercisesAdded')
           td
             = ''
       - else
-        - @collection.exercises.each do |exercise|
+        - @collection.tasks.each do |exercise|
           tr
             td
               - if can? :read, exercise
@@ -66,7 +64,7 @@ br
           span.caret
         ul.scrollable.dropdown-menu[role="menu"]
           li
-            - if @collection.exercises.empty?
+            - if @collection.tasks.empty?
                 a.dropdown-item.disabled-cursor title=t('controllers.collections.download_no_exercises')
                   = t('shared.download_zip')
             - else

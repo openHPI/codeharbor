@@ -1,5 +1,0 @@
-- history_exercises.each do |exercise_hash|
-  .panel.panel-default.history class=({'selected' => 'selected', 'latest' => 'latest'}[exercise_hash[:version]])
-    .panel-body
-      span
-        = link_to t('exercises.show.history.history_version_name', version_nr: exercise_hash[:version], updated_at: exercise_hash[:exercise].updated_at), exercise_path(exercise_hash[:exercise])

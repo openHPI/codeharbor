@@ -11,6 +11,8 @@ class User < ApplicationRecord
   validates :first_name, :last_name, presence: true
   has_secure_password
 
+  has_many :tasks, dependent: :nullify
+
   has_many :collection_users, dependent: :destroy
   has_many :collections, through: :collection_users
 
@@ -19,10 +21,7 @@ class User < ApplicationRecord
 
   has_many :reports, dependent: :destroy
   has_many :account_links, dependent: :destroy
-  has_many :exercises, dependent: :nullify
-  has_one :cart, dependent: :destroy
-  has_many :exercise_authors, dependent: :destroy
-  has_many :authored_exercises, through: :exercise_authors, source: :exercise
+
   has_many :sent_messages, class_name: 'Message', foreign_key: 'sender_id', dependent: :nullify, inverse_of: :sender
   has_many :received_messages, class_name: 'Message', foreign_key: 'recipient_id', dependent: :nullify, inverse_of: :recipient
 
@@ -46,19 +45,6 @@ class User < ApplicationRecord
     groups - groups.as(:pending)
   end
 
-  def cart_count
-    if cart
-      cart.exercises.size
-    else
-      0
-    end
-  end
-
-  def author?(exercise)
-    exercise_authors = User.find(ExerciseAuthor.where(exercise_id: exercise.id).collect(&:user_id))
-    exercise_authors.include? self
-  end
-
   def name
     "#{first_name} #{last_name}"
   end
@@ -67,16 +53,11 @@ class User < ApplicationRecord
     destroy = handle_group_memberships
     if destroy
       handle_collection_membership
-      handle_exercises
       handle_messages
       true
     else
       false
     end
-  end
-
-  def access_through_any_group?(exercise)
-    shares_any_group?(exercise)
   end
 
   def handle_group_memberships
@@ -98,12 +79,8 @@ class User < ApplicationRecord
     end
   end
 
-  def handle_exercises
-    Exercise.where(user: self).find_each { |e| e.update(user: nil) }
-  end
-
   def handle_messages
-    Message.where(sender: self, param_type: %w[exercise group collection]).destroy_all
+    Message.where(sender: self, param_type: %w[group collection]).destroy_all
   end
 
   def unread_messages_count
