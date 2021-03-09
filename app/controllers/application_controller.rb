@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery
 
-  before_action :set_raven_context
+  before_action :set_sentry_context
   after_action :flash_to_headers
 
   # http://www.rubydoc.info/docs/rails/AbstractController/Helpers/ClassMethods:helper_method
@@ -17,10 +17,10 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def set_raven_context
+  def set_sentry_context
     return if current_user.blank?
 
-    Raven.user_context(id: current_user.id, email: current_user.email, username: current_user.username, name: current_user.name)
+    Sentry.set_user(id: current_user.id, username: current_user.username)
   end
 
   def flash_to_headers
