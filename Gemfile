@@ -73,7 +73,8 @@ gem 'sprockets', '~> 4.0.2'
 gem 'concurrent-ruby'
 gem 'mnemosyne-ruby'
 gem 'newrelic_rpm'
-gem 'sentry-raven'
+gem 'sentry-rails'
+gem 'sentry-ruby'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
