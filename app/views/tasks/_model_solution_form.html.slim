@@ -6,7 +6,7 @@
   = model_solution.text_field :internal_description, class: 'form-control'
 .field-element
   = model_solution.label :xml_id, t('tasks.tests.xml_id'), class: 'form-label'
-  = model_solution.text_field :xml_id, class: 'form-control', value: test.object.xml_id.presence || '__nested_field_for_replace_with_index__'
+  = model_solution.text_field :xml_id, class: 'form-control', value: model_solution.object.xml_id.presence || '__nested_field_for_replace_with_index__'
 .files-header
   = label_tag nil, t('tasks.files.label') + ':'
 = render 'nested_file_form', f: model_solution

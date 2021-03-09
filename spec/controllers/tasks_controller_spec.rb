@@ -176,7 +176,7 @@ RSpec.describe TasksController, type: :controller do
       end
 
       context 'when task has a test' do
-        let(:test) { build(:task_test) }
+        let(:test) { build(:test) }
         let!(:task) { create(:task, valid_attributes.merge(tests: [test])) }
 
         let(:tests_attributes) { {'0' => test.attributes.merge('title' => 'new_test_title')} }

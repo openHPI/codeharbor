@@ -8,7 +8,6 @@ RSpec.describe Test, type: :model do
     it { is_expected.to validate_presence_of(:title) }
     it { is_expected.to validate_presence_of(:xml_id) }
     it { is_expected.to validate_uniqueness_of(:xml_id).scoped_to(:task_id) }
-
   end
 
   xdescribe '#content' do
