@@ -55,4 +55,59 @@ RSpec.describe Task, type: :model do
     it { is_expected.to validate_uniqueness_of(:uuid).case_insensitive }
     it { is_expected.to belong_to(:user) }
   end
+
+  describe '.visibility' do
+    subject { described_class.visibility(option, user) }
+
+    let(:option) { :owner }
+    let(:user) { create(:user) }
+    let(:task_user) { user }
+    let!(:task) { create(:task, user: task_user) }
+
+    it { is_expected.to contain_exactly task }
+
+    context 'when task belongs to different user' do
+      let(:task_user) { create(:user) }
+
+      it { is_expected.to be_empty }
+    end
+
+    context 'when option is "public"' do
+      let(:option) { 'public' }
+
+      it { is_expected.to contain_exactly task }
+
+      context 'when task belongs to different user' do
+        let(:task_user) { create(:user) }
+
+        it { is_expected.to contain_exactly task }
+      end
+    end
+  end
+  # describe '.created_before_days' do
+  #   subject { described_class.created_before_days(days) }
+  #
+  #   let(:days) { 1 }
+  #   let!(:task) { create(:task, created_at: ) }
+  #
+  #   it { is_expected.to contain_exactly task }
+  #
+  #   context 'when task is older than 1 day' do
+  #     let(:task_user) { create(:user) }
+  #
+  #     it { is_expected.to be_empty }
+  #   end
+  #
+  #   context 'when option is "public"' do
+  #     let(:option) { 'public' }
+  #
+  #     it { is_expected.to contain_exactly task }
+  #
+  #     context 'when task belongs to different user' do
+  #       let(:task_user) { create(:user) }
+  #
+  #       it { is_expected.to contain_exactly task }
+  #     end
+  #   end
+  # end
 end
