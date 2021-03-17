@@ -22,26 +22,20 @@ class Task < ApplicationRecord
   accepts_nested_attributes_for :tests, allow_destroy: true
   accepts_nested_attributes_for :model_solutions, allow_destroy: true
 
-  scope :text_like, lambda { |text|
-    if text.present?
-      where('title ILIKE ? OR description ILIKE ?', "%#{text}%", "%#{text}%")
-    else
-      where(nil)
-    end
-  }
-  scope :mine, lambda { |user|
-    if user.nil?
-      where(nil)
-    else
-      where(user_id: user.id)
-    end
-  }
+  # scope :text_like, lambda { |text|
+  #   if text.present?
+  #     where('title ILIKE ? OR description ILIKE ?', "%#{text}%", "%#{text}%")
+  #   else
+  #     where(nil)
+  #   end
+  # }
 
-  scope :search_query, lambda { |_stars, _languages, _proglanguages, _priv, user, search, _intervall|
-    mine(user)
-      .text_like(search)
-  }
+  scope :visibility, ->(visibility, user = nil) { {owner: where(user: user), public: all}.with_indifferent_access[visibility] }
+  scope :created_before_days, ->(days) { where(created_at: days.to_i.days.ago.beginning_of_day..) if days.to_i.positive? }
 
+  def self.ransackable_scopes(auth_object = nil)
+    %i[created_before_days]
+  end
   # will be replaced with ransack
   # rubocop:disable Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/AbcSize

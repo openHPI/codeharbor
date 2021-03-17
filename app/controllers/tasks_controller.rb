@@ -13,13 +13,13 @@ class TasksController < ApplicationController
   end
 
   def index
-    page = params[:page]
-    @tasks = Task
-             .search(params[:search], params[:settings], @option, current_user)
-             .paginate(per_page: 5, page: page)
+    @option = params[:option]
+    @created_before_days = params[:q][:created_before_days]
+    @dropdown = params[:dropdownWindowActive]
 
-    last_page = @tasks.total_pages
-    @tasks = @tasks.page(last_page) if page.to_i > last_page
+    page = params[:page]
+    @q = Task.visibility(@option, current_user).ransack(params[:q])
+    @tasks = @q.result(distinct: true).paginate(per_page: 5, page: page)
   end
 
   def show

@@ -61,31 +61,36 @@ initializeFilter =->
 
 
   $(".change-hidden-field").click ->
+    console.log('asdf')
     $('#option').val(this.id)
-    $(".index").submit()
+    $('#task_search').submit()
   $('#'+$('#option').val()).addClass('selected')
   intializeAdvancedFilter()
 
 intializeAdvancedFilter =->
-  if $('#dropdownWindowActive')
-    if $('#dropdownWindowActive').val() == "true"
-      $('.dropdown-content').show()
+  $dropdownWindowActive = $('#dropdownWindowActive')
+  $dropdownContent = $('.dropdown-content')
+  if $dropdownWindowActive
+    if $dropdownWindowActive.val() == "true"
+      $dropdownContent.show()
 
-  $('#advanced').click ->
-    $('.dropdown-content').toggle()
-    search = $('#search')
-    if $('#dropdownWindowActive').val() == "true"
-      $(search).css("border-bottom-left-radius", "4px")
-      $("#advanced").css("border-bottom-right-radius", "4px")
-      $('#dropdownWindowActive').val(false)
-      $('#drop').removeClass('fa-caret-up').addClass('fa-caret-down')
+  $advanced = $('#advanced')
+  $drop = $('#drop')
+  $advanced.click ->
+    $dropdownContent.toggle()
+    $search = $('#search')
+    if $dropdownWindowActive.val() == "true"
+      $search.css("border-bottom-left-radius", "4px")
+      $advanced.css("border-bottom-right-radius", "4px")
+      $dropdownWindowActive.val(false)
+      $drop.removeClass('fa-caret-up').addClass('fa-caret-down')
     else
-      $(search).css("border-bottom-left-radius","0px")
-      $("#advanced").css("border-bottom-right-radius", "0px")
-      $('#dropdownWindowActive').val(true)
-      $('#drop').removeClass('fa-caret-down').addClass('fa-caret-up')
+      $search.css("border-bottom-left-radius","0px")
+      $advanced.css("border-bottom-right-radius", "0px")
+      $dropdownWindowActive.val(true)
+      $drop.removeClass('fa-caret-down').addClass('fa-caret-up')
 
-  if order = document.getElementById('order_param')
+  if $('#order_param')
     #    $('#' + order.value).addClass('active')
     $('#order_created').addClass('active')
 
