@@ -56,12 +56,11 @@ addAnimatedSliding =->
 
 initializeFilter =->
   $("#reset-btn").click ->
-    $('#search').val('')
-    $(".index").submit()
+    $('.ransack-filter').val('').trigger('change')
+    $("#task_search").submit()
 
 
   $(".change-hidden-field").click ->
-    console.log('asdf')
     $('#option').val(this.id)
     $('#task_search').submit()
   $('#'+$('#option').val()).addClass('selected')

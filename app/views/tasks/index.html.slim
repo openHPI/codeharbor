@@ -1,4 +1,4 @@
-= search_form_for @q do |f| # tasks_path, method: 'get', multipart: true, class: 'index' do
+= search_form_for @search do |f|
   = hidden_field_tag 'option', @option
 
   .nav-container
@@ -27,8 +27,7 @@
   br
   .search-container
     .input-group
-      = f.search_field :title_or_description_cont, class: 'form-control', placeholder: t('tasks.index.search.placeholder')
-      / = text_field_tag :search, params[:search], class: 'form-control', type: 'text'
+      = f.search_field :title_or_description_cont, class: 'form-control ransack-filter', placeholder: t('tasks.index.search.placeholder')
       span.input-group-btn
         = f.submit t('tasks.index.search.label'), class: 'btn btn-default'
         = submit_tag t('tasks.index.search.reset'), id: 'reset-btn', type: 'button', name: nil, class: 'btn btn-default'
@@ -43,10 +42,7 @@
           p
             b = t('tasks.index.search.order')
           .btn-group[role="group"]
-            / = advanced.hidden_field_tag 'order_param', @order
-            = sort_link(@q, :created_at)
-            / = button_tag t('tasks.index.search.created_at'), type: 'button', id: 'order_created', class: 'btn btn-default'
-            / = button_tag t('tasks.index.search.rating'), type: 'button', id: 'order_rating', class: 'btn btn-default'
+            = sort_link(@search, :created_at)
         /.stars.section
           p
             b = t('tasks.index.search.stars')
@@ -56,12 +52,12 @@
           p
             b = t('tasks.index.search.proglanguages')
           span.form-group
-            = f.collection_select :programming_language_id_in, ProgrammingLanguage.all, :id, :language_with_version, {}, {multiple: true, class: 'form-control language-box'}
+            = f.collection_select :programming_language_id_in, ProgrammingLanguage.all, :id, :language_with_version, {}, {multiple: true, class: 'form-control language-box ransack-filter'}
         .other.section
           p
             b = t('tasks.index.search.created')
           span.form-group
-            = f.select 'created_before_days', options_for_select({t('tasks.index.search.all_time') => 0, t('tasks.index.search.today') => 1, t('tasks.index.search.last_week') => 7, t('tasks.index.search.last_month') => 30}, selected: @created_before_days), {}, class: 'form-control defaultSelect2'
+            = f.select 'created_before_days', options_for_select({t('tasks.index.search.all_time') => 0, t('tasks.index.search.today') => 1, t('tasks.index.search.last_week') => 7, t('tasks.index.search.last_month') => 30}, selected: @created_before_days), {}, class: 'form-control defaultSelect2 ransack-filter'
       .clear style=("clear: both")
 
     br

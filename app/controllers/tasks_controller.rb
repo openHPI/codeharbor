@@ -5,21 +5,17 @@ require 'zip'
 class TasksController < ApplicationController
   load_and_authorize_resource
 
-  before_action :set_search, only: [:index]
   before_action :handle_search_params, only: :index
+  before_action :set_search, only: [:index]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.exercise.authorization')
   end
 
   def index
-    @option = params[:option]
-    @created_before_days = params[:q][:created_before_days]
-    @dropdown = params[:dropdownWindowActive]
-
     page = params[:page]
-    @q = Task.visibility(@option, current_user).ransack(params[:q])
-    @tasks = @q.result(distinct: true).paginate(per_page: 5, page: page)
+    @search = Task.visibility(@option, current_user).ransack(params[:search])
+    @tasks = @search.result(distinct: true).paginate(per_page: 5, page: page)
   end
 
   def show
@@ -61,53 +57,28 @@ class TasksController < ApplicationController
 
   private
 
+  def set_search
+    search = params[:search]
+    @created_before_days = search[:created_before_days] if search.is_a?(ActionController::Parameters)
+    @option = params[:option]
+    @dropdown = params[:dropdownWindowActive]
+  end
+
   def restore_search_params
     search_params = session.delete(:exercise_search_params)&.symbolize_keys || {}
     params[:search] ||= search_params[:search]
-    params[:settings] ||= search_params[:settings]
+    params[:dropdownWindowActive] ||= search_params[:dropdownWindowActive]
     params[:page] ||= search_params[:page]
   end
 
   def save_search_params
-    session[:exercise_search_params] = {search: params[:search], settings: params[:settings], page: params[:page]}
+    session[:exercise_search_params] = {search: params[:search], dropdownWindowActive: params[:dropdownWindowActive], page: params[:page]}
   end
 
   def handle_search_params
     restore_search_params
     save_search_params
   end
-
-  # will be replaced with ransack
-  # rubocop:disable Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/PerceivedComplexity
-  # rubocop:disable Metrics/AbcSize
-  def set_search
-    @option = params[:option] || 'mine'
-
-    @order = params[:order_param] || 'order_rating'
-
-    @dropdown = params[:window] || false
-
-    @stars = if params[:settings]
-               params[:settings][:stars]
-             else
-               '0'
-             end
-
-    @languages = params[:settings][:language] if params[:settings]
-
-    @proglanguages = params[:settings][:proglanguage] if params[:settings]
-
-    @created = if params[:settings]
-                 params[:settings][:created]
-               else
-                 '0'
-               end
-  end
-
-  # rubocop:enable Metrics/AbcSize
-  # rubocop:enable Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/PerceivedComplexity
 
   def file_params
     %i[id content attachment path name internal_description mime_type used_by_grader visible usage_by_lms _destroy]
