@@ -43,10 +43,10 @@ module ProformaService
     def model_solutions
       @task.model_solutions.map do |model_solution|
         Proforma::ModelSolution.new(
-          id: "ms-#{model_solution.id}",
+          id: model_solution.xml_id,
+          # id: "ms-#{model_solution.id}",
           description: model_solution.description,
           internal_description: model_solution.internal_description,
-          xml_id: model_solution.xml_id,
           files: model_solution.files.map do |file|
             task_file(file)
           end
@@ -85,16 +85,16 @@ module ProformaService
     def test_configuration(test, file)
       {
         'entry-point' => file.full_file_name,
-        'framework' => test.testing_framework&.name,
-        'version' => test.testing_framework&.version
+        # 'framework' => test.testing_framework&.name,
+        # 'version' => test.testing_framework&.version
       }
     end
 
     def test_meta_data(test)
       {
-        'feedback-message' => test.feedback_message,
-        'testing-framework' => test.testing_framework&.name,
-        'testing-framework-version' => test.testing_framework&.version
+        # 'feedback-message' => test.feedback_message,
+        # 'testing-framework' => test.testing_framework&.name,
+        # 'testing-framework-version' => test.testing_framework&.version
       }.compact
     end
 
@@ -121,9 +121,9 @@ module ProformaService
       task_file = Proforma::TaskFile.new(
         id: file.id,
         filename: file.full_file_name,
-        used_by_grader: file.used_by_grader,
+        used_by_grader: file.used_by_grader || false,
         visible: file.visible,
-        usage_by_lms: file.usage_by_lms,
+        usage_by_lms: file.usage_by_lms || 'download',
         internal_description: file.internal_description
       )
       add_content_to_task_file(file, task_file)
