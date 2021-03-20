@@ -2,15 +2,15 @@
 
 require 'rails_helper'
 
-RSpec.describe 'exercises', type: :request do
+RSpec.describe 'tasks', type: :request do
   context 'when logged in' do
     let(:user) { FactoryBot.create(:user) }
-    let(:exercise) { FactoryBot.create(:only_meta_data, :with_primary_description, authors: [user]) }
+    let(:task) { FactoryBot.create(:task, user: user) }
     let(:valid_params) do
       {
         title: 'title',
         descriptions_attributes: {'0' => {text: 'description', primary: true}},
-        execution_environment_id: create(:java_8_execution_environment).id,
+        programming_language: create(:programming_language, :ruby).id,
         license_id: create(:license).id
       }
     end
@@ -19,7 +19,7 @@ RSpec.describe 'exercises', type: :request do
       {
         title: 'new_title',
         descriptions_attributes: {'0' => {text: 'description'}},
-        execution_environment_id: create(:java_8_execution_environment).id,
+        programming_language: create(:programming_language, :ruby).id,
         license_id: create(:license).id
       }
     end
@@ -29,58 +29,58 @@ RSpec.describe 'exercises', type: :request do
       follow_redirect!
     end
 
-    describe 'GET /exercises' do
+    describe 'GET /tasks' do
       it 'works! (now write some real specs)' do
-        get exercises_path
+        get tasks_path
         expect(response).to have_http_status(:ok)
       end
     end
 
-    describe 'POST /exercises' do
+    describe 'POST /tasks' do
       it 'has http 302' do
-        post exercises_path, params: {exercise: valid_params}
+        post tasks_path, params: {task: valid_params}
         expect(response).to have_http_status(:found)
       end
     end
 
-    describe 'GET /exercises/new' do
+    describe 'GET /tasks/new' do
       it 'has http 200' do
-        get new_exercise_path
+        get new_task_path
         expect(response).to have_http_status(:ok)
       end
     end
 
-    describe 'GET /exercises/:id/edit' do
+    describe 'GET /tasks/:id/edit' do
       it 'has http 200' do
-        get edit_exercise_path(exercise)
+        get edit_task_path(task)
         expect(response).to have_http_status(:ok)
       end
     end
 
-    describe 'GET /exercise/:id' do
+    describe 'GET /task/:id' do
       it 'has http 200' do
-        get exercise_path(exercise)
+        get task_path(task)
         expect(response).to have_http_status(:ok)
       end
     end
 
-    describe 'PATCH /exercise/:id' do
+    describe 'PATCH /task/:id' do
       it 'has http 302' do
-        patch exercise_path(exercise, exercise: update_params)
+        patch task_path(task, task: update_params)
         expect(response).to have_http_status(:found)
       end
     end
 
-    describe 'PUT /exercise/:id' do
+    describe 'PUT /task/:id' do
       it 'has http 302' do
-        put exercise_path(exercise, exercise: update_params)
+        put task_path(task, task: update_params)
         expect(response).to have_http_status(:found)
       end
     end
 
-    describe 'DELETE /exercise/:id' do
+    describe 'DELETE /task/:id' do
       it 'has http 302' do
-        delete exercise_path(exercise)
+        delete task_path(task)
         expect(response).to have_http_status(:found)
       end
     end

@@ -58,9 +58,6 @@ $exercise-color: #006600;
   height: 300px;
 }
 
-.search-container {
-}
-
 .nav-container {
   button {
     padding: 10px 70px 10px 70px;
@@ -349,57 +346,6 @@ legend {
   border-top: none;
   min-height: 100px;
   margin-bottom: 10px;
-}
-
-.radio-base {
-  border: #CCCCCC 1px solid;
-  padding: 5px;
-  font-size: 14px;
-  cursor: pointer;
-  font-weight: normal;
-  text-align: center;
-  box-sizing: border-box;
-  border-radius: 4px;
-}
-
-.radio-left {
-  @extend .radio-base;
-  width: 50%;
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 0px;
-}
-
-.radio-right {
-  @extend .radio-base;
-  margin-left: -1px;
-  width: 50%;
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-}
-
-.radio-left.small-radio, .radio-right.small-radio {
-  font-size: 10px;
-  padding: 3px;
-}
-
-input[type="radio"] {
-  display: none;
-}
-
-input[type="radio"]:checked+label {
-  background-color: #eeeeee;
-}
-
-.primary-checkbox:checked+label {
-  background-color: #060;
-  color: white;
-}
-
-.primary-checkbox+label {
-  border-color: #AAA;
-  background-color: #FFF;
-  display: inline;
-  padding: 5px 15px;
 }
 
 .full-window-button{

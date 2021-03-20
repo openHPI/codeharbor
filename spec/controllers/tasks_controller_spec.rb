@@ -4,7 +4,6 @@ require 'rails_helper'
 
 RSpec.describe TasksController, type: :controller do
   let(:user) { create(:user) }
-  let(:cart) { create(:cart, user: user, tasks: []) }
   let(:collection) { create(:collection, users: [user], tasks: []) }
   let(:valid_attributes) { {user: user} }
 
@@ -120,7 +119,7 @@ RSpec.describe TasksController, type: :controller do
         {
           title: 'title',
           descriptions_attributes: {'0' => {text: 'description', primary: true}},
-          execution_environment_id: create(:java_8_execution_environment).id,
+          programming_language_id: create(:programming_language, :ruby).id,
           license_id: create(:license)
         }
       end
@@ -177,7 +176,7 @@ RSpec.describe TasksController, type: :controller do
       end
 
       context 'when task has a test' do
-        let(:test) { build(:task_test) }
+        let(:test) { build(:test) }
         let!(:task) { create(:task, valid_attributes.merge(tests: [test])) }
 
         let(:tests_attributes) { {'0' => test.attributes.merge('title' => 'new_test_title')} }

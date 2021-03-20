@@ -129,7 +129,7 @@ RSpec.describe CollectionsController, type: :controller do
     end
   end
 
-  describe 'PATCH #remove_exercise' do
+  xdescribe 'PATCH #remove_exercise' do
     let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
     let!(:exercise) { create(:exercise, collections: [collection]) }
     let(:patch_request) { patch :remove_exercise, params: {id: collection.id, exercise: exercise.id}, session: valid_session }
@@ -139,7 +139,7 @@ RSpec.describe CollectionsController, type: :controller do
     end
   end
 
-  describe 'PATCH #remove_all' do
+  xdescribe 'PATCH #remove_all' do
     let(:collection) { create(:collection, valid_attributes.merge(users: [user], exercises: exercises)) }
     let(:exercises) { create_list(:exercise, 2) }
 
@@ -150,7 +150,7 @@ RSpec.describe CollectionsController, type: :controller do
     end
   end
 
-  describe 'GET #download_all' do
+  xdescribe 'GET #download_all' do
     let(:collection) { create(:collection, valid_attributes.merge(users: [user], exercises: exercises)) }
     let(:exercises) { create_list(:exercise, 2) }
     let(:zip) { instance_double('StringIO', string: 'dummy') }

@@ -73,7 +73,8 @@ gem 'sprockets', '~> 4.0.2'
 gem 'concurrent-ruby'
 gem 'mnemosyne-ruby'
 gem 'newrelic_rpm'
-gem 'sentry-raven'
+gem 'sentry-rails'
+gem 'sentry-ruby'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -83,7 +84,7 @@ group :development, :test do
   gem 'rails-controller-testing', '>= 1.0.4'
   gem 'rspec-collection_matchers', '~> 1.2.0'
   gem 'rspec-rails', '4.0.2'
-  gem 'rubocop', '~> 1.8.1'
+  gem 'rubocop', '~> 1.9.1'
   gem 'rubocop-performance', '~> 1.9.2'
   gem 'rubocop-rails', '~> 2.9.1'
   gem 'rubocop-rspec', '~> 2.2.0'

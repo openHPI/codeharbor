@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Group < ApplicationRecord
-  groupify :group, members: %i[users exercises], default_members: :users
+  groupify :group, members: %i[users tasks], default_members: :users
   validates :name, presence: true
   validate :admin_in_group
 

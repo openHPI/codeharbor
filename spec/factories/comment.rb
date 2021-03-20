@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :comment do
     text { 'A good comment' }
-    exercise { FactoryBot.create(:simple_exercise) }
-    user { FactoryBot.create(:user) }
+    task { build(:task) }
+    user { build(:user) }
   end
 end

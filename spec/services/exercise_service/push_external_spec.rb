@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ExerciseService::PushExternal do
+xdescribe ExerciseService::PushExternal do
   describe '.new' do
     subject(:push_external) { described_class.new(zip: zip, account_link: account_link) }
 

@@ -54,10 +54,6 @@ RailsAdmin.config do |config|
     add_valid_column(self)
   end
 
-  config.model 'Cart' do
-    add_valid_column(self)
-  end
-
   config.model 'Collection' do
     add_valid_column(self)
   end
@@ -66,31 +62,11 @@ RailsAdmin.config do |config|
     add_valid_column(self)
   end
 
-  config.model 'Description' do
-    add_valid_column(self)
-  end
-
-  config.model 'ExecutionEnvironment' do
-    add_valid_column(self)
-  end
-
-  config.model 'Exercise' do
-    add_valid_column(self)
-  end
-
   config.model 'ExerciseAuthor' do
     add_valid_column(self)
   end
 
   config.model 'ExerciseFile' do
-    add_valid_column(self)
-  end
-
-  config.model 'ExerciseRelation' do
-    add_valid_column(self)
-  end
-
-  config.model 'FileType' do
     add_valid_column(self)
   end
 
