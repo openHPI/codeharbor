@@ -72,7 +72,7 @@ class TasksController < ApplicationController
   end
 
   def save_search_params
-    session[:exercise_search_params] = { search: params[:search], advancedFilterActive: params[:advancedFilterActive], page: params[:page]}
+    session[:exercise_search_params] = {search: params[:search], advancedFilterActive: params[:advancedFilterActive], page: params[:page]}
   end
 
   def handle_search_params
