@@ -14,7 +14,7 @@ class TasksController < ApplicationController
 
   def index
     page = params[:page]
-    @search = Task.visibility(@option, current_user).ransack(params[:search])
+    @search = Task.visibility(@visibility, current_user).ransack(params[:search])
     @tasks = @search.result(distinct: true).paginate(per_page: 5, page: page)
   end
 
@@ -60,19 +60,19 @@ class TasksController < ApplicationController
   def set_search
     search = params[:search]
     @created_before_days = search[:created_before_days] if search.is_a?(ActionController::Parameters)
-    @option = params[:option]
-    @dropdown = params[:dropdownWindowActive]
+    @visibility = params[:visibility] || 'owner'
+    @advanced_filter_active = params[:advancedFilterActive]
   end
 
   def restore_search_params
     search_params = session.delete(:exercise_search_params)&.symbolize_keys || {}
     params[:search] ||= search_params[:search]
-    params[:dropdownWindowActive] ||= search_params[:dropdownWindowActive]
+    params[:advancedFilterActive] ||= search_params[:advancedFilterActive]
     params[:page] ||= search_params[:page]
   end
 
   def save_search_params
-    session[:exercise_search_params] = {search: params[:search], dropdownWindowActive: params[:dropdownWindowActive], page: params[:page]}
+    session[:exercise_search_params] = { search: params[:search], advancedFilterActive: params[:advancedFilterActive], page: params[:page]}
   end
 
   def handle_search_params

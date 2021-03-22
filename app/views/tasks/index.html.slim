@@ -1,11 +1,11 @@
 = search_form_for @search do |f|
-  = hidden_field_tag 'option', @option
+  = hidden_field_tag 'visibility', @visibility
 
   .nav-container
     .col-md-9
       .btn-group[role="group"]
         = button_tag t('tasks.menu_button.mine'), type: 'button', class: 'btn btn-main change-hidden-field', id: 'owner'
-        = button_tag t('tasks.menu_button.private'), type: 'button', class: 'btn btn-main change-hidden-field', id: 'private'
+        = button_tag t('tasks.menu_button.private'), type: 'button', class: 'btn btn-main change-hidden-field hidden', id: 'private'
         = button_tag t('tasks.menu_button.public'), type: 'button', class: 'btn btn-main change-hidden-field', id: 'public'
     .col-md-3
       - if can? :create, Task
@@ -13,7 +13,7 @@
           = link_to new_task_path, class: 'btn btn-main nav-btn-exercise' do
             i.fa.fa-plus style=("color: #008000")
             = ' ' + t('tasks.index.new')
-          = button_tag type: 'button', data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}, class: 'btn btn-main nav-btn-exercise dropdown-toggle dropdown-toggle split' do
+          = button_tag type: 'button', data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}, class: 'btn btn-main nav-btn-exercise dropdown-toggle split' do
             span.caret
           ul.dropdown-menu#xml-import
             li.dropdown-header style="padding-left: 2px;"
@@ -36,7 +36,7 @@
             = t('tasks.index.search.advanced') + ' '
           span.fa.fa-caret-down#drop style="color:#333333"
     .dropdown-content
-      = hidden_field_tag 'dropdownWindowActive', @dropdown
+      = hidden_field_tag 'advancedFilterActive', @advanced_filter_active
       = fields_for 'settings' do |advanced|
         .order.section
           p

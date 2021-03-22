@@ -57,9 +57,9 @@ RSpec.describe Task, type: :model do
   end
 
   describe '.visibility' do
-    subject { described_class.visibility(option, user) }
+    subject { described_class.visibility(visibility, user) }
 
-    let(:option) { :owner }
+    let(:visibility) { 'owner' }
     let(:user) { create(:user) }
     let(:task_user) { user }
     let!(:task) { create(:task, user: task_user) }
@@ -72,10 +72,10 @@ RSpec.describe Task, type: :model do
       it { is_expected.to be_empty }
     end
 
-    context 'when option is "public"' do
-      let(:option) { 'public' }
+    context 'when visibility is "public"' do
+      let(:visibility) { 'public' }
 
-      it { is_expected.to contain_exactly task }
+      it { is_expected.to be_empty }
 
       context 'when task belongs to different user' do
         let(:task_user) { create(:user) }

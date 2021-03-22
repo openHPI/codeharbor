@@ -61,16 +61,16 @@ initializeFilter =->
 
 
   $(".change-hidden-field").click ->
-    $('#option').val(this.id)
+    $('#visibility').val(this.id)
     $('#task_search').submit()
-  $('#'+$('#option').val()).addClass('selected')
+  $('#'+$('#visibility').val()).addClass('selected')
   intializeAdvancedFilter()
 
 intializeAdvancedFilter =->
-  $dropdownWindowActive = $('#dropdownWindowActive')
+  $advancedFilterActive = $('#advancedFilterActive')
   $dropdownContent = $('.dropdown-content')
-  if $dropdownWindowActive
-    if $dropdownWindowActive.val() == "true"
+  if $advancedFilterActive
+    if $advancedFilterActive.val() == "true"
       $dropdownContent.show()
 
   $advanced = $('#advanced')
@@ -78,15 +78,15 @@ intializeAdvancedFilter =->
   $advanced.click ->
     $dropdownContent.toggle()
     $search = $('#search')
-    if $dropdownWindowActive.val() == "true"
+    if $advancedFilterActive.val() == "true"
       $search.css("border-bottom-left-radius", "4px")
       $advanced.css("border-bottom-right-radius", "4px")
-      $dropdownWindowActive.val(false)
+      $advancedFilterActive.val(false)
       $drop.removeClass('fa-caret-up').addClass('fa-caret-down')
     else
       $search.css("border-bottom-left-radius","0px")
       $advanced.css("border-bottom-right-radius", "0px")
-      $dropdownWindowActive.val(true)
+      $advancedFilterActive.val(true)
       $drop.removeClass('fa-caret-down').addClass('fa-caret-up')
 
   if $('#order_param')
