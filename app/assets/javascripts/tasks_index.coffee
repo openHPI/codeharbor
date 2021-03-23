@@ -56,36 +56,40 @@ addAnimatedSliding =->
 
 initializeFilter =->
   $("#reset-btn").click ->
-    $('#search').val('')
-    $(".index").submit()
+    $('.ransack-filter').val('').trigger('change')
+    $("#task_search").submit()
 
 
   $(".change-hidden-field").click ->
-    $('#option').val(this.id)
-    $(".index").submit()
-  $('#'+$('#option').val()).addClass('selected')
+    $('#visibility').val(this.id)
+    $('#task_search').submit()
+  $('#'+$('#visibility').val()).addClass('selected')
   intializeAdvancedFilter()
 
 intializeAdvancedFilter =->
-  if $('#dropdownWindowActive')
-    if $('#dropdownWindowActive').val() == "true"
-      $('.dropdown-content').show()
+  $advancedFilterActive = $('#advancedFilterActive')
+  $dropdownContent = $('.dropdown-content')
+  if $advancedFilterActive
+    if $advancedFilterActive.val() == "true"
+      $dropdownContent.show()
 
-  $('#advanced').click ->
-    $('.dropdown-content').toggle()
-    search = $('#search')
-    if $('#dropdownWindowActive').val() == "true"
-      $(search).css("border-bottom-left-radius", "4px")
-      $("#advanced").css("border-bottom-right-radius", "4px")
-      $('#dropdownWindowActive').val(false)
-      $('#drop').removeClass('fa-caret-up').addClass('fa-caret-down')
+  $advanced = $('#advanced')
+  $drop = $('#drop')
+  $advanced.click ->
+    $dropdownContent.toggle()
+    $search = $('#search')
+    if $advancedFilterActive.val() == "true"
+      $search.css("border-bottom-left-radius", "4px")
+      $advanced.css("border-bottom-right-radius", "4px")
+      $advancedFilterActive.val(false)
+      $drop.removeClass('fa-caret-up').addClass('fa-caret-down')
     else
-      $(search).css("border-bottom-left-radius","0px")
-      $("#advanced").css("border-bottom-right-radius", "0px")
-      $('#dropdownWindowActive').val(true)
-      $('#drop').removeClass('fa-caret-down').addClass('fa-caret-up')
+      $search.css("border-bottom-left-radius","0px")
+      $advanced.css("border-bottom-right-radius", "0px")
+      $advancedFilterActive.val(true)
+      $drop.removeClass('fa-caret-down').addClass('fa-caret-up')
 
-  if order = document.getElementById('order_param')
+  if $('#order_param')
     #    $('#' + order.value).addClass('active')
     $('#order_created').addClass('active')
 

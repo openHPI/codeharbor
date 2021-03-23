@@ -55,4 +55,61 @@ RSpec.describe Task, type: :model do
     it { is_expected.to validate_uniqueness_of(:uuid).case_insensitive }
     it { is_expected.to belong_to(:user) }
   end
+
+  describe '.visibility' do
+    subject { described_class.visibility(visibility, user) }
+
+    let(:visibility) { 'owner' }
+    let(:user) { create(:user) }
+    let(:task_user) { user }
+    let!(:task) { create(:task, user: task_user) }
+
+    it { is_expected.to contain_exactly task }
+
+    context 'when task belongs to different user' do
+      let(:task_user) { create(:user) }
+
+      it { is_expected.to be_empty }
+    end
+
+    context 'when visibility is "public"' do
+      let(:visibility) { 'public' }
+
+      it { is_expected.to be_empty }
+
+      context 'when task belongs to different user' do
+        let(:task_user) { create(:user) }
+
+        it { is_expected.to contain_exactly task }
+      end
+    end
+  end
+
+  describe '.created_before_days' do
+    subject { described_class.created_before_days(days) }
+
+    let(:days) { 0 }
+    let!(:new_task) { create(:task, created_at: Time.zone.now - 1.week) }
+    let!(:old_task) { create(:task, created_at: Time.zone.now - 1.month) }
+
+    it { is_expected.to include new_task, old_task }
+
+    context 'when task days is 1' do
+      let(:days) { 1 }
+
+      it { is_expected.to be_empty }
+    end
+
+    context 'when task days is 7' do
+      let(:days) { 7 }
+
+      it { is_expected.to contain_exactly new_task }
+    end
+
+    context 'when task days is 30' do
+      let(:days) { 30 }
+
+      it { is_expected.to include new_task, old_task }
+    end
+  end
 end

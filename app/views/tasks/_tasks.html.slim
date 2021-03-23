@@ -1,5 +1,5 @@
 - if @tasks.empty?
-  - if Task.mine(current_user).empty? && (@option == 'mine')
+  - if Task.visibility(:owner, current_user).empty? && (@option == 'owner')
     .panel.panel-default style=("margin-top: 40px")
       .panel-body
         .col-md-10

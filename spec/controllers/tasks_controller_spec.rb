@@ -24,19 +24,23 @@ RSpec.describe TasksController, type: :controller do
     end
 
     context 'with a task of a different user' do
-      before { create(:task, user: build(:user)) }
+      let!(:other_task) { create(:task, user: build(:user)) }
 
-      it 'shows all Tasks of that user' do
-        get_request
-        expect(assigns(:tasks)).to contain_exactly task
+      context 'when visibility is owner' do
+        let(:params) { {visibility: 'owner'} }
+
+        it 'shows all Tasks of that user' do
+          get_request
+          expect(assigns(:tasks)).to contain_exactly task
+        end
       end
 
-      context 'when option is public' do
-        let(:params) { {option: 'public'} }
+      context 'when visibility is public' do
+        let(:params) { {visibility: 'public'} }
 
-        it 'shows all Tasks' do
+        it 'shows all Tasks not owned by user' do
           get_request
-          expect(assigns(:tasks).size).to eq 2
+          expect(assigns(:tasks)).to contain_exactly other_task
         end
       end
     end
@@ -50,7 +54,8 @@ RSpec.describe TasksController, type: :controller do
       end
 
       context 'when a filter is used' do
-        let(:params) { {search: 'filter'} }
+        let(:params) { {search: ransack_params} }
+        let(:ransack_params) { {'title_or_description_cont' => 'filter'} }
         let!(:task) { create(:task, user: user, title: 'filter me') }
 
         it 'shows the matching Task' do
