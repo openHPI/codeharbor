@@ -24,8 +24,9 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
     let(:convert_to_proforma_task) { described_class.new(task: task) }
     let(:task) do
       create(:task, uuid: SecureRandom.uuid, parent_uuid: SecureRandom.uuid, files: files, tests: tests, model_solutions: model_solutions,
-                    programming_language: build(:programming_language))
+                    programming_language: build(:programming_language), description: description)
     end
+    let(:description) { 'description' }
     let(:files) { [] }
     let(:tests) { [] }
     let(:model_solutions) { [] }
@@ -49,71 +50,76 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
     end
 
     context 'with options' do
-      let(:convert_to_proforma_task) { described_class.new(exercise: exercise, options: options) }
-      let(:options) { {} } # TODO: descriptions
+      let(:convert_to_proforma_task) { described_class.new(task: task, options: options) }
+      let(:options) { {} }
+
+      it 'converts the description markdown to text' do
+        expect(proforma_task).to have_attributes(description: Kramdown::Document.new(task.description).to_html.strip)
+      end
 
       context 'when options contain description_format md' do
         let(:options) { {description_format: 'md'} }
 
-        it 'creates a task with all basic attributes' do
-          expect(proforma_task).to have_attributes(description: exercise.descriptions.select(&:primary?).first.text)
+        it 'does not convert the description markdown' do
+          expect(proforma_task).to have_attributes(description: task.description)
         end
       end
     end
 
-    context 'when exercise has a mainfile' do
+    # not really applicable anymore
+    # context 'when exercise has a mainfile' do
+    #   let(:files) { [file] }
+    #   let(:file) { build(:codeharbor_main_file) }
+    #
+    #   it 'creates a task-file with the correct attributes' do
+    #     expect(proforma_task.files.first).to have_attributes(
+    #       id: file.id,
+    #       content: file.content,
+    #       filename: file.full_file_name,
+    #       used_by_grader: true,
+    #       usage_by_lms: 'edit',
+    #       visible: 'yes',
+    #       binary: false,
+    #       internal_description: 'main_file'
+    #     )
+    #   end
+    # end
+
+    context 'when task has a file' do
       let(:files) { [file] }
-      let(:file) { build(:codeharbor_main_file) }
+      let(:file) { build(:task_file, :exportable) }
 
       it 'creates a task-file with the correct attributes' do
         expect(proforma_task.files.first).to have_attributes(
           id: file.id,
           content: file.content,
           filename: file.full_file_name,
-          used_by_grader: true,
-          usage_by_lms: 'edit',
-          visible: 'yes',
+          used_by_grader: file.used_by_grader,
+          usage_by_lms: file.usage_by_lms,
+          visible: file.visible,
           binary: false,
-          internal_description: 'main_file'
-        )
-      end
-    end
-
-    context 'when exercise has a regular file' do
-      let(:files) { [file] }
-      let(:file) { build(:codeharbor_regular_file) }
-
-      it 'creates a task-file with the correct attributes' do
-        expect(proforma_task.files.first).to have_attributes(
-          id: file.id,
-          content: file.content,
-          filename: file.full_file_name,
-          used_by_grader: true,
-          usage_by_lms: 'display',
-          visible: 'no',
-          binary: false,
-          internal_description: 'regular_file'
+          internal_description: file.internal_description
         )
       end
 
-      context 'when file is not hidden' do
-        let(:file) { build(:codeharbor_regular_file, hidden: false) }
+      context 'when file has no "usage_by_lms" defined' do
+        let(:file) { build(:task_file) }
 
-        it 'creates a task-file with the correct attributes' do
-          expect(proforma_task.files.first).to have_attributes(visible: 'yes')
+        it 'creates a task-file with the correct default value' do
+          expect(proforma_task.files.first).to have_attributes(usage_by_lms: 'download')
         end
       end
 
-      context 'when file is not read_only' do
-        let(:file) { build(:codeharbor_regular_file, read_only: false) }
+      context 'when file has no "used_by_grader" defined' do
+        let(:file) { build(:task_file) }
 
-        it 'creates a task-file with the correct attributes' do
-          expect(proforma_task.files.first).to have_attributes(usage_by_lms: 'edit')
+        it 'creates a task-file with the correct default value' do
+          expect(proforma_task.files.first).to have_attributes(used_by_grader: false)
         end
       end
 
       context 'when file has an attachment' do
-        let(:file) { build(:codeharbor_regular_file, :with_attachment) }
+        let(:file) { build(:task_file, :with_attachment) }
 
         it 'creates a task-file with the correct attributes' do
           expect(proforma_task.files.first).to have_attributes(
@@ -125,47 +131,64 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
       end
     end
 
-    context 'when exercise has a file with role reference implementation' do
-      let(:files) { [file] }
-      let(:file) { build(:codeharbor_solution_file) }
+    context 'when task has model solution' do
+      let(:model_solutions) { [model_solution] }
+      let(:model_solution) { build(:model_solution, files: ms_files) }
+      let(:ms_files) { [] }
 
       it 'creates a task with one model-solution' do
         expect(proforma_task.model_solutions).to have(1).item
       end
 
-      it 'creates a model-solution with one file' do
+      it 'creates a model-solution with correct attributes' do
         expect(proforma_task.model_solutions.first).to have_attributes(
-          id: "ms-#{file.id}",
-          files: have(1).item
+          description: model_solution.description,
+          internal_description: model_solution.internal_description,
+          id: model_solution.xml_id,
+          files: []
         )
       end
 
-      it 'creates a model-solution with one file with correct attributes' do
-        expect(proforma_task.model_solutions.first.files.first).to have_attributes(
-          id: file.id,
-          content: file.content,
-          filename: file.full_file_name,
-          used_by_grader: false,
-          usage_by_lms: 'display',
-          visible: 'yes',
-          binary: false,
-          internal_description: 'reference_implementation'
-        )
+      context 'when model_solution has a file' do
+        let(:ms_files) { [ms_file] }
+        let(:ms_file) { build(:task_file, :exportable) }
+
+        it 'creates a model-solution with one file with correct attributes' do
+          expect(proforma_task.model_solutions.first.files.first).to have_attributes(
+            id: ms_file.id,
+            content: ms_file.content,
+            filename: ms_file.full_file_name,
+            used_by_grader: ms_file.used_by_grader,
+            usage_by_lms: ms_file.usage_by_lms,
+            visible: ms_file.visible,
+            binary: false,
+            internal_description: ms_file.internal_description
+          )
+        end
       end
-    end
 
-    context 'when exercise has multiple files with role reference implementation' do
-      let(:files) { build_list(:codeharbor_solution_file, 2) }
+      context 'when model_solution has multiple files ' do
+        let(:ms_files) { build_list(:task_file, 2) }
 
-      it 'creates a task with two model-solutions' do
-        expect(proforma_task.model_solutions).to have(2).items
+        it 'creates a model-solution with 2 files' do
+          expect(proforma_task.model_solutions.first.files).to have(2).items
+        end
+      end
+
+      context 'when task has multiple model_solutions' do
+        let(:model_solutions) { build_list(:model_solution, 2) }
+
+        it 'creates a model-solution with 2 tasks' do
+          expect(proforma_task.model_solutions).to have(2).items
+        end
       end
     end
 
     context 'when exercise has a test' do
       let(:tests) { [test] }
-      let(:test) { build(:codeharbor_test, exercise_file: file) }
-      let(:file) { build(:codeharbor_test_file) }
+      let(:test) { build(:test, files: test_files) }
+      let(:test_files) { [test_file] }
+      let(:test_file) { build(:task_file, :exportable) }
 
       it 'creates a task with one test' do
         expect(proforma_task.tests).to have(1).item
@@ -173,61 +196,31 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
 
       it 'creates a test with correct attributes and one file' do
         expect(proforma_task.tests.first).to have_attributes(
-          id: test.id,
-          title: file.name,
+          id: test.xml_id,
+          title: test.title,
           files: have(1).item,
           configuration: {
-            'entry-point' => file.full_file_name,
-            'framework' => test.testing_framework.name,
-            'version' => test.testing_framework.version
+            'entry-point' => test_file.full_file_name,
           },
-          meta_data: {
-            'feedback-message' => test.feedback_message,
-            'testing-framework' => test.testing_framework.name,
-            'testing-framework-version' => test.testing_framework.version
-          }
+          meta_data: {}
         )
       end
 
       it 'creates a test with one file with correct attributes' do
         expect(proforma_task.tests.first.files.first).to have_attributes(
-          id: file.id,
-          content: file.content,
-          filename: file.full_file_name,
-          used_by_grader: true,
-          visible: 'no',
+          id: test_file.id,
+          content: test_file.content,
+          filename: test_file.full_file_name,
+          used_by_grader: test_file.used_by_grader,
+          visible: test_file.visible,
           binary: false,
-          internal_description: 'teacher_defined_test'
+          internal_description: test_file.internal_description
         )
-      end
-
-      context 'when exercise_file is not hidden' do
-        let(:file) { build(:codeharbor_test_file, hidden: false) }
-
-        it 'creates the test file with the correct attribute' do
-          expect(proforma_task.tests.first.files.first).to have_attributes(visible: 'yes')
-        end
-      end
-
-      context 'when exercise_file has a custom role' do
-        let(:file) { build(:codeharbor_test_file, role: 'Very important test') }
-
-        it 'creates the test file with the correct attribute' do
-          expect(proforma_task.tests.first.files.first).to have_attributes(internal_description: 'Very important test')
-        end
-      end
-
-      context 'when test has no testing_framework and feedback_message' do
-        let(:test) { build(:codeharbor_test, feedback_message: nil, testing_framework: nil) }
-
-        it 'does not add feedback_message to meta_data' do
-          expect(proforma_task.tests.first).to have_attributes(meta_data: {})
-        end
       end
     end
 
     context 'when exercise has multiple tests' do
-      let(:tests) { build_list(:codeharbor_test, 2) }
+      let(:tests) { build_list(:test, 2) }
 
       it 'creates a task with two tests' do
         expect(proforma_task.tests).to have(2).items
@@ -235,29 +228,10 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
     end
 
     context 'when exercise has description formatted in markdown' do
-      let(:exercise) { create(:exercise, descriptions: [build(:description, :primary, text: description, language: 'de')]) }
       let(:description) { '# H1 header' }
 
       it 'creates a task with description and language from primary description' do
         expect(proforma_task).to have_attributes(description: '<h1 id="h1-header">H1 header</h1>')
-      end
-    end
-
-    context 'when exercise has multiple descriptions' do
-      let(:exercise) do
-        create(:exercise,
-               descriptions: [
-                 build(:description, text: 'desc', language: 'de'),
-                 build(:description, text: 'other dec', language: 'ja'),
-                 build(:description, :primary, text: 'primary desc', language: 'en')
-               ])
-      end
-
-      it 'creates a task with description and language from primary description' do
-        expect(proforma_task).to have_attributes(
-          description: '<p>primary desc</p>',
-          language: 'en'
-        )
       end
     end
   end

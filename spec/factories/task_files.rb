@@ -12,6 +12,13 @@ FactoryBot.define do
       fileable { build(:test) }
     end
 
+    trait :exportable do
+      internal_description { 'internal_description' }
+      usage_by_lms { 'display' }
+      used_by_grader { true }
+      visible { 'yes' }
+    end
+
     trait(:with_text_attachment) do
       name { 'text' }
       content {}

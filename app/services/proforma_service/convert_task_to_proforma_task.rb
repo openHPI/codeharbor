@@ -44,24 +44,11 @@ module ProformaService
       @task.model_solutions.map do |model_solution|
         Proforma::ModelSolution.new(
           id: model_solution.xml_id,
-          # id: "ms-#{model_solution.id}",
           description: model_solution.description,
           internal_description: model_solution.internal_description,
           files: model_solution.files.map do |file|
             task_file(file)
           end
-          #   [
-          #   Proforma::TaskFile.new(
-          #     id: model_solution.id,
-          #     content: model_solution.content,
-          #     filename: model_solution.full_file_name,
-          #     used_by_grader: false,
-          #     usage_by_lms: 'display',
-          #     visible: model_solution.hidden ? 'no' : 'yes',
-          #     binary: false,
-          #     internal_description: model_solution.role
-          #   )
-          # ]
         )
       end
     end
@@ -75,47 +62,17 @@ module ProformaService
           description: test.description,
           internal_description: test.internal_description,
           test_type: test.test_type,
-          files: test.files.map { |file| task_file file },
-          configuration: test_configuration(test, file),
-          meta_data: test_meta_data(test)
+          files: test.files.map { |test_file| task_file test_file },
+          configuration: test_configuration(test, file)
         )
       end
     end
 
-    def test_configuration(test, file)
+    def test_configuration(_test, file)
       {
-        'entry-point' => file.full_file_name,
-        # 'framework' => test.testing_framework&.name,
-        # 'version' => test.testing_framework&.version
-      }
-    end
-
-    def test_meta_data(test)
-      {
-        # 'feedback-message' => test.feedback_message,
-        # 'testing-framework' => test.testing_framework&.name,
-        # 'testing-framework-version' => test.testing_framework&.version
+        'entry-point' => file&.full_file_name
       }.compact
     end
-
-    # def test_file(file)
-    #   Proforma::TaskFile.new(
-    #     id: file.id,
-    #     content: file.content,
-    #     filename: file.full_file_name,
-    #     used_by_grader: true,
-    #     visible: file.hidden ? 'no' : 'yes',
-    #     binary: false,
-    #     internal_description: file.role || 'teacher_defined_test'
-    #   )
-    # end
-
-    # def files
-    #   @task.files
-    #            .filter { |file| file.role != 'reference_implementation' && !file.in?(@task.tests.map(&:exercise_file)) }.map do |file|
-    #     task_file(file)
-    #   end
-    # end
 
     def task_file(file)
       task_file = Proforma::TaskFile.new(
