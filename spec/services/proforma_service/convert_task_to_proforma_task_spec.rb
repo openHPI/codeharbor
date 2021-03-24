@@ -202,7 +202,6 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
           configuration: {
             'entry-point' => test_file.full_file_name
           },
-          meta_data: {}
         )
       end
 
