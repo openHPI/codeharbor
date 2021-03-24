@@ -2,14 +2,14 @@
 
 module ProformaService
   class ExportTask < ServiceBase
-    def initialize(exercise: nil, options: {})
-      @exercise = exercise
+    def initialize(task: nil, options: {})
+      @task = task
       @options = options
     end
 
     def execute
-      @task = ConvertExerciseToTask.call(exercise: @exercise, options: @options)
-      exporter = Proforma::Exporter.new(@task)
+      @proforma_task = ConvertTaskToProformaTask.call(task: @task, options: @options)
+      exporter = Proforma::Exporter.new(@proforma_task)
       exporter.perform
     end
   end
