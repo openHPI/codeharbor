@@ -66,25 +66,6 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
       end
     end
 
-    # not really applicable anymore
-    # context 'when exercise has a mainfile' do
-    #   let(:files) { [file] }
-    #   let(:file) { build(:codeharbor_main_file) }
-    #
-    #   it 'creates a task-file with the correct attributes' do
-    #     expect(proforma_task.files.first).to have_attributes(
-    #       id: file.id,
-    #       content: file.content,
-    #       filename: file.full_file_name,
-    #       used_by_grader: true,
-    #       usage_by_lms: 'edit',
-    #       visible: 'yes',
-    #       binary: false,
-    #       internal_description: 'main_file'
-    #     )
-    #   end
-    # end
-
     context 'when task has a file' do
       let(:files) { [file] }
       let(:file) { build(:task_file, :exportable) }
