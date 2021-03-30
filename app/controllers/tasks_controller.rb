@@ -9,7 +9,7 @@ class TasksController < ApplicationController
   before_action :set_search, only: [:index]
 
   rescue_from CanCan::AccessDenied do |_exception|
-    redirect_to root_path, alert: t('controllers.exercise.authorization')
+    redirect_to root_path, alert: t('controllers.authorization')
   end
 
   def index
@@ -53,6 +53,12 @@ class TasksController < ApplicationController
   def destroy
     @task.destroy!
     redirect_to tasks_url, notice: t('tasks.notification.destroyed')
+  end
+
+  def download_task
+    zip_file = ProformaService::ExportTask.call(task: @task)
+    # @task.update(downloads: @task.downloads + 1)
+    send_data(zip_file.string, type: 'application/zip', filename: "task_#{@task.id}.zip", disposition: 'attachment')
   end
 
   private

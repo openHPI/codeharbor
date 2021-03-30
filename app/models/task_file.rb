@@ -7,10 +7,10 @@ class TaskFile < ApplicationRecord
   validates :name, presence: true
   validates :fileable, presence: true
 
-  after_create_commit :extract_text_data # TODO: make this manually initiatable and not based on type?
+  # after_create_commit :extract_text_data # TODO: make this manually initiatable and not based on type?
 
   def full_file_name
-    File.join(path.to_s, name)
+    path.present? ? File.join(path.to_s, name) : name
   end
 
   private

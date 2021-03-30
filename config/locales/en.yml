@@ -27,6 +27,7 @@ en:
         execution_environment: Programming language
 
   controllers:
+    authorization: 'You are not authorized for this action.'
     account_links:
       created: 'Account link was successfully created.'
       updated: 'Account link was successfully updated.'

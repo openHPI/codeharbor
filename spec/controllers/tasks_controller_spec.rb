@@ -228,4 +228,33 @@ RSpec.describe TasksController, type: :controller do
       expect(response).to redirect_to(tasks_url)
     end
   end
+
+  describe '#download_task' do
+    let(:task) { create(:task, valid_attributes) }
+
+    let(:get_request) { get :download_task, params: {id: task.id}, session: valid_session }
+    let(:zip) { instance_double('StringIO', string: 'dummy') }
+
+    before { allow(ProformaService::ExportTask).to receive(:call).with(task: task).and_return(zip) }
+
+    it 'calls the ExportTask service' do
+      get_request
+      expect(ProformaService::ExportTask).to have_received(:call)
+    end
+
+    it 'sends the correct data' do
+      get_request
+      expect(response.body).to eql 'dummy'
+    end
+
+    it 'sets the correct Content-Type header' do
+      get_request
+      expect(response.header['Content-Type']).to eql 'application/zip'
+    end
+
+    it 'sets the correct Content-Disposition header' do
+      get_request
+      expect(response.header['Content-Disposition']).to include "attachment; filename=\"task_#{task.id}.zip\""
+    end
+  end
 end

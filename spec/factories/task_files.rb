@@ -22,6 +22,7 @@ FactoryBot.define do
     trait(:with_text_attachment) do
       name { 'text' }
       content {}
+      # attachment { Rack::Test::UploadedFile.new('spec/fixtures/files/example-filename.txt', 'text/plain') }
       after(:build) do |task_file|
         task_file.attachment.attach(io: File.open('spec/fixtures/files/example-filename.txt'),
                                     filename: 'example-filename.txt',
