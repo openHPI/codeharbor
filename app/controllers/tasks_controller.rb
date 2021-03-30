@@ -55,9 +55,8 @@ class TasksController < ApplicationController
     redirect_to tasks_url, notice: t('tasks.notification.destroyed')
   end
 
-  def download_task
+  def download
     zip_file = ProformaService::ExportTask.call(task: @task)
-    # @task.update(downloads: @task.downloads + 1)
     send_data(zip_file.string, type: 'application/zip', filename: "task_#{@task.id}.zip", disposition: 'attachment')
   end
 

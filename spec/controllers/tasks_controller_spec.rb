@@ -229,10 +229,10 @@ RSpec.describe TasksController, type: :controller do
     end
   end
 
-  describe '#download_task' do
+  describe '#download' do
     let(:task) { create(:task, valid_attributes) }
 
-    let(:get_request) { get :download_task, params: {id: task.id}, session: valid_session }
+    let(:get_request) { get :download, params: {id: task.id}, session: valid_session }
     let(:zip) { instance_double('StringIO', string: 'dummy') }
 
     before { allow(ProformaService::ExportTask).to receive(:call).with(task: task).and_return(zip) }

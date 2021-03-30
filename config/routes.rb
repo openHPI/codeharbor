@@ -77,7 +77,7 @@ Rails.application.routes.draw do
 
   resources :tasks do
     member do
-      get :download_task
+      get :download
     end
   end
 
