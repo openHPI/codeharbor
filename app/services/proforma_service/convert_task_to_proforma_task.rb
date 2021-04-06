@@ -20,11 +20,11 @@ module ProformaService
           description: description,
           internal_description: @task.internal_description,
           proglang: proglang,
-          files: @task.files.map { |file| task_file file },
-          tests: tests,
           uuid: @task.uuid,
           parent_uuid: @task.parent_uuid,
           language: @task.language,
+          files: @task.files.map { |file| task_file file },
+          tests: tests,
           model_solutions: model_solutions
         }.compact
       )

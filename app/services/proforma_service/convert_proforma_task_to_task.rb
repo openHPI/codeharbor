@@ -1,0 +1,106 @@
+# frozen_string_literal: true
+
+module ProformaService
+  class ConvertProformaTaskToTask < ServiceBase
+    def initialize(proforma_task:, user:, task: nil)
+      @proforma_task = proforma_task
+      @user = user
+      @task = task || Task.new
+    end
+
+    def execute
+      import_task
+      @task
+    end
+
+    private
+
+    def import_task
+      @task.assign_attributes(
+        user: @user,
+        title: @proforma_task.title,
+        description: @proforma_task.description,
+        internal_description: @proforma_task.internal_description,
+        programming_language: programming_language,
+        uuid: @proforma_task.uuid,
+        parent_uuid: @proforma_task.parent_uuid,
+        language: @proforma_task.language,
+
+        tests: tests,
+        files: files.values,
+        model_solutions: model_solutions
+      )
+    end
+
+    def files
+      @files ||= @proforma_task.all_files.reject { |file| file.id == 'ms-placeholder-file' }.map do |task_file|
+        [task_file.id, file_from_proforma_file(task_file)]
+      end.to_h
+    end
+
+    def file_from_proforma_file(proforma_task_file)
+      task_file = TaskFile.new({
+                                 full_file_name: proforma_task_file.filename,
+                                 internal_description: proforma_task_file.internal_description,
+                                 used_by_grader: proforma_task_file.used_by_grader,
+                                 visible: proforma_task_file.visible,
+                                 usage_by_lms: proforma_task_file.usage_by_lms
+                               })
+      if proforma_task_file.binary
+        task_file.attachment.attach(io: StringIO.new(proforma_task_file.content), filename: proforma_task_file.filename, content_type: proforma_task_file.mimetype)
+      else
+        task_file.content = proforma_task_file.content
+      end
+      task_file
+    end
+
+    def tests
+      @proforma_task.tests.map do |test|
+        Test.new(
+          xml_id: test.id,
+          title: test.title,
+          description: test.description,
+          internal_description: test.internal_description,
+          test_type: test.test_type,
+          files: test_files(test)
+        )
+      end
+    end
+
+    def test_files(test)
+      test_files = test.files
+      # need some kind of hash multidelete.. values_at gathers the correct values
+
+      # files.delete(file.id).tap { |f| f.purpose = 'test' }
+      test_files.map { |file| files.delete(file.id) }
+      # files.values_at(test_files.map(&:id))
+    end
+
+    # def hide_unused_test_files(file, test_object)
+    #   test_object.files.reject { |f| f == file }.each { |f| f.visible = 'no' }
+    # end
+
+    def programming_language
+      proglang_name = @proforma_task.proglang&.dig :name
+      proglang_version = @proforma_task.proglang&.dig :version
+      return @task.programming_language if proglang_name.nil? || proglang_version.nil?
+
+      ProgrammingLanguage.where(language: proglang_name, version: proglang_version).first_or_initialize
+    end
+
+    def model_solutions
+      @proforma_task.model_solutions.map do |model_solution|
+        ModelSolution.new(
+          xml_id: model_solution.id,
+          description: model_solution.description,
+          internal_description: model_solution.internal_description
+        )
+      end
+
+    end
+
+    def model_solution_files
+      @proforma_task.model_solutions.map(&:files).filter(&:present?).flatten
+    end
+  end
+end
