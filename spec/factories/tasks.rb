@@ -5,6 +5,7 @@ FactoryBot.define do
     sequence(:title) { |n| "Test Exercise #{n}" }
     description { 'description' }
     user { build(:user) }
+    uuid { SecureRandom.uuid }
 
     trait :empty do
       title {}

@@ -67,14 +67,14 @@ Rails/UniqueValidationWithoutIndex:
 
 RSpec/ExampleLength:
   Exclude:
-    - spec/services/proforma_service/convert_task_to_exercise_spec.rb
+    - spec/services/proforma_service/convert_proforma_task_to_task_spec.rb
     - spec/services/proforma_service/convert_task_to_proforma_task_spec.rb
 
 RSpec/NestedGroups:
   Max: 5
 
 RSpec/MultipleMemoizedHelpers:
-  Max: 14
+  Max: 15
 
 RSpec/EmptyExampleGroup:
   Exclude:

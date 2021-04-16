@@ -19,7 +19,7 @@ module ProformaService
       @task.assign_attributes(
         user: @user,
         title: @proforma_task.title,
-        description: @proforma_task.description,
+        description: Kramdown::Document.new(@proforma_task.description || '', html_to_native: true).to_kramdown.strip,
         internal_description: @proforma_task.internal_description,
         programming_language: programming_language,
         uuid: @proforma_task.uuid,
@@ -27,8 +27,8 @@ module ProformaService
         language: @proforma_task.language,
 
         tests: tests,
-        files: files.values,
-        model_solutions: model_solutions
+        model_solutions: model_solutions,
+        files: files.values
       )
     end
 
@@ -44,10 +44,12 @@ module ProformaService
                                  internal_description: proforma_task_file.internal_description,
                                  used_by_grader: proforma_task_file.used_by_grader,
                                  visible: proforma_task_file.visible,
-                                 usage_by_lms: proforma_task_file.usage_by_lms
+                                 usage_by_lms: proforma_task_file.usage_by_lms,
+                                 mime_type: proforma_task_file.mimetype
                                })
       if proforma_task_file.binary
-        task_file.attachment.attach(io: StringIO.new(proforma_task_file.content), filename: proforma_task_file.filename, content_type: proforma_task_file.mimetype)
+        task_file.attachment.attach(io: StringIO.new(proforma_task_file.content), filename: proforma_task_file.filename,
+                                    content_type: proforma_task_file.mimetype)
       else
         task_file.content = proforma_task_file.content
       end
@@ -62,23 +64,14 @@ module ProformaService
           description: test.description,
           internal_description: test.internal_description,
           test_type: test.test_type,
-          files: test_files(test)
+          files: object_files(test)
         )
       end
     end
 
-    def test_files(test)
-      test_files = test.files
-      # need some kind of hash multidelete.. values_at gathers the correct values
-
-      # files.delete(file.id).tap { |f| f.purpose = 'test' }
-      test_files.map { |file| files.delete(file.id) }
-      # files.values_at(test_files.map(&:id))
+    def object_files(object)
+      object.files.map { |file| files.delete(file.id) }
     end
-
-    # def hide_unused_test_files(file, test_object)
-    #   test_object.files.reject { |f| f == file }.each { |f| f.visible = 'no' }
-    # end
 
     def programming_language
       proglang_name = @proforma_task.proglang&.dig :name
@@ -93,14 +86,10 @@ module ProformaService
         ModelSolution.new(
           xml_id: model_solution.id,
           description: model_solution.description,
-          internal_description: model_solution.internal_description
+          internal_description: model_solution.internal_description,
+          files: object_files(model_solution)
         )
       end
-
-    end
-
-    def model_solution_files
-      @proforma_task.model_solutions.map(&:files).filter(&:present?).flatten
     end
   end
 end
