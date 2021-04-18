@@ -96,7 +96,7 @@ RSpec.describe Task, type: :model do
 
     let(:days) { 0 }
     let!(:new_task) { create(:task, created_at: Time.zone.now - 1.week) }
-    let!(:old_task) { create(:task, created_at: Time.zone.now - 1.month) }
+    let!(:old_task) { create(:task, created_at: Time.zone.now - 4.weeks) }
 
     it { is_expected.to include new_task, old_task }
 
