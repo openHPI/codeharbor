@@ -75,7 +75,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :tasks
+  resources :tasks do
+    member do
+      get :download
+    end
+  end
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 end

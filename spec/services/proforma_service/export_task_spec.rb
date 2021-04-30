@@ -2,30 +2,33 @@
 
 require 'rails_helper'
 
-xdescribe ProformaService::ExportTask do
+describe ProformaService::ExportTask do
   describe '.new' do
-    subject(:export_service) { described_class.new(exercise: exercise) }
+    subject(:export_service) { described_class.new(task: task) }
 
-    let(:exercise) { build(:exercise) }
+    let(:task) { build(:task) }
 
-    it 'assigns exercise' do
-      expect(export_service.instance_variable_get(:@exercise)).to be exercise
+    it 'assigns task' do
+      expect(export_service.instance_variable_get(:@task)).to be task
     end
   end
 
   describe '#execute' do
     subject(:execute) { export_service.execute }
 
-    let(:export_service) { described_class.new(exercise: exercise) }
-    let(:exercise) do
-      create(:exercise,
-             instruction: 'instruction',
+    let(:export_service) { described_class.new(task: task) }
+    let(:task) do
+      create(:task,
+             internal_description: 'internal_description',
              uuid: SecureRandom.uuid,
-             exercise_files: files,
-             tests: tests)
+             programming_language: build(:programming_language, :ruby),
+             files: files,
+             tests: tests,
+             model_solutions: model_solutions)
     end
     let(:files) { [] }
     let(:tests) { [] }
+    let(:model_solutions) { [] }
 
     let(:zip_files) do
       {}.tap do |hash|
@@ -36,70 +39,56 @@ xdescribe ProformaService::ExportTask do
         end
       end
     end
-    let(:doc) { Nokogiri::XML(zip_files['task.xml'], &:noblanks) }
-    let(:xml) { doc.remove_namespaces! }
+    let(:xml_with_namespaces) { Nokogiri::XML(zip_files['task.xml'], &:noblanks) }
+    let(:xml) { Nokogiri::XML(zip_files['task.xml'], &:noblanks).remove_namespaces! }
 
     it_behaves_like 'zipped task node xml'
 
     it 'adds title node with correct content to task node' do
-      expect(xml.xpath('/task/title').text).to eql exercise.title
+      expect(xml.xpath('/task/title').text).to eql task.title
     end
 
     it 'adds description node with correct content (html) to task node' do
-      expect(xml.xpath('/task/description').text).to eql Kramdown::Document.new(
-        exercise.descriptions.select(&:primary).first.text
-      ).to_html.strip
+      expect(xml.xpath('/task/description').text).to eql Kramdown::Document.new(task.description).to_html.strip
     end
 
     it 'adds proglang node with correct content to task node' do
-      expect(xml.xpath('/task/proglang').text).to eql exercise.execution_environment.language
+      expect(xml.xpath('/task/proglang').text).to eql task.programming_language.language
     end
 
     it 'adds version attribute to proglang node' do
-      expect(xml.xpath('/task/proglang').attribute('version').value).to eql exercise.execution_environment.version
+      expect(xml.xpath('/task/proglang').attribute('version').value).to eql task.programming_language.version
     end
 
     it 'adds internal-description node with correct content to task node' do
-      expect(xml.xpath('/task/internal-description').text).to eql exercise.instruction
+      expect(xml.xpath('/task/internal-description').text).to eql task.internal_description
     end
 
     it 'adds uuid attribute to task node' do
-      expect(xml.xpath('/task').attribute('uuid').value).to eql exercise.uuid
+      expect(xml.xpath('/task').attribute('uuid').value).to eql task.uuid
     end
 
     context 'with options' do
-      let(:export_service) { described_class.new(exercise: exercise, options: options) }
+      let(:export_service) { described_class.new(task: task, options: options) }
       let(:options) { {} }
 
       context 'when options contain description_format md' do
         let(:options) { {description_format: 'md'} }
 
         it 'adds description node with correct content to task node' do
-          expect(xml.xpath('/task/description').text).to eql exercise.descriptions.select(&:primary).first.text
+          expect(xml.xpath('/task/description').text).to eql task.description
         end
       end
     end
 
-    context 'when exercise is minimal' do
-      let(:exercise) do
-        create(:exercise,
-               :empty,
-               title: 'title',
-               descriptions: build_list(:simple_description, 1, :primary),
-               execution_environment: build(:java_8_execution_environment))
-      end
-
-      it_behaves_like 'zipped task node xml'
-    end
-
-    context 'when exercise has a mainfile' do
+    context 'when task has a file' do
       let(:files) { [file] }
-      let(:file) { build(:codeharbor_main_file) }
+      let(:file) { build(:task_file, :exportable, content: 'filecontent') }
 
       it_behaves_like 'task node with file'
 
-      context 'when the mainfile is very large' do
-        let(:file) { build(:codeharbor_main_file, content: 'test' * 10**5) }
+      context 'when the file is very large' do
+        let(:file) { build(:task_file, :exportable, content: 'test' * 10**5) }
 
         it 'adds a attached-txt-file node to the file node' do
           expect(xml.xpath("/task/files/file[@id!='ms-placeholder-file']/attached-txt-file")).to have(1).item
@@ -111,14 +100,14 @@ xdescribe ProformaService::ExportTask do
       end
     end
 
-    context 'when exercise has a regular file' do
+    context 'when task has a regular file' do
       let(:files) { [file] }
-      let(:file) { build(:codeharbor_regular_file) }
+      let(:file) { build(:task_file, :exportable, content: 'foobar') }
 
       it_behaves_like 'task node with file'
 
       context 'when file has an attachment' do
-        let(:file) { build(:codeharbor_regular_file, :with_attachment) }
+        let(:file) { build(:task_file, :exportable, :with_attachment) }
 
         it 'adds a embedded-bin-file node to the file node' do
           expect(xml.xpath("/task/files/file[@id!='ms-placeholder-file']/embedded-bin-file")).to have(1).item
@@ -126,12 +115,14 @@ xdescribe ProformaService::ExportTask do
       end
     end
 
-    context 'when exercise has a file with role reference implementation' do
-      let(:files) { [file] }
-      let(:file) { build(:codeharbor_solution_file) }
+    context 'when task has a model-solution' do
+      let(:model_solutions) { [model_solution] }
+      let(:model_solution) { build(:model_solution, files: ms_files, xml_id: 'ms-1') }
+      let(:ms_files) { [ms_file] }
+      let(:ms_file) { build(:task_file, :exportable) }
 
       it 'adds id attribute to model-solution node' do
-        expect(xml.xpath('/task/model-solutions/model-solution').attribute('id').value).to eql "ms-#{file.id}"
+        expect(xml.xpath('/task/model-solutions/model-solution').attribute('id').value).to eql model_solution.xml_id.to_s
       end
 
       it 'adds correct refid attribute to fileref' do
@@ -141,98 +132,94 @@ xdescribe ProformaService::ExportTask do
       end
 
       it 'adds description attribute to model-solution' do
-        expect(xml.xpath('/task/model-solutions/model-solution/description').text).to be_empty
+        expect(xml.xpath('/task/model-solutions/model-solution/description').text).to eql model_solution.description
       end
 
       it 'adds internal-description attribute to model-solution' do
-        expect(xml.xpath('/task/model-solutions/model-solution/internal-description').text).to be_empty
+        expect(xml.xpath('/task/model-solutions/model-solution/internal-description').text).to eql model_solution.internal_description
       end
 
-      it 'adds correct used-by-grader attribute to the referenced file node' do
-        expect(xml.xpath('/task/files/file').attribute('used-by-grader').value).to eql 'false'
+      it 'adds correct used-by-grader attribute to referenced file node' do
+        expect(xml.xpath('/task/files/file').attribute('used-by-grader').value).to eql ms_file.used_by_grader.to_s
       end
 
-      it 'adds correct usage-by-lms attribute to the referenced file node' do
-        expect(xml.xpath('/task/files/file').attribute('usage-by-lms').value).to eql 'display'
+      it 'adds correct usage-by-lms attribute to referenced file node' do
+        expect(xml.xpath('/task/files/file').attribute('usage-by-lms').value).to eql ms_file.usage_by_lms
       end
 
-      it 'adds correct visible attribute to the referenced file node' do
-        expect(xml.xpath('/task/files/file').attribute('visible').value).to eql 'yes'
+      it 'adds correct visible attribute to referenced file node' do
+        expect(xml.xpath('/task/files/file').attribute('visible').value).to eql ms_file.visible
       end
 
-      it 'adds correct role to internal-description of the  referenced file node' do
-        expect(xml.xpath('/task/files/file/internal-description').text).to eql file.role
+      it 'adds correct role to internal-description of referenced file node' do
+        expect(xml.xpath('/task/files/file/internal-description').text).to eql ms_file.internal_description
+      end
+
+      context 'when task has model-solution with multiple files' do
+        let(:ms_files) { [ms_file, build(:task_file, :exportable)] }
+
+        it 'adds two filerefs to model-solution node' do
+          expect(xml.xpath('/task/model-solutions/model-solution/filerefs/fileref')).to have(2).items
+        end
+      end
+
+      context 'when task has multiple model-solutions' do
+        let(:model_solutions) { [model_solution, build(:model_solution, files: [build(:task_file, :exportable)], xml_id: 'ms-2')] }
+
+        it 'adds two model-solution to task' do
+          expect(xml.xpath('/task/model-solutions/model-solution')).to have(2).items
+        end
       end
     end
 
-    context 'when exercise has multiple files with role reference implementation' do
-      let(:files) { build_list(:codeharbor_solution_file, 2) }
-
-      it 'adds test node to tests node' do
-        expect(xml.xpath('/task/model-solutions/model-solution')).to have(2).items
-      end
-    end
-
-    context 'when exercise has a test' do
+    context 'when task has a test' do
       let(:tests) { [test] }
-      let(:test) { build(:codeharbor_test) }
+      let(:test) { build(:test) }
 
       it 'adds test node to tests node' do
         expect(xml.xpath('/task/tests/test')).to have(1).item
       end
 
       it 'adds id attribute to tests node' do
-        expect(xml.xpath('/task/tests/test').attribute('id').value).to eql test.id.to_s
+        expect(xml.xpath('/task/tests/test').attribute('id').value).to eql test.xml_id.to_s
       end
 
       it 'adds correct title node to test node' do
-        expect(xml.xpath('/task/tests/test/title').text).to eql test.exercise_file.name
+        expect(xml.xpath('/task/tests/test/title').text).to eql test.title
       end
 
       it 'adds fileref node' do
-        expect(xml.xpath('/task/tests/test/test-configuration/filerefs/fileref')).to have(1).item
+        expect(xml.xpath('/task/tests/test/test-configuration/filerefs/fileref')).to be_empty
       end
 
-      it 'adds correct refid attribute to fileref' do
-        expect(
-          xml.xpath('/task/tests/test/test-configuration/filerefs/fileref').attribute('refid').value
-        ).to eql xml.xpath("/task/files/file[@id!='ms-placeholder-file']").attribute('id').value
-      end
+      context 'when test has a file' do
+        let(:test) { build(:test, files: test_files) }
+        let(:test_files) { [test_file] }
+        let(:test_file) { build(:task_file, :exportable) }
 
-      it 'adds feedback-message with codeharbor namespace to test-meta-data node' do
-        expect(
-          doc.xpath('/xmlns:task/xmlns:tests/xmlns:test/xmlns:test-configuration/xmlns:test-meta-data/c:feedback-message').text
-        ).to eql test.feedback_message
-      end
+        it 'adds test node to tests node' do
+          expect(xml.xpath('/task/tests/test')).to have(1).item
+        end
 
-      it 'adds testing-framework with codeharbor namespace to test-meta-data node' do
-        expect(
-          doc.xpath('/xmlns:task/xmlns:tests/xmlns:test/xmlns:test-configuration/xmlns:test-meta-data/c:testing-framework').text
-        ).to eql test.testing_framework.name
-      end
+        it 'adds meta_data with correct namespace to test-configuration node' do
+          expect(xml_with_namespaces.xpath(
+            '/xmlns:task/xmlns:tests/xmlns:test/xmlns:test-configuration/xmlns:test-meta-data/openHPI:entry-point'
+          ).text).to eql 'name'
+        end
 
-      it 'adds testing-framework-version with codeharbor namespace to test-meta-data node' do
-        expect(
-          doc.xpath('/xmlns:task/xmlns:tests/xmlns:test/xmlns:test-configuration/xmlns:test-meta-data/c:testing-framework-version').text
-        ).to eql test.testing_framework.version
+        it 'adds correct refid attribute to fileref' do
+          expect(
+            xml.xpath('/task/tests/test/test-configuration/filerefs/fileref').attribute('refid').value
+          ).to eql xml.xpath("/task/files/file[@id!='ms-placeholder-file']").attribute('id').value
+        end
       end
     end
 
-    context 'when exercise has multiple tests' do
-      let(:tests) { build_list(:codeharbor_test, 2) }
+    context 'when task has multiple tests' do
+      let(:tests) { build_list(:test, 2) }
 
       it 'adds test node to tests node' do
         expect(xml.xpath('/task/tests/test')).to have(2).item
-      end
-    end
-
-    context 'when exercise has multiple descriptions' do
-      let(:exercise) do
-        create(:exercise, descriptions: [build(:description), build(:description), build(:description, :primary)])
-      end
-
-      it 'adds description node with correct content to task node' do
-        expect(xml.xpath('/task/description').text).to include exercise.descriptions.select(&:primary).first.text
       end
     end
   end

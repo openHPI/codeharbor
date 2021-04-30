@@ -2,21 +2,21 @@
 
 require 'rails_helper'
 
-xdescribe ProformaService::ExportTasks do
+describe ProformaService::ExportTasks do
   describe '.new' do
-    subject(:export_service) { described_class.new(exercises: exercises) }
+    subject(:export_service) { described_class.new(tasks: tasks) }
 
-    let(:exercises) { build_list(:exercise, 2) }
+    let(:tasks) { build_list(:task, 2) }
 
-    it 'assigns exercise' do
-      expect(export_service.instance_variable_get(:@exercises)).to be exercises
+    it 'assigns task' do
+      expect(export_service.instance_variable_get(:@tasks)).to be tasks
     end
   end
 
   describe '#execute' do
-    subject(:export_service) { described_class.call(exercises: exercises) }
+    subject(:export_service) { described_class.call(tasks: tasks) }
 
-    let(:exercises) { create_list(:exercise, 2) }
+    let(:tasks) { create_list(:task, 2) }
     let(:user) { create(:user) }
     let(:zip_files) do
       {}.tap do |hash|
@@ -32,26 +32,26 @@ xdescribe ProformaService::ExportTasks do
     end
     let(:doc) { Nokogiri::XML(zip_files['task.xml'], &:noblanks) }
     let(:xml) { doc.remove_namespaces! }
-    let(:imported_exercises) { zip_files.transform_values! { |zip_file| ProformaService::Import.call(zip: zip_file, user: user) } }
+    # let(:imported_tasks) { zip_files.transform_values! { |zip_file| ProformaService::Import.call(zip: zip_file, user: user) } }
 
     it 'creates a zip-file with two files' do
       expect(zip_files.count).to be 2
     end
 
-    it 'creates a zip-file of two importable zip-files' do
-      expect(imported_exercises.values).to all be_an(Exercise)
+    xit 'creates a zip-file of two importable zip-files' do
+      expect(imported_tasks.values).to all be_an(Task)
     end
 
-    it 'creates a zip-file of two importable zip-files which contain valid exercises' do
-      expect(imported_exercises.values).to all be_valid
+    xit 'creates a zip-file of two importable zip-files which contain valid tasks' do
+      expect(imported_tasks.values).to all be_valid
     end
 
     it 'names the zipped files correctly' do
-      expect(zip_files.keys).to match_array(exercises.map { |e| "task_#{e.id}-#{e.title.underscore.gsub(/[^0-9A-Za-z.\-]/, '_')}.zip" })
+      expect(zip_files.keys).to match_array(tasks.map { |e| "task_#{e.id}-#{e.title.underscore.gsub(/[^0-9A-Za-z.\-]/, '_')}.zip" })
     end
 
-    context 'when 10 exercises are supplied' do
-      let(:exercises) { create_list(:exercise, 10) }
+    context 'when 10 tasks are supplied' do
+      let(:tasks) { create_list(:task, 10) }
 
       it 'creates a zip-file with two files' do
         expect(zip_files.count).to be 10

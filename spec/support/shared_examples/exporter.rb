@@ -8,7 +8,7 @@ RSpec.shared_examples 'zipped task node xml' do
   end
 
   it 'contains through schema validatable xml' do
-    expect(Proforma::Validator.new(doc).perform).to be_empty
+    expect(Proforma::Validator.new(xml_with_namespaces).perform).to be_empty
   end
 
   it 'adds task root-node' do
@@ -72,17 +72,17 @@ RSpec.shared_examples 'task node with file' do
   it 'adds used-by-grader-attribute to file node' do
     expect(
       xml.xpath("/task/files/file[@id!='ms-placeholder-file']").attribute('used-by-grader').value
-    ).to eql((!file.attachment.attached?).to_s)
+    ).to eql(file.used_by_grader.to_s)
   end
 
   it 'adds visible-attribute to file node' do
-    expect(xml.xpath("/task/files/file[@id!='ms-placeholder-file']").attribute('visible').value).to eql file.hidden ? 'no' : 'yes'
+    expect(xml.xpath("/task/files/file[@id!='ms-placeholder-file']").attribute('visible').value).to eql file.visible
   end
 
   it 'adds usage-by-lms-attribute to file node' do
     expect(
       xml.xpath("/task/files/file[@id!='ms-placeholder-file']").attribute('usage-by-lms').value
-    ).to eql file.read_only ? 'display' : 'edit'
+    ).to eql file.usage_by_lms
   end
 
   it 'adds a embedded-txt-file node to the file node' do
@@ -101,9 +101,9 @@ RSpec.shared_examples 'task node with file' do
     ).to eql file.content
   end
 
-  it 'adds role as internal-description' do
+  it 'adds internal-description' do
     expect(
       xml.xpath("/task/files/file[@id!='ms-placeholder-file']/internal-description").text
-    ).to eql file.role
+    ).to eql file.internal_description
   end
 end

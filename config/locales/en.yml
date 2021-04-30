@@ -27,6 +27,7 @@ en:
         execution_environment: Programming language
 
   controllers:
+    authorization: 'You are not authorized for this action.'
     account_links:
       created: 'Account link was successfully created.'
       updated: 'Account link was successfully updated.'
@@ -1033,11 +1034,11 @@ en:
       delete: "Delete"
       show_comments: "Show Comments"
       related_exercises: "Show Related Exercises"
-
     notification:
       created: "Task successfully created"
       updated: "Task successfully updated"
       destroyed: "Task successfully destroyed"
+    download: "Download your Task as a zip file or export them directly to an autograder."
   common:
     created_at: "Created at"
     created_by: "Created by"

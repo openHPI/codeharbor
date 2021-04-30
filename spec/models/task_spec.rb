@@ -17,6 +17,8 @@ RSpec.describe Task, type: :model do
     it { is_expected.not_to be_able_to(:show, task) }
     it { is_expected.not_to be_able_to(:update, task) }
     it { is_expected.not_to be_able_to(:destroy, task) }
+    it { is_expected.not_to be_able_to(:download, task) }
+    it { is_expected.not_to be_able_to(:export, task) }
 
     context 'with a user' do
       let(:user) { create(:user) }
@@ -25,6 +27,8 @@ RSpec.describe Task, type: :model do
       it { is_expected.to be_able_to(:create, described_class) }
 
       it { is_expected.not_to be_able_to(:show, task) }
+      it { is_expected.not_to be_able_to(:download, task) }
+      it { is_expected.not_to be_able_to(:export, task) }
 
       it { is_expected.not_to be_able_to(:update, task) }
       it { is_expected.not_to be_able_to(:destroy, task) }
@@ -43,6 +47,8 @@ RSpec.describe Task, type: :model do
         it { is_expected.not_to be_able_to(:manage, task) }
 
         it { is_expected.to be_able_to(:show, task) }
+        it { is_expected.to be_able_to(:download, task) }
+        it { is_expected.to be_able_to(:export, task) }
 
         it { is_expected.to be_able_to(:update, task) }
         it { is_expected.to be_able_to(:destroy, task) }
@@ -90,7 +96,7 @@ RSpec.describe Task, type: :model do
 
     let(:days) { 0 }
     let!(:new_task) { create(:task, created_at: Time.zone.now - 1.week) }
-    let!(:old_task) { create(:task, created_at: Time.zone.now - 1.month) }
+    let!(:old_task) { create(:task, created_at: Time.zone.now - 4.weeks) }
 
     it { is_expected.to include new_task, old_task }
 

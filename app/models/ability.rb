@@ -60,7 +60,7 @@ class Ability
 
   def task_abilities(user)
     can %i[index create], Task
-    can %i[crud], Task, user: {id: user.id}
+    can %i[crud export download], Task, user: {id: user.id}
   end
 
   def task_file_abilities(user)

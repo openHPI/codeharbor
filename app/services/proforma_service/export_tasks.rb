@@ -2,15 +2,15 @@
 
 module ProformaService
   class ExportTasks < ServiceBase
-    def initialize(exercises: nil)
-      @exercises = exercises
+    def initialize(tasks:)
+      @tasks = tasks
     end
 
     def execute
       Zip::OutputStream.write_buffer do |zio|
-        @exercises.each do |exercise|
-          zip_file = ExportTask.call(exercise: exercise)
-          zio.put_next_entry("task_#{exercise.id}-#{exercise.title.underscore.gsub(/[^0-9A-Za-z.\-]/, '_')}.zip")
+        @tasks.each do |task|
+          zip_file = ExportTask.call(task: task)
+          zio.put_next_entry("task_#{task.id}-#{task.title.underscore.gsub(/[^0-9A-Za-z.\-]/, '_')}.zip")
           zio.write zip_file.string
         end
       end

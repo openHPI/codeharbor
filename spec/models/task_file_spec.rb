@@ -45,4 +45,18 @@ RSpec.describe TaskFile, type: :model do
       end
     end
   end
+
+  describe '#full_file_name' do
+    subject { file.full_file_name }
+
+    let(:file) { build(:task_file, name: 'filename') }
+
+    it { is_expected.to eql 'filename' }
+
+    context 'with path' do
+      let(:file) { build(:task_file, name: 'filename', path: 'folder') }
+
+      it { is_expected.to eql 'folder/filename' }
+    end
+  end
 end
