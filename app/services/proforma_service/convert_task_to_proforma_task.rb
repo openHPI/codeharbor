@@ -63,15 +63,13 @@ module ProformaService
           internal_description: test.internal_description,
           test_type: test.test_type,
           files: test.files.map { |test_file| task_file test_file },
-          configuration: test_configuration(test, file)
+          meta_data: test_meta_data(file)
         )
       end
     end
 
-    def test_configuration(_test, file)
-      {
-        'entry-point' => file&.full_file_name
-      }.compact
+    def test_meta_data(file)
+      [{namespace: 'openHPI', key: 'entry-point', value: file&.full_file_name}]
     end
 
     def task_file(file)

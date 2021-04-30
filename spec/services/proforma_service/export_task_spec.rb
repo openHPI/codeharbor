@@ -39,8 +39,8 @@ describe ProformaService::ExportTask do
         end
       end
     end
-    let(:doc) { Nokogiri::XML(zip_files['task.xml'], &:noblanks) }
-    let(:xml) { doc.remove_namespaces! }
+    let(:xml_with_namespaces) { Nokogiri::XML(zip_files['task.xml'], &:noblanks) }
+    let(:xml) { Nokogiri::XML(zip_files['task.xml'], &:noblanks).remove_namespaces! }
 
     it_behaves_like 'zipped task node xml'
 
@@ -199,6 +199,12 @@ describe ProformaService::ExportTask do
 
         it 'adds test node to tests node' do
           expect(xml.xpath('/task/tests/test')).to have(1).item
+        end
+
+        it 'adds meta_data with correct namespace to test-configuration node' do
+          expect(xml_with_namespaces.xpath(
+            '/xmlns:task/xmlns:tests/xmlns:test/xmlns:test-configuration/xmlns:test-meta-data/openHPI:entry-point'
+          ).text).to eql 'name'
         end
 
         it 'adds correct refid attribute to fileref' do
