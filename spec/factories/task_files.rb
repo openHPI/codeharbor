@@ -19,7 +19,7 @@ FactoryBot.define do
       visible { 'yes' }
     end
 
-    trait(:with_text_attachment) do
+    trait :with_text_attachment do
       name { 'text' }
       content {}
       after(:build) do |task_file|
@@ -29,7 +29,7 @@ FactoryBot.define do
       end
     end
 
-    trait(:with_attachment) do
+    trait :with_attachment do
       name { 'image' }
       content {}
       after(:build) do |exercise_file|

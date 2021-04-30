@@ -493,7 +493,7 @@ legend.toggle-next
   - if can? :export, Task
     .button-box
       .button-description
-        = "Download your Task as a zip file or export them directly to an autograder."
+        = t('tasks.download')
       .wrapper
         = link_to t('shared.download_zip'), download_task_path(@task), class: 'btn btn-default', 'data-turbolinks'=> false
         /.dropdown.btn-group

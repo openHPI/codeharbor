@@ -23,10 +23,12 @@ describe ProformaService::ExportTask do
              uuid: SecureRandom.uuid,
              programming_language: build(:programming_language, :ruby),
              files: files,
-             tests: tests)
+             tests: tests,
+             model_solutions: model_solutions)
     end
     let(:files) { [] }
     let(:tests) { [] }
+    let(:model_solutions) { [] }
 
     let(:zip_files) do
       {}.tap do |hash|
@@ -37,8 +39,8 @@ describe ProformaService::ExportTask do
         end
       end
     end
-    let(:doc) { Nokogiri::XML(zip_files['task.xml'], &:noblanks) }
-    let(:xml) { doc.remove_namespaces! }
+    let(:xml_with_namespaces) { Nokogiri::XML(zip_files['task.xml'], &:noblanks) }
+    let(:xml) { Nokogiri::XML(zip_files['task.xml'], &:noblanks).remove_namespaces! }
 
     it_behaves_like 'zipped task node xml'
 
@@ -113,12 +115,14 @@ describe ProformaService::ExportTask do
       end
     end
 
-    xcontext 'when task has a file with role reference implementation' do
-      let(:files) { [file] }
-      let(:file) { build(:task_file, :exportable) }
+    context 'when task has a model-solution' do
+      let(:model_solutions) { [model_solution] }
+      let(:model_solution) { build(:model_solution, files: ms_files, xml_id: 'ms-1') }
+      let(:ms_files) { [ms_file] }
+      let(:ms_file) { build(:task_file, :exportable) }
 
       it 'adds id attribute to model-solution node' do
-        expect(xml.xpath('/task/model-solutions/model-solution').attribute('id').value).to eql "ms-#{file.id}"
+        expect(xml.xpath('/task/model-solutions/model-solution').attribute('id').value).to eql model_solution.xml_id.to_s
       end
 
       it 'adds correct refid attribute to fileref' do
@@ -128,35 +132,43 @@ describe ProformaService::ExportTask do
       end
 
       it 'adds description attribute to model-solution' do
-        expect(xml.xpath('/task/model-solutions/model-solution/description').text).to be_empty
+        expect(xml.xpath('/task/model-solutions/model-solution/description').text).to eql model_solution.description
       end
 
       it 'adds internal-description attribute to model-solution' do
-        expect(xml.xpath('/task/model-solutions/model-solution/internal-description').text).to be_empty
+        expect(xml.xpath('/task/model-solutions/model-solution/internal-description').text).to eql model_solution.internal_description
       end
 
-      it 'adds correct used-by-grader attribute to the referenced file node' do
-        expect(xml.xpath('/task/files/file').attribute('used-by-grader').value).to eql 'false'
+      it 'adds correct used-by-grader attribute to referenced file node' do
+        expect(xml.xpath('/task/files/file').attribute('used-by-grader').value).to eql ms_file.used_by_grader.to_s
       end
 
-      it 'adds correct usage-by-lms attribute to the referenced file node' do
-        expect(xml.xpath('/task/files/file').attribute('usage-by-lms').value).to eql 'display'
+      it 'adds correct usage-by-lms attribute to referenced file node' do
+        expect(xml.xpath('/task/files/file').attribute('usage-by-lms').value).to eql ms_file.usage_by_lms
       end
 
-      it 'adds correct visible attribute to the referenced file node' do
-        expect(xml.xpath('/task/files/file').attribute('visible').value).to eql 'yes'
+      it 'adds correct visible attribute to referenced file node' do
+        expect(xml.xpath('/task/files/file').attribute('visible').value).to eql ms_file.visible
       end
 
-      it 'adds correct role to internal-description of the  referenced file node' do
-        expect(xml.xpath('/task/files/file/internal-description').text).to eql file.role
+      it 'adds correct role to internal-description of referenced file node' do
+        expect(xml.xpath('/task/files/file/internal-description').text).to eql ms_file.internal_description
       end
-    end
 
-    xcontext 'when task has multiple files with role reference implementation' do
-      let(:files) { build_list(:codeharbor_solution_file, 2) }
+      context 'when task has model-solution with multiple files' do
+        let(:ms_files) { [ms_file, build(:task_file, :exportable)] }
 
-      it 'adds test node to tests node' do
-        expect(xml.xpath('/task/model-solutions/model-solution')).to have(2).items
+        it 'adds two filerefs to model-solution node' do
+          expect(xml.xpath('/task/model-solutions/model-solution/filerefs/fileref')).to have(2).items
+        end
+      end
+
+      context 'when task has multiple model-solutions' do
+        let(:model_solutions) { [model_solution, build(:model_solution, files: [build(:task_file, :exportable)], xml_id: 'ms-2')] }
+
+        it 'adds two model-solution to task' do
+          expect(xml.xpath('/task/model-solutions/model-solution')).to have(2).items
+        end
       end
     end
 
@@ -187,6 +199,12 @@ describe ProformaService::ExportTask do
 
         it 'adds test node to tests node' do
           expect(xml.xpath('/task/tests/test')).to have(1).item
+        end
+
+        it 'adds meta_data with correct namespace to test-configuration node' do
+          expect(xml_with_namespaces.xpath(
+            '/xmlns:task/xmlns:tests/xmlns:test/xmlns:test-configuration/xmlns:test-meta-data/openHPI:entry-point'
+          ).text).to eql 'name'
         end
 
         it 'adds correct refid attribute to fileref' do

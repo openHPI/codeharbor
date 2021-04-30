@@ -9,7 +9,8 @@ module ProformaService
 
     def execute
       @proforma_task = ConvertTaskToProformaTask.call(task: @task, options: @options)
-      exporter = Proforma::Exporter.new(@proforma_task)
+      namespaces = [{prefix: 'openHPI', uri: 'open.hpi.de'}]
+      exporter = Proforma::Exporter.new(task: @proforma_task, custom_namespaces: namespaces)
       exporter.perform
     end
   end

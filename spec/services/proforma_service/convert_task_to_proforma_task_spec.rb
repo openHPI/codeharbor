@@ -180,9 +180,7 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
           id: test.xml_id,
           title: test.title,
           files: have(1).item,
-          configuration: {
-            'entry-point' => test_file.full_file_name
-          }
+          meta_data: [{namespace: 'openHPI', key: 'entry-point', value: test_file.full_file_name}]
         )
       end
 
@@ -196,6 +194,19 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
           binary: false,
           internal_description: test_file.internal_description
         )
+      end
+
+      context 'when test has multiple files' do
+        let(:test_files) { [test_file, build(:task_file, :exportable, name: 'file2')] }
+
+        it 'creates a test with correct attributes and one file' do
+          expect(proforma_task.tests.first).to have_attributes(
+            id: test.xml_id,
+            title: test.title,
+            files: have(2).item,
+            meta_data: [{namespace: 'openHPI', key: 'entry-point', value: test_file.full_file_name}]
+          )
+        end
       end
     end
 
