@@ -78,5 +78,5 @@ Rails.application.configure do
     authentication: :plain
   }
 
-  Rails.application.routes.default_url_options[:host] = 'localhost:3000'
+  Rails.application.routes.default_url_options[:host] = 'localhost:7500'
 end

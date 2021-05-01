@@ -5,7 +5,7 @@ db:
 web:
     build: .
     ports:
-        - "3000:3000"
+        - "7500:7500"
     command:
         bash -c "rails s -b 0.0.0.0" #"rm /codeharbor/tmp/pids/server.pid && rails s -b 0.0.0.0"
     environment:
