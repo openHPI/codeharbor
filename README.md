@@ -22,7 +22,7 @@ rake db:migrate
 rails s
 ```
 
-Visit your browser at: `http://localhost:3000/`
+Visit your browser at: `http://localhost:7500/`
 
 ## windows development (vagrant)
 
@@ -63,8 +63,8 @@ Change to the directory of the repository.
      docker-compose build
      docker-compose run --rm web rake db:create db:migrate db:seed
      docker-compose up
-If running on Windows or Mac with Docker Toolbox, or on Docker for Mac browse the ip that was displayed by the env command and the port 3000.  
-Otherwise browse: `http://localhost:3000/`.
+If running on Windows or Mac with Docker Toolbox, or on Docker for Mac browse the ip that was displayed by the env command and the port 7500.  
+Otherwise browse: `http://localhost:7500/`.
 
 ## demo data
 

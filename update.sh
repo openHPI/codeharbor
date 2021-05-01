@@ -36,7 +36,7 @@ function start_new_container(){
           -e DATABASE_URL='postgres://postgres@db:5432/' \
           -e RAILS_SERVE_STATIC_FILES='true' \
           --name $NAME \
-          -p $PORT:3000 \
+          -p $PORT:7500 \
           --restart=unless-stopped openhpidev/codeharbor \
           bundle exec rails s
   # Stop old container once the new one is running
