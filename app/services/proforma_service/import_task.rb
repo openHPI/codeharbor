@@ -2,32 +2,31 @@
 
 module ProformaService
   class ImportTask < ServiceBase
-    def initialize(task:, user:)
-      @task = task
+    def initialize(proforma_task:, user:)
+      @proforma_task = proforma_task
       @user = user
     end
 
     def execute
-      exercise = ConvertTaskToExercise.call(task: @task, user: @user, exercise: base_exercise)
-      ActiveRecord::Base.transaction do
-        exercise.save_old_version if exercise.persisted?
-        exercise.save!
-      end
-
-      exercise
+      task = ConvertProformaTaskToTask.call(proforma_task: @proforma_task, user: @user, task: base_task)
+      # ActiveRecord::Base.transaction do
+      #   task.save_old_version if task.persisted?
+      task.save!
+      # end
+      task
     end
 
     private
 
-    def base_exercise
-      exercise = Exercise.unscoped.find_by(uuid: @task.uuid)
-      if exercise
-        return exercise if exercise.updatable_by?(@user)
+    def base_task
+      task = Task.find_by(uuid: @proforma_task.uuid)
+      if task
+        return task if task.can_access(@user)
 
-        return Exercise.new(uuid: SecureRandom.uuid)
+        return Task.new(uuid: SecureRandom.uuid)
       end
 
-      Exercise.new(uuid: @task.uuid || SecureRandom.uuid)
+      Task.new(uuid: @proforma_task.uuid || SecureRandom.uuid)
     end
   end
 end

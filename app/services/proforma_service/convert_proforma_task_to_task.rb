@@ -22,7 +22,7 @@ module ProformaService
         description: Kramdown::Document.new(@proforma_task.description || '', html_to_native: true).to_kramdown.strip,
         internal_description: @proforma_task.internal_description,
         programming_language: programming_language,
-        uuid: @proforma_task.uuid,
+        uuid: @task.uuid || @proforma_task.uuid,
         parent_uuid: @proforma_task.parent_uuid,
         language: @proforma_task.language,
 
