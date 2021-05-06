@@ -9,10 +9,7 @@ module ProformaService
 
     def execute
       task = ConvertProformaTaskToTask.call(proforma_task: @proforma_task, user: @user, task: base_task)
-      # ActiveRecord::Base.transaction do
-      #   task.save_old_version if task.persisted?
       task.save!
-      # end
       task
     end
 

@@ -14,6 +14,8 @@ FactoryBot.define do
 
     trait :exportable do
       internal_description { 'internal_description' }
+      content { 'content' }
+      path { '' }
       usage_by_lms { 'display' }
       used_by_grader { true }
       visible { 'yes' }
