@@ -39,7 +39,7 @@ RSpec::Matchers.define :be_an_equal_task_as do |task|
       attributes[:files] = object.files if defined? object.files
       # attributes[:descriptions] = object.descriptions if defined? object.descriptions
       attributes[:tests] = object.tests if defined? object.tests
-    end.except('id', 'created_at', 'updated_at', 'task_id', 'task_file_id', 'uuid')
+    end.except('id', 'created_at', 'updated_at', 'task_id', 'task_file_id', 'uuid', 'fileable_id')
     # 'attachment_updated_at','license_id', 'private', 'state_list', 'predecessor_id',, 'deleted'
   end
 end

@@ -26,17 +26,22 @@ describe ProformaService::Import do
     let(:zip_file) { Tempfile.new('proforma_test_zip_file', encoding: 'ascii-8bit') }
     let(:task) do
       create(:task,
-             # instruction: 'instruction',
+             title: 'title',
+             description: 'description',
+             internal_description: 'internal_description',
+             language: 'de',
              programming_language: programming_language,
              files: files,
              tests: tests,
+             model_solutions: model_solutions,
              uuid: uuid,
              user: user)
     end
 
     let(:uuid) {}
-    let(:programming_language) { build(:programming_language) }
+    let(:programming_language) { build(:programming_language, :ruby) }
     let(:files) { [] }
+    let(:model_solutions) { [] }
     let(:tests) { [] }
     let(:exporter) { ProformaService::ExportTask.call(task: task.reload).string }
 
@@ -96,18 +101,20 @@ describe ProformaService::Import do
       end
     end
 
-    # context 'when task has a file with role reference implementation' do
-    #   let(:files) { [file] }
-    #   let(:file) { build(:codeharbor_solution_file) }
-    #
-    #   it { is_expected.to be_an_equal_task_as task }
-    # end
+    context 'when task has a model_solution' do
+      let(:model_solutions) { [model_solution] }
+      let(:model_solution) { build(:model_solution, files: [build(:task_file, :exportable)]) }
 
-    # context 'when task has multiple files with role reference implementation' do
-    #   let(:files) { build_list(:codeharbor_solution_file, 2) }
-    #
-    #   it { is_expected.to be_an_equal_task_as task }
-    # end
+      it { is_expected.to be_an_equal_task_as task }
+    end
+
+    context 'when task has multiple files with role reference implementation' do
+      let(:model_solutions) { [model_solution, model_solution2] }
+      let(:model_solution) { build(:model_solution, files: [build(:task_file, :exportable)]) }
+      let(:model_solution2) { build(:model_solution, files: [build(:task_file, :exportable)]) }
+
+      it { is_expected.to be_an_equal_task_as task }
+    end
 
     context 'when task has a test' do
       let(:tests) { [test] }
@@ -135,16 +142,16 @@ describe ProformaService::Import do
       end
 
       it 'imports the tasks from zip containing multiple zips' do
-        expect(import_service).to all be_an(task)
+        expect(import_service).to all be_an(Task)
       end
 
       it 'imports the zip exactly how they were exported' do
         expect(import_service).to all be_an_equal_task_as(task).or be_an_equal_task_as(task2)
       end
 
-      xcontext 'when a task has files and tests' do
+      context 'when a task has files and tests' do
         let(:files) { [build(:task_file, :exportable), build(:task_file, :exportable)] }
-        let(:tests) { build_list(:codeharbor_test, 2) }
+        let(:tests) { build_list(:test, 2, test_type: 'test_type') }
 
         it 'imports the zip exactly how the were exported' do
           expect(import_service).to all be_an_equal_task_as(task).or be_an_equal_task_as(task2)
@@ -170,10 +177,6 @@ describe ProformaService::Import do
 
       it 'updates the old task' do
         expect(import_service.id).to be task.id
-      end
-
-      xit 'creates a predecessor task' do
-        expect { import_service }.to change { task.reload.predecessor }.from(nil).to(be_an task)
       end
 
       context 'when another user imports the task' do
