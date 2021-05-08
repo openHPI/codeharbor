@@ -69,7 +69,7 @@ module ProformaService
     end
 
     def test_meta_data(file)
-      [{namespace: 'openHPI', key: 'entry-point', value: file&.full_file_name}]
+      [{namespace: 'openHPI', key: 'entry-point', value: file.full_file_name}] unless file.nil?
     end
 
     def task_file(file)

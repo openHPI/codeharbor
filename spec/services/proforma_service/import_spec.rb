@@ -26,10 +26,7 @@ describe ProformaService::Import do
     let(:zip_file) { Tempfile.new('proforma_test_zip_file', encoding: 'ascii-8bit') }
     let(:task) do
       create(:task,
-             title: 'title',
-             description: 'description',
-             internal_description: 'internal_description',
-             language: 'de',
+             :with_content,
              programming_language: programming_language,
              files: files,
              tests: tests,
@@ -110,8 +107,8 @@ describe ProformaService::Import do
 
     context 'when task has multiple files with role reference implementation' do
       let(:model_solutions) { [model_solution, model_solution2] }
-      let(:model_solution) { build(:model_solution, files: [build(:task_file, :exportable)]) }
-      let(:model_solution2) { build(:model_solution, files: [build(:task_file, :exportable)]) }
+      let(:model_solution) { build(:model_solution, :with_content, files: [build(:task_file, :exportable)]) }
+      let(:model_solution2) { build(:model_solution, :with_content, files: [build(:task_file, :exportable)]) }
 
       it { is_expected.to be_an_equal_task_as task }
     end
@@ -134,7 +131,6 @@ describe ProformaService::Import do
 
       let(:task2) do
         create(:task,
-               # instruction: 'instruction2',
                programming_language: programming_language,
                files: [],
                tests: [],

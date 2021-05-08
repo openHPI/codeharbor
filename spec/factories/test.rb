@@ -7,6 +7,8 @@ FactoryBot.define do
 
     trait :with_content do
       test_type { 'test_type' }
+      description { 'description' }
+      internal_description { 'internal_description' }
     end
   end
 end

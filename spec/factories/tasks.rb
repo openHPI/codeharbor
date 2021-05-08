@@ -7,6 +7,11 @@ FactoryBot.define do
     user { build(:user) }
     uuid { SecureRandom.uuid }
 
+    trait :with_content do
+      internal_description { 'internal_description' }
+      language { 'de' }
+    end
+
     trait :empty do
       title {}
       description {}
