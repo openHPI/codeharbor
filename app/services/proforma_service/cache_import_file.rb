@@ -11,10 +11,10 @@ module ProformaService
       data = {}
       ActiveRecord::Base.transaction do
         import_file = ImportFileCache.create!(user: @user, zip_file: @zip_file)
-        ProformaService::ConvertZipToTasks.call(zip_file: @zip_file).each do |task|
-          exercise = Exercise.find_by(uuid: task[:uuid])
+        ProformaService::ConvertZipToProformaTasks.call(zip_file: @zip_file).each do |proforma_task|
+          task = Task.find_by(uuid: proforma_task[:uuid])
 
-          data[SecureRandom.uuid] = file_data_hash(exercise, import_file, task)
+          data[SecureRandom.uuid] = file_data_hash(task, import_file, proforma_task)
         end
         import_file.update!(data: data)
       end
@@ -23,12 +23,12 @@ module ProformaService
 
     private
 
-    def file_data_hash(exercise, import_file, task)
-      {path: task[:path].tr(' ', '_'),
-       exists: exercise.present?,
-       updatable: exercise&.updatable_by?(@user) || false,
+    def file_data_hash(task, import_file, proforma_task)
+      {path: proforma_task[:path].tr(' ', '_'),
+       exists: task.present?,
+       updatable: task&.can_access(@user) || false,
        import_id: import_file.id,
-       exercise_uuid: task[:uuid]}
+       task_uuid: proforma_task[:uuid]}
     end
   end
 end

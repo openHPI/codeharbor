@@ -60,6 +60,35 @@ class TasksController < ApplicationController
     send_data(zip_file.string, type: 'application/zip', filename: "task_#{@task.id}.zip", disposition: 'attachment')
   end
 
+  def import_start
+    zip_file = params[:zip_file]
+    raise t('controllers.task.import.choose_file_error') unless zip_file.presence
+
+    @data = ProformaService::CacheImportFile.call(user: current_user, zip_file: zip_file)
+
+    respond_to do |format|
+      format.js { render layout: false }
+    end
+  end
+
+  def import_confirm
+    task = ProformaService::TaskFromCachedFile.call(import_confirm_params.to_hash.symbolize_keys)
+
+    task = ProformaService::ImportTask.call(proforma_task: task, user: current_user)
+    task_title = task.title
+    render json: {
+      status: 'success',
+      message: t('controllers.task.import.successfully_imported', title: task_title),
+      actions: render_to_string(partial: 'import_actions', locals: {task: task, imported: true})
+    }
+  rescue Proforma::ProformaError, ActiveRecord::RecordInvalid => e
+    render json: {
+      status: 'failure',
+      message: t('controllers.task.import.import_failed', title: task_title, error: e.message),
+      actions: ''
+    }
+  end
+
   private
 
   def set_search
@@ -102,5 +131,9 @@ class TasksController < ApplicationController
     params.require(:task).permit(:title, :description, :internal_description, :parent_uuid, :language,
                                  :programming_language_id, files_attributes: file_params, tests_attributes: test_params,
                                                            model_solutions_attributes: model_solution_params)
+  end
+
+  def import_confirm_params
+    params.permit(:import_id, :subfile_id, :import_type)
   end
 end

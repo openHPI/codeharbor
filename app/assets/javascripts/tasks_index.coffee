@@ -6,7 +6,6 @@ ready =->
 
 $(document).on('turbolinks:load', ready)
 
-
 initializeDynamicHideShow =->
   $('body').on 'click', '.more-btn-wrapper', (event) ->
     event.preventDefault()

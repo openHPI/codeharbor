@@ -1,0 +1,12 @@
+.bootstrap-modal.modal.fade style='display:none;' id="import-export-dialog"
+  .modal-dialog
+    .modal-content
+      .modal-header
+        = button_tag class: 'close', data: {dismiss: 'modal'} do
+          = 'x'
+        h4.modal-title
+          = t('controllers.task.export.label')
+      .modal-body id='import-export-modal-body'
+      .modal-footer
+        = button_tag class: 'btn btn-important', data: {dismiss: 'modal'} do
+          = t('controllers.task.import_export.buttons.close')

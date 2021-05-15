@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ProformaService::ConvertZipToTasks do
+RSpec.describe ProformaService::ConvertZipToProformaTasks do
   describe '.new' do
     subject(:convert_zip_to_tasks) { described_class.new(zip_file: zip_file) }
 

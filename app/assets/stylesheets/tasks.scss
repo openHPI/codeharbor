@@ -18,3 +18,23 @@
   font-size: 12pt;
   margin-left: 10px;
 }
+
+.import-export-task-actions {
+  max-width: 120px;
+  min-width: 120px;
+}
+
+.import-export-task{
+  display: flex;
+}
+
+.import-export-message {
+  flex-grow: 1;
+  padding-right: 5px;
+}
+
+.import-export-task + .import-export-task {
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px solid lightgrey;
+}

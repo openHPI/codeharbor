@@ -78,7 +78,7 @@ xdescribe ProformaService::CacheImportFile do
 
     context 'when a file with 100 tasks is uploaded' do
       before do
-        allow(ProformaService::ConvertZipToTasks).to receive(:call)
+        allow(ProformaService::ConvertZipToProformaTasks).to receive(:call)
           .and_return(Array.new(100) { |i| {path: "zip#{i}.zip", uuid: SecureRandom.uuid} })
       end
 
