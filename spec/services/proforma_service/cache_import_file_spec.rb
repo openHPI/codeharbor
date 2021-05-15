@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-xdescribe ProformaService::CacheImportFile do
+describe ProformaService::CacheImportFile do
   describe '.new' do
     subject(:cache_import_file) { described_class.new(user: user, zip_file: zip_file) }
 
@@ -33,30 +33,30 @@ xdescribe ProformaService::CacheImportFile do
     end
 
     it 'returns a hash with the correct values' do
-      expect(cache_import_file.values).to include(include(exercise_uuid: 'e9c562d8-43fc-4714-9848-6a21e38ef468', exists: false,
+      expect(cache_import_file.values).to include(include(task_uuid: 'e9c562d8-43fc-4714-9848-6a21e38ef468', exists: false,
                                                           import_id: be_an(Integer), path: 'testfile.zip', updatable: false))
     end
 
     it 'saves the data-hash in ImportFileCache' do
       cache_import_file
-      expect(ImportFileCache.last.data.values).to include(include('exercise_uuid' => 'e9c562d8-43fc-4714-9848-6a21e38ef468',
+      expect(ImportFileCache.last.data.values).to include(include('task_uuid' => 'e9c562d8-43fc-4714-9848-6a21e38ef468',
                                                                   'exists' => false, 'import_id' => ImportFileCache.last.id,
                                                                   'path' => 'testfile.zip', 'updatable' => false))
     end
 
-    context 'when an exercise with the uuid exists' do
-      before { create(:exercise, uuid: 'e9c562d8-43fc-4714-9848-6a21e38ef468', user: exercise_user) }
+    context 'when an task with the uuid exists' do
+      before { create(:task, uuid: 'e9c562d8-43fc-4714-9848-6a21e38ef468', user: task_user) }
 
-      context 'when the user owns the exercise' do
-        let(:exercise_user) { user }
+      context 'when the user owns the task' do
+        let(:task_user) { user }
 
         it 'returns a hash with the correct values' do
           expect(cache_import_file.values).to include(include(exists: true, updatable: true))
         end
       end
 
-      context 'when the user does not own the exercise' do
-        let(:exercise_user) { build(:user) }
+      context 'when the user does not own the task' do
+        let(:task_user) { build(:user) }
 
         it 'returns a hash with the correct values' do
           expect(cache_import_file.values).to include(include(exists: true, updatable: false))
