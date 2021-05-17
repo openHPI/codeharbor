@@ -201,6 +201,7 @@ en:
         dialog:
           task_with_uuid: 'Task-UUID: %{task_uuid}'
           path: 'Path: %{path}'
+          import_title: Import Tasks
       import:
         successfully_imported: Task (%{title}) successfully imported.
         choose_file_error: "You need to choose a file."
@@ -212,9 +213,9 @@ en:
           import: Import
           import_copy: Import as copy
           overwrite: Overwrite
-      export:
+#      export:
 #        error: An error occurred.
-        label: Export exercise
+#        label: Export exercise
 #        successfully_exported: Exercise (%{title}) successfully exported.
 #        export_failed: 'Export of exercise (%{title}) failed. <br> Error: %{error}'
 #        buttons:

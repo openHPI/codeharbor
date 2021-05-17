@@ -38,3 +38,26 @@
   padding-top: 5px;
   border-top: 1px solid lightgrey;
 }
+
+#import-task-button {
+  background-color: #d3d3d3;
+}
+
+#import-task-button:hover {
+  background-color: #d0d0d0;
+}
+
+.inputfile {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: - 1;
+}
+
+#xml-import {
+  min-width: 180px;
+  width: auto;
+  padding: 5px 10px 5px 10px;
+}
