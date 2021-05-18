@@ -46,8 +46,6 @@ gem 'will_paginate'
 # Continuation of CanCan (authoriation Gem for RoR)
 gem 'cancancan'
 
-# See https://github.com/rails/execjs#readme for more supported runtimes
-gem 'therubyracer', platforms: :ruby
 # Use Bootstrap (app/assets/stylesheets)
 gem 'devise-bootstrap-views', '~> 1.0'
 gem 'twitter-bootstrap-rails'
