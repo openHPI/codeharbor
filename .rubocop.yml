@@ -65,6 +65,10 @@ Rails/UniqueValidationWithoutIndex:
   Enabled:
     false
 
+RSpec/DescribeClass:
+  Exclude:
+    - spec/custom_matchers/*
+
 RSpec/ExampleLength:
   Exclude:
     - spec/services/proforma_service/convert_proforma_task_to_task_spec.rb

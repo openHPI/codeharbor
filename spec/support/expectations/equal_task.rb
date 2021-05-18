@@ -27,19 +27,28 @@ RSpec::Matchers.define :be_an_equal_task_as do |task|
     true
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity
   def array_equal?(object, other)
     return true if object == other # for []
     return false if object.length != other.length
 
-    object.to_a.product(other.to_a).map { |k, v| equal?(k, v) }.any?
+    object.map do |element|
+      other.map do |other_element|
+        equal?(element, other_element)
+      end.any?
+    end.all? && other.map do |element|
+      object.map do |other_element|
+        equal?(element, other_element)
+      end.any?
+    end.all?
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   def attributes_and_associations(object)
     object.attributes.dup.tap do |attributes|
       attributes[:files] = object.files if defined? object.files
-      # attributes[:descriptions] = object.descriptions if defined? object.descriptions
       attributes[:tests] = object.tests if defined? object.tests
+      attributes[:model_solutions] = object.model_solutions if defined? object.model_solutions
     end.except('id', 'created_at', 'updated_at', 'task_id', 'task_file_id', 'uuid', 'fileable_id')
-    # 'attachment_updated_at','license_id', 'private', 'state_list', 'predecessor_id',, 'deleted'
   end
 end

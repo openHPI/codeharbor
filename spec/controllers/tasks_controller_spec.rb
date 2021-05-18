@@ -229,7 +229,7 @@ RSpec.describe TasksController, type: :controller do
     end
   end
 
-  describe 'POST #download' do
+  describe 'GET #download' do
     let(:task) { create(:task, valid_attributes) }
 
     let(:get_request) { get :download, params: {id: task.id}, session: valid_session }
@@ -258,7 +258,7 @@ RSpec.describe TasksController, type: :controller do
     end
   end
 
-  describe 'GET #import_start' do
+  describe 'POST #import_start' do
     render_views
 
     let(:post_request) { post :import_start, params: {zip_file: zip_file}, session: valid_session, format: :js, xhr: true }
