@@ -6,7 +6,7 @@ RSpec.describe ProformaService::ConvertZipToProformaTasks do
   describe '.new' do
     subject(:convert_zip_to_tasks) { described_class.new(zip_file: zip_file) }
 
-    let(:zip_file) { fixture_file_upload('files/proforma_import/testfile.zip', 'application/zip') }
+    let(:zip_file) { fixture_file_upload('proforma_import/testfile.zip', 'application/zip') }
 
     it 'assigns zip_file' do
       expect(convert_zip_to_tasks.instance_variable_get(:@zip_file)).to be zip_file
@@ -51,7 +51,7 @@ RSpec.describe ProformaService::ConvertZipToProformaTasks do
   describe '#execute' do
     subject(:convert_zip_to_tasks) { described_class.call(zip_file: zip_file) }
 
-    let(:zip_file) { fixture_file_upload('files/proforma_import/testfile.zip', 'application/zip') }
+    let(:zip_file) { fixture_file_upload('proforma_import/testfile.zip', 'application/zip') }
     let(:importer) { instance_double('Proforma::Importer', perform: importer_result) }
     let(:importer_result) { {task: task, custom_namespaces: []} }
     let(:task) { instance_double('Proforma::Task', uuid: 'uuid') }
@@ -63,7 +63,7 @@ RSpec.describe ProformaService::ConvertZipToProformaTasks do
     end
 
     context 'when zip_file contains multiple zipped tasks' do
-      let(:zip_file) { fixture_file_upload('files/proforma_import/testfile_multi.zip', 'application/zip') }
+      let(:zip_file) { fixture_file_upload('proforma_import/testfile_multi.zip', 'application/zip') }
 
       it 'returns an array with a hash for the task' do
         expect(convert_zip_to_tasks).to eql [

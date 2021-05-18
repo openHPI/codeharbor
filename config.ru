@@ -2,8 +2,7 @@
 
 # This file is used by Rack-based servers to start the application.
 
-require ::File.expand_path('config/environment', __dir__)
+require_relative 'config/environment'
 
-map Codeharbor::Application.config.relative_url_root || '/' do
-  run Rails.application
-end
+run Rails.application
+Rails.application.load_server
