@@ -295,11 +295,21 @@ RSpec.describe TasksController, type: :controller do
       end
     end
 
-    context 'when no file is submitted' do
+    context 'when zip_file is submitted' do
       let(:zip_file) {}
 
-      it 'raises error' do
-        expect { post_request }.to raise_error('You need to choose a file.')
+      it 'renders correct json' do
+        post_request
+        expect(JSON.parse(response.body, symbolize_names: true)).to eql({status: 'failure', message: 'You need to choose a file.'})
+      end
+    end
+
+    context "when zip_file is 'undefined'" do
+      let(:zip_file) { 'undefined' }
+
+      it 'renders correct json' do
+        post_request
+        expect(JSON.parse(response.body, symbolize_names: true)).to eql({status: 'failure', message: 'You need to choose a file.'})
       end
     end
   end

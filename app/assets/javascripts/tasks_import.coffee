@@ -36,6 +36,9 @@ importStart = () ->
     data: formData,
     processData: false,
     contentType: false,
+    success: (response) ->
+      if response.status == 'failure'
+        alert(response.message)
     error: (a, b, c) ->
       alert('error: ' + c)
   })

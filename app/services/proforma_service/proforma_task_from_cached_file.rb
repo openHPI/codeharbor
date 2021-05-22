@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ProformaService
-  class TaskFromCachedFile < ServiceBase
+  class ProformaTaskFromCachedFile < ServiceBase
     def initialize(import_id:, subfile_id:, import_type:)
       @import_id = import_id
       @subfile_id = subfile_id

@@ -54,6 +54,11 @@ addAnimatedSliding =->
   , 100
 
 initializeFilter =->
+  $('#search_title_or_description_cont').keypress (event) ->
+    if event.keyCode == 13 || event.which == 13
+      event.preventDefault()
+      $("#task_search").submit()
+
   $("#reset-btn").click ->
     $('.ransack-filter').val('').trigger('change')
     $("#task_search").submit()

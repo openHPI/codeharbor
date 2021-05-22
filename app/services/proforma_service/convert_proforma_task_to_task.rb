@@ -28,7 +28,7 @@ module ProformaService
 
         tests: tests,
         model_solutions: model_solutions,
-        files: files.values
+        files: files.values # this line has to be last, because tests and model_solutions have to remove their respective files first
       )
     end
 

@@ -62,7 +62,9 @@ class TasksController < ApplicationController
 
   def import_start
     zip_file = params[:zip_file]
-    raise t('controllers.task.import.choose_file_error') unless zip_file.presence
+    unless zip_file.is_a?(ActionDispatch::Http::UploadedFile)
+      return render json: {status: 'failure', message: t('controllers.task.import.choose_file_error')}
+    end
 
     @data = ProformaService::CacheImportFile.call(user: current_user, zip_file: zip_file)
 
@@ -72,14 +74,14 @@ class TasksController < ApplicationController
   end
 
   def import_confirm
-    task = ProformaService::TaskFromCachedFile.call(import_confirm_params.to_hash.symbolize_keys)
+    proforma_task = ProformaService::ProformaTaskFromCachedFile.call(import_confirm_params.to_hash.symbolize_keys)
 
-    task = ProformaService::ImportTask.call(proforma_task: task, user: current_user)
-    task_title = task.title
+    proforma_task = ProformaService::ImportTask.call(proforma_task: proforma_task, user: current_user)
+    task_title = proforma_task.title
     render json: {
       status: 'success',
       message: t('controllers.task.import.successfully_imported', title: task_title),
-      actions: render_to_string(partial: 'import_actions', locals: {task: task, imported: true})
+      actions: render_to_string(partial: 'import_actions', locals: {task: proforma_task, imported: true})
     }
   rescue Proforma::ProformaError, ActiveRecord::RecordInvalid => e
     render json: {
