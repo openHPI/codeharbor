@@ -2,12 +2,12 @@
 
 require 'rspec/expectations'
 
-RSpec::Matchers.define :be_an_equal_task_as do |task|
-  match do |actual|
-    equal?(actual, task)
+RSpec::Matchers.define :be_an_equal_task_as do |task2|
+  match do |task1|
+    equal?(task1, task2)
   end
   failure_message do |actual|
-    "#{actual.inspect} is not equal to \n#{task.inspect}. \nLast checked attribute: #{@last_checked}"
+    "#{actual.inspect} is not equal to \n#{task2.inspect}. \nLast checked attribute: #{@last_checked}"
   end
 
   def equal?(object, other)
@@ -33,13 +33,9 @@ RSpec::Matchers.define :be_an_equal_task_as do |task|
     return false if object.length != other.length
 
     object.map do |element|
-      other.map do |other_element|
-        equal?(element, other_element)
-      end.any?
+      other.map { |other_element| equal?(element, other_element) }.any?
     end.all? && other.map do |element|
-      object.map do |other_element|
-        equal?(element, other_element)
-      end.any?
+      object.map { |other_element| equal?(element, other_element) }.any?
     end.all?
   end
   # rubocop:enable Metrics/CyclomaticComplexity
