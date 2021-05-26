@@ -18,3 +18,46 @@
   font-size: 12pt;
   margin-left: 10px;
 }
+
+.import-export-task-actions {
+  max-width: 120px;
+  min-width: 120px;
+}
+
+.import-export-task{
+  display: flex;
+}
+
+.import-export-message {
+  flex-grow: 1;
+  padding-right: 5px;
+}
+
+.import-export-task + .import-export-task {
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px solid lightgrey;
+}
+
+#import-task-button {
+  background-color: #d3d3d3;
+}
+
+#import-task-button:hover {
+  background-color: #d0d0d0;
+}
+
+.inputfile {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: - 1;
+}
+
+#xml-import {
+  min-width: 180px;
+  width: auto;
+  padding: 5px 10px 5px 10px;
+}

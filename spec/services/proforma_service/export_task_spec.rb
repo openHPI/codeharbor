@@ -117,7 +117,7 @@ describe ProformaService::ExportTask do
 
     context 'when task has a model-solution' do
       let(:model_solutions) { [model_solution] }
-      let(:model_solution) { build(:model_solution, files: ms_files, xml_id: 'ms-1') }
+      let(:model_solution) { build(:model_solution, :with_content, files: ms_files, xml_id: 'ms-1') }
       let(:ms_files) { [ms_file] }
       let(:ms_file) { build(:task_file, :exportable) }
 

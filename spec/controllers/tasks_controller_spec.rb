@@ -229,7 +229,7 @@ RSpec.describe TasksController, type: :controller do
     end
   end
 
-  describe '#download' do
+  describe 'GET #download' do
     let(:task) { create(:task, valid_attributes) }
 
     let(:get_request) { get :download, params: {id: task.id}, session: valid_session }
@@ -255,6 +255,93 @@ RSpec.describe TasksController, type: :controller do
     it 'sets the correct Content-Disposition header' do
       get_request
       expect(response.header['Content-Disposition']).to include "attachment; filename=\"task_#{task.id}.zip\""
+    end
+  end
+
+  describe 'POST #import_start' do
+    render_views
+
+    let(:post_request) { post :import_start, params: {zip_file: zip_file}, session: valid_session, format: :js, xhr: true }
+    let(:zip_file) { fixture_file_upload('files/proforma_import/testfile.zip', 'application/zip') }
+
+    before { allow(ProformaService::CacheImportFile).to receive(:call).and_call_original }
+
+    it 'renders correct views' do
+      post_request
+      expect(response).to render_template('import_start', 'import_dialog_content')
+    end
+
+    it 'creates an ImportFileCache' do
+      expect { post_request }.to change(ImportFileCache, :count).by(1)
+    end
+
+    it 'calls service' do
+      post_request
+      expect(ProformaService::CacheImportFile).to have_received(:call).with(user: user,
+                                                                            zip_file: be_a(ActionDispatch::Http::UploadedFile))
+    end
+
+    it 'renders import view for one task' do
+      post_request
+      expect(response.body.scan('data-import-id').count).to be 1
+    end
+
+    context 'when file contains three tasks' do
+      let(:zip_file) { fixture_file_upload('files/proforma_import/testfile_multi.zip', 'application/zip') }
+
+      it 'renders import view for three tasks' do
+        post_request
+        expect(response.body.scan('data-import-id').count).to be 3
+      end
+    end
+
+    context 'when zip_file is submitted' do
+      let(:zip_file) {}
+
+      it 'renders correct json' do
+        post_request
+        expect(JSON.parse(response.body, symbolize_names: true)).to eql({status: 'failure', message: 'You need to choose a file.'})
+      end
+    end
+
+    context "when zip_file is 'undefined'" do
+      let(:zip_file) { 'undefined' }
+
+      it 'renders correct json' do
+        post_request
+        expect(JSON.parse(response.body, symbolize_names: true)).to eql({status: 'failure', message: 'You need to choose a file.'})
+      end
+    end
+  end
+
+  describe 'POST #import_confirm' do
+    render_views
+
+    let(:zip_file) { fixture_file_upload('files/proforma_import/testfile_multi.zip', 'application/zip') }
+    let(:data) { ProformaService::CacheImportFile.call(user: user, zip_file: zip_file) }
+    let(:import_data) { data.first }
+    let(:post_request) do
+      post :import_confirm,
+           params: {import_id: import_data[1][:import_id], subfile_id: import_data[0], import_type: 'export'},
+           session: valid_session, xhr: true
+    end
+
+    it 'creates the task' do
+      expect { post_request }.to change(Task, :count).by(1)
+    end
+
+    it 'renders correct json' do
+      post_request
+      expect(response.body).to include('successfully imported').and(include('Show task').and(include('Hide')))
+    end
+
+    context 'when import raises a validation error' do
+      before { allow(ProformaService::ImportTask).to receive(:call).and_raise(ActiveRecord::RecordInvalid) }
+
+      it 'renders correct json' do
+        post_request
+        expect(response.body).to include('failed').and(include('Record invalid').and(include('"actions":""')))
+      end
     end
   end
 end

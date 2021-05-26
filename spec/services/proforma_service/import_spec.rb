@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-xdescribe ProformaService::Import do
+describe ProformaService::Import do
   describe '.new' do
     subject(:import_service) { described_class.new(zip: zip, user: user) }
 
@@ -24,30 +24,32 @@ xdescribe ProformaService::Import do
     let(:user) { build(:user) }
     let(:import_user) { user }
     let(:zip_file) { Tempfile.new('proforma_test_zip_file', encoding: 'ascii-8bit') }
-    let(:exercise) do
-      create(:exercise,
-             instruction: 'instruction',
-             execution_environment: execution_environment,
-             exercise_files: files,
+    let(:task) do
+      create(:task,
+             :with_content,
+             programming_language: programming_language,
+             files: files,
              tests: tests,
+             model_solutions: model_solutions,
              uuid: uuid,
              user: user)
     end
 
     let(:uuid) {}
-    let(:execution_environment) { build(:java_8_execution_environment) }
+    let(:programming_language) { build(:programming_language, :ruby) }
     let(:files) { [] }
+    let(:model_solutions) { [] }
     let(:tests) { [] }
-    let(:exporter) { ProformaService::ExportTask.call(exercise: exercise.reload).string }
+    let(:exporter) { ProformaService::ExportTask.call(task: task.reload).string }
 
     before do
       zip_file.write(exporter)
       zip_file.rewind
     end
 
-    it { is_expected.to be_an_equal_exercise_as exercise }
+    it { is_expected.to be_an_equal_task_as task }
 
-    it 'sets the correct user as owner of the exercise' do
+    it 'sets the correct user as owner of the task' do
       expect(import_service.user).to be user
     end
 
@@ -55,12 +57,12 @@ xdescribe ProformaService::Import do
       expect(import_service.uuid).not_to be_blank
     end
 
-    context 'when no exercise exists' do
-      before { exercise.destroy }
+    context 'when no task exists' do
+      before { task.destroy }
 
       it { is_expected.to be_valid }
 
-      it 'sets the correct user as owner of the exercise' do
+      it 'sets the correct user as owner of the task' do
         expect(import_service.user).to be user
       end
 
@@ -77,84 +79,78 @@ xdescribe ProformaService::Import do
       end
     end
 
-    context 'when exercise has a mainfile' do
+    context 'when task has a file' do
       let(:files) { [file] }
-      let(:file) { build(:codeharbor_main_file) }
+      let(:file) { build(:task_file, :exportable) }
 
-      it { is_expected.to be_an_equal_exercise_as exercise }
+      it { is_expected.to be_an_equal_task_as task }
 
       context 'when the mainfile is very large' do
-        let(:file) { build(:codeharbor_main_file, content: 'test' * 10**5) }
+        let(:file) { build(:task_file, :exportable, content: 'test' * 10**5) }
 
-        it { is_expected.to be_an_equal_exercise_as exercise }
+        it { is_expected.to be_an_equal_task_as task }
       end
-    end
-
-    context 'when exercise has a regular file' do
-      let(:files) { [file] }
-      let(:file) { build(:codeharbor_regular_file) }
-
-      it { is_expected.to be_an_equal_exercise_as exercise }
 
       context 'when file has an attachment' do
-        let(:file) { build(:codeharbor_regular_file, :with_attachment) }
+        let(:file) { build(:task_file, :exportable, :with_attachment, mime_type: 'image/bmp') }
 
-        it { is_expected.to be_an_equal_exercise_as exercise }
+        it { is_expected.to be_an_equal_task_as task }
       end
     end
 
-    context 'when exercise has a file with role reference implementation' do
-      let(:files) { [file] }
-      let(:file) { build(:codeharbor_solution_file) }
+    context 'when task has a model_solution' do
+      let(:model_solutions) { [model_solution] }
+      let(:model_solution) { build(:model_solution, files: [build(:task_file, :exportable)]) }
 
-      it { is_expected.to be_an_equal_exercise_as exercise }
+      it { is_expected.to be_an_equal_task_as task }
     end
 
-    context 'when exercise has multiple files with role reference implementation' do
-      let(:files) { build_list(:codeharbor_solution_file, 2) }
+    context 'when task has multiple files with role reference implementation' do
+      let(:model_solutions) { [model_solution, model_solution2] }
+      let(:model_solution) { build(:model_solution, :with_content, files: [build(:task_file, :exportable)]) }
+      let(:model_solution2) { build(:model_solution, :with_content, files: [build(:task_file, :exportable)]) }
 
-      it { is_expected.to be_an_equal_exercise_as exercise }
+      it { is_expected.to be_an_equal_task_as task }
     end
 
-    context 'when exercise has a test' do
+    context 'when task has a test' do
       let(:tests) { [test] }
-      let(:test) { build(:codeharbor_test) }
+      let(:test) { build(:test, :with_content) }
 
-      it { is_expected.to be_an_equal_exercise_as exercise }
+      it { is_expected.to be_an_equal_task_as task }
     end
 
-    context 'when exercise has multiple tests' do
-      let(:tests) { build_list(:codeharbor_test, 2) }
+    context 'when task has multiple tests' do
+      let(:tests) { build_list(:test, 2, :with_content) }
 
-      it { is_expected.to be_an_equal_exercise_as exercise }
+      it { is_expected.to be_an_equal_task_as task }
     end
 
     context 'when zip contains multiple tasks' do
-      let(:exporter) { ProformaService::ExportTasks.call(exercises: [exercise, exercise2]).string }
+      let(:exporter) { ProformaService::ExportTasks.call(tasks: [task, task2]).string }
 
-      let(:exercise2) do
-        create(:exercise,
-               instruction: 'instruction2',
-               execution_environment: execution_environment,
-               exercise_files: [],
+      let(:task2) do
+        create(:task,
+               programming_language: programming_language,
+               files: [],
                tests: [],
                user: user)
       end
 
-      it 'imports the exercises from zip containing multiple zips' do
-        expect(import_service).to all be_an(Exercise)
+      it 'imports the tasks from zip containing multiple zips' do
+        expect(import_service).to all be_an(Task)
       end
 
       it 'imports the zip exactly how they were exported' do
-        expect(import_service).to all be_an_equal_exercise_as(exercise).or be_an_equal_exercise_as(exercise2)
+        expect(import_service).to all be_an_equal_task_as(task).or be_an_equal_task_as(task2)
       end
 
-      context 'when a exercise has files and tests' do
-        let(:files) { [build(:codeharbor_main_file), build(:codeharbor_regular_file)] }
-        let(:tests) { build_list(:codeharbor_test, 2) }
+      context 'when a task has files and tests' do
+        let(:files) { [build(:task_file, :exportable), build(:task_file, :exportable)] }
+        let(:tests) { build_list(:test, 2, test_type: 'test_type') }
 
         it 'imports the zip exactly how the were exported' do
-          expect(import_service).to all be_an_equal_exercise_as(exercise).or be_an_equal_exercise_as(exercise2)
+          expect(import_service).to all be_an_equal_task_as(task).or be_an_equal_task_as(task2)
         end
       end
     end
@@ -164,30 +160,26 @@ xdescribe ProformaService::Import do
       let(:new_uuid) { SecureRandom.uuid }
 
       before do
-        exercise.update(uuid: new_uuid)
+        task.update(uuid: new_uuid)
       end
 
-      it 'creates a new Exercise' do
-        expect(import_service.id).not_to be exercise.id
+      it 'creates a new task' do
+        expect(import_service.id).not_to be task.id
       end
     end
 
     context 'when task in zip has the same uuid and nothing has changed' do
       let(:uuid) { SecureRandom.uuid }
 
-      it 'updates the old Exercise' do
-        expect(import_service.id).to be exercise.id
+      it 'updates the old task' do
+        expect(import_service.id).to be task.id
       end
 
-      it 'creates a predecessor Exercise' do
-        expect { import_service }.to change { exercise.reload.predecessor }.from(nil).to(be_an Exercise)
-      end
-
-      context 'when another user imports the exercise' do
+      context 'when another user imports the task' do
         let(:import_user) { create(:user) }
 
-        it 'creates a new Exercise' do
-          expect(import_service.id).not_to be exercise.id
+        it 'creates a new task' do
+          expect(import_service.id).not_to be task.id
         end
       end
     end

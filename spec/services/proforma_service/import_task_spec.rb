@@ -2,94 +2,94 @@
 
 require 'rails_helper'
 
-xdescribe ProformaService::ImportTask do
+describe ProformaService::ImportTask do
   describe '.new' do
-    subject(:import_task) { described_class.new(task: task, user: user) }
+    subject(:import_proforma_task) { described_class.new(proforma_task: proforma_task, user: user) }
 
-    let(:task) { Proforma::Task.new }
+    let(:proforma_task) { Proforma::Task.new }
     let(:user) { build(:user) }
 
-    it 'assigns task' do
-      expect(import_task.instance_variable_get(:@task)).to be task
+    it 'assigns proforma_task' do
+      expect(import_proforma_task.instance_variable_get(:@proforma_task)).to be proforma_task
     end
 
     it 'assigns user' do
-      expect(import_task.instance_variable_get(:@user)).to be user
+      expect(import_proforma_task.instance_variable_get(:@user)).to be user
     end
   end
 
   describe '#execute' do
-    subject(:import_task) { described_class.call(task: task, user: user) }
+    subject(:import_proforma_task) { described_class.call(proforma_task: proforma_task, user: user) }
 
-    let(:task) { ProformaService::ConvertExerciseToTask.call(exercise: exercise) }
-    let(:exercise) { build(:exercise, title: 'task import title', user: exercise_user) }
-    let(:exercise_user) { user }
+    let(:proforma_task) { ProformaService::ConvertTaskToProformaTask.call(task: task) }
+    let(:task) { build(:task, title: 'proforma_task import title', user: task_user) }
+    let(:task_user) { user }
     let(:user) { create(:user) }
 
-    it 'creates an exercise in db' do
-      expect { import_task }.to change(Exercise, :count).by(1)
+    it 'creates an task in db' do
+      expect { import_proforma_task }.to change(Task, :count).by(1)
     end
 
-    it 'creates an exercise based on task' do
-      expect(import_task).to have_attributes(title: 'task import title', uuid: be_a(String))
+    it 'creates an task based on proforma_task' do
+      expect(import_proforma_task).to have_attributes(title: 'proforma_task import title', uuid: be_a(String))
     end
 
-    context 'when task does not provide valid information' do
-      let(:task) { Proforma::Task.new }
+    context 'when proforma_task does not provide valid information' do
+      let(:proforma_task) { Proforma::Task.new }
 
-      it 'does not create an exercise in db' do
-        expect { import_task }.to raise_error(ActiveRecord::RecordInvalid).and(change(Exercise, :count).by(0))
+      it 'does not create an task in db' do
+        expect { import_proforma_task }.to raise_error(ActiveRecord::RecordInvalid).and(change(Task, :count).by(0))
       end
     end
 
-    context 'when exercise with same uuid exists in db' do
-      let!(:exercise) { create(:exercise, title: 'task import title', user: exercise_user).reload }
+    context 'when task with same uuid exists in db' do
+      let!(:task) { create(:task, title: 'proforma_task import title', user: task_user).reload }
 
-      it 'creates an exercise in db' do
-        expect { import_task }.to change(Exercise, :count).by(1)
+      it 'does not create a new task in db' do
+        expect { import_proforma_task }.not_to change(Task, :count)
       end
 
-      it 'changes existing exercise' do
-        expect(import_task).to eql exercise
+      it 'changes existing task' do
+        expect(import_proforma_task).to eql task
       end
 
-      it 'creates a predecessor for exercise' do
-        expect { import_task }.to change { exercise.reload.predecessor }.from(nil).to(be_an(Exercise))
+      xit 'creates a predecessor for task' do
+        expect { import_proforma_task }.to change { task.reload.predecessor }.from(nil).to(be_an(Task))
       end
 
-      context 'when user does not own exercise' do
-        let(:exercise_user) { create(:user) }
+      context 'when user does not own task' do
+        let(:task_user) { create(:user) }
 
-        it 'creates an exercise in db' do
-          expect { import_task }.to change(Exercise, :count).by(1)
+        it 'creates an task in db' do
+          expect { import_proforma_task }.to change(Task, :count).by(1)
         end
 
-        it 'creates a new exercise' do
-          expect(import_task).not_to eql exercise
+        it 'creates a new task' do
+          expect(import_proforma_task).not_to eql task
         end
 
-        context 'when user is an author of exercise' do
-          before { exercise.authors << user }
+        xcontext 'when user is an author of task' do
+          before { task.authors << user }
 
-          it 'creates a new exercise' do
-            expect(import_task).to eql exercise
+          it 'creates a new task' do
+            expect(import_proforma_task).to eql task
           end
 
-          it 'changes existing exercise' do
-            expect { import_task }.to change(Exercise, :count).by(1)
+          it 'changes existing task' do
+            expect { import_proforma_task }.to change(Task, :count).by(1)
           end
 
-          it 'creates a predecessor for exercise' do
-            expect { import_task }.to change { exercise.reload.predecessor }.from(nil).to(be_an(Exercise))
+          it 'creates a predecessor for task' do
+            expect { import_proforma_task }.to change { task.reload.predecessor }.from(nil).to(be_an(Task))
           end
         end
       end
 
-      context 'when task does not provide valid information' do
-        let(:task) { Proforma::Task.new(uuid: exercise.uuid) }
+      context 'when proforma_task does not provide valid information' do
+        let(:proforma_task) { Proforma::Task.new(uuid: task.uuid) }
 
-        it 'does not create an exercise in db' do
-          expect { import_task }.to raise_error(ActiveRecord::RecordInvalid).and(change(Exercise, :count).by(0))
+        it 'does not create an task in db' do
+          expect { import_proforma_task }.to raise_error(ActiveRecord::RecordInvalid).and(change(Task, :count).by(0))
         end
       end
     end

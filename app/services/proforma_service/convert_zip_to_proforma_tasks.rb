@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module ProformaService
-  class ConvertZipToTasks < ServiceBase
+  class ConvertZipToProformaTasks < ServiceBase
     def initialize(zip_file:, depth: 0, path: nil)
       @depth = depth + 1
       raise I18n.t('exercises.import_exercise.convert_zip.nested_too_deep') if depth > 5
@@ -40,7 +40,7 @@ module ProformaService
             store_zip_entry_in_tempfile entry
           end
           zip_files.map do |proforma_hash|
-            ConvertZipToTasks.call(zip_file: proforma_hash[:file], depth: @depth, path: "#{@path}/#{proforma_hash[:filename]}")
+            ConvertZipToProformaTasks.call(zip_file: proforma_hash[:file], depth: @depth, path: "#{@path}/#{proforma_hash[:filename]}")
           end
         ensure
           zip_files.each { |hash| hash[:file].unlink }

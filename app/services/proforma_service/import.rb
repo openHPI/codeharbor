@@ -9,9 +9,9 @@ module ProformaService
 
     def execute
       if single_task?
-        importer = Proforma::Importer.new(@zip)
-        @task = importer.perform
-        ProformaService::ImportTask.call(task: @task, user: @user)
+        importer = Proforma::Importer.new(zip: @zip)
+        import_result = importer.perform
+        ProformaService::ImportTask.call(proforma_task: import_result[:task], user: @user)
       else
         import_multi
       end

@@ -13,6 +13,12 @@ class TaskFile < ApplicationRecord
     path.present? ? File.join(path.to_s, name) : name
   end
 
+  def full_file_name=(full_file_name)
+    path = File.dirname(full_file_name)
+    self.path = path == '.' ? '' : path
+    self.name = File.basename(full_file_name)
+  end
+
   private
 
   def extract_text_data

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-xdescribe ProformaService::TaskFromCachedFile do
+describe ProformaService::ProformaTaskFromCachedFile do
   describe '.new' do
     subject(:task_from_cached_file) { described_class.new(import_id: import_id, subfile_id: subfile_id, import_type: import_type) }
 

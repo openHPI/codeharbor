@@ -242,30 +242,6 @@ $exercise-color: #006600;
   border-radius: 4px;
 }
 
-
-.inputfile {
-  width: 0.1px;
-  height: 0.1px;
-  opacity: 0;
-  overflow: hidden;
-  position: absolute;
-  z-index: - 1;
-}
-
-#xml-import {
-  min-width: 180px;
-  width: auto;
-  padding: 5px 10px 5px 10px;
-}
-
-#import-exercise-button {
-  background-color: #d3d3d3;
-}
-
-#import-exercise-button:hover {
-  background-color: #d0d0d0;
-}
-
 .dropdown-content {
   display: none;
   width: 100%;
@@ -658,11 +634,6 @@ legend {
 .import-export-message {
   flex-grow: 1;
   padding-right: 5px;
-}
-
-.import-export-exercise-actions {
-  max-width: 110px;
-  min-width: 110px;
 }
 
 .import-export-exercise + .import-export-exercise {

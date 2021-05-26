@@ -1,0 +1,8 @@
+- data.each do |subfile_id, task|
+  .import-export-task data-task-uuid="#{task[:task_uuid]}" data-import-subfile-id="#{subfile_id}" data-import-id="#{task[:import_id]}" data-task-path="#{task[:path]}"
+    .import-export-message
+      = link_to_if(task[:exists], t('controllers.task.import_export.dialog.task_with_uuid', task_uuid: task[:task_uuid]), Task.find_by_uuid(task[:task_uuid]), {target: '_blank'})
+      br
+      = t('controllers.task.import_export.dialog.path', path: task[:path])
+    .import-export-task-actions
+      = render partial: 'import_actions', locals: {exists: task[:exists], updatable: task[:updatable], imported: false}

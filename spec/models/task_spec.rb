@@ -14,6 +14,8 @@ RSpec.describe Task, type: :model do
 
     it { is_expected.not_to be_able_to(:index, described_class) }
     it { is_expected.not_to be_able_to(:create, described_class) }
+    it { is_expected.not_to be_able_to(:import_start, described_class) }
+    it { is_expected.not_to be_able_to(:import_confirm, described_class) }
     it { is_expected.not_to be_able_to(:show, task) }
     it { is_expected.not_to be_able_to(:update, task) }
     it { is_expected.not_to be_able_to(:destroy, task) }
@@ -25,6 +27,8 @@ RSpec.describe Task, type: :model do
 
       it { is_expected.to be_able_to(:index, described_class) }
       it { is_expected.to be_able_to(:create, described_class) }
+      it { is_expected.to be_able_to(:import_start, described_class) }
+      it { is_expected.to be_able_to(:import_confirm, described_class) }
 
       it { is_expected.not_to be_able_to(:show, task) }
       it { is_expected.not_to be_able_to(:download, task) }
