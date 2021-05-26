@@ -112,18 +112,20 @@ RSpec.describe 'equal_task matcher' do
     let(:task) { build(:task, files: files) }
     let(:task2) { build(:task, files: files2) }
 
-    let(:files) { [build(:task_file, content: 'foo'), build(:task_file, content: files_2_content)] }
-    let(:files_2_content) { 'bar' }
-    let(:files2) { [build(:task_file, content: 'foo'), build(:task_file, content: 'bar')] }
+    let(:files) { [build(:task_file, content: 'foo'), build(:task_file, content: 'bar'), build(:task_file, content: files_3_content)] }
+    let(:files2) { [build(:task_file, content: 'foo'), build(:task_file, content: 'bar'), build(:task_file, content: files2_3_content)] }
+    let(:files_3_content) { 'foobar' }
+    let(:files2_3_content) { 'foobar' }
 
     it 'successfully compares the tasks' do
       expect(task).to be_an_equal_task_as task2
     end
 
-    context 'when first task has two equal task files' do
-      let(:files_2_content) { 'foo' }
+    context 'when both tasks have two equal files, but are still different' do
+      let(:files_3_content) { 'foo' }
+      let(:files2_3_content) { 'bar' }
 
-      it 'successfully compares the tasks' do
+      it 'fails' do
         expect(task).not_to be_an_equal_task_as task2
       end
     end
