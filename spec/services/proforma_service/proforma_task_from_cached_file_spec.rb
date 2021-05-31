@@ -30,7 +30,7 @@ describe ProformaService::ProformaTaskFromCachedFile do
 
     let!(:data) { ProformaService::CacheImportFile.call(user: user, zip_file: zip_file) }
     let(:user) { build(:user) }
-    let(:zip_file) { fixture_file_upload('files/proforma_import/testfile.zip', 'application/zip') }
+    let(:zip_file) { fixture_file_upload('proforma_import/testfile.zip', 'application/zip') }
     let(:subfile_id) { data.first[0] }
     let(:import_file_cache) { ImportFileCache.find(data[subfile_id][:import_id]) }
     let(:import_type) { 'import' }

@@ -7,7 +7,7 @@ describe ProformaService::CacheImportFile do
     subject(:cache_import_file) { described_class.new(user: user, zip_file: zip_file) }
 
     let(:user) { build(:user) }
-    let(:zip_file) { fixture_file_upload('files/proforma_import/testfile.zip', 'application/zip') }
+    let(:zip_file) { fixture_file_upload('proforma_import/testfile.zip', 'application/zip') }
 
     it 'assigns user' do
       expect(cache_import_file.instance_variable_get(:@user)).to be user
@@ -22,7 +22,7 @@ describe ProformaService::CacheImportFile do
     subject(:cache_import_file) { described_class.call(user: user, zip_file: zip_file) }
 
     let(:user) { build(:user) }
-    let(:zip_file) { fixture_file_upload('files/proforma_import/testfile.zip', 'application/zip') }
+    let(:zip_file) { fixture_file_upload('proforma_import/testfile.zip', 'application/zip') }
 
     it 'creates an ImportFileCache' do
       expect { cache_import_file }.to change(ImportFileCache, :count).by(1)
@@ -65,7 +65,7 @@ describe ProformaService::CacheImportFile do
     end
 
     context 'when a file with three tasks is uploaded' do
-      let(:zip_file) { fixture_file_upload('files/proforma_import/testfile_multi.zip', 'application/zip') }
+      let(:zip_file) { fixture_file_upload('proforma_import/testfile_multi.zip', 'application/zip') }
 
       it 'creates only one ImportFileCache' do
         expect { cache_import_file }.to change(ImportFileCache, :count).by(1)

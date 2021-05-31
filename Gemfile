@@ -12,16 +12,14 @@ gem 'figaro'
 gem 'i18n'
 # Use slim format
 gem 'slim-rails', '>= 3.2.0'
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.0.3'
+# Rails
+gem 'rails', '~> 6.1'
 # Use postgres as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use SCSS for stylesheets
 gem 'sass-rails', '>= 6.0.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
-
-# gem 'yui-compressor'
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '>= 5.0.0'
@@ -48,8 +46,6 @@ gem 'will_paginate'
 # Continuation of CanCan (authoriation Gem for RoR)
 gem 'cancancan'
 
-# See https://github.com/rails/execjs#readme for more supported runtimes
-gem 'therubyracer', platforms: :ruby
 # Use Bootstrap (app/assets/stylesheets)
 gem 'devise-bootstrap-views', '~> 1.0'
 gem 'twitter-bootstrap-rails'
@@ -80,15 +76,15 @@ gem 'sentry-ruby'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
-  gem 'factory_bot_rails', '~> 6.1.0'
+  gem 'factory_bot_rails'
   gem 'pry-byebug'
   gem 'rails-controller-testing', '>= 1.0.4'
   gem 'rspec-collection_matchers', '~> 1.2.0'
-  gem 'rspec-rails', '4.0.2'
-  gem 'rubocop', '~> 1.9.1'
-  gem 'rubocop-performance', '~> 1.9.2'
-  gem 'rubocop-rails', '~> 2.9.1'
-  gem 'rubocop-rspec', '~> 2.2.0'
+  gem 'rspec-rails'
+  gem 'rubocop'
+  gem 'rubocop-performance'
+  gem 'rubocop-rails'
+  gem 'rubocop-rspec'
 end
 
 group :development do
@@ -106,7 +102,6 @@ group :development do
 end
 
 group :test do
-  gem 'codeclimate-test-reporter', '~> 1.0.0'
   gem 'shoulda-matchers'
   gem 'simplecov'
   gem 'webmock'
