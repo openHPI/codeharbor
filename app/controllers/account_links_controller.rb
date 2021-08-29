@@ -91,7 +91,7 @@ class AccountLinksController < ApplicationController
     @user = User.find(params[:user_id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
+  # Never trust parameters from the scary internet, only allow the following list through.
   def account_link_params
     params.require(:account_link).permit(:push_url, :check_uuid_url, :api_key, :name)
   end

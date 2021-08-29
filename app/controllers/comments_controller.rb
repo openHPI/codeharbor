@@ -59,7 +59,7 @@ class CommentsController < ApplicationController
     @exercise = Exercise.find(params[:exercise_id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
+  # Never trust parameters from the scary internet, only allow the following list through.
   def comment_params
     params.require(:comment).permit(:text, :exercise_id, :user_id)
   end

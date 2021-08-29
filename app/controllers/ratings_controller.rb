@@ -29,7 +29,7 @@ class RatingsController < ApplicationController
     @exercise = Exercise.find(params[:exercise_id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
+  # Never trust parameters from the scary internet, only allow the following list through.
   def rating_params
     params.require(:rating).permit(:rating, :exercise_id, :user_id)
   end

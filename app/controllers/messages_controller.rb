@@ -83,7 +83,7 @@ class MessagesController < ApplicationController
     @user = User.find(params[:user_id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
+  # Never trust parameters from the scary internet, only allow the following list through.
   def message_params
     params.require(:message).permit(:text, :sender_id, :recipient_id, :sender_status, :recipient_status)
   end

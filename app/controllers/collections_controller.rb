@@ -139,7 +139,7 @@ class CollectionsController < ApplicationController
     @collection = Collection.find(params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
+  # Never trust parameters from the scary internet, only allow the following list through.
   def collection_params
     params.require(:collection).permit(:title)
   end

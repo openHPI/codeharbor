@@ -146,7 +146,7 @@ class GroupsController < ApplicationController
     @user = User.find(params[:user])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
+  # Never trust parameters from the scary internet, only allow the following list through.
   def group_params
     params.require(:group).permit(:name, :description)
   end
