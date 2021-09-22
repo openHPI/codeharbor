@@ -19,7 +19,7 @@ RSpec.shared_examples 'new examples' do |klass:, resource:|
 end
 
 RSpec.shared_examples 'edit examples' do |klass:, resource:|
-  it "assigns the requested #{resource}  as @#{resource}" do
+  it "assigns the requested #{resource} as @#{resource}" do
     object = klass.create! valid_attributes
     get :edit, params: empty_params.merge(id: object.to_param), session: valid_session
     expect(assigns(resource)).to eq(object)

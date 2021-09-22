@@ -148,7 +148,7 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
         end
       end
 
-      context 'when model_solution has multiple files ' do
+      context 'when model_solution has multiple files' do
         let(:ms_files) { build_list(:task_file, 2) }
 
         it 'creates a model-solution with 2 files' do

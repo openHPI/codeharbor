@@ -88,7 +88,7 @@ describe ProformaService::ExportTask do
       it_behaves_like 'task node with file'
 
       context 'when the file is very large' do
-        let(:file) { build(:task_file, :exportable, content: 'test' * 10**5) }
+        let(:file) { build(:task_file, :exportable, content: 'test' * (10**5)) }
 
         it 'adds a attached-txt-file node to the file node' do
           expect(xml.xpath("/task/files/file[@id!='ms-placeholder-file']/attached-txt-file")).to have(1).item

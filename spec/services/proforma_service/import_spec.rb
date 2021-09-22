@@ -86,7 +86,7 @@ describe ProformaService::Import do
       it { is_expected.to be_an_equal_task_as task }
 
       context 'when the mainfile is very large' do
-        let(:file) { build(:task_file, :exportable, content: 'test' * 10**5) }
+        let(:file) { build(:task_file, :exportable, content: 'test' * (10**5)) }
 
         it { is_expected.to be_an_equal_task_as task }
       end

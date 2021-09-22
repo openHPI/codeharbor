@@ -139,7 +139,7 @@ describe ProformaService::ConvertProformaTaskToTask do
       end
 
       context 'when file is very large' do
-        let(:content) { 'test' * 10**5 }
+        let(:content) { 'test' * (10**5) }
 
         it 'creates an task with a file that has the correct attributes' do
           expect(convert_to_task_service.files.first).to have_attributes(content: content)

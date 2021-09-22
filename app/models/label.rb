@@ -10,7 +10,7 @@ class Label < ApplicationRecord
 
   def font_color
     c_codes = color_codes
-    l_value = 0.2126 * c_codes[0] + 0.7152 * c_codes[1] + 0.0722 * c_codes[2]
+    l_value = (0.2126 * c_codes[0]) + (0.7152 * c_codes[1]) + (0.0722 * c_codes[2])
     if l_value > 0.179
       '000000'
     else
