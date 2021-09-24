@@ -86,7 +86,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :ping, only: :index, defaults: { format: :json }
+  resources :ping, only: :index, defaults: {format: :json}
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 end
