@@ -86,6 +86,12 @@ Rails.application.routes.draw do
     end
   end
 
+  scope 'bridges', module: :bridges, as: 'bridges' do
+    scope 'lom', module: :lom, as: 'lom' do
+      resources :tasks, only: %i[show]
+    end
+  end
+
   resources :ping, only: :index, defaults: {format: :json}
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
