@@ -129,7 +129,7 @@ TaskFile.create!(
 
         @Test
         public void checkForCorrectOutput() {
-            HalloWelt.main(new String[]{});
+            HelloWorld.main(new String[]{});
             String separator = System.getProperty("line.separator");
             Assertions.assertEquals("hello world" + separator,
                     outContent.toString().toLowerCase(),
