@@ -25,6 +25,7 @@ module ProformaService
         uuid: @task.uuid || @proforma_task.uuid,
         parent_uuid: @proforma_task.parent_uuid,
         language: @proforma_task.language,
+        meta_data: @proforma_task.meta_data,
 
         tests: tests,
         model_solutions: model_solutions,

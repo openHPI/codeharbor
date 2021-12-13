@@ -23,6 +23,7 @@ module ProformaService
           uuid: @task.uuid,
           parent_uuid: @task.parent_uuid,
           language: @task.language,
+          meta_data: @task.meta_data,
           files: @task.files.map { |file| task_file file },
           tests: tests,
           model_solutions: model_solutions
