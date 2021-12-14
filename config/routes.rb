@@ -90,6 +90,9 @@ Rails.application.routes.draw do
     scope 'lom', module: :lom, as: 'lom' do
       resources :tasks, only: %i[show]
     end
+    scope 'bird', module: :bird, as: 'bird' do
+      resources :tasks, only: %i[index]
+    end
   end
 
   resources :ping, only: :index, defaults: {format: :json}
