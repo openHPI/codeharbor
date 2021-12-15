@@ -81,6 +81,9 @@ Rails.application.configure do
   # Allow console from docker virtual machine host
   config.web_console.allowed_ips = '192.168.99.0/16'
 
+  # Allow requests for all hostnames, currently 0.0.0.0 doesn't work without it.
+  config.hosts.clear
+
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
