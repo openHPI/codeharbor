@@ -419,7 +419,7 @@ GEM
       faraday
     set (1.0.1)
     shellany (0.0.1)
-    shoulda-matchers (5.0.0)
+    shoulda-matchers (5.1.0)
       activesupport (>= 5.2.0)
     simple_form (5.1.0)
       actionpack (>= 5.2)
