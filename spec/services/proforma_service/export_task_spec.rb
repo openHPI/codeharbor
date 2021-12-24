@@ -200,18 +200,6 @@ describe ProformaService::ExportTask do
         it 'adds test node to tests node' do
           expect(xml.xpath('/task/tests/test')).to have(1).item
         end
-
-        it 'adds meta_data with correct namespace to test-configuration node' do
-          expect(xml_with_namespaces.xpath(
-            '/xmlns:task/xmlns:tests/xmlns:test/xmlns:test-configuration/xmlns:test-meta-data/openHPI:entry-point'
-          ).text).to eql 'name'
-        end
-
-        it 'adds correct refid attribute to fileref' do
-          expect(
-            xml.xpath('/task/tests/test/test-configuration/filerefs/fileref').attribute('refid').value
-          ).to eql xml.xpath("/task/files/file[@id!='ms-placeholder-file']").attribute('id').value
-        end
       end
     end
 

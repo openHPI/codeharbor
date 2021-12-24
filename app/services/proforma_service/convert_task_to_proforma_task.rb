@@ -56,7 +56,6 @@ module ProformaService
 
     def tests
       @task.tests.map do |test|
-        file = test.files.first
         Proforma::Test.new(
           id: test.xml_id,
           title: test.title,
@@ -64,13 +63,9 @@ module ProformaService
           internal_description: test.internal_description,
           test_type: test.test_type,
           files: test.files.map { |test_file| task_file test_file },
-          meta_data: test_meta_data(file)
+          meta_data: test.meta_data
         )
       end
-    end
-
-    def test_meta_data(file)
-      [{namespace: 'openHPI', key: 'entry-point', value: file.full_file_name}] unless file.nil?
     end
 
     def task_file(file)

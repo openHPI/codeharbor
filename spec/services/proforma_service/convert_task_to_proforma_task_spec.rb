@@ -179,8 +179,8 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
         expect(proforma_task.tests.first).to have_attributes(
           id: test.xml_id,
           title: test.title,
-          files: have(1).item,
-          meta_data: [{namespace: 'openHPI', key: 'entry-point', value: test_file.full_file_name}]
+          files: have(1).item
+          # meta_data: [{namespace: 'openHPI', key: 'entry-point', value: test_file.full_file_name}]
         )
       end
 
@@ -203,8 +203,8 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
           expect(proforma_task.tests.first).to have_attributes(
             id: test.xml_id,
             title: test.title,
-            files: have(2).item,
-            meta_data: [{namespace: 'openHPI', key: 'entry-point', value: test_file.full_file_name}]
+            files: have(2).item
+            # meta_data: [{namespace: 'openHPI', key: 'entry-point', value: test_file.full_file_name}]
           )
         end
       end

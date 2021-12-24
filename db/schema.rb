@@ -265,6 +265,7 @@ ActiveRecord::Schema.define(version: 2021_12_13_190514) do
     t.string "validity"
     t.string "timeout"
     t.bigint "task_id"
+    t.jsonb "meta_data", default: {}
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
