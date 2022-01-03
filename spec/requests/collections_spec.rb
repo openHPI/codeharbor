@@ -4,9 +4,9 @@ require 'rails_helper'
 
 RSpec.describe 'Collections', type: :request do
   context 'when logged in' do
-    let(:user) { FactoryBot.create(:user) }
-    let(:collection) { FactoryBot.create(:collection, title: 'Some Collection', users: [user], tasks: []) }
-    let(:collection_params) { FactoryBot.attributes_for(:collection) }
+    let(:user) { create(:user) }
+    let(:collection) { create(:collection, title: 'Some Collection', users: [user], tasks: []) }
+    let(:collection_params) { attributes_for(:collection) }
 
     before do
       post login_path, params: {email: user.email, password: user.password}

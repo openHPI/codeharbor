@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe 'users', type: :request do
   context 'when logged in' do
-    let(:user) { FactoryBot.create(:user) }
-    let(:user_params) { FactoryBot.attributes_for(:user) }
+    let(:user) { create(:user) }
+    let(:user_params) { attributes_for(:user) }
 
     before do
       post login_path, params: {email: user.email, password: user.password}

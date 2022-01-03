@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe 'tasks', type: :request do
   context 'when logged in' do
-    let(:user) { FactoryBot.create(:user) }
-    let(:task) { FactoryBot.create(:task, user: user) }
+    let(:user) { create(:user) }
+    let(:task) { create(:task, user: user) }
     let(:valid_params) do
       {
         title: 'title',

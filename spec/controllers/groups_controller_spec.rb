@@ -7,10 +7,10 @@ RSpec.describe GroupsController, type: :controller do
   # Group. As you add validations to Group, be sure to
   # adjust the attributes here as well.
 
-  let!(:user) { FactoryBot.create(:user) }
+  let!(:user) { create(:user) }
 
   let(:valid_post_attributes) do
-    FactoryBot.attributes_for(:group, users: [user])
+    attributes_for(:group, users: [user])
   end
 
   let(:invalid_attributes) do

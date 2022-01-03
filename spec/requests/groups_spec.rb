@@ -4,9 +4,9 @@ require 'rails_helper'
 
 RSpec.describe 'groups', type: :request do
   context 'when logged in' do
-    let(:user) { FactoryBot.create(:user) }
-    let(:group) { FactoryBot.create(:group, users: [user]) }
-    let(:group_params) { FactoryBot.attributes_for(:group) }
+    let(:user) { create(:user) }
+    let(:group) { create(:group, users: [user]) }
+    let(:group_params) { attributes_for(:group) }
 
     before do
       group.make_admin(user)

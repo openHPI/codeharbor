@@ -7,7 +7,7 @@ RSpec.describe AccountLinksController, type: :controller do
 
   let(:account_link) { create(:account_link) }
 
-  let(:valid_attributes) { FactoryBot.attributes_for(:account_link).merge(user: user) }
+  let(:valid_attributes) { attributes_for(:account_link).merge(user: user) }
   let(:invalid_attributes) do
     {api_key: ''}
   end
@@ -39,7 +39,7 @@ RSpec.describe AccountLinksController, type: :controller do
 
     describe 'PUT #update' do
       let(:new_attributes) do
-        attributes = FactoryBot.attributes_for(:account_link)
+        attributes = attributes_for(:account_link)
         attributes[:api_key] = 'secret'
         attributes
       end

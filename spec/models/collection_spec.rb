@@ -136,11 +136,11 @@ RSpec.describe Collection, type: :model do
   # Not really testing any functionality here
   describe 'factories' do
     it 'has valid factory' do
-      expect(FactoryBot.build_stubbed(:collection)).to be_valid
+      expect(build_stubbed(:collection)).to be_valid
     end
 
     it 'requires title' do
-      expect(FactoryBot.build_stubbed(:collection, title: '')).not_to be_valid
+      expect(build_stubbed(:collection, title: '')).not_to be_valid
     end
   end
 end
