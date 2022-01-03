@@ -33,9 +33,9 @@ module ProformaService
     end
 
     def files
-      @files ||= @proforma_task.all_files.reject { |file| file.id == 'ms-placeholder-file' }.map do |task_file|
+      @files ||= @proforma_task.all_files.reject { |file| file.id == 'ms-placeholder-file' }.to_h do |task_file|
         [task_file.id, file_from_proforma_file(task_file)]
-      end.to_h
+      end
     end
 
     def file_from_proforma_file(proforma_task_file)

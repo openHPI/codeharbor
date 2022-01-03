@@ -99,8 +99,8 @@ RSpec.describe Task, type: :model do
     subject { described_class.created_before_days(days) }
 
     let(:days) { 0 }
-    let!(:new_task) { create(:task, created_at: Time.zone.now - 1.week) }
-    let!(:old_task) { create(:task, created_at: Time.zone.now - 4.weeks) }
+    let!(:new_task) { create(:task, created_at: 1.week.ago) }
+    let!(:old_task) { create(:task, created_at: 4.weeks.ago) }
 
     it { is_expected.to include new_task, old_task }
 

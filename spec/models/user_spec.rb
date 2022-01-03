@@ -213,19 +213,19 @@ RSpec.describe User, type: :model do
 
   describe 'factories' do
     it 'has valid factory' do
-      expect(FactoryBot.build_stubbed(:user)).to be_valid
+      expect(build_stubbed(:user)).to be_valid
     end
 
     it 'requires first name' do
-      expect(FactoryBot.build_stubbed(:user, first_name: '')).not_to be_valid
+      expect(build_stubbed(:user, first_name: '')).not_to be_valid
     end
 
     it 'requires last name' do
-      expect(FactoryBot.build_stubbed(:user, last_name: '')).not_to be_valid
+      expect(build_stubbed(:user, last_name: '')).not_to be_valid
     end
 
     it 'requires email' do
-      expect(FactoryBot.build_stubbed(:user, email: '')).not_to be_valid
+      expect(build_stubbed(:user, email: '')).not_to be_valid
     end
 
     it 'uses the provided primary email for created users' do
@@ -236,7 +236,7 @@ RSpec.describe User, type: :model do
 
     it 'uses the provided primary email even for stubbed users' do
       email = 'test@example.com'
-      user = FactoryBot.build_stubbed(:user, email: 'test@example.com')
+      user = build_stubbed(:user, email: 'test@example.com')
       user.email = email
     end
 

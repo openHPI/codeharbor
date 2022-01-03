@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe CollectionsController, type: :controller do
   let(:valid_attributes) do
-    FactoryBot.attributes_for(:collection)
+    attributes_for(:collection)
   end
 
   let(:invalid_attributes) do
