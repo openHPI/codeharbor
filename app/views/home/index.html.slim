@@ -103,11 +103,11 @@
       p
         = t('home.feature.groups.paragraph')
 
-  - if current_user.nil?
+  - unless user_signed_in?
     .col-md-12.feature
       .col-md-3
       .col-md-9
         h2
           = t('home.sign_in.header')
         p
-          = t('home.sign_in.paragraph_html', href1: (link_to t('home.sign_in.link1'), new_user_path, class: 'classic-link'), href2: (link_to t('home.sign_in.link2'), login_path, class: 'classic-link'))
+          = t('home.sign_in.paragraph_html', href1: (link_to t('home.sign_in.link1'), new_user_registration_path, class: 'classic-link'), href2: (link_to t('home.sign_in.link2'), new_user_session_path, class: 'classic-link'))

@@ -3,7 +3,7 @@
 yaml_file = File.read(Rails.root.join('config/action_mailer.yml'))
 options = YAML.safe_load(yaml_file, aliases: true, permitted_classes: [Symbol])[Rails.env]
 
-Rails.configuration.action_mailer.delivery_method = options.delete('delivery_method')
+Rails.configuration.action_mailer.delivery_method = options.delete('delivery_method') if options.key? 'delivery_method'
 
 if options.key? 'smtp_settings'
   Rails.configuration.action_mailer[:smtp_settings] = {}

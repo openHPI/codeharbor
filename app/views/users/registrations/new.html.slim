@@ -1,0 +1,61 @@
+.header
+  .std-heading
+    i.fa.fa-user style='color: #444444'
+    = ' ' + t('users.new.header')
+
+= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
+  = bootstrap_devise_error_messages!
+
+  .form-group
+    = f.label :first_name
+    = f.text_field :first_name,
+            required: true,
+            autofocus: true,
+            placeholder: t('users.new.first_name'),
+            autocomplete: 'given-name',
+            class: 'form-control'
+  .form-group
+    = f.label :last_name
+    = f.text_field :last_name,
+            required: true,
+            placeholder: t('users.new.last_name'),
+            autocomplete: 'family-name',
+            class: 'form-control'
+
+  .form-group
+    = f.label :email
+    = f.email_field :email,
+            required: true,
+            placeholder: t('users.new.email'),
+            autocomplete: 'email',
+            class: 'form-control'
+
+  .form-group
+    = f.label :password
+    = f.password_field :password,
+            required: true,
+            placeholder: t('users.new.password'),
+            autocomplete: 'current-password',
+            class: 'form-control'
+    - if @minimum_password_length
+      small.form-text.text-muted = t('users.new.minimum_password_length', count: @minimum_password_length)
+  .form-group
+    = f.label :password_confirmation
+    = f.password_field :password_confirmation,
+            required: true,
+            placeholder: t('users.new.password'),
+            autocomplete: 'current-password',
+            class: 'form-control'
+
+  = render 'avatar_form', f: f
+
+  .form-group
+    .btn-group[role='group']
+      = button_tag type: 'submit', class: 'btn btn-important' do
+        i.fa.fa-user
+        = ' ' + t('users.save_user')
+      = link_to :back, class: 'btn btn-important' do
+        i.fa.fa-remove style=('color: gray')
+        = ' ' + t('users.back')
+
+= render 'users/shared/links'
