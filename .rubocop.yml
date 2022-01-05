@@ -78,7 +78,7 @@ RSpec/NestedGroups:
   Max: 5
 
 RSpec/MultipleMemoizedHelpers:
-  Max: 15
+  Enabled: false
 
 RSpec/EmptyExampleGroup:
   Exclude:

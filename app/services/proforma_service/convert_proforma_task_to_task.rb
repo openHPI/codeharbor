@@ -19,7 +19,7 @@ module ProformaService
       @task.assign_attributes(
         user: @user,
         title: @proforma_task.title,
-        description: Kramdown::Document.new(@proforma_task.description || '', html_to_native: true).to_kramdown.strip,
+        description: description,
         internal_description: @proforma_task.internal_description,
         programming_language: programming_language,
         uuid: @task.uuid || @proforma_task.uuid,
@@ -31,6 +31,10 @@ module ProformaService
         model_solutions: model_solutions,
         files: files.values # this line has to be last, because tests and model_solutions have to remove their respective files first
       )
+    end
+
+    def description
+      Kramdown::Document.new(@proforma_task.description || '', html_to_native: true).to_kramdown.strip
     end
 
     def files

@@ -7,4 +7,6 @@ class Test < ApplicationRecord
   validates :title, presence: true
   validates :xml_id, presence: true
   validates :xml_id, uniqueness: {scope: :task_id}
+
+  serialize :meta_data, HashAsJsonbSerializer
 end
