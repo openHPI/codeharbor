@@ -344,4 +344,93 @@ RSpec.describe TasksController, type: :controller do
       end
     end
   end
+
+  describe '#import_uuid_check' do
+    let!(:task) { create(:task, valid_attributes) }
+    let(:account_link) { create(:account_link, user: user) }
+    let(:uuid) { task.reload.uuid }
+    let(:post_request) { post :import_uuid_check, params: {uuid: uuid} }
+    let(:headers) { {'Authorization' => "Bearer #{account_link.api_key}"} }
+
+    before { request.headers.merge! headers }
+
+    it 'renders correct response' do
+      post_request
+      expect(response).to have_http_status(:success)
+
+      expect(JSON.parse(response.body).symbolize_keys).to eql(task_found: true, update_right: true)
+    end
+
+    context 'when api_key is incorrect' do
+      let(:headers) { {'Authorization' => 'Bearer XXXXXX'} }
+
+      it 'renders correct response' do
+        post_request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'when the user is cannot update the task' do
+      let(:account_link) { create(:account_link, api_key: 'anotherkey') }
+
+      it 'renders correct response' do
+        post_request
+        expect(response).to have_http_status(:success)
+
+        expect(JSON.parse(response.body).symbolize_keys).to eql(task_found: true, update_right: false)
+      end
+    end
+
+    context 'when the searched task does not exist' do
+      let(:uuid) { 'anotheruuid' }
+
+      it 'renders correct response' do
+        post_request
+        expect(response).to have_http_status(:success)
+
+        expect(JSON.parse(response.body).symbolize_keys).to eql(task_found: false)
+      end
+    end
+  end
+
+  describe 'POST #import_external' do
+    let(:account_link) { create(:account_link, user: user) }
+
+    let(:post_request) { post :import_external, body: zip_file_content }
+    let(:zip_file_content) { 'zipped task xml' }
+    let(:headers) { {'Authorization' => "Bearer #{account_link.api_key}"} }
+
+    before do
+      request.headers.merge! headers
+      allow(ProformaService::Import).to receive(:call)
+    end
+
+    it 'responds with correct status code' do
+      post_request
+      expect(response).to have_http_status(:created)
+    end
+
+    it 'calls service' do
+      post_request
+      expect(ProformaService::Import).to have_received(:call).with(zip: be_a(Tempfile).and(has_content(zip_file_content)), user: user)
+    end
+
+    context 'when import fails with ProformaError' do
+      before { allow(ProformaService::Import).to receive(:call).and_raise(Proforma::PreImportValidationError) }
+
+      it 'responds with correct status code' do
+        post_request
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+
+    context 'when import fails due to another error' do
+      before { allow(ProformaService::Import).to receive(:call).and_raise(StandardError) }
+
+      it 'responds with correct status code' do
+        post_request
+        expect(response).to have_http_status(:internal_server_error)
+      end
+    end
+  end
 end

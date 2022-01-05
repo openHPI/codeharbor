@@ -86,6 +86,11 @@ Rails.application.routes.draw do
     end
   end
 
+  controller :tasks do # import-api endpoints
+    post 'import_task' => :import_external
+    post :import_uuid_check
+  end
+
   scope 'bridges', module: :bridges, as: 'bridges' do
     scope 'lom', module: :lom, as: 'lom' do
       resources :tasks, only: %i[show]
