@@ -23,10 +23,18 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
 
     let(:convert_to_proforma_task) { described_class.new(task: task) }
     let(:task) do
-      create(:task, uuid: SecureRandom.uuid, parent_uuid: SecureRandom.uuid, files: files, tests: tests, model_solutions: model_solutions,
-                    programming_language: build(:programming_language), description: description)
+      create(:task,
+             uuid: SecureRandom.uuid,
+             parent_uuid: SecureRandom.uuid,
+             meta_data: meta_data,
+             files: files,
+             tests: tests,
+             model_solutions: model_solutions,
+             programming_language: build(:programming_language),
+             description: description)
     end
     let(:description) { 'description' }
+    let(:meta_data) {}
     let(:files) { [] }
     let(:tests) { [] }
     let(:model_solutions) { [] }
@@ -63,6 +71,14 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
         it 'does not convert the description markdown' do
           expect(proforma_task).to have_attributes(description: task.description)
         end
+      end
+    end
+
+    context 'when task has meta_data' do
+      let(:meta_data) { {CodeOcean: {meta: 'data', nested: {other: 'data'}}} }
+
+      it 'does not convert the description markdown' do
+        expect(proforma_task).to have_attributes(meta_data: meta_data)
       end
     end
 
@@ -167,9 +183,10 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
 
     context 'when exercise has a test' do
       let(:tests) { [test] }
-      let(:test) { build(:test, files: test_files) }
+      let(:test) { build(:test, files: test_files, meta_data: test_meta_data) }
       let(:test_files) { [test_file] }
       let(:test_file) { build(:task_file, :exportable) }
+      let(:test_meta_data) {}
 
       it 'creates a task with one test' do
         expect(proforma_task.tests).to have(1).item
@@ -180,7 +197,6 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
           id: test.xml_id,
           title: test.title,
           files: have(1).item
-          # meta_data: [{namespace: 'openHPI', key: 'entry-point', value: test_file.full_file_name}]
         )
       end
 
@@ -196,6 +212,14 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
         )
       end
 
+      context 'when test has meta_data' do
+        let(:test_meta_data) { {CodeOcean: {meta: 'data', nested: {other: 'data'}}} }
+
+        it 'does not convert the description markdown' do
+          expect(proforma_task.tests.first).to have_attributes(meta_data: test_meta_data)
+        end
+      end
+
       context 'when test has multiple files' do
         let(:test_files) { [test_file, build(:task_file, :exportable, name: 'file2')] }
 
@@ -204,7 +228,6 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
             id: test.xml_id,
             title: test.title,
             files: have(2).item
-            # meta_data: [{namespace: 'openHPI', key: 'entry-point', value: test_file.full_file_name}]
           )
         end
       end

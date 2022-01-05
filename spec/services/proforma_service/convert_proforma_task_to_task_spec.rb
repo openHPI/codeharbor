@@ -87,7 +87,7 @@ describe ProformaService::ConvertProformaTaskToTask do
     end
 
     context 'with meta_data' do
-      let(:meta_data) { {CodeOcean: {meta: 'data'}} }
+      let(:meta_data) { {CodeOcean: {meta: 'data', nested: {other: 'data'}}} }
 
       it 'creates a task with meta_data' do
         expect(convert_to_task_service).to have_attributes(meta_data: meta_data)
@@ -326,7 +326,7 @@ describe ProformaService::ConvertProformaTaskToTask do
       end
 
       context 'when test has meta_data' do
-        let(:test_meta_data) { {CodeOcean: {meta: 'data'}} }
+        let(:test_meta_data) { {CodeOcean: {meta: 'data', nested: {other: 'data'}}} }
 
         it 'creates a test with meta_data' do
           expect(convert_to_task_service.tests.first).to have_attributes(meta_data: test_meta_data)
