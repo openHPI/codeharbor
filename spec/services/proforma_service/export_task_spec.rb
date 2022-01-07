@@ -22,10 +22,12 @@ describe ProformaService::ExportTask do
              internal_description: 'internal_description',
              uuid: SecureRandom.uuid,
              programming_language: build(:programming_language, :ruby),
+             meta_data: meta_data,
              files: files,
              tests: tests,
              model_solutions: model_solutions)
     end
+    let(:meta_data) {}
     let(:files) { [] }
     let(:tests) { [] }
     let(:model_solutions) { [] }
@@ -78,6 +80,18 @@ describe ProformaService::ExportTask do
         it 'adds description node with correct content to task node' do
           expect(xml.xpath('/task/description').text).to eql task.description
         end
+      end
+    end
+
+    context 'when task has meta_data' do
+      let(:meta_data) { {CodeOcean: {meta: 'data', nest: {even: {deeper: 'foobar'}}}} }
+
+      it 'adds meta_data node to task node' do
+        expect(xml_with_namespaces.xpath('/xmlns:task/xmlns:meta-data/CodeOcean:meta').text).to eql 'data'
+      end
+
+      it 'adds nested meta_data node to task node' do
+        expect(xml_with_namespaces.xpath('/xmlns:task/xmlns:meta-data/CodeOcean:nest/CodeOcean:even/CodeOcean:deeper').text).to eql 'foobar'
       end
     end
 
@@ -174,7 +188,8 @@ describe ProformaService::ExportTask do
 
     context 'when task has a test' do
       let(:tests) { [test] }
-      let(:test) { build(:test) }
+      let(:test) { build(:test, meta_data: test_meta_data) }
+      let(:test_meta_data) {}
 
       it 'adds test node to tests node' do
         expect(xml.xpath('/task/tests/test')).to have(1).item
@@ -199,6 +214,19 @@ describe ProformaService::ExportTask do
 
         it 'adds test node to tests node' do
           expect(xml.xpath('/task/tests/test')).to have(1).item
+        end
+      end
+
+      context 'when test has meta_data' do
+        let(:test_meta_data) { {CodeOcean: {meta: 'data', nest: {even: {deeper: 'foobar'}}}} }
+        let(:meta_data_path) { '/xmlns:task/xmlns:tests/xmlns:test/xmlns:test-configuration/xmlns:test-meta-data' }
+
+        it 'adds meta_data node to task node' do
+          expect(xml_with_namespaces.xpath("#{meta_data_path}/CodeOcean:meta").text).to eql 'data'
+        end
+
+        it 'adds nested meta_data node to task node' do
+          expect(xml_with_namespaces.xpath("#{meta_data_path}/CodeOcean:nest/CodeOcean:even/CodeOcean:deeper").text).to eql 'foobar'
         end
       end
     end

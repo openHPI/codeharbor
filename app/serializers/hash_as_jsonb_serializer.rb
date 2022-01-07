@@ -7,6 +7,6 @@ class HashAsJsonbSerializer
 
   def self.load(hash)
     # (hash.is_a?(Hash) ? hash : {}).with_indifferent_access
-    hash.is_a?(Hash) ? hash.symbolize_keys : {}
+    hash.is_a?(Hash) ? hash.deep_symbolize_keys : {}
   end
 end
