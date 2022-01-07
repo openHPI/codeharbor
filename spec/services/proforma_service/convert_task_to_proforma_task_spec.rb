@@ -77,7 +77,7 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
     context 'when task has meta_data' do
       let(:meta_data) { {CodeOcean: {meta: 'data', nested: {other: 'data'}}} }
 
-      it 'does not convert the description markdown' do
+      it 'creates a task with correct meta_data' do
         expect(proforma_task).to have_attributes(meta_data: meta_data)
       end
     end

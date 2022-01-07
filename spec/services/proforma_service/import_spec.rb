@@ -28,6 +28,7 @@ describe ProformaService::Import do
       create(:task,
              :with_content,
              programming_language: programming_language,
+             meta_data: meta_data,
              files: files,
              tests: tests,
              model_solutions: model_solutions,
@@ -37,6 +38,7 @@ describe ProformaService::Import do
 
     let(:uuid) {}
     let(:programming_language) { build(:programming_language, :ruby) }
+    let(:meta_data) {}
     let(:files) { [] }
     let(:model_solutions) { [] }
     let(:tests) { [] }
@@ -79,6 +81,14 @@ describe ProformaService::Import do
       end
     end
 
+    context 'when task has meta_data' do
+      let(:meta_data) { {CodeOcean: {meta: 'data', nested: {other: 'data'}}} }
+
+      it 'sets the meta_data' do
+        expect(import_service.meta_data).to eql meta_data
+      end
+    end
+
     context 'when task has a file' do
       let(:files) { [file] }
       let(:file) { build(:task_file, :exportable) }
@@ -115,9 +125,18 @@ describe ProformaService::Import do
 
     context 'when task has a test' do
       let(:tests) { [test] }
-      let(:test) { build(:test, :with_content) }
+      let(:test) { build(:test, :with_content, meta_data: test_meta_data) }
+      let(:test_meta_data) {}
 
       it { is_expected.to be_an_equal_task_as task }
+
+      context 'when task has meta_data' do
+        let(:test_meta_data) { {CodeOcean: {meta: 'data', nested: {other: 'data'}}} }
+
+        it 'sets the meta_data' do
+          expect(import_service.tests.first.meta_data).to eql test_meta_data
+        end
+      end
     end
 
     context 'when task has multiple tests' do
