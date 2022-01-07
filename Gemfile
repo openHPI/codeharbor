@@ -51,7 +51,7 @@ gem 'devise-bootstrap-views', '~> 1.0'
 gem 'twitter-bootstrap-rails'
 
 gem 'ace-rails-ap'
-gem 'acts-as-taggable-on', '~> 8.1'
+gem 'acts-as-taggable-on', '~> 9.0'
 gem 'config'
 gem 'faraday'
 gem 'font-awesome-rails', '>= 4.7.0.5'
