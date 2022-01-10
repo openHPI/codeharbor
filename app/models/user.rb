@@ -57,6 +57,26 @@ class User < ApplicationRecord
     save!(validate: false)
   end
 
+  def self.from_omniauth(auth) # rubocop:disable Metrics/AbcSize
+    identity = {omniauth_provider: auth.provider, provider_uid: auth.uid}
+
+    user = joins(:identities).where(identities: identity).first_or_initialize do |new_user|
+      # Set these values initially
+      new_user.password = Devise.friendly_token[0, 20]
+      new_user.identities << UserIdentity.new(identity)
+      # If you are using confirmable and the provider(s) you use validate emails,
+      # uncomment the line below to skip the confirmation emails.
+      new_user.skip_confirmation!
+    end
+
+    # Update some profile information on every login
+    user.email = auth.info.email
+    user.first_name = auth.info.first_name
+    user.last_name = auth.info.last_name
+    user.save
+    user
+  end
+
   def member_groups
     groups - groups.as(:pending)
   end

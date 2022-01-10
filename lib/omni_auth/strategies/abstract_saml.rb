@@ -7,6 +7,11 @@ require 'ruby-saml'
 module OmniAuth
   module Strategies
     class AbstractSaml < OmniAuth::Strategies::SAML
+      option :attribute_service_name, 'CodeHarbor'
+
+      # We don't request any specific attributes to get all automatically.
+      option :request_attributes, {}
+
       # We want to specify some security options ourselves
       option :security, {
         digest_method: XMLSecurity::Document::SHA512,
@@ -30,7 +35,7 @@ module OmniAuth
 
       # This Lambda is responsible for terminating the session and will
       # only be used for identity-provider-initiated logout requests
-      option :idp_slo_session_destroy, (proc { |env, _session|
+      option :idp_slo_session_destroy, (proc { |env, session|
         if Rails.env.development?
           # For development purposes, we want to assume a secure connection behind an TLS-terminating proxy.
           # If this option is not set, our session cookie is not sent by Rack (due to the `secure` flag)
@@ -40,6 +45,8 @@ module OmniAuth
         # We logout the active user if possible. Probably, the cookie is not included
         # in the request (due to a cross-origin request) and the following line is a no-op.
         env['warden'].logout
+        # Delete all information from the current session
+        session.clear
 
         # We want to ensure that the new cookie (with an empty session) is set by the client.
         # Doing so will definitely overwrite an existing session in the browser
@@ -69,13 +76,14 @@ module OmniAuth
         # Get persistent IDs to recognize returning users
         options[:name_identifier_format] = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
 
-        options[:sp_entity_id] ||= hostname
+        options[:sp_entity_id] ||= sso_path
         options[:single_logout_service_url] ||= slo_path
+        options[:slo_default_relay_state] ||= full_host
         super
       end
 
-      def hostname
-        full_host + script_name
+      def sso_path
+        "#{full_host}#{script_name}#{request_path}"
       end
 
       def slo_path
