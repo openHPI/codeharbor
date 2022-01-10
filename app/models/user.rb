@@ -34,6 +34,8 @@ class User < ApplicationRecord
   has_many :sent_messages, class_name: 'Message', foreign_key: 'sender_id', dependent: :nullify, inverse_of: :sender
   has_many :received_messages, class_name: 'Message', foreign_key: 'recipient_id', dependent: :nullify, inverse_of: :recipient
 
+  has_many :identities, class_name: 'UserIdentity', dependent: :destroy
+
   has_one_attached :avatar
   validate :avatar_format, if: -> { avatar.attached? }
 
