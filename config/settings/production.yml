@@ -1,2 +1,9 @@
+# This file is overwritten during deployment
+
 codeocean:
   url: https://codeocean.openhpi.de
+omniauth:
+  samltestid:
+    enable: false
+  bird:
+    enable: false

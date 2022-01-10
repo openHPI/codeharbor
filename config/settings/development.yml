@@ -1,2 +1,10 @@
 codeocean:
   url: http://localhost:7000
+omniauth:
+  samltestid:
+    enable: true
+    metadata_url: 'https://samltest.id/saml/idp'
+    certificate: <%= Rails.root.join('config', 'certs', 'samltestid_certificate.pem') %>
+    private_key: <%= Rails.root.join('config', 'certs', 'samltestid_key.pem') %>
+  bird:
+    enable: false
