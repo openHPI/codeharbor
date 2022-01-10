@@ -35,6 +35,7 @@ describe ProformaService::ConvertProformaTaskToTask do
         uuid: uuid,
         parent_uuid: 'parent_uuid',
         language: 'language',
+        meta_data: meta_data,
         model_solutions: model_solutions,
         files: files,
         tests: tests
@@ -44,12 +45,13 @@ describe ProformaService::ConvertProformaTaskToTask do
     let(:uuid) { SecureRandom.uuid }
     let(:description) { 'description' }
     let(:user) { build(:user) }
+    let(:meta_data) {}
     let(:files) { [] }
     let(:tests) { [] }
     let(:model_solutions) { [] }
     let(:task) {}
 
-    it 'creates an task with the correct attributes' do
+    it 'creates a task with the correct attributes' do
       expect(convert_to_task_service).to have_attributes(
         title: 'title',
         description: 'description',
@@ -67,7 +69,7 @@ describe ProformaService::ConvertProformaTaskToTask do
     context 'when description contains html' do
       let(:description) { '<p>description</p>' }
 
-      it 'creates an task with a correct description' do
+      it 'creates a task with a correct description' do
         expect(convert_to_task_service).to have_attributes(
           description: 'description'
         )
@@ -76,11 +78,19 @@ describe ProformaService::ConvertProformaTaskToTask do
       context 'with a html entity' do
         let(:description) { '<p>descr&uuml;ption</p>' }
 
-        it 'creates an task with a correct description' do
+        it 'creates a task with a correct description' do
           expect(convert_to_task_service).to have_attributes(
             description: 'descrüption'
           )
         end
+      end
+    end
+
+    context 'with meta_data' do
+      let(:meta_data) { {CodeOcean: {meta: 'data', nested: {other: 'data'}}} }
+
+      it 'creates a task with meta_data' do
+        expect(convert_to_task_service).to have_attributes(meta_data: meta_data)
       end
     end
 
@@ -105,7 +115,7 @@ describe ProformaService::ConvertProformaTaskToTask do
       let(:content) { 'content' }
       let(:visible) { 'yes' }
 
-      it 'creates an task with a file that has the correct attributes' do
+      it 'creates a task with a file that has the correct attributes' do
         expect(convert_to_task_service.files.first).to have_attributes(
           content: 'content',
           path: '',
@@ -125,7 +135,7 @@ describe ProformaService::ConvertProformaTaskToTask do
       context 'when visible is no' do
         let(:visible) { 'no' }
 
-        it 'creates an task with a hidden file' do
+        it 'creates a task with a hidden file' do
           expect(convert_to_task_service.files.first).to have_attributes(visible: 'no')
         end
       end
@@ -133,7 +143,7 @@ describe ProformaService::ConvertProformaTaskToTask do
       context 'when visible is delayed' do
         let(:visible) { 'delayed' }
 
-        it 'creates an task with a hidden file' do
+        it 'creates a task with a hidden file' do
           expect(convert_to_task_service.files.first).to have_attributes(visible: 'delayed')
         end
       end
@@ -141,7 +151,7 @@ describe ProformaService::ConvertProformaTaskToTask do
       context 'when file is very large' do
         let(:content) { 'test' * (10**5) }
 
-        it 'creates an task with a file that has the correct attributes' do
+        it 'creates a task with a file that has the correct attributes' do
           expect(convert_to_task_service.files.first).to have_attributes(content: content)
         end
       end
@@ -150,7 +160,7 @@ describe ProformaService::ConvertProformaTaskToTask do
         let(:mimetype) { 'image/png' }
         let(:binary) { true }
 
-        it 'creates an task with an task_file with has the file attached' do
+        it 'creates a task with an task_file with has the file attached' do
           expect(convert_to_task_service.files.first.attachment).to be_attached
         end
       end
@@ -158,7 +168,7 @@ describe ProformaService::ConvertProformaTaskToTask do
       context 'when usage_by_lms is edit' do
         let(:usage_by_lms) { 'edit' }
 
-        it 'creates an task with a file with correct attributes' do
+        it 'creates a task with a file with correct attributes' do
           expect(convert_to_task_service.files.first).to have_attributes(usage_by_lms: 'edit')
         end
       end
@@ -195,11 +205,11 @@ describe ProformaService::ConvertProformaTaskToTask do
         )
       end
 
-      it 'creates an task with a model-solution' do
+      it 'creates a task with a model-solution' do
         expect(convert_to_task_service.model_solutions).to have(1).item
       end
 
-      it 'creates an task with a model_solution with correct attributes' do
+      it 'creates a task with a model_solution with correct attributes' do
         expect(convert_to_task_service.model_solutions.first).to have_attributes(
           description: model_solution.description,
           internal_description: model_solution.internal_description,
@@ -217,7 +227,7 @@ describe ProformaService::ConvertProformaTaskToTask do
       context 'when proforma_task has two model-solutions' do
         let(:model_solutions) { [model_solution, Proforma::ModelSolution.new(id: 'ms-id-2', files: [])] }
 
-        it 'creates an task with two model-solutions' do
+        it 'creates a task with two model-solutions' do
           expect(convert_to_task_service.model_solutions).to have(2).items
         end
       end
@@ -226,7 +236,7 @@ describe ProformaService::ConvertProformaTaskToTask do
     context 'without tests' do
       let(:tests) { [] }
 
-      it 'creates an task without a test' do
+      it 'creates a task without a test' do
         expect(convert_to_task_service.tests).to have(0).item
       end
     end
@@ -241,11 +251,13 @@ describe ProformaService::ConvertProformaTaskToTask do
           internal_description: 'internal_description',
           test_type: 'test_type',
           files: test_files,
-          configuration: configuration
+          configuration: configuration,
+          meta_data: test_meta_data
         )
       end
 
       let(:configuration) {}
+      let(:test_meta_data) {}
       let(:test_files) { [test_file] }
       let(:test_file) do
         Proforma::TaskFile.new(
@@ -260,11 +272,11 @@ describe ProformaService::ConvertProformaTaskToTask do
         )
       end
 
-      it 'creates an task with a test' do
+      it 'creates a task with a test' do
         expect(convert_to_task_service.tests).to have(1).item
       end
 
-      it 'creates an task with a test with correct attributes' do
+      it 'creates a task with a test with correct attributes' do
         expect(convert_to_task_service.tests.first).to have_attributes(
           title: test.title,
           description: test.description,
@@ -284,7 +296,7 @@ describe ProformaService::ConvertProformaTaskToTask do
       context 'without test has no files' do
         let(:test_files) { [] }
 
-        it 'creates an task with a test without files' do
+        it 'creates a task with a test without files' do
           expect(convert_to_task_service.tests.first.files).to have(0).item
         end
       end
@@ -304,12 +316,20 @@ describe ProformaService::ConvertProformaTaskToTask do
           )
         end
 
-        it 'creates an task with a test' do
+        it 'creates a task with a test' do
           expect(convert_to_task_service.tests).to have(1).item
         end
 
-        it 'creates an task with a test with two files' do
+        it 'creates a task with a test with two files' do
           expect(convert_to_task_service.tests.first).to have_attributes(files: have(2).items)
+        end
+      end
+
+      context 'when test has meta_data' do
+        let(:test_meta_data) { {CodeOcean: {meta: 'data', nested: {other: 'data'}}} }
+
+        it 'creates a test with meta_data' do
+          expect(convert_to_task_service.tests.first).to have_attributes(meta_data: test_meta_data)
         end
       end
 
@@ -332,7 +352,7 @@ describe ProformaService::ConvertProformaTaskToTask do
           )
         end
 
-        it 'creates an task with two test' do
+        it 'creates a task with two test' do
           expect(convert_to_task_service.tests).to have(2).items
         end
       end
