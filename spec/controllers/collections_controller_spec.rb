@@ -11,20 +11,15 @@ RSpec.describe CollectionsController, type: :controller do
     {title: ''}
   end
 
-  # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # CollectionsController. Be sure to keep this updated too.
-  let(:valid_session) do
-    {user_id: user.id}
-  end
-
   let(:user) { create(:user) }
+
+  before { sign_in user }
 
   describe 'GET #index' do
     let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
 
     it 'assigns all collections as @collections' do
-      get :index, params: {}, session: valid_session
+      get :index, params: {}
       expect(assigns(:collections)).to include collection
     end
   end
@@ -33,14 +28,14 @@ RSpec.describe CollectionsController, type: :controller do
     let(:collection) { create(:collection, valid_attributes) }
 
     it 'assigns the requested collection as @collection' do
-      get :show, params: {id: collection.to_param}, session: valid_session
+      get :show, params: {id: collection.to_param}
       expect(assigns(:collection)).to eq(collection)
     end
   end
 
   describe 'GET #new' do
     it 'assigns a new collection as @collection' do
-      get :new, params: {}, session: valid_session
+      get :new, params: {}
       expect(assigns(:collection)).to be_a_new(Collection)
     end
   end
@@ -49,7 +44,7 @@ RSpec.describe CollectionsController, type: :controller do
     let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
 
     it 'assigns the requested collection as @collection' do
-      get :edit, params: {id: collection.to_param}, session: valid_session
+      get :edit, params: {id: collection.to_param}
       expect(assigns(:collection)).to eq(collection)
     end
   end
@@ -58,34 +53,34 @@ RSpec.describe CollectionsController, type: :controller do
     context 'with valid params' do
       it 'creates a new Collection' do
         expect do
-          post :create, params: {collection: valid_attributes}, session: valid_session
+          post :create, params: {collection: valid_attributes}
         end.to change(Collection, :count).by(1)
       end
 
       it 'assigns a newly created collection as @collection' do
-        post :create, params: {collection: valid_attributes}, session: valid_session
+        post :create, params: {collection: valid_attributes}
         expect(assigns(:collection)).to be_a(Collection)
       end
 
       it 'persists @collection' do
-        post :create, params: {collection: valid_attributes}, session: valid_session
+        post :create, params: {collection: valid_attributes}
         expect(assigns(:collection)).to be_persisted
       end
 
       it 'redirects to the created collection' do
-        post :create, params: {collection: valid_attributes}, session: valid_session
+        post :create, params: {collection: valid_attributes}
         expect(response).to redirect_to(collections_path)
       end
     end
 
     context 'with invalid params' do
       it 'assigns a newly created but unsaved collection as @collection' do
-        post :create, params: {collection: invalid_attributes}, session: valid_session
+        post :create, params: {collection: invalid_attributes}
         expect(assigns(:collection)).to be_a_new(Collection)
       end
 
       it "re-renders the 'new' template" do
-        post :create, params: {collection: invalid_attributes}, session: valid_session
+        post :create, params: {collection: invalid_attributes}
         expect(response).to render_template('new')
       end
     end
@@ -101,29 +96,29 @@ RSpec.describe CollectionsController, type: :controller do
 
       it 'updates the requested collection' do
         expect do
-          put :update, params: {id: collection.to_param, collection: new_attributes}, session: valid_session
+          put :update, params: {id: collection.to_param, collection: new_attributes}
         end.to change { collection.reload.title }.to('new title')
       end
 
       it 'assigns the requested collection as @collection' do
-        put :update, params: {id: collection.to_param, collection: valid_attributes}, session: valid_session
+        put :update, params: {id: collection.to_param, collection: valid_attributes}
         expect(assigns(:collection)).to eq(collection)
       end
 
       it 'redirects to the collection' do
-        put :update, params: {id: collection.to_param, collection: valid_attributes}, session: valid_session
+        put :update, params: {id: collection.to_param, collection: valid_attributes}
         expect(response).to redirect_to(collections_path)
       end
     end
 
     context 'with invalid params' do
       it 'assigns the collection as @collection' do
-        put :update, params: {id: collection.to_param, collection: invalid_attributes}, session: valid_session
+        put :update, params: {id: collection.to_param, collection: invalid_attributes}
         expect(assigns(:collection)).to eq(collection)
       end
 
       it "re-renders the 'edit' template" do
-        put :update, params: {id: collection.to_param, collection: invalid_attributes}, session: valid_session
+        put :update, params: {id: collection.to_param, collection: invalid_attributes}
         expect(response).to render_template('edit')
       end
     end
@@ -132,7 +127,7 @@ RSpec.describe CollectionsController, type: :controller do
   xdescribe 'PATCH #remove_exercise' do
     let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
     let!(:exercise) { create(:exercise, collections: [collection]) }
-    let(:patch_request) { patch :remove_exercise, params: {id: collection.id, exercise: exercise.id}, session: valid_session }
+    let(:patch_request) { patch :remove_exercise, params: {id: collection.id, exercise: exercise.id} }
 
     it 'removes exercise from collection' do
       expect { patch_request }.to change(collection.reload.exercises, :count).by(-1)
@@ -143,7 +138,7 @@ RSpec.describe CollectionsController, type: :controller do
     let(:collection) { create(:collection, valid_attributes.merge(users: [user], exercises: exercises)) }
     let(:exercises) { create_list(:exercise, 2) }
 
-    let(:patch_request) { patch :remove_all, params: {id: collection.id}, session: valid_session }
+    let(:patch_request) { patch :remove_all, params: {id: collection.id} }
 
     it 'removes exercise from collection' do
       expect { patch_request }.to change(collection.exercises, :count).by(-2)
@@ -155,7 +150,7 @@ RSpec.describe CollectionsController, type: :controller do
     let(:exercises) { create_list(:exercise, 2) }
     let(:zip) { instance_double('StringIO', string: 'dummy') }
 
-    let(:get_request) { get :download_all, params: {id: collection.id}, session: valid_session }
+    let(:get_request) { get :download_all, params: {id: collection.id} }
 
     before { allow(ProformaService::ExportTasks).to receive(:call).with(exercises: collection.reload.exercises).and_return(zip) }
 
@@ -186,7 +181,7 @@ RSpec.describe CollectionsController, type: :controller do
 
   describe 'POST #share' do
     let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
-    let(:post_request) { post :share, params: params, session: valid_session }
+    let(:post_request) { post :share, params: params }
     let(:params) { {id: collection.id, user: create(:user).email} }
 
     it 'creates a message' do
@@ -222,7 +217,7 @@ RSpec.describe CollectionsController, type: :controller do
 
   describe 'POST #view_shared' do
     let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
-    let(:post_request) { post :view_shared, params: params, session: valid_session }
+    let(:post_request) { post :view_shared, params: params }
     let(:params) { {id: collection.id, user: create(:user).id} }
 
     it 'assigns collection' do
@@ -238,7 +233,7 @@ RSpec.describe CollectionsController, type: :controller do
 
   describe 'POST #save_shared' do
     let(:collection) { create(:collection, valid_attributes.merge(users: [create(:user)])) }
-    let(:post_request) { post :save_shared, params: params, session: valid_session }
+    let(:post_request) { post :save_shared, params: params }
     let(:params) { {id: collection.id} }
 
     it 'increases usercount of collection' do
@@ -259,7 +254,7 @@ RSpec.describe CollectionsController, type: :controller do
   describe 'POST #leave' do
     let!(:collection) { create(:collection, valid_attributes.merge(users: users)) }
     let(:users) { [create(:user), user] }
-    let(:post_request) { post :leave, params: params, session: valid_session }
+    let(:post_request) { post :leave, params: params }
     let(:params) { {id: collection.id} }
 
     it 'removes user from collection' do
