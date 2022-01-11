@@ -345,6 +345,7 @@ RSpec.describe TasksController, type: :controller do
     end
   end
 
+  # rubocop:disable RSpec/MultipleExpectations
   describe '#import_uuid_check' do
     let!(:task) { create(:task, valid_attributes) }
     let(:account_link) { create(:account_link, user: user) }
@@ -392,6 +393,7 @@ RSpec.describe TasksController, type: :controller do
       end
     end
   end
+  # rubocop:enable RSpec/MultipleExpectations
 
   describe 'POST #import_external' do
     let(:account_link) { create(:account_link, user: user) }
