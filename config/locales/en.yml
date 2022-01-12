@@ -175,7 +175,7 @@ en:
     session:
       invalid_credentials: 'Invalid user/password combination'
       activate_email: 'Please activate your account by following the instructions in the account confirmation email you received to proceed'
-      login_first: "Please login first."
+      login_first: "Please log in first."
       logged_out: "Logged out."
 
     user:
@@ -728,7 +728,7 @@ en:
   home:
     header: "Welcome to Code Harbor"
     subheader: "Your coding exercise repository"
-    login: "Login"
+    login: "Log In"
     sign_up: "Sign Up"
     search_exercise: "Search Exercise"
     create_exercise: "Create Exercise"
@@ -780,9 +780,9 @@ en:
 
     sign_in:
       header: "Become a member"
-      paragraph_html: "If you want to join our community %{href1} or %{href2} if you are already a member."
-      link1: "sign up now"
-      link2: "login"
+      paragraph_html: "If you want to join our community %{href1} now or %{href2} if you are already a member."
+      link1: "sign up"
+      link2: "log in"
 
   about:
     header: "About CodeHarbor"
@@ -853,14 +853,15 @@ en:
     no_confirmation: "Did not receive confirmation?"
     reset: "Reset"
     resend: "Resend"
-    header: "Please Log In"
+    header: "Log In"
     email:
       label: "Email"
       placeholder: "Email"
     password:
       label: "Password"
       placeholder: "Password"
-    login: "Login"
+    login: "Log in"
+    back: Back
 
   framework:
     header: "Listing Testing Frameworks"
@@ -913,15 +914,31 @@ en:
     private_information: "Private Information"
     username: "Username"
     full_name: "Full name"
-    save_user: "Save User"
+    save_user: "Sign up"
+    update_user: "Update"
+    waiting_confirmation: "Currently waiting confirmation for: %{email}"
+    resend_confirmation: Resend confirmation instructions
+    resend_unlock: Resend unlock instructions
+    forgot_pwd: Forgot your password?
+    send_reset_pwd: Send me reset password instructions
+    change_pwd: Change your password
+    change_my_pwd: Change my password
     account_links:
       created: "Created Account Links"
       other: "Other Account Links"
     new:
-      header: "New User"
+      header: "Sign Up"
+      first_name: First name
+      last_name: Last name
+      email: Email
       password: "Password"
+      password_current: "Current password"
+      password_new: "New password"
+      password_new_confirmation: "Confirm your new password"
       password_confirmation: "Password confirmation"
-
+      minimum_password_length: "%{count} characters minimum"
+      leave_blank: "Leave it blank if you don't want to change it."
+      confirm_w_pwd: "We need your current password to confirm your changes."
     show:
       account_links:
         add: "Add Account Link"
@@ -933,7 +950,6 @@ en:
       edit: "Edit"
       delete: "Delete Account"
       back: "Back"
-
     admin:
       header: "User Administration"
       new: "New User"
@@ -942,13 +958,20 @@ en:
       show: "Show"
       edit: "Edit"
       deleteX: "X"
-
     edit:
-      header: "Editing User"
-
+      header: "Edit User"
     undefined: "User undefined"
     yourself: "yourself"
     errorMessage: "prohibited this user from being saved."
+    shared:
+      links:
+        log_in: Log in
+        sign_up: Sign up
+        forgot_pwd: Forgot your password?
+        no_confirmation: Didn't receive confirmation instructions?
+        no_unlock: Didn't receive unlock instructions?
+        sign_in_with: "Sign in with %{provider}"
+
   message:
     index:
       inbox: 'Inbox'
@@ -970,19 +993,6 @@ en:
     send_message: "Send Message"
     recipient: "Recipient"
 
-  user_mailer:
-    registration_confirmation:
-      header: "Registration confirmation"
-      greeting: "Hello %{user}"
-      paragraph: |
-        Thanks for registering to Codeharbor! To confirm your registration click the link below.
-      button: "Confirm Email"
-    reset_password:
-      header: "Reset password"
-      greeting: "Hello %{user}"
-      paragraph1: You have requested a password reset for CodeHarbor, please follow the link below to reset your password.
-      paragraph2: Please ignore this email if you did not request a password change.
-      button: 'Reset Password'
   tasks:
     form:
       basic_information: "Basic Information"

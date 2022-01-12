@@ -21,7 +21,7 @@ RSpec.describe User, type: :model do
     it { is_expected.not_to be_able_to(:message, user) }
     it { is_expected.not_to be_able_to(:edit, user) }
     it { is_expected.not_to be_able_to(:update, user) }
-    it { is_expected.not_to be_able_to(:soft_delete, user) }
+    it { is_expected.not_to be_able_to(:destroy, user) }
     it { is_expected.not_to be_able_to(:delete, user) }
     it { is_expected.not_to be_able_to(:manage_accountlinks, user) }
     it { is_expected.not_to be_able_to(:remove_account_link, user) }
@@ -39,7 +39,7 @@ RSpec.describe User, type: :model do
       it { is_expected.to be_able_to(:message, user) }
       it { is_expected.not_to be_able_to(:edit, user) }
       it { is_expected.not_to be_able_to(:update, user) }
-      it { is_expected.not_to be_able_to(:soft_delete, user) }
+      it { is_expected.not_to be_able_to(:destroy, user) }
       it { is_expected.not_to be_able_to(:delete, user) }
       it { is_expected.not_to be_able_to(:manage_accountlinks, user) }
       it { is_expected.not_to be_able_to(:remove_account_link, user) }
@@ -64,7 +64,6 @@ RSpec.describe User, type: :model do
         it { is_expected.not_to be_able_to(:message, user) }
         it { is_expected.to be_able_to(:edit, user) }
         it { is_expected.to be_able_to(:update, user) }
-        it { is_expected.to be_able_to(:soft_delete, user) }
         it { is_expected.to be_able_to(:delete, user) }
         it { is_expected.to be_able_to(:manage_accountlinks, user) }
         it { is_expected.to be_able_to(:remove_account_link, user) }
@@ -76,35 +75,29 @@ RSpec.describe User, type: :model do
     it { is_expected.to validate_presence_of(:email) }
     it { is_expected.to validate_presence_of(:first_name) }
     it { is_expected.to validate_presence_of(:last_name) }
-    it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
-    it { is_expected.to validate_uniqueness_of(:username).case_insensitive }
   end
 
-  describe '#soft_delete' do
-    subject(:soft_delete) { user.soft_delete }
+  describe '#destroy' do
+    subject(:destroy) { user.destroy }
 
     let!(:user) { create(:user) }
 
     it 'hashes email' do
-      expect { soft_delete }.to change(user, :email).to Digest::MD5.hexdigest(user.email)
+      expect { destroy }.to change(user, :email).to Digest::MD5.hexdigest(user.email)
     end
 
     it { is_expected.to be true }
 
     it 'changes first_name to deleted' do
-      expect { soft_delete }.to change(user, :first_name).to 'deleted'
+      expect { destroy }.to change(user, :first_name).to 'deleted'
     end
 
     it 'changes last_name to user' do
-      expect { soft_delete }.to change(user, :last_name).to 'user'
+      expect { destroy }.to change(user, :last_name).to 'user'
     end
 
     it 'changes deleted to deleted' do
-      expect { soft_delete }.to change(user, :deleted).to true
-    end
-
-    it 'removes username' do
-      expect { soft_delete }.to change(user, :username).to nil
+      expect { destroy }.to change(user, :deleted).to true
     end
 
     context 'when user is in a group' do
@@ -115,14 +108,14 @@ RSpec.describe User, type: :model do
       it { is_expected.to be true }
 
       it 'does not delete group' do
-        expect { soft_delete }.not_to change(Group, :count)
+        expect { destroy }.not_to change(Group, :count)
       end
 
       context 'when user is admin and only user in group' do
         let(:group) { create(:group, users: [user]) }
 
         it 'deletes group' do
-          expect { soft_delete }.to change(Group, :count).by(-1)
+          expect { destroy }.to change(Group, :count).by(-1)
         end
       end
 
@@ -134,7 +127,7 @@ RSpec.describe User, type: :model do
         it { is_expected.to be true }
 
         it 'does not delete group' do
-          expect { soft_delete }.not_to change(Group, :count)
+          expect { destroy }.not_to change(Group, :count)
         end
 
         context 'when user is the only admin of group' do
@@ -143,7 +136,7 @@ RSpec.describe User, type: :model do
           it { is_expected.to be false }
 
           it 'does not delete group' do
-            expect { soft_delete }.not_to change(Group, :count)
+            expect { destroy }.not_to change(Group, :count)
           end
         end
 
@@ -156,7 +149,7 @@ RSpec.describe User, type: :model do
           it { is_expected.to be true }
 
           it 'does not delete group' do
-            expect { soft_delete }.not_to change(Group, :count)
+            expect { destroy }.not_to change(Group, :count)
           end
         end
       end
@@ -168,14 +161,14 @@ RSpec.describe User, type: :model do
       let(:users) { [user] }
 
       it 'deletes collection' do
-        expect { soft_delete }.to change(Collection, :count).by(-1)
+        expect { destroy }.to change(Collection, :count).by(-1)
       end
 
       context 'when another user also has that collection' do
         let(:users) { [user, create(:user)] }
 
         it 'deletes collection' do
-          expect { soft_delete }.not_to change(Collection, :count)
+          expect { destroy }.not_to change(Collection, :count)
         end
       end
     end
@@ -186,7 +179,7 @@ RSpec.describe User, type: :model do
       let(:exercise) { create(:simple_exercise, user: user) }
 
       it 'changes user of exercise to nil' do
-        expect { soft_delete }.to change { exercise.reload.user }.from(user).to(nil)
+        expect { destroy }.to change { exercise.reload.user }.from(user).to(nil)
       end
     end
 
@@ -194,7 +187,7 @@ RSpec.describe User, type: :model do
       before { create(:message, sender: user) }
 
       it 'does not delete message' do
-        expect { soft_delete }.not_to change(Message, :count)
+        expect { destroy }.not_to change(Message, :count)
       end
 
       xcontext 'when message has type exercise' do
@@ -205,7 +198,7 @@ RSpec.describe User, type: :model do
         end
 
         it 'deletes message' do
-          expect { soft_delete }.to change(Message, :count).by(-3)
+          expect { destroy }.to change(Message, :count).by(-3)
         end
       end
     end

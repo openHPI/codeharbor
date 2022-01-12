@@ -10,8 +10,7 @@ RSpec.describe 'groups', type: :request do
 
     before do
       group.make_admin(user)
-      post login_path, params: {email: user.email, password: user.password}
-      follow_redirect!
+      sign_in user
     end
 
     describe 'GET /groups' do

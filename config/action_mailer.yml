@@ -2,9 +2,6 @@ default: &default
 
 development:
   <<: *default
-  default_url_options:
-    host: localhost
-    port: 7500
 
 production:
   <<: *default

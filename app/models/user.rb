@@ -3,13 +3,22 @@
 require 'digest'
 
 class User < ApplicationRecord
+  # Include devise modules. Others available are:
+  # :timeoutable, :trackable
+  devise :database_authenticatable,
+         :confirmable,
+         :lockable,
+         :omniauthable,
+         :registerable,
+         :recoverable,
+         :rememberable,
+         :validatable
+
   groupify :named_group_member
   groupify :group_member
 
   validates :email, presence: true, uniqueness: {case_sensitive: false}
-  validates :username, uniqueness: {allow_blank: true, case_sensitive: false}
   validates :first_name, :last_name, presence: true
-  has_secure_password
 
   has_many :tasks, dependent: :nullify
 
@@ -30,15 +39,20 @@ class User < ApplicationRecord
 
   default_scope { where(deleted: [nil, false]) }
 
-  before_create :confirmation_token
-  # before_destroy :handle_destroy, prepend: true
-
-  def soft_delete
+  # Called by Devise and overwritten for soft-deletion
+  def destroy
     return false unless handle_destroy
 
-    email = self.email
-    new_email = Digest::MD5.hexdigest email
-    update(first_name: 'deleted', last_name: 'user', email: new_email, deleted: true, username: nil)
+    self.attributes = {
+      first_name: 'deleted',
+      last_name: 'user',
+      email: Digest::MD5.hexdigest(email),
+      deleted: true
+    }
+
+    skip_reconfirmation!
+    skip_email_changed_notification!
+    save!(validate: false)
   end
 
   def member_groups
@@ -87,38 +101,11 @@ class User < ApplicationRecord
     Message.where(recipient: self, recipient_status: 'u').count.to_s
   end
 
-  def email_activate
-    self.email_confirmed = true
-    self.confirm_token = nil
-    save!(validate: false)
-  end
-
-  def generate_password_token!
-    self.reset_password_token = generate_token
-    self.reset_password_sent_at = Time.now.utc
-    save!
-  end
-
-  def password_token_valid?
-    (reset_password_sent_at + 4.hours) > Time.now.utc
-  end
-
-  def reset_password!(password, password_confirmation)
-    self.reset_password_token = nil
-    self.password = password
-    self.password_confirmation = password_confirmation
-    save
-  end
-
   def available_account_links
     account_links + shared_account_links
   end
 
   private
-
-  def confirmation_token
-    self.confirm_token = SecureRandom.urlsafe_base64.to_s if confirm_token.blank?
-  end
 
   def avatar_format
     avatar_blob = avatar.blob

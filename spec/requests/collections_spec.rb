@@ -9,8 +9,7 @@ RSpec.describe 'Collections', type: :request do
     let(:collection_params) { attributes_for(:collection) }
 
     before do
-      post login_path, params: {email: user.email, password: user.password}
-      follow_redirect!
+      sign_in user
     end
 
     describe 'GET /collections' do

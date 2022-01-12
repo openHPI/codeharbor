@@ -4,10 +4,11 @@ require 'rails_helper'
 
 RSpec.describe TaskFilesController, type: :controller do
   let(:user) { create(:user) }
-  let(:valid_session) { {user_id: user.id} }
+
+  before { sign_in user }
 
   describe 'GET #download_attachment' do
-    subject(:get_request) { get :download_attachment, params: params, session: valid_session }
+    subject(:get_request) { get :download_attachment, params: params }
 
     let!(:task_file) { create(:task_file, :with_task, :with_attachment, fileable: build(:task, user: task_user)) }
     let(:params) { {id: task_file.id} }
