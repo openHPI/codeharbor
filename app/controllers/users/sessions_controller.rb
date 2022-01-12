@@ -15,15 +15,53 @@ module Users
     # end
 
     # DELETE /resource/sign_out
-    # def destroy
-    #   super
-    # end
+    def destroy
+      # In order to redirect the user to the IdP in case of a SAML single-log-out request, we need to keep
+      # some SAML information in the session. They are used by the `after_sign_out_path_for` below
+      # and will be removed once the logout completed as part of the `idp_slo_session_destroy` hook
+      # in the AbstractSAML strategy (`lib/omni_auth/strategies/abstract_saml.rb`).
+      #
+      # Preserve the saml_uid, saml_session_index and omniauth_provider in the session
+      # This is done by copying those and setting these after destroying the session (through `super`)
+      saml_uid = session['saml_uid']
+      saml_session_index = session['saml_session_index']
+      omniauth_provider = session['omniauth_provider']
+      super do
+        session['saml_uid'] = saml_uid
+        session['saml_session_index'] = saml_session_index
+        session['omniauth_provider'] = omniauth_provider
+      end
+    end
 
-    # protected
+    protected
 
     # If you have extra params to permit, append them to the sanitizer.
     # def configure_sign_in_params
     #   devise_parameter_sanitizer.permit(:sign_in, keys: [:attribute])
     # end
+
+    def after_sign_out_path_for(_)
+      provider = session['omniauth_provider']
+      if session['saml_uid'] && session['saml_session_index'] && provider
+        strategy_class = Devise.omniauth_configs[provider.to_sym].strategy_class
+        return spslo_path_for(provider) if strategy_class.default_options.idp_slo_service_url
+      end
+
+      # If SLO is not supported, we delegate the call to the parent
+      super
+    end
+
+    def spslo_path_for(provider)
+      # spslo stands for "Service-Provider initiated Single-Log-Out"
+      # We only need to construct the provider-specific path and return it
+
+      # First, we generate the method name of the routes helper for this provder
+      authorize_path_helper = "user_#{provider}_omniauth_authorize_path"
+      # Then, we call the method to get the path `/users/auth/<provider>`
+      authorize_path = public_send(authorize_path_helper)
+      # Finally, the predefined `/spslo` suffix is appended
+      # This path is defined and handled by the `omniauth-saml` gem
+      "#{authorize_path}/spslo"
+    end
   end
 end

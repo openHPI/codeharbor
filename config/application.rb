@@ -20,7 +20,14 @@ module Codeharbor
     # in config/environments, which are processed later.
     #
     # config.time_zone = "Central Time (US & Canada)"
-    # config.eager_load_paths << Rails.root.join("extras")
+
+    extra_paths = %W[
+      #{config.root}/lib
+    ]
+
+    config.add_autoload_paths_to_load_path = false
+    config.autoload_paths += extra_paths
+    config.eager_load_paths += extra_paths
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]

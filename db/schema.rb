@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_05_111405) do
+ActiveRecord::Schema.define(version: 2022_01_07_173125) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -268,6 +268,16 @@ ActiveRecord::Schema.define(version: 2022_01_05_111405) do
     t.jsonb "meta_data", default: {}
   end
 
+  create_table "user_identities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "omniauth_provider"
+    t.string "provider_uid"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["omniauth_provider", "provider_uid"], name: "index_user_identities_on_omniauth_provider_and_provider_uid", unique: true
+    t.index ["user_id"], name: "index_user_identities_on_user_id"
+  end
+
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -307,4 +317,5 @@ ActiveRecord::Schema.define(version: 2022_01_05_111405) do
   add_foreign_key "reports", "users"
   add_foreign_key "task_labels", "tasks"
   add_foreign_key "tests", "tasks"
+  add_foreign_key "user_identities", "users"
 end
