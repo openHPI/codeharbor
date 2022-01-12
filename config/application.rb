@@ -42,5 +42,10 @@ module Codeharbor
     # Configure asset paths
     config.assets.paths << Rails.root.join('public/assets/vendor')
     config.active_record.belongs_to_required_by_default = true
+
+    # Specify default options for Rails generators
+    config.generators do |g|
+      g.orm :active_record, primary_key_type: :uuid
+    end
   end
 end
