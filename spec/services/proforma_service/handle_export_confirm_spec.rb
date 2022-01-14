@@ -42,7 +42,7 @@ xdescribe ProformaService::HandleExportConfirm do
 
     before do
       allow(ProformaService::ExportTask).to(receive(:call)).and_return('zip_stream')
-      allow(ExerciseService::PushExternal).to(receive(:call))
+      allow(TaskService::PushExternal).to(receive(:call))
     end
 
     it 'returns an array with exercise and potential errors' do
@@ -56,7 +56,7 @@ xdescribe ProformaService::HandleExportConfirm do
 
     it 'calls PushExternal-service with correct arguments' do
       handle_export_confirm
-      expect(ExerciseService::PushExternal).to have_received(:call).with(zip: 'zip_stream', account_link: account_link)
+      expect(TaskService::PushExternal).to have_received(:call).with(zip: 'zip_stream', account_link: account_link)
     end
 
     context 'when push_type is create_new' do

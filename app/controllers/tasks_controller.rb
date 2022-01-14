@@ -117,6 +117,54 @@ class TasksController < ApplicationController
     render json: t('controllers.exercise.import_proforma_xml.internal_error'), status: :internal_server_error
   end
 
+  def export_external_start
+    @account_link = AccountLink.find(params[:account_link])
+
+    respond_to do |format|
+      format.js { render layout: false }
+    end
+  end
+
+  def export_external_check
+    external_check = TaskService::CheckExternal.call(uuid: @task.uuid,
+                                                     account_link: AccountLink.find(params[:account_link]))
+    render json: {
+      message: external_check[:message],
+      actions: render_to_string(
+        partial: 'export_actions.html.slim',
+        locals: {
+          task: @task,
+          task_found: external_check[:task_found],
+          update_right: external_check[:update_right],
+          error: external_check[:error],
+          exported: false
+        }
+      )
+    }, status: :ok
+  end
+
+  def export_external_confirm
+    push_type = params[:push_type]
+
+    return render json: {}, status: :internal_server_error unless %w[create_new export].include? push_type
+
+    exercise, error = ProformaService::HandleExportConfirm.call(user: current_user, exercise: @exercise,
+                                                                push_type: push_type, account_link_id: params[:account_link])
+    exercise_title = exercise.title
+
+    if error.nil?
+      render json: {
+        message: t('exercises.export_exercise.successfully_exported', title: exercise_title),
+        status: 'success', actions: render_export_actions(exercise, true)
+      }
+    else
+      render json: {
+        message: t('exercises.export_exercise.export_failed', title: exercise_title, error: error),
+        status: 'fail', actions: render_export_actions(exercise, false, error)
+      }
+    end
+  end
+
   private
 
   def set_search

@@ -72,6 +72,9 @@ Rails.application.routes.draw do
   resources :tasks do
     member do
       get :download
+      post :export_external_start
+      post :export_external_check
+      post :export_external_confirm
     end
 
     collection do

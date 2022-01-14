@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-xdescribe ExerciseService::PushExternal do
+xdescribe TaskService::PushExternal do
   describe '.new' do
     subject(:push_external) { described_class.new(zip: zip, account_link: account_link) }
 

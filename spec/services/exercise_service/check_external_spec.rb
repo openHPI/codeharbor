@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ExerciseService::CheckExternal do
+RSpec.describe TaskService::CheckExternal do
   describe '.new' do
     subject(:export_service) { described_class.new(uuid: uuid, account_link: account_link) }
 

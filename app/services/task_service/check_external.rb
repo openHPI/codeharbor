@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ExerciseService
+module TaskService
   class CheckExternal < ServiceBase
     def initialize(uuid:, account_link:)
       @uuid = uuid
@@ -13,11 +13,11 @@ module ExerciseService
         req.headers['Authorization'] = authorization_header
         req.body = {uuid: @uuid}.to_json
       end
-      response_hash = JSON.parse(response.body, symbolize_names: true).slice(:exercise_found, :update_right)
+      response_hash = JSON.parse(response.body, symbolize_names: true).slice(:task_found, :update_right)
 
       {error: false, message: message(response_hash)}.merge(response_hash)
     rescue Faraday::Error, JSON::ParserError
-      {error: true, message: I18n.t('exercises.export_exercise.error')}
+      {error: true, message: I18n.t('tasks.export_task.error')}
     end
 
     private
@@ -27,14 +27,14 @@ module ExerciseService
     end
 
     def message(response_hash)
-      if response_hash[:exercise_found]
+      if response_hash[:task_found]
         if response_hash[:update_right]
-          I18n.t('exercises.export_exercise.check.exercise_found')
+          I18n.t('tasks.export_task.check.task_found')
         else
-          I18n.t('exercises.export_exercise.check.exercise_found_no_right')
+          I18n.t('tasks.export_task.check.task_found_no_right')
         end
       else
-        I18n.t('exercises.export_exercise.check.no_exercise')
+        I18n.t('tasks.export_task.check.no_task')
       end
     end
 
