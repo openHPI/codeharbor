@@ -8,19 +8,12 @@ class ApplicationController < ActionController::Base
   before_action :set_sentry_context
   after_action :flash_to_headers
 
-  # http://www.rubydoc.info/docs/rails/AbstractController/Helpers/ClassMethods:helper_method
-  helper_method :current_user
-
-  def current_user
-    @current_user ||= User.find(session[:user_id]) if session[:user_id]
-  end
-
   private
 
   def set_sentry_context
-    return if current_user.blank?
+    return unless user_signed_in?
 
-    Sentry.set_user(id: current_user.id, username: current_user.username)
+    Sentry.set_user(id: current_user.id)
   end
 
   def flash_to_headers

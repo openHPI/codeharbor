@@ -1,0 +1,12 @@
+.form-group
+  = f.label :avatar, class: 'form-label'
+  = f.hidden_field :avatar_present, value: f.object.avatar.attached?, class: 'hidden-avatar-present'
+  - if f.object.avatar.attached?
+    .file-show
+      = image_tag f.object.avatar.variant(resize_to_limit: [200, 200])
+      br
+      = link_to t('users.remove_avatar'), '#', class: 'btn btn-default btn-sm remove-avatar', style: 'margin-top: 10px'
+    .file-input style='display: none'
+      = f.file_field :avatar, class: 'form-control'
+  - else
+    = f.file_field :avatar, class: 'form-control'

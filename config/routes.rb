@@ -2,24 +2,33 @@
 
 Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
-  root 'home#index'
+  root to: 'home#index'
+
   resources :home, only: :index do
     collection do
       get :about
       get :account_link_documentation
-      get :confirm_email
-      get :forgot_password
-      get :resend_confirmation
-      get :reset_password
     end
   end
 
-  controller :sessions do
-    get 'login' => :new
-    post 'login' => :create
-    delete 'logout' => :destroy
+  devise_for :users, controllers: {
+    confirmations: 'users/confirmations',
+    omniauth_callbacks: 'users/omniauth_callbacks',
+    passwords: 'users/passwords',
+    registrations: 'users/registrations',
+    sessions: 'users/sessions',
+    unlocks: 'users/unlocks'
+  }
 
-    get 'sessions/email_link'
+  resources :users, only: %i[show] do
+    resources :account_links, only: %i[new show create edit update destroy] do
+      post :remove_shared_user, on: :member
+      post :add_shared_user, on: :member
+    end
+
+    resources :messages, only: %i[index new create destroy] do
+      get :reply, on: :collection
+    end
   end
 
   resources :collections do
@@ -51,21 +60,6 @@ Rails.application.routes.draw do
   end
 
   resources :labels, only: [] do
-    get :search, on: :collection
-  end
-
-  resources :users, only: %i[new show create edit update destroy] do
-    resources :account_links, only: %i[new show create edit update destroy] do
-      post :remove_shared_user, on: :member
-      post :add_shared_user, on: :member
-    end
-
-    resources :messages, only: %i[index new create destroy] do
-      get :reply, on: :collection
-    end
-  end
-
-  resources :file_types, only: [] do
     get :search, on: :collection
   end
 

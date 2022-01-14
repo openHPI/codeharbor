@@ -2,35 +2,46 @@
 
 ##### Users #####
 
-user1 = User.create!(
+user1 = User.new(
   first_name: 'Firstname1',
   last_name: 'Lastname1',
   email: 'user1@example.org',
-  email_confirmed: true,
-  password: 'pwd',
+  password: '12345678',
+  password_confirmation: '12345678',
   role: 'admin'
 )
-user2 = User.create!(
+user1.skip_confirmation!
+user1.save!
+
+user2 = User.new(
   first_name: 'Firstname2',
   last_name: 'Lastname2',
   email: 'user2@example.org',
-  email_confirmed: true,
-  password: 'pwd'
+  password: '12345678',
+  password_confirmation: '12345678'
 )
-user3 = User.create!(
+user2.skip_confirmation!
+user2.save!
+
+user3 = User.new(
   first_name: 'Firstname3',
   last_name: 'Lastname3',
   email: 'user3@example.org',
-  email_confirmed: true,
-  password: 'pwd'
+  password: '12345678',
+  password_confirmation: '12345678'
 )
-user4 = User.create!(
+user3.skip_confirmation!
+user3.save!
+
+user4 = User.new(
   first_name: 'Firstname4',
   last_name: 'Lastname4',
   email: 'user4@example.org',
-  email_confirmed: true,
-  password: '1234'
+  password: '12345678',
+  password_confirmation: '12345678'
 )
+user4.skip_confirmation!
+user4.save!
 
 AccountLink.create!(
   user: user1,

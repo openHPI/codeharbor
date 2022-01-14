@@ -20,7 +20,14 @@ module Codeharbor
     # in config/environments, which are processed later.
     #
     # config.time_zone = "Central Time (US & Canada)"
-    # config.eager_load_paths << Rails.root.join("extras")
+
+    extra_paths = %W[
+      #{config.root}/lib
+    ]
+
+    config.add_autoload_paths_to_load_path = false
+    config.autoload_paths += extra_paths
+    config.eager_load_paths += extra_paths
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
@@ -35,5 +42,10 @@ module Codeharbor
     # Configure asset paths
     config.assets.paths << Rails.root.join('public/assets/vendor')
     config.active_record.belongs_to_required_by_default = true
+
+    # Specify default options for Rails generators
+    config.generators do |g|
+      g.orm :active_record, primary_key_type: :uuid
+    end
   end
 end

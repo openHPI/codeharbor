@@ -11,7 +11,7 @@ html
       .nav.navbar.navbar-default.navbar-fixed-top.navbar-offset
         = nav_bar fixed: :top, brand: 'CodeHarbor', responsive: true do
           = menu_group do
-            - if current_user
+            - if user_signed_in?
               = menu_item tasks_path  do
                 i.fa.fa-file-text-o style=("color: #006600")
                 = ' ' + t('layouts.tasks')
@@ -27,7 +27,7 @@ html
                     i.fa.fa-lock
                     = ' ' + t('layouts.admin_nav.rails_admin')
           = menu_group pull: :right do
-            - if current_user
+            - if user_signed_in?
               li.dropdown
                 a href="#" class= "dropdown-toggle" data-toggle="dropdown"
                   = current_user.email
@@ -46,12 +46,12 @@ html
                       - if current_user.unread_messages_count != '0'
                         span.menu-number
                           = current_user.unread_messages_count
-              = menu_item t('layouts.logout'),  logout_path, method: :delete
+              = menu_item t('layouts.logout'), destroy_user_session_path, method: :delete
             - else
-              = menu_item new_user_path do
+              = menu_item new_user_registration_path do
                 i.fa.fa-user
                 = ' ' + t('home.sign_up')
-              = menu_item login_path do
+              = menu_item new_user_session_path do
                 i.fa.fa-sign-in
                 = ' ' + t('home.login')
 

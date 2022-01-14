@@ -16,12 +16,6 @@
     .inner-section style="width: 80%"
       .row
         .row-label
-          = t('users.username')
-          | :
-        .row-value
-          = @user.username.nil? ? @user.name : @user.username
-      .row
-        .row-label
           = t('users.full_name')
           | :
         .row-value
@@ -32,12 +26,6 @@
           | :
         .row-value
           = @user.role
-  .row.vertical
-    .row-label
-      = t('groups.show.description')
-      | :
-    .row-value
-      = @user.description
 
 - if can? :manage_accountlinks, @user
   .show-table
@@ -102,12 +90,12 @@
       i.fa.fa-envelope
       = ' ' + t('message.send_message')
   - if can? :edit, @user
-    = link_to edit_user_path(@user), class:'btn btn-important' do
+    = link_to edit_user_registration_path, class:'btn btn-important' do
       i.fa.fa-edit
       = ' '
       = t('users.show.edit')
   - if can? :delete, @user
-    = link_to @user, method: :delete, data: { confirm: t('sure')}, class:'btn btn-important' do
+    = link_to registration_path(@user), method: :delete, data: {confirm: t('sure')}, class:'btn btn-important' do
       i.fa.fa-trash
       = ' '
       = t('users.show.delete')

@@ -9,12 +9,12 @@ RSpec.describe TasksController, type: :controller do
 
   let(:invalid_attributes) { {title: ''} }
 
-  let(:valid_session) { {user_id: user.id} }
+  before { sign_in user }
 
   describe 'GET #index' do
-    subject(:get_request) { get :index, params: params, session: valid_session }
+    subject(:get_request) { get :index, params: params }
 
-    let(:get_request_without_params) { get :index, params: {}, session: valid_session }
+    let(:get_request_without_params) { get :index, params: {} }
     let!(:task) { create(:task, valid_attributes) }
     let(:params) { {} }
 
@@ -75,7 +75,7 @@ RSpec.describe TasksController, type: :controller do
   end
 
   describe 'GET #show' do
-    subject(:get_request) { get :show, params: {id: task.to_param}, session: valid_session }
+    subject(:get_request) { get :show, params: {id: task.to_param} }
 
     let!(:task) { create(:task, valid_attributes) }
 
@@ -105,7 +105,7 @@ RSpec.describe TasksController, type: :controller do
 
   describe 'GET #new' do
     it 'assigns a new task as @task' do
-      get :new, params: {}, session: valid_session
+      get :new, params: {}
       expect(assigns(:task)).to be_a_new(Task)
     end
   end
@@ -114,14 +114,14 @@ RSpec.describe TasksController, type: :controller do
     let!(:task) { create(:task, valid_attributes) }
 
     it 'assigns the requested task as @task' do
-      get :edit, params: {id: task.to_param}, session: valid_session
+      get :edit, params: {id: task.to_param}
       expect(assigns(:task)).to eq(task)
     end
   end
 
   describe 'POST #create' do
     context 'with valid params' do
-      subject(:post_request) { post :create, params: {task: valid_params}, session: valid_session }
+      subject(:post_request) { post :create, params: {task: valid_params} }
 
       let(:valid_params) do
         {
@@ -148,7 +148,7 @@ RSpec.describe TasksController, type: :controller do
     end
 
     context 'with invalid params' do
-      subject(:post_request) { post :create, params: {task: invalid_attributes}, session: valid_session }
+      subject(:post_request) { post :create, params: {task: invalid_attributes} }
 
       it 'assigns a newly created but unsaved task as @task' do
         post_request
@@ -163,7 +163,7 @@ RSpec.describe TasksController, type: :controller do
   end
 
   describe 'PUT #update' do
-    subject(:put_update) { put :update, params: {id: task.to_param, task: update_attributes}, session: valid_session }
+    subject(:put_update) { put :update, params: {id: task.to_param, task: update_attributes} }
 
     let(:update_attributes) { {title: 'new_title'} }
     let!(:task) { create(:task, valid_attributes) }
@@ -186,8 +186,7 @@ RSpec.describe TasksController, type: :controller do
 
       context 'when task has a test' do
         subject(:put_update) do
-          put :update, params: {id: task.to_param, task: update_attributes.merge({'tests_attributes' => tests_attributes})},
-                       session: valid_session
+          put :update, params: {id: task.to_param, task: update_attributes.merge({'tests_attributes' => tests_attributes})}
         end
 
         let(:test) { build(:test) }
@@ -206,7 +205,7 @@ RSpec.describe TasksController, type: :controller do
     end
 
     context 'with invalid params' do
-      subject(:put_update) { put :update, params: {id: task.to_param, task: invalid_attributes}, session: valid_session }
+      subject(:put_update) { put :update, params: {id: task.to_param, task: invalid_attributes} }
 
       it 'assigns the task as @task' do
         put_update
@@ -222,7 +221,7 @@ RSpec.describe TasksController, type: :controller do
 
   describe 'DELETE #destroy' do
     subject(:delete_request) do
-      delete :destroy, params: {id: task.to_param}, session: valid_session
+      delete :destroy, params: {id: task.to_param}
     end
 
     let!(:task) { create(:task, valid_attributes) }
@@ -238,7 +237,7 @@ RSpec.describe TasksController, type: :controller do
   end
 
   describe 'GET #download' do
-    subject(:get_request) { get :download, params: {id: task.id}, session: valid_session }
+    subject(:get_request) { get :download, params: {id: task.id} }
 
     let(:task) { create(:task, valid_attributes) }
     let(:zip) { instance_double('StringIO', string: 'dummy') }
@@ -269,8 +268,7 @@ RSpec.describe TasksController, type: :controller do
   describe 'POST #import_start' do
     render_views
 
-    subject(:post_request) { post :import_start, params: {zip_file: zip_file}, session: valid_session, format: :js, xhr: true }
-
+    subject(:post_request) { post :import_start, params: {zip_file: zip_file}, format: :js, xhr: true }
     let(:zip_file) { fixture_file_upload('files/proforma_import/testfile.zip', 'application/zip') }
 
     before { allow(ProformaService::CacheImportFile).to receive(:call).and_call_original }
@@ -328,8 +326,7 @@ RSpec.describe TasksController, type: :controller do
 
     subject(:post_request) do
       post :import_confirm,
-           params: {import_id: import_data[1][:import_id], subfile_id: import_data[0], import_type: 'export'},
-           session: valid_session, xhr: true
+           params: {import_id: import_data[1][:import_id], subfile_id: import_data[0], import_type: 'export'}, xhr: true
     end
 
     let(:zip_file) { fixture_file_upload('files/proforma_import/testfile_multi.zip', 'application/zip') }

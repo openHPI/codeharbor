@@ -34,16 +34,20 @@ gem 'jquery-rails', '>= 4.3.5'
 gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.11'
-# bundle exec rake doc:rails generates the API under doc/api.
-# gem 'sdoc', '~> 1.0', group: :doc
 
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.16'
 
-# pagination
+# Pagination
 gem 'will_paginate'
 
-# Continuation of CanCan (authoriation Gem for RoR)
+# Authentication
+gem 'devise', '~> 4.8'
+gem 'omniauth', '~> 2.0'
+gem 'omniauth-rails_csrf_protection', '~> 1.0'
+gem 'omniauth-saml', '~> 2.0'
+
+# Authorization
 gem 'cancancan'
 
 # Use Bootstrap (app/assets/stylesheets)
@@ -95,6 +99,8 @@ group :development do
   gem 'rack-mini-profiler'
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '>= 3.7.0'
+
+  gem 'letter_opener'
 
   gem 'pry-rails'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring

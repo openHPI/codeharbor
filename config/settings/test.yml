@@ -1,2 +1,7 @@
 codeocean:
   url: http://localhost
+omniauth:
+  samltestid:
+    enable: false
+  bird:
+    enable: false
