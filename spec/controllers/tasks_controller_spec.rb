@@ -269,6 +269,7 @@ RSpec.describe TasksController, type: :controller do
     render_views
 
     subject(:post_request) { post :import_start, params: {zip_file: zip_file}, format: :js, xhr: true }
+
     let(:zip_file) { fixture_file_upload('files/proforma_import/testfile.zip', 'application/zip') }
 
     before { allow(ProformaService::CacheImportFile).to receive(:call).and_call_original }
