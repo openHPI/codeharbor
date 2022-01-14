@@ -3,10 +3,11 @@
 require 'zip'
 
 class TasksController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource except: %i[import_external import_uuid_check]
 
   before_action :handle_search_params, only: :index
   before_action :set_search, only: [:index]
+  skip_before_action :verify_authenticity_token, only: %i[import_external import_uuid_check]
 
   rescue_from CanCan::AccessDenied do |_exception|
     redirect_to root_path, alert: t('controllers.authorization')
@@ -91,6 +92,31 @@ class TasksController < ApplicationController
     }
   end
 
+  def import_uuid_check
+    user = user_for_api_request
+    return render json: {}, status: :unauthorized if user.nil?
+
+    task = Task.find_by(uuid: params[:uuid])
+    return render json: {task_found: false} if task.nil?
+    return render json: {task_found: true, update_right: false} unless task.can_access(user)
+
+    render json: {task_found: true, update_right: true}
+  end
+
+  def import_external
+    user = user_for_api_request
+    tempfile = tempfile_from_string(request.body.read.force_encoding('UTF-8'))
+
+    ProformaService::Import.call(zip: tempfile, user: user)
+
+    render json: t('controllers.exercise.import_proforma_xml.success'), status: :created
+  rescue Proforma::ProformaError
+    render json: t('controllers.exercise.import_proforma_xml.invalid'), status: :bad_request
+  rescue StandardError => e
+    Sentry.capture_exception(e)
+    render json: t('controllers.exercise.import_proforma_xml.internal_error'), status: :internal_server_error
+  end
+
   private
 
   def set_search
@@ -137,5 +163,22 @@ class TasksController < ApplicationController
 
   def import_confirm_params
     params.permit(:import_id, :subfile_id, :import_type)
+  end
+
+  def user_for_api_request
+    authorization_header = request.headers['Authorization']
+    api_key = authorization_header&.split(' ')&.second
+    user_by_api_key(api_key)
+  end
+
+  def user_by_api_key(api_key)
+    AccountLink.find_by(api_key: api_key)&.user
+  end
+
+  def tempfile_from_string(string)
+    Tempfile.new('codeharbor_import.zip').tap do |tempfile|
+      tempfile.write string
+      tempfile.rewind
+    end
   end
 end

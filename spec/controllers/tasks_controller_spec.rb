@@ -75,8 +75,9 @@ RSpec.describe TasksController, type: :controller do
   end
 
   describe 'GET #show' do
+    subject(:get_request) { get :show, params: {id: task.to_param} }
+
     let!(:task) { create(:task, valid_attributes) }
-    let(:get_request) { get :show, params: {id: task.to_param} }
 
     it 'assigns the requested task to instance variable' do
       get_request
@@ -120,6 +121,8 @@ RSpec.describe TasksController, type: :controller do
 
   describe 'POST #create' do
     context 'with valid params' do
+      subject(:post_request) { post :create, params: {task: valid_params} }
+
       let(:valid_params) do
         {
           title: 'title',
@@ -130,40 +133,41 @@ RSpec.describe TasksController, type: :controller do
       end
 
       it 'creates a new Task' do
-        expect do
-          post :create, params: {task: valid_params}
-        end.to change(Task, :count).by(1)
+        expect { post_request }.to change(Task, :count).by(1)
       end
 
       it 'assigns a newly created task as @task' do
-        post :create, params: {task: valid_params}
+        post_request
         expect(assigns(:task)).to be_persisted
       end
 
       it 'redirects to the created task' do
-        post :create, params: {task: valid_params}
+        post_request
         expect(response).to redirect_to(Task.last)
       end
     end
 
     context 'with invalid params' do
+      subject(:post_request) { post :create, params: {task: invalid_attributes} }
+
       it 'assigns a newly created but unsaved task as @task' do
-        post :create, params: {task: invalid_attributes}
+        post_request
         expect(assigns(:task)).to be_a_new(Task)
       end
 
       it "re-renders the 'new' template" do
-        post :create, params: {task: invalid_attributes}
+        post_request
         expect(response).to render_template('new')
       end
     end
   end
 
   describe 'PUT #update' do
+    subject(:put_update) { put :update, params: {id: task.to_param, task: update_attributes} }
+
     let(:update_attributes) { {title: 'new_title'} }
     let!(:task) { create(:task, valid_attributes) }
     let(:valid_attributes) { {user: user, title: 'title'} }
-    let(:put_update) { put :update, params: {id: task.to_param, task: update_attributes} }
 
     context 'with valid params' do
       it 'updates the requested task' do
@@ -181,14 +185,14 @@ RSpec.describe TasksController, type: :controller do
       end
 
       context 'when task has a test' do
+        subject(:put_update) do
+          put :update, params: {id: task.to_param, task: update_attributes.merge({'tests_attributes' => tests_attributes})}
+        end
+
         let(:test) { build(:test) }
         let!(:task) { create(:task, valid_attributes.merge(tests: [test])) }
 
         let(:tests_attributes) { {'0' => test.attributes.merge('title' => 'new_test_title')} }
-
-        let(:put_update) do
-          put :update, params: {id: task.to_param, task: update_attributes.merge({'tests_attributes' => tests_attributes})}
-        end
 
         it 'updates the requested task' do
           expect { put_update }.to change { task.reload.title }.to('new_title')
@@ -201,37 +205,41 @@ RSpec.describe TasksController, type: :controller do
     end
 
     context 'with invalid params' do
+      subject(:put_update) { put :update, params: {id: task.to_param, task: invalid_attributes} }
+
       it 'assigns the task as @task' do
-        put :update, params: {id: task.to_param, task: invalid_attributes}
+        put_update
         expect(assigns(:task)).to eq(task)
       end
 
       it "re-renders the 'edit' template" do
-        put :update, params: {id: task.to_param, task: invalid_attributes}
+        put_update
         expect(response).to render_template('edit')
       end
     end
   end
 
   describe 'DELETE #destroy' do
+    subject(:delete_request) do
+      delete :destroy, params: {id: task.to_param}
+    end
+
     let!(:task) { create(:task, valid_attributes) }
 
     it 'destroys the requested task' do
-      expect do
-        delete :destroy, params: {id: task.to_param}
-      end.to change(Task, :count).by(-1)
+      expect { delete_request }.to change(Task, :count).by(-1)
     end
 
     it 'redirects to the tasks list' do
-      delete :destroy, params: {id: task.to_param}
+      delete_request
       expect(response).to redirect_to(tasks_url)
     end
   end
 
   describe 'GET #download' do
-    let(:task) { create(:task, valid_attributes) }
+    subject(:get_request) { get :download, params: {id: task.id} }
 
-    let(:get_request) { get :download, params: {id: task.id} }
+    let(:task) { create(:task, valid_attributes) }
     let(:zip) { instance_double('StringIO', string: 'dummy') }
 
     before { allow(ProformaService::ExportTask).to receive(:call).with(task: task).and_return(zip) }
@@ -260,7 +268,8 @@ RSpec.describe TasksController, type: :controller do
   describe 'POST #import_start' do
     render_views
 
-    let(:post_request) { post :import_start, params: {zip_file: zip_file}, format: :js, xhr: true }
+    subject(:post_request) { post :import_start, params: {zip_file: zip_file}, format: :js, xhr: true }
+
     let(:zip_file) { fixture_file_upload('files/proforma_import/testfile.zip', 'application/zip') }
 
     before { allow(ProformaService::CacheImportFile).to receive(:call).and_call_original }
@@ -316,13 +325,14 @@ RSpec.describe TasksController, type: :controller do
   describe 'POST #import_confirm' do
     render_views
 
-    let(:zip_file) { fixture_file_upload('files/proforma_import/testfile_multi.zip', 'application/zip') }
-    let(:data) { ProformaService::CacheImportFile.call(user: user, zip_file: zip_file) }
-    let(:import_data) { data.first }
-    let(:post_request) do
+    subject(:post_request) do
       post :import_confirm,
            params: {import_id: import_data[1][:import_id], subfile_id: import_data[0], import_type: 'export'}, xhr: true
     end
+
+    let(:zip_file) { fixture_file_upload('files/proforma_import/testfile_multi.zip', 'application/zip') }
+    let(:data) { ProformaService::CacheImportFile.call(user: user, zip_file: zip_file) }
+    let(:import_data) { data.first }
 
     it 'creates the task' do
       expect { post_request }.to change(Task, :count).by(1)
@@ -339,6 +349,98 @@ RSpec.describe TasksController, type: :controller do
       it 'renders correct json' do
         post_request
         expect(response.body).to include('failed').and(include('Record invalid').and(include('"actions":""')))
+      end
+    end
+  end
+
+  # rubocop:disable RSpec/MultipleExpectations
+  describe '#import_uuid_check' do
+    subject(:post_request) { post :import_uuid_check, params: {uuid: uuid} }
+
+    let!(:task) { create(:task, valid_attributes) }
+    let(:headers) { {'Authorization' => "Bearer #{account_link.api_key}"} }
+    let(:account_link) { create(:account_link, user: user) }
+    let(:uuid) { task.reload.uuid }
+
+    before { request.headers.merge! headers }
+
+    it 'renders correct response' do
+      post_request
+      expect(response).to have_http_status(:success)
+
+      expect(JSON.parse(response.body).symbolize_keys).to eql(task_found: true, update_right: true)
+    end
+
+    context 'when api_key is incorrect' do
+      let(:headers) { {'Authorization' => 'Bearer XXXXXX'} }
+
+      it 'renders correct response' do
+        post_request
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'when the user is cannot update the task' do
+      let(:account_link) { create(:account_link, api_key: 'anotherkey') }
+
+      it 'renders correct response' do
+        post_request
+        expect(response).to have_http_status(:success)
+
+        expect(JSON.parse(response.body).symbolize_keys).to eql(task_found: true, update_right: false)
+      end
+    end
+
+    context 'when the searched task does not exist' do
+      let(:uuid) { 'anotheruuid' }
+
+      it 'renders correct response' do
+        post_request
+        expect(response).to have_http_status(:success)
+
+        expect(JSON.parse(response.body).symbolize_keys).to eql(task_found: false)
+      end
+    end
+  end
+  # rubocop:enable RSpec/MultipleExpectations
+
+  describe 'POST #import_external' do
+    subject(:post_request) { post :import_external, body: zip_file_content }
+
+    let(:account_link) { create(:account_link, user: user) }
+    let(:zip_file_content) { 'zipped task xml' }
+    let(:headers) { {'Authorization' => "Bearer #{account_link.api_key}"} }
+
+    before do
+      request.headers.merge! headers
+      allow(ProformaService::Import).to receive(:call)
+    end
+
+    it 'responds with correct status code' do
+      post_request
+      expect(response).to have_http_status(:created)
+    end
+
+    it 'calls service' do
+      post_request
+      expect(ProformaService::Import).to have_received(:call).with(zip: be_a(Tempfile).and(has_content(zip_file_content)), user: user)
+    end
+
+    context 'when import fails with ProformaError' do
+      before { allow(ProformaService::Import).to receive(:call).and_raise(Proforma::PreImportValidationError) }
+
+      it 'responds with correct status code' do
+        post_request
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+
+    context 'when import fails due to another error' do
+      before { allow(ProformaService::Import).to receive(:call).and_raise(StandardError) }
+
+      it 'responds with correct status code' do
+        post_request
+        expect(response).to have_http_status(:internal_server_error)
       end
     end
   end
