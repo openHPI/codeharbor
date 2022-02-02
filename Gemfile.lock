@@ -421,9 +421,9 @@ GEM
       sprockets-rails
       tilt
     select2-rails (4.0.13)
-    sentry-rails (5.0.1)
+    sentry-rails (5.0.2)
       railties (>= 5.0)
-      sentry-ruby-core (~> 5.0.1)
+      sentry-ruby-core (~> 5.0.2)
     sentry-ruby (5.0.2)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       sentry-ruby-core (= 5.0.2)
@@ -491,7 +491,7 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     will_paginate (3.3.1)
-    zeitwerk (2.5.3)
+    zeitwerk (2.5.4)
 
 PLATFORMS
   ruby
