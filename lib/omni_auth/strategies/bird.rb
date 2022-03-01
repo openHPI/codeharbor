@@ -15,8 +15,6 @@ module OmniAuth
       # Our Service Provider has some configuration options
       option :certificate, File.read(Settings.omniauth.bird.certificate)
       option :private_key, File.read(Settings.omniauth.bird.private_key)
-
-      restore_deprecated_options
     end
   end
 end

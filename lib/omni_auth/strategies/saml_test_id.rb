@@ -18,8 +18,6 @@ module OmniAuth
       option :certificate, File.read(Settings.omniauth.samltestid.certificate)
       option :private_key, File.read(Settings.omniauth.samltestid.private_key)
 
-      restore_deprecated_options
-
       # Don't forget to upload the metadata to use this test service:
       # Copy the XML from http://localhost:7500/users/auth/samltestid/metadata
       # to the metadata upload at https://samltest.id/upload.php
