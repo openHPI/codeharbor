@@ -109,7 +109,7 @@ describe ProformaService::ExportTask do
         end
 
         it 'adds attached file to zip' do
-          expect(zip_files[file.full_file_name]).not_to be nil
+          expect(zip_files[file.full_file_name]).not_to be_nil
         end
       end
     end
