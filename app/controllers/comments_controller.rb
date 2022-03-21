@@ -7,7 +7,7 @@ class CommentsController < ApplicationController
   before_action :new_comment, only: :create
 
   rescue_from CanCan::AccessDenied do |_exception|
-    redirect_to root_path, alert: 'You are not authorized to comment.'
+    redirect_to root_path, alert: t('controllers.comment.authorization')
   end
 
   def edit
@@ -18,7 +18,7 @@ class CommentsController < ApplicationController
     if @comment.save
       index
     else
-      flash[:alert] = 'An error ocurred while creating your comment.'
+      flash[:alert] = t('controllers.comment.error.create')
       render nothing: true, status: :ok
     end
   end
@@ -27,7 +27,7 @@ class CommentsController < ApplicationController
     if @comment.update(comment_params)
       index
     else
-      flash[:alert] = 'An error ocurred while updating your comment.'
+      flash[:alert] = t('controllers.comment.error.update')
       render nothing: true, status: :ok
     end
   end

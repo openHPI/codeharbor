@@ -4,7 +4,7 @@ class TaskFilesController < ApplicationController
   load_and_authorize_resource
 
   rescue_from CanCan::AccessDenied do |_exception|
-    redirect_to root_path, alert: 'You are not authorized to for this action.'
+    redirect_to root_path, alert: t('controllers.authorization')
   end
 
   def download_attachment
