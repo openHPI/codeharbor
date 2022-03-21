@@ -5,7 +5,7 @@ class RatingsController < ApplicationController
   before_action :set_exercise
 
   rescue_from CanCan::AccessDenied do |_exception|
-    redirect_to root_path, alert: 'You are not authorized to rate.'
+    redirect_to root_path, alert: t('controllers.rating.authorization')
   end
 
   def create
@@ -18,7 +18,7 @@ class RatingsController < ApplicationController
         overall_rating = @exercise.round_avg_rating
         format.json { render json: {overall_rating: overall_rating, user_rating: rating} }
       else
-        format.json { render layout: false, notice: 'An Error occured' }
+        format.json { render layout: false, notice: t('controllers.generic_error') }
       end
     end
   end
@@ -35,7 +35,7 @@ class RatingsController < ApplicationController
   end
 
   def handle_own_rating
-    flash[:alert] = 'You cannot rate your own exercise.'
+    flash[:alert] = t('controllers.rating.own_exercise')
     overall_rating = @exercise.round_avg_rating
     respond_to do |format|
       format.json { render json: {overall_rating: overall_rating, user_rating: overall_rating} }
@@ -44,9 +44,9 @@ class RatingsController < ApplicationController
 
   def handle_rating
     rating = @exercise.ratings.find_by(user: current_user)
-    notice = 'Rating was successfully created.'
+    notice = t('controllers.rating.success.create')
     if rating
-      notice = 'Rating was successfully updated.'
+      notice = t('controllers.rating.success.update')
       rating.update(rating_params)
     else
       rating = Rating.new(rating_params)
