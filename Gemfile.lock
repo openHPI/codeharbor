@@ -230,7 +230,7 @@ GEM
       actionpack (>= 4)
       less (~> 2.6.0)
       sprockets (>= 2)
-    letter_opener (1.8.0)
+    letter_opener (1.8.1)
       launchy (>= 2.2, < 3)
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
