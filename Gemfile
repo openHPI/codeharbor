@@ -43,7 +43,7 @@ gem 'will_paginate'
 
 # Authentication
 gem 'devise', '~> 4.8'
-gem 'omniauth', '~> 2.0'
+gem 'omniauth', '~> 2.1'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
 gem 'omniauth-saml', '~> 2.0'
 
