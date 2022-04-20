@@ -240,7 +240,7 @@ RSpec.describe TasksController, type: :controller do
     subject(:get_request) { get :download, params: {id: task.id} }
 
     let(:task) { create(:task, valid_attributes) }
-    let(:zip) { instance_double('StringIO', string: 'dummy') }
+    let(:zip) { instance_double(StringIO, string: 'dummy') }
 
     before { allow(ProformaService::ExportTask).to receive(:call).with(task: task).and_return(zip) }
 
