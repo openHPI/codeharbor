@@ -256,7 +256,6 @@ GEM
       coffee-rails (>= 3.2.1)
       jquery-rails
       rails (>= 3.2.0)
-    newrelic_rpm (8.6.0)
     nio4r (2.5.8)
     nokogiri (1.13.4)
       mini_portile2 (~> 2.8.0)
@@ -525,7 +524,6 @@ DEPENDENCIES
   letter_opener
   mnemosyne-ruby
   nested_form_fields (>= 0.8.2)
-  newrelic_rpm
   nokogiri
   omniauth (~> 2.1)
   omniauth-rails_csrf_protection (~> 1.0)

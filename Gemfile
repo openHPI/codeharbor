@@ -73,7 +73,6 @@ gem 'sprockets', '~> 4.0.3'
 # Error Tracing
 gem 'concurrent-ruby'
 gem 'mnemosyne-ruby'
-gem 'newrelic_rpm'
 gem 'sentry-rails'
 gem 'sentry-ruby'
 
