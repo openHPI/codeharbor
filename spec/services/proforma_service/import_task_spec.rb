@@ -38,7 +38,7 @@ describe ProformaService::ImportTask do
       let(:proforma_task) { Proforma::Task.new }
 
       it 'does not create an task in db' do
-        expect { import_proforma_task }.to raise_error(ActiveRecord::RecordInvalid).and(change(Task, :count).by(0))
+        expect { import_proforma_task }.to raise_error(ActiveRecord::RecordInvalid).and(avoid_change(Task, :count))
       end
     end
 
@@ -89,7 +89,7 @@ describe ProformaService::ImportTask do
         let(:proforma_task) { Proforma::Task.new(uuid: task.uuid) }
 
         it 'does not create an task in db' do
-          expect { import_proforma_task }.to raise_error(ActiveRecord::RecordInvalid).and(change(Task, :count).by(0))
+          expect { import_proforma_task }.to raise_error(ActiveRecord::RecordInvalid).and(avoid_change(Task, :count))
         end
       end
     end
