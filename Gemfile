@@ -63,6 +63,9 @@ gem 'image_processing'
 gem 'jquery-ui-rails', '>= 6.0.1'
 gem 'kramdown', '~> 2.4'
 gem 'nested_form_fields', '>= 0.8.2'
+gem 'net-imap', require: false
+gem 'net-pop', require: false
+gem 'net-smtp', require: false
 gem 'nokogiri'
 gem 'proforma', git: 'https://github.com/openHPI/proforma.git', tag: 'v0.7.1'
 gem 'rails_admin', '~> 2.0'
