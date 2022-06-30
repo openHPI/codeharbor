@@ -75,7 +75,7 @@ class TasksController < ApplicationController
   end
 
   def import_confirm
-    proforma_task = ProformaService::ProformaTaskFromCachedFile.call(import_confirm_params.to_hash.symbolize_keys)
+    proforma_task = ProformaService::ProformaTaskFromCachedFile.call(**import_confirm_params.to_hash.symbolize_keys)
 
     proforma_task = ProformaService::ImportTask.call(proforma_task: proforma_task, user: current_user)
     task_title = proforma_task.title
