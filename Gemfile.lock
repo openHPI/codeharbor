@@ -437,13 +437,11 @@ GEM
       sprockets-rails
       tilt
     select2-rails (4.0.13)
-    sentry-rails (5.3.1)
+    sentry-rails (5.4.1)
       railties (>= 5.0)
-      sentry-ruby-core (~> 5.3.1)
+      sentry-ruby (~> 5.4.1)
     sentry-ruby (5.4.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
-    sentry-ruby-core (5.3.1)
-      concurrent-ruby
     set (1.0.2)
     shellany (0.0.1)
     shoulda-matchers (5.1.0)
@@ -488,7 +486,7 @@ GEM
       execjs (~> 2.7)
       less-rails (>= 3.0, < 5.0)
       railties (>= 5.0, < 8.0)
-    tzinfo (2.0.4)
+    tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
