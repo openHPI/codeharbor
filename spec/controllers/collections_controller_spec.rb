@@ -148,7 +148,7 @@ RSpec.describe CollectionsController, type: :controller do
   xdescribe 'GET #download_all' do
     let(:collection) { create(:collection, valid_attributes.merge(users: [user], exercises: exercises)) }
     let(:exercises) { create_list(:exercise, 2) }
-    let(:zip) { instance_double('StringIO', string: 'dummy') }
+    let(:zip) { instance_double(StringIO, string: 'dummy') }
 
     let(:get_request) { get :download_all, params: {id: collection.id} }
 

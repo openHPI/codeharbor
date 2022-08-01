@@ -91,15 +91,6 @@ module OmniAuth
         "#{full_host}#{script_name}#{request_path}/slo"
       end
 
-      def self.restore_deprecated_options
-        # The `omniauth-saml` gem still uses some of these deprecated options and does not work correctly otherwise
-        option :assertion_consumer_logout_service_url, default_options[:single_logout_service_url]
-        option :assertion_consumer_logout_service_binding, default_options[:single_logout_service_binding]
-        option :issuer, default_options[:sp_entity_id]
-        option :idp_sso_target_url, default_options[:idp_sso_service_url]
-        option :idp_slo_target_url, default_options[:idp_slo_service_url]
-      end
-
       class << self
         def sign(url)
           Rails.application.message_verifier('saml').generate(url)

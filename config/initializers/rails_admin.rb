@@ -13,7 +13,7 @@ RailsAdmin.config do |config|
   # config.authorize_with :cancancan
   config.authorize_with do
     unless can?(:access, :rails_admin)
-      flash[:alert] = 'Access denied.'
+      flash[:alert] = t('controllers.authorization')
       redirect_to main_app.root_path
     end
   end

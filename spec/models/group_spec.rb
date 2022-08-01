@@ -144,7 +144,7 @@ RSpec.describe Group, type: :model do
     end
 
     it 'does not delete admin' do
-      expect { group.remove_member(admin) }.to raise_error(ActiveRecord::RecordInvalid).and change(group.users, :count).by(0)
+      expect { group.remove_member(admin) }.to raise_error(ActiveRecord::RecordInvalid).and avoid_change(group.users, :count)
     end
 
     context 'when group has another admin' do

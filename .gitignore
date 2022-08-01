@@ -51,7 +51,6 @@ config/action_mailer.yml
 config/action_mailer.production.yml
 config/database.yml
 config/database.production.yml
-config/newrelic.yml
 config/settings.local.yml
 config/settings/*.local.yml
 config/environments/*.local.yml

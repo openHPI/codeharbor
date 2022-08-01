@@ -36,14 +36,14 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 2.11'
 
 # Use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.16'
+gem 'bcrypt', '~> 3.1.18'
 
 # Pagination
 gem 'will_paginate'
 
 # Authentication
 gem 'devise', '~> 4.8'
-gem 'omniauth', '~> 2.0'
+gem 'omniauth', '~> 2.1'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
 gem 'omniauth-saml', '~> 2.0'
 
@@ -61,19 +61,21 @@ gem 'faraday'
 gem 'font-awesome-rails', '>= 4.7.0.5'
 gem 'image_processing'
 gem 'jquery-ui-rails', '>= 6.0.1'
-gem 'kramdown', '~> 2.3'
+gem 'kramdown', '~> 2.4'
 gem 'nested_form_fields', '>= 0.8.2'
+gem 'net-imap', require: false
+gem 'net-pop', require: false
+gem 'net-smtp', require: false
 gem 'nokogiri'
 gem 'proforma', git: 'https://github.com/openHPI/proforma.git', tag: 'v0.7.1'
 gem 'rails_admin', '~> 2.0'
 gem 'ransack'
 gem 'select2-rails', '~> 4.0'
-gem 'sprockets', '~> 4.0.2'
+gem 'sprockets', '~> 4.1.1'
 
 # Error Tracing
 gem 'concurrent-ruby'
 gem 'mnemosyne-ruby'
-gem 'newrelic_rpm'
 gem 'sentry-rails'
 gem 'sentry-ruby'
 

@@ -28,6 +28,7 @@ en:
 
   controllers:
     authorization: 'You are not authorized for this action.'
+    generic_error: An error occurred.
     account_links:
       created: 'Account link was successfully created.'
       updated: 'Account link was successfully updated.'
@@ -72,6 +73,12 @@ en:
         confirm_destroy: The collection has successfully been deleted.
         deletion_warning: You are the last user in this collection. If you leave, this collection will be permanently deleted! Are you sure?
         button: Leave
+
+    comment:
+      authorization: You are not authorized to comment.
+      error:
+        create: An error ocurred while creating your comment.
+        update: An error ocurred while updating your comment.
 
     exercise:
       choose_file: "You need to choose a file."
@@ -171,6 +178,13 @@ en:
       email_not_found: "Email address not found. Please check and try again."
       change_successful: "Your password was successfully changed"
       link_invalid: 'Link not valid or expired. Try generating a new link.'
+
+    rating:
+      authorization: You are not authorized to rate.
+      own_exercise: You cannot rate your own exercise
+      success:
+        create: Rating was successfully created.
+        update: Rating was successfully updated.
 
     session:
       invalid_credentials: 'Invalid user/password combination'
