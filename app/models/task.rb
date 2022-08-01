@@ -36,4 +36,33 @@ class Task < ApplicationRecord
   def can_access(user)
     self.user == user
   end
+
+  def duplicate
+    dup.tap do |task|
+      task.uuid = nil
+      task.tests = duplicate_tests
+      task.files = duplicate_files
+      task.model_solutions = duplicate_model_solutions
+    end
+  end
+
+  def initialize_derivate(user = nil)
+    duplicate.tap do |task|
+      task.user = user if user
+    end
+  end
+
+  private
+
+  def duplicate_tests
+    tests.map(&:duplicate)
+  end
+
+  def duplicate_files
+    files.map(&:duplicate)
+  end
+
+  def duplicate_model_solutions
+    model_solutions.map(&:duplicate)
+  end
 end

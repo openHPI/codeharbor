@@ -148,19 +148,19 @@ class TasksController < ApplicationController
 
     return render json: {}, status: :internal_server_error unless %w[create_new export].include? push_type
 
-    exercise, error = ProformaService::HandleExportConfirm.call(user: current_user, exercise: @exercise,
-                                                                push_type: push_type, account_link_id: params[:account_link])
-    exercise_title = exercise.title
+    task, error = ProformaService::HandleExportConfirm.call(user: current_user, task: @task,
+                                                            push_type: push_type, account_link_id: params[:account_link])
+    task_title = task.title
 
     if error.nil?
       render json: {
-        message: t('exercises.export_exercise.successfully_exported', title: exercise_title),
-        status: 'success', actions: render_export_actions(exercise, true)
+        message: t('tasks.export_task.successfully_exported', title: task_title),
+        status: 'success', actions: render_export_actions(task, true)
       }
     else
       render json: {
-        message: t('exercises.export_exercise.export_failed', title: exercise_title, error: error),
-        status: 'fail', actions: render_export_actions(exercise, false, error)
+        message: t('tasks.export_task.export_failed', title: task_title, error: error),
+        status: 'fail', actions: render_export_actions(task, false, error)
       }
     end
   end
@@ -228,5 +228,9 @@ class TasksController < ApplicationController
       tempfile.write string
       tempfile.rewind
     end
+  end
+
+  def render_export_actions(task, exported, error = nil)
+    render_to_string(partial: 'export_actions.html.slim', locals: {task: task, exported: exported, error: error})
   end
 end
