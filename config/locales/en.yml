@@ -216,6 +216,7 @@ en:
           task_with_uuid: 'Task-UUID: %{task_uuid}'
           path: 'Path: %{path}'
           import_title: Import Tasks
+          export_title: Export Tasks
       import:
         successfully_imported: Task (%{title}) successfully imported.
         choose_file_error: "You need to choose a file."
@@ -672,9 +673,6 @@ en:
       files:
         mainfile: "Mainfile"
         solution: "Solution file"
-      export: "Export"
-      export_to: "Export to"
-      define_account_link: "Please define an account link first"
       add_to_cart: "Add to cart"
       add_to_collection: "Add to collection"
       add_collection: "Add Collection"
@@ -1089,6 +1087,7 @@ en:
       show_comments: "Show Comments"
       related_exercises: "Show Related Exercises"
       choose_file: "You need to choose a file."
+      import_zip: "Import ZIP file"
 
     notification:
       created: "Task successfully created"
@@ -1114,11 +1113,13 @@ en:
         no_task: "No corresponding task found on external app. Pushing this task will create a new task on external app, which will be linked to this one on Codeharbor. Any changes to either one can be pushed to the respective other platform."
     new:
       header: "New Task"
+    show:
+      export: "Export"
+      export_to: "Export to"
+      define_account_link: "Please define an account link first"
+
 
 
   common:
     created_at: "Created at"
     created_by: "Created by"
-  task:
-    index:
-      import_zip: "Import ZIP file"
