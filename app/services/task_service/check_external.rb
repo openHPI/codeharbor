@@ -13,7 +13,7 @@ module TaskService
         req.headers['Authorization'] = authorization_header
         req.body = {uuid: @uuid}.to_json
       end
-      response_hash = JSON.parse(response.body, symbolize_names: true).slice(:task_found, :update_right)
+      response_hash = JSON.parse(response.body, symbolize_names: true).slice(:uuid_found, :update_right)
 
       {error: false, message: message(response_hash)}.merge(response_hash)
     rescue Faraday::Error, JSON::ParserError
@@ -27,7 +27,7 @@ module TaskService
     end
 
     def message(response_hash)
-      if response_hash[:task_found]
+      if response_hash[:uuid_found]
         if response_hash[:update_right]
           I18n.t('tasks.export_task.check.task_found')
         else

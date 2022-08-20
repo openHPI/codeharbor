@@ -97,10 +97,10 @@ class TasksController < ApplicationController
     return render json: {}, status: :unauthorized if user.nil?
 
     task = Task.find_by(uuid: params[:uuid])
-    return render json: {task_found: false} if task.nil?
-    return render json: {task_found: true, update_right: false} unless task.can_access(user)
+    return render json: {uuid_found: false} if task.nil?
+    return render json: {uuid_found: true, update_right: false} unless task.can_access(user)
 
-    render json: {task_found: true, update_right: true}
+    render json: {uuid_found: true, update_right: true}
   end
 
   def import_external
@@ -134,7 +134,7 @@ class TasksController < ApplicationController
         partial: 'export_actions.html.slim',
         locals: {
           task: @task,
-          task_found: external_check[:task_found],
+          task_found: external_check[:uuid_found],
           update_right: external_check[:update_right],
           error: external_check[:error],
           exported: false
