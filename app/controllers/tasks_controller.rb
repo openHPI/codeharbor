@@ -160,7 +160,7 @@ class TasksController < ApplicationController
     else
       render json: {
         message: t('tasks.export_task.export_failed', title: task_title, error: error),
-        status: 'fail', actions: render_export_actions(task, false, error)
+        status: 'fail', actions: render_export_actions(@task, false, error) # TODO: not sure whether to use task or @task here (@task would be the original task, while task might be a copy - task breaks, because the id is missing in the dialog)
       }
     end
   end
