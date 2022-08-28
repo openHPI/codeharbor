@@ -25,6 +25,8 @@ Metrics/BlockLength:
 
 Metrics/ClassLength:
   Max: 150
+  Exclude:
+    - app/controllers/tasks_controller.rb
 
 Metrics/MethodLength:
   Max: 20

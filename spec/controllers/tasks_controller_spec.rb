@@ -368,7 +368,7 @@ RSpec.describe TasksController, type: :controller do
       post_request
       expect(response).to have_http_status(:success)
 
-      expect(JSON.parse(response.body).symbolize_keys).to eql(task_found: true, update_right: true)
+      expect(JSON.parse(response.body).symbolize_keys).to eql(uuid_found: true, update_right: true)
     end
 
     context 'when api_key is incorrect' do
@@ -387,7 +387,7 @@ RSpec.describe TasksController, type: :controller do
         post_request
         expect(response).to have_http_status(:success)
 
-        expect(JSON.parse(response.body).symbolize_keys).to eql(task_found: true, update_right: false)
+        expect(JSON.parse(response.body).symbolize_keys).to eql(uuid_found: true, update_right: false)
       end
     end
 
@@ -398,7 +398,7 @@ RSpec.describe TasksController, type: :controller do
         post_request
         expect(response).to have_http_status(:success)
 
-        expect(JSON.parse(response.body).symbolize_keys).to eql(task_found: false)
+        expect(JSON.parse(response.body).symbolize_keys).to eql(uuid_found: false)
       end
     end
   end
