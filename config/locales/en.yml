@@ -114,7 +114,6 @@ en:
         not_empty_while_public: Can't be empty while visibility is set to public
       visibility:
         not_public_without_exenv: Can't be public while programming language is not set
-      account_link_authorization: You are not allowed to use this account link.
 
     exercise_file:
       authorization: "You are not authorized to for this action."
@@ -229,6 +228,8 @@ en:
           import_copy: Import as copy
           overwrite: Overwrite
 #      export:
+#        account_link_authorization: "You are not allowed to use this account link."
+  #      export:
 #        error: An error occurred.
 #        label: Export exercise
 #        successfully_exported: Exercise (%{title}) successfully exported.

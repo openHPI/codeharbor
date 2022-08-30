@@ -231,6 +231,6 @@ class TasksController < ApplicationController
   end
 
   def render_export_actions(task, exported, error = nil)
-    render_to_string(partial: 'export_actions', locals: {task: task, exported: exported, error: error})
+    render_to_string(partial: 'export_actions.html.slim', locals: {task: task, exported: exported, error: error})
   end
 end

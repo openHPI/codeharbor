@@ -21,7 +21,6 @@ class TaskFile < ApplicationRecord
   def duplicate
     dup.tap do |file|
       file.attachment.attach(attachment.blob) if attachment.attached?
-      # file.fileable = fileable
     end
   end
 

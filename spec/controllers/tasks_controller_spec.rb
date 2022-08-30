@@ -354,7 +354,7 @@ RSpec.describe TasksController, type: :controller do
   end
 
   # rubocop:disable RSpec/MultipleExpectations
-  describe '#import_uuid_check' do
+  describe 'POST #import_uuid_check' do
     subject(:post_request) { post :import_uuid_check, params: {uuid: uuid} }
 
     let!(:task) { create(:task, valid_attributes) }
@@ -444,4 +444,135 @@ RSpec.describe TasksController, type: :controller do
       end
     end
   end
+
+  describe 'POST #export_external_start' do
+    let(:task) { create(:task, valid_attributes) }
+    let(:account_link) { create(:account_link, user: account_link_user) }
+    let(:account_link_user) { user }
+    let(:get_request) do
+      get :export_external_start, params: {id: task.id, account_link: account_link.id}, format: :js, xhr: true
+    end
+
+    it 'renders export_external_start javascript' do
+      get_request
+      expect(response).to render_template('export_external_start')
+    end
+  end
+
+  # rubocop:disable RSpec/ExampleLength
+  # rubocop:disable RSpec/MultipleExpectations
+  RSpec::Matchers.define_negated_matcher :not_include, :include
+
+  describe 'POST #export_external_check' do
+    render_views
+
+    let!(:task) { create(:task, valid_attributes).reload }
+    let(:account_link) { create(:account_link, user: account_link_user) }
+    let(:account_link_user) { user }
+    let(:post_request) do
+      post :export_external_check, params: {id: task.id, account_link: account_link.id}, format: :json, xhr: true
+    end
+    let(:external_check_hash) { {message: message, uuid_found: uuid_found, update_right: true, error: error} }
+    let(:message) { 'message' }
+    let(:uuid_found) { true }
+    let(:error) { nil }
+
+    before do
+      allow(TaskService::CheckExternal).to receive(:call).with(uuid: task.uuid, account_link: account_link).and_return(external_check_hash)
+    end
+
+    it 'renders the correct contents as json' do
+      post_request
+      expect(JSON.parse(response.body).symbolize_keys[:message]).to eq('message')
+      expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+        include('button').and(include('Abort').and(include('Overwrite')).and(include('Create new')))
+      )
+      expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+        not_include('Retry').and(not_include('Hide'))
+      )
+    end
+
+    context 'when there is an error' do
+      let(:error) { 'error' }
+
+      it 'renders the correct contents as json' do
+        post_request
+        expect(JSON.parse(response.body).symbolize_keys[:message]).to eq('message')
+        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+          include('button').and(include('Abort')).and(include('Retry'))
+        )
+        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+          not_include('Overwrite').and(not_include('Create new')).and(not_include('Export')).and(not_include('Hide'))
+        )
+      end
+    end
+
+    context 'when uuid_found is false' do
+      let(:uuid_found) { false }
+
+      it 'renders the correct contents as json' do
+        post_request
+        expect(JSON.parse(response.body).symbolize_keys[:message]).to eq('message')
+        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+          include('button').and(include('Abort')).and(include('Export'))
+        )
+        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+          not_include('Overwrite').and(not_include('Create new')).and(not_include('Hide'))
+        )
+      end
+    end
+  end
+
+  describe 'POST #export_external_confirm' do
+    render_views
+
+    let(:task) { create(:task, valid_attributes) }
+    let(:account_link) { create(:account_link, user: account_link_user) }
+    let(:account_link_user) { user }
+    let(:post_request) do
+      post :export_external_confirm, params: {push_type: push_type, id: task.id, account_link: account_link.id}, format: :json, xhr: true
+    end
+    let(:push_type) { 'create_new' }
+    let(:error) {}
+
+    before do
+      allow(ProformaService::HandleExportConfirm).to receive(:call)
+        .with(user: user, task: task, push_type: push_type, account_link_id: account_link.to_param)
+        .and_return([task, error])
+    end
+
+    it 'renders correct response' do
+      post_request
+
+      expect(response).to have_http_status(:success)
+      expect(JSON.parse(response.body).symbolize_keys[:message]).to(include('successfully exported'))
+      expect(JSON.parse(response.body).symbolize_keys[:status]).to(eql('success'))
+      expect(JSON.parse(response.body).symbolize_keys[:actions]).to(include('button').and(include('Hide')))
+      expect(JSON.parse(response.body).symbolize_keys[:actions]).to(not_include('Retry').and(not_include('Abort')))
+    end
+
+    context 'when an error occurs' do
+      let(:error) { 'exampleerror' }
+
+      it 'renders correct response' do
+        post_request
+        expect(response).to have_http_status(:success)
+        expect(JSON.parse(response.body).symbolize_keys[:message]).to(include('failed').and(include('exampleerror')))
+        expect(JSON.parse(response.body).symbolize_keys[:status]).to(eql('fail'))
+        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(include('button').and(include('Retry')).and(include('Abort')))
+        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(not_include('Hide'))
+      end
+    end
+
+    context 'without push_type' do
+      let(:push_type) {}
+
+      it 'responds with status 500' do
+        post_request
+        expect(response).to have_http_status(:internal_server_error)
+      end
+    end
+  end
+  # rubocop:enable RSpec/ExampleLength
+  # rubocop:enable RSpec/MultipleExpectations
 end
