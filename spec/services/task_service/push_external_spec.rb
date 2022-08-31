@@ -2,11 +2,11 @@
 
 require 'rails_helper'
 
-xdescribe TaskService::PushExternal do
+describe TaskService::PushExternal do
   describe '.new' do
     subject(:push_external) { described_class.new(zip: zip, account_link: account_link) }
 
-    let(:zip) { ProformaService::ExportTask.call(exercise: build(:exercise)) }
+    let(:zip) { ProformaService::ExportTask.call(task: build(:task)) }
     let(:account_link) { build(:account_link) }
 
     it 'assigns zip' do
@@ -21,7 +21,7 @@ xdescribe TaskService::PushExternal do
   describe '#execute' do
     subject(:push_external) { described_class.call(zip: zip, account_link: account_link) }
 
-    let(:zip) { ProformaService::ExportTask.call(exercise: build(:exercise)) }
+    let(:zip) { ProformaService::ExportTask.call(task: build(:task)) }
     let(:account_link) { build(:account_link) }
     let(:status) { 200 }
     let(:response) { '' }

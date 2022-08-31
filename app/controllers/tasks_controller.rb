@@ -175,14 +175,14 @@ class TasksController < ApplicationController
   end
 
   def restore_search_params
-    search_params = session.delete(:exercise_search_params)&.symbolize_keys || {}
+    search_params = session.delete(:task_search_params)&.symbolize_keys || {}
     params[:search] ||= search_params[:search]
     params[:advancedFilterActive] ||= search_params[:advancedFilterActive]
     params[:page] ||= search_params[:page]
   end
 
   def save_search_params
-    session[:exercise_search_params] = {search: params[:search], advancedFilterActive: params[:advancedFilterActive], page: params[:page]}
+    session[:task_search_params] = {search: params[:search], advancedFilterActive: params[:advancedFilterActive], page: params[:page]}
   end
 
   def handle_search_params
