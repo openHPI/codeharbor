@@ -33,6 +33,10 @@ class Task < ApplicationRecord
     %i[created_before_days]
   end
 
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[title description programming_language_id created_at]
+  end
+
   def can_access(user)
     self.user == user
   end
