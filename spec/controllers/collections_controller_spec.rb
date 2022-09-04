@@ -216,18 +216,40 @@ RSpec.describe CollectionsController, type: :controller do
   end
 
   describe 'POST #view_shared' do
-    let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
-    let(:post_request) { post :view_shared, params: params }
-    let(:params) { {id: collection.id, user: create(:user).id} }
+    let(:collection_owner) { create(:user) }
+    let(:collection) { create(:collection, valid_attributes.merge(users: [collection_owner, user])) }
+    let(:get_request) { get :view_shared, params: params }
+    let(:params) { {id: collection.id, user: collection_owner.id} }
 
-    it 'assigns collection' do
-      post_request
-      expect(assigns(:collection)).to eq(collection)
+    context 'when user has been invited' do
+      it 'assigns collection' do
+        get_request
+        expect(assigns(:collection)).to eq(collection)
+      end
+
+      it 'renders show' do
+        get_request
+        expect(response).to render_template('show')
+      end
+
+      it 'renders the page successfully' do
+        get_request
+        expect(response).to have_http_status(:ok)
+      end
     end
 
-    it 'renders show' do
-      post_request
-      expect(response).to render_template('show')
+    context 'when user has not been invited' do
+      let(:collection) { create(:collection, valid_attributes.merge(users: [collection_owner])) }
+
+      it 'does not show the page' do
+        get_request
+        expect(response).not_to render_template('show')
+      end
+
+      it 'redirects the user to the collections path' do
+        get_request
+        expect(response).to redirect_to collections_path
+      end
     end
   end
 
@@ -236,18 +258,44 @@ RSpec.describe CollectionsController, type: :controller do
     let(:post_request) { post :save_shared, params: params }
     let(:params) { {id: collection.id} }
 
-    it 'increases usercount of collection' do
-      expect { post_request }.to change(collection.reload.users, :count).from(1).to(2)
+    context 'when user has been invited' do
+      let(:send_invitation) do
+        create(:message, sender: collection.users.first, recipient: user, param_type: 'collection', param_id: collection.id,
+                         text: 'Invitation')
+      end
+
+      it 'increases usercount of collection' do
+        send_invitation
+        expect { post_request }.to change(collection.reload.users, :count).from(1).to(2)
+      end
+
+      it 'adds user to collection' do
+        send_invitation
+        post_request
+        expect(collection.reload.users).to include user
+      end
+
+      it 'redirects to collection' do
+        send_invitation
+        post_request
+        expect(response).to redirect_to collection
+      end
     end
 
-    it 'adds user to collection' do
-      post_request
-      expect(collection.reload.users).to include user
-    end
+    context 'when user has not been invited' do
+      it 'does not increase usercount of collection' do
+        expect { post_request }.not_to change(collection.reload.users, :count)
+      end
 
-    it 'redirects to collection' do
-      post_request
-      expect(response).to redirect_to collection
+      it 'does not add the user to the collection' do
+        post_request
+        expect(collection.reload.users).not_to include user
+      end
+
+      it 'redirects to collection' do
+        post_request
+        expect(response).to redirect_to collections_path
+      end
     end
   end
 

@@ -8,7 +8,11 @@ class CollectionsController < ApplicationController
   before_action :new_collection, only: :create
 
   rescue_from CanCan::AccessDenied do |_exception|
-    redirect_to root_path, alert: t('controllers.collections.authorization')
+    if current_user
+      redirect_to collections_path, alert: t('controllers.message.authorization')
+    else
+      redirect_to root_path, alert: t('controllers.message.authorization')
+    end
   end
 
   def index
@@ -89,12 +93,15 @@ class CollectionsController < ApplicationController
 
   def view_shared
     @user = User.find(params[:user])
+    raise CanCan::AccessDenied if @collection.users.exclude?(@user)
+
     render :show
   end
 
   def save_shared
-    @collection.users << current_user
+    raise CanCan::AccessDenied unless Message.received_by(current_user).exists?(param_type: 'collection', param_id: @collection.id)
 
+    @collection.users << current_user
     if @collection.save
       redirect_to @collection, notice: t('controllers.collections.save_shared.notice')
     else
@@ -137,6 +144,7 @@ class CollectionsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_collection
     @collection = Collection.find(params[:id])
+    raise CanCan::AccessDenied if @collection.users.exclude?(current_user) && action_name != 'save_shared'
   end
 
   # Never trust parameters from the scary internet, only allow the following list through.
