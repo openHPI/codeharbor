@@ -24,7 +24,7 @@ RSpec.describe ModelSolution, type: :model do
       expect(duplicate).to have_attributes(model_solution.attributes.except('created_at', 'updated_at', 'id', 'fileable_id'))
     end
 
-    it 'creates a new new files' do
+    it 'creates new files' do
       expect(duplicate.files).not_to match_array model_solution.files
     end
 

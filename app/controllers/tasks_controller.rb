@@ -143,16 +143,17 @@ class TasksController < ApplicationController
 
     return render json: {}, status: :internal_server_error unless %w[create_new export].include? push_type
 
-    task, error = ProformaService::HandleExportConfirm.call(user: current_user, task: @task,
+    export_task, error = ProformaService::HandleExportConfirm.call(user: current_user, task: @task,
                                                             push_type: push_type, account_link_id: params[:account_link])
-    task_title = task.title
+    task_title = export_task.title
 
     if error.nil?
       render json: {
         message: t('tasks.export_task.successfully_exported', title: task_title),
-        status: 'success', actions: render_export_actions(task: task, exported: true)
+        status: 'success', actions: render_export_actions(task: export_task, exported: true)
       }
     else
+      export_task.destroy if push_type == 'create_new'
       render json: {
         message: t('tasks.export_task.export_failed', title: task_title, error: error),
         status: 'fail', actions: render_export_actions(task: @task, exported: false, error: error)
