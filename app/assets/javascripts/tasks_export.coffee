@@ -30,7 +30,7 @@ exportTaskStart = (taskID) ->
     success: (response) ->
       $messageDiv.html(response.message)
       $actionsDiv.html(response.actions)
-    error: (_, _, message) ->
+    error: (_xhr, _textStatus, message) ->
       alert('error:' + message);
   })
 
@@ -52,7 +52,7 @@ exportConfirm = (taskId, accountLinkId, pushType) ->
         $taskDiv.addClass 'import-export-success'
       else
         $taskDiv.addClass 'import-export-failure'
-    error: (_, _, message) ->
+    error: (_xhr, _textStatus, message) ->
       alert('error:' + message)
   })
 
