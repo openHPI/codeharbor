@@ -353,7 +353,6 @@ RSpec.describe TasksController, type: :controller do
     end
   end
 
-  # rubocop:disable RSpec/MultipleExpectations
   describe 'POST #import_uuid_check' do
     subject(:post_request) { post :import_uuid_check, params: {uuid: uuid} }
 
@@ -402,7 +401,6 @@ RSpec.describe TasksController, type: :controller do
       end
     end
   end
-  # rubocop:enable RSpec/MultipleExpectations
 
   describe 'POST #import_external' do
     subject(:post_request) { post :import_external, body: zip_file_content }
@@ -459,10 +457,6 @@ RSpec.describe TasksController, type: :controller do
     end
   end
 
-  # rubocop:disable RSpec/ExampleLength
-  # rubocop:disable RSpec/MultipleExpectations
-  RSpec::Matchers.define_negated_matcher :not_include, :include
-
   describe 'POST #export_external_check' do
     render_views
 
@@ -478,7 +472,8 @@ RSpec.describe TasksController, type: :controller do
     let(:error) { nil }
 
     before do
-      allow(TaskService::CheckExternal).to receive(:call).with(uuid: task.uuid, account_link: account_link).and_return(external_check_hash)
+      allow(TaskService::CheckExternal).to receive(:call).with(uuid: task.uuid,
+                                                               account_link: account_link).and_return(external_check_hash)
     end
 
     it 'renders the correct contents as json' do
@@ -530,7 +525,8 @@ RSpec.describe TasksController, type: :controller do
     let(:account_link) { create(:account_link, user: account_link_user) }
     let(:account_link_user) { user }
     let(:post_request) do
-      post :export_external_confirm, params: {push_type: push_type, id: task.id, account_link: account_link.id}, format: :json, xhr: true
+      post :export_external_confirm, params: {push_type: push_type, id: task.id, account_link: account_link.id}, format: :json,
+                                     xhr: true
     end
     let(:push_type) { 'create_new' }
     let(:error) {}
@@ -573,6 +569,4 @@ RSpec.describe TasksController, type: :controller do
       end
     end
   end
-  # rubocop:enable RSpec/ExampleLength
-  # rubocop:enable RSpec/MultipleExpectations
 end

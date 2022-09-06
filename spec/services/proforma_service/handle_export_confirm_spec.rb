@@ -60,8 +60,6 @@ describe ProformaService::HandleExportConfirm do
     end
 
     context 'when push_type is create_new' do
-      RSpec::Matchers.define_negated_matcher :not_have_attributes, :have_attributes
-
       let(:push_type) { 'create_new' }
 
       it 'returns an array with task' do

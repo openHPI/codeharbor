@@ -143,7 +143,7 @@ RSpec.describe Task, type: :model do
     end
 
     it 'has no uuid' do
-      expect(duplicate.uuid).to be nil
+      expect(duplicate.uuid).to be_nil
     end
 
     it 'has the same attributes' do

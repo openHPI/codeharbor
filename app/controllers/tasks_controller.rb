@@ -130,16 +130,11 @@ class TasksController < ApplicationController
                                                      account_link: AccountLink.find(params[:account_link]))
     render json: {
       message: external_check[:message],
-      actions: render_to_string(
-        partial: 'export_actions.html.slim',
-        locals: {
-          task: @task,
-          task_found: external_check[:uuid_found],
-          update_right: external_check[:update_right],
-          error: external_check[:error],
-          exported: false
-        }
-      )
+      actions: render_export_actions(task: @task,
+                                     task_found: external_check[:uuid_found],
+                                     update_right: external_check[:update_right],
+                                     error: external_check[:error],
+                                     exported: false)
     }, status: :ok
   end
 
@@ -155,12 +150,12 @@ class TasksController < ApplicationController
     if error.nil?
       render json: {
         message: t('tasks.export_task.successfully_exported', title: task_title),
-        status: 'success', actions: render_export_actions(task, true)
+        status: 'success', actions: render_export_actions(task: task, exported: true)
       }
     else
       render json: {
         message: t('tasks.export_task.export_failed', title: task_title, error: error),
-        status: 'fail', actions: render_export_actions(@task, false, error) # TODO: not sure whether to use task or @task here (@task would be the original task, while task might be a copy - task breaks, because the id is missing in the dialog)
+        status: 'fail', actions: render_export_actions(task: @task, exported: false, error: error)
       }
     end
   end
@@ -230,7 +225,9 @@ class TasksController < ApplicationController
     end
   end
 
-  def render_export_actions(task, exported, error = nil)
-    render_to_string(partial: 'export_actions.html.slim', locals: {task: task, exported: exported, error: error})
+  def render_export_actions(task:, exported:, error: nil, task_found: nil, update_right: nil)
+    render_to_string(partial: 'export_actions.html.slim',
+                     locals: {task: task, exported: exported, error: error, task_found: task_found,
+                              update_right: update_right})
   end
 end

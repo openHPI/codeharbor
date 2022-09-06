@@ -505,8 +505,6 @@ legend.toggle-next
             - if !current_user.available_account_links.empty?
               - current_user.available_account_links.each do |acc_link|
                 li
-                  / TODO: do we still have and want shared account_links?
-                  / = link_to acc_link.name + (acc_link.user != current_user ? " (#{t('.account_link_shared')})" : ''), export_external_start_task_path(account_link: acc_link), method: :post, remote: true, class: 'dropdown-item export-test'
                   = link_to acc_link.name, export_external_start_task_path(account_link: acc_link), method: :post, remote: true, class: 'dropdown-item export-test'
             - else
               li
