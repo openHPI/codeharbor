@@ -521,20 +521,27 @@ RSpec.describe TasksController, type: :controller do
   describe 'POST #export_external_confirm' do
     render_views
 
-    let(:task) { create(:task, valid_attributes) }
+    let!(:task) { create(:task, valid_attributes) }
     let(:account_link) { create(:account_link, user: account_link_user) }
     let(:account_link_user) { user }
     let(:post_request) do
       post :export_external_confirm, params: {push_type: push_type, id: task.id, account_link: account_link.id}, format: :json,
                                      xhr: true
     end
-    let(:push_type) { 'create_new' }
+    let(:push_type) { 'export' }
     let(:error) {}
 
     before do
-      allow(ProformaService::HandleExportConfirm).to receive(:call)
-        .with(user: user, task: task, push_type: push_type, account_link_id: account_link.to_param)
-        .and_return([task, error])
+      allow(ProformaService::ExportTask).to receive(:call)
+        .with(task: an_instance_of(Task), options: {description_format: 'md'})
+        .and_return('zip stream')
+      allow(TaskService::PushExternal).to receive(:call)
+        .with(zip: 'zip stream', account_link: account_link)
+        .and_return(error)
+    end
+
+    it 'does not create a new task' do
+      expect { post_request }.not_to change(Task, :count)
     end
 
     it 'renders correct response' do
@@ -545,6 +552,23 @@ RSpec.describe TasksController, type: :controller do
       expect(JSON.parse(response.body).symbolize_keys[:status]).to(eql('success'))
       expect(JSON.parse(response.body).symbolize_keys[:actions]).to(include('button').and(include('Hide')))
       expect(JSON.parse(response.body).symbolize_keys[:actions]).to(not_include('Retry').and(not_include('Abort')))
+    end
+
+    context 'when push_type is create_new' do
+      let(:push_type) { 'create_new' }
+      let(:return_task) { Task.last }
+
+      it 'creates a new task' do
+        expect { post_request }.to change(Task, :count).by(1)
+      end
+
+      context 'when an error occurs' do
+        let(:error) { 'exampleerror' }
+
+        it 'deletes the new task' do
+          expect { post_request }.not_to change(Task, :count)
+        end
+      end
     end
 
     context 'when an error occurs' do

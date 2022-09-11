@@ -138,13 +138,14 @@ class TasksController < ApplicationController
     }, status: :ok
   end
 
+  # rubocop:disable Metrics/AbcSize
   def export_external_confirm
     push_type = params[:push_type]
 
     return render json: {}, status: :internal_server_error unless %w[create_new export].include? push_type
 
     export_task, error = ProformaService::HandleExportConfirm.call(user: current_user, task: @task,
-                                                            push_type: push_type, account_link_id: params[:account_link])
+                                                                   push_type: push_type, account_link_id: params[:account_link])
     task_title = export_task.title
 
     if error.nil?
@@ -160,6 +161,7 @@ class TasksController < ApplicationController
       }
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   private
 
