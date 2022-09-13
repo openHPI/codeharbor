@@ -6,7 +6,11 @@ class MessagesController < ApplicationController
   before_action :set_option, only: %i[index]
 
   rescue_from CanCan::AccessDenied do |_exception|
-    redirect_to root_path, alert: t('controllers.message.authorization')
+    if current_user
+      redirect_to user_messages_path(current_user), alert: t('controllers.message.authorization')
+    else
+      redirect_to root_path, alert: t('controllers.message.authorization')
+    end
   end
 
   def index
@@ -57,6 +61,8 @@ class MessagesController < ApplicationController
 
   def reply
     @recipient = User.find(params[:recipient])
+    raise CanCan::AccessDenied if Message.received_by(current_user).sent_by(@recipient).empty?
+
     @message = Message.new
     render :reply
   end
