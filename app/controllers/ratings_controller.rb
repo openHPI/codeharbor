@@ -35,7 +35,8 @@ class RatingsController < ApplicationController
   end
 
   def handle_own_rating
-    flash[:alert] = t('controllers.rating.own_exercise')
+    # TODO: Flash is useless, as the "render json" won't show it. Kept for historical reasons, should be refactored.
+    flash.now[:alert] = t('controllers.rating.own_exercise')
     overall_rating = @exercise.round_avg_rating
     respond_to do |format|
       format.json { render json: {overall_rating: overall_rating, user_rating: overall_rating} }

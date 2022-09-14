@@ -224,13 +224,13 @@ RSpec.describe User, type: :model do
     it 'uses the provided primary email for created users' do
       email = 'test@example.com'
       user = create(:user, email: 'test@example.com')
-      user.email = email
+      expect(user.email).to eq email
     end
 
     it 'uses the provided primary email even for stubbed users' do
       email = 'test@example.com'
       user = build_stubbed(:user, email: 'test@example.com')
-      user.email = email
+      expect(user.email).to eq email
     end
 
     context 'when two users are created' do
