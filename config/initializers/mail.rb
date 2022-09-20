@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-yaml_file = File.read(Rails.root.join('config/action_mailer.yml'))
+yaml_file = Rails.root.join('config/action_mailer.yml').read
 options = YAML.safe_load(yaml_file, aliases: true, permitted_classes: [Symbol])[Rails.env]
 
 Rails.configuration.action_mailer.delivery_method = options.delete('delivery_method') if options.key? 'delivery_method'
