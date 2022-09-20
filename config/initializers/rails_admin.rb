@@ -62,14 +62,6 @@ RailsAdmin.config do |config|
     add_valid_column(self)
   end
 
-  config.model 'ExerciseAuthor' do
-    add_valid_column(self)
-  end
-
-  config.model 'ExerciseFile' do
-    add_valid_column(self)
-  end
-
   config.model 'Group' do
     add_valid_column(self)
   end
@@ -94,6 +86,14 @@ RailsAdmin.config do |config|
     add_valid_column(self)
   end
 
+  config.model 'ModelSolution' do
+    add_valid_column(self)
+  end
+
+  config.model 'ProgrammingLanguage' do
+    add_valid_column(self)
+  end
+
   config.model 'Rating' do
     add_valid_column(self)
   end
@@ -103,6 +103,18 @@ RailsAdmin.config do |config|
   end
 
   config.model 'Report' do
+    add_valid_column(self)
+  end
+
+  config.model 'Task' do
+    add_valid_column(self)
+  end
+
+  config.model 'TaskFile' do
+    add_valid_column(self)
+  end
+
+  config.model 'TaskLabel' do
     add_valid_column(self)
   end
 

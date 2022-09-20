@@ -34,8 +34,8 @@ FactoryBot.define do
     trait :with_attachment do
       name { 'image' }
       content {}
-      after(:build) do |exercise_file|
-        exercise_file.attachment.attach(io: File.open('spec/fixtures/files/red.bmp'), filename: 'red.bmp', content_type: 'image/bmp')
+      after(:build) do |file|
+        file.attachment.attach(io: File.open('spec/fixtures/files/red.bmp'), filename: 'red.bmp', content_type: 'image/bmp')
       end
     end
   end
