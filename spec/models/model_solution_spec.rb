@@ -8,4 +8,30 @@ RSpec.describe ModelSolution, type: :model do
     it { is_expected.to validate_presence_of(:xml_id) }
     it { is_expected.to validate_uniqueness_of(:xml_id).scoped_to(:task_id) }
   end
+
+  describe '#duplicate' do
+    subject(:duplicate) { model_solution.duplicate }
+
+    let(:model_solution) do
+      create(:model_solution, task: create(:task), files: [build(:task_file, :exportable), build(:task_file, :exportable)])
+    end
+
+    it 'creates a new model_solution' do
+      expect(duplicate).not_to be model_solution
+    end
+
+    it 'has the same attributes' do
+      expect(duplicate).to have_attributes(model_solution.attributes.except('created_at', 'updated_at', 'id', 'fileable_id'))
+    end
+
+    it 'creates new files' do
+      expect(duplicate.files).not_to match_array model_solution.files
+    end
+
+    it 'creates new files with the same attributes' do
+      expect(duplicate.files).to match_array(model_solution.files.map do |file|
+                                               have_attributes(file.attributes.except('created_at', 'updated_at', 'id', 'fileable_id'))
+                                             end)
+    end
+  end
 end

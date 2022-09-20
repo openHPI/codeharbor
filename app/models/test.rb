@@ -9,4 +9,10 @@ class Test < ApplicationRecord
   validates :xml_id, uniqueness: {scope: :task_id}
 
   serialize :meta_data, HashAsJsonbSerializer
+
+  def duplicate
+    dup.tap do |test|
+      test.files = files.map(&:duplicate)
+    end
+  end
 end

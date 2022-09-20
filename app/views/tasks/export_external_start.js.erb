@@ -1,0 +1,4 @@
+$("#import-export-modal-body").html("<%= escape_javascript(render partial: 'tasks/export_dialog_content', locals: { task: @task, account_link: @account_link } ) %>");
+$('#import-export-dialog').modal('show');
+
+exportTaskStart(<%= @task.id %>)

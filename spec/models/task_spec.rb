@@ -20,7 +20,9 @@ RSpec.describe Task, type: :model do
     it { is_expected.not_to be_able_to(:update, task) }
     it { is_expected.not_to be_able_to(:destroy, task) }
     it { is_expected.not_to be_able_to(:download, task) }
-    it { is_expected.not_to be_able_to(:export, task) }
+    it { is_expected.not_to be_able_to(:export_external_start, task) }
+    it { is_expected.not_to be_able_to(:export_external_check, task) }
+    it { is_expected.not_to be_able_to(:export_external_confirm, task) }
 
     context 'with a user' do
       let(:user) { create(:user) }
@@ -32,10 +34,13 @@ RSpec.describe Task, type: :model do
 
       it { is_expected.not_to be_able_to(:show, task) }
       it { is_expected.not_to be_able_to(:download, task) }
-      it { is_expected.not_to be_able_to(:export, task) }
 
       it { is_expected.not_to be_able_to(:update, task) }
       it { is_expected.not_to be_able_to(:destroy, task) }
+
+      it { is_expected.not_to be_able_to(:export_external_start, task) }
+      it { is_expected.not_to be_able_to(:export_external_check, task) }
+      it { is_expected.not_to be_able_to(:export_external_confirm, task) }
 
       context 'when user is admin' do
         let(:user) { create(:admin) }
@@ -52,7 +57,9 @@ RSpec.describe Task, type: :model do
 
         it { is_expected.to be_able_to(:show, task) }
         it { is_expected.to be_able_to(:download, task) }
-        it { is_expected.to be_able_to(:export, task) }
+        it { is_expected.to be_able_to(:export_external_start, task) }
+        it { is_expected.to be_able_to(:export_external_check, task) }
+        it { is_expected.to be_able_to(:export_external_confirm, task) }
 
         it { is_expected.to be_able_to(:update, task) }
         it { is_expected.to be_able_to(:destroy, task) }
@@ -120,6 +127,58 @@ RSpec.describe Task, type: :model do
       let(:days) { 30 }
 
       it { is_expected.to include new_task, old_task }
+    end
+  end
+
+  describe '#duplicate' do
+    subject(:duplicate) { task.duplicate }
+
+    let(:task) { create(:task, files: files, tests: tests, model_solutions: model_solutions) }
+    let(:files) { build_list(:task_file, 2, :exportable) }
+    let(:tests) { build_list(:test, 2) }
+    let(:model_solutions) { build_list(:model_solution, 2) }
+
+    it 'creates a new task' do
+      expect(duplicate).not_to be task
+    end
+
+    it 'has no uuid' do
+      expect(duplicate.uuid).to be_nil
+    end
+
+    it 'has the same attributes' do
+      expect(duplicate).to be_an_equal_task_as task
+    end
+
+    it 'creates new files' do
+      expect(duplicate.files).not_to match_array task.files
+    end
+
+    it 'creates new files with the same attributes' do
+      expect(duplicate.files).to match_array(task.files.map do |file|
+                                               have_attributes(file.attributes.except('created_at', 'updated_at', 'id', 'fileable_id'))
+                                             end)
+    end
+
+    it 'creates new tests' do
+      expect(duplicate.tests).not_to match_array task.tests
+    end
+
+    it 'creates new tests with the same attributes' do
+      expect(duplicate.tests).to match_array(task.tests.map do |file|
+                                               have_attributes(file.attributes.except('created_at', 'updated_at', 'id', 'task_id'))
+                                             end)
+    end
+
+    it 'creates new model_solutions' do
+      expect(duplicate.tests).not_to match_array task.model_solutions
+    end
+
+    it 'creates new model_solutions with the same attributes' do
+      expect(duplicate.model_solutions).to match_array(task.model_solutions.map do |file|
+                                                         have_attributes(file.attributes.except('created_at', 'updated_at', 'id',
+                                                                                                'task_id'))
+                                                       end)
     end
   end
 end

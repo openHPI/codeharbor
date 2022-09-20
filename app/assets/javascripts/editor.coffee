@@ -10,13 +10,14 @@ initializeAce = ->
 initializeEditors =->
   $('.editor').each ->
     editor = ace.edit(this)
+    hiddenContent = $(this).parent().find('.hidden')
     editor.setTheme 'ace/theme/chrome'
     this.style.fontSize = '16px'
     if $(this).hasClass('readonly')
       editor.setReadOnly true
     else
       editor.getSession().on 'change', (e) ->
-        $(this).parent().find('.hidden').val(editor.getValue())
+        hiddenContent.val(editor.getValue())
 
 changeEditorMode = (editor, editor_mode) ->
   ace.edit(editor).getSession().setMode(editor_mode)

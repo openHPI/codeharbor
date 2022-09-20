@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ExerciseService
+module TaskService
   class PushExternal < ServiceBase
     def initialize(zip:, account_link:)
       @zip = zip

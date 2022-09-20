@@ -257,6 +257,8 @@ GEM
       coffee-rails (>= 3.2.1)
       jquery-rails
       rails (>= 3.2.0)
+    net-http (0.2.2)
+      uri
     net-imap (0.2.3)
       digest
       net-protocol
@@ -490,6 +492,7 @@ GEM
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (2.3.0)
+    uri (0.11.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.2.0)
@@ -539,6 +542,7 @@ DEPENDENCIES
   letter_opener
   mnemosyne-ruby
   nested_form_fields (>= 0.8.2)
+  net-http
   net-imap
   net-pop
   net-smtp

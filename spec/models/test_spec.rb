@@ -10,25 +10,27 @@ RSpec.describe Test, type: :model do
     it { is_expected.to validate_uniqueness_of(:xml_id).scoped_to(:task_id) }
   end
 
-  xdescribe '#duplicate' do
+  describe '#duplicate' do
     subject(:duplicate) { test.duplicate }
 
-    let(:test) { create(:test) }
+    let(:test) { create(:test, task: create(:task), files: [build(:task_file, :exportable), build(:task_file, :exportable)]) }
 
     it 'creates a new test' do
       expect(duplicate).not_to be test
     end
 
     it 'has the same attributes' do
-      expect(duplicate).to have_attributes(test.attributes.except('created_at', 'updated_at', 'id', 'exercise_file_id'))
+      expect(duplicate).to have_attributes(test.attributes.except('created_at', 'updated_at', 'id', 'fileable_id'))
     end
 
-    it 'creates a new exercise_file' do
-      expect(duplicate.exercise_file).not_to be test.exercise_file
+    it 'creates new files' do
+      expect(duplicate.files).not_to match_array test.files
     end
 
-    it 'creates a new exercise_file with the same attribute' do
-      expect(duplicate.exercise_file).to have_attributes(test.exercise_file.attributes.except('created_at', 'updated_at', 'id', 'test_id'))
+    it 'creates new files with the same attributes' do
+      expect(duplicate.files).to match_array(test.files.map do |file|
+                                               have_attributes(file.attributes.except('created_at', 'updated_at', 'id', 'fileable_id'))
+                                             end)
     end
   end
 end

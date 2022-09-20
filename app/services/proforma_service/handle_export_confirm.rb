@@ -2,25 +2,25 @@
 
 module ProformaService
   class HandleExportConfirm < ServiceBase
-    def initialize(user:, exercise:, push_type:, account_link_id:)
+    def initialize(user:, task:, push_type:, account_link_id:)
       @user = user
-      @exercise = exercise
+      @task = task
       @push_type = push_type
       @account_link_id = account_link_id
     end
 
     def execute
       if @push_type == 'create_new'
-        @exercise = @exercise.initialize_derivate(@user)
-        @exercise.save!
-        @exercise.reload
+        @task = @task.initialize_derivate(@user)
+        @task.save!
+        @task.reload
       end
 
       account_link = AccountLink.find(@account_link_id)
-      zip_stream = ProformaService::ExportTask.call(exercise: @exercise, options: {description_format: 'md'})
-      error = ExerciseService::PushExternal.call(zip: zip_stream, account_link: account_link)
+      zip_stream = ProformaService::ExportTask.call(task: @task, options: {description_format: 'md'})
+      error = TaskService::PushExternal.call(zip: zip_stream, account_link: account_link)
 
-      [@exercise, error]
+      [@task, error]
     end
   end
 end

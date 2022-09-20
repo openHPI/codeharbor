@@ -97,10 +97,10 @@ class TasksController < ApplicationController
     return render json: {}, status: :unauthorized if user.nil?
 
     task = Task.find_by(uuid: params[:uuid])
-    return render json: {task_found: false} if task.nil?
-    return render json: {task_found: true, update_right: false} unless task.can_access(user)
+    return render json: {uuid_found: false} if task.nil?
+    return render json: {uuid_found: true, update_right: false} unless task.can_access(user)
 
-    render json: {task_found: true, update_right: true}
+    render json: {uuid_found: true, update_right: true}
   end
 
   def import_external
@@ -117,6 +117,52 @@ class TasksController < ApplicationController
     render json: t('controllers.exercise.import_proforma_xml.internal_error'), status: :internal_server_error
   end
 
+  def export_external_start
+    @account_link = AccountLink.find(params[:account_link])
+
+    respond_to do |format|
+      format.js { render layout: false }
+    end
+  end
+
+  def export_external_check
+    external_check = TaskService::CheckExternal.call(uuid: @task.uuid,
+                                                     account_link: AccountLink.find(params[:account_link]))
+    render json: {
+      message: external_check[:message],
+      actions: render_export_actions(task: @task,
+                                     task_found: external_check[:uuid_found],
+                                     update_right: external_check[:update_right],
+                                     error: external_check[:error],
+                                     exported: false)
+    }, status: :ok
+  end
+
+  # rubocop:disable Metrics/AbcSize
+  def export_external_confirm
+    push_type = params[:push_type]
+
+    return render json: {}, status: :internal_server_error unless %w[create_new export].include? push_type
+
+    export_task, error = ProformaService::HandleExportConfirm.call(user: current_user, task: @task,
+                                                                   push_type: push_type, account_link_id: params[:account_link])
+    task_title = export_task.title
+
+    if error.nil?
+      render json: {
+        message: t('tasks.export_task.successfully_exported', title: task_title),
+        status: 'success', actions: render_export_actions(task: export_task, exported: true)
+      }
+    else
+      export_task.destroy if push_type == 'create_new'
+      render json: {
+        message: t('tasks.export_task.export_failed', title: task_title, error: error),
+        status: 'fail', actions: render_export_actions(task: @task, exported: false, error: error)
+      }
+    end
+  end
+  # rubocop:enable Metrics/AbcSize
+
   private
 
   def set_search
@@ -127,14 +173,14 @@ class TasksController < ApplicationController
   end
 
   def restore_search_params
-    search_params = session.delete(:exercise_search_params)&.symbolize_keys || {}
+    search_params = session.delete(:task_search_params)&.symbolize_keys || {}
     params[:search] ||= search_params[:search]
     params[:advancedFilterActive] ||= search_params[:advancedFilterActive]
     params[:page] ||= search_params[:page]
   end
 
   def save_search_params
-    session[:exercise_search_params] = {search: params[:search], advancedFilterActive: params[:advancedFilterActive], page: params[:page]}
+    session[:task_search_params] = {search: params[:search], advancedFilterActive: params[:advancedFilterActive], page: params[:page]}
   end
 
   def handle_search_params
@@ -180,5 +226,11 @@ class TasksController < ApplicationController
       tempfile.write string
       tempfile.rewind
     end
+  end
+
+  def render_export_actions(task:, exported:, error: nil, task_found: nil, update_right: nil)
+    render_to_string(partial: 'export_actions.html.slim',
+                     locals: {task: task, exported: exported, error: error, task_found: task_found,
+                              update_right: update_right})
   end
 end

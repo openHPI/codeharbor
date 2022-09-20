@@ -60,6 +60,8 @@ class Ability
 
   def task_abilities(user)
     can %i[index create import_start import_confirm], Task
+
+    alias_action :export_external_start, :export_external_check, :export_external_confirm, to: :export
     can %i[crud export download], Task, user: {id: user.id}
   end
 

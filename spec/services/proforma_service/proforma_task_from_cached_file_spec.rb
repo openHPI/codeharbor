@@ -39,7 +39,6 @@ describe ProformaService::ProformaTaskFromCachedFile do
       expect(task_from_cached_file).to be_a Proforma::Task
     end
 
-    # rubocop:disable RSpec/ExampleLength
     it 'sets the attributes of task' do
       expect(task_from_cached_file).to have_attributes(
         description: be_present,
@@ -66,7 +65,6 @@ describe ProformaService::ProformaTaskFromCachedFile do
           uuid: be_nil
         )
       end
-      # rubocop:enable RSpec/ExampleLength
     end
   end
 end

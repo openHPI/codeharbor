@@ -59,4 +59,18 @@ RSpec.describe TaskFile, type: :model do
       it { is_expected.to eql 'folder/filename' }
     end
   end
+
+  describe '#duplicate' do
+    subject(:duplicate) { file.duplicate }
+
+    let(:file) { create(:task_file, :with_task) }
+
+    it 'creates a new file' do
+      expect(duplicate).not_to be file
+    end
+
+    it 'has the same attributes' do
+      expect(duplicate).to have_attributes(file.attributes.except('created_at', 'updated_at', 'id'))
+    end
+  end
 end

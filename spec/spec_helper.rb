@@ -27,6 +27,8 @@ require 'webmock/rspec'
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 RSpec::Matchers.define_negated_matcher :avoid_change, :change
+RSpec::Matchers.define_negated_matcher :not_include, :include
+RSpec::Matchers.define_negated_matcher :not_have_attributes, :have_attributes
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

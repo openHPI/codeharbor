@@ -18,6 +18,12 @@ class TaskFile < ApplicationRecord
     self.name = File.basename(full_file_name)
   end
 
+  def duplicate
+    dup.tap do |file|
+      file.attachment.attach(attachment.blob) if attachment.attached?
+    end
+  end
+
   private
 
   def extract_text_data
