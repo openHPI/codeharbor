@@ -46,7 +46,7 @@ user4.save!
 AccountLink.create!(
   user: user1,
   name: 'My Autograder',
-  push_url: 'http://localhost:7000/import_exercise',
+  push_url: 'http://localhost:7000/import_task',
   check_uuid_url: 'http://localhost:7000/import_uuid_check',
   api_key: 'abcdefg'
 )
