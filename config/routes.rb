@@ -81,6 +81,7 @@ Rails.application.routes.draw do
       post :import_start
       post :import_confirm
     end
+    resources :comments
   end
 
   controller :tasks do # import-api endpoints

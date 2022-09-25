@@ -76,8 +76,8 @@
         / - if cannot? :edit, task
           = link_to 'Contribute', contribute_task_path(task), method: :post, class: 'btn btn-default'
     .panel-footer
-      = button_tag type: 'button', class: 'btn no-border comment-button', data: {task: task.id} do
-        = t('tasks.index.show_comments') + ' '
+      = button_tag type: 'button', class: 'btn no-border index-comment-button', data: {task: task.id} do
+        = t('comments.show_comments') + ' '
         span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
         span.fa.fa-caret-down.my-caret
       = ' '
@@ -109,11 +109,11 @@
         = button_tag do
           i.fa.fa-caret-right
 
-    /div class=("comment-box") data-exercise=exercise.id
-      = form_for :comment, url: exercise_comments_path(exercise), remote: true do |f|
+    div class=("comment-box") data-task=task.id
+      = form_for :comment, url: task_comments_path(task), remote: true do |f|
         .write-comment
           .input-group
-            = f.label_tag 'new_comment_label', t('exercises.all.new_comment'), class: 'input-group-addon'
+            = f.label_tag 'new_comment_label', t('comments.new_comment'), class: 'input-group-addon'
             = f.text_field :text, class: 'form-control'
             span.input-group-btn
               = f.submit class: 'btn btn-default'

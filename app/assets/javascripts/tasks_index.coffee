@@ -1,17 +1,18 @@
-ready =->
+ready = ->
   initializeSelect2()
   initCollapsable($('.description'), '95px')
   initializeDynamicHideShow()
   initializeFilter()
+  initializeIndexComments()
 
 $(document).on('turbolinks:load', ready)
 
-initializeDynamicHideShow =->
+initializeDynamicHideShow = ->
   $('body').on 'click', '.more-btn-wrapper', (event) ->
     event.preventDefault()
     toggleHideShowMore $(this)
 
-initializeSelect2 =->
+initializeSelect2 = ->
   $('.defaultSelect2').select2
     minimumResultsForSearch: 10
     width: '100%'
@@ -33,7 +34,7 @@ toggleHideShowMore = (element) ->
     $parent.css 'max-height', 'unset'
     # Save old height somewhere for later use
     $text.prop 'default-max-height', $text.css 'max-height'
-    $text.css 'max-height', $text.prop('scrollHeight')+'px'
+    $text.css 'max-height', $text.prop('scrollHeight') + 'px'
   else
     $text.css 'max-height', $text.prop 'default-max-height'
   $less_tag.toggleClass 'hidden'
@@ -48,12 +49,12 @@ initCollapsable = (collapsables, max_height) ->
       $(this).siblings('.more-btn-wrapper').hide()
     addAnimatedSliding()
 
-addAnimatedSliding =->
+addAnimatedSliding = ->
   setTimeout ->
     $('.collapsable').addClass('animated-sliding')
   , 100
 
-initializeFilter =->
+initializeFilter = ->
   $('#search_title_or_description_cont').keypress (event) ->
     if event.keyCode == 13 || event.which == 13
       event.preventDefault()
@@ -67,10 +68,10 @@ initializeFilter =->
   $(".change-hidden-field").click ->
     $('#visibility').val(this.id)
     $('#task_search').submit()
-  $('#'+$('#visibility').val()).addClass('selected')
+  $('#' + $('#visibility').val()).addClass('selected')
   intializeAdvancedFilter()
 
-intializeAdvancedFilter =->
+intializeAdvancedFilter = ->
   $advancedFilterActive = $('#advancedFilterActive')
   $dropdownContent = $('.dropdown-content')
   if $advancedFilterActive
@@ -88,21 +89,43 @@ intializeAdvancedFilter =->
       $advancedFilterActive.val(false)
       $drop.removeClass('fa-caret-up').addClass('fa-caret-down')
     else
-      $search.css("border-bottom-left-radius","0px")
+      $search.css("border-bottom-left-radius", "0px")
       $advanced.css("border-bottom-right-radius", "0px")
       $advancedFilterActive.val(true)
       $drop.removeClass('fa-caret-down').addClass('fa-caret-up')
 
   if $('#order_param')
-    #    $('#' + order.value).addClass('active')
+#    $('#' + order.value).addClass('active')
     $('#order_created').addClass('active')
 
-    #  $('#order_rating').click ->
-    #    $('#order_rating').addClass('active')
-    #    $('#order_created').removeClass('active')
-    #    document.getElementById('order_param').value = 'order_rating'
+  #  $('#order_rating').click ->
+  #    $('#order_rating').addClass('active')
+  #    $('#order_created').removeClass('active')
+  #    document.getElementById('order_param').value = 'order_rating'
 
   $('#order_created').click ->
     $('#order_created').addClass('active')
     $('#order_rating').removeClass('active')
     $('#order_param').val('order_created')
+
+initializeIndexComments = ->
+  $('.index-comment-button').on 'click', ->
+    task_id = this.getAttribute("data-task")
+    url = window.location.pathname + '/' + task_id + "/comments"
+    $comment_box = $(".comment-box[data-task=#{task_id}]")
+    $related_box = $(".related-box[data-task=#{task_id}]")
+
+    $caret = $(this).children('.my-caret')
+    $wait_icon = $(this).children('.wait')
+
+    if $caret.hasClass('fa-caret-down')
+      $caret.removeClass('fa-caret-down').addClass('fa-caret-up')
+      loadComments(url, $wait_icon, $comment_box, ->
+        if $related_box
+          if $related_box.css('display') != 'none'
+            $related_box.addClass('with-bottom-border'))
+    else
+      $caret.removeClass('fa-caret-up').addClass('fa-caret-down')
+      $comment_box.hide()
+      if $related_box
+        $related_box.removeClass('with-bottom-border')

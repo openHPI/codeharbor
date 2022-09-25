@@ -529,20 +529,20 @@ legend.toggle-next
   .slide-right.inactive
     = button_tag do
       i.fa.fa-caret-right
-/.comments-panel
-  = button_tag type: 'button', class: 'full-window-button comment-button' do
-    = t('exercises.all.comments') + ' '
+.expandable-panel.with-borders
+  = button_tag type: 'button', class: 'full-window-button show-comment-button' do
+    = t('comments.show_comments') + ' '
     span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
     span.fa.fa-caret-down.my-caret
-/div class=("comment-box with-borders") data-exercise=@task.id
-  = form_for :comment, url: exercise_comments_path(@task), remote: true do |f|
-    .write-comment
-      .input-group
-        = f.label_tag 'new_comment_label', 'New Comment', class: 'input-group-addon'
-        = f.text_field :text, class: 'form-control'
-        span.input-group-btn
-          = f.submit class: 'btn btn-default'
-  .comment-body
+  .comment-box data-task=@task.id
+    = form_for :comment, url: task_comments_path(@task), remote: true do |f|
+      .write-comment
+        .input-group
+          = f.label_tag 'new_comment_label', 'New Comment', class: 'input-group-addon'
+          = f.text_field :text, class: 'form-control'
+          span.input-group-btn
+            = f.submit class: 'btn btn-default'
+    .comment-body
 
 /.history-panel
   = button_tag type: 'button', class: 'full-window-button history-button' do

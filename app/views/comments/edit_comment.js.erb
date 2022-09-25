@@ -1,5 +1,5 @@
-exercise_id = <%= @exercise.id %>
+task_id = <%= @task.id %>
 comment_id = <%= @comment.id %>
-    commentText =  $(".comment-text[data-exercise="+ exercise_id +"][data-comment="+ comment_id +"]")
+    commentText =  $(".comment-text[data-task="+ task_id +"][data-comment="+ comment_id +"]")
 $(commentText).css("color=blue;")
-$(commentText).replaceWith("<%= escape_javascript(render :partial => 'comments/edit', :locals =>{:comment => @comment, :exercise => @exercise}) %>");
+$(commentText).replaceWith("<%= escape_javascript(render :partial => 'comments/edit', :locals =>{:comment => @comment, :task => @task}) %>");
