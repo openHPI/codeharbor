@@ -18,7 +18,6 @@ class CommentsController < ApplicationController
     if @comment.save
       index
     else
-      # TODO: Flash is useless, as the "render json" won't show it. Kept for historical reasons, should be refactored.
       flash.now[:alert] = t('controllers.comment.error.create')
       head :ok
     end
@@ -28,7 +27,6 @@ class CommentsController < ApplicationController
     if @comment.update(comment_params)
       index
     else
-      # TODO: Flash is useless, as the "render json" won't show it. Kept for historical reasons, should be refactored.
       flash.now[:alert] = t('controllers.comment.error.update')
       head :ok
     end
