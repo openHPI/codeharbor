@@ -14,3 +14,21 @@ initializeDropdowns =->
     else
       $caret.removeClass('fa-caret-up').addClass('fa-caret-down')
       $(this).addClass('closed')
+
+loadComments = (url, $wait_icon, $comment_box, onSucess)->
+  $.ajax({
+    type: 'GET',
+    url: url
+    dataType: 'script'
+    beforeSend: ->
+      $wait_icon.show()
+    success: ->
+      $comment_box.show()
+      if typeof onSucess == 'function'
+        onSucess()
+    complete: ->
+      $wait_icon.hide()
+  })
+
+root = exports ? this;
+root.loadComments = loadComments

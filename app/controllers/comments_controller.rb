@@ -2,7 +2,7 @@
 
 class CommentsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_exercise
+  before_action :set_task
   before_action :set_comment, only: %i[edit update destroy]
   before_action :new_comment, only: :create
 
@@ -38,7 +38,7 @@ class CommentsController < ApplicationController
   end
 
   def index
-    @comments = Comment.where(exercise: @exercise).paginate(per_page: 5, page: params[:page]).order('created_at DESC')
+    @comments = Comment.where(task: @task).paginate(per_page: 5, page: params[:page]).order('created_at DESC')
     render 'load_comments.js.erb'
   end
 
@@ -47,7 +47,7 @@ class CommentsController < ApplicationController
   def new_comment
     @comment = Comment.new(comment_params)
     @comment.user = current_user
-    @comment.exercise = @exercise
+    @comment.task = @task
   end
 
   # Use callbacks to share common setup or constraints between actions.
@@ -55,12 +55,12 @@ class CommentsController < ApplicationController
     @comment = Comment.find(params[:id])
   end
 
-  def set_exercise
-    @exercise = Exercise.find(params[:exercise_id])
+  def set_task
+    @task = Task.find(params[:task_id])
   end
 
   # Never trust parameters from the scary internet, only allow the following list through.
   def comment_params
-    params.require(:comment).permit(:text, :exercise_id, :user_id)
+    params.require(:comment).permit(:text, :task_id, :user_id)
   end
 end

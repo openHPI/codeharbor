@@ -466,14 +466,14 @@ en:
   group_memberships:
     duplicate_validation_error: cannot have multiple memberships for same member and group
   comments:
-    header: "Comments for %{title}"
     text: "Text"
-    exercise: "Exercise"
-    user: "User"
     created_at: "Created at"
-    actions: "Actions"
     info:
-      no_comments: "This Exercise does not have comments yet"
+      no_comments: "This Task does not have comments yet"
+    show_comments: "Show Comments"
+    new_comment: "New Comment"
+    show_more: "Show more"
+    show_less: "Show less"
 
     button:
       new: "New Comment"
@@ -602,13 +602,9 @@ en:
       ratings: "Ratings"
       view: "View"
       related_exercises: "Show Related Exercises"
-      comments: "Show Comments"
-      new_comment: "New Comment"
       duplicate: "Duplicate"
       edit: "Edit"
       delete: "Delete"
-      show_more: "Show more"
-      show_less: "Show less"
       open_exercise: "Open exercise to show more"
       reset: "Reset"
 
@@ -1083,7 +1079,6 @@ en:
       view: "View"
       edit: "Edit"
       delete: "Delete"
-      show_comments: "Show Comments"
       related_exercises: "Show Related Exercises"
       choose_file: "You need to choose a file."
       import_zip: "Import ZIP file"
