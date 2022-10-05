@@ -19,7 +19,7 @@ class Task < ApplicationRecord
   # has_many :collections, through: :collection_tasks
 
   has_many :comments, dependent: :destroy
-  # has_many :ratings, dependent: :destroy
+  has_many :ratings, dependent: :destroy
 
   belongs_to :user
   belongs_to :programming_language, optional: true
@@ -60,6 +60,18 @@ class Task < ApplicationRecord
     duplicate.tap do |task|
       task.user = user if user
     end
+  end
+
+  def average_rating
+    if ratings.empty?
+      0
+    else
+      ratings.map(&:rating).sum.to_f / ratings.size
+    end
+  end
+
+  def rating_star
+    (average_rating * 2).round / 2.0
   end
 
   private

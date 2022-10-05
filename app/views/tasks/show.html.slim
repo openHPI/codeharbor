@@ -4,12 +4,12 @@
       i.i.fa.fa-file-text-o style=("color: #008000")
       = ' '
       = truncate(@task.title, length: 100)
-  /.col-md-4
+  .col-md-4
     span.star-rating.pull-right style=("font-size: 2.0em")
       - [*1..5].each do |i|
-        - if @task.round_avg_rating >= i
+        - if @task.average_rating >= i
           span.fa.fa-star.overall-rating data-rating=i
-        - elsif (@task.round_avg_rating + 0.5) >= i
+        - elsif (@task.average_rating + 0.5) >= i
           span.fa.fa-star-half-o.overall-rating data-rating=i
         - else
           span.fa.fa-star-o.overall-rating data-rating=i
@@ -29,7 +29,7 @@
               - else
                 - [*1..5].each do |i|
                   span.fa.fa-star-o data-rating=i
-    = render 'remove_state_tag', exercise: @task
+    /= render 'remove_state_tag', exercise: @task
 
   br
 legend.toggle-next
