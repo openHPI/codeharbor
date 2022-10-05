@@ -180,7 +180,7 @@ en:
 
     rating:
       authorization: You are not authorized to rate.
-      own_exercise: You cannot rate your own exercise
+      own_task: You cannot rate your own task
       success:
         create: Rating was successfully created.
         update: Rating was successfully updated.

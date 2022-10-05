@@ -43,7 +43,10 @@
             b = t('tasks.index.search.order')
           .btn-group[role="group"]
             = sort_link(@search, :created_at)
-        /.stars.section
+            /= advanced.hidden_field_tag 'order_param', @order
+            /= button_tag t('tasks.index.search.rating'), type: 'button', id: 'order_rating', class: 'btn btn-default'
+            /= button_tag t('tasks.index.search.created_at'), type: 'button', id: 'order_created', class: 'btn btn-default'
+        .stars.section
           p
             b = t('tasks.index.search.stars')
           div.form-group

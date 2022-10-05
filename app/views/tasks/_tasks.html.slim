@@ -27,19 +27,19 @@
       h3.panel-title
         span data-toggle="tooltip" data-placement="bottom" title="#{task.title}"
           = truncate(task.title, length: 100)
-        /span.star-rating.pull-right
+        span.star-rating.pull-right
           small.number-rating
             = task.average_rating.round(1)
           - [*1..5].each do |i|
-            - if task.rating_star(task.average_rating.round(1)) >= i
+            - if task.rating_star >= i
               span.fa.fa-star data-rating=i
-            - elsif (task.rating_star(task.average_rating.round(1)) + 0.5) >= i
+            - elsif (task.rating_star + 0.5) >= i
               span.fa.fa-star-half-o data-rating=i
             - else
               span.fa.fa-star-o data-rating=i
           small
             = ' '
-            = exercise.ratings.count
+            = task.ratings.count
             = ' ' + t('exercises.all.ratings')
         span.programming-language.pull-right
           = task.programming_language&.language || t('tasks.index.no_programming_language_selected')

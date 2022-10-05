@@ -23,6 +23,8 @@ class TasksController < ApplicationController
     @files = @task.files
     @tests = @task.tests
     @model_solutions = @task.model_solutions
+
+    @user_rating = @task.ratings&.find_by(user: current_user)&.rating
   end
 
   def new
