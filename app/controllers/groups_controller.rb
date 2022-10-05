@@ -5,7 +5,7 @@ class GroupsController < ApplicationController
   before_action :set_group, only: %i[show edit update destroy request_access grant_access delete_from_group make_admin]
   before_action :set_option, only: [:index]
   before_action :set_user, only: %i[grant_access delete_from_group deny_access make_admin]
-  rescue_from CanCan::AccessDenied do |_exception|
+  rescue_from CanCan::AccessDenied, ActiveRecord::RecordNotFound do |_exception|
     redirect_to root_path, alert: t('controllers.group.authorization')
   end
 

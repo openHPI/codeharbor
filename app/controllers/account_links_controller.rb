@@ -7,7 +7,7 @@ class AccountLinksController < ApplicationController
   before_action :set_account_link, only: %i[show edit update destroy]
   before_action :set_shared_user, only: %i[remove_shared_user add_shared_user]
 
-  rescue_from CanCan::AccessDenied do |_exception|
+  rescue_from CanCan::AccessDenied, ActiveRecord::RecordNotFound do |_exception|
     redirect_to root_path, alert: t('controllers.user.authorization')
   end
 

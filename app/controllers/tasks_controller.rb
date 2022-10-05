@@ -9,7 +9,7 @@ class TasksController < ApplicationController
   before_action :set_search, only: [:index]
   skip_before_action :verify_authenticity_token, only: %i[import_external import_uuid_check]
 
-  rescue_from CanCan::AccessDenied do |_exception|
+  rescue_from CanCan::AccessDenied, ActiveRecord::RecordNotFound do |_exception|
     redirect_to root_path, alert: t('controllers.authorization')
   end
 

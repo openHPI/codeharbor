@@ -4,7 +4,7 @@ class RatingsController < ApplicationController
   load_and_authorize_resource
   before_action :set_exercise
 
-  rescue_from CanCan::AccessDenied do |_exception|
+  rescue_from CanCan::AccessDenied, ActiveRecord::RecordNotFound do |_exception|
     redirect_to root_path, alert: t('controllers.rating.authorization')
   end
 

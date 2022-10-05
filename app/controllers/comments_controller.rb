@@ -6,7 +6,7 @@ class CommentsController < ApplicationController
   before_action :set_comment, only: %i[edit update destroy]
   before_action :new_comment, only: :create
 
-  rescue_from CanCan::AccessDenied do |_exception|
+  rescue_from CanCan::AccessDenied, ActiveRecord::RecordNotFound do |_exception|
     redirect_to root_path, alert: t('controllers.comment.authorization')
   end
 
