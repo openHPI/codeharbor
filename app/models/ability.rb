@@ -102,11 +102,10 @@ class Ability
   end
 
   def user_abilities(user)
-    can %i[show view], User
     can %i[message], User do |this_user|
       this_user != user
     end
-    can %i[edit update soft_delete delete manage_accountlinks remove_account_link], User, id: user.id
+    can %i[edit update soft_delete delete manage_accountlinks remove_account_link show view], User, id: user.id
   end
 
   def message_abilities(user)

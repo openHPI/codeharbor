@@ -34,8 +34,8 @@ RSpec.describe User, type: :model do
       it { is_expected.not_to be_able_to(:new, described_class) }
       it { is_expected.not_to be_able_to(:manage, described_class) }
 
-      it { is_expected.to be_able_to(:show, user) }
-      it { is_expected.to be_able_to(:view, user) }
+      it { is_expected.not_to be_able_to(:show, user) }
+      it { is_expected.not_to be_able_to(:view, user) }
       it { is_expected.to be_able_to(:message, user) }
       it { is_expected.not_to be_able_to(:edit, user) }
       it { is_expected.not_to be_able_to(:update, user) }
@@ -49,6 +49,8 @@ RSpec.describe User, type: :model do
 
         it { is_expected.to be_able_to(:manage, described_class) }
         it { is_expected.to be_able_to(:manage, user) }
+        it { is_expected.to be_able_to(:show, user) }
+        it { is_expected.to be_able_to(:view, user) }
       end
 
       context 'when current_user is user' do
