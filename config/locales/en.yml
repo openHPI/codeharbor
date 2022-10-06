@@ -1057,7 +1057,7 @@ en:
         order: "Order By"
         rating: "Rating"
         created_at: "Created At"
-        stars: "Stars"
+        min_stars: "Minimum amount of stars"
         all_stars: "All Stars"
         unrated_only: "Unrated Only"
         languages: "Languages"

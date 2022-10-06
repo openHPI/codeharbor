@@ -169,7 +169,10 @@ class TasksController < ApplicationController
 
   def set_search
     search = params[:search]
-    @created_before_days = search[:created_before_days] if search.is_a?(ActionController::Parameters)
+    if search.is_a?(ActionController::Parameters)
+      @created_before_days = search[:created_before_days]
+      @min_stars = search[:min_stars]
+    end
     @visibility = params[:visibility] || 'owner'
     @advanced_filter_active = params[:advancedFilterActive]
   end
@@ -179,6 +182,7 @@ class TasksController < ApplicationController
     params[:search] ||= search_params[:search]
     params[:advancedFilterActive] ||= search_params[:advancedFilterActive]
     params[:page] ||= search_params[:page]
+    params[:min_stars] ||= search_params[:min_stars]
   end
 
   def save_search_params
