@@ -42,15 +42,18 @@
           p
             b = t('tasks.index.search.order')
           .btn-group[role="group"]
-            = sort_link(@search, :created_at)
+            div
+              = sort_link(@search, :created_at)
+            div
+              = sort_link(@search, :average_rating)
             /= advanced.hidden_field_tag 'order_param', @order
-            /= button_tag t('tasks.index.search.rating'), type: 'button', id: 'order_rating', class: 'btn btn-default'
-            /= button_tag t('tasks.index.search.created_at'), type: 'button', id: 'order_created', class: 'btn btn-default'
+            / = button_tag t('tasks.index.search.rating'), type: 'button', id: 'order_rating', class: 'btn btn-default'
+            / = button_tag t('tasks.index.search.created_at'), type: 'button', id: 'order_created', class: 'btn btn-default'
         .stars.section
           p
-            b = t('tasks.index.search.stars')
+            b = t('tasks.index.search.min_stars')
           div.form-group
-            = advanced.select 'stars', options_for_select({t('tasks.index.search.all_stars') => "0", "5" => "5", "4+" => "4", "3+" => "3", "2+" => "2", t('tasks.index.search.unrated_only') => ""}, selected: @stars), {}, class: 'form-control defaultSelect2'
+            = f.select 'min_stars', options_for_select(%w[5 4 3 2 1 0], selected: @min_stars), {}, class: 'form-control defaultSelect2'
         .proglanguages.section
           p
             b = t('tasks.index.search.proglanguages')
