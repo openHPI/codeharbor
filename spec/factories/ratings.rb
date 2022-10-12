@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :rating do
     user { build(:user) }
-    exercise { build(:codeharbor_exercise) }
+    task { build(:task) }
     rating { 5 }
   end
 end
