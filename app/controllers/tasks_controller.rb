@@ -230,7 +230,7 @@ class TasksController < ApplicationController
 
   def render_export_actions(task:, exported:, error: nil, task_found: nil, update_right: nil)
     render_to_string(partial: 'export_actions',
-                     formats: [:'html.slim'],
+                     formats: [:html],
                      locals: {task: task, exported: exported, error: error, task_found: task_found,
                               update_right: update_right})
   end
