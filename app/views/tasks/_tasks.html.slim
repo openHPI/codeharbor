@@ -4,10 +4,10 @@
       .panel-body
         .col-md-10
           h3 style=("color: #777777")
-            = t('tasks.index.search.no_exercises')
+            = t('tasks.index.search.no_tasks')
           br
           p style=("color: #777777")
-            = t('tasks.index.search.no_exercises_description')
+            = t('tasks.index.search.no_tasks_description')
           br
           br
   - else
@@ -40,7 +40,7 @@
           small
             = ' '
             = task.ratings.count
-            = ' ' + t('exercises.all.ratings')
+            = ' ' + t('tasks.all.ratings')
         span.programming-language.pull-right
           = task.programming_language&.language || t('tasks.index.no_programming_language_selected')
         / = render 'remove_state_tag', exercise: exercise
@@ -55,9 +55,9 @@
         .more-btn-wrapper
           = link_to task, class: 'more-btn' do
             span class=("more-tag")
-              = t('exercises.all.show_more')
+              = t('comments.show_more')
             span class=("less-tag hidden")
-              = t('exercises.all.show_less')
+              = t('comments.show_less')
         /.labels
           - if exercise.labels.empty?
             span style=("color: gray")

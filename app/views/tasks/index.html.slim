@@ -46,10 +46,7 @@
             div
               = sort_link(@search, :created_at)
             div
-              = sort_link(@search, :average_rating)
-            /= advanced.hidden_field_tag 'order_param', @order
-            / = button_tag t('tasks.index.search.rating'), type: 'button', id: 'order_rating', class: 'btn btn-default'
-            / = button_tag t('tasks.index.search.created_at'), type: 'button', id: 'order_created', class: 'btn btn-default'
+              = sort_link(@search, :average_rating)1
         .stars.section
           p
             b = t('tasks.index.search.min_stars')

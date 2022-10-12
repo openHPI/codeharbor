@@ -599,7 +599,6 @@ en:
       new: "New Exercise"
       search: "Search"
       placeholder: "Search for exercise or label"
-      ratings: "Ratings"
       view: "View"
       related_exercises: "Show Related Exercises"
       duplicate: "Duplicate"
@@ -997,6 +996,8 @@ en:
     recipient: "Recipient"
 
   tasks:
+    all:
+      ratings: "Ratings"
     form:
       basic_information: "Basic Information"
       errors:
@@ -1068,8 +1069,8 @@ en:
         last_week: "Last Week"
         last_month: "Last Month"
         all_languages: "All Languages"
-        no_exercises: "You do not have tasks yet"
-        no_exercises_description: "Search tasks by clicking on private or public or add your own tasks."
+        no_tasks: "You do not have tasks yet"
+        no_tasks_description: "Search tasks by clicking on private or public or add your own tasks."
         no_results: "No results"
         no_results_description: "Try different options by clicking on Advanced."
         reset: "Reset"
