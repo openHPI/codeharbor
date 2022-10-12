@@ -1111,6 +1111,7 @@ en:
       export: "Export"
       export_to: "Export to"
       define_account_link: "Please define an account link first"
+      meta_data: "Metadata"
 
 
 
