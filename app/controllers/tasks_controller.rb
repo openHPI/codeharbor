@@ -229,7 +229,8 @@ class TasksController < ApplicationController
   end
 
   def render_export_actions(task:, exported:, error: nil, task_found: nil, update_right: nil)
-    render_to_string(partial: 'export_actions.html.slim',
+    render_to_string(partial: 'export_actions',
+                     formats: [:'html.slim'],
                      locals: {task: task, exported: exported, error: error, task_found: task_found,
                               update_right: update_right})
   end

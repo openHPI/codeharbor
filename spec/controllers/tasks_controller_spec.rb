@@ -270,7 +270,7 @@ RSpec.describe TasksController, type: :controller do
 
     subject(:post_request) { post :import_start, params: {zip_file: zip_file}, format: :js, xhr: true }
 
-    let(:zip_file) { fixture_file_upload('files/proforma_import/testfile.zip', 'application/zip') }
+    let(:zip_file) { fixture_file_upload('proforma_import/testfile.zip', 'application/zip') }
 
     before { allow(ProformaService::CacheImportFile).to receive(:call).and_call_original }
 
@@ -295,7 +295,7 @@ RSpec.describe TasksController, type: :controller do
     end
 
     context 'when file contains three tasks' do
-      let(:zip_file) { fixture_file_upload('files/proforma_import/testfile_multi.zip', 'application/zip') }
+      let(:zip_file) { fixture_file_upload('proforma_import/testfile_multi.zip', 'application/zip') }
 
       it 'renders import view for three tasks' do
         post_request
@@ -330,7 +330,7 @@ RSpec.describe TasksController, type: :controller do
            params: {import_id: import_data[1][:import_id], subfile_id: import_data[0], import_type: 'export'}, xhr: true
     end
 
-    let(:zip_file) { fixture_file_upload('files/proforma_import/testfile_multi.zip', 'application/zip') }
+    let(:zip_file) { fixture_file_upload('proforma_import/testfile_multi.zip', 'application/zip') }
     let(:data) { ProformaService::CacheImportFile.call(user: user, zip_file: zip_file) }
     let(:import_data) { data.first }
 
