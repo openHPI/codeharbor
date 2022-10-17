@@ -210,7 +210,7 @@ legend.toggle-next
           .row-value
             = file.internal_description
 
-        - if !file.attachment.present?
+        - if !file.use_attached_file
           .row
             .editor.readonly data-file-name="#{file.name}"
               = file.content
@@ -342,7 +342,7 @@ legend.toggle-next
                   .row-value
                     = file.internal_description
 
-                - if !file.attachment.present?
+                - if !file.use_attached_file
                   .row
                     .editor.readonly data-file-name="#{file.name}"
                       = file.content
@@ -440,7 +440,7 @@ legend.toggle-next
                   .row-value
                     = file.internal_description
 
-                - if !file.attachment.present?
+                - if !file.use_attached_file
                   .row
                     .editor.readonly data-file-name="#{file.name}"
                       = file.content
