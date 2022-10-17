@@ -1,7 +1,7 @@
 ready =->
   initializeUploadedFileDeletion()
   initializeToggleEditorAttachment()
-  initializeSetNameOnUpload()
+  initializeOnUpload()
 
 $(document).on('turbolinks:load', ready)
 
@@ -10,7 +10,7 @@ initializeUploadedFileDeletion =->
     event.preventDefault()
     $(this).parent().hide()
     $(this).parents('.attachment').find('.alternative').show()
-    $(this).parents('.attachment').find('.hidden-attachment-present').val(false)
+    $(this).parents('.attachment').find('.use-attached-file').val(false)
 
 initializeToggleEditorAttachment =->
   $('form').on 'click','.toggle-input', (event) ->
@@ -23,18 +23,21 @@ initializeToggleEditorAttachment =->
       $(this).text($(this).data('text-toggled'))
       $editor.find('.hidden').attr('disabled', true)
       $editor.hide()
+      $attachment.find('.use-attached-file').val($attachment.find('.attachment_present').length > 0)
       $attachment.find('.alternative-input').attr('disabled', false)
       $attachment.show()
     else
       $(this).text($(this).data('text-initial'))
       $attachment.find('.alternative-input').attr('disabled', true)
+      $attachment.find('.use-attached-file').val(false)
       $attachment.hide()
       $editor.find('hidden').attr('disabled', false)
       $editor.show()
     return
 
-initializeSetNameOnUpload =->
+initializeOnUpload =->
   $('form').on 'change', '.alternative-input', (event) ->
+    $attachment.find('.use-attached-file').val(true)
     event.preventDefault()
     fullPath = this.value
     fullName = get_filename_from_full_path(fullPath)
