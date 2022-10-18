@@ -44,14 +44,7 @@ module ProformaService
     end
 
     def file_from_proforma_file(proforma_task_file)
-      task_file = TaskFile.new({
-                                 full_file_name: proforma_task_file.filename,
-                                 internal_description: proforma_task_file.internal_description,
-                                 used_by_grader: proforma_task_file.used_by_grader,
-                                 visible: proforma_task_file.visible,
-                                 usage_by_lms: proforma_task_file.usage_by_lms,
-                                 mime_type: proforma_task_file.mimetype
-                               })
+      task_file = TaskFile.new(file_attributes(proforma_task_file))
       if proforma_task_file.binary
         task_file.attachment.attach(io: StringIO.new(proforma_task_file.content), filename: proforma_task_file.filename,
                                     content_type: proforma_task_file.mimetype)
@@ -59,6 +52,18 @@ module ProformaService
         task_file.content = proforma_task_file.content
       end
       task_file
+    end
+
+    def file_attributes(proforma_task_file)
+      {
+        full_file_name: proforma_task_file.filename,
+        internal_description: proforma_task_file.internal_description,
+        used_by_grader: proforma_task_file.used_by_grader,
+        visible: proforma_task_file.visible,
+        usage_by_lms: proforma_task_file.usage_by_lms,
+        mime_type: proforma_task_file.mimetype,
+        use_attached_file: proforma_task_file.binary
+      }
     end
 
     def tests
