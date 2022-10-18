@@ -37,7 +37,7 @@ initializeToggleEditorAttachment =->
 
 initializeOnUpload =->
   $('form').on 'change', '.alternative-input', (event) ->
-    $attachment.find('.use-attached-file').val(true)
+    $(this).parents('.attachment').find('.use-attached-file').val(true)
     event.preventDefault()
     fullPath = this.value
     fullName = get_filename_from_full_path(fullPath)
