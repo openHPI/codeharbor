@@ -1012,6 +1012,7 @@ en:
       files:
         remove: 'Remove file'
         add: 'Add file'
+        extract_text: "Extract text"
       model_solutions:
         add: "Add Model solution"
       model_solution:

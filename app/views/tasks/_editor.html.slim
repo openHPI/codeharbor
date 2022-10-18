@@ -28,5 +28,10 @@ a.btn.btn-main.btn-xs.toggle-input data={text_initial: t('exercises.files.upload
           = link_to file.object.attachment.filename, download_attachment_task_file_path(file.object), class: 'btn btn-default', style: "border-right: none", 'data-turbolinks' => false
         = link_to '#', class: 'btn btn-default remove-attachment', style: "border-left: none; margin-right: 5px;" do
           i.fa.fa-remove style=("color: gray")
+        - if file.object.has_text_data?
+          .extract-text.btn.btn-main data-file-id=file.object.id
+            = t('tasks.form.files.extract_text')
+
     .alternative style=fileupload_display
       = file.file_field :attachment, disabled: !use_attached_file, class: 'alternative-input form-control'
+

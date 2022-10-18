@@ -10,4 +10,10 @@ class TaskFilesController < ApplicationController
   def download_attachment
     redirect_to rails_blob_path(@task_file.attachment, disposition: 'attachment')
   end
+
+  def extract_text_data
+    render json: {
+      text_data: @task_file.extract_text_data
+    }
+  end
 end

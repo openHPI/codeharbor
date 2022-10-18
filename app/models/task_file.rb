@@ -24,15 +24,13 @@ class TaskFile < ApplicationRecord
     end
   end
 
-  private
+  def has_text_data?
+    %r{(text/)|(application/xml)}.match?(attachment.content_type)
+  end
 
   def extract_text_data
-    return unless attachment.attached?
-
-    return unless %r{(text/)|(application/xml)}.match?(attachment.content_type)
-
-    self.content = attachment.blob.download
-    attachment.purge
-    save!
+    # return unless attachment.attached?
+    # return unless %r{(text/)|(application/xml)}.match?(attachment.content_type)
+    attachment.blob.download
   end
 end

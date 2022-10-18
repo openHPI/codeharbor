@@ -2,6 +2,7 @@ ready =->
   initializeUploadedFileDeletion()
   initializeToggleEditorAttachment()
   initializeOnUpload()
+  initializeExtractText()
 
 $(document).on('turbolinks:load', ready)
 
@@ -11,6 +12,33 @@ initializeUploadedFileDeletion =->
     $(this).parent().hide()
     $(this).parents('.attachment').find('.alternative').show()
     $(this).parents('.attachment').find('.use-attached-file').val(false)
+
+initializeExtractText =->
+  $('form').on 'click', '.extract-text', (event) ->
+    id = $(this).data('file-id')
+    $.ajax({
+      type: 'GET',
+      url: "/task_files/#{id}/extract_text_data",
+#      dataType: 'script'
+#      beforeSend: ->
+#        $wait_icon.show()
+      success: (response) ->
+        console.log(response)
+#        $(this).text($(this).data('text-initial'))
+        $content = $(this).parents('toggle-divs')
+        $editor = $content.find('.edit')
+        $attachment = $content.find('.attachment')
+        $attachment.find('.alternative-input').attr('disabled', true)
+        $attachment.find('.use-attached-file').val(false)
+        $attachment.hide()
+        $editor.find('hidden').attr('disabled', false)
+        $editor.show()
+
+        # set reponse.text_data into editor
+
+    })
+
+
 
 initializeToggleEditorAttachment =->
   $('form').on 'click','.toggle-input', (event) ->
