@@ -15,27 +15,22 @@ initializeUploadedFileDeletion =->
 
 initializeExtractText =->
   $('form').on 'click', '.extract-text', (event) ->
-    id = $(this).data('file-id')
+    $button = $(this)
+    id = $button.data('file-id')
     $.ajax({
       type: 'GET',
       url: "/task_files/#{id}/extract_text_data",
-#      dataType: 'script'
-#      beforeSend: ->
-#        $wait_icon.show()
       success: (response) ->
-        console.log(response)
-#        $(this).text($(this).data('text-initial'))
-        $content = $(this).parents('toggle-divs')
-        $editor = $content.find('.edit')
+        $content = $button.parents('.toggle-divs')
+        $editor = $content.find('.editor')
+        setAceEditorValue($editor[0], response.text_data)
         $attachment = $content.find('.attachment')
         $attachment.find('.alternative-input').attr('disabled', true)
         $attachment.find('.use-attached-file').val(false)
         $attachment.hide()
-        $editor.find('hidden').attr('disabled', false)
-        $editor.show()
-
-        # set reponse.text_data into editor
-
+        $edit = $content.find('.edit')
+        $edit.find('hidden').attr('disabled', false)
+        $edit.show()
     })
 
 
