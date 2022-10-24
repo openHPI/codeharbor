@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Label, type: :model do
+RSpec.describe Label do
   describe 'validations' do
     it { is_expected.to validate_presence_of(:name) }
   end

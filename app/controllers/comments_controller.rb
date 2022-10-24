@@ -10,6 +10,11 @@ class CommentsController < ApplicationController
     redirect_to root_path, alert: t('controllers.comment.authorization')
   end
 
+  def index
+    @comments = Comment.where(task: @task).paginate(per_page: 5, page: params[:page]).order('created_at DESC')
+    render 'load_comments.js.erb'
+  end
+
   def edit
     render 'edit_comment.js.erb'
   end
@@ -35,11 +40,6 @@ class CommentsController < ApplicationController
   def destroy
     @comment.destroy
     index
-  end
-
-  def index
-    @comments = Comment.where(task: @task).paginate(per_page: 5, page: params[:page]).order('created_at DESC')
-    render 'load_comments.js.erb'
   end
 
   private

@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'nokogiri'
 
-RSpec.describe Message, type: :model do
+RSpec.describe Message do
   describe 'abilities' do
     subject(:ability) { Ability.new(user) }
 

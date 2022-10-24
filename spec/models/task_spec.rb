@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Task, type: :model do
+RSpec.describe Task do
   describe 'abilities' do
     subject(:ability) { Ability.new(user) }
 

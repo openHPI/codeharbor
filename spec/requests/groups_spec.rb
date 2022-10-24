@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'groups', type: :request do
+RSpec.describe 'Groups' do
   context 'when logged in' do
     let(:user) { create(:user) }
     let(:group) { create(:group, users: [user]) }

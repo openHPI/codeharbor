@@ -53,7 +53,7 @@ class RatingsController < ApplicationController
     end
     rating.exercise = @exercise
     rating.user = current_user
-    flash[:notice] = notice
+    flash.now[:notice] = notice
 
     rating
   end

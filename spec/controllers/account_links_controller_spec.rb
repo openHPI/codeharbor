@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AccountLinksController, type: :controller do
+RSpec.describe AccountLinksController do
   let(:user) { create(:user) }
 
   let(:account_link) { create(:account_link) }

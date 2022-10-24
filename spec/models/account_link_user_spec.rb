@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AccountLinkUser, type: :model do
+RSpec.describe AccountLinkUser do
   describe '#valid?' do
     subject { build(:account_link_user, account_link: account_link, user: user).valid? }
 

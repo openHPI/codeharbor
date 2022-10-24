@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe TasksController, type: :controller do
+RSpec.describe TasksController do
   let(:user) { create(:user) }
   let(:collection) { create(:collection, users: [user], tasks: []) }
   let(:valid_attributes) { {user: user} }

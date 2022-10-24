@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe AccountLink, type: :model do
+RSpec.describe AccountLink do
   describe 'abilities' do
     subject(:ability) { Ability.new(user) }
 

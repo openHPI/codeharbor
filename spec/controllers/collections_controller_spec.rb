@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe CollectionsController, type: :controller do
+RSpec.describe CollectionsController do
   let(:valid_attributes) do
     attributes_for(:collection)
   end

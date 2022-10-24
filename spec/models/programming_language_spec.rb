@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ProgrammingLanguage, type: :model do
+RSpec.describe ProgrammingLanguage do
   describe '#language_with_version' do
     subject { programming_language.language_with_version }
 
