@@ -20,8 +20,8 @@ initializeEditors =->
         hiddenContent.val(editor.getValue())
 
 setAceEditorValue = (editor, value) ->
-  editor = $('#task_files_attributes_6_content').parent().find('.editor')[0]
-  ace.edit(editor).getSession().setValue(value)
+  aceEditor = $(editor).parent().find('.editor')[0]
+  ace.edit(aceEditor).getSession().setValue(value)
 
 changeEditorMode = (editor, editor_mode) ->
   ace.edit(editor).getSession().setMode(editor_mode)

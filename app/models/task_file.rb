@@ -25,12 +25,14 @@ class TaskFile < ApplicationRecord
   end
 
   def has_text_data?
-    %r{(text/)|(application/xml)}.match?(attachment.content_type)
+    return false unless (content = attachment&.blob&.download)
+    content.encode('UTF-8', 'binary')
+    true
+  rescue Encoding::UndefinedConversionError => _e
+    false
   end
 
   def extract_text_data
-    # return unless attachment.attached?
-    # return unless %r{(text/)|(application/xml)}.match?(attachment.content_type)
     attachment.blob.download
   end
 end

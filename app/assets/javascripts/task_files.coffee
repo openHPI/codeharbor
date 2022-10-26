@@ -22,15 +22,15 @@ initializeExtractText =->
       url: "/task_files/#{id}/extract_text_data",
       success: (response) ->
         $content = $button.parents('.toggle-divs')
+        $edit = $content.find('.edit')
+        $edit.find('hidden').attr('disabled', false)
+        $edit.show()
         $editor = $content.find('.editor')
         setAceEditorValue($editor[0], response.text_data)
         $attachment = $content.find('.attachment')
         $attachment.find('.alternative-input').attr('disabled', true)
         $attachment.find('.use-attached-file').val(false)
         $attachment.hide()
-        $edit = $content.find('.edit')
-        $edit.find('hidden').attr('disabled', false)
-        $edit.show()
     })
 
 
