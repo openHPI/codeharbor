@@ -23,7 +23,7 @@ initializeToggleEditorAttachment =->
       $(this).text($(this).data('text-toggled'))
       $editor.find('.hidden').attr('disabled', true)
       $editor.hide()
-      $attachment.find('.use-attached-file').val($attachment.find('.attachment_present').length > 0)
+      $attachment.find('.use-attached-file').val(true)
       $attachment.find('.alternative-input').attr('disabled', false)
       $attachment.show()
     else

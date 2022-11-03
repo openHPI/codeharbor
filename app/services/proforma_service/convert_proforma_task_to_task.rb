@@ -62,7 +62,6 @@ module ProformaService
         visible: proforma_task_file.visible,
         usage_by_lms: proforma_task_file.usage_by_lms,
         mime_type: proforma_task_file.mimetype,
-        use_attached_file: proforma_task_file.binary
       }
     end
 

@@ -1,26 +1,24 @@
-- use_attached_file = file.object.use_attached_file
-- attachment_present = file.object.attachment.attached?
-- if use_attached_file
+- file_attached = file.object.attachment.attached?
+- show_attachment = file_attached || file.object.use_attached_file
+- if show_attachment
   - editor_display = "display: none"
   - attachment_display = "display: block"
 - else
   - editor_display = "display: block"
   - attachment_display = "display: none"
-- if file.object.attachment.attached?
-  - fileupload_display = "display: none"
-- else
-  - fileupload_display = "display: block"
+- fileupload_display = file_attached ? "display: none" : "display: block"
+
 = f.label :content, t('exercises.files.content'), class: 'form-label', style: 'margin-bottom: 15px'
 a.btn.btn-main.btn-xs.toggle-input data={text_initial: t('exercises.files.upload_file'), text_toggled: t('shared.back')} href='#'
   = t('tasks.edit.toggle_file')
 .toggle-divs
   .edit style=editor_display
-    = file.text_area :content, disabled: use_attached_file, class: 'hidden form-control'
+    = file.text_area :content, disabled: show_attachment, class: 'hidden form-control'
     .editor
       = file.text_area :content
   .attachment style=attachment_display
-    = file.hidden_field :use_attached_file, value: use_attached_file, class: 'use-attached-file'
-    - if attachment_present
+    = file.hidden_field :use_attached_file, value: show_attachment, class: 'use-attached-file'
+    - if file_attached
       .btn-group.attachment_present
         - if file.object.attachment.image?
           = image_tag file.object.attachment.variant(resize_to_limit: [600, 600])
@@ -29,4 +27,4 @@ a.btn.btn-main.btn-xs.toggle-input data={text_initial: t('exercises.files.upload
         = link_to '#', class: 'btn btn-default remove-attachment', style: "border-left: none; margin-right: 5px;" do
           i.fa.fa-remove style=("color: gray")
     .alternative style=fileupload_display
-      = file.file_field :attachment, disabled: !use_attached_file, class: 'alternative-input form-control'
+      = file.file_field :attachment, disabled: file_attached, class: 'alternative-input form-control'
