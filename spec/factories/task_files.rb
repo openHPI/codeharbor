@@ -3,7 +3,6 @@
 FactoryBot.define do
   factory :task_file do
     name { 'name' }
-    use_attached_file { false }
 
     trait :with_task do
       fileable { build(:task) }
@@ -30,8 +29,6 @@ FactoryBot.define do
                                     filename: 'example-filename.txt',
                                     content_type: 'text/plain')
       end
-
-      use_attached_file { true }
     end
 
     trait :with_attachment do
@@ -40,8 +37,6 @@ FactoryBot.define do
       after(:build) do |file|
         file.attachment.attach(io: File.open('spec/fixtures/files/red.bmp'), filename: 'red.bmp', content_type: 'image/bmp')
       end
-
-      use_attached_file { true }
     end
   end
 end

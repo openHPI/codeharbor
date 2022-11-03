@@ -5,6 +5,9 @@ class TaskFile < ApplicationRecord
 
   has_one_attached :attachment
   validates :name, presence: true
+  validates :attachment, presence: true, if: -> { use_attached_file == 'true' }
+
+  attr_accessor :use_attached_file
 
   # after_create_commit :extract_text_data # TODO: make this manually initiatable and not based on type?
 
@@ -35,4 +38,13 @@ class TaskFile < ApplicationRecord
     attachment.purge
     save!
   end
+
+  # def avatar_format
+  #   avatar_blob = avatar.blob
+  #   if avatar_blob.content_type.start_with? 'image/'
+  #     errors.add(:avatar, 'size needs to be less than 10MB') if avatar_blob.byte_size > 10.megabytes
+  #   else
+  #     errors.add(:avatar, 'needs to be an image')
+  #   end
+  # end
 end
