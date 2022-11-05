@@ -21,12 +21,6 @@ class Task < ApplicationRecord
   has_many :comments, dependent: :destroy
   # has_many :ratings, dependent: :destroy
 
-  before_save :touch_files
-
-  def touch_files
-    files.all.find_each { |file| file.updated_at = DateTime.now }
-  end
-
   belongs_to :user
   belongs_to :programming_language, optional: true
 
