@@ -36,7 +36,7 @@ class TasksController < ApplicationController
 
     @task.user = current_user
 
-    if @task.save
+    if @task.save(context: :force_validations)
       redirect_to @task, notice: t('tasks.notification.created')
     else
       render :new
@@ -44,7 +44,8 @@ class TasksController < ApplicationController
   end
 
   def update
-    if @task.update(task_params)
+    @task.assign_attributes(task_params)
+    if @task.save(context: :force_validations)
       redirect_to @task, notice: t('tasks.notification.updated')
     else
       render :edit

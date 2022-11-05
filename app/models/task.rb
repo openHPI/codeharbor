@@ -10,7 +10,7 @@ class Task < ApplicationRecord
 
   validates :uuid, uniqueness: true
 
-  has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy
+  has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy, autosave: true
 
   has_many :tests, dependent: :destroy
   has_many :model_solutions, dependent: :destroy
@@ -20,6 +20,12 @@ class Task < ApplicationRecord
 
   has_many :comments, dependent: :destroy
   # has_many :ratings, dependent: :destroy
+
+  before_save :touch_files
+
+  def touch_files
+    files.all.find_each { |file| file.updated_at = DateTime.now }
+  end
 
   belongs_to :user
   belongs_to :programming_language, optional: true
