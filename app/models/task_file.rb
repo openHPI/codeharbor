@@ -29,9 +29,6 @@ class TaskFile < ApplicationRecord
 
   private
 
-
-  private
-
   def remove_attachment
     attachment.purge if use_attached_file != 'true' && attachment.present?
   end
