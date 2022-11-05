@@ -31,7 +31,7 @@ initializeToggleEditorAttachment =->
       $attachment.find('.alternative-input').attr('disabled', true)
       $attachment.find('.use-attached-file').val(false)
       $attachment.hide()
-      $editor.find('hidden').attr('disabled', false)
+      $editor.find('.hidden').attr('disabled', false)
       $editor.show()
     return
 
