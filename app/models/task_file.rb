@@ -7,7 +7,7 @@ class TaskFile < ApplicationRecord
   validates :name, presence: true
   validates :attachment, presence: true, if: -> { use_attached_file == 'true' }, on: :force_validations
 
-  attr_accessor :use_attached_file
+  attr_accessor :use_attached_file, :file_marked_for_deletion
 
   before_save :remove_attachment
 

@@ -1113,6 +1113,7 @@ en:
       define_account_link: "Please define an account link first"
     edit:
       toggle_file: "Toggle file upload/editor"
+      upload_a_new_file: "Upload a new file"
 
 
 

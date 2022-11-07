@@ -24,7 +24,7 @@ a.btn.btn-main.btn-xs.toggle-input data={text_initial: t('exercises.files.upload
           = image_tag file.object.attachment.variant(resize_to_limit: [600, 600])
         - else
           = link_to file.object.attachment.filename, download_attachment_task_file_path(file.object), class: 'btn btn-default', style: "border-right: none", 'data-turbolinks' => false
-        = link_to '#', class: 'btn btn-default remove-attachment', style: "border-left: none; margin-right: 5px;" do
-          i.fa.fa-remove style=("color: gray")
+        = link_to '#', class: 'btn btn-default reupload-attachment', style: "border-left: none; margin-right: 5px;", title: t('tasks.edit.upload_a_new_file') do
+          i.fa.fa-upload style=("color: gray")
     .alternative style=fileupload_display
-      = file.file_field :attachment, disabled: file_attached, class: 'alternative-input form-control'
+      = file.file_field :attachment, class: 'alternative-input form-control'
