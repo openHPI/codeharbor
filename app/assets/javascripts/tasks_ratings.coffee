@@ -4,20 +4,6 @@ ready =->
 $(document).on('turbolinks:load', ready)
 
 initializeRatings = ->
-  USERRATING = 0
-
-#  $('.popup-rating').hover (->
-#    USERRATING = $('.rating span.fa-star').last().attr("data-rating")
-#  ), ->
-#    lower = $('.rating span').filter (->
-#      $(this).attr("data-rating") <= USERRATING
-#    )
-#    $(lower).removeClass("fa-star-o").addClass("fa-star")
-#    upper = $('.rating span').filter (->
-#      $(this).attr("data-rating") > USERRATING
-#    )
-#    $(upper).removeClass("fa-star").addClass("fa-star-o")
-
   $('.rating span').hover (->
     $(this).removeClass("fa-star-o").addClass("fa-star")
     rating = this.getAttribute("data-rating")
@@ -33,18 +19,6 @@ initializeRatings = ->
 
   $('.rating span').on 'click', ->
     rating = this.getAttribute("data-rating")
-#    $(this).removeClass("fa-star-o").addClass("fa-star")
-#    lower = $('.rating span').filter (->
-#      $(this).attr("data-rating") < rating
-#    )
-#    $(lower).removeClass("fa-star-o").addClass("fa-star")
-#    upper = $('.rating span').filter (->
-#      $(this).attr("data-rating") > rating
-#    )
-#    $(upper).removeClass("fa-star").addClass("fa-star-o")
-
-#    loc = window.location.pathname
-#    dir = loc.substring(0, loc.lastIndexOf('/'))
 
     $.ajax({
       type: "POST",
