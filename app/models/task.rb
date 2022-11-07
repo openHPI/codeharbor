@@ -32,11 +32,14 @@ class Task < ApplicationRecord
   scope :owner, ->(user) { where(user: user) }
   scope :visibility, ->(visibility, user = nil) { {owner: owner(user), public: not_owner(user)}.with_indifferent_access[visibility] }
   scope :created_before_days, ->(days) { where(created_at: days.to_i.days.ago.beginning_of_day..) if days.to_i.positive? }
-  scope :min_stars, lambda { |stars|
-                      joins('LEFT JOIN (SELECT task_id, AVG(rating) AS avg_rating FROM ratings GROUP BY task_id)
+  scope :average_rating, lambda {
+    select('tasks.*, COALESCE(avg_rating, 0) AS average_rating')
+      .joins('LEFT JOIN (SELECT task_id, AVG(rating) AS avg_rating FROM ratings GROUP BY task_id)
                              AS ratings ON ratings.task_id = tasks.id')
-                        .where('COALESCE(avg_rating, 0) >= ?', stars)
-                    }
+  }
+  scope :min_stars, ->(stars) { average_rating.where('COALESCE(avg_rating, 0) >= ?', stars) }
+  scope :sort_by_average_rating_asc, -> { average_rating.order(average_rating: 'ASC') }
+  scope :sort_by_average_rating_desc, -> { average_rating.order(average_rating: 'DESC') }
 
   serialize :meta_data, HashAsJsonbSerializer
 
