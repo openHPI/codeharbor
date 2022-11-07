@@ -10,7 +10,7 @@ class Task < ApplicationRecord
 
   validates :uuid, uniqueness: true
 
-  has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy, autosave: true
+  has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy
 
   has_many :tests, dependent: :destroy
   has_many :model_solutions, dependent: :destroy
