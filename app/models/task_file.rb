@@ -42,13 +42,4 @@ class TaskFile < ApplicationRecord
     attachment.purge
     save!
   end
-
-  # def avatar_format
-  #   avatar_blob = avatar.blob
-  #   if avatar_blob.content_type.start_with? 'image/'
-  #     errors.add(:avatar, 'size needs to be less than 10MB') if avatar_blob.byte_size > 10.megabytes
-  #   else
-  #     errors.add(:avatar, 'needs to be an image')
-  #   end
-  # end
 end

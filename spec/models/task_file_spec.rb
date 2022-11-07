@@ -46,6 +46,23 @@ RSpec.describe TaskFile, type: :model do
     end
   end
 
+  describe '#valid?' do
+    it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to belong_to(:fileable) }
+
+    context 'when use_attached_file is true' do
+      subject { build(:task_file, :with_attachment, use_attached_file: 'true') }
+
+      it { is_expected.to validate_presence_of(:attachment).on(:force_validations) }
+    end
+
+    context 'when use_attached_file is false' do
+      subject { build(:task_file, :with_attachment, use_attached_file: 'false') }
+
+      it { is_expected.not_to validate_presence_of(:attachment).on(:force_validations) }
+    end
+  end
+
   describe '#full_file_name' do
     subject { file.full_file_name }
 
@@ -71,6 +88,28 @@ RSpec.describe TaskFile, type: :model do
 
     it 'has the same attributes' do
       expect(duplicate).to have_attributes(file.attributes.except('created_at', 'updated_at', 'id'))
+    end
+  end
+
+  describe '#remove_attachment hook' do
+    let!(:file) { create(:task_file, :with_task, :with_attachment) }
+    let(:use_attached_file) { 'true' }
+
+    before do
+      file.use_attached_file = use_attached_file
+      file.save
+    end
+
+    it 'does not remove attachment on save' do
+      expect(file.reload.attachment.present?).to be true
+    end
+
+    context 'when use_attached_file is false' do
+      let(:use_attached_file) { 'false' }
+
+      it 'removes attachment on save' do
+        expect(file.reload.attachment.present?).to be false
+      end
     end
   end
 end
