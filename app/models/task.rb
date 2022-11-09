@@ -19,7 +19,7 @@ class Task < ApplicationRecord
   # has_many :collections, through: :collection_tasks
 
   has_many :comments, dependent: :destroy
-  # has_many :ratings, dependent: :destroy
+  has_many :ratings, dependent: :destroy
 
   belongs_to :user
   belongs_to :programming_language, optional: true
@@ -32,11 +32,19 @@ class Task < ApplicationRecord
   scope :owner, ->(user) { where(user: user) }
   scope :visibility, ->(visibility, user = nil) { {owner: owner(user), public: not_owner(user)}.with_indifferent_access[visibility] }
   scope :created_before_days, ->(days) { where(created_at: days.to_i.days.ago.beginning_of_day..) if days.to_i.positive? }
+  scope :average_rating, lambda {
+    select('tasks.*, COALESCE(avg_rating, 0) AS average_rating')
+      .joins('LEFT JOIN (SELECT task_id, AVG(rating) AS avg_rating FROM ratings GROUP BY task_id)
+                             AS ratings ON ratings.task_id = tasks.id')
+  }
+  scope :min_stars, ->(stars) { average_rating.where('COALESCE(avg_rating, 0) >= ?', stars) }
+  scope :sort_by_average_rating_asc, -> { average_rating.order(average_rating: 'ASC') }
+  scope :sort_by_average_rating_desc, -> { average_rating.order(average_rating: 'DESC') }
 
   serialize :meta_data, HashAsJsonbSerializer
 
   def self.ransackable_scopes(_auth_object = nil)
-    %i[created_before_days]
+    %i[created_before_days min_stars]
   end
 
   def self.ransackable_attributes(_auth_object = nil)
@@ -60,6 +68,18 @@ class Task < ApplicationRecord
     duplicate.tap do |task|
       task.user = user if user
     end
+  end
+
+  def average_rating
+    if ratings.empty?
+      0
+    else
+      ratings.map(&:rating).sum.to_f / ratings.size
+    end
+  end
+
+  def rating_star
+    (average_rating * 2).round / 2.0
   end
 
   private

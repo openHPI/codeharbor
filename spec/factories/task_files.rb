@@ -24,6 +24,7 @@ FactoryBot.define do
     trait :with_text_attachment do
       name { 'text' }
       content {}
+      use_attached_file { 'true' }
       after(:build) do |task_file|
         task_file.attachment.attach(io: File.open('spec/fixtures/files/example-filename.txt'),
                                     filename: 'example-filename.txt',
@@ -34,6 +35,7 @@ FactoryBot.define do
     trait :with_attachment do
       name { 'image' }
       content {}
+      use_attached_file { 'true' }
       after(:build) do |file|
         file.attachment.attach(io: File.open('spec/fixtures/files/red.bmp'), filename: 'red.bmp', content_type: 'image/bmp')
       end

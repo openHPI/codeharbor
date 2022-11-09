@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe GroupMembership, type: :model do
+RSpec.describe GroupMembership do
   describe 'validations' do
     let(:group) { create(:group) }
     let(:member) { create(:user) }

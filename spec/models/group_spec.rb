@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'nokogiri'
 
-RSpec.describe Group, type: :model do
+RSpec.describe Group do
   describe 'abilities' do
     subject(:ability) { Ability.new(user) }
 

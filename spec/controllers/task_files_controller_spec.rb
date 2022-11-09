@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe TaskFilesController, type: :controller do
+RSpec.describe TaskFilesController do
   let(:user) { create(:user) }
 
   before { sign_in user }

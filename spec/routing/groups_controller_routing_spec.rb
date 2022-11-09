@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe GroupsController, type: :routing do
+RSpec.describe GroupsController do
   describe 'routing' do
     it 'routes to #index' do
       expect(get: '/groups').to route_to('groups#index')

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe GroupsController, type: :controller do
+RSpec.describe GroupsController do
   let(:user) { create(:user) }
 
   let(:valid_post_attributes) do
