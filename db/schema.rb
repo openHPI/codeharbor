@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_07_173125) do
+ActiveRecord::Schema.define(version: 2022_11_09_202113) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -221,6 +221,7 @@ ActiveRecord::Schema.define(version: 2022_01_07_173125) do
     t.bigint "fileable_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "xml_id"
     t.index ["fileable_type", "fileable_id"], name: "index_task_files_on_fileable_type_and_fileable_id"
   end
 

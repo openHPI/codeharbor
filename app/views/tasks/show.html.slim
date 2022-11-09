@@ -75,11 +75,11 @@ legend.toggle-next
       = @task.description
 
 
-legend.toggle-next
+legend.toggle-next.closed
   span.number = '2'
   = t('tasks.form.additional_info') + ' '
-  span.fa.fa-caret-up
-.show-table.exercise-show
+  span.fa.fa-caret-down
+.show-table.exercise-show style="display:none;"
   .row.vertical
     .row-label
       = t('tasks.internal_description')
@@ -216,6 +216,13 @@ legend.toggle-next
             | :
           .row-value
             = file.internal_description
+        - if @task.meta_data.present? && file.xml_id.present?
+          .row
+            .row-label
+              = t('tasks.files.xml_id')
+              | :
+            .row-value
+              = file.xml_id
 
         - if !file.attachment.present?
           .row
