@@ -75,18 +75,25 @@ legend.toggle-next
       = @task.description
 
 
-legend.toggle-next
+legend.toggle-next.closed
   span.number = '2'
   = t('tasks.form.additional_info') + ' '
-  span.fa.fa-caret-up
-.show-table.exercise-show
+  span.fa.fa-caret-down
+.show-table.exercise-show style="display:none;"
   .row.vertical
     .row-label
       = t('tasks.internal_description')
       | :
     .row-value
       = @task.internal_description
-
+  - if @task.meta_data.present?
+    .row.vertical
+      .row-label
+        = t('tasks.show.meta_data')
+        | :
+      .row-value
+        pre
+          = JSON.pretty_generate @task.meta_data
   .row
     .row-label
       = t('common.created_at')
@@ -209,6 +216,13 @@ legend.toggle-next
             | :
           .row-value
             = file.internal_description
+        - if @task.meta_data.present? && file.xml_id.present?
+          .row
+            .row-label
+              = t('tasks.files.xml_id')
+              | :
+            .row-value
+              = file.xml_id
 
         - if !file.attachment.present?
           .row
@@ -288,6 +302,14 @@ legend.toggle-next
             | :
           .row-value
             = test.internal_description
+        - if test.meta_data.present?
+          .row.vertical
+            .row-label
+              = t('tasks.show.meta_data')
+              | :
+            .row-value
+              pre
+                = JSON.pretty_generate test.meta_data
         .row
           .row-label
             = t('tasks.tests.test_type')

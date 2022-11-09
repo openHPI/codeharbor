@@ -1034,6 +1034,7 @@ en:
       visible: "Visible"
       usage_by_lms: "Usage by LMS"
       configuration: "Configuration"
+      xml_id: "XML ID"
     tests:
       title: "Title"
       description: "Description"
@@ -1112,6 +1113,7 @@ en:
       export: "Export"
       export_to: "Export to"
       define_account_link: "Please define an account link first"
+      meta_data: "Metadata"
     edit:
       toggle_file: "Toggle file upload/editor"
       upload_a_new_file: "Upload a new file"

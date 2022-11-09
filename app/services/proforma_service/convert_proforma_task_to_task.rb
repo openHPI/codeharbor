@@ -62,7 +62,8 @@ module ProformaService
         used_by_grader: proforma_task_file.used_by_grader,
         visible: proforma_task_file.visible,
         usage_by_lms: proforma_task_file.usage_by_lms,
-        mime_type: proforma_task_file.mimetype
+        mime_type: proforma_task_file.mimetype,
+        xml_id: proforma_task_file.id
       }
     end
 

@@ -124,7 +124,8 @@ describe ProformaService::ConvertProformaTaskToTask do
           mime_type: file.mimetype,
           used_by_grader: file.used_by_grader,
           visible: file.visible,
-          usage_by_lms: file.usage_by_lms
+          usage_by_lms: file.usage_by_lms,
+          xml_id: file.id
         )
       end
 
