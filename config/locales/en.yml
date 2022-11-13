@@ -180,7 +180,7 @@ en:
 
     rating:
       authorization: You are not authorized to rate.
-      own_exercise: You cannot rate your own exercise
+      own_task: You cannot rate your own task
       success:
         create: Rating was successfully created.
         update: Rating was successfully updated.
@@ -599,7 +599,6 @@ en:
       new: "New Exercise"
       search: "Search"
       placeholder: "Search for exercise or label"
-      ratings: "Ratings"
       view: "View"
       related_exercises: "Show Related Exercises"
       duplicate: "Duplicate"
@@ -997,6 +996,8 @@ en:
     recipient: "Recipient"
 
   tasks:
+    all:
+      ratings: "Ratings"
     form:
       basic_information: "Basic Information"
       errors:
@@ -1058,7 +1059,7 @@ en:
         order: "Order By"
         rating: "Rating"
         created_at: "Created At"
-        stars: "Stars"
+        min_stars: "Minimum number of stars"
         all_stars: "All Stars"
         unrated_only: "Unrated Only"
         languages: "Languages"
@@ -1069,8 +1070,8 @@ en:
         last_week: "Last Week"
         last_month: "Last Month"
         all_languages: "All Languages"
-        no_exercises: "You do not have tasks yet"
-        no_exercises_description: "Search tasks by clicking on private or public or add your own tasks."
+        no_tasks: "You do not have tasks yet"
+        no_tasks_description: "Search tasks by clicking on private or public or add your own tasks."
         no_results: "No results"
         no_results_description: "Try different options by clicking on Advanced."
         reset: "Reset"
@@ -1114,6 +1115,7 @@ en:
       define_account_link: "Please define an account link first"
     edit:
       toggle_file: "Toggle file upload/editor"
+      upload_a_new_file: "Upload a new file"
 
 
 

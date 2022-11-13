@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'users', type: :request do
+RSpec.describe 'Users' do
   let(:user) { create(:user) }
 
   context 'when not logged in' do

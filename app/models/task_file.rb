@@ -5,8 +5,11 @@ class TaskFile < ApplicationRecord
 
   has_one_attached :attachment
   validates :name, presence: true
+  validates :attachment, presence: true, if: -> { use_attached_file == 'true' }, on: :force_validations
 
-  # after_create_commit :extract_text_data # TODO: make this manually initiatable and not based on type?
+  attr_accessor :use_attached_file, :file_marked_for_deletion
+
+  before_save :remove_attachment
 
   def full_file_name
     path.present? ? File.join(path.to_s, name) : name
@@ -30,6 +33,10 @@ class TaskFile < ApplicationRecord
     true
   rescue Encoding::UndefinedConversionError => _e
     false
+  end
+
+  def remove_attachment
+    attachment.purge if use_attached_file != 'true' && attachment.present?
   end
 
   def extract_text_data

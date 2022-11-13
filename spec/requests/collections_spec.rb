@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Collections', type: :request do
+RSpec.describe 'Collections' do
   context 'when logged in' do
     let(:user) { create(:user) }
     let(:collection) { create(:collection, title: 'Some Collection', users: [user], tasks: []) }

@@ -1,17 +1,22 @@
 ready =->
-  initializeUploadedFileDeletion()
+  initializeUploadedFileReupload()
+  initializeUploadedFileChange()
   initializeToggleEditorAttachment()
   initializeOnUpload()
   initializeExtractText()
 
 $(document).on('turbolinks:load', ready)
 
-initializeUploadedFileDeletion =->
-  $('form').on 'click', '.remove-attachment', (event) ->
-    event.preventDefault()
-    $(this).parent().hide()
+initializeUploadedFileChange =->
+  $('form').on 'change', '.alternative-input', (event) ->
     $(this).parents('.attachment').find('.alternative').show()
-    $(this).parents('.attachment').find('.use-attached-file').val(false)
+    $(this).parents('.attachment').find('.attachment_present').hide()
+
+
+initializeUploadedFileReupload =->
+  $('form').on 'click', '.reupload-attachment', (event) ->
+    event.preventDefault()
+    $(this).parents('.attachment').find('.alternative-input').click()
 
 initializeExtractText =->
   $('form').on 'click', '.extract-text', (event) ->
@@ -33,8 +38,6 @@ initializeExtractText =->
         $attachment.hide()
     })
 
-
-
 initializeToggleEditorAttachment =->
   $('form').on 'click','.toggle-input', (event) ->
     event.preventDefault()
@@ -46,7 +49,7 @@ initializeToggleEditorAttachment =->
       $(this).text($(this).data('text-toggled'))
       $editor.find('.hidden').attr('disabled', true)
       $editor.hide()
-      $attachment.find('.use-attached-file').val($attachment.find('.attachment_present').length > 0)
+      $attachment.find('.use-attached-file').val(true)
       $attachment.find('.alternative-input').attr('disabled', false)
       $attachment.show()
     else
@@ -54,7 +57,7 @@ initializeToggleEditorAttachment =->
       $attachment.find('.alternative-input').attr('disabled', true)
       $attachment.find('.use-attached-file').val(false)
       $attachment.hide()
-      $editor.find('hidden').attr('disabled', false)
+      $editor.find('.hidden').attr('disabled', false)
       $editor.show()
     return
 

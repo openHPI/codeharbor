@@ -23,6 +23,8 @@ class TasksController < ApplicationController
     @files = @task.files
     @tests = @task.tests
     @model_solutions = @task.model_solutions
+
+    @user_rating = @task.ratings&.find_by(user: current_user)&.rating
   end
 
   def new
@@ -36,7 +38,7 @@ class TasksController < ApplicationController
 
     @task.user = current_user
 
-    if @task.save
+    if @task.save(context: :force_validations)
       redirect_to @task, notice: t('tasks.notification.created')
     else
       render :new
@@ -44,7 +46,8 @@ class TasksController < ApplicationController
   end
 
   def update
-    if @task.update(task_params)
+    @task.assign_attributes(task_params)
+    if @task.save(context: :force_validations)
       redirect_to @task, notice: t('tasks.notification.updated')
     else
       render :edit
@@ -167,16 +170,19 @@ class TasksController < ApplicationController
 
   def set_search
     search = params[:search]
-    @created_before_days = search[:created_before_days] if search.is_a?(ActionController::Parameters)
+    if search.is_a?(ActionController::Parameters)
+      @created_before_days = search[:created_before_days]
+      @min_stars = search[:min_stars]
+    end
     @visibility = params[:visibility] || 'owner'
     @advanced_filter_active = params[:advancedFilterActive]
   end
 
   def restore_search_params
     search_params = session.delete(:task_search_params)&.symbolize_keys || {}
-    params[:search] ||= search_params[:search]
-    params[:advancedFilterActive] ||= search_params[:advancedFilterActive]
-    params[:page] ||= search_params[:page]
+    %i[search advancedFilterActive page min_stars].each do |key|
+      params[key] ||= search_params[key]
+    end
   end
 
   def save_search_params
@@ -229,7 +235,8 @@ class TasksController < ApplicationController
   end
 
   def render_export_actions(task:, exported:, error: nil, task_found: nil, update_right: nil)
-    render_to_string(partial: 'export_actions.html.slim',
+    render_to_string(partial: 'export_actions',
+                     formats: :html,
                      locals: {task: task, exported: exported, error: error, task_found: task_found,
                               update_right: update_right})
   end

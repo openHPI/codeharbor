@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Collection, type: :model do
+RSpec.describe Collection do
   describe 'abilities' do
     subject(:ability) { Ability.new(user) }
 

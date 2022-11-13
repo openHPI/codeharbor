@@ -1,5 +1,6 @@
 = search_form_for @search do |f|
   = hidden_field_tag 'visibility', @visibility
+  = hidden_field_tag 'page', 1, {id: 'override-page', disabled: true}
 
   .nav-container
     .col-md-9
@@ -42,12 +43,15 @@
           p
             b = t('tasks.index.search.order')
           .btn-group[role="group"]
-            = sort_link(@search, :created_at)
-        /.stars.section
+            div
+              = sort_link(@search, :created_at)
+            div
+              = sort_link(@search, :average_rating)
+        .stars.section
           p
-            b = t('tasks.index.search.stars')
+            b = t('tasks.index.search.min_stars')
           div.form-group
-            = advanced.select 'stars', options_for_select({t('tasks.index.search.all_stars') => "0", "5" => "5", "4+" => "4", "3+" => "3", "2+" => "2", t('tasks.index.search.unrated_only') => ""}, selected: @stars), {}, class: 'form-control defaultSelect2'
+            = f.select 'min_stars', options_for_select(%w[0 1 2 3 4 5], selected: @min_stars), {}, class: 'form-control defaultSelect2 ransack-filter'
         .proglanguages.section
           p
             b = t('tasks.index.search.proglanguages')

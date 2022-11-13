@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Test, type: :model do
+RSpec.describe Test do
   describe 'validations' do
     it { is_expected.to belong_to(:task) }
     it { is_expected.to validate_presence_of(:title) }

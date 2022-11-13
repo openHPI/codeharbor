@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe MessagesController, type: :controller do
+RSpec.describe MessagesController do
   let(:user) { create(:user) }
   let(:recipient) { create(:user) }
 

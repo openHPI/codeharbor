@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'tasks', type: :request do
+RSpec.describe 'Tasks' do
   context 'when logged in' do
     let(:user) { create(:user) }
     let(:task) { create(:task, user: user) }
