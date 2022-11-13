@@ -27,8 +27,9 @@ class TaskFile < ApplicationRecord
     end
   end
 
-  def has_text_data?
+  def text_data?
     return false unless (content = attachment&.blob&.download)
+
     content.encode('UTF-8', 'binary')
     true
   rescue Encoding::UndefinedConversionError => _e
