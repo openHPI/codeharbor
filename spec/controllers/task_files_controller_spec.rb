@@ -28,4 +28,26 @@ RSpec.describe TaskFilesController do
       end
     end
   end
+
+  describe 'GET #extract_text_data' do
+    subject(:get_request) { get :extract_text_data, params: params }
+
+    let(:task_file) { create(:task_file, :with_task, :with_text_attachment, fileable: build(:task, user: task_user)) }
+    let(:params) { {id: task_file.id} }
+    let(:task_user) { user }
+
+    it 'returns content of the file' do
+      get_request
+      expect(response.body).to eql '{"text_data":"beipsieltext\n"}'
+    end
+
+    context 'when attachment does not contain text' do
+      let(:task_file) { create(:task_file, :with_task, :with_attachment, fileable: build(:task, user: task_user)) }
+
+      it 'returns content of the file' do
+        get_request
+        expect(response.body).to eql "{\"error\":\"#{I18n.t('controllers.task_file.extract_text_data.no_text')}\"}"
+      end
+    end
+  end
 end

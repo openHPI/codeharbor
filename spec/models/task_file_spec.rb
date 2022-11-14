@@ -13,11 +13,13 @@ RSpec.describe TaskFile do
     let(:task_file) { create(:task_file, fileable: fileable) }
 
     it { is_expected.not_to be_able_to(:download_attachment, task_file) }
+    it { is_expected.not_to be_able_to(:extract_text_data, task_file) }
 
     context 'with a user' do
       let(:user) { create(:user) }
 
       it { is_expected.not_to be_able_to(:download_attachment, task_file) }
+      it { is_expected.not_to be_able_to(:extract_text_data, task_file) }
 
       context 'when user is admin' do
         let(:user) { create(:admin) }
@@ -30,17 +32,20 @@ RSpec.describe TaskFile do
         let(:task_user) { user }
 
         it { is_expected.to be_able_to(:download_attachment, task_file) }
+        it { is_expected.to be_able_to(:extract_text_data, task_file) }
       end
 
       context 'when task_file belongs to a test' do
         let(:fileable) { create(:test, task: task) }
 
         it { is_expected.not_to be_able_to(:download_attachment, task_file) }
+        it { is_expected.not_to be_able_to(:extract_text_data, task_file) }
 
         context 'when task is from user' do
           let(:task_user) { user }
 
           it { is_expected.to be_able_to(:download_attachment, task_file) }
+          it { is_expected.to be_able_to(:extract_text_data, task_file) }
         end
       end
     end
@@ -110,6 +115,20 @@ RSpec.describe TaskFile do
       it 'removes attachment on save' do
         expect(file.reload.attachment.present?).to be false
       end
+    end
+  end
+
+  describe '#text_data?' do
+    subject { file.text_data? }
+
+    let(:file) { create(:task_file, :with_task, :with_attachment) }
+
+    it { is_expected.to be false }
+
+    context 'when file has text content' do
+      let(:file) { create(:task_file, :with_task, :with_text_attachment) }
+
+      it { is_expected.to be true }
     end
   end
 end

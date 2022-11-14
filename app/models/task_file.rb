@@ -36,11 +36,13 @@ class TaskFile < ApplicationRecord
     false
   end
 
-  def remove_attachment
-    attachment.purge if use_attached_file != 'true' && attachment.present?
-  end
-
   def extract_text_data
     attachment.blob.download
+  end
+
+  private
+
+  def remove_attachment
+    attachment.purge if use_attached_file != 'true' && attachment.present?
   end
 end
