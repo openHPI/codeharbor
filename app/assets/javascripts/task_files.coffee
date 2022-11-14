@@ -28,7 +28,7 @@ initializeExtractText =->
       success: (response) ->
         $content = $button.parents('.toggle-divs')
         $edit = $content.find('.edit')
-        $edit.find('hidden').attr('disabled', false)
+        $edit.find('.hidden').attr('disabled', false)
         $edit.show()
         $editor = $content.find('.editor')
         setAceEditorValue($editor[0], response.text_data)
