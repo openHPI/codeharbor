@@ -47,7 +47,7 @@ describe ProformaService::ExportTasks do
     end
 
     it 'names the zipped files correctly' do
-      expect(zip_files.keys).to match_array(tasks.map { |e| "task_#{e.id}-#{e.title.underscore.gsub(/[^0-9A-Za-z.\-]/, '_')}.zip" })
+      expect(zip_files.keys).to match_array(tasks.map { |e| "task_#{e.id}-#{e.title.underscore.gsub(/[^0-9A-Za-z.-]/, '_')}.zip" })
     end
 
     context 'when 10 tasks are supplied' do
