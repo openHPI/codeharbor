@@ -66,13 +66,9 @@ class Ability
   end
 
   def task_file_abilities(user)
-    can %i[download_attachment], TaskFile do |task_file|
+    can %i[download_attachment extract_text_data], TaskFile do |task_file|
       fileable = task_file.fileable
-      task = if fileable.is_a? Task
-               fileable
-             else
-               fileable.task
-             end
+      task = fileable.is_a?(Task) ? fileable : fileable.task
       task.can_access(user)
     end
   end

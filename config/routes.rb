@@ -66,6 +66,7 @@ Rails.application.routes.draw do
   resources :task_files, only: [] do
     member do
       get :download_attachment
+      get :extract_text_data
     end
   end
 

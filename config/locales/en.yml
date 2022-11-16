@@ -227,7 +227,10 @@ en:
           import: Import
           import_copy: Import as copy
           overwrite: Overwrite
-#      export:
+    task_file:
+      extract_text_data:
+        no_text: "File does not contain text"
+  #      export:
 #        error: An error occurred.
 #        label: Export exercise
 #        successfully_exported: Exercise (%{title}) successfully exported.
@@ -1013,6 +1016,7 @@ en:
       files:
         remove: 'Remove file'
         add: 'Add file'
+        extract_text: "Extract text"
       model_solutions:
         add: "Add Model solution"
       model_solution:
