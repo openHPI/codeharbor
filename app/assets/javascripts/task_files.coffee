@@ -24,7 +24,7 @@ initializeExtractText =->
     id = $button.data('file-id')
     $.ajax({
       type: 'GET',
-      url: "/task_files/#{id}/extract_text_data",
+      url: Routes.extract_text_data_task_file_path(id),
       success: (response) ->
         $content = $button.parents('.toggle-divs')
         hideFileUploadShowTextEditor $content, response.text_data
@@ -63,9 +63,6 @@ hideFileUploadShowTextEditor =($content, text)->
   $editor.show()
   if text
     setAceEditorValue($ace_editor[0], text)
-
-
-
 
 initializeOnUpload =->
   $('form').on 'change', '.alternative-input', (event) ->

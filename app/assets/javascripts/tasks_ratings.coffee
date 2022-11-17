@@ -22,7 +22,7 @@ initializeRatings = ->
 
     $.ajax({
       type: "POST",
-      url: window.location.pathname + "/ratings",
+      url: Routes.task_ratings_path(),
       data: {rating: {rating: rating}, commit: "Save Rating"},
       dataType: 'json',
       success: (response) ->

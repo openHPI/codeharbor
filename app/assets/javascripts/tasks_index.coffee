@@ -114,7 +114,7 @@ intializeAdvancedFilter = ->
 initializeIndexComments = ->
   $('.index-comment-button').on 'click', ->
     task_id = this.getAttribute("data-task")
-    url = window.location.pathname + '/' + task_id + "/comments"
+    url = Routes.task_comments_path(task_id)
     $comment_box = $(".comment-box[data-task=#{task_id}]")
     $related_box = $(".related-box[data-task=#{task_id}]")
 

@@ -23,7 +23,7 @@ exportTaskStart = (taskID) ->
 
   $.ajax({
     type: 'POST',
-    url: '/tasks/' + taskID + '/export_external_check',
+    url: Routes.export_external_check_task_path(taskID),
     data: {account_link: accountLinkID},
     accepts: 'application/json'
     dataType: 'json',
@@ -41,7 +41,7 @@ exportConfirm = (taskId, accountLinkId, pushType) ->
 
   $.ajax({
     type: 'POST',
-    url: '/tasks/' + taskId + '/export_external_confirm',
+    url: Routes.export_external_confirm_task_path(taskId),
     data: {account_link: accountLinkId, push_type: pushType},
     dataType: 'json',
     success: (response) ->
