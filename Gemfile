@@ -2,6 +2,7 @@
 
 source 'https://rubygems.org'
 
+gem 'js-routes'
 # Create Zip files
 gem 'rubyzip'
 # Handle Group Access

@@ -22,3 +22,4 @@
 //= require ace/ext-options
 //= require nested_form_fields
 //= require labels
+//= require js-routes

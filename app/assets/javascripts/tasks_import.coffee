@@ -32,7 +32,7 @@ importStart = () ->
 
   $.ajax({
     type: 'POST',
-    url: '/tasks/import_start',
+    url: Routes.import'/tasks/import_start',
     data: formData,
     processData: false,
     contentType: false,
