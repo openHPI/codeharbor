@@ -50,7 +50,7 @@ importConfirm = (importId, subfileId, importType) ->
 
   $.ajax({
     type: 'POST',
-    url: '/tasks/import_confirm',
+    url: Routes.import_confirm_tasks_path(),
     data: {import_id: importId, subfile_id: subfileId, import_type: importType},
     dataType: 'json',
     success: (response) ->

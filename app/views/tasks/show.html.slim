@@ -552,8 +552,8 @@ legend.toggle-next
     = button_tag do
       i.fa.fa-caret-right
 .expandable-panel.with-borders
-  = button_tag type: 'button', class: 'full-window-button show-comment-button' do
-    = t('comments.show_comments') + ' '
+  = button_tag type: 'button', class: 'full-window-button show-comment-button', data: {task_id: @task.id} do
+    => t('comments.show_comments')
     span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
     span.fa.fa-caret-down.my-caret
   .comment-box data-task=@task.id
