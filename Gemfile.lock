@@ -208,6 +208,8 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
+    js-routes (2.2.4)
+      railties (>= 4)
     json (2.6.2)
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
@@ -531,6 +533,7 @@ DEPENDENCIES
   jbuilder (~> 2.11)
   jquery-rails (>= 4.3.5)
   jquery-ui-rails (>= 6.0.1)
+  js-routes
   kramdown (~> 2.4)
   letter_opener
   mnemosyne-ruby

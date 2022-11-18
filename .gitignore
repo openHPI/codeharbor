@@ -57,3 +57,4 @@ config/environments/*.local.yml
 
 # activestorage
 /storage/
+/app/assets/javascripts/routes.js

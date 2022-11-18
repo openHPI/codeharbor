@@ -10,7 +10,7 @@ setAceEditorMode = ->
 
 initializeShowComments = ->
   $('.show-comment-button').on 'click', ->
-    url = window.location.pathname + "/comments"
+    url = Routes.task_comments_path($(this).data('task-id'))
     $comment_box = $(".comment-box")
     $caret = $(this).children('.my-caret')
     $wait_icon = $(this).children('.wait')
