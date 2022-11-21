@@ -19,7 +19,7 @@ module Codeharbor
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    # config.time_zone = "Central Time (US & Canada)"
+    config.time_zone = ENV.fetch('RAILS_TIME_ZONE', 'UTC')
 
     extra_paths = %W[
       #{config.root}/lib
