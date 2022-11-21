@@ -15,8 +15,8 @@ class PingController < ApplicationController
 
   def postgres_connected!
     # any unhandled exception leads to a HTTP 500 response.
-    unless ApplicationRecord.connection.execute('SELECT 1 as result').first['result'] == 1
-      raise ActiveRecord::ConnectionNotEstablished
-    end
+    return if ApplicationRecord.connection.execute('SELECT 1 as result').first['result'] == 1
+
+    raise ActiveRecord::ConnectionNotEstablished
   end
 end
