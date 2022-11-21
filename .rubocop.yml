@@ -59,6 +59,9 @@ Rails/HelperInstanceVariable:
   Exclude:
     - app/helpers/will_paginate_helper.rb
 
+Rails/I18nLazyLookup:
+  Enabled: false
+
 Rails/OutputSafety:
   Exclude:
     - app/helpers/will_paginate_helper.rb
