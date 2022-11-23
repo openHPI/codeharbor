@@ -116,3 +116,4 @@ group :test do
   gem 'simplecov'
   gem 'webmock'
 end
+gem 'sassc-rails'
