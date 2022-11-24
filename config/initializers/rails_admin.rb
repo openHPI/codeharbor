@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 RailsAdmin.config do |config|
+  config.asset_source = :sprockets
   ### Popular gems integration
 
   # == Devise ==
@@ -17,6 +18,8 @@ RailsAdmin.config do |config|
       redirect_to main_app.root_path
     end
   end
+
+  config.excluded_models = %w[OmniAuth::Strategies::Bird]
 
   ## == Pundit ==
   # config.authorize_with :pundit

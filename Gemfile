@@ -70,7 +70,7 @@ gem 'net-pop', require: false
 gem 'net-smtp', require: false
 gem 'nokogiri'
 gem 'proforma', git: 'https://github.com/openHPI/proforma.git', tag: 'v0.7.1'
-gem 'rails_admin', '~> 2.0'
+gem 'rails_admin', '~> 3.1'
 gem 'ransack'
 gem 'select2-rails', '~> 4.0'
 gem 'sprockets', '~> 4.1.1'
@@ -116,3 +116,4 @@ group :test do
   gem 'simplecov'
   gem 'webmock'
 end
+gem 'sassc-rails'
