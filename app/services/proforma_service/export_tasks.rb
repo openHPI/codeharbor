@@ -9,7 +9,7 @@ module ProformaService
     def execute
       Zip::OutputStream.write_buffer do |zio|
         @tasks.each do |task|
-          zip_file = ExportTask.call(task: task)
+          zip_file = ExportTask.call(task:)
           zio.put_next_entry("task_#{task.id}-#{task.title.underscore.gsub(/[^0-9A-Za-z.-]/, '_')}.zip")
           zio.write zip_file.string
         end

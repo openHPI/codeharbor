@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe ProformaService::ExportTasks do
   describe '.new' do
-    subject(:export_service) { described_class.new(tasks: tasks) }
+    subject(:export_service) { described_class.new(tasks:) }
 
     let(:tasks) { build_list(:task, 2) }
 
@@ -14,7 +14,7 @@ describe ProformaService::ExportTasks do
   end
 
   describe '#execute' do
-    subject(:export_service) { described_class.call(tasks: tasks) }
+    subject(:export_service) { described_class.call(tasks:) }
 
     let(:tasks) { create_list(:task, 2) }
     let(:user) { create(:user) }
@@ -32,7 +32,7 @@ describe ProformaService::ExportTasks do
     end
     let(:doc) { Nokogiri::XML(zip_files['task.xml'], &:noblanks) }
     let(:xml) { doc.remove_namespaces! }
-    let(:imported_tasks) { zip_files.transform_values! { |zip_file| ProformaService::Import.call(zip: zip_file, user: user) } }
+    let(:imported_tasks) { zip_files.transform_values! { |zip_file| ProformaService::Import.call(zip: zip_file, user:) } }
 
     it 'creates a zip-file with two files' do
       expect(zip_files.count).to be 2

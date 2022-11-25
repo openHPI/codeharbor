@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe ProformaService::ProformaTaskFromCachedFile do
   describe '.new' do
-    subject(:task_from_cached_file) { described_class.new(import_id: import_id, subfile_id: subfile_id, import_type: import_type) }
+    subject(:task_from_cached_file) { described_class.new(import_id:, subfile_id:, import_type:) }
 
     let(:import_id) { 1 }
     let(:subfile_id) { 2 }
@@ -25,10 +25,10 @@ describe ProformaService::ProformaTaskFromCachedFile do
 
   describe '#execute' do
     subject(:task_from_cached_file) do
-      described_class.call(import_id: import_file_cache.id, subfile_id: subfile_id, import_type: import_type)
+      described_class.call(import_id: import_file_cache.id, subfile_id:, import_type:)
     end
 
-    let!(:data) { ProformaService::CacheImportFile.call(user: user, zip_file: zip_file) }
+    let!(:data) { ProformaService::CacheImportFile.call(user:, zip_file:) }
     let(:user) { build(:user) }
     let(:zip_file) { fixture_file_upload('proforma_import/testfile.zip', 'application/zip') }
     let(:subfile_id) { data.first[0] }

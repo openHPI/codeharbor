@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe ProformaService::ImportTask do
   describe '.new' do
-    subject(:import_proforma_task) { described_class.new(proforma_task: proforma_task, user: user) }
+    subject(:import_proforma_task) { described_class.new(proforma_task:, user:) }
 
     let(:proforma_task) { Proforma::Task.new }
     let(:user) { build(:user) }
@@ -19,9 +19,9 @@ describe ProformaService::ImportTask do
   end
 
   describe '#execute' do
-    subject(:import_proforma_task) { described_class.call(proforma_task: proforma_task, user: user) }
+    subject(:import_proforma_task) { described_class.call(proforma_task:, user:) }
 
-    let(:proforma_task) { ProformaService::ConvertTaskToProformaTask.call(task: task) }
+    let(:proforma_task) { ProformaService::ConvertTaskToProformaTask.call(task:) }
     let(:task) { build(:task, title: 'proforma_task import title', user: task_user) }
     let(:task_user) { user }
     let(:user) { create(:user) }

@@ -14,14 +14,14 @@ RSpec.describe MessagesController do
 
       it 'renders the reply page' do
         message
-        get :reply, params: {user_id: user, recipient: recipient}
+        get :reply, params: {user_id: user, recipient:}
         expect(response).to have_http_status(:ok)
       end
     end
 
     context 'when users did not a conversation before' do
       it 'does not render the reply page' do
-        get :reply, params: {user_id: user, recipient: recipient}
+        get :reply, params: {user_id: user, recipient:}
         expect(response).to redirect_to user_messages_path(user)
       end
     end

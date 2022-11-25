@@ -7,7 +7,7 @@ RSpec.describe GroupMembership do
     let(:group) { create(:group) }
     let(:member) { create(:user) }
     let(:type) { 'member' }
-    let(:group_membership) { build(:group_membership, member: member, group: group, membership_type: type) }
+    let(:group_membership) { build(:group_membership, member:, group:, membership_type: type) }
 
     it 'is valid' do
       expect(group_membership).to be_valid

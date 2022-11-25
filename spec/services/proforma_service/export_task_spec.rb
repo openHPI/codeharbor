@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe ProformaService::ExportTask do
   describe '.new' do
-    subject(:export_service) { described_class.new(task: task) }
+    subject(:export_service) { described_class.new(task:) }
 
     let(:task) { build(:task) }
 
@@ -16,16 +16,16 @@ describe ProformaService::ExportTask do
   describe '#execute' do
     subject(:execute) { export_service.execute }
 
-    let(:export_service) { described_class.new(task: task) }
+    let(:export_service) { described_class.new(task:) }
     let(:task) do
       create(:task,
              internal_description: 'internal_description',
              uuid: SecureRandom.uuid,
              programming_language: build(:programming_language, :ruby),
-             meta_data: meta_data,
-             files: files,
-             tests: tests,
-             model_solutions: model_solutions)
+             meta_data:,
+             files:,
+             tests:,
+             model_solutions:)
     end
     let(:meta_data) {}
     let(:files) { [] }
@@ -71,7 +71,7 @@ describe ProformaService::ExportTask do
     end
 
     context 'with options' do
-      let(:export_service) { described_class.new(task: task, options: options) }
+      let(:export_service) { described_class.new(task:, options:) }
       let(:options) { {} }
 
       context 'when options contain description_format md' do

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe TaskService::CheckExternal do
   describe '.new' do
-    subject(:export_service) { described_class.new(uuid: uuid, account_link: account_link) }
+    subject(:export_service) { described_class.new(uuid:, account_link:) }
 
     let(:uuid) { SecureRandom.uuid }
     let(:account_link) { build(:account_link) }
@@ -19,7 +19,7 @@ RSpec.describe TaskService::CheckExternal do
   end
 
   describe '#execute' do
-    subject(:check_external_service) { described_class.call(uuid: uuid, account_link: account_link) }
+    subject(:check_external_service) { described_class.call(uuid:, account_link:) }
 
     let(:uuid) { SecureRandom.uuid }
     let(:account_link) { build(:account_link) }
@@ -38,7 +38,7 @@ RSpec.describe TaskService::CheckExternal do
 
     it 'submits the correct body' do
       expect(check_external_service).to have_requested(:post, account_link.check_uuid_url)
-        .with(body: {uuid: uuid}.to_json)
+        .with(body: {uuid:}.to_json)
     end
 
     context 'when response contains a JSON with expected keys' do

@@ -14,7 +14,7 @@ class RatingsController < ApplicationController
     rating, notice = handle_rating
     if rating.save
       overall_rating = @task.average_rating
-      render json: {overall_rating: overall_rating, user_rating: rating}
+      render json: {overall_rating:, user_rating: rating}
       flash.now[:notice] = notice
     else
       render json: {notice: t('controllers.generic_error')}
@@ -35,7 +35,7 @@ class RatingsController < ApplicationController
   def handle_own_rating
     flash.now[:alert] = t('controllers.rating.own_task')
     overall_rating = @task.average_rating
-    render json: {overall_rating: overall_rating, user_rating: overall_rating}
+    render json: {overall_rating:, user_rating: overall_rating}
   end
 
   def handle_rating

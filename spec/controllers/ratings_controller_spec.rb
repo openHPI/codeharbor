@@ -8,7 +8,7 @@ RSpec.describe RatingsController do
   let(:rating) { 4 }
 
   let(:valid_attributes) do
-    {task_id: task.id, rating: {rating: rating}}
+    {task_id: task.id, rating: {rating:}}
   end
 
   let(:invalid_attributes) do
@@ -37,7 +37,7 @@ RSpec.describe RatingsController do
       end
 
       context 'when the user has already rated the task' do
-        let!(:existing_rating) { task.ratings.create(user: user, rating: 1) }
+        let!(:existing_rating) { task.ratings.create(user:, rating: 1) }
 
         it 'updates the existing rating' do
           expect { post_request }.to change { existing_rating.reload.rating }.from(1).to(rating)
@@ -58,7 +58,7 @@ RSpec.describe RatingsController do
       end
 
       context 'when user rates his own task' do
-        let(:task) { create(:task, user: user) }
+        let(:task) { create(:task, user:) }
 
         it 'does not create a new rating' do
           expect { post_request }.not_to change(Rating, :count)

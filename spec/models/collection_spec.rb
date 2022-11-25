@@ -8,7 +8,7 @@ RSpec.describe Collection do
 
     let(:user) { nil }
     let(:collection_user) { create(:user) }
-    let(:collection) { create(:collection, users: users) }
+    let(:collection) { create(:collection, users:) }
     let(:users) { [collection_user] }
 
     it { is_expected.not_to be_able_to(:create, described_class) }

@@ -10,7 +10,7 @@ RSpec.describe TaskFile do
     let(:task_user) { create(:user) }
     let(:task) { create(:task, user: task_user) }
     let(:fileable) { task }
-    let(:task_file) { create(:task_file, fileable: fileable) }
+    let(:task_file) { create(:task_file, fileable:) }
 
     it { is_expected.not_to be_able_to(:download_attachment, task_file) }
     it { is_expected.not_to be_able_to(:extract_text_data, task_file) }
@@ -36,7 +36,7 @@ RSpec.describe TaskFile do
       end
 
       context 'when task_file belongs to a test' do
-        let(:fileable) { create(:test, task: task) }
+        let(:fileable) { create(:test, task:) }
 
         it { is_expected.not_to be_able_to(:download_attachment, task_file) }
         it { is_expected.not_to be_able_to(:extract_text_data, task_file) }

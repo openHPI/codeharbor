@@ -168,7 +168,7 @@ module Bridges
           uuid: 'f15cb7a3-87eb-4c4c-a998-c33e25d44cdc',
           language: 'English',
           programming_language: pl,
-          user: user,
+          user:,
           updated_at: Time.zone.now
         )
       end

@@ -5,13 +5,13 @@ require 'rails_helper'
 describe ProformaService::HandleExportConfirm do
   describe '.new' do
     subject(:handle_export_confirm) do
-      described_class.new(user: user, task: task, push_type: push_type, account_link_id: account_link_id)
+      described_class.new(user:, task:, push_type:, account_link_id:)
     end
 
     let(:user) { build(:user) }
-    let(:task) { build(:task, user: user) }
+    let(:task) { build(:task, user:) }
     let(:push_type) { 'export' }
-    let(:account_link_id) { create(:account_link, user: user).id }
+    let(:account_link_id) { create(:account_link, user:).id }
 
     it 'assigns user' do
       expect(handle_export_confirm.instance_variable_get(:@user)).to be user
@@ -32,13 +32,13 @@ describe ProformaService::HandleExportConfirm do
 
   describe '#execute' do
     subject(:handle_export_confirm) do
-      described_class.call(user: user, task: task, push_type: push_type, account_link_id: account_link.id)
+      described_class.call(user:, task:, push_type:, account_link_id: account_link.id)
     end
 
     let(:user) { create(:user) }
-    let!(:task) { create(:task, user: user).reload }
+    let!(:task) { create(:task, user:).reload }
     let(:push_type) { 'export' }
-    let(:account_link) { create(:account_link, user: user) }
+    let(:account_link) { create(:account_link, user:) }
 
     before do
       allow(ProformaService::ExportTask).to(receive(:call)).and_return('zip_stream')
@@ -51,12 +51,12 @@ describe ProformaService::HandleExportConfirm do
 
     it 'calls ExportTask-service with correct arguments' do
       handle_export_confirm
-      expect(ProformaService::ExportTask).to have_received(:call).with(task: task, options: {description_format: 'md'})
+      expect(ProformaService::ExportTask).to have_received(:call).with(task:, options: {description_format: 'md'})
     end
 
     it 'calls PushExternal-service with correct arguments' do
       handle_export_confirm
-      expect(TaskService::PushExternal).to have_received(:call).with(zip: 'zip_stream', account_link: account_link)
+      expect(TaskService::PushExternal).to have_received(:call).with(zip: 'zip_stream', account_link:)
     end
 
     context 'when push_type is create_new' do
@@ -90,7 +90,7 @@ describe ProformaService::HandleExportConfirm do
 
       it 'calls PushExternal-service with correct arguments' do
         handle_export_confirm
-        expect(TaskService::PushExternal).to have_received(:call).with(zip: 'zip_stream', account_link: account_link)
+        expect(TaskService::PushExternal).to have_received(:call).with(zip: 'zip_stream', account_link:)
       end
     end
   end

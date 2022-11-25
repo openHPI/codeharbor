@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe ProformaService::Import do
   describe '.new' do
-    subject(:import_service) { described_class.new(zip: zip, user: user) }
+    subject(:import_service) { described_class.new(zip:, user:) }
 
     let(:zip) { Tempfile.new('proforma_test_zip_file') }
     let(:user) { build(:user) }
@@ -27,13 +27,13 @@ describe ProformaService::Import do
     let(:task) do
       create(:task,
              :with_content,
-             programming_language: programming_language,
-             meta_data: meta_data,
-             files: files,
-             tests: tests,
-             model_solutions: model_solutions,
-             uuid: uuid,
-             user: user)
+             programming_language:,
+             meta_data:,
+             files:,
+             tests:,
+             model_solutions:,
+             uuid:,
+             user:)
     end
 
     let(:uuid) {}
@@ -150,10 +150,10 @@ describe ProformaService::Import do
 
       let(:task2) do
         create(:task,
-               programming_language: programming_language,
+               programming_language:,
                files: [],
                tests: [],
-               user: user)
+               user:)
       end
 
       it 'imports the tasks from zip containing multiple zips' do

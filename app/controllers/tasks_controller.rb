@@ -16,7 +16,7 @@ class TasksController < ApplicationController
   def index
     page = params[:page]
     @search = Task.visibility(@visibility, current_user).ransack(params[:search])
-    @tasks = @search.result(distinct: true).paginate(per_page: 5, page: page)
+    @tasks = @search.result(distinct: true).paginate(per_page: 5, page:)
   end
 
   def show
@@ -70,7 +70,7 @@ class TasksController < ApplicationController
       return render json: {status: 'failure', message: t('controllers.task.import.choose_file_error')}
     end
 
-    @data = ProformaService::CacheImportFile.call(user: current_user, zip_file: zip_file)
+    @data = ProformaService::CacheImportFile.call(user: current_user, zip_file:)
 
     respond_to do |format|
       format.js { render layout: false }
@@ -80,7 +80,7 @@ class TasksController < ApplicationController
   def import_confirm
     proforma_task = ProformaService::ProformaTaskFromCachedFile.call(**import_confirm_params.to_hash.symbolize_keys)
 
-    proforma_task = ProformaService::ImportTask.call(proforma_task: proforma_task, user: current_user)
+    proforma_task = ProformaService::ImportTask.call(proforma_task:, user: current_user)
     task_title = proforma_task.title
     render json: {
       status: 'success',
@@ -110,7 +110,7 @@ class TasksController < ApplicationController
     user = user_for_api_request
     tempfile = tempfile_from_string(request.body.read.force_encoding('UTF-8'))
 
-    ProformaService::Import.call(zip: tempfile, user: user)
+    ProformaService::Import.call(zip: tempfile, user:)
 
     render json: t('controllers.exercise.import_proforma_xml.success'), status: :created
   rescue Proforma::ProformaError
@@ -148,7 +148,7 @@ class TasksController < ApplicationController
     return render json: {}, status: :internal_server_error unless %w[create_new export].include? push_type
 
     export_task, error = ProformaService::HandleExportConfirm.call(user: current_user, task: @task,
-                                                                   push_type: push_type, account_link_id: params[:account_link])
+                                                                   push_type:, account_link_id: params[:account_link])
     task_title = export_task.title
 
     if error.nil?
@@ -159,8 +159,8 @@ class TasksController < ApplicationController
     else
       export_task.destroy if push_type == 'create_new'
       render json: {
-        message: t('tasks.export_task.export_failed', title: task_title, error: error),
-        status: 'fail', actions: render_export_actions(task: @task, exported: false, error: error)
+        message: t('tasks.export_task.export_failed', title: task_title, error:),
+        status: 'fail', actions: render_export_actions(task: @task, exported: false, error:)
       }
     end
   end
@@ -224,7 +224,7 @@ class TasksController < ApplicationController
   end
 
   def user_by_api_key(api_key)
-    AccountLink.find_by(api_key: api_key)&.user
+    AccountLink.find_by(api_key:)&.user
   end
 
   def tempfile_from_string(string)
@@ -237,7 +237,7 @@ class TasksController < ApplicationController
   def render_export_actions(task:, exported:, error: nil, task_found: nil, update_right: nil)
     render_to_string(partial: 'export_actions',
                      formats: :html,
-                     locals: {task: task, exported: exported, error: error, task_found: task_found,
-                              update_right: update_right})
+                     locals: {task:, exported:, error:, task_found:,
+                              update_right:})
   end
 end

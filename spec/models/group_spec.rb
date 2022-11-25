@@ -111,7 +111,7 @@ RSpec.describe Group do
   end
 
   describe 'validations' do
-    let(:group) { create(:group, users: users) }
+    let(:group) { create(:group, users:) }
     let(:users) { [user] }
     let(:user) { create(:user) }
 
@@ -159,7 +159,7 @@ RSpec.describe Group do
   describe '.create_with_admin' do
     subject(:create_with_admin) { described_class.create_with_admin(params, user) }
 
-    let(:params) { {name: name} }
+    let(:params) { {name:} }
     let(:user) { create(:user) }
     let(:name) { 'name' }
 

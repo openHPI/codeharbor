@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe ProformaService::ConvertProformaTaskToTask do
   describe '.new' do
-    subject(:convert_to_task_service) { described_class.new(proforma_task: proforma_task, user: user, task: task) }
+    subject(:convert_to_task_service) { described_class.new(proforma_task:, user:, task:) }
 
     let(:proforma_task) { Proforma::Task.new }
     let(:user) { build(:user) }
@@ -24,21 +24,21 @@ describe ProformaService::ConvertProformaTaskToTask do
   end
 
   describe '#execute' do
-    subject(:convert_to_task_service) { described_class.call(proforma_task: proforma_task, user: user, task: task) }
+    subject(:convert_to_task_service) { described_class.call(proforma_task:, user:, task:) }
 
     let(:proforma_task) do
       Proforma::Task.new(
         title: 'title',
-        description: description,
+        description:,
         internal_description: 'internal_description',
         proglang: {name: 'proglang-name', version: 'proglang-version'},
-        uuid: uuid,
+        uuid:,
         parent_uuid: 'parent_uuid',
         language: 'language',
-        meta_data: meta_data,
-        model_solutions: model_solutions,
-        files: files,
-        tests: tests
+        meta_data:,
+        model_solutions:,
+        files:,
+        tests:
       )
     end
 
@@ -90,7 +90,7 @@ describe ProformaService::ConvertProformaTaskToTask do
       let(:meta_data) { {CodeOcean: {meta: 'data', nested: {other: 'data'}}} }
 
       it 'creates a task with meta_data' do
-        expect(convert_to_task_service).to have_attributes(meta_data: meta_data)
+        expect(convert_to_task_service).to have_attributes(meta_data:)
       end
     end
 
@@ -99,14 +99,14 @@ describe ProformaService::ConvertProformaTaskToTask do
       let(:file) do
         Proforma::TaskFile.new(
           id: 'id',
-          content: content,
+          content:,
           filename: 'filename.txt',
           used_by_grader: false,
-          visible: visible,
-          usage_by_lms: usage_by_lms,
-          binary: binary,
+          visible:,
+          usage_by_lms:,
+          binary:,
           internal_description: 'internal_description',
-          mimetype: mimetype
+          mimetype:
         )
       end
       let(:usage_by_lms) { 'display' }
@@ -153,7 +153,7 @@ describe ProformaService::ConvertProformaTaskToTask do
         let(:content) { 'test' * (10**5) }
 
         it 'creates a task with a file that has the correct attributes' do
-          expect(convert_to_task_service.files.first).to have_attributes(content: content)
+          expect(convert_to_task_service.files.first).to have_attributes(content:)
         end
       end
 
@@ -252,7 +252,7 @@ describe ProformaService::ConvertProformaTaskToTask do
           internal_description: 'internal_description',
           test_type: 'test_type',
           files: test_files,
-          configuration: configuration,
+          configuration:,
           meta_data: test_meta_data
         )
       end

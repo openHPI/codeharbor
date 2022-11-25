@@ -7,7 +7,7 @@ RSpec.describe AccountLinksController do
 
   let(:account_link) { create(:account_link) }
 
-  let(:valid_attributes) { attributes_for(:account_link).merge(user: user) }
+  let(:valid_attributes) { attributes_for(:account_link).merge(user:) }
   let(:invalid_attributes) do
     {api_key: ''}
   end
@@ -70,7 +70,7 @@ RSpec.describe AccountLinksController do
     describe 'POST remove_shared_user' do
       render_views
 
-      let(:account_link) { create(:account_link, user: user) }
+      let(:account_link) { create(:account_link, user:) }
       let(:shared_user) { create(:user) }
 
       let(:post_request) do
@@ -96,7 +96,7 @@ RSpec.describe AccountLinksController do
     describe 'POST add_shared_user' do
       render_views
 
-      let(:account_link) { create(:account_link, user: user) }
+      let(:account_link) { create(:account_link, user:) }
       let(:shared_user) { create(:user) }
 
       let(:post_request) do

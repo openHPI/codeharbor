@@ -19,16 +19,16 @@ module ProformaService
       @task.assign_attributes(
         user: @user,
         title: @proforma_task.title,
-        description: description,
+        description:,
         internal_description: @proforma_task.internal_description,
-        programming_language: programming_language,
+        programming_language:,
         uuid: @task.uuid || @proforma_task.uuid,
         parent_uuid: @proforma_task.parent_uuid,
         language: @proforma_task.language,
         meta_data: @proforma_task.meta_data,
 
-        tests: tests,
-        model_solutions: model_solutions,
+        tests:,
+        model_solutions:,
         files: files.values # this line has to be last, because tests and model_solutions have to remove their respective files first
       )
     end

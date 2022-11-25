@@ -16,7 +16,7 @@ module ProformaService
 
           data[SecureRandom.uuid] = file_data_hash(task, import_file, proforma_task)
         end
-        import_file.update!(data: data)
+        import_file.update!(data:)
       end
       data
     end

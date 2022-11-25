@@ -8,7 +8,7 @@ RSpec.describe AccountLink do
 
     let(:user) { nil }
     let(:account_link_user) { create(:user) }
-    let(:account_link) { create(:account_link, user: account_link_user, shared_users: shared_users) }
+    let(:account_link) { create(:account_link, user: account_link_user, shared_users:) }
     let(:shared_users) { [] }
 
     it { is_expected.not_to be_able_to(:create, described_class) }
@@ -83,7 +83,7 @@ RSpec.describe AccountLink do
     end
 
     context 'when account_link is shared with user' do
-      before { create(:account_link_user, account_link: account_link, user: user) }
+      before { create(:account_link_user, account_link:, user:) }
 
       it { is_expected.to be true }
     end

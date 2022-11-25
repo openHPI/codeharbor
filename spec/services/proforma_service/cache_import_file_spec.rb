@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe ProformaService::CacheImportFile do
   describe '.new' do
-    subject(:cache_import_file) { described_class.new(user: user, zip_file: zip_file) }
+    subject(:cache_import_file) { described_class.new(user:, zip_file:) }
 
     let(:user) { build(:user) }
     let(:zip_file) { fixture_file_upload('proforma_import/testfile.zip', 'application/zip') }
@@ -19,7 +19,7 @@ describe ProformaService::CacheImportFile do
   end
 
   describe '#execute' do
-    subject(:cache_import_file) { described_class.call(user: user, zip_file: zip_file) }
+    subject(:cache_import_file) { described_class.call(user:, zip_file:) }
 
     let(:user) { build(:user) }
     let(:zip_file) { fixture_file_upload('proforma_import/testfile.zip', 'application/zip') }

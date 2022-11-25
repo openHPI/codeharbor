@@ -6,16 +6,16 @@ RSpec.describe 'equal_task matcher' do
   let(:task) do
     build(:task,
           :with_content,
-          programming_language: programming_language,
-          files: files,
-          tests: tests,
-          model_solutions: model_solutions,
+          programming_language:,
+          files:,
+          tests:,
+          model_solutions:,
           uuid: SecureRandom.uuid)
   end
   let(:task2) do
     build(:task,
           :with_content,
-          programming_language: programming_language,
+          programming_language:,
           files: files2,
           tests: tests2,
           model_solutions: model_solutions2,
@@ -109,7 +109,7 @@ RSpec.describe 'equal_task matcher' do
   end
 
   context 'with two similar tasks' do
-    let(:task) { build(:task, files: files) }
+    let(:task) { build(:task, files:) }
     let(:task2) { build(:task, files: files2) }
 
     let(:files) { [build(:task_file, content: 'foo'), build(:task_file, content: 'bar'), build(:task_file, content: files_3_content)] }

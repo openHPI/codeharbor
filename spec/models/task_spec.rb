@@ -133,7 +133,7 @@ RSpec.describe Task do
   describe '#duplicate' do
     subject(:duplicate) { task.duplicate }
 
-    let(:task) { create(:task, files: files, tests: tests, model_solutions: model_solutions) }
+    let(:task) { create(:task, files:, tests:, model_solutions:) }
     let(:files) { build_list(:task_file, 2, :exportable) }
     let(:tests) { build_list(:test, 2) }
     let(:model_solutions) { build_list(:model_solution, 2) }

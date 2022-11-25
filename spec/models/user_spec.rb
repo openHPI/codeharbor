@@ -158,7 +158,7 @@ RSpec.describe User do
     end
 
     context 'when user has a collection' do
-      before { create(:collection, users: users) }
+      before { create(:collection, users:) }
 
       let(:users) { [user] }
 
@@ -178,7 +178,7 @@ RSpec.describe User do
     xcontext 'when user has an exercise' do
       before { user.exercises << exercise }
 
-      let(:exercise) { create(:simple_exercise, user: user) }
+      let(:exercise) { create(:simple_exercise, user:) }
 
       it 'changes user of exercise to nil' do
         expect { destroy }.to change { exercise.reload.user }.from(user).to(nil)
@@ -300,7 +300,7 @@ RSpec.describe User do
       end
 
       context 'when account_link is shared' do
-        before { create(:account_link_user, user: user, account_link: account_link) }
+        before { create(:account_link_user, user:, account_link:) }
 
         it 'contains account_link' do
           expect(available_account_links).to include(account_link)

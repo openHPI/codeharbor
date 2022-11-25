@@ -17,16 +17,16 @@ module ProformaService
       Proforma::Task.new(
         {
           title: @task.title,
-          description: description,
+          description:,
           internal_description: @task.internal_description,
-          proglang: proglang,
+          proglang:,
           uuid: @task.uuid,
           parent_uuid: @task.parent_uuid,
           language: @task.language,
           meta_data: @task.meta_data,
           files: @task.files.map { |file| task_file file },
-          tests: tests,
-          model_solutions: model_solutions
+          tests:,
+          model_solutions:
         }.compact
       )
     end

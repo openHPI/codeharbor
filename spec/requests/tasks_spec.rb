@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe 'Tasks' do
   context 'when logged in' do
     let(:user) { create(:user) }
-    let(:task) { create(:task, user: user) }
+    let(:task) { create(:task, user:) }
     let(:valid_params) do
       {
         title: 'title',

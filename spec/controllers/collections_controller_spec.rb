@@ -135,7 +135,7 @@ RSpec.describe CollectionsController do
   end
 
   xdescribe 'PATCH #remove_all' do
-    let(:collection) { create(:collection, valid_attributes.merge(users: [user], exercises: exercises)) }
+    let(:collection) { create(:collection, valid_attributes.merge(users: [user], exercises:)) }
     let(:exercises) { create_list(:exercise, 2) }
 
     let(:patch_request) { patch :remove_all, params: {id: collection.id} }
@@ -146,7 +146,7 @@ RSpec.describe CollectionsController do
   end
 
   xdescribe 'GET #download_all' do
-    let(:collection) { create(:collection, valid_attributes.merge(users: [user], exercises: exercises)) }
+    let(:collection) { create(:collection, valid_attributes.merge(users: [user], exercises:)) }
     let(:exercises) { create_list(:exercise, 2) }
     let(:zip) { instance_double(StringIO, string: 'dummy') }
 
@@ -181,7 +181,7 @@ RSpec.describe CollectionsController do
 
   describe 'POST #share' do
     let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
-    let(:post_request) { post :share, params: params }
+    let(:post_request) { post :share, params: }
     let(:params) { {id: collection.id, user: create(:user).email} }
 
     it 'creates a message' do
@@ -218,7 +218,7 @@ RSpec.describe CollectionsController do
   describe 'POST #view_shared' do
     let(:collection_owner) { create(:user) }
     let(:collection) { create(:collection, valid_attributes.merge(users: [collection_owner, user])) }
-    let(:get_request) { get :view_shared, params: params }
+    let(:get_request) { get :view_shared, params: }
     let(:params) { {id: collection.id, user: collection_owner.id} }
 
     context 'when user has been invited' do
@@ -255,7 +255,7 @@ RSpec.describe CollectionsController do
 
   describe 'POST #save_shared' do
     let(:collection) { create(:collection, valid_attributes.merge(users: [create(:user)])) }
-    let(:post_request) { post :save_shared, params: params }
+    let(:post_request) { post :save_shared, params: }
     let(:params) { {id: collection.id} }
 
     context 'when user has been invited' do
@@ -300,9 +300,9 @@ RSpec.describe CollectionsController do
   end
 
   describe 'POST #leave' do
-    let!(:collection) { create(:collection, valid_attributes.merge(users: users)) }
+    let!(:collection) { create(:collection, valid_attributes.merge(users:)) }
     let(:users) { [create(:user), user] }
-    let(:post_request) { post :leave, params: params }
+    let(:post_request) { post :leave, params: }
     let(:params) { {id: collection.id} }
 
     it 'removes user from collection' do

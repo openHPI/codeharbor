@@ -22,7 +22,7 @@ module ProformaService
         importer = Proforma::Importer.new(zip: @zip_file)
         result = importer.perform
         task = result[:task]
-        tasks = [{path: @path, uuid: task.uuid, task: task}]
+        tasks = [{path: @path, uuid: task.uuid, task:}]
       else
         tasks = import_multi
       end

@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe TaskService::PushExternal do
   describe '.new' do
-    subject(:push_external) { described_class.new(zip: zip, account_link: account_link) }
+    subject(:push_external) { described_class.new(zip:, account_link:) }
 
     let(:zip) { ProformaService::ExportTask.call(task: build(:task)) }
     let(:account_link) { build(:account_link) }
@@ -19,14 +19,14 @@ describe TaskService::PushExternal do
   end
 
   describe '#execute' do
-    subject(:push_external) { described_class.call(zip: zip, account_link: account_link) }
+    subject(:push_external) { described_class.call(zip:, account_link:) }
 
     let(:zip) { ProformaService::ExportTask.call(task: build(:task)) }
     let(:account_link) { build(:account_link) }
     let(:status) { 200 }
     let(:response) { '' }
 
-    before { stub_request(:post, account_link.push_url).to_return(status: status, body: response) }
+    before { stub_request(:post, account_link.push_url).to_return(status:, body: response) }
 
     it 'calls the correct url' do
       expect(push_external).to have_requested(:post, account_link.push_url)

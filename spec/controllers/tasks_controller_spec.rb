@@ -5,14 +5,14 @@ require 'rails_helper'
 RSpec.describe TasksController do
   let(:user) { create(:user) }
   let(:collection) { create(:collection, users: [user], tasks: []) }
-  let(:valid_attributes) { {user: user} }
+  let(:valid_attributes) { {user:} }
 
   let(:invalid_attributes) { {title: ''} }
 
   before { sign_in user }
 
   describe 'GET #index' do
-    subject(:get_request) { get :index, params: params }
+    subject(:get_request) { get :index, params: }
 
     let(:get_request_without_params) { get :index, params: {} }
     let!(:task) { create(:task, valid_attributes) }
@@ -56,7 +56,7 @@ RSpec.describe TasksController do
       context 'when a filter is used' do
         let(:params) { {search: ransack_params} }
         let(:ransack_params) { {'title_or_description_cont' => 'filter'} }
-        let!(:task) { create(:task, user: user, title: 'filter me') }
+        let!(:task) { create(:task, user:, title: 'filter me') }
 
         it 'shows the matching Task' do
           get_request
@@ -94,7 +94,7 @@ RSpec.describe TasksController do
     end
 
     context 'when task has a test' do
-      let!(:test) { create(:test, task: task) }
+      let!(:test) { create(:test, task:) }
 
       it "assigns task's tests to instance variable" do
         get_request
@@ -167,7 +167,7 @@ RSpec.describe TasksController do
 
     let(:update_attributes) { {title: 'new_title'} }
     let!(:task) { create(:task, valid_attributes) }
-    let(:valid_attributes) { {user: user, title: 'title'} }
+    let(:valid_attributes) { {user:, title: 'title'} }
 
     context 'with valid params' do
       it 'updates the requested task' do
@@ -242,7 +242,7 @@ RSpec.describe TasksController do
     let(:task) { create(:task, valid_attributes) }
     let(:zip) { instance_double(StringIO, string: 'dummy') }
 
-    before { allow(ProformaService::ExportTask).to receive(:call).with(task: task).and_return(zip) }
+    before { allow(ProformaService::ExportTask).to receive(:call).with(task:).and_return(zip) }
 
     it 'calls the ExportTask service' do
       get_request
@@ -268,7 +268,7 @@ RSpec.describe TasksController do
   describe 'POST #import_start' do
     render_views
 
-    subject(:post_request) { post :import_start, params: {zip_file: zip_file}, format: :js, xhr: true }
+    subject(:post_request) { post :import_start, params: {zip_file:}, format: :js, xhr: true }
 
     let(:zip_file) { fixture_file_upload('proforma_import/testfile.zip', 'application/zip') }
 
@@ -285,7 +285,7 @@ RSpec.describe TasksController do
 
     it 'calls service' do
       post_request
-      expect(ProformaService::CacheImportFile).to have_received(:call).with(user: user,
+      expect(ProformaService::CacheImportFile).to have_received(:call).with(user:,
                                                                             zip_file: be_a(ActionDispatch::Http::UploadedFile))
     end
 
@@ -331,7 +331,7 @@ RSpec.describe TasksController do
     end
 
     let(:zip_file) { fixture_file_upload('proforma_import/testfile_multi.zip', 'application/zip') }
-    let(:data) { ProformaService::CacheImportFile.call(user: user, zip_file: zip_file) }
+    let(:data) { ProformaService::CacheImportFile.call(user:, zip_file:) }
     let(:import_data) { data.first }
 
     it 'creates the task' do
@@ -354,11 +354,11 @@ RSpec.describe TasksController do
   end
 
   describe 'POST #import_uuid_check' do
-    subject(:post_request) { post :import_uuid_check, params: {uuid: uuid} }
+    subject(:post_request) { post :import_uuid_check, params: {uuid:} }
 
     let!(:task) { create(:task, valid_attributes) }
     let(:headers) { {'Authorization' => "Bearer #{account_link.api_key}"} }
-    let(:account_link) { create(:account_link, user: user) }
+    let(:account_link) { create(:account_link, user:) }
     let(:uuid) { task.reload.uuid }
 
     before { request.headers.merge! headers }
@@ -405,7 +405,7 @@ RSpec.describe TasksController do
   describe 'POST #import_external' do
     subject(:post_request) { post :import_external, body: zip_file_content }
 
-    let(:account_link) { create(:account_link, user: user) }
+    let(:account_link) { create(:account_link, user:) }
     let(:zip_file_content) { 'zipped task xml' }
     let(:headers) { {'Authorization' => "Bearer #{account_link.api_key}"} }
 
@@ -421,7 +421,7 @@ RSpec.describe TasksController do
 
     it 'calls service' do
       post_request
-      expect(ProformaService::Import).to have_received(:call).with(zip: be_a(Tempfile).and(has_content(zip_file_content)), user: user)
+      expect(ProformaService::Import).to have_received(:call).with(zip: be_a(Tempfile).and(has_content(zip_file_content)), user:)
     end
 
     context 'when import fails with ProformaError' do
@@ -466,14 +466,14 @@ RSpec.describe TasksController do
     let(:post_request) do
       post :export_external_check, params: {id: task.id, account_link: account_link.id}, format: :json, xhr: true
     end
-    let(:external_check_hash) { {message: message, uuid_found: uuid_found, update_right: true, error: error} }
+    let(:external_check_hash) { {message:, uuid_found:, update_right: true, error:} }
     let(:message) { 'message' }
     let(:uuid_found) { true }
     let(:error) { nil }
 
     before do
       allow(TaskService::CheckExternal).to receive(:call).with(uuid: task.uuid,
-                                                               account_link: account_link).and_return(external_check_hash)
+                                                               account_link:).and_return(external_check_hash)
     end
 
     it 'renders the correct contents as json' do
@@ -525,7 +525,7 @@ RSpec.describe TasksController do
     let(:account_link) { create(:account_link, user: account_link_user) }
     let(:account_link_user) { user }
     let(:post_request) do
-      post :export_external_confirm, params: {push_type: push_type, id: task.id, account_link: account_link.id}, format: :json,
+      post :export_external_confirm, params: {push_type:, id: task.id, account_link: account_link.id}, format: :json,
                                      xhr: true
     end
     let(:push_type) { 'export' }
@@ -536,7 +536,7 @@ RSpec.describe TasksController do
         .with(task: an_instance_of(Task), options: {description_format: 'md'})
         .and_return('zip stream')
       allow(TaskService::PushExternal).to receive(:call)
-        .with(zip: 'zip stream', account_link: account_link)
+        .with(zip: 'zip stream', account_link:)
         .and_return(error)
     end
 

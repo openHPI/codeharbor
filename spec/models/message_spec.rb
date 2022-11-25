@@ -10,7 +10,7 @@ RSpec.describe Message do
     let(:user) { nil }
     let(:recipient) { create(:user) }
     let(:sender) { create(:user) }
-    let(:message) { create(:message, sender: sender, recipient: recipient) }
+    let(:message) { create(:message, sender:, recipient:) }
     let(:role) { 'member' }
 
     it { is_expected.not_to be_able_to(:create, described_class) }
@@ -98,7 +98,7 @@ RSpec.describe Message do
     subject(:mark_as_deleted) { message.mark_as_deleted(user) }
 
     let(:user) { build(:user) }
-    let(:message) { build(:message, sender: sender, recipient: recipient) }
+    let(:message) { build(:message, sender:, recipient:) }
     let(:sender) {}
     let(:recipient) {}
 

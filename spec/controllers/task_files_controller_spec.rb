@@ -8,7 +8,7 @@ RSpec.describe TaskFilesController do
   before { sign_in user }
 
   describe 'GET #download_attachment' do
-    subject(:get_request) { get :download_attachment, params: params }
+    subject(:get_request) { get :download_attachment, params: }
 
     let!(:task_file) { create(:task_file, :with_task, :with_attachment, fileable: build(:task, user: task_user)) }
     let(:params) { {id: task_file.id} }
@@ -30,7 +30,7 @@ RSpec.describe TaskFilesController do
   end
 
   describe 'GET #extract_text_data' do
-    subject(:get_request) { get :extract_text_data, params: params }
+    subject(:get_request) { get :extract_text_data, params: }
 
     let(:task_file) { create(:task_file, :with_task, :with_text_attachment, fileable: build(:task, user: task_user)) }
     let(:params) { {id: task_file.id} }

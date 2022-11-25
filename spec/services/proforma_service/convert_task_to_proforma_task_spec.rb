@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ProformaService::ConvertTaskToProformaTask do
   describe '.new' do
-    subject(:convert_to_proforma_task) { described_class.new(task: task, options: options) }
+    subject(:convert_to_proforma_task) { described_class.new(task:, options:) }
 
     let(:options) { {} }
     let(:task) { build(:task) }
@@ -21,17 +21,17 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
   describe '#execute' do
     subject(:proforma_task) { convert_to_proforma_task.execute }
 
-    let(:convert_to_proforma_task) { described_class.new(task: task) }
+    let(:convert_to_proforma_task) { described_class.new(task:) }
     let(:task) do
       create(:task,
              uuid: SecureRandom.uuid,
              parent_uuid: SecureRandom.uuid,
-             meta_data: meta_data,
-             files: files,
-             tests: tests,
-             model_solutions: model_solutions,
+             meta_data:,
+             files:,
+             tests:,
+             model_solutions:,
              programming_language: build(:programming_language),
-             description: description)
+             description:)
     end
     let(:description) { 'description' }
     let(:meta_data) {}
@@ -58,7 +58,7 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
     end
 
     context 'with options' do
-      let(:convert_to_proforma_task) { described_class.new(task: task, options: options) }
+      let(:convert_to_proforma_task) { described_class.new(task:, options:) }
       let(:options) { {} }
 
       it 'converts the description markdown to text' do
@@ -78,7 +78,7 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
       let(:meta_data) { {CodeOcean: {meta: 'data', nested: {other: 'data'}}} }
 
       it 'creates a task with correct meta_data' do
-        expect(proforma_task).to have_attributes(meta_data: meta_data)
+        expect(proforma_task).to have_attributes(meta_data:)
       end
     end
 

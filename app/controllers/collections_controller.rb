@@ -129,7 +129,7 @@ class CollectionsController < ApplicationController
   def share_message
     user = User.find_by(email: params[:user])
     text = t('controllers.collections.share.text', user: current_user.name, collection: @collection.title)
-    Message.new(sender: current_user, recipient: user, param_type: 'collection', param_id: @collection.id, text: text)
+    Message.new(sender: current_user, recipient: user, param_type: 'collection', param_id: @collection.id, text:)
   end
 
   def push_exercises
