@@ -23,3 +23,4 @@
 //= require nested_form_fields
 //= require labels
 //= require js-routes
+//= require i18n/translations

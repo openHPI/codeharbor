@@ -803,6 +803,7 @@ en:
       destroy: "Destroy"
       back: "Back"
       #submit:
+    can_only_create_5: 'You can only add 5 labels'
 
     edit:
       header: "Editing Label"
@@ -1081,6 +1082,7 @@ en:
         no_results_description: "Try different options by clicking on Advanced."
         reset: "Reset"
         placeholder: "Search for task or label"
+
       no_programming_language_selected: "No programming language selected"
       no_description: "No Description"
       view: "View"
@@ -1112,6 +1114,7 @@ en:
         task_found: "A corresponding task has been found on the external app. You can: <ul><li><b>Overwrite</b> the task on the external app. This will transfer all changes made on CodeHarbor to the external app.<br>Careful: This will overwrite all potential changes made on the external app. This will change (and might break) the task, even if it is currently in use by a course.</li><li><b>Create a new</b> task which copies the current state of this task. This will create a copy of this task on CodeHarbor, which will then be exported as a completely new exercise to the external app.</li></ul>"
         task_found_no_right: "A corresponding task has been found on external app, but you don't have the rights to edit it. You can: <ul><li><b>Create a new</b> task which copies the current state of this task. This will create a copy of this task on CodeHarbor, which will then be exported as a completly new task to the external app.</li></ul>"
         no_task: "No corresponding task found on external app. Pushing this task will create a new task on external app, which will be linked to this one on CodeHarbor. Any changes to either one can be pushed to the respective other platform."
+      checking_external_app: Checking if the task exists on the external app.
     new:
       header: "New Task"
     show:

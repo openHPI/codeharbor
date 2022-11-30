@@ -21,7 +21,7 @@ initializeSelect2 = ->
     width: '100%'
     multiple: true
     closeOnSelect: false
-    placeholder: "All Languages"
+    placeholder: I18n.t('tasks.index.search.all_languages')
 
 toggleHideShowMore = (element) ->
   $parent = $(element).parent()
