@@ -28,7 +28,7 @@ ready = ->
       return
     maximumSelectionLength: 5
     formatSelectionTooBig: (limit) ->
-      'You can only add 5 labels'
+      I18n.t('labels.can_only_create_5')
       tags: false
   return
 
