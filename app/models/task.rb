@@ -9,6 +9,7 @@ class Task < ApplicationRecord
   validates :title, presence: true
 
   validates :uuid, uniqueness: true
+  validates :language, format: {with: /\A[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*\z/, message: I18n.t('tasks.form.errors.language')}
 
   has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy
 

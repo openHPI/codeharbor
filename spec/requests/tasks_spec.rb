@@ -11,7 +11,8 @@ RSpec.describe 'Tasks' do
         title: 'title',
         descriptions_attributes: {'0' => {text: 'description', primary: true}},
         programming_language: create(:programming_language, :ruby).id,
-        license_id: create(:license).id
+        license_id: create(:license).id,
+        language: 'de'
       }
     end
 
