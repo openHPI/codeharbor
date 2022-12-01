@@ -28,6 +28,7 @@ en:
 
   controllers:
     authorization: 'You are not authorized for this action.'
+    not_found: You are not able to access this object or it doesn't exist
     generic_error: An error occurred.
     account_links:
       created: 'Account link was successfully created.'

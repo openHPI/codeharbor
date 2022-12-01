@@ -7,14 +7,6 @@ class CollectionsController < ApplicationController
   before_action :set_collection, only: %i[show edit update remove_exercise remove_all download_all share view_shared save_shared]
   before_action :new_collection, only: :create
 
-  rescue_from CanCan::AccessDenied, ActiveRecord::RecordNotFound do |_exception|
-    if current_user
-      redirect_to collections_path, alert: t('controllers.message.authorization')
-    else
-      redirect_to root_path, alert: t('controllers.message.authorization')
-    end
-  end
-
   def index
     @collections = Collection.includes(:collection_users)
                              .where(collection_users: {user: current_user})
