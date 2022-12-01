@@ -5,14 +5,6 @@ class MessagesController < ApplicationController
   before_action :set_message, only: %i[destroy]
   before_action :set_option, only: %i[index]
 
-  rescue_from CanCan::AccessDenied, ActiveRecord::RecordNotFound do |_exception|
-    if current_user
-      redirect_to user_messages_path(current_user), alert: t('controllers.message.authorization')
-    else
-      redirect_to root_path, alert: t('controllers.message.authorization')
-    end
-  end
-
   def index
     if @option == 'inbox'
       @messages = Message.received_by(current_user)

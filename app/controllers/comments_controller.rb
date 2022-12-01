@@ -6,10 +6,6 @@ class CommentsController < ApplicationController
   before_action :set_comment, only: %i[edit update destroy]
   before_action :new_comment, only: :create
 
-  rescue_from CanCan::AccessDenied, ActiveRecord::RecordNotFound do |_exception|
-    redirect_to root_path, alert: t('controllers.comment.authorization')
-  end
-
   def index
     @comments = Comment.where(task: @task).paginate(per_page: 5, page: params[:page]).order('created_at DESC')
     render 'load_comments.js.erb'

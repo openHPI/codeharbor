@@ -8,6 +8,18 @@ class ApplicationController < ActionController::Base
   before_action :set_sentry_context
   after_action :flash_to_headers
 
+  rescue_from CanCan::AccessDenied do |_exception|
+    if current_user
+      redirect_to({action: :index}, alert: t('controllers.authorization'))
+    else
+      redirect_to root_path, alert: t('controllers.authorization')
+    end
+  end
+
+  rescue_from ActiveRecord::RecordNotFound do |_exception|
+    redirect_to({action: :index}, alert: t('controllers.not_found'))
+  end
+
   private
 
   def set_sentry_context
