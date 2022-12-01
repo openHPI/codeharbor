@@ -128,7 +128,8 @@ RSpec.describe TasksController do
           title: 'title',
           descriptions_attributes: {'0' => {text: 'description', primary: true}},
           programming_language_id: create(:programming_language, :ruby).id,
-          license_id: create(:license)
+          license_id: create(:license),
+          language: 'de'
         }
       end
 

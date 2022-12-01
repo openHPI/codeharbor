@@ -6,10 +6,10 @@ FactoryBot.define do
     description { 'description' }
     user { build(:user) }
     uuid { SecureRandom.uuid }
+    language { 'de' }
 
     trait :with_content do
       internal_description { 'internal_description' }
-      language { 'de' }
     end
 
     trait :empty do

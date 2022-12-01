@@ -71,6 +71,11 @@ RSpec.describe Task do
     it { is_expected.to validate_presence_of(:title) }
     it { is_expected.to validate_uniqueness_of(:uuid).case_insensitive }
     it { is_expected.to belong_to(:user) }
+
+    it { is_expected.to allow_value('de-DE').for(:language) }
+    it { is_expected.to allow_value('en').for(:language) }
+    it { is_expected.not_to allow_value('verylonglanguagename').for(:language) }
+    it { is_expected.not_to allow_value('$pecial').for(:language) }
   end
 
   describe '.visibility' do
