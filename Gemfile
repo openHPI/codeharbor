@@ -13,7 +13,7 @@ gem 'i18n'
 # Use slim format
 gem 'slim-rails', '>= 3.2.0'
 # Rails
-gem 'rails', '~> 6.1'
+gem 'rails', '~> 7.0'
 gem 'sprockets-rails'
 # Use postgres as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
@@ -108,8 +108,6 @@ group :development do
   gem 'letter_opener'
 
   gem 'pry-rails'
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
 end
 
 group :test do
