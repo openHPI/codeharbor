@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_16_201724) do
-
+ActiveRecord::Schema[7.0].define(version: 2023_04_11_004611) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -49,7 +48,7 @@ ActiveRecord::Schema.define(version: 2023_01_16_201724) do
     t.string "content_type"
     t.text "metadata"
     t.bigint "byte_size", null: false
-    t.string "checksum", null: false
+    t.string "checksum"
     t.datetime "created_at", null: false
     t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
@@ -95,8 +94,8 @@ ActiveRecord::Schema.define(version: 2023_01_16_201724) do
     t.bigint "user_id", null: false
     t.bigint "group_id", null: false
     t.integer "role", limit: 2, default: 0, null: false, comment: "Used as enum in Rails"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_group_memberships_on_group_id"
     t.index ["user_id"], name: "index_group_memberships_on_user_id"
   end
@@ -104,8 +103,8 @@ ActiveRecord::Schema.define(version: 2023_01_16_201724) do
   create_table "group_tasks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "task_id", null: false
     t.bigint "group_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_group_tasks_on_group_id"
     t.index ["task_id"], name: "index_group_tasks_on_task_id"
   end
@@ -156,16 +155,16 @@ ActiveRecord::Schema.define(version: 2023_01_16_201724) do
     t.string "internal_description"
     t.string "xml_id"
     t.bigint "task_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["task_id"], name: "index_model_solutions_on_task_id"
   end
 
   create_table "programming_languages", force: :cascade do |t|
     t.string "language"
     t.string "version"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "ratings", id: :serial, force: :cascade do |t|
@@ -224,8 +223,8 @@ ActiveRecord::Schema.define(version: 2023_01_16_201724) do
     t.string "usage_by_lms"
     t.string "fileable_type"
     t.bigint "fileable_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "xml_id"
     t.index ["fileable_type", "fileable_id"], name: "index_task_files_on_fileable_type_and_fileable_id"
   end
@@ -246,8 +245,8 @@ ActiveRecord::Schema.define(version: 2023_01_16_201724) do
     t.string "language"
     t.bigint "programming_language_id"
     t.bigint "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.jsonb "meta_data", default: {}
     t.index ["programming_language_id"], name: "index_tasks_on_programming_language_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
@@ -278,8 +277,8 @@ ActiveRecord::Schema.define(version: 2023_01_16_201724) do
     t.bigint "user_id", null: false
     t.string "omniauth_provider"
     t.string "provider_uid"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["omniauth_provider", "provider_uid"], name: "index_user_identities_on_omniauth_provider_and_provider_uid", unique: true
     t.index ["user_id"], name: "index_user_identities_on_user_id"
   end
