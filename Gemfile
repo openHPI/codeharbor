@@ -16,6 +16,7 @@ gem 'i18n'
 gem 'slim-rails', '>= 3.2.0'
 # Rails
 gem 'rails', '~> 6.1'
+gem 'sprockets-rails'
 # Use postgres as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
 # Use SCSS for stylesheets

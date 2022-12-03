@@ -568,6 +568,7 @@ DEPENDENCIES
   slim-rails (>= 3.2.0)
   spring
   sprockets (~> 4.1.1)
+  sprockets-rails
   terser
   turbolinks
   twitter-bootstrap-rails
