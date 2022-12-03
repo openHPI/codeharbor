@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require 'omni_auth/strategies/abstract_saml'
+require 'omni_auth/strategies/bird' if Settings.omniauth.bird.enable
+require 'omni_auth/strategies/saml_test_id' if Settings.omniauth.samltestid.enable
+
 # Assuming you have not yet modified this file, each configuration option below
 # is set to its default value. Note that some are commented out while others
 # are not: uncommented lines are intended to protect your configuration from
