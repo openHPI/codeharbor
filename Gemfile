@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'i18n-js', '< 4.0.0' # Newer versions require the npm package `i18n-js`
+gem 'i18n-js', '< 5.0.0' # Newer versions require the npm package `i18n-js`
 gem 'js-routes'
 # Create Zip files
 gem 'rubyzip'
