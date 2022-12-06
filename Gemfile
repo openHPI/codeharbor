@@ -71,7 +71,7 @@ gem 'net-imap', require: false
 gem 'net-pop', require: false
 gem 'net-smtp', require: false
 gem 'nokogiri'
-gem 'proforma', git: 'https://github.com/openHPI/proforma.git', tag: 'v0.7.1'
+gem 'proforma', git: 'https://github.com/openHPI/proforma.git', tag: 'v0.8'
 gem 'rails_admin', '~> 3.1'
 gem 'ransack'
 gem 'select2-rails', '~> 4.0'
