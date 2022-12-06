@@ -8,10 +8,10 @@ FactoryBot.define do
 
     # Special create handler is necessary, because the groupify gem doesn't allow assignment of members, when group is not saved yet.
     # This breaks a validation. This is based on Group.create_with_admin
-    to_create do |group|
-      group.save(validate: false)
-      group.make_admin(group.users.first || create(:user))
-      group.validate!
-    end
+    # to_create do |group|
+    #   group.save(validate: false)
+    #   group.make_admin(group.users.first || create(:user))
+    #   group.validate!
+    # end
   end
 end

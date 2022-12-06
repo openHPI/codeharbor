@@ -14,9 +14,6 @@ class User < ApplicationRecord
          :rememberable,
          :validatable
 
-  groupify :named_group_member
-  groupify :group_member
-
   validates :email, presence: true, uniqueness: {case_sensitive: false}
   validates :first_name, :last_name, presence: true
 

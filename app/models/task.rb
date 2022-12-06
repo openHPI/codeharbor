@@ -5,7 +5,6 @@ require 'zip'
 class Task < ApplicationRecord
   acts_as_taggable_on :state
 
-  groupify :group_member
   validates :title, presence: true
 
   validates :uuid, uniqueness: true
