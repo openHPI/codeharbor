@@ -12,6 +12,9 @@ class Task < ApplicationRecord
 
   has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy
 
+  has_many :group_memberships, as: :member, dependent: :destroy
+  has_many :groups, through: :group_memberships, as: :member
+
   has_many :tests, dependent: :destroy
   has_many :model_solutions, dependent: :destroy
 

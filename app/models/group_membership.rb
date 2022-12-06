@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 
 class GroupMembership < ApplicationRecord
+  belongs_to :member, polymorphic: true
+  belongs_to :group
+
   validate :membership_unique
   scope :similars, lambda { |membership|
     where(membership.attributes.select { |key| key.in? %w[member_id member_type group_type group_id] })
       .where.not(id: membership.id)
   }
+
 
   private
 

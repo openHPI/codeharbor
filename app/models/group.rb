@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Group < ApplicationRecord
+  has_many :members, through: :group_memberships
+  has_many :group_memberships, dependent: :destroy
+
   validates :name, presence: true
   validate :admin_in_group
 
