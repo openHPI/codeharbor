@@ -79,7 +79,16 @@ task1 = Task.create!(
   uuid: 'f15cb7a3-87eb-4c4c-a998-c33e25d44cdc',
   language: 'English',
   programming_language: pl_java,
-  user: user1
+  user: user1,
+  meta_data: {
+    CodeOcean: {
+      files: {
+        'CO-42': {
+          role: 'main_file',
+        },
+      },
+    },
+  }
 )
 
 TaskFile.create!(
@@ -89,7 +98,7 @@ TaskFile.create!(
   visible: 'yes',
   usage_by_lms: 'edit',
   fileable: task1,
-  xml_id: '0',
+  xml_id: '42',
   content: <<~JAVA)
     public class HelloWorld {
       public static void main (String[] args) {
