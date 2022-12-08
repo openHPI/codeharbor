@@ -83,7 +83,7 @@ task1 = Task.create!(
 )
 
 TaskFile.create!(
-  name: 'Main.java',
+  name: 'HelloWorld.java',
   internal_description: 'The main java file.',
   used_by_grader: true,
   visible: 'yes',
@@ -158,7 +158,7 @@ task1_solution1 = ModelSolution.create!(
 )
 
 TaskFile.create!(
-  name: 'Main.java',
+  name: 'HelloWorld.java',
   mime_type: nil,
   used_by_grader: true,
   visible: 'delayed',
