@@ -173,6 +173,25 @@ TaskFile.create!(
     }
   JAVA
 
+TaskFile.create!(
+  name: 'Makefile',
+  mime_type: nil,
+  used_by_grader: true,
+  visible: 'no',
+  usage_by_lms: 'display',
+  fileable: task1,
+  xml_id: '3',
+  content: <<~MAKEFILE)
+    run:
+    	@javac -encoding utf8 HelloWorld.java
+    	@java -Dfile.encoding=UTF8 HelloWorld
+    	#exit
+
+    test:
+    	javac -encoding utf8 ${FILENAME}
+    	java -jar ${JUNIT} --classpath ${CLASSPATH} --disable-banner --details-theme ascii --disable-ansi-colors --details tree --select-class ${CLASS_NAME}
+  MAKEFILE
+
 Rating.create!(rating: 2, task: task1, user: user2)
 Rating.create!(rating: 4, task: task1, user: user4)
 Rating.create!(rating: 5, task: task1, user: user3)
