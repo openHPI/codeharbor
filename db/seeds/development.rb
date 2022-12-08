@@ -167,7 +167,7 @@ task1_solution1 = ModelSolution.create!(
 )
 
 TaskFile.create!(
-  name: 'HelloWorld.java',
+  name: 'HelloWorldSolution.java',
   mime_type: nil,
   used_by_grader: true,
   visible: 'delayed',
@@ -175,7 +175,7 @@ TaskFile.create!(
   fileable: task1_solution1,
   xml_id: '2',
   content: <<~JAVA)
-    public class HelloWorld {
+    public class HelloWorldSolution {
       public static void main (String[] args) {
         System.out.println("Hello World");
       }
