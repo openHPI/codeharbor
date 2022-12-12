@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :task_file do
     name { 'name' }
+    sequence(:xml_id, &:to_s)
 
     trait :with_task do
       fileable { build(:task) }

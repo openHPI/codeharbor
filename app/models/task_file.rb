@@ -6,6 +6,8 @@ class TaskFile < ApplicationRecord
   has_one_attached :attachment
   validates :name, presence: true
   validates :attachment, presence: true, if: -> { use_attached_file == 'true' }, on: :force_validations
+  validates :xml_id, presence: true
+  validates :xml_id, uniqueness: {scope: [:fileable_id, :fileable_type]}
 
   attr_accessor :use_attached_file, :file_marked_for_deletion
 

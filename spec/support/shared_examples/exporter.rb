@@ -72,7 +72,7 @@ RSpec.shared_examples 'task node with file' do
   end
 
   it 'adds id-attribute to file node' do
-    expect(xml.xpath("/task/files/file[@id!='ms-placeholder-file']").attribute('id').value).to eql file.id.to_s
+    expect(xml.xpath("/task/files/file[@id!='ms-placeholder-file']").attribute('id').value).to eql file.xml_id
   end
 
   it 'adds used-by-grader-attribute to file node' do
