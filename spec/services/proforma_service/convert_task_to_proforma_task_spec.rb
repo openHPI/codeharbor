@@ -126,6 +126,14 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
           )
         end
       end
+
+      context 'when file has a xml_id' do
+        let(:file) { build(:task_file, xml_id: 42) }
+
+        it 'creates a task-file with the correct attribute' do
+          expect(proforma_task.files.first).to have_attributes(id: '42')
+        end
+      end
     end
 
     context 'when task has model solution' do
