@@ -54,6 +54,8 @@ RSpec.describe TaskFile do
   describe '#valid?' do
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to belong_to(:fileable) }
+    it { is_expected.to validate_presence_of(:xml_id) }
+    it { is_expected.to validate_uniqueness_of(:xml_id).scoped_to([:fileable_id, :fileable_type]) }
 
     context 'when use_attached_file is true' do
       subject { build(:task_file, :with_attachment, use_attached_file: 'true') }

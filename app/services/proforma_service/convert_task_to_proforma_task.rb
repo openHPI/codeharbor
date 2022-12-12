@@ -70,7 +70,7 @@ module ProformaService
 
     def task_file(file)
       task_file = Proforma::TaskFile.new(
-        id: file.xml_id || file.id,
+        id: file.xml_id,
         filename: file.full_file_name,
         used_by_grader: file.used_by_grader || false,
         visible: file.visible,

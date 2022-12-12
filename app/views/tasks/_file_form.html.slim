@@ -8,6 +8,10 @@
   = file.label :internal_description, t('tasks.files.internal_description'), class:'form-label'
   = file.text_area :internal_description, class:'form-control'
 .field-element
+  = file.label :xml_id, t('tasks.tests.xml_id'), class: 'form-label'
+  = file.text_field :xml_id, class: 'form-control', value: file.object.xml_id.presence || '__nested_field_for_replace_with_index__'
+
+.field-element
   = render 'file_config', file: file
 .field-element
   = render 'editor', f: f, file: file
