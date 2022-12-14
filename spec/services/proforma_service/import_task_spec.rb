@@ -53,7 +53,7 @@ describe ProformaService::ImportTask do
         expect(import_proforma_task).to eql task
       end
 
-      xit 'creates a predecessor for task' do
+      it 'creates a predecessor for task', pending: 'task relations are currently not available' do
         expect { import_proforma_task }.to change { task.reload.predecessor }.from(nil).to(be_an(Task))
       end
 
@@ -68,7 +68,7 @@ describe ProformaService::ImportTask do
           expect(import_proforma_task).not_to eql task
         end
 
-        xcontext 'when user is an author of task' do
+        context 'when user is an author of task', pending: 'tasks currently have one author only' do
           before { task.authors << user }
 
           it 'creates a new task' do

@@ -175,13 +175,13 @@ RSpec.describe User do
       end
     end
 
-    xcontext 'when user has an exercise' do
-      before { user.exercises << exercise }
+    context 'when user has an exercise' do
+      before { user.tasks << tasks }
 
-      let(:exercise) { create(:simple_exercise, user:) }
+      let(:tasks) { create(:task, user:) }
 
       it 'changes user of exercise to nil' do
-        expect { destroy }.to change { exercise.reload.user }.from(user).to(nil)
+        expect { destroy }.to change { tasks.reload.user }.from(user).to(nil)
       end
     end
 
@@ -192,7 +192,7 @@ RSpec.describe User do
         expect { destroy }.not_to change(Message, :count)
       end
 
-      xcontext 'when message has type exercise' do
+      context 'when message has type exercise', pending: 'messages and sharing permissions need to be reworked' do
         before do
           create(:message, sender: user, param_type: 'exercise')
           create(:message, sender: user, param_type: 'group')
@@ -253,7 +253,7 @@ RSpec.describe User do
     end
   end
 
-  xdescribe 'exercise visible for user' do
+  describe 'exercise visible for user', pending: 'group sharing is currently broken' do
     let!(:user) { create(:user) }
     let!(:user2) { create(:user) }
     let!(:group) { create(:group, users: [user]) }
