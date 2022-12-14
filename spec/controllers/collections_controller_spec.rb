@@ -124,7 +124,7 @@ RSpec.describe CollectionsController do
     end
   end
 
-  xdescribe 'PATCH #remove_exercise' do
+  describe 'PATCH #remove_exercise', pending: 'collections are currently broken' do
     let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
     let!(:exercise) { create(:exercise, collections: [collection]) }
     let(:patch_request) { patch :remove_exercise, params: {id: collection.id, exercise: exercise.id} }
@@ -134,7 +134,7 @@ RSpec.describe CollectionsController do
     end
   end
 
-  xdescribe 'PATCH #remove_all' do
+  describe 'PATCH #remove_all', pending: 'collections are currently broken' do
     let(:collection) { create(:collection, valid_attributes.merge(users: [user], exercises:)) }
     let(:exercises) { create_list(:exercise, 2) }
 
@@ -145,7 +145,7 @@ RSpec.describe CollectionsController do
     end
   end
 
-  xdescribe 'GET #download_all' do
+  describe 'GET #download_all', pending: 'collections are currently broken' do
     let(:collection) { create(:collection, valid_attributes.merge(users: [user], exercises:)) }
     let(:exercises) { create_list(:exercise, 2) }
     let(:zip) { instance_double(StringIO, string: 'dummy') }
