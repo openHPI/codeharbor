@@ -67,7 +67,7 @@ Label.create!(name: 'Conditions', color: 'DF0101')
 Label.create!(name: 'Data Structures', color: '3333CC')
 
 pl_java = ProgrammingLanguage.create!(language: 'Java', version: '17')
-ProgrammingLanguage.create!(language: 'Python', version: '3')
+pl_python = ProgrammingLanguage.create!(language: 'Python', version: '3.8')
 
 TestingFramework.create!(name: 'JUnit', version: '5')
 TestingFramework.create!(name: 'Pytest', version: '6')
@@ -200,6 +200,37 @@ TaskFile.create!(
     	javac -encoding utf8 ${FILENAME}
     	java -jar ${JUNIT} --classpath ${CLASSPATH} --disable-banner --details-theme ascii --disable-ansi-colors --details tree --select-class ${CLASS_NAME}
   MAKEFILE
+
+task2 = Task.create!(
+  title: 'Minimal Hello World',
+  description: 'Write a simple program that prints "Hello World".',
+  internal_description: 'This is a simple exercise for your students to begin with Python.',
+  uuid: 'a85825d4-397b-4c65-8550-ae607f0a70e9',
+  language: 'English',
+  programming_language: pl_python,
+  user: user1,
+  meta_data: {
+    CodeOcean: {
+      files: {
+        'CO-1337': {
+          role: 'main_file',
+        },
+      },
+    },
+  }
+)
+
+TaskFile.create!(
+  name: 'hello_world.py',
+  internal_description: 'The main Python file.',
+  used_by_grader: true,
+  visible: 'yes',
+  usage_by_lms: 'edit',
+  fileable: task2,
+  xml_id: '1337',
+  content: <<~PYTHON)
+    # print("Hello World")
+  PYTHON
 
 Rating.create!(rating: 2, task: task1, user: user2)
 Rating.create!(rating: 4, task: task1, user: user4)
