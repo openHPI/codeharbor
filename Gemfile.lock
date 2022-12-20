@@ -427,6 +427,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    sd_notify (0.1.1)
     select2-rails (4.0.13)
     sentry-rails (5.7.0)
       railties (>= 5.0)
@@ -564,6 +565,7 @@ DEPENDENCIES
   rubyzip
   sass-rails (>= 6.0.0)
   sassc-rails
+  sd_notify
   select2-rails (~> 4.0)
   sentry-rails
   sentry-ruby
