@@ -77,7 +77,7 @@ gem 'proforma', git: 'https://github.com/openHPI/proforma.git', tag: 'v0.8'
 gem 'rails_admin', '~> 3.1'
 gem 'ransack'
 gem 'select2-rails', '~> 4.0'
-gem 'sprockets', '~> 4.1.1'
+gem 'sprockets', '~> 4.2.0'
 
 # Error Tracing
 gem 'concurrent-ruby'
