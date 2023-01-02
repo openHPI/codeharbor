@@ -225,8 +225,8 @@ GEM
     kaminari-core (1.2.2)
     kramdown (2.4.0)
       rexml
-    launchy (2.5.0)
-      addressable (~> 2.7)
+    launchy (2.5.2)
+      addressable (~> 2.8)
     less (2.6.0)
       commonjs (~> 0.2.7)
     less-rails (4.0.0)
@@ -251,8 +251,8 @@ GEM
     method_source (1.0.0)
     mini_magick (4.12.0)
     mini_mime (1.1.2)
-    mini_portile2 (2.8.0)
-    minitest (5.16.3)
+    mini_portile2 (2.8.1)
+    minitest (5.17.0)
     mnemosyne-ruby (1.13.0)
       activesupport (>= 4)
       bunny
@@ -307,7 +307,7 @@ GEM
     puma (6.0.2)
       nio4r (~> 2.0)
     racc (1.6.2)
-    rack (2.2.4)
+    rack (2.2.5)
     rack-mini-profiler (3.0.0)
       rack (>= 1.2.0)
     rack-protection (3.0.5)
@@ -388,17 +388,17 @@ GEM
       rspec-mocks (~> 3.11)
       rspec-support (~> 3.11)
     rspec-support (3.12.0)
-    rubocop (1.41.1)
+    rubocop (1.42.0)
       json (~> 2.3)
       parallel (~> 1.10)
       parser (>= 3.1.2.1)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml (>= 3.2.5, < 4.0)
-      rubocop-ast (>= 1.23.0, < 2.0)
+      rubocop-ast (>= 1.24.1, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.24.0)
+    rubocop-ast (1.24.1)
       parser (>= 3.1.1.0)
     rubocop-performance (1.15.2)
       rubocop (>= 1.7.0, < 2.0)
@@ -584,4 +584,4 @@ DEPENDENCIES
   will_paginate
 
 BUNDLED WITH
-   2.3.26
+   2.4.1
