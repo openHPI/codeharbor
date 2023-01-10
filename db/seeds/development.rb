@@ -89,6 +89,7 @@ TaskFile.create!(
   visible: 'yes',
   usage_by_lms: 'edit',
   fileable: task1,
+  xml_id: '0',
   content: <<~JAVA)
     public class HelloWorld {
       public static void main (String[] args) {
@@ -113,6 +114,7 @@ TaskFile.create!(
   visible: 'no',
   usage_by_lms: 'display',
   fileable: task1_test1,
+  xml_id: '1',
   content: <<~JAVA)
     import org.junit.jupiter.api.*;
     import java.io.*;
@@ -162,6 +164,7 @@ TaskFile.create!(
   visible: 'delayed',
   usage_by_lms: 'display',
   fileable: task1_solution1,
+  xml_id: '2',
   content: <<~JAVA)
     public class HelloWorld {
       public static void main (String[] args) {
