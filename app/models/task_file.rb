@@ -7,7 +7,7 @@ class TaskFile < ApplicationRecord
   validates :name, presence: true
   validates :attachment, presence: true, if: -> { use_attached_file == 'true' }, on: :force_validations
   validates :xml_id, presence: true
-  validates :xml_id, uniqueness: {scope: %i[fileable_id fileable_type]}
+  validate :unique_xml_id, if: -> { !fileable.nil? }
 
   attr_accessor :use_attached_file, :file_marked_for_deletion
 
@@ -46,5 +46,11 @@ class TaskFile < ApplicationRecord
 
   def remove_attachment
     attachment.purge if use_attached_file != 'true' && attachment.present?
+  end
+
+  def unique_xml_id
+    task = fileable.is_a?(Task) ? fileable : fileable.task
+    xml_ids = (task.all_files - [self]).map(&:xml_id)
+    errors.add(:xml, I18n.t('task_files.xml_id_not_unique')) if xml_ids.include? xml_id
   end
 end
