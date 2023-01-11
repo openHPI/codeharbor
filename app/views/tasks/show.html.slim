@@ -19,7 +19,7 @@
             = t('exercises.rate')+ ' '
             span.caret
           .popup-rating
-            .rating
+            .rating data-task-id=@task.id
               - if @user_rating
                 - [*1..5].each do |i|
                   - if @user_rating >= i

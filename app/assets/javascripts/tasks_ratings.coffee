@@ -19,10 +19,11 @@ initializeRatings = ->
 
   $('.rating span').on 'click', ->
     rating = this.getAttribute("data-rating")
+    task_id = this.parentElement.getAttribute("data-task-id")
 
     $.ajax({
       type: "POST",
-      url: Routes.task_ratings_path(),
+      url: Routes.task_ratings_path(task_id),
       data: {rating: {rating: rating}, commit: "Save Rating"},
       dataType: 'json',
       success: (response) ->
