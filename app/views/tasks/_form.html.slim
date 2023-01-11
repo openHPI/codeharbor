@@ -85,7 +85,7 @@
         = t('tasks.files.label') + ' '
         span.fa.fa-caret-up
       .form-content
-        = render 'nested_file_form', f: f
+        = render 'nested_file_form', f: f, nested_form_placeholder: 'f-__nested_field_for_replace_with_index__'
         /.field-element
           = f.nested_fields_for :files, style: 'margin-left: 10px' do |file|
             .show-table.exercise-show

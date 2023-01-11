@@ -22,7 +22,7 @@
   / = test.fields_for :file do |file|
 .files-header
   = label_tag nil, t('tasks.files.label') + ':'
-= render 'nested_file_form', f: test
+= render 'nested_file_form', f: test, nested_form_placeholder: 't-__nested_field_for_replace_with_index__-__task_tests___nested_field_for_replace_with_index___files_index__'
 
 / .show-table.exercise-show
   = test.nested_fields_for :files, style: 'margin-left: 10px' do |file|

@@ -9,7 +9,7 @@
   = file.text_area :internal_description, class:'form-control'
 .field-element
   = file.label :xml_id, t('tasks.tests.xml_id'), class: 'form-label'
-  = file.text_field :xml_id, class: 'form-control', value: file.object.xml_id.presence || '__nested_field_for_replace_with_index__'
+  = file.text_field :xml_id, class: 'form-control', value: file.object.xml_id.presence || nested_form_placeholder
 
 .field-element
   = render 'file_config', file: file
