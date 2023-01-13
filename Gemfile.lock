@@ -12,7 +12,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    ace-rails-ap (4.4)
+    ace-rails-ap (4.5)
     actioncable (6.1.7)
       actionpack (= 6.1.7)
       activesupport (= 6.1.7)
