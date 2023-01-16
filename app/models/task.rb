@@ -85,6 +85,10 @@ class Task < ApplicationRecord
     (average_rating * 2).round / 2.0
   end
 
+  def all_files
+    (files + tests.map(&:files) + model_solutions.map(&:files)).flatten
+  end
+
   private
 
   def duplicate_tests

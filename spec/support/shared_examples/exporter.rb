@@ -32,23 +32,29 @@ RSpec.shared_examples 'zipped task node xml' do
   end
 
   it 'adds file node to files' do
-    expect(xml.xpath('/task/files/file')).to have_at_least(1).item
+    # Since model-solutions are optional since ProFormA v2.1,
+    # we no longer need to add a dummy file to the task.
+    expect(xml.xpath('/task/files/file')).to have_at_least(0).items
   end
 
   it 'adds model-solutions node' do
-    expect(xml.xpath('/task/model-solutions')).to have(1).item
+    # model-solutions are optional since ProFormA v2.1
+    expect(xml.xpath('/task/model-solutions')).to have(0).items
   end
 
   it 'adds model-solution node to model-solutions' do
-    expect(xml.xpath('/task/model-solutions/model-solution')).to have(1).item
+    # model-solutions are optional since ProFormA v2.1
+    expect(xml.xpath('/task/model-solutions/model-solution')).to have(0).items
   end
 
   it 'adds filerefs node to model-solution' do
-    expect(xml.xpath('/task/model-solutions/model-solution/filerefs')).to have(1).item
+    # model-solutions are optional since ProFormA v2.1
+    expect(xml.xpath('/task/model-solutions/model-solution/filerefs')).to have(0).items
   end
 
   it 'adds fileref node to filerefs' do
-    expect(xml.xpath('/task/model-solutions/model-solution/filerefs/fileref')).to have(1).item
+    # model-solutions are optional since ProFormA v2.1
+    expect(xml.xpath('/task/model-solutions/model-solution/filerefs/fileref')).to have(0).items
   end
 
   it 'adds tests node' do
@@ -66,7 +72,7 @@ RSpec.shared_examples 'task node with file' do
   end
 
   it 'adds id-attribute to file node' do
-    expect(xml.xpath("/task/files/file[@id!='ms-placeholder-file']").attribute('id').value).to eql file.id.to_s
+    expect(xml.xpath("/task/files/file[@id!='ms-placeholder-file']").attribute('id').value).to eql file.xml_id
   end
 
   it 'adds used-by-grader-attribute to file node' do

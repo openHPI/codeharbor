@@ -71,7 +71,7 @@ RSpec.describe Collection do
     it { is_expected.to validate_presence_of(:users) }
   end
 
-  xdescribe '#add_exercise' do
+  describe '#add_exercise', pending: 'collections are currently broken' do
     subject(:add_exercise) { collection.add_exercise(exercise) }
 
     let(:user) { create(:user) }
@@ -98,7 +98,7 @@ RSpec.describe Collection do
     end
   end
 
-  xdescribe '#remove_exercise' do
+  describe '#remove_exercise', pending: 'collections are currently broken' do
     subject(:remove_exercise) { collection.remove_exercise(exercise) }
 
     let(:user) { create(:user) }
@@ -116,7 +116,7 @@ RSpec.describe Collection do
     end
   end
 
-  xdescribe '#destroy' do
+  describe '#destroy', pending: 'collections are currently broken' do
     subject(:destroy) { collection.destroy }
 
     let(:user) { create(:user) }

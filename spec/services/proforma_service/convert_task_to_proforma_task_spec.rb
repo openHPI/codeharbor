@@ -88,7 +88,7 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
 
       it 'creates a task-file with the correct attributes' do
         expect(proforma_task.files.first).to have_attributes(
-          id: file.id,
+          id: file.xml_id,
           content: file.content,
           filename: file.full_file_name,
           used_by_grader: file.used_by_grader,
@@ -126,6 +126,14 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
           )
         end
       end
+
+      context 'when file has a xml_id' do
+        let(:file) { build(:task_file, xml_id: 42) }
+
+        it 'creates a task-file with the correct attribute' do
+          expect(proforma_task.files.first).to have_attributes(id: '42')
+        end
+      end
     end
 
     context 'when task has model solution' do
@@ -152,7 +160,7 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
 
         it 'creates a model-solution with one file with correct attributes' do
           expect(proforma_task.model_solutions.first.files.first).to have_attributes(
-            id: ms_file.id,
+            id: ms_file.xml_id,
             content: ms_file.content,
             filename: ms_file.full_file_name,
             used_by_grader: ms_file.used_by_grader,
@@ -202,7 +210,7 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
 
       it 'creates a test with one file with correct attributes' do
         expect(proforma_task.tests.first.files.first).to have_attributes(
-          id: test_file.id,
+          id: test_file.xml_id,
           content: test_file.content,
           filename: test_file.full_file_name,
           used_by_grader: test_file.used_by_grader,

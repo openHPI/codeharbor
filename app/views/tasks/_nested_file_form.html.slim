@@ -17,7 +17,7 @@
             i.fa.fa-remove style=("color: #800000")
             = ' ' + t('tasks.form.files.remove')
       .file-container style="margin-left: 10px; #{display_container}"
-        = render 'file_form', f: f, file: file
+        = render 'file_form', f: f, file: file, nested_form_placeholder: nested_form_placeholder
   = f.add_nested_fields_link :files, ' ', class:'btn btn-main', id: 'addFileButton' do
     i.fa.fa-plus style=("color: #008000")
     = ' ' + t('tasks.form.files.add')

@@ -9,7 +9,7 @@
   = model_solution.text_field :xml_id, class: 'form-control', value: model_solution.object.xml_id.presence || '__nested_field_for_replace_with_index__'
 .files-header
   = label_tag nil, t('tasks.files.label') + ':'
-= render 'nested_file_form', f: model_solution
+= render 'nested_file_form', f: model_solution, nested_form_placeholder: 'ms-__nested_field_for_replace_with_index__-__task_model_solutions___nested_field_for_replace_with_index___files_index__'
 
 / .show-table.exercise-show
   = test.nested_fields_for :files, style: 'margin-left: 10px' do |file|

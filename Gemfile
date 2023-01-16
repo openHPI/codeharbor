@@ -27,6 +27,8 @@ gem 'coffee-rails', '>= 5.0.0'
 
 # Use puma instead of WEBrick
 gem 'puma'
+# Watchdog service monitoring for systemd, automatically used by Puma if this gem is installed
+gem 'sd_notify'
 # Use simple_form
 gem 'simple_form', '>= 5.0.1'
 # Use jquery as the JavaScript library
@@ -69,11 +71,11 @@ gem 'net-imap', require: false
 gem 'net-pop', require: false
 gem 'net-smtp', require: false
 gem 'nokogiri'
-gem 'proforma', git: 'https://github.com/openHPI/proforma.git', tag: 'v0.7.1'
+gem 'proforma', git: 'https://github.com/openHPI/proforma.git', tag: 'v0.8'
 gem 'rails_admin', '~> 3.1'
 gem 'ransack'
 gem 'select2-rails', '~> 4.0'
-gem 'sprockets', '~> 4.1.1'
+gem 'sprockets', '~> 4.2.0'
 
 # Error Tracing
 gem 'concurrent-ruby'

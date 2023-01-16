@@ -52,8 +52,41 @@ RSpec.describe TaskFile do
   end
 
   describe '#valid?' do
+    subject { build(:task_file, :with_task) }
+
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to belong_to(:fileable) }
+    it { is_expected.to validate_presence_of(:xml_id) }
+
+    context 'with task which has another file with the same xml_id' do
+      subject(:file) { task.files.first }
+
+      let(:task) { build(:task, files: [build(:task_file, xml_id: '1'), build(:task_file, xml_id: '1')]) }
+
+      it 'has correct error' do
+        file.validate
+        expect(file.errors.full_messages).to include "Xml #{I18n.t('task_files.xml_id_not_unique')}"
+      end
+    end
+
+    context 'with task which has a test with another file with the same xml_id' do
+      subject(:file) { task.files.first }
+
+      let(:task) { build(:task, files: [build(:task_file, xml_id: '1')], tests: [build(:test, files: [build(:task_file, xml_id: '1')])]) }
+
+      it 'has correct error' do
+        file.validate
+        expect(file.errors.full_messages).to include "Xml #{I18n.t('task_files.xml_id_not_unique')}"
+      end
+    end
+
+    context 'with task which has a test with another file with the another xml_id' do
+      subject(:file) { task.files.first }
+
+      let(:task) { build(:task, files: [build(:task_file, xml_id: '1')], tests: [build(:test, files: [build(:task_file, xml_id: '2')])]) }
+
+      it { is_expected.to be_valid }
+    end
 
     context 'when use_attached_file is true' do
       subject { build(:task_file, :with_attachment, use_attached_file: 'true') }

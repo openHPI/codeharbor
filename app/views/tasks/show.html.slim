@@ -19,7 +19,7 @@
             = t('exercises.rate')+ ' '
             span.caret
           .popup-rating
-            .rating
+            .rating data-task-id=@task.id
               - if @user_rating
                 - [*1..5].each do |i|
                   - if @user_rating >= i
@@ -216,13 +216,12 @@ legend.toggle-next
             | :
           .row-value
             = file.internal_description
-        - if @task.meta_data.present? && file.xml_id.present?
-          .row
-            .row-label
-              = t('tasks.files.xml_id')
-              | :
-            .row-value
-              = file.xml_id
+        .row
+          .row-label
+            = t('tasks.files.xml_id')
+            | :
+          .row-value
+            = file.xml_id
 
         - if !file.attachment.present?
           .row
@@ -363,7 +362,12 @@ legend.toggle-next
                     | :
                   .row-value
                     = file.internal_description
-
+                .row
+                  .row-label
+                    = t('tasks.files.xml_id')
+                    | :
+                  .row-value
+                    = file.xml_id
                 - if !file.attachment.present?
                   .row
                     .editor.readonly data-file-name="#{file.name}"
@@ -461,7 +465,12 @@ legend.toggle-next
                     | :
                   .row-value
                     = file.internal_description
-
+                .row
+                  .row-label
+                    = t('tasks.files.xml_id')
+                    | :
+                  .row-value
+                    = file.xml_id
                 - if !file.attachment.present?
                   .row
                     .editor.readonly data-file-name="#{file.name}"
