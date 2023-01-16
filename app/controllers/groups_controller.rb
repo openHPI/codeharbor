@@ -23,31 +23,27 @@ class GroupsController < ApplicationController
   def edit; end
 
   def create
-    respond_to do |format|
-      @group = Group.create_with_admin(group_params, current_user)
-      if @group&.persisted?
-        format.html { redirect_to @group, notice: t('controllers.group.created') }
+      @group = Group.new(group_params)
+      @group.group_memberships << GroupMembership.new(user: current_user, role: :admin)
+      if @group.save
+         redirect_to @group, notice: t('controllers.group.created')
       else
-        format.html { render :new }
+         render :new
       end
-    end
   end
 
   def update
-    respond_to do |format|
       if @group.update(group_params)
-        format.html { redirect_to @group, notice: t('controllers.group.updated') }
+         redirect_to @group, notice: t('controllers.group.updated')
       else
-        format.html { render :edit }
+         render :edit
       end
     end
   end
 
   def destroy
     @group.destroy
-    respond_to do |format|
-      format.html { redirect_to groups_url, notice: t('controllers.group.destroyed') }
-    end
+       redirect_to groups_url, notice: t('controllers.group.destroyed')
   end
 
   def leave

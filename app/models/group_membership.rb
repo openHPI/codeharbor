@@ -1,24 +1,10 @@
 # frozen_string_literal: true
 
 class GroupMembership < ApplicationRecord
-  belongs_to :member, polymorphic: true
+  belongs_to :user
   belongs_to :group
 
-  validate :membership_unique
-  scope :similars, lambda { |membership|
-    where(membership.attributes.select { |key| key.in? %w[member_id member_type group_type group_id] })
-      .where.not(id: membership.id)
-  }
+  validates :user, uniqueness: {scope: :group}
 
-
-  private
-
-  def membership_unique
-    similar_memberships = GroupMembership.unscoped.similars(self).filter do |gm|
-      membership_type.nil? ? gm.membership_type.nil? : !gm.membership_type.nil?
-    end
-    return unless similar_memberships.any?
-
-    errors.add(:base, I18n.t('group_memberships.duplicate_validation_error'))
-  end
+  enum role: [:applicant, :member, :admin]
 end
