@@ -1,96 +1,29 @@
 require:
-  - rubocop-rspec
+  - rubocop-capybara
+  - rubocop-performance
   - rubocop-rails
+  - rubocop-rspec
+
+inherit_from:
+  - .rubocop/layout.yml
+  - .rubocop/lint.yml
+  - .rubocop/metrics.yml
+  - .rubocop/rails.yml
+  - .rubocop/rspec.yml
+  - .rubocop/style.yml
+  - .rubocop_todo.yml
 
 AllCops:
-  NewCops: enable
   TargetRubyVersion: 3.2
   TargetRailsVersion: 6.1
+  UseCache: True
+  NewCops: enable
   Exclude:
-    - bin/*
-    - db/migrate/**/*
-    - db/schema.rb
-    - test/**/*
-    - tmp/**/*
-    - views/**/*
-    - vendor/**/*
-
-Metrics/BlockLength:
-  Exclude:
-    - spec/**/*
-    - config/routes.rb
-    - Guardfile
-    - config/environments/*
-    - config/initializers/rails_admin.rb
-
-Metrics/ClassLength:
-  Max: 150
-  Exclude:
-    - app/controllers/tasks_controller.rb
-
-Metrics/MethodLength:
-  Max: 20
-
-Layout/LineLength:
-  Max: 140
-
-Layout/SpaceInsideHashLiteralBraces:
-  EnforcedStyle: no_space
-
-Lint/EmptyBlock:
-  Exclude:
-    - 'spec/**/*'
-
-Lint/MissingSuper:
-  Exclude:
-    - 'app/services/**/*'
-
-Lint/RaiseException:
-  Enabled: true
-
-Lint/StructNewOverride:
-  Enabled: true
-
-Rails/ActiveRecordAliases:
-  Exclude:
-    - 'spec/**/*'
-
-Rails/HelperInstanceVariable:
-  Exclude:
-    - app/helpers/will_paginate_helper.rb
-
-Rails/I18nLazyLookup:
-  Enabled: false
-
-Rails/OutputSafety:
-  Exclude:
-    - app/helpers/will_paginate_helper.rb
-
-Rails/UniqueValidationWithoutIndex:
-  Enabled:
-    false
-
-RSpec/DescribeClass:
-  Exclude:
-    - spec/custom_matchers/*
-
-RSpec/ExampleLength:
-  Enabled:
-    false
-
-RSpec/MultipleExpectations:
-  Enabled:
-    false
-
-RSpec/NestedGroups:
-  Max: 5
-
-RSpec/MultipleMemoizedHelpers:
-  Enabled: false
-
-RSpec/EmptyExampleGroup:
-  Exclude:
-    - spec/models/file_type_spec.rb
-
-Style/Documentation:
-  Enabled: false
+    - 'bin/*'
+    - 'db/schema.rb'
+    - 'vendor/**/*'
+    # Ignore local files for faster processing
+    - 'tmp/**/*'
+    - 'out/**/*'
+    - 'node_modules/**/*'
+    - 'coverage/**/*'

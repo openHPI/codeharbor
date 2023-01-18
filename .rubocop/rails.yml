@@ -1,0 +1,21 @@
+# rails cop settings
+
+Rails:
+  Enabled: true
+
+#
+# False positives:
+#   * On embedded models in migrations.
+#
+Rails/ApplicationRecord:
+  Exclude:
+    - "db/**/*"
+
+Rails/UnknownEnv:
+  Environments:
+    - development
+    - production
+    - test
+
+Rails/I18nLazyLookup:
+  Enabled: false
