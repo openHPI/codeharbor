@@ -61,7 +61,7 @@ en:
       remove_all_success: 'All Exercises were successfully removed'
       remove_all_fail: 'You cannot remove all exercises'
       share:
-        text: "%{user} sent you his Collection %{collection}."
+        text: "%{user} sent you their Collection %{collection}."
         notice: "Your collection has been sent."
         alert: "Something went wrong."
       save_shared:
@@ -95,9 +95,9 @@ en:
       download_error: "An error occurred. Please contact an admin!"
       contribute: "%{user} wants to contribute to your Exercise %{exercise}."
       contribute_notice: "Your access request has been sent."
-      add_author_text: "%{user} made you co-author of his exercise: %{exercise}."
+      add_author_text: "%{user} made you co-author of their exercise: %{exercise}."
       add_author_notice: "User was added as co-author."
-      decline_author_text: "%{user} declined your contribution request to his exercise: %{exercise}."
+      decline_author_text: "%{user} declined your contribution request to their exercise: %{exercise}."
       decline_author_notice: "Users contribution request was declined."
       report_alert: "You already reported this exercise."
       report_notice: "You successfully reported this exercise."
@@ -134,10 +134,10 @@ en:
         notice: "Your Access request has been sent."
         text: "%{user} wants to access your group: %{group}."
       grant_access:
-        text: "%{user} accepted you to his group: %{group}."
+        text: "%{user} accepted you to their group: %{group}."
         notice: "Access granted."
       deny_access:
-        text: "%{user} did not accept you to his group: %{group}."
+        text: "%{user} did not accept you to their group: %{group}."
         notice: "User declined."
       remove_task_notice: "Task successfully removed"
       delete_from_group_notice: "User deleted from group."
@@ -438,7 +438,7 @@ en:
         show: "Show"
         edit: "Edit"
         destroy: "Destroy"
-        delete: "Delete"
+        remove: "Remove"
         back: "Back"
         save: "Save Group"
         leave: "Leave Group"
@@ -446,6 +446,7 @@ en:
         grant: "Grant Access"
         deny: "Deny Access"
         make_admin: "Make Admin"
+        delete_group: "Delete group"
 
       edit:
         header: "Editing"
@@ -456,7 +457,7 @@ en:
         admins: "Admins"
         users: "Users"
         pending: "Pending users"
-        exercises: "Exercises"
+        tasks: "Tasks"
         add_account_link_user: Share Account Link with %{user}
         remove_account_link_user: Remove shared Account Link for %{user}
       admin:

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_16_201724) do
+ActiveRecord::Schema.define(version: 2023_01_18_195657) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -99,6 +99,15 @@ ActiveRecord::Schema.define(version: 2023_01_16_201724) do
     t.datetime "updated_at"
     t.index ["group_id"], name: "index_group_memberships_on_group_id"
     t.index ["user_id"], name: "index_group_memberships_on_user_id"
+  end
+
+  create_table "group_tasks", id: :serial, force: :cascade do |t|
+    t.bigint "task_id", null: false
+    t.bigint "group_id", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["group_id"], name: "index_group_tasks_on_group_id"
+    t.index ["task_id"], name: "index_group_tasks_on_task_id"
   end
 
   create_table "groups", id: :serial, force: :cascade do |t|
@@ -309,6 +318,8 @@ ActiveRecord::Schema.define(version: 2023_01_16_201724) do
   add_foreign_key "comments", "users"
   add_foreign_key "group_memberships", "groups"
   add_foreign_key "group_memberships", "users"
+  add_foreign_key "group_tasks", "groups"
+  add_foreign_key "group_tasks", "tasks"
   add_foreign_key "model_solutions", "tasks"
   add_foreign_key "ratings", "tasks"
   add_foreign_key "ratings", "users"

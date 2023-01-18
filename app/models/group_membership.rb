@@ -6,5 +6,5 @@ class GroupMembership < ApplicationRecord
 
   validates :user, uniqueness: {scope: :group}
 
-  enum role: [:applicant, :member, :admin]
+  enum role: {applicant: 0, member: 1, admin: 2}
 end

@@ -23,27 +23,26 @@ class GroupsController < ApplicationController
   def edit; end
 
   def create
-      @group = Group.new(group_params)
-      @group.group_memberships << GroupMembership.new(user: current_user, role: :admin)
-      if @group.save
-         redirect_to @group, notice: t('controllers.group.created')
-      else
-         render :new
-      end
+    @group = Group.new(group_params)
+    @group.group_memberships << GroupMembership.new(user: current_user, role: :admin)
+    if @group.save
+      redirect_to @group, notice: t('controllers.group.created')
+    else
+      render :new
+    end
   end
 
   def update
-      if @group.update(group_params)
-         redirect_to @group, notice: t('controllers.group.updated')
-      else
-         render :edit
-      end
+    if @group.update(group_params)
+      redirect_to @group, notice: t('controllers.group.updated')
+    else
+      render :edit
     end
   end
 
   def destroy
     @group.destroy
-       redirect_to groups_url, notice: t('controllers.group.destroyed')
+    redirect_to groups_url, notice: t('controllers.group.destroyed')
   end
 
   def leave
@@ -66,9 +65,9 @@ class GroupsController < ApplicationController
     redirect_to groups_path
   end
 
-  def remove_exercise
-    exercise = Task.find(params[:exercise])
-    @group.tasks.delete(exercise)
+  def remove_task
+    task = Task.find(params[:task])
+    @group.tasks.delete(task)
     redirect_to @group, notice: t('controllers.group.remove_task_notice')
   end
 

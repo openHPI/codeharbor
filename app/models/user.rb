@@ -22,8 +22,8 @@ class User < ApplicationRecord
   has_many :collection_users, dependent: :destroy
   has_many :collections, through: :collection_users
 
-  has_many :group_memberships, as: :member, dependent: :destroy
-  has_many :groups, through: :group_memberships, as: :member
+  has_many :group_memberships, dependent: :destroy
+  has_many :groups, through: :group_memberships
 
   has_many :account_link_users, dependent: :destroy
   has_many :shared_account_links, through: :account_link_users, dependent: :destroy, source: :account_link

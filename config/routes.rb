@@ -55,7 +55,7 @@ Rails.application.routes.draw do
       post :request_access
 
       patch :delete_from_group
-      patch :remove_exercise
+      patch :remove_task
     end
   end
 

@@ -13,7 +13,7 @@
         .table-list
           = admin.email
           = ' '
-          - unless admin == current_user
+          /- unless admin == current_user
             .btn-group.pull-right
               .dropdown.btn-group
                 = button_tag class: 'btn btn-default btn-xs dropdown-toggle', data: {toggle: 'dropdown'} do
@@ -28,12 +28,12 @@
     .row-label = t('groups.show.users')
 
     .row-value
-      - @group.members.each do |member|
+      - (@group.admins + @group.confirmed_members).each do |member|
         .table-list
           = member.email
           = ' '
           - if can? :view, @group
-            .btn-group.pull-right
+            /.btn-group.pull-right
               .dropdown.btn-group
                 = button_tag class: 'btn btn-default btn-xs dropdown-toggle', data: {toggle: 'dropdown'} do
                   = t('groups.manage_shared_account_links') + ' '
@@ -43,16 +43,17 @@
                     li
                       = render partial: 'share_account_link_button', locals: {shared_user: member, account_link: account_link}
             - if can? :edit, @group
-              = link_to make_admin_group_path(group: @group, user: member), method: :post, class: 'btn btn-default btn-xs' do
-                i.fa.fa-plus style=("color:#008000")
-                = ' ' + t('groups.button.make_admin')
+              - if @group.group_membership_for(member).member?
+                = link_to make_admin_group_path(group: @group, user: member), method: :post, class: 'btn btn-default btn-xs' do
+                  i.fa.fa-plus style=("color:#008000")
+                  = ' ' + t('groups.button.make_admin')
               = link_to delete_from_group_group_path(group: @group, user: member), method: :patch, class: 'btn btn-default btn-xs' do
                 i.fa.fa-remove style=("color:#800000")
-                = ' ' + t('groups.button.delete')
+                = ' ' + t('groups.button.remove')
 
 
 
-  - if @group.admin?(current_user)
+  - if can? :grant_acess, @group
     .row.vertical
       .row-label = t('groups.show.pending')
       .row-value
@@ -68,13 +69,13 @@
                 i.fa.fa-remove style=("color:#800000")
                 = ' ' + t('message.index.deny_access')
   .row.vertical
-    .row-label = t('groups.show.exercises')
+    .row-label = t('groups.show.tasks')
     .row-value
-      - @group.tasks.each do |exercise|
+      - @group.tasks.each do |task|
         .table-list
           .btn-group
-            = link_to exercise.title, task_path(exercise), class: 'btn btn-default', style: "border-right: none"
-            = link_to remove_exercise_group_path(exercise: exercise), method: :patch, class: 'btn btn-default', style: "border-left: none; margin-right: 5px;"  do
+            = link_to task.title, task_path(task), class: 'btn btn-default', style: "border-right: none"
+            = link_to remove_task_group_path(task: task), method: :patch, class: 'btn btn-default', style: "border-left: none; margin-right: 5px;"  do
               i.fa.fa-remove style=("color:gray;")
 
 br
@@ -87,7 +88,7 @@ br
       = ' ' + t('groups.button.edit')
     = link_to group_path(@group), class: 'btn btn-important', method: :delete, data: {confirm: 'Are you sure?'} do
       i.fa.fa-trash style=("color:#800000")
-      = ' ' + t('groups.button.delete')
+      = ' ' + t('groups.button.delete_group')
   - if can? :leave, @group
     = link_to t('groups.button.leave'), leave_group_path(@group), method: :post, class: "leave-btn btn btn-important #{@group.last_admin?(current_user) ? 'disabled' : ''}", data: {confirm: 'Are you sure?'}
   = link_to t('groups.button.back'), :back, class: 'btn btn-important'

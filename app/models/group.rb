@@ -4,25 +4,14 @@ class Group < ApplicationRecord
   has_many :group_memberships, dependent: :destroy
   has_many :users, through: :group_memberships
 
-  has_many :tasks
+  has_many :group_tasks, dependent: :destroy
+  has_many :tasks, through: :group_tasks
 
   validates :name, presence: true
-  # validate :admin_in_group
-  enum membership_type: [:admin, :user]
-  # def self.create_with_admin(params, user)
-  #   group = Group.new(params)
-  #   return group unless user
-  #
-  #   ActiveRecord::Base.transaction do
-  #     group.save(validate: false)
-  #     group.make_admin(user)
-  #     raise ActiveRecord::Rollback unless group.valid?
-  #   end
-  #   group
-  # end
+  validate :admin_in_group
 
   def group_membership_for(user)
-    group_memberships.where(user: user).first
+    group_memberships.where(user:).first
   end
 
   def admin?(user)
@@ -30,7 +19,7 @@ class Group < ApplicationRecord
   end
 
   def confirmed_member?(user)
-    confirmed_members.map(&:user).include? user
+    confirmed_members.include? user
   end
 
   def member?(user)
@@ -46,7 +35,7 @@ class Group < ApplicationRecord
   end
 
   def add_pending_user(user)
-    group_memberships << GroupMembership.new(user: user)
+    group_memberships << GroupMembership.new(user:)
   end
 
   def admins
@@ -54,15 +43,15 @@ class Group < ApplicationRecord
   end
 
   def confirmed_members
-    group_memberships.admin.map(&:member)
+    group_memberships.member.map(&:user)
   end
 
   def members
-    group_memberships.map(&:member)
+    group_memberships.map(&:user)
   end
 
   def pending_users
-    group_memberships.applicant.map(&:member)
+    group_memberships.applicant.map(&:user)
   end
 
   def remove_member(user)
