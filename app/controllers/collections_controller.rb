@@ -9,9 +9,9 @@ class CollectionsController < ApplicationController
 
   def index
     @collections = Collection.includes(:collection_users)
-                             .where(collection_users: {user: current_user})
-                             .distinct
-                             .paginate(per_page: 5, page: params[:page])
+      .where(collection_users: {user: current_user})
+      .distinct
+      .paginate(per_page: 5, page: params[:page])
   end
 
   def show; end
@@ -70,7 +70,7 @@ class CollectionsController < ApplicationController
 
   def download_all
     binary_zip_data = ProformaService::ExportTasks.call(exercises: @collection.tasks)
-    @collection.tasks.each { |exercise| exercise.update(downloads: exercise.downloads + 1) }
+    @collection.tasks.each {|exercise| exercise.update(downloads: exercise.downloads + 1) }
 
     send_data(binary_zip_data.string, type: 'application/zip', filename: "#{@collection.title}.zip", disposition: 'attachment')
   end

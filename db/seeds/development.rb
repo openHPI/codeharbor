@@ -197,7 +197,7 @@ collection.save!
 group = Group.create_with_admin(
   {
     name: 'openHPI Teachers',
-    description: 'All teachers from openHPI programming courses.'
+    description: 'All teachers from openHPI programming courses.',
   },
   user1
 )

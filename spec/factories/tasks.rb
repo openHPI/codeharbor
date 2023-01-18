@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :task do
-    sequence(:title) { |n| "Test Exercise #{n}" }
+    sequence(:title) {|n| "Test Exercise #{n}" }
     description { 'description' }
     user { build(:user) }
     uuid { SecureRandom.uuid }

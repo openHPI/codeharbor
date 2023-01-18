@@ -26,14 +26,14 @@ describe ProformaService::Import do
     let(:zip_file) { Tempfile.new('proforma_test_zip_file', encoding: 'ascii-8bit') }
     let(:task) do
       create(:task,
-             :with_content,
-             programming_language:,
-             meta_data:,
-             files:,
-             tests:,
-             model_solutions:,
-             uuid:,
-             user:)
+        :with_content,
+        programming_language:,
+        meta_data:,
+        files:,
+        tests:,
+        model_solutions:,
+        uuid:,
+        user:)
     end
 
     let(:uuid) {}
@@ -150,10 +150,10 @@ describe ProformaService::Import do
 
       let(:task2) do
         create(:task,
-               programming_language:,
-               files: [],
-               tests: [],
-               user:)
+          programming_language:,
+          files: [],
+          tests: [],
+          user:)
       end
 
       it 'imports the tasks from zip containing multiple zips' do

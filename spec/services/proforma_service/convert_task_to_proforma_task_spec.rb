@@ -24,14 +24,14 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
     let(:convert_to_proforma_task) { described_class.new(task:) }
     let(:task) do
       create(:task,
-             uuid: SecureRandom.uuid,
-             parent_uuid: SecureRandom.uuid,
-             meta_data:,
-             files:,
-             tests:,
-             model_solutions:,
-             programming_language: build(:programming_language),
-             description:)
+        uuid: SecureRandom.uuid,
+        parent_uuid: SecureRandom.uuid,
+        meta_data:,
+        files:,
+        tests:,
+        model_solutions:,
+        programming_language: build(:programming_language),
+        description:)
     end
     let(:description) { 'description' }
     let(:meta_data) {}
@@ -46,7 +46,7 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
         internal_description: task.internal_description,
         proglang: {
           name: task.programming_language.language,
-          version: task.programming_language.version
+          version: task.programming_language.version,
         },
         uuid: task.uuid,
         language: task.language,

@@ -3,6 +3,7 @@
 module TaskService
   class CheckExternal < ServiceBase
     def initialize(uuid:, account_link:)
+      super()
       @uuid = uuid
       @account_link = account_link
     end

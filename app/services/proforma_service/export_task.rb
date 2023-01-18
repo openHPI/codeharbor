@@ -3,6 +3,7 @@
 module ProformaService
   class ExportTask < ServiceBase
     def initialize(task: nil, options: {})
+      super()
       @task = task
       @options = options
     end

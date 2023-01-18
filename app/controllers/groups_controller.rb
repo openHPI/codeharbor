@@ -106,28 +106,28 @@ class GroupsController < ApplicationController
 
   def send_access_request_message(admin, group)
     Message.create(sender: current_user,
-                   recipient: admin,
-                   text: t('controllers.group.request_access.text', user: current_user.name, group: group.name),
-                   param_type: 'group',
-                   param_id: group.id,
-                   sender_status: 'd')
+      recipient: admin,
+      text: t('controllers.group.request_access.text', user: current_user.name, group: group.name),
+      param_type: 'group',
+      param_id: group.id,
+      sender_status: 'd')
   end
 
   def send_deny_access_message(user, group)
     Message.create(sender: current_user,
-                   recipient: user,
-                   text: t('controllers.group.deny_access.text', user: current_user.name, group: group.name),
-                   param_type: 'group_declined',
-                   sender_status: 'd')
+      recipient: user,
+      text: t('controllers.group.deny_access.text', user: current_user.name, group: group.name),
+      param_type: 'group_declined',
+      sender_status: 'd')
   end
 
   def send_grant_access_messages(user, group)
     Message.create(sender: current_user,
-                   recipient: user,
-                   text: t('controllers.group.grant_access.text', user: current_user.name, group: group.name),
-                   param_type: 'group_accepted',
-                   param_id: group.id,
-                   sender_status: 'd')
+      recipient: user,
+      text: t('controllers.group.grant_access.text', user: current_user.name, group: group.name),
+      param_type: 'group_accepted',
+      param_id: group.id,
+      sender_status: 'd')
   end
 
   # Use callbacks to share common setup or constraints between actions.

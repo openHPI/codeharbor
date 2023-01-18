@@ -69,7 +69,7 @@ RSpec.describe ProformaService::ConvertZipToProformaTasks do
         expect(convert_zip_to_tasks).to match_array [
           {path: 'testfile_multi.zip/task_24-short_hello_world.zip', uuid: 'uuid', task:},
           {path: 'testfile_multi.zip/task_1-haha_world__123456.zip', uuid: 'uuid', task:},
-          {path: 'testfile_multi.zip/task_2-hallo_welt.zip', uuid: 'uuid', task:}
+          {path: 'testfile_multi.zip/task_2-hallo_welt.zip', uuid: 'uuid', task:},
         ]
       end
     end

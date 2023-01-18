@@ -261,7 +261,7 @@ RSpec.describe CollectionsController do
     context 'when user has been invited' do
       let(:send_invitation) do
         create(:message, sender: collection.users.first, recipient: user, param_type: 'collection', param_id: collection.id,
-                         text: 'Invitation')
+          text: 'Invitation')
       end
 
       it 'increases usercount of collection' do

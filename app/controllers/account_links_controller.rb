@@ -71,7 +71,7 @@ class AccountLinksController < ApplicationController
 
   def render_shared_user_json
     render json: {button: render_to_string(partial: 'groups/share_account_link_button',
-                                           locals: {shared_user: @shared_user, account_link: @account_link})}
+      locals: {shared_user: @shared_user, account_link: @account_link})}
   end
 
   # Use callbacks to share common setup or constraints between actions.

@@ -5,21 +5,21 @@ require 'rails_helper'
 RSpec.describe 'equal_task matcher' do
   let(:task) do
     build(:task,
-          :with_content,
-          programming_language:,
-          files:,
-          tests:,
-          model_solutions:,
-          uuid: SecureRandom.uuid)
+      :with_content,
+      programming_language:,
+      files:,
+      tests:,
+      model_solutions:,
+      uuid: SecureRandom.uuid)
   end
   let(:task2) do
     build(:task,
-          :with_content,
-          programming_language:,
-          files: files2,
-          tests: tests2,
-          model_solutions: model_solutions2,
-          uuid: SecureRandom.uuid)
+      :with_content,
+      programming_language:,
+      files: files2,
+      tests: tests2,
+      model_solutions: model_solutions2,
+      uuid: SecureRandom.uuid)
   end
 
   let(:uuid) {}

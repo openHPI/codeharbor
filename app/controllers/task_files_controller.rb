@@ -15,7 +15,7 @@ class TaskFilesController < ApplicationController
     return render json: {error: I18n.t('controllers.task_file.extract_text_data.no_text')} unless @task_file.text_data?
 
     render json: {
-      text_data: @task_file.extract_text_data
+      text_data: @task_file.extract_text_data,
     }
   end
 end

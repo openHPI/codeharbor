@@ -3,6 +3,7 @@
 module ProformaService
   class ConvertProformaTaskToTask < ServiceBase
     def initialize(proforma_task:, user:, task: nil)
+      super()
       @proforma_task = proforma_task
       @user = user
       @task = task || Task.new
@@ -38,7 +39,7 @@ module ProformaService
     end
 
     def files
-      @files ||= @proforma_task.all_files.reject { |file| file.id == 'ms-placeholder-file' }.to_h do |task_file|
+      @files ||= @proforma_task.all_files.reject {|file| file.id == 'ms-placeholder-file' }.to_h do |task_file|
         [task_file.id, file_from_proforma_file(task_file)]
       end
     end
@@ -47,7 +48,7 @@ module ProformaService
       task_file = TaskFile.new(file_attributes(proforma_task_file))
       if proforma_task_file.binary
         task_file.attachment.attach(io: StringIO.new(proforma_task_file.content), filename: proforma_task_file.filename,
-                                    content_type: proforma_task_file.mimetype)
+          content_type: proforma_task_file.mimetype)
         task_file.use_attached_file = 'true'
       else
         task_file.content = proforma_task_file.content
@@ -63,7 +64,7 @@ module ProformaService
         visible: proforma_task_file.visible,
         usage_by_lms: proforma_task_file.usage_by_lms,
         mime_type: proforma_task_file.mimetype,
-        xml_id: proforma_task_file.id
+        xml_id: proforma_task_file.id,
       }
     end
 
@@ -82,7 +83,7 @@ module ProformaService
     end
 
     def object_files(object)
-      object.files.map { |file| files.delete(file.id) }
+      object.files.map {|file| files.delete(file.id) }
     end
 
     def programming_language

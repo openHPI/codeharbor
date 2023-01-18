@@ -4,8 +4,8 @@ class GroupMembership < ApplicationRecord
   groupify :group_membership
 
   validate :membership_unique
-  scope :similars, lambda { |membership|
-    where(membership.attributes.select { |key| key.in? %w[member_id member_type group_type group_id] })
+  scope :similars, lambda {|membership|
+    where(membership.attributes.select {|key| key.in? %w[member_id member_type group_type group_id] })
       .where.not(id: membership.id)
   }
 

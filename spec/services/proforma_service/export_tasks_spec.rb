@@ -32,7 +32,7 @@ describe ProformaService::ExportTasks do
     end
     let(:doc) { Nokogiri::XML(zip_files['task.xml'], &:noblanks) }
     let(:xml) { doc.remove_namespaces! }
-    let(:imported_tasks) { zip_files.transform_values! { |zip_file| ProformaService::Import.call(zip: zip_file, user:) } }
+    let(:imported_tasks) { zip_files.transform_values! {|zip_file| ProformaService::Import.call(zip: zip_file, user:) } }
 
     it 'creates a zip-file with two files' do
       expect(zip_files.count).to be 2
@@ -47,7 +47,7 @@ describe ProformaService::ExportTasks do
     end
 
     it 'names the zipped files correctly' do
-      expect(zip_files.keys).to match_array(tasks.map { |e| "task_#{e.id}-#{e.title.underscore.gsub(/[^0-9A-Za-z.-]/, '_')}.zip" })
+      expect(zip_files.keys).to match_array(tasks.map {|e| "task_#{e.id}-#{e.title.underscore.gsub(/[^0-9A-Za-z.-]/, '_')}.zip" })
     end
 
     context 'when 10 tasks are supplied' do

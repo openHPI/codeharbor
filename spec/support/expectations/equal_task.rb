@@ -36,7 +36,7 @@ RSpec::Matchers.define :be_an_equal_task_as do |task2|
     other_clone = other.to_a.clone
     object.each do |element|
       object_index = object_clone.index(element)
-      other_index = other_clone.index { |delete_element| equal?(element, delete_element) }
+      other_index = other_clone.index {|delete_element| equal?(element, delete_element) }
       return false if other_index.nil?
 
       object_clone.delete_at(object_index)

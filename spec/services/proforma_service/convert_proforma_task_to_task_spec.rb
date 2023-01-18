@@ -216,12 +216,12 @@ describe ProformaService::ConvertProformaTaskToTask do
           internal_description: model_solution.internal_description,
           xml_id: model_solution.id,
           files: have_exactly(1).item.and(all(have_attributes(
-                                                content: ms_file.content,
-                                                name: ms_file.filename,
-                                                used_by_grader: ms_file.used_by_grader,
-                                                visible: ms_file.visible,
-                                                usage_by_lms: ms_file.usage_by_lms
-                                              )))
+            content: ms_file.content,
+            name: ms_file.filename,
+            used_by_grader: ms_file.used_by_grader,
+            visible: ms_file.visible,
+            usage_by_lms: ms_file.usage_by_lms
+          )))
         )
       end
 
@@ -284,13 +284,13 @@ describe ProformaService::ConvertProformaTaskToTask do
           internal_description: test.internal_description,
           xml_id: test.id,
           files: all(have_attributes(
-                       content: test_file.content,
-                       internal_description: test_file.internal_description,
-                       name: test_file.filename,
-                       used_by_grader: test_file.used_by_grader,
-                       visible: test_file.visible,
-                       usage_by_lms: test_file.usage_by_lms
-                     ))
+            content: test_file.content,
+            internal_description: test_file.internal_description,
+            name: test_file.filename,
+            used_by_grader: test_file.used_by_grader,
+            visible: test_file.visible,
+            usage_by_lms: test_file.usage_by_lms
+          ))
         )
       end
 
@@ -459,7 +459,7 @@ describe ProformaService::ConvertProformaTaskToTask do
             files: have(1).item.and(include(have_attributes(content: 'content'))),
             model_solutions: have(1).item
               .and(include(have_attributes(description: model_solution.description,
-                                           files: include(have_attributes(content: ms_file.content))))),
+                files: include(have_attributes(content: ms_file.content))))),
             tests: have(1).item
               .and(include(have_attributes(title: test.title, files: include(have_attributes(content: test_file.content)))))
           )

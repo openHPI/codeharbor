@@ -182,7 +182,7 @@ RSpec.describe Task do
     it 'creates new model_solutions with the same attributes' do
       expect(duplicate.model_solutions).to match_array(task.model_solutions.map do |file|
                                                          have_attributes(file.attributes.except('created_at', 'updated_at', 'id',
-                                                                                                'task_id'))
+                                                           'task_id'))
                                                        end)
     end
   end

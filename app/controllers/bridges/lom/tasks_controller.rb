@@ -2,12 +2,11 @@
 
 module Bridges
   module Lom
-    # rubocop:disable Metrics/ClassLength
     class TasksController < ActionController::API
       OML_SCHEMA_PATH = Rails.root.join('vendor/assets/schemas/lom_1484.12.3-2020/lom.xsd')
 
       def show
-        builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') { |xml| sample_oml(xml) }
+        builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') {|xml| sample_oml(xml) }
 
         if params[:validate].present?
           schema = Nokogiri::XML::Schema(File.read(OML_SCHEMA_PATH))
@@ -34,7 +33,6 @@ module Bridges
       end
 
       # rubocop:disable Metrics/AbcSize
-      # rubocop:disable Metrics/BlockLength
       # rubocop:disable Metrics/MethodLength
       def oml_general(xml)
         xml.general do
@@ -107,7 +105,6 @@ module Bridges
       end
 
       # rubocop:disable Metrics/AbcSize
-      # rubocop:disable Metrics/BlockLength
       # rubocop:disable Metrics/MethodLength
       def oml_educational(xml)
         xml.educational do
@@ -203,6 +200,5 @@ module Bridges
         )
       end
     end
-    # rubocop:enasle all
   end
 end

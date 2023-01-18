@@ -21,7 +21,7 @@ module OmniAuth
         logout_requests_signed: true, # Enable signature on Logout Request
         logout_responses_signed: true, # Enable signature on Logout Response
         want_assertions_signed: true, # Require the IdP to sign its SAML Assertions
-        want_assertions_encrypted: true # Invalidate SAML messages without an EncryptedAssertion
+        want_assertions_encrypted: true, # Invalidate SAML messages without an EncryptedAssertion
       }
 
       # Our auto-login mechanism passes a desired redirect path (signed with a
@@ -30,12 +30,12 @@ module OmniAuth
       # get it back in the callback phase.
       # TODO: This parameter is not yet used in the app
       option :idp_sso_target_url_runtime_params, {
-        redirect_path: 'RelayState'
+        redirect_path: 'RelayState',
       }
 
       # This Lambda is responsible for terminating the session and will
       # only be used for identity-provider-initiated logout requests
-      option :idp_slo_session_destroy, (proc { |env, session|
+      option :idp_slo_session_destroy, (proc {|env, session|
         if Rails.env.development?
           # For development purposes, we want to assume a secure connection behind an TLS-terminating proxy.
           # If this option is not set, our session cookie is not sent by Rack (due to the `secure` flag)
@@ -66,7 +66,7 @@ module OmniAuth
           name: @attributes['urn:oid:2.5.4.3'],
           first_name: @attributes['urn:oid:2.5.4.42'],
           last_name: @attributes['urn:oid:2.5.4.4'],
-          display_name: @attributes['urn:oid:2.16.840.1.113730.3.1.241']
+          display_name: @attributes['urn:oid:2.16.840.1.113730.3.1.241'],
         }
       end
 

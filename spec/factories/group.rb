@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :group do
-    sequence(:name) { |n| "Gruppe #{n}" }
+    sequence(:name) {|n| "Gruppe #{n}" }
     description { 'Lorem ipsum Bacon Soda.' }
     users { [create(:user), create(:user)] }
 

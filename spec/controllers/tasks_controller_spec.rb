@@ -129,7 +129,7 @@ RSpec.describe TasksController do
           descriptions_attributes: {'0' => {text: 'description', primary: true}},
           programming_language_id: create(:programming_language, :ruby).id,
           license_id: create(:license),
-          language: 'de'
+          language: 'de',
         }
       end
 
@@ -164,9 +164,9 @@ RSpec.describe TasksController do
   end
 
   describe 'PUT #update' do
-    subject(:put_update) { put :update, params: {id: task.to_param, task: update_attributes} }
+    subject(:put_update) { put :update, params: {id: task.to_param, task: changed_attributes} }
 
-    let(:update_attributes) { {title: 'new_title'} }
+    let(:changed_attributes) { {title: 'new_title'} }
     let!(:task) { create(:task, valid_attributes) }
     let(:valid_attributes) { {user:, title: 'title'} }
 
@@ -187,7 +187,7 @@ RSpec.describe TasksController do
 
       context 'when task has a test' do
         subject(:put_update) do
-          put :update, params: {id: task.to_param, task: update_attributes.merge({'tests_attributes' => tests_attributes})}
+          put :update, params: {id: task.to_param, task: changed_attributes.merge({'tests_attributes' => tests_attributes})}
         end
 
         let(:test) { build(:test) }
@@ -287,7 +287,7 @@ RSpec.describe TasksController do
     it 'calls service' do
       post_request
       expect(ProformaService::CacheImportFile).to have_received(:call).with(user:,
-                                                                            zip_file: be_a(ActionDispatch::Http::UploadedFile))
+        zip_file: be_a(ActionDispatch::Http::UploadedFile))
     end
 
     it 'renders import view for one task' do
@@ -328,7 +328,7 @@ RSpec.describe TasksController do
 
     subject(:post_request) do
       post :import_confirm,
-           params: {import_id: import_data[1][:import_id], subfile_id: import_data[0], import_type: 'export'}, xhr: true
+        params: {import_id: import_data[1][:import_id], subfile_id: import_data[0], import_type: 'export'}, xhr: true
     end
 
     let(:zip_file) { fixture_file_upload('proforma_import/testfile_multi.zip', 'application/zip') }
@@ -474,7 +474,7 @@ RSpec.describe TasksController do
 
     before do
       allow(TaskService::CheckExternal).to receive(:call).with(uuid: task.uuid,
-                                                               account_link:).and_return(external_check_hash)
+        account_link:).and_return(external_check_hash)
     end
 
     it 'renders the correct contents as json' do
@@ -527,7 +527,7 @@ RSpec.describe TasksController do
     let(:account_link_user) { user }
     let(:post_request) do
       post :export_external_confirm, params: {push_type:, id: task.id, account_link: account_link.id}, format: :json,
-                                     xhr: true
+        xhr: true
     end
     let(:push_type) { 'export' }
     let(:error) {}

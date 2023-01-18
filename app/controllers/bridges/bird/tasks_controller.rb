@@ -4,7 +4,7 @@ module Bridges
   module Bird
     class TasksController < ActionController::API
       def index
-        builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') { |xml| build_bird(xml) }
+        builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') {|xml| build_bird(xml) }
         render xml: builder
       end
 
@@ -61,7 +61,7 @@ module Bridges
             description: 'Write a simple program that prints "Hello World".',
             internal_description: 'This is a simple exercise for your students to begin with Python.',
             language: 'English'
-          )
+          ),
         ]
       end
     end

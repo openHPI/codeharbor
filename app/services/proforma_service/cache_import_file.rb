@@ -3,6 +3,7 @@
 module ProformaService
   class CacheImportFile < ServiceBase
     def initialize(user:, zip_file:)
+      super()
       @user = user
       @zip_file = zip_file
     end

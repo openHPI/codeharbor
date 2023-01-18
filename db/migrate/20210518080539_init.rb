@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Init < ActiveRecord::Migration[6.1]
   def change
     # These are extensions that must be enabled in order to support this database
