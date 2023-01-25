@@ -12,13 +12,10 @@ RSpec.describe GroupsController do
   let(:invalid_attributes) do
     {name: ''}
   end
+  let(:group_memberships) { [build(:group_membership, :with_admin), build(:group_membership, user:)] }
+  let!(:group) { create(:group, group_memberships:) }
 
-  let!(:group) { create(:group) }
-
-  before do
-    sign_in user
-    group.grant_access(user)
-  end
+  before { sign_in user }
 
   describe 'GET #index' do
     it 'assigns all groups as @groups' do

@@ -105,7 +105,9 @@ RSpec.describe User do
     context 'when user is in a group' do
       before { group }
 
-      let(:group) { create(:group, users: [create(:user), user]) }
+      let(:group) { create(:group, group_memberships:) }
+
+      let(:group_memberships) { [build(:group_membership, :with_admin), build(:group_membership, user:)] }
 
       it { is_expected.to be true }
 
@@ -114,7 +116,7 @@ RSpec.describe User do
       end
 
       context 'when user is admin and only user in group' do
-        let(:group) { create(:group, users: [user]) }
+        let(:group_memberships) { [build(:group_membership, :with_admin, user:)] }
 
         it 'deletes group' do
           expect { destroy }.to change(Group, :count).by(-1)
@@ -122,31 +124,16 @@ RSpec.describe User do
       end
 
       context 'when another user is in the group' do
-        before { group.users << other_user }
+        let(:group_memberships) { [build(:group_membership, :with_admin, user:), build(:group_membership)] }
 
-        let(:other_user) { create(:user) }
-
-        it { is_expected.to be true }
+        it { is_expected.to be false }
 
         it 'does not delete group' do
           expect { destroy }.not_to change(Group, :count)
         end
 
-        context 'when user is the only admin of group' do
-          let(:group) { create(:group, users: [user, create(:user)]) }
-
-          it { is_expected.to be false }
-
-          it 'does not delete group' do
-            expect { destroy }.not_to change(Group, :count)
-          end
-        end
-
-        context 'when both users are admins of group' do
-          before do
-            group.make_admin user
-            group.make_admin other_user
-          end
+        context 'when the other user is also and admin' do
+          let(:group_memberships) { [build(:group_membership, :with_admin, user:), build(:group_membership, :with_admin)] }
 
           it { is_expected.to be true }
 

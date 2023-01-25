@@ -10,6 +10,10 @@ class Group < ApplicationRecord
   validates :name, presence: true
   validate :admin_in_group
 
+  def add(user, role: :member)
+    group_memberships << GroupMembership.new(user:, role:)
+  end
+
   def group_membership_for(user)
     group_memberships.where(user:).first
   end
@@ -39,11 +43,11 @@ class Group < ApplicationRecord
   end
 
   def admins
-    group_memberships.admin.map(&:user)
+    group_memberships.select(&:admin?).map(&:user)
   end
 
   def confirmed_members
-    group_memberships.member.map(&:user)
+    group_memberships.select(&:member?).map(&:user)
   end
 
   def members
@@ -51,12 +55,13 @@ class Group < ApplicationRecord
   end
 
   def pending_users
-    group_memberships.applicant.map(&:user)
+    group_memberships.select(&:applicant?).map(&:user)
   end
 
   def remove_member(user)
     ActiveRecord::Base.transaction do
       group_membership_for(user)&.destroy
+      reload
       validate!
     end
   end

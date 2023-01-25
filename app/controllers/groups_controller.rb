@@ -61,7 +61,7 @@ class GroupsController < ApplicationController
 
       AccessRequestMailer.send_access_request(current_user, admin, @group).deliver_now
     end
-    @group.add_pending_user(current_user)
+    @group.add(current_user, role: :applicant)
     redirect_to groups_path
   end
 

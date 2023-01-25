@@ -12,7 +12,7 @@ RSpec.describe Group do
     let(:group) { create(:group) }
     let(:role) { 'member' }
 
-    before { group.add(group_user, as: role) }
+    before { group.add(group_user, role:) }
 
     it { is_expected.not_to be_able_to(:index, described_class) }
     it { is_expected.not_to be_able_to(:create, described_class) }
@@ -111,16 +111,16 @@ RSpec.describe Group do
   end
 
   describe 'validations' do
-    let(:group) { create(:group, users:) }
-    let(:users) { [user] }
-    let(:user) { create(:user) }
+    let(:group_memberships) { [build(:group_membership, :with_admin)] }
+    let(:group) { build(:group, group_memberships:) }
+    let(:user) { build(:user) }
 
     it 'is valid' do
       expect(group.valid?).to be true
     end
 
-    context 'when user get removed from group' do
-      before { group.users.destroy(user) }
+    context 'when group has no admin' do
+      let(:group_memberships) { [] }
 
       it 'is not valid' do
         expect(group.valid?).to be false
@@ -134,8 +134,8 @@ RSpec.describe Group do
   end
 
   describe '#remove_member' do
-    let(:group) { create(:group, users: group_users) }
-    let(:group_users) { [admin, user] }
+    let(:group_memberships) { [build(:group_membership, :with_admin, user: admin), build(:group_membership, user:)] }
+    let(:group) { create(:group, group_memberships:) }
     let(:admin) { create(:user) }
     let(:user) { create(:user) }
 
@@ -148,42 +148,15 @@ RSpec.describe Group do
     end
 
     context 'when group has another admin' do
-      before { group.make_admin(create(:user)) }
+      let(:admin2) { create(:user) }
+
+      before do
+        group.add_pending_user(admin2)
+        group.make_admin(admin2)
+      end
 
       it 'allows deletion of admin' do
         expect { group.remove_member(admin) }.to change(group.users, :count).by(-1)
-      end
-    end
-  end
-
-  describe '.create_with_admin' do
-    subject(:create_with_admin) { described_class.create_with_admin(params, user) }
-
-    let(:params) { {name:} }
-    let(:user) { create(:user) }
-    let(:name) { 'name' }
-
-    it 'creates a group' do
-      expect { create_with_admin }.to change(described_class, :count).by(1)
-    end
-
-    it 'sets user as admin of created group' do
-      expect(create_with_admin.admin?(user)).to be true
-    end
-
-    context 'without user' do
-      let(:user) {}
-
-      it 'does not create a group' do
-        expect { create_with_admin }.not_to change(described_class, :count)
-      end
-    end
-
-    context 'without name' do
-      let(:name) {}
-
-      it 'does not create a group' do
-        expect { create_with_admin }.not_to change(described_class, :count)
       end
     end
   end
