@@ -10,8 +10,8 @@ class Group < ApplicationRecord
   validates :name, presence: true
   validate :admin_in_group
 
-  def add(user, role: :member)
-    group_memberships << GroupMembership.new(user:, role:)
+  def add(user, role: :confirmed_member)
+    GroupMembership.new(group: self, user:, role:).save!
   end
 
   def group_membership_for(user)
@@ -30,16 +30,20 @@ class Group < ApplicationRecord
     members.include? user
   end
 
+  def applicant?(user)
+    applicants.include? user
+  end
+
   def make_admin(user)
+    return false unless confirmed_member?(user)
+
     group_membership_for(user)&.admin!
   end
 
   def grant_access(user)
-    group_membership_for(user)&.member!
-  end
+    return false unless applicant?(user)
 
-  def add_pending_user(user)
-    group_memberships << GroupMembership.new(user:)
+    group_membership_for(user)&.confirmed_member!
   end
 
   def admins
@@ -47,14 +51,14 @@ class Group < ApplicationRecord
   end
 
   def confirmed_members
-    group_memberships.select(&:member?).map(&:user)
+    group_memberships.select(&:confirmed_member?).map(&:user)
   end
 
   def members
     group_memberships.map(&:user)
   end
 
-  def pending_users
+  def applicants
     group_memberships.select(&:applicant?).map(&:user)
   end
 
@@ -67,7 +71,7 @@ class Group < ApplicationRecord
   end
 
   def last_admin?(user)
-    group_membership_for(user).admin? && admins.size == 1
+    group_membership_for(user)&.admin? && admins.size == 1
   end
 
   private

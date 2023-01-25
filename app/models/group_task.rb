@@ -4,5 +4,5 @@ class GroupTask < ApplicationRecord
   belongs_to :group
   belongs_to :task
 
-  validates :task, uniqueness: {scope: :group}
+  validates :task_id, uniqueness: {scope: :group_id}
 end

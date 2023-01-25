@@ -95,6 +95,22 @@ RSpec.describe GroupsController do
         expect(response).to redirect_to(groups_url)
       end
     end
+
+    describe 'PATCH #remove_task' do
+      let!(:group) { create(:group, group_memberships:, tasks:) }
+
+      let(:tasks) { [task] }
+      let(:task) { build(:task) }
+
+      it 'removes specified task from the group' do
+        expect { patch :remove_task, params: {id: group.to_param, task: task.id} }.to change(group.tasks, :count).by(-1)
+      end
+
+      it 'redirects to the groups list' do
+        patch :remove_task, params: {id: group.to_param, task: task.id}
+        expect(response).to redirect_to(group)
+      end
+    end
   end
 
   describe 'POST #create' do

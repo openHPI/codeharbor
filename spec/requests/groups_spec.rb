@@ -5,11 +5,11 @@ require 'rails_helper'
 RSpec.describe 'Groups' do
   context 'when logged in' do
     let(:user) { create(:user) }
-    let(:group) { create(:group, users: [user]) }
+    let(:group) { create(:group) }
     let(:group_params) { attributes_for(:group) }
 
     before do
-      group.make_admin(user)
+      group.add(user, role: :admin)
       sign_in user
     end
 
@@ -42,7 +42,7 @@ RSpec.describe 'Groups' do
     end
 
     describe 'GET /group/:id' do
-      it 'has http 302' do
+      it 'has http 200' do
         get group_path(group)
         expect(response).to have_http_status(:ok)
       end

@@ -3,13 +3,13 @@
 FactoryBot.define do
   factory :group_membership do
     user { build(:user) }
-    role { GroupMembership.roles[:member] }
+    role { :confirmed_member }
 
     trait :with_admin do
-      role { GroupMembership.roles[:admin] }
+      role { :admin }
     end
     trait :with_applicant do
-      role { GroupMembership.roles[:applicant] }
+      role { :applicant }
     end
 
     trait :with_group do

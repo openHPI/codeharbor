@@ -43,7 +43,7 @@
                     li
                       = render partial: 'share_account_link_button', locals: {shared_user: member, account_link: account_link}
             - if can? :edit, @group
-              - if @group.group_membership_for(member).member?
+              - if @group.group_membership_for(member).confirmed_member?
                 = link_to make_admin_group_path(group: @group, user: member), method: :post, class: 'btn btn-default btn-xs' do
                   i.fa.fa-plus style=("color:#008000")
                   = ' ' + t('groups.button.make_admin')
@@ -57,7 +57,7 @@
     .row.vertical
       .row-label = t('groups.show.pending')
       .row-value
-        - @group.pending_users.each do |user|
+        - @group.applicants.each do |user|
           .table-list
             = user.email
             = ' '
