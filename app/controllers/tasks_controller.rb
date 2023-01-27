@@ -220,7 +220,7 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:title, :description, :internal_description, :parent_uuid, :language, :groups,
+    params.require(:task).permit(:title, :description, :internal_description, :parent_uuid, :language,
       :programming_language_id, files_attributes: file_params, tests_attributes: test_params,
       model_solutions_attributes: model_solution_params)
   end

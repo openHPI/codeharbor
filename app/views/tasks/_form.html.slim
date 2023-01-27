@@ -71,7 +71,6 @@
           .field-element
             = ff.label :group_ids, t('tasks.groups'), class: 'form-label'
             = ff.collection_select :group_ids, (@task.groups + current_user.member_groups).uniq, :id, :name, {selected: @task.groups.map(&:id)}, {class: "my-group form-control", multiple: true, style: "width: 300px;"}
-          / = group_tasks_form.collection_select :programming_language_id_in, ProgrammingLanguage.all, :id, :language_with_version, {}, {multiple: true, class: 'form-control language-box ransack-filter'}
 
         /.field-element
           = f.label :labels, t('exercises.labels'), class: 'form-label'

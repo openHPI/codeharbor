@@ -196,7 +196,7 @@ RSpec.describe TasksController do
 
           let(:group2) { create(:group, group_memberships: [build(:group_membership, user:), build(:group_membership, :with_admin)]) }
 
-          it 'adds group to the Task' do
+          it 'only adds one group to the Task' do
             post_request
             expect(Task.last.groups).to match_array([group])
           end
