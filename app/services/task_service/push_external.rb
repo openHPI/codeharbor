@@ -3,6 +3,7 @@
 module TaskService
   class PushExternal < ServiceBase
     def initialize(zip:, account_link:)
+      super()
       @zip = zip
       @account_link = account_link
     end
@@ -10,7 +11,7 @@ module TaskService
     def execute
       body = @zip.string
       begin
-        response = connection.post { |request| request_parameters(request, body) }
+        response = connection.post {|request| request_parameters(request, body) }
         response.success? ? nil : response.body
       rescue StandardError => e
         e

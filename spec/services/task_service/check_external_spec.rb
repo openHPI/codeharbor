@@ -46,7 +46,7 @@ RSpec.describe TaskService::CheckExternal do
 
       it 'returns the correct hash' do
         expect(check_external_service).to eql(error: false, message: I18n.t('tasks.export_task.check.task_found'),
-                                              uuid_found: true, update_right: true)
+          uuid_found: true, update_right: true)
       end
 
       context 'with uuid_found: false and no update_right' do
@@ -54,7 +54,7 @@ RSpec.describe TaskService::CheckExternal do
 
         it 'returns the correct hash' do
           expect(check_external_service).to eql(error: false, message: I18n.t('tasks.export_task.check.no_task'),
-                                                uuid_found: false)
+            uuid_found: false)
         end
       end
 
@@ -63,7 +63,7 @@ RSpec.describe TaskService::CheckExternal do
 
         it 'returns the correct hash' do
           expect(check_external_service).to eql(error: false, message: I18n.t('tasks.export_task.check.task_found_no_right'),
-                                                uuid_found: true, update_right: false)
+            uuid_found: true, update_right: false)
         end
       end
     end

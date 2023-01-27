@@ -3,6 +3,7 @@
 module ProformaService
   class ImportTask < ServiceBase
     def initialize(proforma_task:, user:)
+      super()
       @proforma_task = proforma_task
       @user = user
     end

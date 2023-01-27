@@ -28,8 +28,8 @@ FactoryBot.define do
       use_attached_file { 'true' }
       after(:build) do |task_file|
         task_file.attachment.attach(io: File.open('spec/fixtures/files/example-filename.txt'),
-                                    filename: 'example-filename.txt',
-                                    content_type: 'text/plain')
+          filename: 'example-filename.txt',
+          content_type: 'text/plain')
       end
     end
 

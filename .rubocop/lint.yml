@@ -1,0 +1,13 @@
+# lint cop settings
+
+#
+# False positives:
+#   * expect { something }.to change { something } often triggers this
+#
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - "spec/**/*_spec.rb"
+
+Lint/EmptyBlock:
+  Exclude:
+    - 'spec/**/*'

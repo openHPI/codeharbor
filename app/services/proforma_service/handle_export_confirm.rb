@@ -3,6 +3,7 @@
 module ProformaService
   class HandleExportConfirm < ServiceBase
     def initialize(user:, task:, push_type:, account_link_id:)
+      super()
       @user = user
       @task = task
       @push_type = push_type

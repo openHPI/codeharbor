@@ -34,7 +34,7 @@ RailsAdmin.config do |config|
   # config.show_gravatar = true
 
   def get_default_columns(model)
-    RailsAdmin::Config::Fields.factory(model).map { |i| {i.name.to_sym => i.class} }
+    RailsAdmin::Config::Fields.factory(model).map {|i| {i.name.to_sym => i.class} }
   end
 
   def add_valid_column(model)

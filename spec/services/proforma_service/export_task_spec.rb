@@ -19,13 +19,13 @@ describe ProformaService::ExportTask do
     let(:export_service) { described_class.new(task:) }
     let(:task) do
       create(:task,
-             internal_description: 'internal_description',
-             uuid: SecureRandom.uuid,
-             programming_language: build(:programming_language, :ruby),
-             meta_data:,
-             files:,
-             tests:,
-             model_solutions:)
+        internal_description: 'internal_description',
+        uuid: SecureRandom.uuid,
+        programming_language: build(:programming_language, :ruby),
+        meta_data:,
+        files:,
+        tests:,
+        model_solutions:)
     end
     let(:meta_data) {}
     let(:files) { [] }

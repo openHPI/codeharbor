@@ -16,8 +16,8 @@ module WillPaginateHelper
         target = url(target)
       end
 
-      @template.link_to(target, attributes.merge(remote: true)) do
-        text.to_s.html_safe
+      @template.link_to(target, attributes.merge(remote: true)) do # rubocop:disable Rails/HelperInstanceVariable
+        text.to_s.html_safe # rubocop:disable Rails/OutputSafety as the string is already safe and provided by WillPaginate
       end
     end
   end

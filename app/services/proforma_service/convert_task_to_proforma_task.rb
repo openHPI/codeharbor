@@ -3,6 +3,7 @@
 module ProformaService
   class ConvertTaskToProformaTask < ServiceBase
     def initialize(task:, options: {})
+      super()
       @task = task
       @options = options
     end
@@ -24,9 +25,9 @@ module ProformaService
           parent_uuid: @task.parent_uuid,
           language: @task.language,
           meta_data: @task.meta_data,
-          files: @task.files.map { |file| task_file file },
+          files: @task.files.map {|file| task_file file },
           tests:,
-          model_solutions:
+          model_solutions:,
         }.compact
       )
     end
@@ -62,7 +63,7 @@ module ProformaService
           description: test.description,
           internal_description: test.internal_description,
           test_type: test.test_type,
-          files: test.files.map { |test_file| task_file test_file },
+          files: test.files.map {|test_file| task_file test_file },
           meta_data: test.meta_data
         )
       end

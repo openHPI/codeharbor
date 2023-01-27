@@ -6,13 +6,13 @@ class User < ApplicationRecord
   # Include devise modules. Others available are:
   # :timeoutable, :trackable
   devise :database_authenticatable,
-         :confirmable,
-         :lockable,
-         :omniauthable,
-         :registerable,
-         :recoverable,
-         :rememberable,
-         :validatable
+    :confirmable,
+    :lockable,
+    :omniauthable,
+    :registerable,
+    :recoverable,
+    :rememberable,
+    :validatable
 
   validates :email, presence: true, uniqueness: {case_sensitive: false}
   validates :first_name, :last_name, presence: true
@@ -49,7 +49,7 @@ class User < ApplicationRecord
       first_name: 'deleted',
       last_name: 'user',
       email: Digest::MD5.hexdigest(email),
-      deleted: true
+      deleted: true,
     }
 
     skip_reconfirmation!

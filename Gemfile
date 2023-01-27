@@ -92,6 +92,7 @@ group :development, :test do
   gem 'rspec-collection_matchers', '~> 1.2.0'
   gem 'rspec-rails'
   gem 'rubocop'
+  gem 'rubocop-capybara'
   gem 'rubocop-performance'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'

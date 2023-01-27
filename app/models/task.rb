@@ -78,7 +78,7 @@ class Task < ApplicationRecord
     if ratings.empty?
       0
     else
-      ratings.map(&:rating).sum.to_f / ratings.size
+      ratings.sum(&:rating).to_f / ratings.size
     end
   end
 

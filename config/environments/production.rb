@@ -146,6 +146,6 @@ Rails.application.configure do
   config.action_mailer.default_url_options = {
     host: 'https://codeharbor.openhpi.de',
     only_path: false,
-    script_name: '/'
+    script_name: '/',
   }
 end

@@ -82,13 +82,13 @@ class TasksController < ApplicationController
     render json: {
       status: 'success',
       message: t('controllers.task.import.successfully_imported', title: task_title),
-      actions: render_to_string(partial: 'import_actions', locals: {task: proforma_task, imported: true})
+      actions: render_to_string(partial: 'import_actions', locals: {task: proforma_task, imported: true}),
     }
   rescue Proforma::ProformaError, ActiveRecord::RecordInvalid => e
     render json: {
       status: 'failure',
       message: t('controllers.task.import.import_failed', title: task_title, error: e.message),
-      actions: ''
+      actions: '',
     }
   end
 
@@ -127,14 +127,14 @@ class TasksController < ApplicationController
 
   def export_external_check
     external_check = TaskService::CheckExternal.call(uuid: @task.uuid,
-                                                     account_link: AccountLink.find(params[:account_link]))
+      account_link: AccountLink.find(params[:account_link]))
     render json: {
       message: external_check[:message],
       actions: render_export_actions(task: @task,
-                                     task_found: external_check[:uuid_found],
-                                     update_right: external_check[:update_right],
-                                     error: external_check[:error],
-                                     exported: false)
+        task_found: external_check[:uuid_found],
+        update_right: external_check[:update_right],
+        error: external_check[:error],
+        exported: false),
     }, status: :ok
   end
 
@@ -145,7 +145,7 @@ class TasksController < ApplicationController
     return render json: {}, status: :internal_server_error unless %w[create_new export].include? push_type
 
     export_task, error = ProformaService::HandleExportConfirm.call(user: current_user, task: @task,
-                                                                   push_type:, account_link_id: params[:account_link])
+      push_type:, account_link_id: params[:account_link])
     task_title = export_task.title
 
     if error.nil?
@@ -222,8 +222,8 @@ class TasksController < ApplicationController
 
   def task_params
     params.require(:task).permit(:title, :description, :internal_description, :parent_uuid, :language, :groups,
-                                 :programming_language_id, files_attributes: file_params, tests_attributes: test_params,
-                                                           model_solutions_attributes: model_solution_params)
+      :programming_language_id, files_attributes: file_params, tests_attributes: test_params,
+      model_solutions_attributes: model_solution_params)
   end
 
   def group_tasks_params
@@ -253,8 +253,8 @@ class TasksController < ApplicationController
 
   def render_export_actions(task:, exported:, error: nil, task_found: nil, update_right: nil)
     render_to_string(partial: 'export_actions',
-                     formats: :html,
-                     locals: {task:, exported:, error:, task_found:,
-                              update_right:})
+      formats: :html,
+      locals: {task:, exported:, error:, task_found:,
+               update_right:})
   end
 end

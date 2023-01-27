@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateUserIdentity < ActiveRecord::Migration[6.1]
   def change
     create_table :user_identities, id: :uuid, force: :cascade do |t|
