@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddGroupsTasks < ActiveRecord::Migration[6.1]
   def change
     create_table :group_tasks, id: :serial, force: :cascade do |t|

@@ -168,17 +168,17 @@ class TasksController < ApplicationController
   def handle_groups
     return unless group_tasks_params
 
-    groups = group_tasks_params[:group_ids].filter(&:present?).map(&:to_i).map { |gid| Group.find(gid) }
+    groups = group_tasks_params[:group_ids].filter(&:present?).map(&:to_i).map {|gid| Group.find(gid) }
     remove_groups(@task.groups - groups)
     add_groups(groups - @task.groups)
   end
 
   def add_groups(groups)
-    groups.filter { |group| group.admin?(current_user) }.each { |group| @task.groups << group }
+    groups.filter {|group| group.admin?(current_user) }.each {|group| @task.groups << group }
   end
 
   def remove_groups(groups)
-    groups.each { |group| @task.groups.destroy(group) }
+    groups.each {|group| @task.groups.destroy(group) }
   end
 
   def set_search
@@ -212,8 +212,7 @@ class TasksController < ApplicationController
   end
 
   def test_params
-    [:id, :title, :description, :internal_description, :test_type, :xml_id, :validity, :timeout, :_destroy,
-     {files_attributes: file_params}]
+    [:id, :title, :description, :internal_description, :test_type, :xml_id, :validity, :timeout, :_destroy, {files_attributes: file_params}]
   end
 
   def model_solution_params
@@ -252,9 +251,6 @@ class TasksController < ApplicationController
   end
 
   def render_export_actions(task:, exported:, error: nil, task_found: nil, update_right: nil)
-    render_to_string(partial: 'export_actions',
-      formats: :html,
-      locals: {task:, exported:, error:, task_found:,
-               update_right:})
+    render_to_string(partial: 'export_actions', formats: :html, locals: {task:, exported:, error:, task_found:, update_right:})
   end
 end

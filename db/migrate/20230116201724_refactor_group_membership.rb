@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class RefactorGroupMembership < ActiveRecord::Migration[6.1]
-  def change
+  def up
     drop_table :group_memberships
 
     create_table :group_memberships, id: :serial, force: :cascade do |t|
@@ -10,6 +12,5 @@ class RefactorGroupMembership < ActiveRecord::Migration[6.1]
       t.datetime 'updated_at'
     end
     remove_column :groups, :membership_type, :string
-
   end
 end
