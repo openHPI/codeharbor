@@ -146,6 +146,62 @@ RSpec.describe TasksController do
         post_request
         expect(response).to redirect_to(Task.last)
       end
+
+      context 'with group_tasks_params' do
+        subject(:post_request) { post :create, params: {task: valid_params, group_tasks: group_tasks_params} }
+
+        let(:group_tasks_params) { {group_ids: ['', group.id.to_s]} }
+        let(:group) { create(:group, group_memberships: [build(:group_membership, :with_admin, user:)]) }
+
+        it 'creates a new Task' do
+          expect { post_request }.to change(Task, :count).by(1)
+        end
+
+        it 'adds the group to the task' do
+          post_request
+          expect(Task.last.groups).to match_array(group)
+        end
+
+        it 'assigns a newly created task as @task' do
+          post_request
+          expect(assigns(:task)).to be_persisted
+        end
+
+        it 'redirects to the created task' do
+          post_request
+          expect(response).to redirect_to(Task.last)
+        end
+
+        context 'when no groups are given' do
+          let(:group_tasks_params) { {group_ids: []} }
+
+          it 'adds no groups to the Task' do
+            post_request
+            expect(Task.last.groups).to be_empty
+          end
+        end
+
+        context 'when two groups are given' do
+          let(:group_tasks_params) { {group_ids: [group.id.to_s, group2.id.to_s]} }
+          let(:group2) { create(:group, group_memberships: [build(:group_membership, :with_admin, user:)]) }
+
+          it 'adds two groups to the Task' do
+            post_request
+            expect(Task.last.groups).to match_array([group, group2])
+          end
+        end
+
+        context 'with two groups, but user does not have admin role in one of the groups' do
+          let(:group_tasks_params) { {group_ids: [group.id.to_s, group2.id.to_s]} }
+
+          let(:group2) { create(:group, group_memberships: [build(:group_membership, user:), build(:group_membership, :with_admin)]) }
+
+          it 'adds group to the Task' do
+            post_request
+            expect(Task.last.groups).to match_array([group])
+          end
+        end
+      end
     end
 
     context 'with invalid params' do
@@ -201,6 +257,68 @@ RSpec.describe TasksController do
 
         it 'updates the test' do
           expect { put_update }.to change { task.tests.first.reload.title }.to('new_test_title')
+        end
+      end
+
+      context 'with group_tasks_params' do
+        subject(:put_update) { put :update, params: {id: task.to_param, task: valid_attributes, group_tasks: group_tasks_params} }
+
+        let(:group_tasks_params) { {group_ids: ['', group.id.to_s]} }
+        let(:group) { create(:group, group_memberships: [build(:group_membership, :with_admin, user:)]) }
+
+        it 'adds the group to the task' do
+          put_update
+          expect(task.reload.groups).to match_array(group)
+        end
+
+        context 'when no groups are given' do
+          let(:group_tasks_params) { {group_ids: []} }
+
+          it 'adds no groups to the Task' do
+            put_update
+            expect(task.reload.groups).to be_empty
+          end
+        end
+
+        context 'when two groups are given' do
+          let(:group_tasks_params) { {group_ids: [group.id.to_s, group2.id.to_s]} }
+          let(:group2) { create(:group, group_memberships: [build(:group_membership, :with_admin, user:)]) }
+
+          it 'adds two groups to the Task' do
+            put_update
+            expect(task.reload.groups).to match_array([group, group2])
+          end
+        end
+
+        context 'with two groups, but user does not have admin role in one of the groups' do
+          let(:group_tasks_params) { {group_ids: [group.id.to_s, group2.id.to_s]} }
+
+          let(:group2) { create(:group, group_memberships: [build(:group_membership, user:), build(:group_membership, :with_admin)]) }
+
+          it 'adds group to the Task' do
+            put_update
+            expect(task.reload.groups).to match_array([group])
+          end
+        end
+
+        context 'when task has a group and it is not supplied in the params' do
+          before { task.groups << group }
+
+          let(:group_tasks_params) { {group_ids: ['']} }
+
+          it 'removes the group from the Task' do
+            expect { put_update }.to change { task.reload.groups }.from(contain_exactly(group)).to(be_empty)
+          end
+        end
+
+        context 'when task has a group and it is supplied in the params' do
+          before { task.groups << group }
+
+          let(:group_tasks_params) { {group_ids: [group.id.to_s]} }
+
+          it 'does not remove the group from the Task' do
+            expect { put_update }.not_to(change { task.reload.groups.map(&:id) })
+          end
         end
       end
     end

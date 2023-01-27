@@ -30,6 +30,7 @@ class Task < ApplicationRecord
   accepts_nested_attributes_for :files, allow_destroy: true
   accepts_nested_attributes_for :tests, allow_destroy: true
   accepts_nested_attributes_for :model_solutions, allow_destroy: true
+  accepts_nested_attributes_for :group_tasks, allow_destroy: true
 
   scope :not_owner, ->(user) { where.not(user:) }
   scope :owner, ->(user) { where(user:) }

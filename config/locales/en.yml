@@ -140,6 +140,7 @@ en:
         text: "%{user} did not accept you to their group: %{group}."
         notice: "User declined."
       remove_task_notice: "Task successfully removed"
+      add_task_notice: "Task successfully added"
       delete_from_group_notice: "User deleted from group."
       make_admin_notice: "Made user to admin."
 
@@ -566,7 +567,6 @@ en:
       private: "Private"
       public: "Public"
     labels: "Labels"
-    groups: "Groups"
     impact: "Impact"
     license: "License"
     downloads: "Downloads"
@@ -1127,6 +1127,8 @@ en:
     edit:
       toggle_file: "Toggle file upload/editor"
       upload_a_new_file: "Upload a new file"
+      select_groups: Select groups
+    groups: "Groups"
   task_files:
     xml_id_not_unique: id is not unique
     fileable_not_set: "is not set"

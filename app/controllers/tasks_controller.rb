@@ -31,7 +31,7 @@ class TasksController < ApplicationController
 
   def create
     @task = Task.new(task_params)
-
+    handle_groups
     @task.user = current_user
 
     if @task.save(context: :force_validations)
@@ -43,6 +43,7 @@ class TasksController < ApplicationController
 
   def update
     @task.assign_attributes(task_params)
+    handle_groups
     if @task.save(context: :force_validations)
       redirect_to @task, notice: t('tasks.notification.updated')
     else
@@ -164,6 +165,22 @@ class TasksController < ApplicationController
 
   private
 
+  def handle_groups
+    return unless group_tasks_params
+
+    groups = group_tasks_params[:group_ids].filter(&:present?).map(&:to_i).map { |gid| Group.find(gid) }
+    remove_groups(@task.groups - groups)
+    add_groups(groups - @task.groups)
+  end
+
+  def add_groups(groups)
+    groups.filter { |group| group.admin?(current_user) }.each { |group| @task.groups << group }
+  end
+
+  def remove_groups(groups)
+    groups.each { |group| @task.groups.destroy(group) }
+  end
+
   def set_search
     search = params[:search]
     if search.is_a?(ActionController::Parameters)
@@ -204,9 +221,13 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:title, :description, :internal_description, :parent_uuid, :language,
+    params.require(:task).permit(:title, :description, :internal_description, :parent_uuid, :language, :groups,
                                  :programming_language_id, files_attributes: file_params, tests_attributes: test_params,
                                                            model_solutions_attributes: model_solution_params)
+  end
+
+  def group_tasks_params
+    params.permit(group_tasks: {group_ids: []})[:group_tasks]
   end
 
   def import_confirm_params

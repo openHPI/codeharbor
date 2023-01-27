@@ -78,7 +78,7 @@ class User < ApplicationRecord
   end
 
   def member_groups
-    groups - groups.as(:pending)
+    group_memberships.admin.map(&:group)
   end
 
   def name
