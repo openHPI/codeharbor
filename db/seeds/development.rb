@@ -193,16 +193,14 @@ collection.tasks << task1
 collection.save!
 
 ##### Groups #####
-
-group = Group.create_with_admin(
-  {
-    name: 'openHPI Teachers',
-    description: 'All teachers from openHPI programming courses.'
-  },
-  user1
-)
-
-group.add(user2, as: 'member')
+group = Group.new({
+                    name: 'openHPI Teachers',
+                    description: 'All teachers from openHPI programming courses.'
+                  })
+group.group_memberships << GroupMembership.new(user: user1, role: :admin)
+group.save!
+group.add(user2, role: 'confirmed_member')
+group.tasks << task1
 
 ##### Messages #####
 
