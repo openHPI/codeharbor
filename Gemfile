@@ -29,8 +29,6 @@ gem 'coffee-rails', '>= 5.0.0'
 
 # Use puma instead of WEBrick
 gem 'puma'
-# Watchdog service monitoring for systemd, automatically used by Puma if this gem is installed
-gem 'sd_notify'
 # Use simple_form
 gem 'simple_form', '>= 5.0.1'
 # Use jquery as the JavaScript library
