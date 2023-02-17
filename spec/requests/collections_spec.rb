@@ -5,7 +5,8 @@ require 'rails_helper'
 RSpec.describe 'Collections' do
   context 'when logged in' do
     let(:user) { create(:user) }
-    let(:collection) { create(:collection, title: 'Some Collection', users: [user], tasks: []) }
+    let(:task) { create(:task) }
+    let(:collection) { create(:collection, title: 'Some Collection', users: [user], tasks: [task]) }
     let(:collection_params) { attributes_for(:collection) }
 
     before do
