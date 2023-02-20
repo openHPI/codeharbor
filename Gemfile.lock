@@ -115,7 +115,7 @@ GEM
     date (3.3.3)
     debug_inspector (1.1.0)
     deep_merge (1.2.2)
-    devise (4.8.1)
+    devise (4.9.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 4.1.0)
@@ -520,7 +520,7 @@ DEPENDENCIES
   coffee-rails (>= 5.0.0)
   concurrent-ruby
   config
-  devise (~> 4.8)
+  devise (~> 4.9)
   devise-bootstrap-views (~> 1.0)
   factory_bot_rails
   faraday
