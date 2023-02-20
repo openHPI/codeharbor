@@ -45,7 +45,7 @@ gem 'bcrypt', '~> 3.1.18'
 gem 'will_paginate'
 
 # Authentication
-gem 'devise', '~> 4.8'
+gem 'devise', '~> 4.9'
 gem 'omniauth', '~> 2.1'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
 gem 'omniauth-saml', '~> 2.0'
