@@ -834,6 +834,7 @@ en:
 
     footer:
       imprint: "Imprint"
+      privacy_policy: "Privacy Policy"
       about:
         header: "About Codeharbor"
         paragraph: "CodeHarbor allows to share, rate, and discuss auto-gradeable programming exercises with colleagues. Re-use existing exercises, clone exercises and adjust them to your needs. Translate them to another human language or port them to another programming language. Always keep full control with whom you share."
