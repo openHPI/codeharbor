@@ -80,7 +80,7 @@ class GroupsController < ApplicationController
     @group.grant_access(@user)
     send_grant_access_messages(@user, @group)
 
-    Message.where(sender: @user, recipient: current_user, param_type: 'group', param_id: @group.id).delete_all
+    Message.where(sender: @user, recipient: current_user, param_type: 'group', param_id: @group.id).destroy_all
     redirect_to @group, notice: t('controllers.group.grant_access.notice')
   end
 
@@ -93,7 +93,7 @@ class GroupsController < ApplicationController
     @group.users.delete(@user)
     send_deny_access_message(@user, @group)
 
-    Message.where(sender: @user, recipient: current_user, param_type: 'group', param_id: @group.id).delete_all
+    Message.where(sender: @user, recipient: current_user, param_type: 'group', param_id: @group.id).destroy_all
     redirect_to @group, notice: t('controllers.group.deny_access.notice')
   end
 
