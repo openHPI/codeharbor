@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class GroupMembershipOld < ApplicationRecord
-  groupify :group_membership_old
+  self.table_name = 'group_memberships_old'
+  groupify :group_membership
 
   validate :membership_unique
   scope :similars, lambda {|membership|
