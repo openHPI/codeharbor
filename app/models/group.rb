@@ -39,21 +39,21 @@ class Group < ApplicationRecord
   def make_admin(user)
     return false unless confirmed_member?(user)
 
-    group_membership_for(user)&.admin!
+    group_membership_for(user)&.role_admin!
   end
 
   def grant_access(user)
     return false unless applicant?(user)
 
-    group_membership_for(user)&.confirmed_member!
+    group_membership_for(user)&.role_confirmed_member!
   end
 
   def admins
-    group_memberships.select(&:admin?).map(&:user)
+    group_memberships.select(&:role_admin?).map(&:user)
   end
 
   def confirmed_members
-    group_memberships.select(&:confirmed_member?).map(&:user)
+    group_memberships.select(&:role_confirmed_member?).map(&:user)
   end
 
   def members
@@ -61,7 +61,7 @@ class Group < ApplicationRecord
   end
 
   def applicants
-    group_memberships.select(&:applicant?).map(&:user)
+    group_memberships.select(&:role_applicant?).map(&:user)
   end
 
   def remove_member(user)
@@ -73,7 +73,7 @@ class Group < ApplicationRecord
   end
 
   def last_admin?(user)
-    group_membership_for(user)&.admin? && admins.size == 1
+    group_membership_for(user)&.role_admin? && admins.size == 1
   end
 
   private

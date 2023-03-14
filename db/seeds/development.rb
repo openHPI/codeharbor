@@ -195,7 +195,7 @@ collection.save!
 ##### Groups #####
 group = Group.new({
   name: 'openHPI Teachers',
-                    description: 'All teachers from openHPI programming courses.',
+  description: 'All teachers from openHPI programming courses.',
 })
 group.group_memberships << GroupMembership.new(user: user1, role: :admin)
 group.save!

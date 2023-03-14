@@ -4,12 +4,11 @@ class RefactorGroupMembership < ActiveRecord::Migration[6.1]
   def up
     rename_table :group_memberships, :group_memberships_old
 
-    create_table :group_memberships, id: :serial, force: :cascade do |t|
+    create_table :group_memberships, id: :uuid, force: :cascade do |t|
       t.belongs_to :user, foreign_key: true, null: false, index: true
       t.belongs_to :group, foreign_key: true, null: false, index: true
-      t.integer :role, default: 0, null: false
-      t.datetime 'created_at'
-      t.datetime 'updated_at'
+      t.integer :role, limit: 1, null: false, default: 0, comment: 'Used as enum in Rails'
+      t.timestamps
     end
 
     GroupMembershipOld.where(member_type: 'User').and(GroupMembershipOld.where.not(membership_type: nil)).each do |gmo|

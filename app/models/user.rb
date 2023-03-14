@@ -78,7 +78,7 @@ class User < ApplicationRecord
   end
 
   def member_groups
-    group_memberships.admin.map(&:group)
+    group_memberships.role_admin.map(&:group)
   end
 
   def name
