@@ -2,7 +2,7 @@
 
 class RefactorGroupMembership < ActiveRecord::Migration[6.1]
   def up
-    drop_table :group_memberships
+    rename_table :group_memberships, :group_memberships_old
 
     create_table :group_memberships, id: :serial, force: :cascade do |t|
       t.belongs_to :user, foreign_key: true, null: false, index: true

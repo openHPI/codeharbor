@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Group < ApplicationRecord
+  groupify :group, members: %i[users tasks], default_members: :users
+
   has_many :group_memberships, dependent: :destroy
   has_many :users, through: :group_memberships
 

@@ -175,6 +175,7 @@ GEM
     formatador (1.1.0)
     globalid (1.1.0)
       activesupport (>= 5.0)
+    groupify (0.9.0)
     guard (2.18.0)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
@@ -526,6 +527,7 @@ DEPENDENCIES
   faraday
   figaro
   font-awesome-rails (>= 4.7.0.5)
+  groupify
   guard
   guard-rspec
   i18n
