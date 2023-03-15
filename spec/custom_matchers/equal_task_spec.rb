@@ -61,22 +61,22 @@ RSpec.describe 'equal_task matcher' do
 
   context 'when the tasks are complex' do
     let(:files) do
-      [build(:task_file, :exportable), build(:task_file, :exportable)]
+      build_list(:task_file, 1, :exportable)
     end
     let(:files2) do
-      [build(:task_file, :exportable), build(:task_file, :exportable)]
+      build_list(:task_file, 1, :exportable)
     end
     let(:tests) do
-      [build(:test, :with_content, files: [build(:task_file, :exportable), build(:task_file, :exportable)])]
+      build_list(:test, 1, :with_content, files: build_list(:task_file, 1, :exportable))
     end
     let(:tests2) do
-      [build(:test, :with_content, files: [build(:task_file, :exportable), build(:task_file, :exportable)])]
+      build_list(:test, 1, :with_content, files: build_list(:task_file, 1, :exportable))
     end
     let(:model_solutions) do
-      [build(:model_solution, :with_content, files: [build(:task_file, :exportable), build(:task_file, :exportable)])]
+      build_list(:model_solution, 1, :with_content, files: build_list(:task_file, 1, :exportable))
     end
     let(:model_solutions2) do
-      [build(:model_solution, :with_content, files: [build(:task_file, :exportable), build(:task_file, :exportable)])]
+      build_list(:model_solution, 1, :with_content, files: build_list(:task_file, 1, :exportable))
     end
 
     it 'successfully compares the tasks' do

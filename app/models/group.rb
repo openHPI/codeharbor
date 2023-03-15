@@ -29,7 +29,7 @@ class Group < ApplicationRecord
   end
 
   def member?(user)
-    members.include? user
+    all_users.include? user
   end
 
   def applicant?(user)
@@ -56,7 +56,7 @@ class Group < ApplicationRecord
     group_memberships.select(&:role_confirmed_member?).map(&:user)
   end
 
-  def members
+  def all_users
     group_memberships.map(&:user)
   end
 

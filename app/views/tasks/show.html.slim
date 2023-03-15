@@ -150,9 +150,10 @@ legend.toggle-next.closed
       = t('tasks.groups')
       | :
     .row-value
-      - @task.groups.each do |group|
+      - @task.groups.each_with_index do |group, index|
+        - if index > 0
+          = ', '
         = link_to group.name, group_path(group)
-        = ' '
   /.row
     .row-label
       = t('exercises.license')

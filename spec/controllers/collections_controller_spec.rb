@@ -254,7 +254,7 @@ RSpec.describe CollectionsController do
   end
 
   describe 'POST #save_shared' do
-    let(:collection) { create(:collection, valid_attributes.merge(users: [create(:user)])) }
+    let(:collection) { create(:collection, valid_attributes.merge(users: create_list(:user, 1))) }
     let(:post_request) { post :save_shared, params: }
     let(:params) { {id: collection.id} }
 

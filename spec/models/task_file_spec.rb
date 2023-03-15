@@ -61,7 +61,7 @@ RSpec.describe TaskFile do
     context 'with task which has another file with the same xml_id' do
       subject(:file) { task.files.first }
 
-      let(:task) { build(:task, files: [build(:task_file, xml_id: '1'), build(:task_file, xml_id: '1')]) }
+      let(:task) { build(:task, files: build_list(:task_file, 2, xml_id: '1')) }
 
       it 'has correct error' do
         file.validate
@@ -72,7 +72,7 @@ RSpec.describe TaskFile do
     context 'with task which has a test with another file with the same xml_id' do
       subject(:file) { task.files.first }
 
-      let(:task) { build(:task, files: [build(:task_file, xml_id: '1')], tests: [build(:test, files: [build(:task_file, xml_id: '1')])]) }
+      let(:task) { build(:task, files: build_list(:task_file, 1, xml_id: '1'), tests: build_list(:test, 1, files: build_list(:task_file, 1, xml_id: '1'))) }
 
       it 'has correct error' do
         file.validate
@@ -83,7 +83,7 @@ RSpec.describe TaskFile do
     context 'with task which has a test with another file with the another xml_id' do
       subject(:file) { task.files.first }
 
-      let(:task) { build(:task, files: [build(:task_file, xml_id: '1')], tests: [build(:test, files: [build(:task_file, xml_id: '2')])]) }
+      let(:task) { build(:task, files: build_list(:task_file, 1, xml_id: '1'), tests: build_list(:test, 1, files: build_list(:task_file, 1, xml_id: '2'))) }
 
       it { is_expected.to be_valid }
     end

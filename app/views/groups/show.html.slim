@@ -28,7 +28,7 @@
     .row-label = t('groups.show.users')
 
     .row-value
-      - (@group.admins + @group.confirmed_members).each do |member|
+      - (@group.confirmed_members).each do |member|
         .table-list
           = member.email
           = ' '
@@ -57,17 +57,20 @@
     .row.vertical
       .row-label = t('groups.show.pending')
       .row-value
-        - @group.applicants.each do |user|
-          .table-list
-            = user.email
-            = ' '
-            .btn-group.pull-right
-              = link_to grant_access_group_path(group: @group, user: user), method: :post, class: 'btn btn-default btn-xs' do
-                i.fa.fa-plus style=("color:#008000")
-                = ' ' + t('groups.button.grant')
-              = link_to deny_access_group_path(group: @group, user: user), method: :post, class: 'btn btn-default btn-xs' do
-                i.fa.fa-remove style=("color:#800000")
-                = ' ' + t('message.index.deny_access')
+        - if @group.applicants.present?
+          - @group.applicants.each do |user|
+            .table-list
+              = user.email
+              = ' '
+              .btn-group.pull-right
+                = link_to grant_access_group_path(group: @group, user: user), method: :post, class: 'btn btn-default btn-xs' do
+                  i.fa.fa-plus style=("color:#008000")
+                  = ' ' + t('groups.button.grant')
+                = link_to deny_access_group_path(group: @group, user: user), method: :post, class: 'btn btn-default btn-xs' do
+                  i.fa.fa-remove style=("color:#800000")
+                  = ' ' + t('message.index.deny_access')
+        - else
+          = t('groups.show.no_pending_users')
   .row.vertical
     .row-label = t('groups.show.tasks')
     .row-value

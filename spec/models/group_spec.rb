@@ -114,7 +114,7 @@ RSpec.describe Group do
   end
 
   describe 'validations' do
-    let(:group_memberships) { [build(:group_membership, :with_admin)] }
+    let(:group_memberships) { build_list(:group_membership, 1, :with_admin) }
     let(:group) { build(:group, group_memberships:) }
     let(:user) { build(:user) }
 
@@ -240,7 +240,7 @@ RSpec.describe Group do
       it { is_expected.to be false }
 
       context 'when user is admin' do
-        let(:group_memberships) { [build(:group_membership, :with_admin, user:)] }
+        let(:group_memberships) { build_list(:group_membership, 1, :with_admin, user:) }
 
         it { is_expected.to be true }
       end
@@ -290,7 +290,7 @@ RSpec.describe Group do
       end
 
       context 'when user is admin' do
-        let(:group_memberships) { [build(:group_membership, :with_admin, user:)] }
+        let(:group_memberships) { build_list(:group_membership, 1, :with_admin, user:) }
 
         it { is_expected.to be true }
       end
@@ -434,8 +434,8 @@ RSpec.describe Group do
     it { is_expected.to match_array(applicant) }
   end
 
-  describe '#members' do
-    subject { group.members }
+  describe '#all_users' do
+    subject { group.all_users }
 
     let(:group_memberships) do
       [build(:group_membership, :with_admin, user: admin), build(:group_membership, :with_applicant, user: applicant),
@@ -464,7 +464,7 @@ RSpec.describe Group do
       it { is_expected.to be false }
 
       context 'when user is admin' do
-        let(:group_memberships) { [build(:group_membership, :with_admin, user:)] }
+        let(:group_memberships) { build_list(:group_membership, 1, :with_admin, user:) }
 
         it { is_expected.to be true }
 

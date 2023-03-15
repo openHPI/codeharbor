@@ -109,23 +109,21 @@ describe ProformaService::Import do
     end
 
     context 'when task has a model_solution' do
-      let(:model_solutions) { [model_solution] }
-      let(:model_solution) { build(:model_solution, files: [build(:task_file, :exportable)]) }
+      let(:model_solutions) { build_list(:model_solution, 1, files: build_list(:task_file, 1, :exportable)) }
 
       it { is_expected.to be_an_equal_task_as task }
     end
 
     context 'when task has multiple files with role reference implementation' do
       let(:model_solutions) { [model_solution, model_solution2] }
-      let(:model_solution) { build(:model_solution, :with_content, files: [build(:task_file, :exportable)]) }
-      let(:model_solution2) { build(:model_solution, :with_content, files: [build(:task_file, :exportable)]) }
+      let(:model_solution) { build(:model_solution, :with_content, files: build_list(:task_file, 1, :exportable)) }
+      let(:model_solution2) { build(:model_solution, :with_content, files: build_list(:task_file, 1, :exportable)) }
 
       it { is_expected.to be_an_equal_task_as task }
     end
 
     context 'when task has a test' do
-      let(:tests) { [test] }
-      let(:test) { build(:test, :with_content, meta_data: test_meta_data) }
+      let(:tests) { build_list(:test, 1, :with_content, meta_data: test_meta_data) }
       let(:test_meta_data) {}
 
       it { is_expected.to be_an_equal_task_as task }
@@ -165,7 +163,7 @@ describe ProformaService::Import do
       end
 
       context 'when a task has files and tests' do
-        let(:files) { [build(:task_file, :exportable), build(:task_file, :exportable)] }
+        let(:files) { build_list(:task_file, 2, :exportable) }
         let(:tests) { build_list(:test, 2, test_type: 'test_type') }
 
         it 'imports the zip exactly how the were exported' do

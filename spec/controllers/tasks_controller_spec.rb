@@ -151,7 +151,7 @@ RSpec.describe TasksController do
         subject(:post_request) { post :create, params: {task: valid_params, group_tasks: group_tasks_params} }
 
         let(:group_tasks_params) { {group_ids: ['', group.id.to_s]} }
-        let(:group) { create(:group, group_memberships: [build(:group_membership, :with_admin, user:)]) }
+        let(:group) { create(:group, group_memberships: build_list(:group_membership, 1, :with_admin, user:)) }
 
         it 'creates a new Task' do
           expect { post_request }.to change(Task, :count).by(1)
@@ -183,7 +183,7 @@ RSpec.describe TasksController do
 
         context 'when two groups are given' do
           let(:group_tasks_params) { {group_ids: [group.id.to_s, group2.id.to_s]} }
-          let(:group2) { create(:group, group_memberships: [build(:group_membership, :with_admin, user:)]) }
+          let(:group2) { create(:group, group_memberships: build_list(:group_membership, 1, :with_admin, user:)) }
 
           it 'adds two groups to the Task' do
             post_request
@@ -264,7 +264,7 @@ RSpec.describe TasksController do
         subject(:put_update) { put :update, params: {id: task.to_param, task: valid_attributes, group_tasks: group_tasks_params} }
 
         let(:group_tasks_params) { {group_ids: ['', group.id.to_s]} }
-        let(:group) { create(:group, group_memberships: [build(:group_membership, :with_admin, user:)]) }
+        let(:group) { create(:group, group_memberships: build_list(:group_membership, 1, :with_admin, user:)) }
 
         it 'adds the group to the task' do
           put_update
@@ -282,7 +282,7 @@ RSpec.describe TasksController do
 
         context 'when two groups are given' do
           let(:group_tasks_params) { {group_ids: [group.id.to_s, group2.id.to_s]} }
-          let(:group2) { create(:group, group_memberships: [build(:group_membership, :with_admin, user:)]) }
+          let(:group2) { create(:group, group_memberships: build_list(:group_membership, 1, :with_admin, user:)) }
 
           it 'adds two groups to the Task' do
             put_update
