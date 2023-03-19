@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe TasksController do
+  render_views
+
   let(:user) { create(:user) }
   let(:collection) { create(:collection, users: [user], tasks: []) }
   let(:valid_attributes) { {user:} }

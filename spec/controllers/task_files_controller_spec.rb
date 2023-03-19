@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe TaskFilesController do
+  render_views
+
   let(:user) { create(:user) }
 
   before { sign_in user }

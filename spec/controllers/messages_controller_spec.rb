@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe MessagesController do
+  render_views
+
   let(:user) { create(:user) }
   let(:recipient) { create(:user) }
 

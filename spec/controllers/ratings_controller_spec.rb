@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe RatingsController do
+  render_views
+
   let(:user) { create(:user) }
   let(:task) { create(:task) }
   let(:rating) { 4 }

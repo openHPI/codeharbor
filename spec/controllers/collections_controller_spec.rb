@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe CollectionsController do
+  render_views
+
   let(:valid_attributes) do
     attributes_for(:collection)
   end
@@ -16,7 +18,7 @@ RSpec.describe CollectionsController do
   before { sign_in user }
 
   describe 'GET #index' do
-    let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
+    let!(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
 
     it 'assigns all collections as @collections' do
       get :index, params: {}
@@ -25,8 +27,6 @@ RSpec.describe CollectionsController do
   end
 
   describe 'GET #show' do
-    render_views
-
     let(:task) { create(:task) }
     let(:collection) { create(:collection, valid_attributes.merge(users: [user], tasks: [task])) }
 

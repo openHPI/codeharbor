@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe GroupsController do
+  render_views
+
   let(:user) { create(:user) }
 
   let(:valid_post_attributes) do
