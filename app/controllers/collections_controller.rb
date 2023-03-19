@@ -103,10 +103,10 @@ class CollectionsController < ApplicationController
   def leave
     if @collection.users.count == 1
       @collection.destroy
-      redirect_to collections_path, notice: t('controllers.collection.leave.confirm_destroy')
+      redirect_to collections_path, notice: t('controllers.collections.leave.confirm_destroy')
     else
       @collection.users.delete(current_user)
-      redirect_to collections_path, notice: t('controllers.collection.leave.confirm_leave')
+      redirect_to collections_path, notice: t('controllers.collections.leave.confirm_leave')
     end
   end
 
