@@ -25,11 +25,19 @@ RSpec.describe CollectionsController do
   end
 
   describe 'GET #show' do
-    let(:collection) { create(:collection, valid_attributes) }
+    render_views
+
+    let(:task) { create(:task) }
+    let(:collection) { create(:collection, valid_attributes.merge(users: [user], tasks: [task])) }
 
     it 'assigns the requested collection as @collection' do
       get :show, params: {id: collection.to_param}
       expect(assigns(:collection)).to eq(collection)
+    end
+
+    it 'includes a link to the respective tasks' do
+      get :show, params: {id: collection.to_param}
+      expect(response.body).to include(task_path(collection.tasks.first))
     end
   end
 

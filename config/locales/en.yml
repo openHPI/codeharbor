@@ -398,6 +398,7 @@ en:
     button:
       new: "New Collection"
       show: "Show"
+      view: "View"
       edit: "Edit"
       destroy: "Destroy"
       back: "Back"
