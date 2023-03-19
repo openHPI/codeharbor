@@ -186,4 +186,24 @@ RSpec.describe Task do
                                                        end)
     end
   end
+
+  describe '#destroy' do
+    subject(:destroy) { task.destroy }
+
+    let(:group) { create(:group) }
+    let(:collection) { create(:collection, tasks: [task]) }
+    let!(:task) { create(:task, groups: [group]) }
+
+    it 'removes group from task' do
+      expect(group.tasks).not_to be_empty
+      destroy
+      expect(group.reload.tasks).to be_empty
+    end
+
+    it 'removes task from collection' do
+      expect(collection.tasks).not_to be_empty
+      destroy
+      expect(collection.reload.tasks).to be_empty
+    end
+  end
 end
