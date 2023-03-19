@@ -20,6 +20,7 @@ RSpec.describe Task do
     it { is_expected.not_to be_able_to(:update, task) }
     it { is_expected.not_to be_able_to(:destroy, task) }
     it { is_expected.not_to be_able_to(:download, task) }
+    it { is_expected.not_to be_able_to(:add_to_collection, task) }
     it { is_expected.not_to be_able_to(:export_external_start, task) }
     it { is_expected.not_to be_able_to(:export_external_check, task) }
     it { is_expected.not_to be_able_to(:export_external_confirm, task) }
@@ -34,6 +35,7 @@ RSpec.describe Task do
 
       it { is_expected.not_to be_able_to(:show, task) }
       it { is_expected.not_to be_able_to(:download, task) }
+      it { is_expected.not_to be_able_to(:add_to_collection, task) }
 
       it { is_expected.not_to be_able_to(:update, task) }
       it { is_expected.not_to be_able_to(:destroy, task) }
@@ -57,6 +59,8 @@ RSpec.describe Task do
 
         it { is_expected.to be_able_to(:show, task) }
         it { is_expected.to be_able_to(:download, task) }
+        it { is_expected.to be_able_to(:add_to_collection, task) }
+
         it { is_expected.to be_able_to(:export_external_start, task) }
         it { is_expected.to be_able_to(:export_external_check, task) }
         it { is_expected.to be_able_to(:export_external_confirm, task) }

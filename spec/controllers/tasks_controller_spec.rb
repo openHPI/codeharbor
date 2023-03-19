@@ -594,4 +594,15 @@ RSpec.describe TasksController do
       end
     end
   end
+
+  describe 'POST #add_to_collection' do
+    let!(:task) { create(:task, valid_attributes) }
+    let(:valid_session) { {user_id: collection.users.first.id} }
+
+    it 'adds task to collection' do
+      expect do
+        post :add_to_collection, params: {id: task.to_param, collection: collection.id}, session: valid_session
+      end.to change(collection.tasks, :count).by(+1)
+    end
+  end
 end
