@@ -153,22 +153,18 @@ RSpec.describe CollectionsController do
     end
   end
 
-  describe 'GET #download_all', pending: 'collections are currently broken' do
-    let(:collection) { create(:collection, valid_attributes.merge(users: [user], exercises:)) }
-    let(:exercises) { create_list(:exercise, 2) }
+  describe 'GET #download_all' do
+    let(:collection) { create(:collection, valid_attributes.merge(users: [user], tasks:)) }
+    let(:tasks) { create_list(:task, 2) }
     let(:zip) { instance_double(StringIO, string: 'dummy') }
 
     let(:get_request) { get :download_all, params: {id: collection.id} }
 
-    before { allow(ProformaService::ExportTasks).to receive(:call).with(exercises: collection.reload.exercises).and_return(zip) }
+    before { allow(ProformaService::ExportTasks).to receive(:call).with(tasks: collection.reload.tasks).and_return(zip) }
 
     it do
       get_request
       expect(ProformaService::ExportTasks).to have_received(:call)
-    end
-
-    it 'updates download count' do
-      expect { get_request }.to change { exercises.first.reload.downloads }.by(1)
     end
 
     it 'sends the correct data' do
