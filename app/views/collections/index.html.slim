@@ -2,12 +2,12 @@
   .col-md-9
     .std-heading
       i.fa.fa-folder-open style=("color: #444444")
-      = ' ' + 'Collections'
+      =< t('layouts.collections')
   .col-md-3
     - if can? :create, Group
       = link_to new_collection_path, class: 'btn btn-main pull-right nav-btn-collection' do
         i.fa.fa-plus style=("color: #000066")
-        = ' ' + 'New Collection'
+        =< t('collections.new.header')
 br
 = render 'collections'
 

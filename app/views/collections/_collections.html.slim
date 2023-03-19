@@ -3,10 +3,10 @@
     .panel-body
       .col-md-10
         h3 style=("color: #777777")
-          = 'You do not have collections yet'
+          = t('controllers.collections.empty_state.heading')
         br
         p style=("color: #777777")
-          = 'You can create Collections and add exercises to it.'
+          = t('controllers.collections.empty_state.hint')
         br
         br
 - @collections.each do |collection|
@@ -33,6 +33,6 @@
       .col-md-3
         .btn-group.pull-right aria-label="..." role="group"
           - if can? :edit, collection
-            = link_to 'View', collection_path(collection), class:'btn btn-default'
-            = link_to 'Edit', edit_collection_path(collection), class:'btn btn-default'
+            = link_to t('collections.button.view'), collection_path(collection), class:'btn btn-default'
+            = link_to t('collections.button.edit'), edit_collection_path(collection), class:'btn btn-default'
 = will_paginate @collections

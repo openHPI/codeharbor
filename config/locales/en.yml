@@ -52,6 +52,9 @@ en:
       download_no_exercises: Download not possible without exercises
 
     collections:
+      empty_state:
+        heading: You do not have collections yet
+        hint: You can create Collections and add exercises to it.
       authorization: "You are not authorized to for this action."
       created: 'Collection was successfully created.'
       updated: 'Collection was successfully updated.'

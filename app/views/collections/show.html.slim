@@ -1,13 +1,13 @@
 .header
   .std-heading
     i.fa.fa-folder-open
-    = ' ' + @collection.title
+    =< @collection.title
 .collection-content
   - if @user
     label.form-label
       = t('collections.show.shared_by')
-      = ': '
-    = @user.name
+      | :
+    =< @user.name
     p style="margin-top: 10px"
       = t('collections.show.hint')
     br
@@ -48,7 +48,7 @@ br
   - else
     .btn-group
       = button_tag type: 'button', data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}, class: 'btn btn-important nav-btn-exercise dropdown-toggle dropdown-toggle split' do
-        = t('collections.show.share') + ' '
+        => t('collections.show.share')
         span.caret
       .dropdown-menu#share-menu
         .dropdown-header style="padding-left: 2px;"
@@ -61,13 +61,13 @@ br
     - if can? :edit, Collection
       .dropup.btn-group
         = button_tag class: 'btn btn-important dropdown-toggle', data: {toggle: 'dropdown'} do
-          = t('shared.export') + ' '
+          => t('shared.export')
           span.caret
         ul.scrollable.dropdown-menu[role="menu"]
           li
             - if @collection.tasks.empty?
-                a.dropdown-item.disabled-cursor title=t('controllers.collections.download_no_exercises')
-                  = t('shared.download_zip')
+              a.dropdown-item.disabled-cursor title=t('controllers.collections.download_no_exercises')
+                = t('shared.download_zip')
             - else
               = link_to t('shared.download_zip'), download_all_collection_path(@collection), 'data-turbolinks': false
 
@@ -81,13 +81,13 @@ br
                   = acc_link.name
           - else
             li
-              = link_to t('exercises.show.define_account_link'), new_user_account_link_path(current_user)
+              = link_to t('tasks.show.define_account_link'), new_user_account_link_path(current_user)
     = link_to remove_all_collection_path(@collection), method: :patch, data: { confirm: t('sure') }, class: 'btn btn-important' do
       i.fa.fa-remove style=("color: #800000")
-      = ' ' + t('collections.show.remove_all')
+      =< t('collections.show.remove_all')
     = link_to edit_collection_path(@collection), class:'btn btn-important' do
       i.fa.fa-edit
-      = ' ' + t('collections.button.edit')
+      =< t('collections.button.edit')
     - if @collection.users.include? current_user
       = link_to leave_collection_path(@collection), class:'btn btn-important', method: :post, data: { confirm: @collection.users.count == 1 ? t('controllers.collections.leave.deletion_warning') : t('sure') } do
         = t('controllers.collections.leave.button')
