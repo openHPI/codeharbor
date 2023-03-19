@@ -4,7 +4,7 @@ require 'zip'
 
 class CollectionsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_collection, only: %i[show edit update remove_exercise remove_all download_all share view_shared save_shared]
+  before_action :set_collection, only: %i[show edit update remove_task remove_all download_all share view_shared save_shared]
   before_action :new_collection, only: :create
 
   def index
@@ -38,11 +38,11 @@ class CollectionsController < ApplicationController
     end
   end
 
-  def remove_exercise
-    if @collection.remove_exercise(params[:exercise])
-      redirect_to @collection, notice: t('controllers.collections.remove_exercise_success')
+  def remove_task
+    if @collection.remove_task(params[:task])
+      redirect_to @collection, notice: t('controllers.collections.remove_task_success')
     else
-      redirect_to @collection, alert: t('controllers.collections.remove_exercise_fail')
+      redirect_to @collection, alert: t('controllers.collections.remove_task_fail')
     end
   end
 

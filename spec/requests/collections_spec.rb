@@ -5,7 +5,8 @@ require 'rails_helper'
 RSpec.describe 'Collections' do
   context 'when logged in' do
     let(:user) { create(:user) }
-    let(:collection) { create(:collection, title: 'Some Collection', users: [user], tasks: []) }
+    let(:task) { create(:task) }
+    let(:collection) { create(:collection, title: 'Some Collection', users: [user], tasks: [task]) }
     let(:collection_params) { attributes_for(:collection) }
 
     before do
@@ -57,6 +58,13 @@ RSpec.describe 'Collections' do
     describe 'PUT /collection/:id' do
       it 'has http 302' do
         put collection_path(collection, collection: collection_params)
+        expect(response).to have_http_status(:found)
+      end
+    end
+
+    describe 'POST /collection/:id/remove_task/:task_id' do
+      it 'has http 302' do
+        patch remove_task_collection_path(collection, collection:, task:)
         expect(response).to have_http_status(:found)
       end
     end

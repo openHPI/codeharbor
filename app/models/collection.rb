@@ -14,9 +14,9 @@ class Collection < ApplicationRecord
   #   exercises << exercise unless exercises.find_by(id: exercise.id)
   # end
   #
-  # def remove_exercise(exercise)
-  #   exercises.delete(exercise)
-  # end
+  def remove_task(task)
+    tasks.delete(task)
+  end
   #
   # def remove_all
   #   exercises.each do |exercise|

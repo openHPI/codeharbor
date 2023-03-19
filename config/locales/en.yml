@@ -56,8 +56,8 @@ en:
       created: 'Collection was successfully created.'
       updated: 'Collection was successfully updated.'
       destroyed: 'Collection was successfully destroyed.'
-      remove_exercise_success: 'Exercise was successfully removed.'
-      remove_exercise_fail: "You cannot remove this exercise."
+      remove_task_success: 'Task was successfully removed.'
+      remove_task_fail: "You cannot remove this task."
       remove_all_success: 'All Exercises were successfully removed'
       remove_all_fail: 'You cannot remove all exercises'
       share:

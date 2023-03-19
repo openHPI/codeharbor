@@ -18,7 +18,7 @@ RSpec.describe Collection do
     it { is_expected.not_to be_able_to(:show, collection) }
     it { is_expected.not_to be_able_to(:update, collection) }
     it { is_expected.not_to be_able_to(:leave, collection) }
-    it { is_expected.not_to be_able_to(:remove_exercise, collection) }
+    it { is_expected.not_to be_able_to(:remove_task, collection) }
     it { is_expected.not_to be_able_to(:remove_all, collection) }
     it { is_expected.not_to be_able_to(:push_collection, collection) }
     it { is_expected.not_to be_able_to(:download_all, collection) }
@@ -34,7 +34,7 @@ RSpec.describe Collection do
       it { is_expected.not_to be_able_to(:show, collection) }
       it { is_expected.not_to be_able_to(:update, collection) }
       it { is_expected.not_to be_able_to(:leave, collection) }
-      it { is_expected.not_to be_able_to(:remove_exercise, collection) }
+      it { is_expected.not_to be_able_to(:remove_task, collection) }
       it { is_expected.not_to be_able_to(:remove_all, collection) }
       it { is_expected.not_to be_able_to(:push_collection, collection) }
       it { is_expected.not_to be_able_to(:download_all, collection) }
@@ -57,7 +57,7 @@ RSpec.describe Collection do
         it { is_expected.to be_able_to(:show, collection) }
         it { is_expected.to be_able_to(:update, collection) }
         it { is_expected.to be_able_to(:leave, collection) }
-        it { is_expected.to be_able_to(:remove_exercise, collection) }
+        it { is_expected.to be_able_to(:remove_task, collection) }
         it { is_expected.to be_able_to(:remove_all, collection) }
         it { is_expected.to be_able_to(:push_collection, collection) }
         it { is_expected.to be_able_to(:download_all, collection) }
