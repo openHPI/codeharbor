@@ -17,10 +17,10 @@ class Collection < ApplicationRecord
   def remove_task(task)
     tasks.delete(task)
   end
-  #
-  # def remove_all
-  #   exercises.each do |exercise|
-  #     exercises.delete(exercise)
-  #   end
-  # end
+
+  def remove_all
+    tasks.each do |task|
+      tasks.delete(task)
+    end
+  end
 end
