@@ -18,6 +18,7 @@ RSpec.describe Collection do
     it { is_expected.not_to be_able_to(:show, collection) }
     it { is_expected.not_to be_able_to(:update, collection) }
     it { is_expected.not_to be_able_to(:leave, collection) }
+    it { is_expected.not_to be_able_to(:add_task, collection) }
     it { is_expected.not_to be_able_to(:remove_task, collection) }
     it { is_expected.not_to be_able_to(:remove_all, collection) }
     it { is_expected.not_to be_able_to(:push_collection, collection) }
@@ -34,6 +35,7 @@ RSpec.describe Collection do
       it { is_expected.not_to be_able_to(:show, collection) }
       it { is_expected.not_to be_able_to(:update, collection) }
       it { is_expected.not_to be_able_to(:leave, collection) }
+      it { is_expected.not_to be_able_to(:add_task, collection) }
       it { is_expected.not_to be_able_to(:remove_task, collection) }
       it { is_expected.not_to be_able_to(:remove_all, collection) }
       it { is_expected.not_to be_able_to(:push_collection, collection) }
@@ -57,6 +59,7 @@ RSpec.describe Collection do
         it { is_expected.to be_able_to(:show, collection) }
         it { is_expected.to be_able_to(:update, collection) }
         it { is_expected.to be_able_to(:leave, collection) }
+        it { is_expected.to be_able_to(:add_task, collection) }
         it { is_expected.to be_able_to(:remove_task, collection) }
         it { is_expected.to be_able_to(:remove_all, collection) }
         it { is_expected.to be_able_to(:push_collection, collection) }
@@ -71,30 +74,48 @@ RSpec.describe Collection do
     it { is_expected.to validate_presence_of(:users) }
   end
 
-  describe '#add_exercise', pending: 'collections are currently broken' do
-    subject(:add_exercise) { collection.add_exercise(exercise) }
+  describe '#add_task' do
+    subject(:add_task) { collection.add_task(task) }
 
     let(:user) { create(:user) }
-    let(:exercise) { create(:simple_exercise) }
+    let(:task) { create(:task) }
 
-    context 'when exercise is not in collection' do
-      let(:collection) { create(:collection, users: [user], exercises: []) }
+    context 'when task is not in collection' do
+      let(:collection) { create(:collection, users: [user], tasks: []) }
 
       it { is_expected.to be_truthy }
 
-      it 'adds exercise' do
-        expect { add_exercise }.to change(collection.exercises, :count).by(1)
+      it 'adds task' do
+        expect { add_task }.to change(collection.tasks, :count).by(1)
       end
     end
 
-    context 'when exercise is in collection' do
-      let(:collection) { create(:collection, users: [user], exercises: [exercise]) }
+    context 'when task is in collection' do
+      let(:collection) { create(:collection, users: [user], tasks: [task]) }
 
       it { is_expected.to be_falsey }
 
       it 'does not add when in collection already' do
-        expect { add_exercise }.not_to change(collection.exercises, :count)
+        expect { add_task }.not_to change(collection.tasks, :count)
       end
+    end
+  end
+
+  describe '#remove_task' do
+    subject(:remove_task) { collection.remove_task(task) }
+
+    let(:user) { create(:user) }
+    let(:collection) { create(:collection, users: [user], tasks: [task]) }
+    let!(:task) { create(:task) }
+
+    it { is_expected.to be_truthy }
+
+    it 'does not delete task' do
+      expect { remove_task }.not_to change(Task, :count)
+    end
+
+    it 'removes task from group' do
+      expect { remove_task }.to change(collection.tasks, :count).by(-1)
     end
   end
 

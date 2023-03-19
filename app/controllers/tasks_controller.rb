@@ -55,6 +55,15 @@ class TasksController < ApplicationController
     redirect_to tasks_url, notice: t('tasks.notification.destroyed')
   end
 
+  def add_to_collection
+    collection = Collection.find(params[:collection])
+    if collection.add_task(@task)
+      redirect_to @task, notice: t('controllers.task.add_to_collection.success')
+    else
+      redirect_to @task, alert: t('controllers.task.add_to_collection.fail')
+    end
+  end
+
   def download
     zip_file = ProformaService::ExportTask.call(task: @task)
     send_data(zip_file.string, type: 'application/zip', filename: "task_#{@task.id}.zip", disposition: 'attachment')

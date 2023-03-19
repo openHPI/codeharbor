@@ -90,8 +90,6 @@ en:
       destroyed: 'Exercise was successfully destroyed.'
       add_to_cart_success: 'Exercise was successfully added to your cart.'
       add_to_cart_fail: "Exercise already is in your cart."
-      add_to_collection_success: 'Exercise was successfully added to collection.'
-      add_to_collection_fail: "Exercise already is in collection."
       download_error: "An error occurred. Please contact an admin!"
       contribute: "%{user} wants to contribute to your Exercise %{exercise}."
       contribute_notice: "Your access request has been sent."
@@ -203,6 +201,10 @@ en:
         success: "Account Link was successfully removed."
         fail: "Account Link could not be removed."
     task:
+      add_to_collection:
+        success: Task was successfully added to collection.
+        fail: Task already is in collection.
+        hint: Save Tasks for later by adding them to a collection.
       import_export:
         buttons:
 #          retry: Retry
@@ -673,8 +675,6 @@ en:
         mainfile: "Mainfile"
         solution: "Solution file"
       add_to_cart: "Add to cart"
-      add_to_collection: "Add to collection"
-      add_collection: "Add Collection"
       download_xml: "Download XML"
       edit: "Edit"
       delete: "Delete"
@@ -1125,6 +1125,8 @@ en:
       export_to: "Export to"
       define_account_link: "Please define an account link first"
       meta_data: "Metadata"
+      add_to_collection: "Add to collection"
+      add_collection: "Add Collection"
     edit:
       toggle_file: "Toggle file upload/editor"
       upload_a_new_file: "Upload a new file"
