@@ -98,21 +98,21 @@ RSpec.describe Collection do
     end
   end
 
-  describe '#remove_exercise', pending: 'collections are currently broken' do
-    subject(:remove_exercise) { collection.remove_exercise(exercise) }
+  describe '#remove_all' do
+    subject(:remove_all) { collection.remove_all }
 
     let(:user) { create(:user) }
-    let(:collection) { create(:collection, users: [user], exercises: [exercise]) }
-    let!(:exercise) { create(:simple_exercise) }
+    let(:number_of_tasks) { 2 }
+    let!(:collection) { create(:collection, users: [user], tasks: create_list(:task, number_of_tasks, user:)) }
 
     it { is_expected.to be_truthy }
 
-    it 'does not delete exercise' do
-      expect { remove_exercise }.not_to change(Exercise, :count)
+    it 'does not delete any task' do
+      expect { remove_all }.not_to change(Task, :count)
     end
 
-    it 'removes exercise from group' do
-      expect { remove_exercise }.to change(collection.exercises, :count).by(-1)
+    it 'removes all tasks from group' do
+      expect { remove_all }.to change(collection.tasks, :count).by(-number_of_tasks)
     end
   end
 

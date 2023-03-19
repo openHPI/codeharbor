@@ -58,8 +58,8 @@ en:
       destroyed: 'Collection was successfully destroyed.'
       remove_task_success: 'Task was successfully removed.'
       remove_task_fail: "You cannot remove this task."
-      remove_all_success: 'All Exercises were successfully removed'
-      remove_all_fail: 'You cannot remove all exercises'
+      remove_all_success: 'All Tasks were successfully removed'
+      remove_all_fail: 'You cannot remove all tasks'
       share:
         text: "%{user} sent you his Collection %{collection}."
         notice: "Your collection has been sent."

@@ -142,14 +142,14 @@ RSpec.describe CollectionsController do
     end
   end
 
-  describe 'PATCH #remove_all', pending: 'collections are currently broken' do
-    let(:collection) { create(:collection, valid_attributes.merge(users: [user], exercises:)) }
-    let(:exercises) { create_list(:exercise, 2) }
+  describe 'PATCH #remove_all' do
+    let(:collection) { create(:collection, valid_attributes.merge(users: [user], tasks:)) }
+    let(:tasks) { create_list(:task, 2) }
 
     let(:patch_request) { patch :remove_all, params: {id: collection.id} }
 
-    it 'removes exercise from collection' do
-      expect { patch_request }.to change(collection.exercises, :count).by(-2)
+    it 'removes task from collection' do
+      expect { patch_request }.to change(collection.tasks, :count).by(-2)
     end
   end
 
