@@ -116,11 +116,11 @@ RSpec.describe Collection do
     end
   end
 
-  describe '#destroy', pending: 'collections are currently broken' do
+  describe '#destroy' do
     subject(:destroy) { collection.destroy }
 
     let(:user) { create(:user) }
-    let!(:collection) { create(:collection, users: [user], exercises: create_list(:simple_exercise, 2)) }
+    let!(:collection) { create(:collection, users: [user], tasks: create_list(:task, 2)) }
 
     it { is_expected.to be_truthy }
 
@@ -128,8 +128,8 @@ RSpec.describe Collection do
       expect { destroy }.to change(described_class, :count).by(-1)
     end
 
-    it 'does not delete exercises' do
-      expect { destroy }.not_to change(Exercise, :count)
+    it 'does not delete tasks' do
+      expect { destroy }.not_to change(Task, :count)
     end
   end
 
