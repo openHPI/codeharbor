@@ -16,8 +16,8 @@ class Task < ApplicationRecord
   has_many :tests, dependent: :destroy
   has_many :model_solutions, dependent: :destroy
 
-  # has_many :collection_tasks, dependent: :destroy
-  # has_many :collections, through: :collection_tasks
+  has_many :collection_tasks, dependent: :destroy
+  has_many :collections, through: :collection_tasks
 
   has_many :comments, dependent: :destroy
   has_many :ratings, dependent: :destroy
