@@ -1,6 +1,6 @@
 .header
   .std-heading
     i.fa.fa-folder-open style=("color: #000080")
-    = ' ' + t('exercises.edit.header')
-    = ' ' + @collection.title
+    =< t('exercises.edit.header')
+    =< @collection.title
 = render 'form'
