@@ -69,8 +69,7 @@ class CollectionsController < ApplicationController
   end
 
   def download_all
-    binary_zip_data = ProformaService::ExportTasks.call(exercises: @collection.tasks)
-    @collection.tasks.each {|exercise| exercise.update(downloads: exercise.downloads + 1) }
+    binary_zip_data = ProformaService::ExportTasks.call(tasks: @collection.tasks)
 
     send_data(binary_zip_data.string, type: 'application/zip', filename: "#{@collection.title}.zip", disposition: 'attachment')
   end
