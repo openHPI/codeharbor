@@ -6,8 +6,6 @@ gem 'i18n-js', '< 4.0.0' # Newer versions require the npm package `i18n-js`
 gem 'js-routes'
 # Create Zip files
 gem 'rubyzip'
-
-gem 'groupify'
 # Private Data
 gem 'figaro'
 # Translate
