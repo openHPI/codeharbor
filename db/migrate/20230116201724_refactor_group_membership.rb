@@ -20,3 +20,7 @@ class RefactorGroupMembership < ActiveRecord::Migration[6.1]
     end
   end
 end
+
+class GroupMembershipOld < ApplicationRecord
+  self.table_name = 'group_memberships_old'
+end
