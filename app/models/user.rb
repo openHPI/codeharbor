@@ -86,27 +86,26 @@ class User < ApplicationRecord
   end
 
   def handle_destroy
-    destroy = handle_group_memberships
-    if destroy
-      handle_collection_membership
-      handle_messages
-      true
-    else
-      false
-    end
+    handle_group_memberships
+    handle_collection_membership
+    handle_messages
+    true
   end
 
   def handle_group_memberships
-    # in_all_groups?(as: 'admin')
-
     groups.each do |group|
-      if group.users.size > 1
-        return false if group.admin?(self) && group.admins.size == 1
-      else
-        group.destroy
+      next unless group.admin?(self)
+
+      if group.admins.size == 1
+        if group.confirmed_members.empty?
+          group.destroy
+        else
+          group.group_memberships.where(role: 'confirmed_member').order(:created_at).first.update(role: 'admin')
+          # notify user somehow?
+        end
       end
     end
-    true
+    group_memberships.destroy_all
   end
 
   def handle_collection_membership
