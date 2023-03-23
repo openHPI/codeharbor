@@ -13,4 +13,18 @@ ready =->
     event.preventDefault()
     $('.account-link-description').toggle()
 
+  $('.delete-user').on 'click', (event) ->
+    event.preventDefault()
+    $('#notification-modal').modal()
+
+deleteUser = (deletePath) ->
+  if confirm(I18n.t('users.show.delete_modal.last_confirm'))
+    post(deletePath, {_method: 'delete', authenticity_token: $('meta[name=csrf-token]').attr('content')})
+  else
+    $('#notification-modal').modal('hide')
+
+
 $(document).on('turbolinks:load', ready)
+
+root = exports ? this;
+root.deleteUser = deleteUser

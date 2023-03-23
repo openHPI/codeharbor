@@ -1,0 +1,16 @@
+.bootstrap-modal.modal.fade style='display:none;' id="notification-modal"
+  .modal-dialog
+    .modal-content
+      .modal-header
+        = button_tag class: 'close', data: {dismiss: 'modal'} do
+          = 'x'
+        h4.modal-title
+          = title
+      .modal-body id='notification-modal-body'
+        = content
+      .modal-footer
+        - if confirm_notification_javascript.present?
+          = button_tag class: 'btn btn-important green-border', onclick: confirm_notification_javascript do
+            = t('notification_modal.confirm')
+        = button_tag class: 'btn btn-important red-border', data: { dismiss: 'modal' } do
+          = t('notification_modal.cancel')
