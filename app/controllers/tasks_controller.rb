@@ -31,7 +31,7 @@ class TasksController < ApplicationController
 
   def create
     @task = Task.new(task_params)
-    handle_groups
+    TaskService::HandleGroups.call(user: current_user, task: @task, group_tasks_params:)
     @task.user = current_user
 
     if @task.save(context: :force_validations)
@@ -43,7 +43,7 @@ class TasksController < ApplicationController
 
   def update
     @task.assign_attributes(task_params)
-    handle_groups
+    TaskService::HandleGroups.call(user: current_user, task: @task, group_tasks_params:)
     if @task.save(context: :force_validations)
       redirect_to @task, notice: t('tasks.notification.updated')
     else
@@ -173,30 +173,6 @@ class TasksController < ApplicationController
   # rubocop:enable Metrics/AbcSize
 
   private
-
-  def handle_groups
-    return unless group_tasks_params
-
-    groups = group_tasks_params[:group_ids].filter(&:present?).map(&:to_i).map {|gid| Group.find(gid) }
-    remove_groups(@task.groups - groups)
-    add_groups(groups - @task.groups)
-  end
-
-  def add_groups(groups)
-    groups.each do |group|
-      next unless can? :add_task, group
-
-      @task.groups << group
-    end
-  end
-
-  def remove_groups(groups)
-    groups.each do |group|
-      next unless can? :remove_task, group
-
-      @task.groups.destroy(group)
-    end
-  end
 
   def set_search
     search = params[:search]
