@@ -174,11 +174,19 @@ class TasksController < ApplicationController
   end
 
   def add_groups(groups)
-    groups.filter {|group| group.admin?(current_user) }.each {|group| @task.groups << group }
+    groups.each do |group|
+      next unless can? :add_task, group
+
+      @task.groups << group
+    end
   end
 
   def remove_groups(groups)
-    groups.each {|group| @task.groups.destroy(group) }
+    groups.each do |group|
+      next unless can? :remove_task, group
+
+      @task.groups.destroy(group)
+    end
   end
 
   def set_search

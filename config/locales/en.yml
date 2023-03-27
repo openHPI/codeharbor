@@ -1146,6 +1146,7 @@ en:
       toggle_file: "Toggle file upload/editor"
       upload_a_new_file: "Upload a new file"
       select_groups: Select groups
+      unchangeable_groups: "Unchangeable groups"
     groups: "Groups"
   task_files:
     xml_id_not_unique: id is not unique

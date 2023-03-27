@@ -311,6 +311,18 @@ RSpec.describe TasksController do
           end
         end
 
+        context 'when task has a group and it is not supplied in the params and the user cannot remove the task from the group (does not have admin rights to the group)' do
+          before { task.groups << group }
+
+          let(:group) { create(:group) }
+          let(:group_tasks_params) { {group_ids: ['']} }
+
+
+          it 'does not remove the group from the Task' do
+            expect { put_update }.not_to change { task.reload.groups.map(&:id) }
+          end
+        end
+
         context 'when task has a group and it is supplied in the params' do
           before { task.groups << group }
 
