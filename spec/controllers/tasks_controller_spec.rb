@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe TasksController do
+  render_views
+
   let(:user) { create(:user) }
   let(:collection) { create(:collection, users: [user], tasks: []) }
   let(:valid_attributes) { {user:} }
@@ -498,7 +500,7 @@ RSpec.describe TasksController do
       post_request
       expect(response).to have_http_status(:success)
 
-      expect(JSON.parse(response.body).symbolize_keys).to eql(uuid_found: true, update_right: true)
+      expect(response.parsed_body.symbolize_keys).to eql(uuid_found: true, update_right: true)
     end
 
     context 'when api_key is incorrect' do
@@ -517,7 +519,7 @@ RSpec.describe TasksController do
         post_request
         expect(response).to have_http_status(:success)
 
-        expect(JSON.parse(response.body).symbolize_keys).to eql(uuid_found: true, update_right: false)
+        expect(response.parsed_body.symbolize_keys).to eql(uuid_found: true, update_right: false)
       end
     end
 
@@ -528,7 +530,7 @@ RSpec.describe TasksController do
         post_request
         expect(response).to have_http_status(:success)
 
-        expect(JSON.parse(response.body).symbolize_keys).to eql(uuid_found: false)
+        expect(response.parsed_body.symbolize_keys).to eql(uuid_found: false)
       end
     end
   end
@@ -609,11 +611,11 @@ RSpec.describe TasksController do
 
     it 'renders the correct contents as json' do
       post_request
-      expect(JSON.parse(response.body).symbolize_keys[:message]).to eq('message')
-      expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+      expect(response.parsed_body.symbolize_keys[:message]).to eq('message')
+      expect(response.parsed_body.symbolize_keys[:actions]).to(
         include('button').and(include('Abort').and(include('Overwrite')).and(include('Create new')))
       )
-      expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+      expect(response.parsed_body.symbolize_keys[:actions]).to(
         not_include('Retry').and(not_include('Hide'))
       )
     end
@@ -623,11 +625,11 @@ RSpec.describe TasksController do
 
       it 'renders the correct contents as json' do
         post_request
-        expect(JSON.parse(response.body).symbolize_keys[:message]).to eq('message')
-        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+        expect(response.parsed_body.symbolize_keys[:message]).to eq('message')
+        expect(response.parsed_body.symbolize_keys[:actions]).to(
           include('button').and(include('Abort')).and(include('Retry'))
         )
-        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+        expect(response.parsed_body.symbolize_keys[:actions]).to(
           not_include('Overwrite').and(not_include('Create new')).and(not_include('Export')).and(not_include('Hide'))
         )
       end
@@ -638,11 +640,11 @@ RSpec.describe TasksController do
 
       it 'renders the correct contents as json' do
         post_request
-        expect(JSON.parse(response.body).symbolize_keys[:message]).to eq('message')
-        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+        expect(response.parsed_body.symbolize_keys[:message]).to eq('message')
+        expect(response.parsed_body.symbolize_keys[:actions]).to(
           include('button').and(include('Abort')).and(include('Export'))
         )
-        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(
+        expect(response.parsed_body.symbolize_keys[:actions]).to(
           not_include('Overwrite').and(not_include('Create new')).and(not_include('Hide'))
         )
       end
@@ -679,10 +681,10 @@ RSpec.describe TasksController do
       post_request
 
       expect(response).to have_http_status(:success)
-      expect(JSON.parse(response.body).symbolize_keys[:message]).to(include('successfully exported'))
-      expect(JSON.parse(response.body).symbolize_keys[:status]).to(eql('success'))
-      expect(JSON.parse(response.body).symbolize_keys[:actions]).to(include('button').and(include('Hide')))
-      expect(JSON.parse(response.body).symbolize_keys[:actions]).to(not_include('Retry').and(not_include('Abort')))
+      expect(response.parsed_body.symbolize_keys[:message]).to(include('successfully exported'))
+      expect(response.parsed_body.symbolize_keys[:status]).to(eql('success'))
+      expect(response.parsed_body.symbolize_keys[:actions]).to(include('button').and(include('Hide')))
+      expect(response.parsed_body.symbolize_keys[:actions]).to(not_include('Retry').and(not_include('Abort')))
     end
 
     context 'when push_type is create_new' do
@@ -708,10 +710,10 @@ RSpec.describe TasksController do
       it 'renders correct response' do
         post_request
         expect(response).to have_http_status(:success)
-        expect(JSON.parse(response.body).symbolize_keys[:message]).to(include('failed').and(include('exampleerror')))
-        expect(JSON.parse(response.body).symbolize_keys[:status]).to(eql('fail'))
-        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(include('button').and(include('Retry')).and(include('Abort')))
-        expect(JSON.parse(response.body).symbolize_keys[:actions]).to(not_include('Hide'))
+        expect(response.parsed_body.symbolize_keys[:message]).to(include('failed').and(include('exampleerror')))
+        expect(response.parsed_body.symbolize_keys[:status]).to(eql('fail'))
+        expect(response.parsed_body.symbolize_keys[:actions]).to(include('button').and(include('Retry')).and(include('Abort')))
+        expect(response.parsed_body.symbolize_keys[:actions]).to(not_include('Hide'))
       end
     end
 
@@ -722,6 +724,17 @@ RSpec.describe TasksController do
         post_request
         expect(response).to have_http_status(:internal_server_error)
       end
+    end
+  end
+
+  describe 'POST #add_to_collection' do
+    let!(:task) { create(:task, valid_attributes) }
+    let(:valid_session) { {user_id: collection.users.first.id} }
+
+    it 'adds task to collection' do
+      expect do
+        post :add_to_collection, params: {id: task.to_param, collection: collection.id}, session: valid_session
+      end.to change(collection.tasks, :count).by(+1)
     end
   end
 end

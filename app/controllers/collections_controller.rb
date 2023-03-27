@@ -4,7 +4,7 @@ require 'zip'
 
 class CollectionsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_collection, only: %i[show edit update remove_exercise remove_all download_all share view_shared save_shared]
+  before_action :set_collection, only: %i[show edit update remove_task remove_all download_all share view_shared save_shared]
   before_action :new_collection, only: :create
 
   def index
@@ -38,11 +38,11 @@ class CollectionsController < ApplicationController
     end
   end
 
-  def remove_exercise
-    if @collection.remove_exercise(params[:exercise])
-      redirect_to @collection, notice: t('controllers.collections.remove_exercise_success')
+  def remove_task
+    if @collection.remove_task(params[:task])
+      redirect_to @collection, notice: t('controllers.collections.remove_task_success')
     else
-      redirect_to @collection, alert: t('controllers.collections.remove_exercise_fail')
+      redirect_to @collection, alert: t('controllers.collections.remove_task_fail')
     end
   end
 
@@ -69,8 +69,7 @@ class CollectionsController < ApplicationController
   end
 
   def download_all
-    binary_zip_data = ProformaService::ExportTasks.call(exercises: @collection.tasks)
-    @collection.tasks.each {|exercise| exercise.update(downloads: exercise.downloads + 1) }
+    binary_zip_data = ProformaService::ExportTasks.call(tasks: @collection.tasks)
 
     send_data(binary_zip_data.string, type: 'application/zip', filename: "#{@collection.title}.zip", disposition: 'attachment')
   end
@@ -104,10 +103,10 @@ class CollectionsController < ApplicationController
   def leave
     if @collection.users.count == 1
       @collection.destroy
-      redirect_to collections_path, notice: t('controllers.collection.leave.confirm_destroy')
+      redirect_to collections_path, notice: t('controllers.collections.leave.confirm_destroy')
     else
       @collection.users.delete(current_user)
-      redirect_to collections_path, notice: t('controllers.collection.leave.confirm_leave')
+      redirect_to collections_path, notice: t('controllers.collections.leave.confirm_leave')
     end
   end
 

@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe CollectionsController do
+  render_views
+
   let(:valid_attributes) do
     attributes_for(:collection)
   end
@@ -16,7 +18,7 @@ RSpec.describe CollectionsController do
   before { sign_in user }
 
   describe 'GET #index' do
-    let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
+    let!(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
 
     it 'assigns all collections as @collections' do
       get :index, params: {}
@@ -25,11 +27,17 @@ RSpec.describe CollectionsController do
   end
 
   describe 'GET #show' do
-    let(:collection) { create(:collection, valid_attributes) }
+    let(:task) { create(:task) }
+    let(:collection) { create(:collection, valid_attributes.merge(users: [user], tasks: [task])) }
 
     it 'assigns the requested collection as @collection' do
       get :show, params: {id: collection.to_param}
       expect(assigns(:collection)).to eq(collection)
+    end
+
+    it 'includes a link to the respective tasks' do
+      get :show, params: {id: collection.to_param}
+      expect(response.body).to include(task_path(collection.tasks.first))
     end
   end
 
@@ -124,43 +132,39 @@ RSpec.describe CollectionsController do
     end
   end
 
-  describe 'PATCH #remove_exercise', pending: 'collections are currently broken' do
+  describe 'PATCH #remove_task' do
     let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
-    let!(:exercise) { create(:exercise, collections: [collection]) }
-    let(:patch_request) { patch :remove_exercise, params: {id: collection.id, exercise: exercise.id} }
+    let!(:task) { create(:task, collections: [collection]) }
+    let(:patch_request) { patch :remove_task, params: {id: collection.id, task: task.id} }
 
-    it 'removes exercise from collection' do
-      expect { patch_request }.to change(collection.reload.exercises, :count).by(-1)
+    it 'removes task from collection' do
+      expect { patch_request }.to change(collection.reload.tasks, :count).by(-1)
     end
   end
 
-  describe 'PATCH #remove_all', pending: 'collections are currently broken' do
-    let(:collection) { create(:collection, valid_attributes.merge(users: [user], exercises:)) }
-    let(:exercises) { create_list(:exercise, 2) }
+  describe 'PATCH #remove_all' do
+    let(:collection) { create(:collection, valid_attributes.merge(users: [user], tasks:)) }
+    let(:tasks) { create_list(:task, 2) }
 
     let(:patch_request) { patch :remove_all, params: {id: collection.id} }
 
-    it 'removes exercise from collection' do
-      expect { patch_request }.to change(collection.exercises, :count).by(-2)
+    it 'removes task from collection' do
+      expect { patch_request }.to change(collection.tasks, :count).by(-2)
     end
   end
 
-  describe 'GET #download_all', pending: 'collections are currently broken' do
-    let(:collection) { create(:collection, valid_attributes.merge(users: [user], exercises:)) }
-    let(:exercises) { create_list(:exercise, 2) }
+  describe 'GET #download_all' do
+    let(:collection) { create(:collection, valid_attributes.merge(users: [user], tasks:)) }
+    let(:tasks) { create_list(:task, 2) }
     let(:zip) { instance_double(StringIO, string: 'dummy') }
 
     let(:get_request) { get :download_all, params: {id: collection.id} }
 
-    before { allow(ProformaService::ExportTasks).to receive(:call).with(exercises: collection.reload.exercises).and_return(zip) }
+    before { allow(ProformaService::ExportTasks).to receive(:call).with(tasks: collection.reload.tasks).and_return(zip) }
 
     it do
       get_request
       expect(ProformaService::ExportTasks).to have_received(:call)
-    end
-
-    it 'updates download count' do
-      expect { get_request }.to change { exercises.first.reload.downloads }.by(1)
     end
 
     it 'sends the correct data' do

@@ -67,7 +67,7 @@ Label.create!(name: 'Conditions', color: 'DF0101')
 Label.create!(name: 'Data Structures', color: '3333CC')
 
 pl_java = ProgrammingLanguage.create!(language: 'Java', version: '17')
-ProgrammingLanguage.create!(language: 'Python', version: '3')
+pl_python = ProgrammingLanguage.create!(language: 'Python', version: '3.8')
 
 TestingFramework.create!(name: 'JUnit', version: '5')
 TestingFramework.create!(name: 'Pytest', version: '6')
@@ -79,17 +79,26 @@ task1 = Task.create!(
   uuid: 'f15cb7a3-87eb-4c4c-a998-c33e25d44cdc',
   language: 'English',
   programming_language: pl_java,
-  user: user1
+  user: user1,
+  meta_data: {
+    CodeOcean: {
+      files: {
+        'CO-42': {
+          role: 'main_file',
+        },
+      },
+    },
+  }
 )
 
 TaskFile.create!(
-  name: 'Main.java',
+  name: 'HelloWorld.java',
   internal_description: 'The main java file.',
   used_by_grader: true,
   visible: 'yes',
   usage_by_lms: 'edit',
   fileable: task1,
-  xml_id: '0',
+  xml_id: '42',
   content: <<~JAVA)
     public class HelloWorld {
       public static void main (String[] args) {
@@ -158,7 +167,7 @@ task1_solution1 = ModelSolution.create!(
 )
 
 TaskFile.create!(
-  name: 'Main.java',
+  name: 'HelloWorldSolution.java',
   mime_type: nil,
   used_by_grader: true,
   visible: 'delayed',
@@ -166,12 +175,62 @@ TaskFile.create!(
   fileable: task1_solution1,
   xml_id: '2',
   content: <<~JAVA)
-    public class HelloWorld {
+    public class HelloWorldSolution {
       public static void main (String[] args) {
         System.out.println("Hello World");
       }
     }
   JAVA
+
+TaskFile.create!(
+  name: 'Makefile',
+  mime_type: nil,
+  used_by_grader: true,
+  visible: 'no',
+  usage_by_lms: 'display',
+  fileable: task1,
+  xml_id: '3',
+  content: <<~MAKEFILE)
+    run:
+    	@javac -encoding utf8 HelloWorld.java
+    	@java -Dfile.encoding=UTF8 HelloWorld
+    	#exit
+
+    test:
+    	javac -encoding utf8 ${FILENAME}
+    	java -jar ${JUNIT} --classpath ${CLASSPATH} --disable-banner --details-theme ascii --disable-ansi-colors --details tree --select-class ${CLASS_NAME}
+  MAKEFILE
+
+task2 = Task.create!(
+  title: 'Minimal Hello World',
+  description: 'Write a simple program that prints "Hello World".',
+  internal_description: 'This is a simple exercise for your students to begin with Python.',
+  uuid: 'a85825d4-397b-4c65-8550-ae607f0a70e9',
+  language: 'English',
+  programming_language: pl_python,
+  user: user1,
+  meta_data: {
+    CodeOcean: {
+      files: {
+        'CO-1337': {
+          role: 'main_file',
+        },
+      },
+    },
+  }
+)
+
+TaskFile.create!(
+  name: 'hello_world.py',
+  internal_description: 'The main Python file.',
+  used_by_grader: true,
+  visible: 'yes',
+  usage_by_lms: 'edit',
+  fileable: task2,
+  xml_id: '1337',
+  content: <<~PYTHON)
+    # print("Hello World")
+  PYTHON
 
 Rating.create!(rating: 2, task: task1, user: user2)
 Rating.create!(rating: 4, task: task1, user: user4)

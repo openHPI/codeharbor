@@ -1,34 +1,67 @@
-apt-get update
+#!/usr/bin/env bash
 
-# default directory
-echo "cd /vagrant" >> /home/vagrant/.bashrc
+cd /home/vagrant/codeharbor
 
-# rvm
-apt-get install -y git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev libcurl4-openssl-dev python-software-properties libffi-dev libpq-dev
-apt-get install -y libgdbm-dev libncurses5-dev automake libtool bison libffi-dev
-gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+######## VERSION INFORMATION ########
 
-# postgreSQL
-apt-get install -y postgresql postgresql-contrib
-sudo -u postgres createuser -s vagrant
+postgres_version=15
+node_version=lts/hydrogen
+ruby_version=$(cat .ruby-version)
 
-# rvm
-curl -sSL https://get.rvm.io | bash
-source /etc/profile.d/rvm.sh
+DISTRO="$(lsb_release -cs)"
+ARCH=$(dpkg --print-architecture)
 
-rvm install 2.3.0
-rvm use 2.3.0 --default
+########## INSTALL SCRIPT ###########
 
-# rails
-apt-get -y install nodejs
-apt-get -y install libgmp-dev
-gem install rails -v 4.2.4
+# Disable any optimizations for comparing checksums.
+# Otherwise, a hash collision might prevent apt to work correctly
+# https://askubuntu.com/a/1242739
+sudo mkdir -p /etc/gcrypt
+echo all | sudo tee /etc/gcrypt/hwf.deny
 
-# codeharbor app
-cd /vagrant
-bundle
+# Always set language to English
+sudo locale-gen en_US en_US.UTF-8
 
-# http://stackoverflow.com/questions/22268669/deprecation-warning-you-didnt-set-config-secret-key-base
-# echo -n "Codeharbor::Application.config.secret_key_base = '" > config/initializers/secret_token.rb
-# rake secret >> config/initializers/secret_token.rb
-# echo "'" >> config/initializers/secret_token.rb
+# Prerequisites
+sudo apt -qq update
+sudo apt -qq -y install ca-certificates curl libpq-dev
+sudo apt -qq -y upgrade
+
+# PostgreSQL
+curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg >/dev/null
+echo "deb [arch=$ARCH] http://apt.postgresql.org/pub/repos/apt $DISTRO-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+sudo apt-get update && sudo apt-get -y install postgresql-$postgres_version postgresql-client-$postgres_version
+sudo -u postgres createuser $(whoami) -ed
+
+# RVM
+gpg --keyserver hkp://keyserver.ubuntu.com --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+curl -sSL https://get.rvm.io | bash -s stable
+source ~/.rvm/scripts/rvm
+
+# Install NodeJS
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+source ~/.nvm/nvm.sh
+nvm install $node_version
+
+# Enable Yarn
+corepack enable
+
+# Install Ruby
+rvm install $ruby_version
+
+######## CODEHARBOR INSTALL ##########
+
+# Prepare config
+for f in database.yml
+do
+  if [ ! -f config/$f ]
+  then
+    cp config/$f.example config/$f
+  fi
+done
+
+# Install dependencies
+bundle install
+
+# Initialize database
+rake db:setup

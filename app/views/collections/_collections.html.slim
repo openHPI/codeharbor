@@ -3,10 +3,10 @@
     .panel-body
       .col-md-10
         h3 style=("color: #777777")
-          = 'You do not have collections yet'
+          = t('controllers.collections.empty_state.heading')
         br
         p style=("color: #777777")
-          = 'You can create Collections and add exercises to it.'
+          = t('controllers.collections.empty_state.hint')
         br
         br
 - @collections.each do |collection|
@@ -19,20 +19,20 @@
         - if collection.tasks.empty?
           = t('collections.noTasksAdded')
         - else collection.tasks
-          - collection.tasks.each do |exercise|
-            - if exercise
+          - collection.tasks.each do |task|
+            - if task
               .btn-group
-                - if can? :read, exercise
-                  = link_to exercise.title, task_path(exercise), class: 'btn btn-default', style: "border-right: none"
-                  = link_to remove_exercise_collection_path(collection, exercise: exercise), class: 'btn btn-default', style: "border-left: none; margin-right: 5px;" do
+                - if can? :read, task
+                  = link_to task.title, task_path(task), class: 'btn btn-default', style: "border-right: none"
+                  = link_to remove_task_collection_path(collection, task: task), class: 'btn btn-default', style: "border-left: none; margin-right: 5px;" do
                     i.fa.fa-remove style=("color: gray")
                 - else
-                  = link_to exercise.title, task_path(exercise), class: 'btn btn-default disabled', style: "border-right: none"
+                  = link_to task.title, task_path(task), class: 'btn btn-default disabled', style: "border-right: none"
                   / = link_to contribute_exercise_path(exercise), method: :post, class: 'btn btn-default', style: "border-left: none; margin-right: 5px;" do
                   /   i.fa.fa-lock style=("color: gray")
       .col-md-3
         .btn-group.pull-right aria-label="..." role="group"
           - if can? :edit, collection
-            = link_to 'View', collection_path(collection), class:'btn btn-default'
-            = link_to 'Edit', edit_collection_path(collection), class:'btn btn-default'
+            = link_to t('collections.button.view'), collection_path(collection), class:'btn btn-default'
+            = link_to t('collections.button.edit'), edit_collection_path(collection), class:'btn btn-default'
 = will_paginate @collections

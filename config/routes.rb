@@ -37,7 +37,7 @@ Rails.application.routes.draw do
       get :view_shared # ???
 
       patch :remove_all
-      patch :remove_exercise
+      patch :remove_task
 
       post :push_collection # later
       post :save_shared # ???
@@ -76,6 +76,7 @@ Rails.application.routes.draw do
       post :export_external_start
       post :export_external_check
       post :export_external_confirm
+      post :add_to_collection
     end
 
     collection do

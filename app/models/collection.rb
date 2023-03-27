@@ -10,17 +10,17 @@ class Collection < ApplicationRecord
   has_many :collection_tasks, dependent: :destroy
   has_many :tasks, through: :collection_tasks
 
-  # def add_exercise(exercise)
-  #   exercises << exercise unless exercises.find_by(id: exercise.id)
-  # end
-  #
-  # def remove_exercise(exercise)
-  #   exercises.delete(exercise)
-  # end
-  #
-  # def remove_all
-  #   exercises.each do |exercise|
-  #     exercises.delete(exercise)
-  #   end
-  # end
+  def add_task(task)
+    tasks << task unless tasks.find_by(id: task.id)
+  end
+
+  def remove_task(task)
+    tasks.delete(task)
+  end
+
+  def remove_all
+    tasks.each do |task|
+      tasks.delete(task)
+    end
+  end
 end

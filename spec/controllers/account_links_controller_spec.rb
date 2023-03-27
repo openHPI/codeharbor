@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe AccountLinksController do
+  render_views
+
   let(:user) { create(:user) }
 
   let(:account_link) { create(:account_link) }

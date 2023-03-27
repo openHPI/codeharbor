@@ -55,14 +55,14 @@ class Ability
   def collection_abilities(user)
     can %i[create view_shared save_shared index], Collection
     cannot %i[leave], Collection
-    can %i[crud leave remove_exercise remove_all push_collection download_all share], Collection, users: {id: user.id}
+    can %i[crud leave add_task remove_task remove_all push_collection download_all share], Collection, users: {id: user.id}
   end
 
   def task_abilities(user)
     can %i[index create import_start import_confirm], Task
 
     alias_action :export_external_start, :export_external_check, :export_external_confirm, to: :export
-    can %i[crud export download], Task, user: {id: user.id}
+    can %i[crud export download add_to_collection], Task, user: {id: user.id}
   end
 
   def task_file_abilities(user)

@@ -27,8 +27,6 @@ gem 'coffee-rails', '>= 5.0.0'
 
 # Use puma instead of WEBrick
 gem 'puma'
-# Watchdog service monitoring for systemd, automatically used by Puma if this gem is installed
-gem 'sd_notify'
 # Use simple_form
 gem 'simple_form', '>= 5.0.1'
 # Use jquery as the JavaScript library
@@ -45,7 +43,7 @@ gem 'bcrypt', '~> 3.1.18'
 gem 'will_paginate'
 
 # Authentication
-gem 'devise', '~> 4.8'
+gem 'devise', '~> 4.9'
 gem 'omniauth', '~> 2.1'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
 gem 'omniauth-saml', '~> 2.0'
@@ -115,6 +113,7 @@ group :development do
 end
 
 group :test do
+  gem 'rspec-github', require: false
   gem 'shoulda-matchers'
   gem 'simplecov'
   gem 'webmock'
