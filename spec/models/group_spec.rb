@@ -33,6 +33,7 @@ RSpec.describe Group do
     it { is_expected.not_to be_able_to(:delete_from_group, group) }
     it { is_expected.not_to be_able_to(:deny_access, group) }
     it { is_expected.not_to be_able_to(:make_admin, group) }
+    it { is_expected.not_to be_able_to(:demote_admin, group) }
 
     context 'with a user' do
       let(:user) { create(:user) }
@@ -53,6 +54,7 @@ RSpec.describe Group do
       it { is_expected.not_to be_able_to(:delete_from_group, group) }
       it { is_expected.not_to be_able_to(:deny_access, group) }
       it { is_expected.not_to be_able_to(:make_admin, group) }
+      it { is_expected.not_to be_able_to(:demote_admin, group) }
 
       context 'when user is admin' do
         let(:user) { create(:admin) }
@@ -88,6 +90,7 @@ RSpec.describe Group do
         it { is_expected.not_to be_able_to(:delete_from_group, group) }
         it { is_expected.not_to be_able_to(:deny_access, group) }
         it { is_expected.not_to be_able_to(:make_admin, group) }
+        it { is_expected.not_to be_able_to(:demote_admin, group) }
 
         context 'when user is admin of the group' do
           let(:role) { 'admin' }
@@ -108,6 +111,7 @@ RSpec.describe Group do
           it { is_expected.to be_able_to(:delete_from_group, group) }
           it { is_expected.to be_able_to(:deny_access, group) }
           it { is_expected.to be_able_to(:make_admin, group) }
+          it { is_expected.to be_able_to(:demote_admin, group) }
         end
       end
     end
@@ -269,8 +273,8 @@ RSpec.describe Group do
     end
   end
 
-  describe '#member?' do
-    subject { group.member?(user) }
+  describe '#user?' do
+    subject { group.user?(user) }
 
     let(:user) { build(:user) }
     let(:group) { create(:group) }
@@ -339,6 +343,49 @@ RSpec.describe Group do
 
         it 'does not change role' do
           expect { make_admin }.not_to(change { group_membership.reload.role })
+        end
+      end
+    end
+  end
+
+  describe '#demote_admin' do
+    subject(:demote_admin) { group.demote_admin(user) }
+
+    before { group }
+
+    let(:user) { build(:user) }
+    let(:group) { create(:group) }
+
+    context 'when user is in group' do
+      let(:group) { create(:group, group_memberships:) }
+      let(:group_memberships) { [group_membership, build(:group_membership, :with_admin)] }
+      let(:group_membership) { build(:group_membership, :with_applicant, user:) }
+
+      it { is_expected.to be false }
+
+      it 'does not change role' do
+        expect { demote_admin }.not_to(change { group_membership.reload.role })
+      end
+
+      context 'when user is confirmed_member' do
+        let(:group_memberships) { [group_membership, build(:group_membership, :with_admin)] }
+        let(:group_membership) { build(:group_membership, user:) }
+
+        it { is_expected.to be false }
+
+        it 'does not change role' do
+          expect { demote_admin }.not_to(change { group_membership.reload.role })
+        end
+      end
+
+      context 'when user is admin' do
+        let(:group_memberships) { [group_membership] }
+        let(:group_membership) { build(:group_membership, :with_admin, user:) }
+
+        it { is_expected.to be true }
+
+        it 'changes role to confirmed_member' do
+          expect { demote_admin }.to change { group_membership.reload.role }.from('admin').to('confirmed_member')
         end
       end
     end
@@ -434,8 +481,8 @@ RSpec.describe Group do
     it { is_expected.to match_array(applicant) }
   end
 
-  describe '#all_users' do
-    subject { group.all_users }
+  describe '#users' do
+    subject { group.users }
 
     let(:group_memberships) do
       [build(:group_membership, :with_admin, user: admin), build(:group_membership, :with_applicant, user: applicant),
@@ -446,7 +493,7 @@ RSpec.describe Group do
     let(:user) { create(:user) }
     let(:applicant) { create(:user) }
 
-    it { is_expected.to match_array([admin, user, applicant]) }
+    it { is_expected.to contain_exactly(admin, user, applicant) }
   end
 
   describe '#last_admin?' do

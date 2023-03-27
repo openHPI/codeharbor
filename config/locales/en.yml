@@ -144,6 +144,7 @@ en:
       add_task_notice: "Task successfully added"
       delete_from_group_notice: "User deleted from group."
       make_admin_notice: "Made user to admin."
+      demote_admin_notice: "Demoted admin to user."
 
     home:
       email_confirmed: "Welcome to the CodeHarbor! Your email has been confirmed. Please sign in to continue."
@@ -432,48 +433,56 @@ en:
     noTasksAdded: "No Tasks Added"
 
   groups:
-      header: "Your Groups"
-      title: "Title"
-      actions: "Actions"
-      name: "Name"
-      manage_shared_account_links: Manage shared account links
-      admin_label: Admin
-      member_label: Member
-      pending_label: Pending
-      button:
-        new: "New Group"
-        show: "Show"
-        edit: "Edit"
-        destroy: "Destroy"
-        remove: "Remove"
-        back: "Back"
-        save: "Save Group"
-        leave: "Leave Group"
-        request: "Request Membership"
-        grant: "Grant Access"
-        deny: "Deny Access"
-        make_admin: "Make Admin"
-        delete_group: "Delete group"
+    header: "Your Groups"
+    title: "Title"
+    actions: "Actions"
+    name: "Name"
+    manage_shared_account_links: Manage shared account links
+    admin_label: Admin
+    member_label: Member
+    pending_label: Pending
+    button:
+      new: "New Group"
+      show: "Show"
+      edit: "Edit"
+      destroy: "Destroy"
+      remove: "Remove"
+      back: "Back"
+      save: "Save Group"
+      leave: "Leave Group"
+      request: "Request Membership"
+      grant: "Grant Access"
+      deny: "Deny Access"
+      make_admin: "Make Admin"
+      demote_admin: "Demote Admin"
+      delete_group: "Delete group"
+      demote_yourself: "Demote yourself"
 
-      edit:
-        header: "Editing"
-      new:
-        header: "New Group"
-      show:
-        description: "Description"
-        admins: "Admins"
-        users: "Users"
-        pending: "Pending users"
-        tasks: "Tasks"
-        add_account_link_user: Share Account Link with %{user}
-        remove_account_link_user: Remove shared Account Link for %{user}
-      admin:
-        header: "Group Administration"
+    edit:
+      header: "Editing"
+    new:
+      header: "New Group"
+    show:
+      description: "Description"
+      admins: "Admins"
+      users: "Users"
+      pending: "Pending users"
+      tasks: "Tasks"
+      add_account_link_user: Share Account Link with %{user}
+      remove_account_link_user: Remove shared Account Link for %{user}
+      no_users: "The group does not have any users"
+      no_tasks: "The group does not have any tasks yet"
+    admin:
+      header: "Group Administration"
 
-      authorization_error: "You need to request membership to view this group!"
-      errorMessage: "prohibited this group from being saved."
-      noExercisesAdded: "No Exercises Added"
-      no_admin_validation: No admin in group
+    authorization_error: "You need to request membership to view this group!"
+    errorMessage: "prohibited this group from being saved."
+    noExercisesAdded: "No Exercises Added"
+    no_admin_validation: No admin in group
+    demote_admin:
+      confirm: "Are you sure you want to demote the admin?"
+    demote_yourself:
+      confirm: "Are your sure your want to demote yourself?"
 
   group_memberships:
     duplicate_validation_error: cannot have multiple memberships for same member and group

@@ -40,6 +40,12 @@ class Group < ApplicationRecord
     group_membership_for(user)&.role_admin!
   end
 
+  def demote_admin(admin)
+    return false unless admin?(admin)
+
+    group_membership_for(admin)&.role_confirmed_member!
+  end
+
   def grant_access(user)
     return false unless applicant?(user)
 

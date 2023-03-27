@@ -189,7 +189,7 @@ RSpec.describe TasksController do
 
           it 'adds two groups to the Task' do
             post_request
-            expect(Task.last.groups).to match_array([group, group2])
+            expect(Task.last.groups).to contain_exactly(group, group2)
           end
         end
 
@@ -200,7 +200,7 @@ RSpec.describe TasksController do
 
           it 'only adds one group to the Task' do
             post_request
-            expect(Task.last.groups).to match_array([group])
+            expect(Task.last.groups).to contain_exactly(group)
           end
         end
       end
@@ -288,7 +288,7 @@ RSpec.describe TasksController do
 
           it 'adds two groups to the Task' do
             put_update
-            expect(task.reload.groups).to match_array([group, group2])
+            expect(task.reload.groups).to contain_exactly(group, group2)
           end
         end
 
@@ -299,7 +299,7 @@ RSpec.describe TasksController do
 
           it 'adds group to the Task' do
             put_update
-            expect(task.reload.groups).to match_array([group])
+            expect(task.reload.groups).to contain_exactly(group)
           end
         end
 
@@ -318,7 +318,6 @@ RSpec.describe TasksController do
 
           let(:group) { create(:group) }
           let(:group_tasks_params) { {group_ids: ['']} }
-
 
           it 'does not remove the group from the Task' do
             expect { put_update }.not_to change { task.reload.groups.map(&:id) }

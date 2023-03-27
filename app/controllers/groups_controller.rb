@@ -4,7 +4,7 @@ class GroupsController < ApplicationController
   load_and_authorize_resource
   before_action :set_group, only: %i[show edit update destroy request_access grant_access delete_from_group make_admin]
   before_action :set_option, only: [:index]
-  before_action :set_user, only: %i[grant_access delete_from_group deny_access make_admin]
+  before_action :set_user, only: %i[grant_access delete_from_group deny_access make_admin demote_admin]
 
   def index
     @groups = if @option == 'mine'
@@ -95,6 +95,11 @@ class GroupsController < ApplicationController
   def make_admin
     @group.make_admin(@user)
     redirect_to @group, notice: t('controllers.group.make_admin_notice')
+  end
+
+  def demote_admin
+    @group.demote_admin(@user)
+    redirect_to @group, notice: t('controllers.group.demote_admin_notice')
   end
 
   private

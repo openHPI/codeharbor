@@ -82,4 +82,4 @@ en:
         other: "%{count} errors prohibited this %{resource} from being saved:"
   groups:
     show:
-      no_pending_users: "no pending users"
+      no_pending_users: "The group does not have pending users"
