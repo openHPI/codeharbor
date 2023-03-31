@@ -7,6 +7,7 @@ CodeHarbor is a repository system for automatically gradeable programming exerci
 [![Build Status](https://github.com/openHPI/codeharbor/workflows/CI/badge.svg)](https://github.com/openHPI/codeharbor/actions?query=workflow%3ACI)
 [![Code Climate](https://codeclimate.com/github/openHPI/codeharbor/badges/gpa.svg)](https://codeclimate.com/github/openHPI/codeharbor)
 [![Test Coverage](https://codeclimate.com/github/openHPI/codeharbor/badges/coverage.svg)](https://codeclimate.com/github/openHPI/codeharbor)
+[![codecov](https://codecov.io/gh/openHPI/codeharbor/branch/master/graph/badge.svg?token=lUL0Fq7Uc9)](https://codecov.io/gh/openHPI/codeharbor)
 
 
 ## Server Setup and Deployment
