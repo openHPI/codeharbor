@@ -974,21 +974,15 @@ en:
       back: "Back"
       delete_modal:
         title: "Warning"
-        content_html: |
-          Deletion of your account will have the following effects: 
-          <ul>
-            <li>Tasks:</li>
-              <ul>
-                <li>Your tasks will persist, but your name will be anonymized</li>
-              </ul>
-            <li>Groups:</li>
-              <ul>
-                <li>Groups with only you as user will be deleted</li> 
-                <li>Groups with only you as admin and other users: Another user will be randomly declared as admin</li> 
-                <li>Groups with other admins: no changes</li>
-              </ul>
-          </ul>
         last_confirm: Are you sure you want to permanently delete your account?
+        content:
+          intro: "Deletion of your account will have the following effects:"
+          tasks_header: "Tasks:"
+          tasks_content: "Your tasks will persist, but your name will be anonymized"
+          groups_header: "Groups:"
+          groups_1: "Groups with only you as user will be deleted"
+          groups_2: "Groups with only you as admin and other users: Another user will be randomly declared as admin"
+          groups_3: "Groups with other admins: no changes"
 
     admin:
       header: "User Administration"
@@ -1176,3 +1170,4 @@ en:
   notification_modal:
     cancel: Cancel
     confirm: Confirm
+

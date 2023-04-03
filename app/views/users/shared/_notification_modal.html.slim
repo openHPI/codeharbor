@@ -7,7 +7,7 @@
         h4.modal-title
           = title
       .modal-body id='notification-modal-body'
-        = content
+        = yield(:notification_modal_content)
       .modal-footer
         - if confirm_notification_javascript.present?
           = button_tag class: 'btn btn-important green-border', onclick: confirm_notification_javascript do
