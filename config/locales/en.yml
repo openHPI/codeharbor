@@ -472,6 +472,7 @@ en:
       remove_account_link_user: Remove shared Account Link for %{user}
       no_users: "The group does not have any users"
       no_tasks: "The group does not have any tasks yet"
+      no_pending_users: The group does not have pending users
     admin:
       header: "Group Administration"
 
