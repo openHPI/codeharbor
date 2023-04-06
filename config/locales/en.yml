@@ -978,7 +978,7 @@ en:
         content:
           intro: "Deletion of your account will have the following effects:"
           tasks_header: "Tasks:"
-          tasks_content: "Your tasks will persist, but your name will be anonymized"
+          tasks_content: "Your tasks will remain, but your name will be anonymized"
           groups_header: "Groups:"
           groups_1: "Groups with only you as user will be deleted"
           groups_2: "Groups with only you as admin and other users: Another user will be randomly declared as admin"
