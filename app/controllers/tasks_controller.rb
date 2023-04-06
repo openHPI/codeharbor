@@ -244,6 +244,8 @@ class TasksController < ApplicationController
   end
 
   def render_export_actions(task:, exported:, error: nil, task_found: nil, update_right: nil)
-    render_to_string(partial: 'export_actions', formats: :html, locals: {task:, exported:, error:, task_found:, update_right:})
+    render_to_string(partial: 'export_actions',
+      formats: :html,
+      locals: {task:, exported:, error:, task_found:, update_right:})
   end
 end
