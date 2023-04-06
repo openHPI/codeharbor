@@ -354,11 +354,10 @@ RSpec.describe Group do
     before { group }
 
     let(:user) { build(:user) }
-    let(:group) { create(:group) }
+    let(:group_memberships) { [group_membership, build(:group_membership, :with_admin)] }
 
     context 'when user is in group' do
       let(:group) { create(:group, group_memberships:) }
-      let(:group_memberships) { [group_membership, build(:group_membership, :with_admin)] }
       let(:group_membership) { build(:group_membership, :with_applicant, user:) }
 
       it { is_expected.to be false }
@@ -368,7 +367,6 @@ RSpec.describe Group do
       end
 
       context 'when user is confirmed_member' do
-        let(:group_memberships) { [group_membership, build(:group_membership, :with_admin)] }
         let(:group_membership) { build(:group_membership, user:) }
 
         it { is_expected.to be false }
@@ -379,13 +377,23 @@ RSpec.describe Group do
       end
 
       context 'when user is admin' do
-        let(:group_memberships) { [group_membership] }
         let(:group_membership) { build(:group_membership, :with_admin, user:) }
 
         it { is_expected.to be true }
 
         it 'changes role to confirmed_member' do
           expect { demote_admin }.to change { group_membership.reload.role }.from('admin').to('confirmed_member')
+        end
+      end
+
+      context 'when user is the only admin' do
+        let(:group_memberships) { [group_membership] }
+        let(:group_membership) { build(:group_membership, :with_admin, user:) }
+
+        it { is_expected.to be false }
+
+        it 'does not change role' do
+          expect { demote_admin }.not_to change { group_membership.reload.role }
         end
       end
     end

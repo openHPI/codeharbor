@@ -41,7 +41,7 @@ class Group < ApplicationRecord
   end
 
   def demote_admin(admin)
-    return false unless admin?(admin)
+    return false unless admin?(admin) && admins.size > 1
 
     group_membership_for(admin)&.role_confirmed_member!
   end

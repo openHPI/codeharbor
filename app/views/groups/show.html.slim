@@ -14,7 +14,7 @@
         .table-list
           = admin.email
           = ' '
-          - if can? :demote_admin, @group && @group.admins.length > 1
+          - if can?(:demote_admin, @group) && @group.admins.length > 1
             = link_to demote_admin_group_path(group: @group, user: admin), method: :post, class: 'btn btn-default btn-xs', data: { confirm: admin == current_user ? t('groups.demote_yourself.confirm') : t('groups.demote_admin.confirm') } do
               i.fa.fa-arrow-down style=("color:#000080")
               = ' ' + (admin == current_user ? t('groups.button.demote_yourself') : t('groups.button.demote_admin'))
