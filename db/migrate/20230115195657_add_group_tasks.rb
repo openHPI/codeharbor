@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddGroupsTasks < ActiveRecord::Migration[6.1]
+class AddGroupTasks < ActiveRecord::Migration[6.1]
   def change
     create_table :group_tasks, id: :uuid, force: :cascade do |t|
       t.belongs_to :task, foreign_key: true, null: false, index: true
