@@ -13,6 +13,9 @@ Rails/CreateTableWithTimestamps:
 Rails/BulkChangeTable:
   Enabled: false
 
+Rails/ThreeStateBooleanColumn:
+  Enabled: false
+
 # The models need to be fixed anyway
 #
 Rails/UniqueValidationWithoutIndex:
