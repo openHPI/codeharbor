@@ -13,4 +13,8 @@ ready =->
     event.preventDefault()
     $('.account-link-description').toggle()
 
+  $('.delete-user').on 'click', (event) ->
+    event.preventDefault()
+    $('#notification-modal').modal()
+
 $(document).on('turbolinks:load', ready)

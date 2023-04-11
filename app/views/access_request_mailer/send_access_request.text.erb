@@ -1,6 +1,6 @@
 Hello <%= @admin.name %>
 
-<%= @user.name %> asked to join your group " <%= @group.name %>
+<%= @user.name %> asked to join your group "<%= @group.name %>"
 If you want to give your permission click on the link below.
 Otherwise ignore this Email.
-<%= sessions_email_link_url(user: @admin)%>
+<%= group_url(@group)%>

@@ -6,11 +6,11 @@
 <body>
 <h3>Hello <%= @admin.name %></h3>
 <p>
-  <%= @user.name %> asked to join your group " <%= @group.name %> <br/>
+  <%= @user.name %> asked to join your group "<%= @group.name %>" <br/>
   If you want to give your permission click on the link below. <br/>
   Otherwise ignore this Email. <br/>
   <br/>
-  <%= link_to 'Confirm Request', sessions_email_link_url(user:@admin)%>
+  <%= link_to 'Confirm Request', group_url(@group)%>
 </p>
 </body>
 </html>

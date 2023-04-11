@@ -67,9 +67,19 @@
             = label_tag 'exercise_private_false', t('exercises.visibility.public'), class: 'radio-left'
             = f.radio_button :private, true, value: true
             = label_tag 'exercise_private_true', t('exercises.visibility.private'), class: 'radio-right'
-        /.field-element
-          = f.label :groups, t('exercises.groups'), class: 'form-label'
-          = f.select :groups, options_for_select((@task.groups + current_user.member_groups).uniq.collect{ |g| [g.name, g.id] }, @task.groups.pluck(:id)), {}, {class: "my-group form-control", multiple: "multiple", style: "width: 300px;"}
+        = fields_for :group_tasks do |ff|
+          .field-element
+            = ff.label :group_ids, t('tasks.groups'), class: 'form-label'
+            = ff.collection_select :group_ids, (current_user.member_groups).uniq, :id, :name, {selected: @task.groups.map(&:id)}, {class: "my-group form-control", multiple: true, style: "width: 300px;"}
+            - if (@task.groups - current_user.member_groups).length > 0
+              .unchangeable-groups
+                span.title style='margin-right: 5px;'
+                  = t('tasks.edit.unchangeable_groups')+':'
+                - (@task.groups - current_user.member_groups).each_with_index do |group, index|
+                  - if index > 0
+                    = ', '
+                  = group.name
+
         /.field-element
           = f.label :labels, t('exercises.labels'), class: 'form-label'
           = f.select :labels, options_for_select(Label.all.collect{ |l| [l.name, l.name] }, @task.labels.pluck(:name)), {}, {class: "my-tag form-control", multiple: "multiple", style: "width: 300px;"}

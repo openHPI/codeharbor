@@ -4,7 +4,7 @@ class GroupsController < ApplicationController
   load_and_authorize_resource
   before_action :set_group, only: %i[show edit update destroy request_access grant_access delete_from_group make_admin]
   before_action :set_option, only: [:index]
-  before_action :set_user, only: %i[grant_access delete_from_group deny_access make_admin]
+  before_action :set_user, only: %i[grant_access delete_from_group deny_access make_admin demote_admin]
 
   def index
     @groups = if @option == 'mine'
@@ -23,31 +23,26 @@ class GroupsController < ApplicationController
   def edit; end
 
   def create
-    respond_to do |format|
-      @group = Group.create_with_admin(group_params, current_user)
-      if @group&.persisted?
-        format.html { redirect_to @group, notice: t('controllers.group.created') }
-      else
-        format.html { render :new }
-      end
+    @group = Group.new(group_params)
+    @group.group_memberships << GroupMembership.new(user: current_user, role: :admin)
+    if @group.save
+      redirect_to @group, notice: t('controllers.group.created')
+    else
+      render :new
     end
   end
 
   def update
-    respond_to do |format|
-      if @group.update(group_params)
-        format.html { redirect_to @group, notice: t('controllers.group.updated') }
-      else
-        format.html { render :edit }
-      end
+    if @group.update(group_params)
+      redirect_to @group, notice: t('controllers.group.updated')
+    else
+      render :edit
     end
   end
 
   def destroy
     @group.destroy
-    respond_to do |format|
-      format.html { redirect_to groups_url, notice: t('controllers.group.destroyed') }
-    end
+    redirect_to groups_url, notice: t('controllers.group.destroyed')
   end
 
   def leave
@@ -66,13 +61,13 @@ class GroupsController < ApplicationController
 
       AccessRequestMailer.send_access_request(current_user, admin, @group).deliver_now
     end
-    @group.add_pending_user(current_user)
+    @group.add(current_user, role: :applicant)
     redirect_to groups_path
   end
 
-  def remove_exercise
-    exercise = Task.find(params[:exercise])
-    @group.tasks.delete(exercise)
+  def remove_task
+    task = Task.find(params[:task])
+    @group.tasks.delete(task)
     redirect_to @group, notice: t('controllers.group.remove_task_notice')
   end
 
@@ -100,6 +95,11 @@ class GroupsController < ApplicationController
   def make_admin
     @group.make_admin(@user)
     redirect_to @group, notice: t('controllers.group.make_admin_notice')
+  end
+
+  def demote_admin
+    @group.demote_admin(@user)
+    redirect_to @group, notice: t('controllers.group.demote_admin_notice')
   end
 
   private

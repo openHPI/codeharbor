@@ -178,7 +178,7 @@ describe ProformaService::ExportTask do
       end
 
       context 'when task has multiple model-solutions' do
-        let(:model_solutions) { [model_solution, build(:model_solution, files: [build(:task_file, :exportable)], xml_id: 'ms-2')] }
+        let(:model_solutions) { [model_solution, build(:model_solution, files: build_list(:task_file, 1, :exportable), xml_id: 'ms-2')] }
 
         it 'adds two model-solution to task' do
           expect(xml.xpath('/task/model-solutions/model-solution')).to have(2).items
@@ -209,8 +209,7 @@ describe ProformaService::ExportTask do
 
       context 'when test has a file' do
         let(:test) { build(:test, files: test_files) }
-        let(:test_files) { [test_file] }
-        let(:test_file) { build(:task_file, :exportable) }
+        let(:test_files) { build_list(:task_file, 1, :exportable) }
 
         it 'adds test node to tests node' do
           expect(xml.xpath('/task/tests/test')).to have(1).item

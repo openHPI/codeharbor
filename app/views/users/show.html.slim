@@ -95,8 +95,27 @@
       = ' '
       = t('users.show.edit')
   - if can? :delete, @user
-    = link_to registration_path(@user), method: :delete, data: {confirm: t('sure')}, class:'btn btn-important' do
+    = button_tag type: 'button', class: 'btn btn-important delete-user', style: 'margin-bottom: 10px' do
+
       i.fa.fa-trash
       = ' '
       = t('users.show.delete')
   = link_to t('users.show.back'), :back, class:'btn btn-important'
+
+= render layout: 'users/shared/notification_modal', locals: { title: t('users.show.delete_modal.title'), confirm_notification_button: {target: user_registration_path, method: 'delete'}} do
+  = t('users.show.delete_modal.content.intro')
+  ul
+    li
+      = t('users.show.delete_modal.content.tasks_header')
+      ul
+        li
+          = t('users.show.delete_modal.content.tasks_content')
+    li
+      = t('users.show.delete_modal.content.groups_header')
+      ul
+        li
+          = t('users.show.delete_modal.content.groups_1')
+        li
+          = t('users.show.delete_modal.content.groups_2')
+        li
+          = t('users.show.delete_modal.content.groups_3')

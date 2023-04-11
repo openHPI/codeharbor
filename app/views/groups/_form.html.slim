@@ -23,7 +23,7 @@
     .actions.btn-group[role="group"]
       = button_tag type: 'submit', class: 'btn btn-important' do
         i.fa.fa-group style=("color: #660000")
-        = ' ' + t('groups.button.save')
+        =< t('groups.button.save')
       = link_to :back, class: 'btn btn-important' do
         i.fa.fa-remove style=("color: gray")
-        = ' ' + t('exercises.form.cancel')
+        =< t('exercises.form.cancel')

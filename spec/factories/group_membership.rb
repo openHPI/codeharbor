@@ -2,8 +2,18 @@
 
 FactoryBot.define do
   factory :group_membership do
-    member { create(:user) }
-    group { create(:group) }
-    membership_type { 'member' }
+    user { build(:user) }
+    role { :confirmed_member }
+
+    trait :with_admin do
+      role { :admin }
+    end
+    trait :with_applicant do
+      role { :applicant }
+    end
+
+    trait :with_group do
+      group { build(:group) }
+    end
   end
 end

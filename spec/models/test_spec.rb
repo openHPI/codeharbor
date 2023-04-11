@@ -13,7 +13,7 @@ RSpec.describe Test do
   describe '#duplicate' do
     subject(:duplicate) { test.duplicate }
 
-    let(:test) { create(:test, task: create(:task), files: [build(:task_file, :exportable), build(:task_file, :exportable)]) }
+    let(:test) { create(:test, task: create(:task), files: build_list(:task_file, 2, :exportable)) }
 
     it 'creates a new test' do
       expect(duplicate).not_to be test

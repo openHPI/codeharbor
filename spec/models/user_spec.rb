@@ -98,14 +98,16 @@ RSpec.describe User do
       expect { destroy }.to change(user, :last_name).to 'user'
     end
 
-    it 'changes deleted to deleted' do
+    it 'changes deleted to true' do
       expect { destroy }.to change(user, :deleted).to true
     end
 
     context 'when user is in a group' do
       before { group }
 
-      let(:group) { create(:group, users: [create(:user), user]) }
+      let(:group) { create(:group, group_memberships:) }
+
+      let(:group_memberships) { [build(:group_membership, :with_admin), build(:group_membership, user:)] }
 
       it { is_expected.to be true }
 
@@ -113,40 +115,32 @@ RSpec.describe User do
         expect { destroy }.not_to change(Group, :count)
       end
 
+      it 'removes one group_membership' do
+        expect { destroy }.to change { group.group_memberships.reload.size }.by(-1)
+      end
+
       context 'when user is admin and only user in group' do
-        let(:group) { create(:group, users: [user]) }
+        let(:group_memberships) { build_list(:group_membership, 1, :with_admin, user:) }
 
         it 'deletes group' do
           expect { destroy }.to change(Group, :count).by(-1)
         end
       end
 
-      context 'when another user is in the group' do
-        before { group.users << other_user }
-
-        let(:other_user) { create(:user) }
-
-        it { is_expected.to be true }
+      context 'when another user is in the group, but does not have admin privileges' do
+        let(:group_memberships) { [build(:group_membership, :with_admin, user:), build(:group_membership, created_at: 1.day.ago, user: new_admin), build(:group_membership, :with_applicant, created_at: 2.days.ago)] }
+        let(:new_admin) { build(:user) }
 
         it 'does not delete group' do
           expect { destroy }.not_to change(Group, :count)
         end
 
-        context 'when user is the only admin of group' do
-          let(:group) { create(:group, users: [user, create(:user)]) }
-
-          it { is_expected.to be false }
-
-          it 'does not delete group' do
-            expect { destroy }.not_to change(Group, :count)
-          end
+        it 'promotes the oldest confirmed_member to admin' do
+          expect { destroy }.to change { group.reload.group_membership_for(new_admin).role }.from('confirmed_member').to('admin')
         end
 
-        context 'when both users are admins of group' do
-          before do
-            group.make_admin user
-            group.make_admin other_user
-          end
+        context 'when the other user is also an admin' do
+          let(:group_memberships) { [build(:group_membership, :with_admin, user:), build(:group_membership, :with_admin)] }
 
           it { is_expected.to be true }
 

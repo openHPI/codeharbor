@@ -1,73 +1,79 @@
 # frozen_string_literal: true
 
 class Group < ApplicationRecord
-  groupify :group, members: %i[users tasks], default_members: :users
+  has_many :group_memberships, dependent: :destroy
+  has_many :users, through: :group_memberships
+
+  has_many :group_tasks, dependent: :destroy
+  has_many :tasks, through: :group_tasks
+
   validates :name, presence: true
   validate :admin_in_group
 
-  def self.create_with_admin(params, user)
-    group = Group.new(params)
-    return group unless user
+  def add(user, role: :confirmed_member)
+    GroupMembership.new(group: self, user:, role:).save!
+  end
 
-    ActiveRecord::Base.transaction do
-      group.save(validate: false)
-      group.make_admin(user)
-      raise ActiveRecord::Rollback unless group.valid?
-    end
-    group
+  def group_membership_for(user)
+    group_memberships.where(user:).first
   end
 
   def admin?(user)
-    user.in_group?(self, as: 'admin')
+    admins.include? user
   end
 
   def confirmed_member?(user)
-    user.in_group?(self) unless user.in_group?(self, as: 'pending')
+    confirmed_members.include? user
   end
 
-  def member?(user)
-    user.in_group?(self, as: 'member')
+  def user?(user)
+    users.include? user
+  end
+
+  def applicant?(user)
+    applicants.include? user
   end
 
   def make_admin(user)
-    users.delete(user)
-    add(user, as: 'admin')
+    return false unless confirmed_member?(user)
+
+    group_membership_for(user)&.role_admin!
+  end
+
+  def demote_admin(admin)
+    return false unless admin?(admin) && admins.size > 1
+
+    group_membership_for(admin)&.role_confirmed_member!
   end
 
   def grant_access(user)
-    users.delete(user)
-    add(user, as: 'member')
-  end
+    return false unless applicant?(user)
 
-  def add_pending_user(user)
-    add(user, as: 'pending')
+    group_membership_for(user)&.role_confirmed_member!
   end
 
   def admins
-    User.in_group(self).as(:admin)
+    group_memberships.select(&:role_admin?).map(&:user)
   end
 
   def confirmed_members
-    User.in_group(self).as(:member) | User.in_group(self).as(:admin)
+    group_memberships.select(&:role_confirmed_member?).map(&:user)
   end
 
-  def members
-    User.in_group(self).as(:member)
+  def applicants
+    group_memberships.select(&:role_applicant?).map(&:user)
   end
 
-  def pending_users
-    User.in_group(self).as(:pending)
-  end
-
-  def remove_member(member)
+  def remove_member(user)
     ActiveRecord::Base.transaction do
-      users.destroy(member)
+      group_membership_for(user)&.destroy
+      reload
       validate!
     end
   end
 
   def last_admin?(user)
-    user.in_group?(self, as: 'admin') && admins.size == 1
+    group_membership_for(user)&.role_admin? && admins.size == 1
   end
 
   private

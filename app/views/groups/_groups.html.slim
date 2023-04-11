@@ -16,7 +16,10 @@
         span= group.name
         span.pull-right
           - unless @option == 'all'
-            = group.admin?(current_user) ? t('groups.admin_label') : group.member?(current_user) ? t('groups.member_label') : t('groups.pending_label')
+            - if group.admin?(current_user)
+              = t('groups.admin_label')
+            - else
+              = group.confirmed_member?(current_user) ? t('groups.member_label') : t('groups.pending_label')
     .panel-body
       .col-md-9 style=("overflow-wrap: break-word;")
         - if group.description
@@ -28,7 +31,7 @@
             - if can? :edit, group
               = link_to 'Edit', edit_group_path(group), class: 'btn btn-default'
               = link_to 'Destroy', group, data: {confirm: 'Are you sure?'}, method: :delete, class: 'btn btn-default'
-          - elsif group.pending_users.include?(current_user)
+          - elsif group.applicants.include?(current_user)
             = 'Wait to get accepted'
           - else
             = link_to 'Request Membership', request_access_group_path(group), method: :post, class: 'btn btn-default'

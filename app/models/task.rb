@@ -5,13 +5,15 @@ require 'zip'
 class Task < ApplicationRecord
   acts_as_taggable_on :state
 
-  groupify :group_member
   validates :title, presence: true
 
   validates :uuid, uniqueness: true
   validates :language, format: {with: /\A[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*\z/, message: I18n.t('tasks.form.errors.language')}
 
   has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy
+
+  has_many :group_tasks, dependent: :destroy
+  has_many :groups, through: :group_tasks
 
   has_many :tests, dependent: :destroy
   has_many :model_solutions, dependent: :destroy
@@ -28,6 +30,7 @@ class Task < ApplicationRecord
   accepts_nested_attributes_for :files, allow_destroy: true
   accepts_nested_attributes_for :tests, allow_destroy: true
   accepts_nested_attributes_for :model_solutions, allow_destroy: true
+  accepts_nested_attributes_for :group_tasks, allow_destroy: true
 
   scope :not_owner, ->(user) { where.not(user:) }
   scope :owner, ->(user) { where(user:) }

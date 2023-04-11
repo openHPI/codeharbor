@@ -31,7 +31,7 @@ class TasksController < ApplicationController
 
   def create
     @task = Task.new(task_params)
-
+    TaskService::HandleGroups.call(user: current_user, task: @task, group_tasks_params:)
     @task.user = current_user
 
     if @task.save(context: :force_validations)
@@ -43,6 +43,7 @@ class TasksController < ApplicationController
 
   def update
     @task.assign_attributes(task_params)
+    TaskService::HandleGroups.call(user: current_user, task: @task, group_tasks_params:)
     if @task.save(context: :force_validations)
       redirect_to @task, notice: t('tasks.notification.updated')
     else
@@ -204,8 +205,7 @@ class TasksController < ApplicationController
   end
 
   def test_params
-    [:id, :title, :description, :internal_description, :test_type, :xml_id, :validity, :timeout, :_destroy,
-     {files_attributes: file_params}]
+    [:id, :title, :description, :internal_description, :test_type, :xml_id, :validity, :timeout, :_destroy, {files_attributes: file_params}]
   end
 
   def model_solution_params
@@ -216,6 +216,10 @@ class TasksController < ApplicationController
     params.require(:task).permit(:title, :description, :internal_description, :parent_uuid, :language,
       :programming_language_id, files_attributes: file_params, tests_attributes: test_params,
       model_solutions_attributes: model_solution_params)
+  end
+
+  def group_tasks_params
+    params.permit(group_tasks: {group_ids: []})[:group_tasks]
   end
 
   def import_confirm_params
@@ -242,7 +246,6 @@ class TasksController < ApplicationController
   def render_export_actions(task:, exported:, error: nil, task_found: nil, update_right: nil)
     render_to_string(partial: 'export_actions',
       formats: :html,
-      locals: {task:, exported:, error:, task_found:,
-               update_right:})
+      locals: {task:, exported:, error:, task_found:, update_right:})
   end
 end

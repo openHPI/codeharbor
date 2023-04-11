@@ -14,9 +14,6 @@ class User < ApplicationRecord
     :rememberable,
     :validatable
 
-  groupify :named_group_member
-  groupify :group_member
-
   validates :email, presence: true, uniqueness: {case_sensitive: false}
   validates :first_name, :last_name, presence: true
 
@@ -24,6 +21,9 @@ class User < ApplicationRecord
 
   has_many :collection_users, dependent: :destroy
   has_many :collections, through: :collection_users
+
+  has_many :group_memberships, dependent: :destroy
+  has_many :groups, through: :group_memberships
 
   has_many :account_link_users, dependent: :destroy
   has_many :shared_account_links, through: :account_link_users, dependent: :destroy, source: :account_link
@@ -78,7 +78,7 @@ class User < ApplicationRecord
   end
 
   def member_groups
-    groups - groups.as(:pending)
+    group_memberships.role_admin.map(&:group)
   end
 
   def name
@@ -86,27 +86,26 @@ class User < ApplicationRecord
   end
 
   def handle_destroy
-    destroy = handle_group_memberships
-    if destroy
-      handle_collection_membership
-      handle_messages
-      true
-    else
-      false
-    end
+    handle_group_memberships
+    handle_collection_membership
+    handle_messages
+    true
   end
 
   def handle_group_memberships
-    # in_all_groups?(as: 'admin')
-
     groups.each do |group|
-      if group.users.size > 1
-        return false if in_group?(group, as: 'admin') && group.admins.size == 1
-      else
-        group.destroy
+      next unless group.admin?(self)
+
+      if group.admins.size == 1
+        if group.confirmed_members.empty?
+          group.destroy
+        else
+          group.group_memberships.where(role: 'confirmed_member').order(:created_at).first.update(role: 'admin')
+          # notify user somehow?
+        end
       end
     end
-    true
+    group_memberships.destroy_all
   end
 
   def handle_collection_membership

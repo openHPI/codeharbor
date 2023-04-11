@@ -1,0 +1,19 @@
+.bootstrap-modal.modal.fade style='display:none;' id="notification-modal"
+  .modal-dialog
+    .modal-content
+      .modal-header
+        = button_tag class: 'close', data: {dismiss: 'modal'} do
+          = 'x'
+        h4.modal-title
+          = title
+      .modal-body id='notification-modal-body'
+        = yield
+      .modal-footer
+        - if defined?(confirm_notification_javascript)
+          = button_tag class: 'btn btn-important green-border', onclick: confirm_notification_javascript do
+            = t('notification_modal.confirm')
+        - elsif defined?(confirm_notification_button)
+          = button_to confirm_notification_button[:target], method: confirm_notification_button[:method], form_class: 'd-inline margin-right-5px', class: 'btn btn-important green-border', style: 'display: inline' do
+            = t('notification_modal.confirm')
+        = button_tag class: 'btn btn-important red-border', data: { dismiss: 'modal' } do
+          = t('notification_modal.cancel')
