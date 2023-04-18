@@ -36,12 +36,17 @@ jobs:
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
-      - name: Manage yarn cache
+      - name: Manage yarn, webpack and assets cache
         uses: actions/cache@v3
         # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         id: yarn-cache
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          path: |
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+            public/assets
+            public/packs-test
+            tmp/cache
+            tmp/shakapacker
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-

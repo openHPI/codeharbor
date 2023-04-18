@@ -54,7 +54,6 @@ gem 'cancancan'
 
 # Use Bootstrap (app/assets/stylesheets)
 gem 'devise-bootstrap-views', '~> 1.0'
-gem 'twitter-bootstrap-rails'
 
 gem 'ace-rails-ap'
 gem 'acts-as-taggable-on', '~> 9.0'
@@ -124,3 +123,5 @@ group :test do
   gem 'webmock'
 end
 gem 'sassc-rails'
+
+gem 'shakapacker', '7.0.3'
