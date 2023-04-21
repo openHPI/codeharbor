@@ -8,11 +8,11 @@ class CommentsController < ApplicationController
 
   def index
     @comments = Comment.where(task: @task).paginate(per_page: 5, page: params[:page]).order('created_at DESC')
-    render 'load_comments.js.erb'
+    render 'load_comments'
   end
 
   def edit
-    render 'edit_comment.js.erb'
+    render 'edit_comment'
   end
 
   def create
