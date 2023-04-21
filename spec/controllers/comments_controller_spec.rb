@@ -24,7 +24,7 @@ RSpec.describe CommentsController do
 
   describe 'GET #edit' do
     it 'answers with HTTP 200 OK' do
-      get :index, xhr: true, format: :js, params: {task_id: task.id}
+      get :index, params: {task_id: task.id}, format: :js, xhr: true
       expect(response).to have_http_status :ok
     end
   end
