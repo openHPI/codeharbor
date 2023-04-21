@@ -33,3 +33,6 @@ RSpec/NestedGroups:
 #
 RSpec/EmptyExampleGroup:
   Enabled: false
+
+RSpec/IndexedLet:
+  Max: 2
