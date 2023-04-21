@@ -10,7 +10,11 @@ class ApplicationController < ActionController::Base
 
   rescue_from CanCan::AccessDenied do |_exception|
     if current_user
-      redirect_to({action: :index}, alert: t('controllers.authorization'))
+      begin
+        redirect_to({action: :index}, alert: t('controllers.authorization'))
+      rescue ActionController::UrlGenerationError
+        redirect_to root_path, alert: t('controllers.authorization')
+      end
     else
       redirect_to root_path, alert: t('controllers.authorization')
     end
@@ -18,6 +22,8 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActiveRecord::RecordNotFound do |_exception|
     redirect_to({action: :index}, alert: t('controllers.not_found'))
+  rescue ActionController::UrlGenerationError
+    redirect_to root_path, alert: t('controllers.not_found')
   end
 
   private
