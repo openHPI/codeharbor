@@ -3,6 +3,22 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
 
+  rescue_from CanCan::AccessDenied do |_exception|
+    if current_user
+      redirect_to({id: current_user.id}, alert: t('controllers.authorization'))
+    else
+      redirect_to root_path, alert: t('controllers.authorization')
+    end
+  end
+
+  rescue_from ActiveRecord::RecordNotFound do |_exception|
+    if current_user
+      redirect_to({id: current_user.id}, alert: t('controllers.not_found'))
+    else
+      redirect_to root_path, alert: t('controllers.authorization')
+    end
+  end
+
   def index
     @users = User.all.paginate(per_page: 10, page: params[:page])
   end
