@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :license do
-    name { 'License' }
+    sequence(:name) {|n| "license#{n}"}
     link { 'Link' }
   end
 end
