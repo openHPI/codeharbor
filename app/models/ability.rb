@@ -115,7 +115,7 @@ class Ability
 
   def license_abilities(user)
     can %i[delete], License do |l|
-      user.role == 'admin' && l.tasks.count.zero?
+      user.role == 'admin'
     end
   end
 end

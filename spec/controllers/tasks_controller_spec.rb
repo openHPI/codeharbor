@@ -149,6 +149,11 @@ RSpec.describe TasksController do
         expect(response).to redirect_to(Task.last)
       end
 
+      it 'sets license correctly' do
+        post_request
+        expect(Task.last.license).to match(License.last)
+      end
+
       context 'with group_tasks_params' do
         subject(:post_request) { post :create, params: {task: valid_params, group_tasks: group_tasks_params} }
 
@@ -224,9 +229,9 @@ RSpec.describe TasksController do
   describe 'PUT #update' do
     subject(:put_update) { put :update, params: {id: task.to_param, task: changed_attributes} }
 
-    let(:changed_attributes) { {title: 'new_title'} }
+    let(:changed_attributes) { {title: 'new_title', license_id: create(:license, name: 'new_license').id} }
     let!(:task) { create(:task, valid_attributes) }
-    let(:valid_attributes) { {user:, title: 'title'} }
+    let(:valid_attributes) { {user:, title: 'title', license: create(:license, name: 'old_license')} }
 
     context 'with valid params' do
       it 'updates the requested task' do
@@ -241,6 +246,10 @@ RSpec.describe TasksController do
       it 'redirects to the task' do
         put_update
         expect(response).to redirect_to(task)
+      end
+
+      it 'updates the license' do
+        expect { put_update }.to change { task.reload.license.name }.to('new_license')
       end
 
       context 'when task has a test' do
