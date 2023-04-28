@@ -35,9 +35,6 @@ class Ability
 
     # Message
     message_abilities user
-
-    # License
-    license_abilities user
   end
 
   def admin_abilities(user)
@@ -111,11 +108,5 @@ class Ability
     can %i[create], Message
     can %i[show reply delete], Message, recipient: {id: user.id}
     can %i[show delete], Message, sender: {id: user.id}
-  end
-
-  def license_abilities(user)
-    can %i[delete], License do |l|
-      user.role == 'admin'
-    end
   end
 end
