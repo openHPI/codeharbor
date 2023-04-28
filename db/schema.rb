@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_11_004611) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_26_101035) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -248,6 +248,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_11_004611) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "meta_data", default: {}
+    t.bigint "license_id"
+    t.index ["license_id"], name: "index_tasks_on_license_id"
     t.index ["programming_language_id"], name: "index_tasks_on_programming_language_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
@@ -325,6 +327,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_11_004611) do
   add_foreign_key "reports", "tasks"
   add_foreign_key "reports", "users"
   add_foreign_key "task_labels", "tasks"
+  add_foreign_key "tasks", "licenses"
   add_foreign_key "tests", "tasks"
   add_foreign_key "user_identities", "users"
 end
