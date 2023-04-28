@@ -26,6 +26,7 @@ class Task < ApplicationRecord
 
   belongs_to :user
   belongs_to :programming_language, optional: true
+  belongs_to :license, optional: true
 
   accepts_nested_attributes_for :files, allow_destroy: true
   accepts_nested_attributes_for :tests, allow_destroy: true
