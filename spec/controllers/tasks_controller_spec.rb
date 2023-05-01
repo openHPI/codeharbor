@@ -151,7 +151,7 @@ RSpec.describe TasksController do
 
       it 'sets license correctly' do
         post_request
-        expect(Task.last.license).to match(License.last)
+        expect(assigns(:task).license).to match(valid_params[:license_id])
       end
 
       context 'with group_tasks_params' do

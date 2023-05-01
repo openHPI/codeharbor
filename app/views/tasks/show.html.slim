@@ -156,7 +156,7 @@ legend.toggle-next.closed
         = link_to group.name, group_path(group)
   .row
     .row-label
-      = t('exercises.license')
+      = t('tasks.show.license')
       | :
     .row-value
       - if @task.license
@@ -164,7 +164,7 @@ legend.toggle-next.closed
         = ': '
         = link_to @task.license.link, @task.license.link
       - else
-        = t('exercises.show.none')
+        = t('tasks.show.no_license')
   /.row
     .row-label
       = t('exercises.impact')
