@@ -57,4 +57,8 @@ class Label < ApplicationRecord
     483c46 3c6e71 70ae6e beee62 f4743b
     c33c54 254e70 37718e 8ee3ef aef3e7
   ].freeze
+
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[name]
+  end
 end

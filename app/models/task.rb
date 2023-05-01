@@ -35,6 +35,7 @@ class Task < ApplicationRecord
   accepts_nested_attributes_for :tests, allow_destroy: true
   accepts_nested_attributes_for :model_solutions, allow_destroy: true
   accepts_nested_attributes_for :group_tasks, allow_destroy: true
+  accepts_nested_attributes_for :labels
 
   scope :owner, ->(user) { where(user:) }
   scope :public_access, -> { where(access_level: :public) }
@@ -147,6 +148,14 @@ class Task < ApplicationRecord
 
   def all_files
     (files + tests.map(&:files) + model_solutions.map(&:files)).flatten
+  end
+
+  def label_names=(label_names)
+    self.labels = label_names.compact_blank.map {|name| Label.find_or_initialize_by(name:) }
+  end
+
+  def label_names
+    labels.map(&:name)
   end
 
   private
