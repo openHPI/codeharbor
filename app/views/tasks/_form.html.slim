@@ -87,7 +87,7 @@
           = f.label :license, t('exercises.license'), class: 'form-label'
           .license
             .select
-              = f.select :license_id, options_for_select(License.all.collect{ |l| [l.name, l.id, {'data-link'=> l.link}] }, @task.license_id), {include_blank: t('exercises.form.none')}, {class: 'form-control'}
+              = f.select :license_id, options_for_select(License.all.collect{ |l| [l.name, l.id, {'data-link'=> l.link}] }, @task.license_id), {include_blank: t('tasks.form.no_license')}, {class: 'form-control'}
             .link
     fieldset.form-group
       legend.toggle-next

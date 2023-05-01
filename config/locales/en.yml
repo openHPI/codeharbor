@@ -1039,6 +1039,7 @@ en:
         language: 'is not in the correct format. Please use one of the following formats: de / en-US'
       none: "None"
       additional_info: "Additional Information"
+      no_license: "No License"
       save: "Save Task"
       cancel: "Cancel"
       tests:
@@ -1153,6 +1154,8 @@ en:
       meta_data: "Metadata"
       add_to_collection: "Add to collection"
       add_collection: "Add Collection"
+      license: "License"
+      no_license: "None"
     edit:
       toggle_file: "Toggle file upload/editor"
       upload_a_new_file: "Upload a new file"
