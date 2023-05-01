@@ -1,36 +1,82 @@
 ready = ->
   $('.my-tag').select2
     width: '100%'
+    tags: true
     multiple: true
+    minimumInputLength: 1
     maximumSelectionLength: 5
     closeOnSelect: false
 
-    templateSelection: (data, container) ->
-      $(container).css("background-color", "#"+$(data.element).attr("label_color"));
-      $(container).css("color", "#"+$(data.element).attr("label_font_color"));
-      $(container).children("span").css("color", "#"+$(data.element).attr("label_font_color"));
+    ajax: {
+      url: '/labels/search',
+      dataType: 'json',
+      data: (params) ->
+        query = {
+          search: params.term,
+          page: params.page || 1
+        }
+        return query;
+    }
 
-      $template = $('<span></span>').text(data.text);
+    ajax: {
+      url: '/labels/search',
+      dataType: 'json',
+      data: (params) ->
+        query = {
+          search: params.term,
+          page: params.page || 1
+        }
+        return query;
+    }
+
+    templateSelection: (data, container) ->
+      text = data.text;
+      bg_color = "#" + ($(data.element).attr("label_color") || data.label_color || "e4e4e4");
+      color = "#" + ($(data.element).attr("label_font_color") || data.label_font_color || "000000");
+
+      if data.newTag == true
+        text += " (new)";
+
+      $(container).css({"background-color" : bg_color, "color" : color});
+      $(container).children("span").css("color", color);
+
+      $template = $('<span></span>').text(text);
       $template.css({"font-size" : "80%", "font-weight" : "bold"});
       return $template;
 
-    templateResult: (data, container) ->
-      $template = $('<div></div>').text(data.text).addClass("task_label");
-      $template.css({"background-color" : "#"+$(data.element).attr("label_color"), "color" : "#"+$(data.element).attr("label_font_color")});
+    templateResult: (data) ->
+      if (data.loading)
+        return data.text;
+
+      text = data.text;
+      bg_color = "#" + (data.label_color || "e4e4e4");
+      color = "#" + (data.label_font_color || "000000");
+
+      if data.newTag == true
+        text += " (new)";
+
+      $template = $('<div></div>').text(text).addClass("task_label");
+      $template.css({"background-color" : bg_color, "color" : color});
       return $template;
 
-    createSearchChoice: (term, data) ->
-      if $(data).filter((->
-        @text.localeCompare(term) == 0
-      )).length == 0
-        return {
-          id: term
-          text: term
-        }
-      return
+    createTag: (params) ->
+      if params.term == '' || params.term.length > 15
+        return null;
+
+      return {
+        id: params.term,
+        text: params.term,
+        newTag: true
+      }
 
     formatSelectionTooBig: (limit) ->
       I18n.t('labels.can_only_create_5')
+
+    $('#task_label_names').on 'select2:select', clear_input
+  return
+
+clear_input = ->
+  $('#task_label_names').siblings(".select2").find("input").val("");
   return
 
 $(document).on 'turbolinks:load', ready

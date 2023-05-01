@@ -216,7 +216,7 @@ class TasksController < ApplicationController
   def task_params
     params.require(:task).permit(:title, :description, :internal_description, :parent_uuid, :language, :license_id,
       :programming_language_id, :access_level, files_attributes: file_params, tests_attributes: test_params,
-      model_solutions_attributes: model_solution_params, label_ids: [])
+      model_solutions_attributes: model_solution_params, label_names: [])
   end
 
   def group_tasks_params

@@ -146,7 +146,7 @@ RSpec.describe TasksController do
           programming_language_id: create(:programming_language, :ruby).id,
           license_id: create(:license),
           language: 'de',
-          label_ids: create_list(:label, 1).map(&:id),
+          label_names: create_list(:label, 1).map(&:name),
         }
       end
 
@@ -171,7 +171,7 @@ RSpec.describe TasksController do
 
       it 'sets labels correctly' do
         post_request
-        expect(assigns(:task).labels.map(&:id)).to eq(valid_params[:label_ids])
+        expect(assigns(:task).labels.map(&:name)).to eq(valid_params[:label_names])
       end
 
       it 'creates a new TaskLabel' do
@@ -269,7 +269,7 @@ RSpec.describe TasksController do
       {
         title: 'new_title',
         license_id: create(:license, name: 'new_license').id,
-        label_ids: [new_label.id],
+        label_names: [new_label.name],
       }
     end
 
@@ -294,6 +294,12 @@ RSpec.describe TasksController do
 
       it 'updates the tasks labels' do
         expect { put_update }.to change { task.reload.labels }.from([existing_label]).to([new_label])
+      end
+
+      it 'creates new task label when requested' do
+        changed_attributes[:label_names] = ['some new label']
+        expect { put_update }.to change { task.reload.labels.map(&:name) }.from([existing_label.name]).to(['some new label'])
+        expect(Label.where(name: 'some new label')).not_to be_empty
       end
 
       context 'when task has a test' do
