@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema[7.0].define(version: 2023_04_26_101035) do
+=======
+ActiveRecord::Schema[7.0].define(version: 2023_05_01_095629) do
+>>>>>>> 92056b9 (Implemented database requirements for task access level)
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -250,6 +254,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_26_101035) do
     t.jsonb "meta_data", default: {}
     t.bigint "license_id"
     t.index ["license_id"], name: "index_tasks_on_license_id"
+    t.integer "access_level", limit: 2, default: 0, null: false, comment: "Used as enum in Rails"
     t.index ["programming_language_id"], name: "index_tasks_on_programming_language_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
