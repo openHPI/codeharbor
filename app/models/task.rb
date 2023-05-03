@@ -36,9 +36,9 @@ class Task < ApplicationRecord
   accepts_nested_attributes_for :model_solutions, allow_destroy: true
   accepts_nested_attributes_for :group_tasks, allow_destroy: true
 
-  scope :not_owner, ->(user) { where.not(user:) }
   scope :owner, ->(user) { where(user:) }
-  scope :visibility, ->(visibility, user = nil) { {owner: owner(user), public: not_owner(user)}.with_indifferent_access[visibility] }
+  scope :public_access, -> { where(access_level: 'public') }
+  scope :visibility, ->(visibility, user = nil) { {owner: owner(user), public: public_access}.with_indifferent_access[visibility] }
   scope :created_before_days, ->(days) { where(created_at: days.to_i.days.ago.beginning_of_day..) if days.to_i.positive? }
   scope :average_rating, lambda {
     select('tasks.*, COALESCE(avg_rating, 0) AS average_rating')
@@ -50,6 +50,8 @@ class Task < ApplicationRecord
   scope :sort_by_average_rating_desc, -> { average_rating.order(average_rating: 'DESC') }
 
   serialize :meta_data, HashAsJsonbSerializer
+
+  enum access_level: {private: 0, public: 1}, _default: :private, _prefix: true
 
   def self.ransackable_scopes(_auth_object = nil)
     %i[created_before_days min_stars]
