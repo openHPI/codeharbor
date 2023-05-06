@@ -132,6 +132,7 @@ RSpec.describe TasksController do
           programming_language_id: create(:programming_language, :ruby).id,
           license_id: create(:license),
           language: 'de',
+          label_ids: [create(:label)],
         }
       end
 
@@ -152,6 +153,11 @@ RSpec.describe TasksController do
       it 'sets license correctly' do
         post_request
         expect(assigns(:task).license).to match(valid_params[:license_id])
+      end
+
+      it 'sets labels correctly' do
+        post_request
+        expect(assigns(:task).labels).to eq(valid_params[:label_ids])
       end
 
       context 'with group_tasks_params' do
@@ -229,9 +235,25 @@ RSpec.describe TasksController do
   describe 'PUT #update' do
     subject(:put_update) { put :update, params: {id: task.to_param, task: changed_attributes} }
 
-    let(:changed_attributes) { {title: 'new_title', license_id: create(:license, name: 'new_license').id} }
+    let(:existing_label) { create(:label) }
+    let(:new_label) { create(:label) }
+
     let!(:task) { create(:task, valid_attributes) }
-    let(:valid_attributes) { {user:, title: 'title', license: create(:license, name: 'old_license')} }
+    let(:valid_attributes) do
+      {
+        user:,
+        title: 'title',
+        license: create(:license, name: 'old_license'),
+        labels: [existing_label],
+      }
+    end
+    let(:changed_attributes) do
+      {
+        title: 'new_title',
+        license_id: create(:license, name: 'new_license').id,
+        label_ids: [new_label.id],
+      }
+    end
 
     context 'with valid params' do
       it 'updates the requested task' do
@@ -250,6 +272,11 @@ RSpec.describe TasksController do
 
       it 'updates the license' do
         expect { put_update }.to change { task.reload.license.name }.to('new_license')
+      end
+
+      it 'updates the tasks labels' do
+        expect(task.labels).to eq([existing_label])
+        expect { put_update }.to change { task.reload.labels }.to([new_label])
       end
 
       context 'when task has a test' do
