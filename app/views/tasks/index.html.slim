@@ -62,6 +62,12 @@
             b = t('tasks.index.search.created')
           span.form-group
             = f.select 'created_before_days', options_for_select({t('tasks.index.search.all_time') => 0, t('tasks.index.search.today') => 1, t('tasks.index.search.last_week') => 7, t('tasks.index.search.last_month') => 30}, selected: @created_before_days), {}, class: 'form-control defaultSelect2 ransack-filter'
+      - if @visibility == 'owner'
+        .other.section
+          p
+            b = t('exercises.visibility.label')
+          span.form-group
+            = f.select 'access_level', options_for_select({t('exercises.search.all_access_levels') => '', t('exercises.visibility.private') => 'private', t('exercises.visibility.public') => 'public'}, selected: @access_level), {}, class: 'form-control defaultSelect2 ransack-filter'
       .clear style=("clear: both")
 
     br

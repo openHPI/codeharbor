@@ -647,6 +647,7 @@ en:
       no_exercises_description: "Search exercises buy clicking on private or public or add your own exercise."
       no_results: "No results"
       no_results_description: "Try different options by clicking on Advanced."
+      all_access_levels: "All Visibilities"
 
     form:
       basic_info: "Basic Information"
