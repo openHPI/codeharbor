@@ -179,6 +179,7 @@ class TasksController < ApplicationController
     if search.is_a?(ActionController::Parameters)
       @created_before_days = search[:created_before_days]
       @min_stars = search[:min_stars]
+      @access_level = search[:access_level]
     end
     @visibility = params[:visibility] || 'owner'
     @advanced_filter_active = params[:advancedFilterActive]

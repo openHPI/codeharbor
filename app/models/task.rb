@@ -48,13 +48,14 @@ class Task < ApplicationRecord
   scope :min_stars, ->(stars) { average_rating.where('COALESCE(avg_rating, 0) >= ?', stars) }
   scope :sort_by_average_rating_asc, -> { average_rating.order(average_rating: 'ASC') }
   scope :sort_by_average_rating_desc, -> { average_rating.order(average_rating: 'DESC') }
+  scope :access_level, ->(access_level) { where(access_level:) }
 
   serialize :meta_data, HashAsJsonbSerializer
 
   enum access_level: {private: 0, public: 1}, _default: :private, _prefix: true
 
   def self.ransackable_scopes(_auth_object = nil)
-    %i[created_before_days min_stars]
+    %i[created_before_days min_stars access_level]
   end
 
   def self.ransackable_attributes(_auth_object = nil)
