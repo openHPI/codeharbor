@@ -1,22 +1,18 @@
 ready = ->
   $('.my-tag').select2
-    tags: true
-    multiple: true
-    minimumInputLength: 1
-    createTag: (params) ->
-      term = $.trim(params.term)
-      if term == ''
-        return null
-      {
-        id: term
-        text: term
-        newTag: true
-      }
     width: '100%'
-    tokenSeparators: [
-      ','
-      ' '
-    ]
+    multiple: true
+    maximumSelectionLength: 5
+    closeOnSelect: false
+
+    templateSelection: (data, container) ->
+      $(container).css("background-color", "#"+$(data.element).attr("label_color"));
+      $(container).children("span").css("color", "black");
+      return $('<span></span>').text(data.text).css({"font-size":"80%", "font-weight":"bold", "color":"black"});
+
+    templateResult: (data, container) ->
+      return $('<div></div>').text(data.text).addClass("exercise_label").css("background-color", "#"+$(data.element).attr("label_color"));
+
     createSearchChoice: (term, data) ->
       if $(data).filter((->
         @text.localeCompare(term) == 0
@@ -26,10 +22,9 @@ ready = ->
           text: term
         }
       return
-    maximumSelectionLength: 5
+
     formatSelectionTooBig: (limit) ->
       I18n.t('labels.can_only_create_5')
-      tags: false
   return
 
 $(document).on 'turbolinks:load', ready

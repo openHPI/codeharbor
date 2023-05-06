@@ -15,6 +15,9 @@ class Task < ApplicationRecord
   has_many :group_tasks, dependent: :destroy
   has_many :groups, through: :group_tasks
 
+  has_many :task_labels, dependent: :destroy
+  has_many :labels, through: :task_labels
+
   has_many :tests, dependent: :destroy
   has_many :model_solutions, dependent: :destroy
 
