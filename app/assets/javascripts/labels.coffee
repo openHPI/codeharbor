@@ -7,11 +7,17 @@ ready = ->
 
     templateSelection: (data, container) ->
       $(container).css("background-color", "#"+$(data.element).attr("label_color"));
-      $(container).children("span").css("color", "black");
-      return $('<span></span>').text(data.text).css({"font-size":"80%", "font-weight":"bold", "color":"black"});
+      $(container).css("color", "#"+$(data.element).attr("label_font_color"));
+      $(container).children("span").css("color", "#"+$(data.element).attr("label_font_color"));
+
+      $template = $('<span></span>').text(data.text);
+      $template.css({"font-size" : "80%", "font-weight" : "bold", "color" : "#"+$(data.element).attr("label_font_color")});
+      return $template;
 
     templateResult: (data, container) ->
-      return $('<div></div>').text(data.text).addClass("exercise_label").css("background-color", "#"+$(data.element).attr("label_color"));
+      $template = $('<div></div>').text(data.text).addClass("exercise_label");
+      $template.css({"background-color" : "#"+$(data.element).attr("label_color"), "color" : "#"+$(data.element).attr("label_font_color")});
+      return $template;
 
     createSearchChoice: (term, data) ->
       if $(data).filter((->

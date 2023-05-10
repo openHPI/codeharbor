@@ -143,7 +143,7 @@ legend.toggle-next.closed
       | :
     .row-value
       - @task.labels.each do |label|
-        .exercise_label style=("background-color: #{'#' + label.color.to_s};")
+        .exercise_label style=("background-color: #{'#' + label.color.to_s}; color: #{'#' + label.font_color.to_s};")
           = label.name
   .row
     .row-label

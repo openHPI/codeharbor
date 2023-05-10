@@ -132,7 +132,7 @@ RSpec.describe TasksController do
           programming_language_id: create(:programming_language, :ruby).id,
           license_id: create(:license),
           language: 'de',
-          label_ids: [create(:label)],
+          label_ids: create_list(:label, 1).map(&:id),
         }
       end
 
@@ -157,7 +157,11 @@ RSpec.describe TasksController do
 
       it 'sets labels correctly' do
         post_request
-        expect(assigns(:task).labels).to eq(valid_params[:label_ids])
+        expect(assigns(:task).labels.map(&:id)).to eq(valid_params[:label_ids])
+      end
+
+      it 'creates a new TaskLabel' do
+        expect { post_request }.to change(TaskLabel, :count).by(1)
       end
 
       context 'with group_tasks_params' do
@@ -275,8 +279,7 @@ RSpec.describe TasksController do
       end
 
       it 'updates the tasks labels' do
-        expect(task.labels).to eq([existing_label])
-        expect { put_update }.to change { task.reload.labels }.to([new_label])
+        expect { put_update }.to change { task.reload.labels }.to([new_label]).from([existing_label])
       end
 
       context 'when task has a test' do
