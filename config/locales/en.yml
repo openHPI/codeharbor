@@ -1061,6 +1061,7 @@ en:
     parent_uuid: "Parent UUID"
     language: "Language"
     uuid: "UUID"
+    labels: "Labels"
     files:
       label: "Files"
       name: "Name"

@@ -81,7 +81,7 @@
                   = group.name
 
         .field-element
-          = f.label :labels, t('exercises.labels'), class: 'form-label'
+          = f.label :labels, t('tasks.labels'), class: 'form-label'
           = f.select :label_ids, options_for_select(Label.all.collect{ |l| [l.name, l.id, {label_color: l.color, label_font_color: l.font_color}] }, @task.labels.pluck(:id)), {}, {class: "my-tag form-control", multiple: "multiple", style: "width: 300px;"}
 
         .field-element

@@ -11,11 +11,11 @@ ready = ->
       $(container).children("span").css("color", "#"+$(data.element).attr("label_font_color"));
 
       $template = $('<span></span>').text(data.text);
-      $template.css({"font-size" : "80%", "font-weight" : "bold", "color" : "#"+$(data.element).attr("label_font_color")});
+      $template.css({"font-size" : "80%", "font-weight" : "bold"});
       return $template;
 
     templateResult: (data, container) ->
-      $template = $('<div></div>').text(data.text).addClass("exercise_label");
+      $template = $('<div></div>').text(data.text).addClass("task_label");
       $template.css({"background-color" : "#"+$(data.element).attr("label_color"), "color" : "#"+$(data.element).attr("label_font_color")});
       return $template;
 
