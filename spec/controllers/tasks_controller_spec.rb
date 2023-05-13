@@ -279,7 +279,7 @@ RSpec.describe TasksController do
       end
 
       it 'updates the tasks labels' do
-        expect { put_update }.to change { task.reload.labels }.to([new_label]).from([existing_label])
+        expect { put_update }.to change { task.reload.labels }.from([existing_label]).to([new_label])
       end
 
       context 'when task has a test' do
