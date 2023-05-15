@@ -67,7 +67,6 @@ class Task < ApplicationRecord
   end
 
   def is_author?(user)
-    can_access(user)
     self.user == user
   end
   #TODO: Find a better name for the methods
