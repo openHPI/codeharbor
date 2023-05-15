@@ -63,7 +63,24 @@ class Task < ApplicationRecord
   end
 
   def can_access(user)
+    is_author?(user)
+  end
+
+  def is_author?(user)
+    can_access(user)
     self.user == user
+  end
+  #TODO: Find a better name for the methods
+  def in_same_group?(user)
+    in_same_group_member?(user) || in_same_group_admin?(user)
+  end
+
+  def in_same_group_member?(user)
+    task.groups.any? {|group| group.confirmed_member?(user)}
+  end
+
+  def in_same_group_admin?(user)
+    task.groups.any? {|group| group.admin?(user)}
   end
 
   def duplicate
