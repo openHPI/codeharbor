@@ -93,3 +93,20 @@
     font-weight: bold;
   }
 }
+
+.task_label {
+  padding: 0.5em 1.5em;
+  font-size: 80%;
+  display: inline;
+  font-weight: bold;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  border-radius: 0.25em;
+  margin-left: 2px;
+}
+
+.task_label:first-child {
+  margin-left: 0;
+}
