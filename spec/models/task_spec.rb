@@ -14,11 +14,11 @@ RSpec.describe Task do
     let(:task) { create(:task, user: task_user, access_level:, groups: [group]) }
     let(:authors) { [] }
     let(:role) { :confirmed_member }
+
     before do
       group.add(group_user, role:)
       group.reload
     end
-
 
     it { is_expected.not_to be_able_to(:index, described_class) }
     it { is_expected.not_to be_able_to(:create, described_class) }
