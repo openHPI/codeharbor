@@ -8,9 +8,17 @@ RSpec.describe Task do
 
     let(:user) { nil }
     let(:task_user) { create(:user) }
-    let(:task) { create(:task, user: task_user) }
-    let(:private?) { false }
+    let(:group_user) { create(:user) }
+    let(:access_level) { 'private' }
+    let!(:group) { create(:group) }
+    let(:task) { create(:task, user: task_user, access_level:, groups: [group]) }
     let(:authors) { [] }
+    let(:role) { :confirmed_member }
+    before do
+      group.add(group_user, role:)
+      group.reload
+    end
+
 
     it { is_expected.not_to be_able_to(:index, described_class) }
     it { is_expected.not_to be_able_to(:create, described_class) }
@@ -68,6 +76,33 @@ RSpec.describe Task do
         it { is_expected.to be_able_to(:update, task) }
         it { is_expected.to be_able_to(:destroy, task) }
       end
+
+      context 'when task has access_level "public"' do
+        let(:task_user) { create(:user) }
+        let(:access_level) { 'public' }
+
+        it { is_expected.to be_able_to(:show, task) }
+        it { is_expected.to be_able_to(:export, task) }
+        it { is_expected.to be_able_to(:download, task) }
+        it { is_expected.to be_able_to(:add_to_collection, task) }
+
+        it { is_expected.not_to be_able_to(:update, task) }
+        it { is_expected.not_to be_able_to(:destroy, task) }
+      end
+
+      context 'when task is "private" and in same group' do
+        let(:user) { group_user }
+        let(:access_level) { 'private' }
+
+        it { is_expected.to be_able_to(:update, task) }
+        it { is_expected.not_to be_able_to(:destroy, task) }
+
+        context 'when user is group-admin' do
+          let(:role) { 'admin' }
+
+          it { is_expected.to be_able_to(:destroy, task) }
+        end
+      end
     end
   end
 
@@ -88,7 +123,7 @@ RSpec.describe Task do
     let(:visibility) { 'owner' }
     let(:user) { create(:user) }
     let(:task_user) { user }
-    let!(:task) { create(:task, user: task_user) }
+    let!(:task) { create(:task, user: task_user, access_level: 'public') }
 
     it { is_expected.to contain_exactly task }
 
@@ -101,7 +136,7 @@ RSpec.describe Task do
     context 'when visibility is "public"' do
       let(:visibility) { 'public' }
 
-      it { is_expected.to be_empty }
+      it { is_expected.to contain_exactly task }
 
       context 'when task belongs to different user' do
         let(:task_user) { create(:user) }
