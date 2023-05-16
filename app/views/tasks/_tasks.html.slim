@@ -64,7 +64,7 @@
               = t('tasks.defaults.no_labels')
           - else
             - exercise.labels.each do |label|
-              .exercise_label style=("background-color: #{'#' + label.color.to_s}; color: #{'#' + label.font_color.to_s};")
+              .task_label style=("background-color: #{'#' + label.color.to_s}; color: #{'#' + label.font_color.to_s};")
                 = label.name
       .exercise-buttons.btn-group-vertical.pull-right aria-label="..." role="group"
         - if can? :show, task
