@@ -588,6 +588,7 @@ legend.toggle-next
     = link_to edit_task_path(@task),  class: 'btn btn-important' do
       i.fa.fa-edit
       = ' ' + t('exercises.show.edit')
+  - if can? :destroy, @task
     = link_to task_path(@task), class:'btn btn-important', method: :delete, data: { confirm: t('sure') } do
       i.fa.fa-trash
       = ' ' + t('exercises.show.delete')
