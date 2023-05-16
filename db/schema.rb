@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema[7.0].define(version: 2023_04_26_101035) do
-=======
 ActiveRecord::Schema[7.0].define(version: 2023_05_01_095629) do
->>>>>>> 92056b9 (Implemented database requirements for task access level)
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
