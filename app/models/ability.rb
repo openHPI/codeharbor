@@ -62,7 +62,7 @@ class Ability
     can %i[index create import_start import_confirm], Task
     alias_action :export_external_start, :export_external_check, :export_external_confirm, to: :export
     can %i[show export download add_to_collection], Task do |task|
-      task.access_level_public? || task.in_same_group?(user) || task.is_author?
+      task.access_level_public? || task.in_same_group?(user) || task.is_author?(user)
     end
     can %i[update], Task do |task|
       task.in_same_group_member?(user)
@@ -72,11 +72,11 @@ class Ability
     end
   end
 
-  def task_file_abilities(user)
+  def task_file_abilities(user) #WHERE is it used?
     can %i[download_attachment extract_text_data], TaskFile do |task_file|
       fileable = task_file.fileable
       task = fileable.is_a?(Task) ? fileable : fileable.task
-      task.is_author?(user) || task.in_same_group?(user)
+      task.is_author?(user)
     end
   end
 

@@ -75,11 +75,11 @@ class Task < ApplicationRecord
   end
 
   def in_same_group_member?(user)
-    task.groups.any? {|group| group.confirmed_member?(user)}
+    self.groups.any? {|group| group.confirmed_member?(user)}
   end
 
   def in_same_group_admin?(user)
-    task.groups.any? {|group| group.admin?(user)}
+    self.groups.any? {|group| group.admin?(user)}
   end
 
   def duplicate
