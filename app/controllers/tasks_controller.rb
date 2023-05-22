@@ -185,10 +185,13 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   def set_search
     search = params[:search]
+    @req_labels = []
+
     if search.is_a?(ActionController::Parameters)
       @created_before_days = search[:created_before_days]
       @min_stars = search[:min_stars]
       @access_level = search[:access_level]
+      @req_labels = Label.where(name: search['has_all_labels'])
     end
     @visibility = params[:visibility]&.to_sym || :owner
     @advanced_filter_active = params[:advancedFilterActive]

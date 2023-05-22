@@ -57,19 +57,36 @@ RSpec.describe TasksController do
 
       context 'when a filter is used' do
         let(:params) { {search: ransack_params} }
-        let(:ransack_params) { {'title_or_description_cont' => 'filter'} }
-        let!(:task) { create(:task, user:, title: 'filter me') }
+        let(:labels) { [create(:label, name: 'l1'), create(:label, name: 'l2'), create(:label, name: 'l3')] }
 
-        it 'shows the matching Task' do
-          get_request
-          expect(assigns(:tasks)).to contain_exactly task
+        let!(:task1) { create(:task, user:, title: 'find me (key1)', description: 'key2', labels:) }
+        let(:task2) { create(:task, user:, title: 'filter me out key1', description: 'key1 key2', labels: [labels[0]]) }
+
+        context 'when a fulltext search filter is used' do
+          let(:ransack_params) { {'fulltext_search' => 'key1 key2 l3'} }
+
+          it 'shows only the matching task' do
+            get_request
+            expect(assigns(:tasks)).to contain_exactly task1
+          end
+        end
+
+        context 'when a label filter is used' do
+          let(:ransack_params) { {'has_all_labels' => %w[l1 l3]} }
+
+          it 'shows only the matching task' do
+            get_request
+            expect(assigns(:tasks)).to contain_exactly task1
+          end
         end
 
         context 'when a second request without searchparams is made' do
-          it 'shows the matching Task' do
+          let(:ransack_params) { {'fulltext_search' => 'key1 key2', 'has_all_labels' => %w[l3]} }
+
+          it 'shows only the matching task' do
             get_request
             get_request_without_params
-            expect(assigns(:tasks)).to contain_exactly task
+            expect(assigns(:tasks)).to contain_exactly task1
           end
         end
       end

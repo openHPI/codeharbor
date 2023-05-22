@@ -60,17 +60,43 @@ class Task < ApplicationRecord
   scope :sort_by_average_rating_asc, -> { average_rating.order(average_rating: 'ASC') }
   scope :sort_by_average_rating_desc, -> { average_rating.order(average_rating: 'DESC') }
   scope :access_level, ->(access_level) { where(access_level:) }
+  scope :fulltext_search, lambda {|input|
+    r = left_outer_joins(:programming_language)
+
+    input.split(/[,\s]+/).each do |keyword|
+      r = r.where(["title ILIKE :keyword
+                    OR description ILIKE :keyword
+                    OR internal_description ILIKE :keyword
+                    OR programming_languages.language ILIKE :keyword
+                    OR EXISTS (SELECT name FROM task_labels JOIN labels ON label_id = labels.id
+                                WHERE task_id = tasks.id
+                                AND name ILIKE :keyword)",
+                   {keyword: "%#{keyword}%"}])
+    end
+    return r
+  }
+  scope :has_all_labels, lambda {|*input|
+    label_names = input.flatten.compact_blank.uniq
+
+    where("(SELECT COUNT(DISTINCT labels.name) FROM task_labels
+            JOIN labels ON label_id = labels.id AND task_id = tasks.id
+            WHERE labels.name IN (?)) = ?", label_names, label_names.count)
+  }
 
   serialize :meta_data, HashAsJsonbSerializer
 
   enum access_level: {private: 0, public: 1}, _default: :private, _prefix: true
 
   def self.ransackable_scopes(_auth_object = nil)
-    %i[created_before_days min_stars access_level]
+    %i[created_before_days min_stars access_level fulltext_search has_all_labels]
   end
 
   def self.ransackable_attributes(_auth_object = nil)
     %w[title description programming_language_id created_at]
+  end
+
+  def self.ransackable_associations(_auth_object = nil)
+    ['labels']
   end
 
   def can_access(user)
