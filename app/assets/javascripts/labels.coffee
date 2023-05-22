@@ -3,20 +3,9 @@ ready = ->
     width: '100%'
     tags: true
     multiple: true
-    minimumInputLength: 1
     maximumSelectionLength: 5
     closeOnSelect: false
-
-    ajax: {
-      url: '/labels/search',
-      dataType: 'json',
-      data: (params) ->
-        query = {
-          search: params.term,
-          page: params.page || 1
-        }
-        return query;
-    }
+    tokenSeparators: [',']
 
     ajax: {
       url: '/labels/search',
@@ -60,12 +49,13 @@ ready = ->
       return $template;
 
     createTag: (params) ->
-      if params.term == '' || params.term.length > 15
+      term = $.trim(params.term)
+      if term == '' || term.length > 15
         return null;
 
       return {
-        id: params.term,
-        text: params.term,
+        id: term,
+        text: term,
         newTag: true
       }
 

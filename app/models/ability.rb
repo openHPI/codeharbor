@@ -37,7 +37,7 @@ class Ability
     message_abilities user
 
     # Label
-    label_abilities user
+    label_abilities
   end
 
   def admin_abilities(user)
@@ -125,7 +125,7 @@ class Ability
     can %i[show delete], Message, sender: {id: user.id}
   end
 
-  def label_abilities(_user)
+  def label_abilities
     can %i[search], Label
   end
 end
