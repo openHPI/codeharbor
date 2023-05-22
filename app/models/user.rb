@@ -41,7 +41,6 @@ class User < ApplicationRecord
 
   default_scope { where(deleted: [nil, false]) }
 
-  delegate :can?, :cannot?, to: Ability.new(self)
   # Called by Devise and overwritten for soft-deletion
   def destroy
     return false unless handle_destroy
@@ -56,6 +55,10 @@ class User < ApplicationRecord
     skip_reconfirmation!
     skip_email_changed_notification!
     save!(validate: false)
+  end
+
+  def can?(permission, object)
+    Ability.new(self).can?(permission, object)
   end
 
   def self.from_omniauth(auth) # rubocop:disable Metrics/AbcSize
