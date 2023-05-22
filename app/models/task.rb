@@ -69,8 +69,20 @@ class Task < ApplicationRecord
   def author?(user)
     self.user == user
   end
-  # TODO: Find a better name for the methods
 
+  def showable_by?(user)
+    user.can?(:show, self)
+  end
+
+  def updateable_by?(user)
+    user.can?(:update, self)
+  end
+
+  def destroyable_by?(user)
+    user.can?(:destroy, self)
+  end
+
+  # TODO: Find a better name for the methods
   def in_same_group?(user)
     in_same_group_member?(user) || in_same_group_admin?(user)
   end

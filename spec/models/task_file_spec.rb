@@ -8,14 +8,19 @@ RSpec.describe TaskFile do
 
     let(:user) { nil }
     let(:task_user) { create(:user) }
-    let(:task) { create(:task, user: task_user) }
+    let(:group_user) { create(:user) }
+    let(:access_level) { 'private' }
+    let(:task) { create(:task, user: task_user, access_level:, groups: [group]) }
     let(:fileable) { task }
     let(:task_file) { create(:task_file, fileable:) }
+    let(:role) { :confirmed_member }
+    let(:group_memberships) { [build(:group_membership, :with_admin), build(:group_membership, user: group_user, role:)] }
+    let(:group) { create(:group, group_memberships:) }
 
     it { is_expected.not_to be_able_to(:download_attachment, task_file) }
     it { is_expected.not_to be_able_to(:extract_text_data, task_file) }
 
-    context 'with a user' do
+    context 'with an user and private task' do
       let(:user) { create(:user) }
 
       it { is_expected.not_to be_able_to(:download_attachment, task_file) }
@@ -35,6 +40,13 @@ RSpec.describe TaskFile do
         it { is_expected.to be_able_to(:extract_text_data, task_file) }
       end
 
+      context 'when task is in same group' do
+        let(:user) { group_user }
+
+        it { is_expected.to be_able_to(:download_attachment, task_file) }
+        it { is_expected.to be_able_to(:extract_text_data, task_file) }
+      end
+
       context 'when task_file belongs to a test' do
         let(:fileable) { create(:test, task:) }
 
@@ -47,6 +59,34 @@ RSpec.describe TaskFile do
           it { is_expected.to be_able_to(:download_attachment, task_file) }
           it { is_expected.to be_able_to(:extract_text_data, task_file) }
         end
+      end
+    end
+
+    context 'with an user and public task' do
+      let(:user) { create(:user) }
+      let(:access_level) { 'public' }
+
+      it { is_expected.to be_able_to(:download_attachment, task_file) }
+      it { is_expected.not_to be_able_to(:extract_text_data, task_file) }
+
+      context 'when task is from user' do
+        let(:task_user) { user }
+
+        it { is_expected.to be_able_to(:download_attachment, task_file) }
+        it { is_expected.to be_able_to(:extract_text_data, task_file) }
+      end
+
+      context 'when user is in group' do
+        let(:user) { group_user }
+
+        it { is_expected.to be_able_to(:download_attachment, task_file) }
+        it { is_expected.to be_able_to(:extract_text_data, task_file) }
+      end
+
+      context 'when user is admin' do
+        let(:user) { create(:admin) }
+
+        it { is_expected.to be_able_to(:manage, task_file) }
       end
     end
   end

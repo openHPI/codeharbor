@@ -1163,6 +1163,10 @@ en:
       select_groups: Select groups
       unchangeable_groups: "Unchangeable groups"
     groups: "Groups"
+    visibility:
+      label: "Visibility"
+      private: "Private"
+      public: "Public"
   task_files:
     xml_id_not_unique: id is not unique
     fileable_not_set: "is not set"

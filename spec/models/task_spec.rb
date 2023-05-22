@@ -10,15 +10,11 @@ RSpec.describe Task do
     let(:task_user) { create(:user) }
     let(:group_user) { create(:user) }
     let(:access_level) { 'private' }
-    let!(:group) { create(:group) }
+    let(:group_memberships) { [build(:group_membership, :with_admin), build(:group_membership, user: group_user, role:)] }
+    let(:group) { create(:group, group_memberships:) }
     let(:task) { create(:task, user: task_user, access_level:, groups: [group]) }
     let(:authors) { [] }
     let(:role) { :confirmed_member }
-
-    before do
-      group.add(group_user, role:)
-      group.reload
-    end
 
     it { is_expected.not_to be_able_to(:index, described_class) }
     it { is_expected.not_to be_able_to(:create, described_class) }
