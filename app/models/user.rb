@@ -41,6 +41,7 @@ class User < ApplicationRecord
 
   default_scope { where(deleted: [nil, false]) }
 
+  delegate :can?, :cannot?, to: Ability.new(self)
   # Called by Devise and overwritten for soft-deletion
   def destroy
     return false unless handle_destroy
