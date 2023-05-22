@@ -151,7 +151,7 @@ class Task < ApplicationRecord
   end
 
   def label_names=(label_names)
-    self.labels = label_names.compact_blank.map {|name| Label.find_or_initialize_by(name:) }
+    self.labels = label_names.uniq.compact_blank.map {|name| Label.find_or_initialize_by(name:) }
   end
 
   def label_names

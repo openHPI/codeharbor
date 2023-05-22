@@ -50,7 +50,9 @@ ready = ->
 
     createTag: (params) ->
       term = $.trim(params.term)
-      if term == '' || term.length > 15
+      selection = $('#task_label_names').select2('data').map (element) -> element.id
+
+      if term == '' || term.length > 15 || selection.includes(term)
         return null;
 
       return {
