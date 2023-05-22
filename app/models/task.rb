@@ -63,7 +63,7 @@ class Task < ApplicationRecord
   end
 
   def can_access(user)
-    author?(user)
+    showable_by?(user) && updateable_by?(user) && destroyable_by?(user)
   end
 
   def author?(user)
