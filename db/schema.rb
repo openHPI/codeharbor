@@ -249,8 +249,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_01_095629) do
     t.datetime "updated_at", null: false
     t.jsonb "meta_data", default: {}
     t.bigint "license_id"
-    t.index ["license_id"], name: "index_tasks_on_license_id"
     t.integer "access_level", limit: 2, default: 0, null: false, comment: "Used as enum in Rails"
+    t.index ["license_id"], name: "index_tasks_on_license_id"
     t.index ["programming_language_id"], name: "index_tasks_on_programming_language_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
