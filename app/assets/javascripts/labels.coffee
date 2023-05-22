@@ -55,7 +55,7 @@ ready = ->
 
     createTag: (params) ->
       term = $.trim(params.term)
-      selection = $('#task_label_names').select2('data').map (element) -> element.id
+      selection = $('.my-tag').select2('data').map (element) -> element.id
 
       if term == '' || term.length > max_label_length || selection.includes(term)
         return null;
@@ -69,11 +69,11 @@ ready = ->
     formatSelectionTooBig: (limit) ->
       I18n.t('labels.can_only_create_5')
 
-    $('#task_label_names').on 'select2:select', clear_input
+    $('.my-tag').on 'select2:select', clear_input
   return
 
 clear_input = ->
-  $('#task_label_names').siblings(".select2").find("input").val("");
+  $('.my-tag').siblings(".select2").find("input").val("");
   return
 
 $(document).on 'turbolinks:load', ready
