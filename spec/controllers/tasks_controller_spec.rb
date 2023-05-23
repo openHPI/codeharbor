@@ -296,10 +296,21 @@ RSpec.describe TasksController do
         expect { put_update }.to change { task.reload.labels }.from([existing_label]).to([new_label])
       end
 
-      it 'creates new task label when requested' do
-        changed_attributes[:label_names] = ['some new label']
-        expect { put_update }.to change { task.reload.labels.map(&:name) }.from([existing_label.name]).to(['some new label'])
-        expect(Label.where(name: 'some new label')).not_to be_empty
+      context 'when requesting new label to be created' do
+        subject(:put_update) do
+          put :update, params: {id: task.to_param, task: attributes}
+        end
+
+        let(:attributes) { {label_names: [not_existing_label_name]} }
+        let(:not_existing_label_name) { 'some new label' }
+
+        it 'creates new task label' do
+          expect { put_update }.to change(Label, :count).by(1)
+        end
+
+        it 'sets newly created task label' do
+          expect { put_update }.to change { task.reload.labels.map(&:name) }.from([existing_label.name]).to([not_existing_label_name])
+        end
       end
 
       context 'when task has a test' do
