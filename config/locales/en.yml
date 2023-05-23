@@ -1113,6 +1113,7 @@ en:
         no_results_description: "Try different options by clicking on Advanced."
         reset: "Reset"
         placeholder: "Search for task or label"
+        all_access_levels: "All Visibilities"
 
       no_programming_language_selected: "No programming language selected"
       no_description: "No Description"

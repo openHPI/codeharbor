@@ -67,7 +67,7 @@ class Ability
     can %i[update], Task do |task|
       task.in_same_group_member?(user)
     end
-    can %i[crud], Task do |task| # , user: {id: user.id}
+    can %i[crud], Task do |task|
       task.author?(user) || task.in_same_group_admin?(user)
     end
   end
