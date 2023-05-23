@@ -28,8 +28,8 @@
         span data-toggle="tooltip" data-placement="bottom" title="#{task.title}"
           = truncate(task.title, length: 100)
         - if @visibility == 'owner'
-          span.visibility.pull-left data-toggle="tooltip" data-placement="bottom" title="#{t('exercises.visibility.label')}"
-            = t("exercises.visibility.#{task.access_level}")
+          span.visibility.pull-left data-toggle="tooltip" data-placement="bottom" title="#{t('tasks.visibility.label')}"
+            = t("tasks.visibility.#{task.access_level}")
         span.star-rating.pull-right
           small.number-rating
             = task.average_rating.round(1)
