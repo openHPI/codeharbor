@@ -16,7 +16,7 @@
       small
         .rating-dropdown
           span.btn.btn-xs#rate
-            = t('exercises.rate')+ ' '
+            => t('exercises.rate')
             span.caret
           .popup-rating
             .rating data-task-id=@task.id
@@ -34,7 +34,7 @@
   br
 legend.toggle-next
   span.number = '1'
-  = t('exercises.form.basic_info') + ' '
+  => t('exercises.form.basic_info')
   span.fa.fa-caret-up
 .show-table.exercise-show
   .row
@@ -77,7 +77,7 @@ legend.toggle-next
 
 legend.toggle-next.closed
   span.number = '2'
-  = t('tasks.form.additional_info') + ' '
+  => t('tasks.form.additional_info')
   span.fa.fa-caret-down
 .show-table.exercise-show style="display:none;"
   .row.vertical
@@ -185,7 +185,7 @@ legend.toggle-next.closed
 
 legend.toggle-next
   span.number = '3'
-  = t('exercises.files.label') + ' '
+  => t('exercises.files.label')
   span.fa.fa-caret-up
 - if @files.empty?
   p style="margin-left: 10px; margin-bottom: 30px"
@@ -270,7 +270,7 @@ legend.toggle-next
 
 legend.toggle-next
   span.number = '4'
-  = t('exercises.tests.label') + ' '
+  => t('exercises.tests.label')
   span.fa.fa-caret-up
 - if @tests.empty?
   p style="margin-left: 10px; margin-bottom: 30px"
@@ -403,7 +403,7 @@ legend.toggle-next
 
 legend.toggle-next
   span.number = '5'
-  = t('tasks.model_solution.plural') + ' '
+  => t('tasks.model_solution.plural')
   span.fa.fa-caret-up
 - if @model_solutions.empty?
   p style="margin-left: 10px; margin-bottom: 30px"
@@ -529,7 +529,7 @@ legend.toggle-next
         = link_to t('shared.download_zip'), download_task_path(@task), class: 'btn btn-default', 'data-turbolinks'=> false
         .dropdown.btn-group
           = button_tag class: 'btn btn-default dropdown-toggle', data: {toggle: 'dropdown'} do
-            = t('tasks.show.export') + ' '
+            => t('tasks.show.export')
             .caret
           ul.scrollable.dropdown-menu[role="menu"]
             li.dropdown-header = t('tasks.show.export_to') + ': '
@@ -549,7 +549,7 @@ legend.toggle-next
 
 /.related-panel
   = button_tag type: 'button', class: 'full-window-button related-button' do
-    = t('exercises.all.related_exercises')+ ' '
+    => t('exercises.all.related_exercises')
     span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
     span.fa.fa-caret-down.my-caret
 /div class=("related-box with-borders") data-exercise=@task.id
@@ -577,7 +577,7 @@ legend.toggle-next
 
 /.history-panel
   = button_tag type: 'button', class: 'full-window-button history-button' do
-    = t('exercises.all.history_exercises')+ ' '
+    => t('exercises.all.history_exercises')
     span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
     span.fa.fa-caret-down.my-caret
 /div class=("history-box with-borders") data-exercise=@task.id
@@ -587,15 +587,15 @@ legend.toggle-next
   - if can? :edit, @task
     = link_to edit_task_path(@task),  class: 'btn btn-important' do
       i.fa.fa-edit
-      = ' ' + t('exercises.show.edit')
+      =< t('tasks.show.edit')
   - if can? :destroy, @task
     = link_to task_path(@task), class:'btn btn-important', method: :delete, data: { confirm: t('sure') } do
       i.fa.fa-trash
-      = ' ' + t('exercises.show.delete')
+      =< t('tasks.show.delete')
   /- if can? :report, @task
     /.btn-group
       = button_tag type: 'button', data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}, class: 'btn btn-important nav-btn-exercise dropdown-toggle dropdown-toggle split' do
-        = t('exercises.show.report')+ ' '
+        => t('exercises.show.report')
         span.caret
       .dropdown-menu#share-menu
         .dropdown-header style="padding-left: 2px;"
@@ -605,7 +605,10 @@ legend.toggle-next
             = text_field_tag 'text', nil, form: 'report', class: 'form-control'
             .input-group-btn
               = submit_tag t('exercises.show.submit'), form: 'report', class: 'btn btn-default'
-  = link_to t('exercises.show.back'), tasks_path, class: 'btn btn-important'
+  = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important' do
+    i.fa.fa-clone
+    =< t('tasks.show.duplicate')
+  = link_to t('tasks.show.back'), tasks_path, class: 'btn btn-important'
 
 /= form_tag report_exercise_path(@task), id: 'report'
 
