@@ -78,6 +78,7 @@ Rails.application.routes.draw do
       post :export_external_check
       post :export_external_confirm
       post :add_to_collection
+      post :duplicate
     end
 
     collection do

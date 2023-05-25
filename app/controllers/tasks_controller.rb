@@ -15,6 +15,16 @@ class TasksController < ApplicationController
     @tasks = @search.result(distinct: true).paginate(per_page: 5, page:)
   end
 
+  def duplicate
+    new_entry = @task.duplicate
+    new_entry.user = current_user
+    if new_entry.save(context: :force_validations)
+      redirect_to new_entry, notice: t('tasks.notification.created')
+    else
+      redirect_to @task, alert: t('tasks.notification.duplicate_failed')
+    end
+  end
+
   def show
     @files = @task.files
     @tests = @task.tests
