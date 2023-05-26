@@ -297,15 +297,16 @@ RSpec.describe TasksController do
       end
 
       context 'when requesting new label to be created' do
-        subject(:put_update) do
-          put :update, params: {id: task.to_param, task: attributes}
-        end
-
-        let(:attributes) { {label_names: [not_existing_label_name]} }
+        let(:changed_attributes) { {label_names: [not_existing_label_name]} }
         let(:not_existing_label_name) { 'some new label' }
 
         it 'creates new task label' do
           expect { put_update }.to change(Label, :count).by(1)
+        end
+
+        it 'creates a label with the correct name' do
+          put_update
+          expect(Label.last.name).to eql not_existing_label_name
         end
 
         it 'sets newly created task label' do
