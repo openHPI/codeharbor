@@ -9,26 +9,33 @@ RSpec.describe LabelsController do
   let(:label) { create(:label) }
 
   describe 'GET #search' do
+    subject(:get_request) { get :search, params: {search: label.name, page: 1} }
+
     context 'without being signed in' do
       it 'redirects to other page' do
-        get :search, params: {search: label.name, page: 1}
-        expect(response.body).to match(%r{^<html><body>You are being.*redirected.*</body></html>$})
+        get_request
+        expect(response).to have_http_status(:redirect)
+        expect(response).to redirect_to(root_url)
       end
     end
 
     context 'with valid params' do
-      subject(:request) { get :search, params: {search: label.name, page: 1} }
-
       before { sign_in user }
 
       it 'returns valid json' do
-        request
-        expect(response.body).to match(/^{"results":\[.*\],"pagination":{"more":(true|false)}}$/)
+        get_request
+
+        expect(response.parsed_body).to have_key('results')
+        expect(response.parsed_body).to have_key('pagination')
+        expect(response.parsed_body['pagination']).to have_key('more')
+
+        expect(response.parsed_body['results']).to be_an_instance_of(Array)
+        expect(response.parsed_body['pagination']['more']).to be_in([true, false])
       end
 
       it 'returns response containing label' do
-        request
-        expect(response.body).to include(label.name)
+        get_request
+        expect(response.parsed_body['results']).to include(a_hash_including('text' => label.name))
       end
     end
   end

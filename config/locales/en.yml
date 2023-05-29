@@ -825,6 +825,7 @@ en:
       header: "Editing Label"
     new:
       header: "New Label"
+      selection_suffix: " (new)"
     errorMessage: "prohibited this label from being saved."
 
   layouts:
