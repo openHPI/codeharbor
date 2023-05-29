@@ -582,7 +582,6 @@ en:
       label: "Visibility"
       private: "Private"
       public: "Public"
-    labels: "Labels"
     impact: "Impact"
     license: "License"
     downloads: "Downloads"
