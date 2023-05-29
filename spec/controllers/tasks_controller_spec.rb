@@ -171,7 +171,7 @@ RSpec.describe TasksController do
 
       it 'sets labels correctly' do
         post_request
-        expect(assigns(:task).labels.map(&:name)).to eq(valid_params[:label_names])
+        expect(assigns(:task).labels.map(&:name)).to match_array(valid_params[:label_names])
       end
 
       it 'creates a new TaskLabel' do
@@ -253,8 +253,8 @@ RSpec.describe TasksController do
   describe 'PUT #update' do
     subject(:put_update) { put :update, params: {id: task.to_param, task: changed_attributes} }
 
-    let(:existing_label) { create(:label) }
-    let(:new_label) { create(:label) }
+    let!(:existing_label) { create(:label) }
+    let!(:new_label) { create(:label) }
 
     let!(:task) { create(:task, valid_attributes) }
     let(:valid_attributes) do
@@ -296,7 +296,11 @@ RSpec.describe TasksController do
         expect { put_update }.to change { task.reload.labels }.from([existing_label]).to([new_label])
       end
 
-      context 'when requesting new label to be created' do
+      it 'does not create or delete a label' do
+        expect { put_update }.not_to change(Label, :count)
+      end
+
+      context 'when requesting a new label to be created' do
         let(:changed_attributes) { {label_names: [not_existing_label_name]} }
         let(:not_existing_label_name) { 'some new label' }
 
@@ -306,7 +310,7 @@ RSpec.describe TasksController do
 
         it 'creates a label with the correct name' do
           put_update
-          expect(Label.last.name).to eql not_existing_label_name
+          expect(Label.where(name: not_existing_label_name).size).to be 1
         end
 
         it 'sets newly created task label' do

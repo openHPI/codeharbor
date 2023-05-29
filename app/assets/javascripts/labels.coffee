@@ -1,9 +1,14 @@
 ready = ->
+  max_label_length = 15
+  default_label_color = "e4e4e4"
+  default_label_font_color = "000000"
+
   $('.my-tag').select2
     width: '100%'
     tags: true
     multiple: true
     maximumSelectionLength: 5
+    maximumInputLength: max_label_length
     closeOnSelect: false
     tokenSeparators: [',']
 
@@ -20,11 +25,11 @@ ready = ->
 
     templateSelection: (data, container) ->
       text = data.text;
-      bg_color = "#" + ($(data.element).attr("label_color") || data.label_color || "e4e4e4");
-      color = "#" + ($(data.element).attr("label_font_color") || data.label_font_color || "000000");
+      bg_color = "#" + ($(data.element).attr("label_color") || data.label_color || default_label_color);
+      color = "#" + ($(data.element).attr("label_font_color") || data.label_font_color || default_label_font_color);
 
       if data.newTag == true
-        text += " (new)";
+        text += I18n.t('labels.new.selection_suffix');
 
       $(container).css({"background-color" : bg_color, "color" : color});
       $(container).children("span").css("color", color);
@@ -38,11 +43,11 @@ ready = ->
         return data.text;
 
       text = data.text;
-      bg_color = "#" + (data.label_color || "e4e4e4");
-      color = "#" + (data.label_font_color || "000000");
+      bg_color = "#" + (data.label_color || default_label_color);
+      color = "#" + (data.label_font_color || default_label_font_color);
 
       if data.newTag == true
-        text += " (new)";
+        text += I18n.t('labels.new.selection_suffix');
 
       $template = $('<div></div>').text(text).addClass("task_label");
       $template.css({"background-color" : bg_color, "color" : color});
@@ -52,7 +57,7 @@ ready = ->
       term = $.trim(params.term)
       selection = $('#task_label_names').select2('data').map (element) -> element.id
 
-      if term == '' || term.length > 15 || selection.includes(term)
+      if term == '' || term.length > max_label_length || selection.includes(term)
         return null;
 
       return {
