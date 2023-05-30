@@ -18,6 +18,9 @@ class TasksController < ApplicationController
   def duplicate
     new_entry = @task.duplicate
     new_entry.user = current_user
+    new_entry.groups = []
+    new_entry.collections = []
+    # new_entry.access_level = 'private' Activate after rebase
     if new_entry.save(context: :force_validations)
       redirect_to new_entry, notice: t('tasks.notification.created')
     else

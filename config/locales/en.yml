@@ -1136,6 +1136,7 @@ en:
       created: "Task successfully created"
       updated: "Task successfully updated"
       destroyed: "Task successfully destroyed"
+      duplicate_failed: "Task could not be duplicated"
     download: "Download your Task as a zip file or export them directly to an autograder."
     export_task:
       error: An error occurred.
@@ -1166,6 +1167,10 @@ en:
       add_collection: "Add Collection"
       license: "License"
       no_license: "None"
+      edit: "Edit"
+      delete: "Delete"
+      back: "Back"
+      duplicate: "Duplicate"
     edit:
       toggle_file: "Toggle file upload/editor"
       upload_a_new_file: "Upload a new file"
