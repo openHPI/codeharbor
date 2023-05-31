@@ -39,7 +39,9 @@ RSpec.describe TaskFile do
       end
 
       context 'when task is in same group' do
-        let(:user) { group_user }
+        let(:user) { create(:user) }
+        let(:group_memberships) { [build(:group_membership, :with_admin), build(:group_membership, user:, role: :confirmed_member)] }
+        let(:groups) { create_list(:group, 1, group_memberships:) }
 
         it { is_expected.to be_able_to(:download_attachment, task_file) }
         it { is_expected.to be_able_to(:extract_text_data, task_file) }
@@ -62,7 +64,7 @@ RSpec.describe TaskFile do
 
     context 'with an user and public task' do
       let(:user) { create(:user) }
-      let(:access_level) { 'public' }
+      let(:access_level) { :public }
 
       it { is_expected.to be_able_to(:download_attachment, task_file) }
       it { is_expected.not_to be_able_to(:extract_text_data, task_file) }
@@ -75,7 +77,9 @@ RSpec.describe TaskFile do
       end
 
       context 'when user is in group' do
-        let(:user) { group_user }
+        let(:user) { create(:user) }
+        let(:group_memberships) { [build(:group_membership, :with_admin), build(:group_membership, user:, role: :confirmed_member)] }
+        let(:groups) { create_list(:group, 1, group_memberships:) }
 
         it { is_expected.to be_able_to(:download_attachment, task_file) }
         it { is_expected.to be_able_to(:extract_text_data, task_file) }
