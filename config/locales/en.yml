@@ -1054,6 +1054,7 @@ en:
         add: "Add Model solution"
       model_solution:
         remove: "Remove Model solution"
+      visibility_warning: "This task is currently in a collection. Other users will not be able to view or modify your task. However the title will remain visible to some users."
     error: "prohibited this project from being saved"
     title: "Title"
     programming_language: "Programming language"
