@@ -43,7 +43,7 @@
     fieldset.form-group
       legend.toggle-next
         span.number = '2'
-        = t('tasks.form.additional_info') + ' '
+        => t('tasks.form.additional_info')
         span.fa.fa-caret-up
       .form-content
         .field-element
@@ -97,7 +97,7 @@
     fieldset.form-group
       legend.toggle-next
         span.number = '3'
-        = t('tasks.files.label') + ' '
+        => t('tasks.files.label')
         span.fa.fa-caret-up
       .form-content
         = render 'nested_file_form', f: f, nested_form_placeholder: 'f-__nested_field_for_replace_with_index__'
@@ -109,7 +109,7 @@
                 .table-header
                   = file.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
                     i.fa.fa-remove style=("color: #800000")
-                    = ' ' + t('exercises.form.files.remove')
+                    =< t('exercises.form.files.remove')
               - else
                 - display_container = "display: none"
                 .table-header.closed.toggle-next
@@ -118,16 +118,16 @@
                   span.fa.fa-caret-down
                   = file.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
                     i.fa.fa-remove style=("color: #800000")
-                    = ' ' + t('exercises.form.files.remove')
+                    =< t('exercises.form.files.remove')
               .file-container style="margin-left: 10px; #{display_container}"
                 = render 'file_form', f: f, file: file
           = f.add_nested_fields_link :files, ' ', class:'btn btn-main', id: 'addFileButton' do
             i.fa.fa-plus style=("color: #008000")
-            = ' ' + t('exercises.form.files.add')
+            =< t('exercises.form.files.add')
     fieldset.form-group
       legend.toggle-next
         span.number = '4'
-        = t('tasks.tests.label') + ' '
+        => t('tasks.tests.label')
         span.fa.fa-caret-up
       .form-content
         .field-element
@@ -138,7 +138,7 @@
                 .table-header
                   = test.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
                     i.fa.fa-remove style=("color: #800000")
-                    = ' ' + t('tasks.form.tests.remove')
+                    =< t('tasks.form.tests.remove')
               - else
                 - display_container = "display: none"
                 .table-header.closed.toggle-next
@@ -147,17 +147,17 @@
                   span.fa.fa-caret-down
                   = test.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
                     i.fa.fa-remove style=("color: #800000")
-                    = ' ' + t('tasks.form.tests.remove')
+                    =< t('tasks.form.tests.remove')
               .test-container style="margin-left: 10px; #{display_container}"
                 = render 'test_form', f: f, test: test
           / .field-element
           = f.add_nested_fields_link :tests, ' ', class:'btn btn-main', id: 'addTestButton' do
             i.fa.fa-plus style=("color: #008000")
-            = ' ' + t('tasks.form.tests.add')
+            =< t('tasks.form.tests.add')
     fieldset.form-group
       legend.toggle-next
         span.number = '5'
-        = t('tasks.model_solution.plural') + ' '
+        => t('tasks.model_solution.plural')
         span.fa.fa-caret-up
       .form-content
         .field-element
@@ -168,7 +168,7 @@
                 .table-header
                   = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
                     i.fa.fa-remove style=("color: #800000")
-                    = ' ' + t('tasks.form.model_solution.remove')
+                    =< t('tasks.form.model_solution.remove')
               - else
                 - display_container = "display: none"
                 .table-header.closed.toggle-next
@@ -178,18 +178,18 @@
                   span.fa.fa-caret-down
                   = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
                     i.fa.fa-remove style=("color: #800000")
-                    = ' ' + t('tasks.form.model_solution.remove')
+                    =< t('tasks.form.model_solution.remove')
               .model-solution-container style="margin-left: 10px; #{display_container}"
                 = render 'model_solution_form', f: f, model_solution: model_solution
           / .field-element
           = f.add_nested_fields_link :model_solutions, ' ', class:'btn btn-main', id: 'addTestButton' do
             i.fa.fa-plus style=("color: #008000")
-            = ' ' + t('tasks.form.model_solutions.add')
+            =< t('tasks.form.model_solutions.add')
     .form-group
       .actions.btn-group[role="group"]
         = button_tag type: 'submit', class: 'btn btn-important' do
           i.fa.fa-file-text-o
-          = ' ' + t('tasks.form.save')
+          =< t('tasks.form.save')
         = link_to :back, class: 'btn btn-important' do
           i.fa.fa-remove style=("color: gray")
-          = ' ' + t('tasks.form.cancel')
+          =< t('tasks.form.cancel')
