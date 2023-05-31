@@ -1045,6 +1045,7 @@ en:
       tests:
         remove: "Remove Test"
         add_file: "Add file to test"
+        add: "Add Test"
       files:
         remove: 'Remove file'
         add: 'Add file'
@@ -1080,6 +1081,11 @@ en:
       xml_id: "XML ID"
       validity: "Validity"
       timeout: "Timeout"
+      label: "Tests"
+      content: "Content"
+      feedback: "Feedback Message"
+      framework: "Testing Framework"
+      model_solution: "Model solution"
     model_solution:
       plural: "Model Solutions"
       singular: "Model Solution"
