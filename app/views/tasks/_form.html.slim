@@ -68,6 +68,9 @@
             = label_tag 'task_access_level_public', t('tasks.visibility.public'), class: 'radio-left'
             = f.radio_button :access_level, 'private', value: 'private'
             = label_tag 'task_access_level_private', t('tasks.visibility.private'), class: 'radio-right'
+          .visibility_warning
+            span.hidden#task_visibility_warning data-external-collection-membership=@task.collections.any?{|collection| collection.users.exclude?(current_user)}.to_s
+              = t('tasks.form.visibility_warning')
         = fields_for :group_tasks do |ff|
           .field-element
             = ff.label :group_ids, t('tasks.groups'), class: 'form-label'

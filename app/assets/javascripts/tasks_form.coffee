@@ -1,6 +1,7 @@
 ready =->
   initializeLoadSelect2()
   initializeFileTypeSelection()
+  initializeVisibilityWarning()
 
 $(document).on('turbolinks:load', ready)
 
@@ -21,3 +22,11 @@ initializeFileTypeSelection = ->
     editor = $(this).parents('.file-container').find('.editor')[0]
     changeEditorMode(editor, getModeByFileExtension($(this).val()))
   $('.file-name').keyup()
+
+initializeVisibilityWarning = ->
+  warning_message = $('#task_visibility_warning')
+  $('#task_access_level_private').on 'change', ->
+    if warning_message.data("external-collection-membership")
+      warning_message.removeClass('hidden')
+  $('#task_access_level_public').on 'change', ->
+      warning_message.addClass('hidden')
