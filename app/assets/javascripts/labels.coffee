@@ -25,8 +25,8 @@ ready = ->
 
     templateSelection: (data, container) ->
       text = data.text;
-      bg_color = "#" + ($(data.element).attr("label_color") || data.label_color || default_label_color);
-      color = "#" + ($(data.element).attr("label_font_color") || data.label_font_color || default_label_font_color);
+      bg_color = "#" + (data.label_color || $(data.element).attr("label_color") || default_label_color);
+      color = "#" + (data.label_font_color || $(data.element).attr("label_font_color") || default_label_font_color);
 
       if data.newTag == true
         text += I18n.t('labels.new.selection_suffix');
