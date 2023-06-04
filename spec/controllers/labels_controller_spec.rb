@@ -24,13 +24,12 @@ RSpec.describe LabelsController do
 
       it 'returns valid json' do
         get_request
-
-        expect(response.parsed_body).to have_key('results')
-        expect(response.parsed_body).to have_key('pagination')
-        expect(response.parsed_body['pagination']).to have_key('more')
-
-        expect(response.parsed_body['results']).to be_an_instance_of(Array)
-        expect(response.parsed_body['pagination']['more']).to be_in([true, false])
+        expect(JSON.parse(response.body, symbolize_names: true)).to eql(
+          {
+            pagination: {more: false},
+            results: [{id: label.name, label_color: label.color, label_font_color: label.font_color, text: label.name}],
+          }
+        )
       end
 
       it 'returns response containing label' do
