@@ -39,8 +39,14 @@ class Task < ApplicationRecord
   scope :owner, ->(user) { where(user:) }
   scope :public_access, -> { where(access_level: 'public') }
   scope :private_access, ->(user) { where(access_level: 'private', user:) }
+  scope :group_access, lambda {|user|
+    select('tasks.*')
+      .joins(:groups)
+      .joins(:user)
+      .where(users: {id: user.id})
+  }
   scope :visibility, lambda {|visibility, user = nil|
-                       {owner: owner(user), private: private_access(user), public: public_access}.with_indifferent_access[visibility]
+                       {owner: owner(user), group: group_access(user), public: public_access}.with_indifferent_access[visibility]
                      }
   scope :created_before_days, ->(days) { where(created_at: days.to_i.days.ago.beginning_of_day..) if days.to_i.positive? }
   scope :average_rating, lambda {
