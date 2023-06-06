@@ -38,7 +38,6 @@ class Task < ApplicationRecord
 
   scope :owner, ->(user) { where(user:) }
   scope :public_access, -> { where(access_level: 'public') }
-  scope :private_access, ->(user) { where(access_level: 'private', user:) }
   scope :group_access, lambda {|user|
     select('tasks.*')
       .joins(:groups)
