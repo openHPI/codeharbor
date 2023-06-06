@@ -6,7 +6,8 @@
     .col-md-9
       .btn-group[role="group"]
         = button_tag t('tasks.menu_button.mine'), type: 'button', class: 'btn btn-main change-hidden-field', id: 'owner'
-        = button_tag t('tasks.menu_button.private'), type: 'button', class: 'btn btn-main change-hidden-field', id: 'private'
+        /= button_tag t('tasks.menu_button.private'), type: 'button', class: 'btn btn-main change-hidden-field', id: 'private'
+        = button_tag t('tasks.menu_button.group'), type: 'button', class: 'btn btn-main change-hidden-field', id: 'group'
         = button_tag t('tasks.menu_button.public'), type: 'button', class: 'btn btn-main change-hidden-field', id: 'public'
     .col-md-3
       - if can? :create, Task
