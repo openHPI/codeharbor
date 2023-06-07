@@ -12,7 +12,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   def index
     page = params[:page]
     @search = Task.visibility(@visibility, current_user).ransack(params[:search])
-    @tasks = @search.result(distinct: true).paginate(per_page: 5, page:)
+    @tasks = @search.result(distinct: true).paginate(per_page: 5, page:).includes(:ratings, :programming_language, :labels).load
   end
 
   def duplicate
@@ -191,7 +191,9 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
       @created_before_days = search[:created_before_days]
       @min_stars = search[:min_stars]
       @access_level = search[:access_level]
-      @req_labels = Label.where(name: search['has_all_labels'])
+      if search['has_all_labels']
+        @req_labels = Label.where(name: search['has_all_labels'].compact_blank)
+      end
     end
     @visibility = params[:visibility]&.to_sym || :owner
     @advanced_filter_active = params[:advancedFilterActive]

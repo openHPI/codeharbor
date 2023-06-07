@@ -1111,7 +1111,7 @@ en:
         unrated_only: "Unrated Only"
         languages: "Languages"
         proglanguages: "Programming Languages"
-        labels: "Has Labels"
+        labels: "Has All Labels"
         created: "Created"
         all_time: "All Time"
         today: "Today"

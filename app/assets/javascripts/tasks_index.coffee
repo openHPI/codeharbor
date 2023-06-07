@@ -4,6 +4,7 @@ ready = ->
   initializeDynamicHideShow()
   initializeFilter()
   initializeIndexComments()
+  initializeInputFieldEnterCallback()
 
 $(document).on('turbolinks:load', ready)
 
@@ -132,3 +133,10 @@ initializeIndexComments = ->
       $comment_box.hide()
       if $related_box
         $related_box.removeClass('with-bottom-border')
+
+initializeInputFieldEnterCallback = ->
+  $('.input-field-tag').keypress (event) ->
+    if(event.key != "Enter")
+      return
+    $('.search-submit-button-tag').click();
+    event.preventDefault();

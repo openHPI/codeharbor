@@ -54,40 +54,76 @@ RSpec.describe TasksController do
         get_request
         expect(assigns(:tasks).size).to eq 2
       end
+    end
 
-      context 'when a filter is used' do
-        let(:params) { {search: ransack_params} }
-        let(:labels) { [create(:label, name: 'l1'), create(:label, name: 'l2'), create(:label, name: 'l3')] }
+    context 'when a filter is used' do
+      before { create(:task, user:, title: 'filter me out key1', description: 'key1 key2', labels: [labels[0]], programming_language: python_lang) }
 
-        let!(:task1) { create(:task, user:, title: 'find me (key1)', description: 'key2', labels:) }
-        let(:task2) { create(:task, user:, title: 'filter me out key1', description: 'key1 key2', labels: [labels[0]]) }
+      let(:labels) { [create(:label, name: 'l1'), create(:label, name: 'l2'), create(:label, name: 'l3')] }
+      let(:python_lang) { create(:programming_language, language: 'Python') }
+      let(:ruby_lang) { create(:programming_language, :ruby) }
 
-        context 'when a fulltext search filter is used' do
-          let(:ransack_params) { {'fulltext_search' => 'key1 key2 l3'} }
+      let!(:task1) { create(:task, user:, title: 'find me key3 (key1)', description: 'key2 key4', labels:, programming_language: ruby_lang) }
 
-          it 'shows only the matching task' do
-            get_request
-            expect(assigns(:tasks)).to contain_exactly task1
+      let(:params) { {search: ransack_params} }
+
+      context 'when a fulltext search filter is used' do
+        requests = {
+          'title only' => 'key1 key3',
+          'description only' => 'key2 key4',
+          'labels only' => 'l1 l2',
+          'programming language only' => 'ruby',
+          'title and description' => 'key1 key4',
+          'title, description and labels' => 'l1 key4 key1',
+          'labels and programming language' => 'l1 ruby',
+        }
+
+        requests.each do |description, keywords|
+          context "when using filter keywords from #{description}" do
+            let(:ransack_params) { {'fulltext_search' => keywords} }
+
+            it 'shows only the matching task' do
+              get_request
+              expect(assigns(:tasks)).to contain_exactly task1
+            end
           end
         end
+      end
 
-        context 'when a label filter is used' do
-          let(:ransack_params) { {'has_all_labels' => %w[l1 l3]} }
+      context 'when a label filter is used' do
+        let(:ransack_params) { {'has_all_labels' => %w[l1 l3]} }
 
-          it 'shows only the matching task' do
-            get_request
-            expect(assigns(:tasks)).to contain_exactly task1
-          end
+        it 'shows only the matching task' do
+          get_request
+          expect(assigns(:tasks)).to contain_exactly task1
         end
+      end
 
-        context 'when a second request without searchparams is made' do
-          let(:ransack_params) { {'fulltext_search' => 'key1 key2', 'has_all_labels' => %w[l3]} }
+      context 'when a fulltext search filter and label filter are combined' do
+        let(:ransack_params) { {'fulltext_search' => 'key1 key2', 'has_all_labels' => %w[l3]} }
 
-          it 'shows only the matching task' do
-            get_request
-            get_request_without_params
-            expect(assigns(:tasks)).to contain_exactly task1
-          end
+        it 'shows only the matching task' do
+          get_request
+          expect(assigns(:tasks)).to contain_exactly task1
+        end
+      end
+
+      context 'when a programming language filter is used' do
+        let(:ransack_params) { {'programming_language_id_in' => ruby_lang.id} }
+
+        it 'shows only the matching task' do
+          get_request
+          expect(assigns(:tasks)).to contain_exactly task1
+        end
+      end
+
+      context 'when a second request without searchparams is made' do
+        let(:ransack_params) { {'fulltext_search' => 'key1 key2 l3 l1'} }
+
+        it 'shows only the matching task' do
+          get_request
+          get_request_without_params
+          expect(assigns(:tasks)).to contain_exactly task1
         end
       end
     end

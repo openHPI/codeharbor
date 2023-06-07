@@ -42,7 +42,7 @@
               span.fa.fa-star-o data-rating=i
           small
             = ' '
-            = task.ratings.count
+            = task.ratings.size
             = ' ' + t('tasks.all.ratings')
         span.programming-language.pull-right
           = task.programming_language&.language || t('tasks.index.no_programming_language_selected')
