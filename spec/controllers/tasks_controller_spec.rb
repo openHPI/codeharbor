@@ -296,8 +296,15 @@ RSpec.describe TasksController do
         expect { put_update }.to change { task.reload.labels }.from([existing_label]).to([new_label])
       end
 
-      it 'does not create or delete a label' do
-        expect { put_update }.not_to change(Label, :count)
+      it 'does not create a new label' do
+        old_labels = Label.all.to_a
+        put_update
+        expect(Label.all.to_a.difference(old_labels)).to be_empty
+      end
+
+      it 'does delete the unused label' do
+        put_update
+        expect(Label.all).to not_include(existing_label)
       end
 
       context 'when requesting a new label to be created' do
@@ -305,7 +312,8 @@ RSpec.describe TasksController do
         let(:not_existing_label_name) { 'some new label' }
 
         it 'creates new task label' do
-          expect { put_update }.to change(Label, :count).by(1)
+          put_update
+          expect(Label.where(name: not_existing_label_name)).not_to be_empty
         end
 
         it 'creates a label with the correct name' do
