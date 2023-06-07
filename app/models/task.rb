@@ -139,6 +139,7 @@ class Task < ApplicationRecord
 
   def label_names=(label_names)
     self.labels = label_names.uniq.compact_blank.map {|name| Label.find_or_initialize_by(name:) }
+    Label.where.not(id: TaskLabel.select(:label_id)).destroy_all
   end
 
   def label_names

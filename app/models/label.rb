@@ -6,7 +6,7 @@ class Label < ApplicationRecord
 
   validates :name, presence: true
 
-  before_create :choose_random_color
+  before_create :choose_label_color
 
   def font_color
     c_codes = color_codes
@@ -41,8 +41,8 @@ class Label < ApplicationRecord
     ]
   end
 
-  def choose_random_color
-    self.color = COLORS[Random.rand(50)]
+  def choose_label_color
+    self.color = COLORS[Digest::MD5.hexdigest(name).to_i(16) % 50]
   end
 
   COLORS = %w[
