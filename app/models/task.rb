@@ -78,9 +78,11 @@ class Task < ApplicationRecord
   scope :has_all_labels, lambda {|*input|
     label_names = input.flatten.compact_blank.uniq
 
-    where("(SELECT COUNT(DISTINCT labels.name) FROM task_labels
-            JOIN labels ON label_id = labels.id AND task_id = tasks.id
-            WHERE labels.name IN (?)) = ?", label_names, label_names.count)
+    includes(:task_labels).where(task_labels:
+                                   TaskLabel.includes(:label)
+                                            .where(labels: {name: label_names})
+                                            .group(:task_id)
+                                            .having('COUNT(DISTINCT name) = ?', label_names.count))
   }
 
   serialize :meta_data, HashAsJsonbSerializer
@@ -96,7 +98,7 @@ class Task < ApplicationRecord
   end
 
   def self.ransackable_associations(_auth_object = nil)
-    ['labels']
+    %w[labels]
   end
 
   def can_access(user)

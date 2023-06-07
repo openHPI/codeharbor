@@ -3,7 +3,7 @@ ready = ->
   default_label_color = "e4e4e4"
   default_label_font_color = "000000"
 
-  $('.my-tag').select2
+  $('.labels-select2-tag').select2
     width: '100%'
     tags: true
     multiple: true
@@ -55,7 +55,7 @@ ready = ->
 
     createTag: (params) ->
       term = $.trim(params.term)
-      selection = $('.my-tag').select2('data').map (element) -> element.id
+      selection = $('.labels-select2-tag').select2('data').map (element) -> element.id
 
       if term == '' || term.length > max_label_length || selection.includes(term)
         return null;
@@ -69,11 +69,11 @@ ready = ->
     formatSelectionTooBig: (limit) ->
       I18n.t('labels.can_only_create_5')
 
-    $('.my-tag').on 'select2:select', clear_input
+    $('.labels-select2-tag').on 'select2:select', clear_input
   return
 
 clear_input = ->
-  $('.my-tag').siblings(".select2").find("input").val("");
+  $('.labels-select2-tag').siblings(".select2").find("input").val("");
   return
 
 $(document).on 'turbolinks:load', ready
