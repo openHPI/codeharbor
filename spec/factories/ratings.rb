@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :rating do
-    user { build(:user) }
-    task { build(:task) }
+    user
+    task
     rating { 5 }
   end
 end

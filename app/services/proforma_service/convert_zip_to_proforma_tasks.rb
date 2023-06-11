@@ -58,7 +58,7 @@ module ProformaService
 
     def xml_present?
       Zip::File.open(@zip_file.path) do |zip_content|
-        return zip_content.map(&:name).select {|f| f[/\.xml$/] }.any?
+        return zip_content.map(&:name).any? {|f| f[/\.xml$/] }
       end
     end
   end

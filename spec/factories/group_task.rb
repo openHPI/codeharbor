@@ -2,10 +2,10 @@
 
 FactoryBot.define do
   factory :group_task do
-    task { build(:task) }
+    task
 
     trait :with_group do
-      group { build(:group) }
+      group
     end
   end
 end

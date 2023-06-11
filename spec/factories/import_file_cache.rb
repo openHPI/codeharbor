@@ -3,6 +3,6 @@
 FactoryBot.define do
   factory :import_file_cache, class: 'ImportFileCache' do
     data {}
-    user { build(:user) }
+    user
   end
 end

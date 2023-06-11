@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :group_membership do
-    user { build(:user) }
+    user
     role { :confirmed_member }
 
     trait :with_admin do
@@ -13,7 +13,7 @@ FactoryBot.define do
     end
 
     trait :with_group do
-      group { build(:group) }
+      group
     end
   end
 end
