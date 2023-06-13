@@ -20,7 +20,7 @@ class TasksController < ApplicationController
     new_entry.user = current_user
     new_entry.groups = []
     new_entry.collections = []
-    # new_entry.access_level = 'private' Activate after rebase
+    new_entry.access_level_private!
     if new_entry.save(context: :force_validations)
       redirect_to new_entry, notice: t('tasks.notification.created')
     else
