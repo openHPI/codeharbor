@@ -67,6 +67,13 @@ RSpec.describe TasksController do
 
       let(:params) { {search: ransack_params} }
 
+      shared_examples 'shows task1' do
+        it 'shows only the matching task' do
+          get_request
+          expect(assigns(:tasks)).to contain_exactly task1
+        end
+      end
+
       context 'when a fulltext search filter is used' do
         requests = {
           'title only' => 'key1 key3',
@@ -82,10 +89,7 @@ RSpec.describe TasksController do
           context "when using filter keywords from #{description}" do
             let(:ransack_params) { {'fulltext_search' => keywords} }
 
-            it 'shows only the matching task' do
-              get_request
-              expect(assigns(:tasks)).to contain_exactly task1
-            end
+            include_examples 'shows task1'
           end
         end
       end
@@ -93,28 +97,19 @@ RSpec.describe TasksController do
       context 'when a label filter is used' do
         let(:ransack_params) { {'has_all_labels' => %w[l1 l3]} }
 
-        it 'shows only the matching task' do
-          get_request
-          expect(assigns(:tasks)).to contain_exactly task1
-        end
+        include_examples 'shows task1'
       end
 
       context 'when a fulltext search filter and label filter are combined' do
         let(:ransack_params) { {'fulltext_search' => 'key1 key2', 'has_all_labels' => %w[l3]} }
 
-        it 'shows only the matching task' do
-          get_request
-          expect(assigns(:tasks)).to contain_exactly task1
-        end
+        include_examples 'shows task1'
       end
 
       context 'when a programming language filter is used' do
         let(:ransack_params) { {'programming_language_id_in' => ruby_lang.id} }
 
-        it 'shows only the matching task' do
-          get_request
-          expect(assigns(:tasks)).to contain_exactly task1
-        end
+        include_examples 'shows task1'
       end
 
       context 'when a second request without searchparams is made' do
