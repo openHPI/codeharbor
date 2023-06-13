@@ -21,6 +21,7 @@ class TasksController < ApplicationController
     new_entry.groups = []
     new_entry.collections = []
     new_entry.access_level_private!
+    new_entry.title = "#{t('tasks.copy_of_task')} ##{@task.id}: #{new_entry.title}"
     if new_entry.save(context: :force_validations)
       redirect_to new_entry, notice: t('tasks.notification.created')
     else

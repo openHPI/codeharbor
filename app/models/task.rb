@@ -107,6 +107,7 @@ class Task < ApplicationRecord
 
   def duplicate
     dup.tap do |task|
+      task.parent_uuid = task.uuid
       task.uuid = nil
       task.tests = duplicate_tests
       task.files = duplicate_files

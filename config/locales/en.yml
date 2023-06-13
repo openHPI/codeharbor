@@ -1062,6 +1062,7 @@ en:
     internal_description: "Internal Description"
     parent_uuid: "Parent UUID"
     language: "Language"
+    copy_of_task: "Copy of task"
     uuid: "UUID"
     labels: "Labels"
     files:
