@@ -105,6 +105,7 @@ class Task < ApplicationRecord
     groups.any? {|group| group.admin?(user) }
   end
 
+  # This method creates a duplicate while leaving permissions and ownership unchanged
   def duplicate
     dup.tap do |task|
       task.parent_uuid = task.uuid
@@ -113,6 +114,16 @@ class Task < ApplicationRecord
       task.files = duplicate_files
       task.model_solutions = duplicate_model_solutions
     end
+  end
+
+  # This method resets all permissions and assigns a useful title
+  def clean_duplicate(user)
+    new_entry = @task.duplicate
+    new_entry.user = user
+    new_entry.groups = []
+    new_entry.collections = []
+    new_entry.access_level_private!
+    new_entry.title = "#{t('tasks.copy_of_task')} ##{@task.id}: #{new_entry.title}"
   end
 
   def initialize_derivate(user = nil)

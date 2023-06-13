@@ -2,7 +2,7 @@
 
 require 'zip'
 
-class TasksController < ApplicationController
+class TasksController < ApplicationController # rubocop:disable Metrics/ClassLength
   load_and_authorize_resource except: %i[import_external import_uuid_check]
 
   before_action :handle_search_params, only: :index
@@ -16,12 +16,7 @@ class TasksController < ApplicationController
   end
 
   def duplicate
-    new_entry = @task.duplicate
-    new_entry.user = current_user
-    new_entry.groups = []
-    new_entry.collections = []
-    new_entry.access_level_private!
-    new_entry.title = "#{t('tasks.copy_of_task')} ##{@task.id}: #{new_entry.title}"
+    new_entry = @task.clean_duplicate(current_user)
     if new_entry.save(context: :force_validations)
       redirect_to new_entry, notice: t('tasks.notification.created')
     else
