@@ -112,7 +112,11 @@ group :development do
 end
 
 group :test do
+  gem 'capybara'
+  gem 'database_cleaner'
+  gem 'headless'
   gem 'rspec-github', require: false
+  gem 'selenium-webdriver'
   gem 'shoulda-matchers'
   gem 'simplecov'
   gem 'webmock'
