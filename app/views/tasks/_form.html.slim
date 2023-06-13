@@ -64,9 +64,9 @@
           .div.hidden.execution-environment-error
             = t('controllers.exercise.visibility.not_public_without_exenv')
           .radio-switch
-            = f.radio_button :access_level, 'public', value: 'public', checked: true
+            = f.radio_button :access_level, :public, value: :public, checked: true
             = label_tag 'task_access_level_public', t('tasks.visibility.public'), class: 'radio-left'
-            = f.radio_button :access_level, 'private', value: 'private'
+            = f.radio_button :access_level, :private, value: :private
             = label_tag 'task_access_level_private', t('tasks.visibility.private'), class: 'radio-right'
           .visibility_warning
             span.hidden#task_visibility_warning data-external-collection-membership=@task.collections.any?{|collection| collection.users.exclude?(current_user)}.to_s

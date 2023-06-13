@@ -37,7 +37,7 @@ class Task < ApplicationRecord
   accepts_nested_attributes_for :group_tasks, allow_destroy: true
 
   scope :owner, ->(user) { where(user:) }
-  scope :public_access, -> { where(access_level: 'public') }
+  scope :public_access, -> { where(access_level: :public) }
   scope :group_access, lambda {|user|
     joins(groups: [:users])
       .where(users: {id: user.id})

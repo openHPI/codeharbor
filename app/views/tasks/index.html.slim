@@ -5,10 +5,9 @@
   .nav-container
     .col-md-9
       .btn-group[role="group"]
-        = button_tag t('tasks.menu_button.mine'), type: 'button', class: 'btn btn-main change-hidden-field', id: 'owner'
-        /= button_tag t('tasks.menu_button.private'), type: 'button', class: 'btn btn-main change-hidden-field', id: 'private'
-        = button_tag t('tasks.menu_button.group'), type: 'button', class: 'btn btn-main change-hidden-field', id: 'group'
-        = button_tag t('tasks.menu_button.public'), type: 'button', class: 'btn btn-main change-hidden-field', id: 'public'
+        = button_tag t('tasks.menu_button.mine'), type: 'button', class: 'btn btn-main change-hidden-field', id: :owner
+        = button_tag t('tasks.menu_button.group'), type: 'button', class: 'btn btn-main change-hidden-field', id: :group
+        = button_tag t('tasks.menu_button.public'), type: 'button', class: 'btn btn-main change-hidden-field', id: :public
     .col-md-3
       - if can? :create, Task
         .btn-group.pull-right
@@ -63,12 +62,12 @@
             b = t('tasks.index.search.created')
           span.form-group
             = f.select 'created_before_days', options_for_select({t('tasks.index.search.all_time') => 0, t('tasks.index.search.today') => 1, t('tasks.index.search.last_week') => 7, t('tasks.index.search.last_month') => 30}, selected: @created_before_days), {}, class: 'form-control defaultSelect2 ransack-filter'
-      - if @visibility == 'owner'
+      - if @visibility == :owner
         .other.section
           p
             b = t('tasks.visibility.label')
           span.form-group
-            = f.select 'access_level', options_for_select({t('tasks.index.search.all_access_levels') => '', t('tasks.visibility.private') => 'private', t('tasks.visibility.public') => 'public'}, selected: @access_level), {}, class: 'form-control defaultSelect2 ransack-filter'
+            = f.select 'access_level', options_for_select({t('tasks.index.search.all_access_levels') => '', t('tasks.visibility.private') => :private, t('tasks.visibility.public') => :public}, selected: @access_level), {}, class: 'form-control defaultSelect2 ransack-filter'
       .clear style=("clear: both")
 
     br
