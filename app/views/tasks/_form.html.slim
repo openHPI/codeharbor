@@ -86,7 +86,7 @@
 
         .field-element
           = f.label :labels, t('tasks.labels'), class: 'form-label'
-          = f.select :label_names, options_for_select(@task.labels.map { |l| [l.name, l.name, {label_color: l.color, label_font_color: l.font_color}] }, @task.labels.pluck(:name)), {}, {class: "my-tag form-control", multiple: "multiple", style: "width: 300px;"}
+          = f.select :label_names, options_for_select(@task.labels.map { |l| [l.name, l.name, {label_color: l.color, label_font_color: l.font_color}] }, @task.labels.map(&:name)), {}, {class: "my-tag form-control", multiple: "multiple", style: "width: 300px;"}
 
         .field-element
           = f.label :license, t('tasks.show.license'), class: 'form-label'
