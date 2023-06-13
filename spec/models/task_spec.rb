@@ -140,6 +140,23 @@ RSpec.describe Task do
         it { is_expected.to contain_exactly task }
       end
     end
+
+    context 'when visibility is "invalid"' do
+      let(:visibility) { 'invalid' }
+
+      it { is_expected.to contain_exactly task }
+    end
+
+    context 'when visibility is "group"' do
+      let(:user) { create(:user) }
+      let(:role) { :confirmed_member }
+      let(:group_memberships) { [build(:group_membership, :with_admin), build(:group_membership, user:, role:)] }
+      let(:groups) { create_list(:group, 1, group_memberships:) }
+      let(:group_task) { create(:task, user: task_user, access_level: :public, groups:) }
+      let(:visibility) { :group }
+
+      it { is_expected.to contain_exactly group_task }
+    end
   end
 
   describe '.created_before_days' do
