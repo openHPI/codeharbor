@@ -102,6 +102,15 @@ GEM
       sorted_set (~> 1, >= 1.0.2)
     byebug (11.1.3)
     cancancan (3.5.0)
+    capybara (3.39.2)
+      addressable
+      matrix
+      mini_mime (>= 0.1.3)
+      nokogiri (~> 1.8)
+      rack (>= 1.6.0)
+      rack-test (>= 0.6.3)
+      regexp_parser (>= 1.5, < 3.0)
+      xpath (~> 3.2)
     coderay (1.1.3)
     coffee-rails (5.0.0)
       coffee-script (>= 2.2.0)
@@ -118,6 +127,12 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
+    database_cleaner (2.0.2)
+      database_cleaner-active_record (>= 2, < 3)
+    database_cleaner-active_record (2.1.0)
+      activerecord (>= 5.a)
+      database_cleaner-core (~> 2.0.0)
+    database_cleaner-core (2.0.1)
     date (3.3.3)
     debug_inspector (1.1.0)
     deep_merge (1.2.2)
@@ -197,6 +212,7 @@ GEM
       rspec (>= 2.99.0, < 4.0)
     hashdiff (1.0.1)
     hashie (5.0.0)
+    headless (2.3.1)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     i18n-js (3.9.2)
@@ -253,6 +269,7 @@ GEM
       net-pop
       net-smtp
     marcel (1.0.2)
+    matrix (0.4.2)
     method_source (1.0.0)
     mini_magick (4.12.0)
     mini_mime (1.1.2)
@@ -444,6 +461,10 @@ GEM
       sprockets-rails
       tilt
     select2-rails (4.0.13)
+    selenium-webdriver (4.10.0)
+      rexml (~> 3.2, >= 3.2.5)
+      rubyzip (>= 1.2.2, < 3.0)
+      websocket (~> 1.0)
     sentry-rails (5.9.0)
       railties (>= 5.0)
       sentry-ruby (~> 5.9.0)
@@ -513,10 +534,13 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
+    websocket (1.2.9)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     will_paginate (4.0.0)
+    xpath (3.2.0)
+      nokogiri (~> 1.8)
     zeitwerk (2.6.8)
 
 PLATFORMS
@@ -530,9 +554,11 @@ DEPENDENCIES
   binding_of_caller
   byebug
   cancancan
+  capybara
   coffee-rails (>= 5.0.0)
   concurrent-ruby
   config
+  database_cleaner
   devise (~> 4.9)
   devise-bootstrap-views (~> 1.0)
   factory_bot_rails
@@ -541,6 +567,7 @@ DEPENDENCIES
   font-awesome-rails (>= 4.7.0.5)
   guard
   guard-rspec
+  headless
   i18n
   i18n-js (< 4.0.0)
   image_processing
@@ -582,6 +609,7 @@ DEPENDENCIES
   sass-rails (>= 6.0.0)
   sassc-rails
   select2-rails (~> 4.0)
+  selenium-webdriver
   sentry-rails
   sentry-ruby
   shoulda-matchers
