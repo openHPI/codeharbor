@@ -62,7 +62,7 @@ class Task < ApplicationRecord
   scope :access_level, ->(access_level) { where(access_level:) }
   scope :fulltext_search, lambda {|input|
     r = left_outer_joins(:programming_language)
-
+    # NOTE: Splitting by spaces like this is not ideal. For example, it breaks for labels containing spaces.
     input.split(/[,\s]+/).each do |keyword|
       r = r.where(["title ILIKE :keyword
                     OR description ILIKE :keyword
