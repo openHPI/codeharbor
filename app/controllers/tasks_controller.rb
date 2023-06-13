@@ -181,7 +181,7 @@ class TasksController < ApplicationController
       @min_stars = search[:min_stars]
       @access_level = search[:access_level]
     end
-    @visibility = params[:visibility] || 'owner'
+    @visibility = params[:visibility]&.to_sym || :owner
     @advanced_filter_active = params[:advancedFilterActive]
   end
 

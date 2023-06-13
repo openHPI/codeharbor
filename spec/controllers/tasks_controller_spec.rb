@@ -7,7 +7,7 @@ RSpec.describe TasksController do
 
   let(:user) { create(:user) }
   let(:collection) { create(:collection, users: [user], tasks: []) }
-  let(:valid_attributes) { {user:, access_level: 'private'} }
+  let(:valid_attributes) { {user:, access_level: :private} }
 
   let(:invalid_attributes) { {title: ''} }
 
@@ -26,10 +26,10 @@ RSpec.describe TasksController do
     end
 
     context 'with a task of a different user' do
-      let!(:other_task) { create(:task, user: build(:user), access_level: 'public') }
+      let!(:other_task) { create(:task, user: build(:user), access_level: :public) }
 
       context 'when visibility is owner' do
-        let(:params) { {visibility: 'owner'} }
+        let(:params) { {visibility: :owner} }
 
         it 'shows all Tasks of that user' do
           get_request
@@ -38,7 +38,7 @@ RSpec.describe TasksController do
       end
 
       context 'when visibility is public' do
-        let(:params) { {visibility: 'public'} }
+        let(:params) { {visibility: :public} }
 
         it 'shows all Tasks with a visibility of public' do
           get_request

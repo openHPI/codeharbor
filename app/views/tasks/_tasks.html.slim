@@ -1,5 +1,5 @@
 - if @tasks.empty?
-  - if Task.visibility(:owner, current_user).empty? && (@option == 'owner')
+  - if Task.visibility(:owner, current_user).empty? && (@option == :owner)
     .panel.panel-default style=("margin-top: 40px")
       .panel-body
         .col-md-10
@@ -27,7 +27,7 @@
       h3.panel-title
         span data-toggle="tooltip" data-placement="bottom" title="#{task.title}"
           = truncate(task.title, length: 100)
-        - if @visibility == 'owner'
+        - if @visibility == :owner
           span.visibility.pull-left data-toggle="tooltip" data-placement="bottom" title="#{t('tasks.visibility.label')}"
             = t("tasks.visibility.#{task.access_level}")
         span.star-rating.pull-right
