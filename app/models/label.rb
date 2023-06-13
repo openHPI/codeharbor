@@ -5,8 +5,9 @@ class Label < ApplicationRecord
   has_many :tasks, through: :task_labels
 
   validates :name, presence: true
+  validates :color, presence: true, format: {with: /\A[a-fA-F0-9]{6}\z/}
 
-  before_create :choose_label_color
+  before_validation :choose_label_color, if: -> { color.blank? }
 
   def font_color
     c_codes = color_codes

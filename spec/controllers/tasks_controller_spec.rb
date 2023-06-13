@@ -247,6 +247,17 @@ RSpec.describe TasksController do
         post_request
         expect(response).to render_template('new')
       end
+
+      context 'when new label needs to be created' do
+        let(:invalid_attributes) { {title: '', label_names: [not_existing_label_name]} }
+        let(:not_existing_label_name) { 'some new label' }
+
+        it "re-renders the 'new' template successfully" do
+          post_request
+          expect(response).to have_http_status(:success)
+          expect(response).to render_template('new')
+        end
+      end
     end
   end
 
