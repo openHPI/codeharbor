@@ -61,7 +61,7 @@ class Ability
   def task_abilities(user)
     can %i[index create import_start import_confirm], Task
     alias_action :export_external_start, :export_external_check, :export_external_confirm, to: :export
-    can %i[show export download add_to_collection], Task do |task|
+    can %i[show export download add_to_collection duplicate], Task do |task|
       task.access_level_public? || task.in_same_group?(user) || task.author?(user)
     end
     can %i[update], Task do |task|
