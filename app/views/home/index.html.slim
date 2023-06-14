@@ -12,15 +12,15 @@
     - else
       = content_tag :div, msg, :id => "flash_#{name}"
 
-#myCarousel.carousel.slide data-ride="carousel" data-interval="5000"
-  ol class="carousel-indicators"
-    li data-target="#myCarousel" data-slide-to="0" class="active"
-    li data-target="#myCarousel" data-slide-to="1"
-    li data-target="#myCarousel" data-slide-to="2"
+#myCarousel.carousel.pt-3.slide[data-bs-ride="carousel"]
+  .carousel-indicators
+    button.active[type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" aria-current="true" aria-label="Slide 1"]
+    button[type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"]
+    button[type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"]
   .carousel-inner
-    .item.active
-      = image_tag "banner1.jpg", style: "width:100%"
-      .carousel-caption
+    .carousel-item.active
+      = image_tag('banner1.jpg', class: 'd-block w-100', alt: '...')
+      .carousel-caption.d-none.d-md-block
         .background-transparent
           h1 = t('home.banner1.header')
           p = t('home.banner1.paragraph')
@@ -30,10 +30,9 @@
         = "Bengdt Nyman"
         = ' / '
         = link_to "cc", 'https://creativecommons.org/licenses/by/2.0/'
-
-    .item
-      = image_tag "banner2.jpg", style: "width:100%"
-      .carousel-caption
+    .carousel-item
+      = image_tag('banner2.jpg', class: 'd-block w-100', alt: '...')
+      .carousel-caption.d-none.d-md-block
         .background-transparent
           h1 = t('home.banner2.header')
           p = t('home.banner2.paragraph')
@@ -43,9 +42,9 @@
         = "Solent Creatives"
         = ' / '
         = link_to "cc", 'https://creativecommons.org/licenses/by/2.0/'
-    .item
-      = image_tag "banner3.jpg", style: "width:100%"
-      .carousel-caption
+    .carousel-item
+      = image_tag('banner3.jpg', class: 'd-block w-100', alt: '...')
+      .carousel-caption.d-none.d-md-block
         .background-transparent
           h1 = t('home.banner3.header')
           p = t('home.banner3.paragraph')
@@ -55,6 +54,14 @@
         = "Tim Peacock"
         = ' / '
         = link_to "cc", 'https://creativecommons.org/licenses/by/2.0/'
+  button.carousel-control-prev[type="button" data-bs-target="#myCarousel" data-bs-slide="prev"]
+    span.carousel-control-prev-icon[aria-hidden="true"]
+    span.visually-hidden
+      | Previous
+  button.carousel-control-next[type="button" data-bs-target="#myCarousel" data-bs-slide="next"]
+    span.carousel-control-next-icon[aria-hidden="true"]
+    span.visually-hidden
+      | Next
 
 .container.homepage
   .col-md-12 style="margin-bottom: 80px;"
