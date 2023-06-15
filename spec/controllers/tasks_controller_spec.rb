@@ -74,6 +74,20 @@ RSpec.describe TasksController do
         end
       end
     end
+
+    context 'when no user is signed in' do
+      before { sign_out user }
+
+      it 'redirects to root page' do
+        get_request
+        expect(response).to redirect_to(root_path)
+      end
+
+      it 'shows a flash message' do
+        get_request
+        expect(flash[:alert]).to eq I18n.t('controllers.authorization')
+      end
+    end
   end
 
   describe 'GET #show' do
