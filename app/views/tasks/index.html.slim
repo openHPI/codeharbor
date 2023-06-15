@@ -39,40 +39,42 @@
     .dropdown-content
       = hidden_field_tag 'advancedFilterActive', @advanced_filter_active
       = fields_for 'settings' do |advanced|
-        .order.section
-          p
-            b = t('tasks.index.search.order')
-          .btn-group[role="group"]
-            div
-              = sort_link(@search, :created_at)
-            div
-              = sort_link(@search, :average_rating)
-        .stars.section
-          p
-            b = t('tasks.index.search.min_stars')
-          div.form-group
-            = f.select 'min_stars', options_for_select(%w[0 1 2 3 4 5], selected: @min_stars), {}, class: 'form-control defaultSelect2 ransack-filter'
-        .proglanguages.section
-          p
-            b = t('tasks.index.search.proglanguages')
-          span.form-group
-            = f.collection_select :programming_language_id_in, ProgrammingLanguage.all, :id, :language_with_version, {}, {multiple: true, class: 'form-control language-box ransack-filter'}
-        .other.section
-          p
-            b = t('tasks.index.search.created')
-          span.form-group
-            = f.select 'created_before_days', options_for_select({t('tasks.index.search.all_time') => 0, t('tasks.index.search.today') => 1, t('tasks.index.search.last_week') => 7, t('tasks.index.search.last_month') => 30}, selected: @created_before_days), {}, class: 'form-control defaultSelect2 ransack-filter'
-        .labels.section
-          p
-            b = t('tasks.index.search.labels')
-          span.form-group
-            = f.select 'has_all_labels', options_for_select(@req_labels.map { |l| [l.name, l.name, {label_color: l.color, label_font_color: l.font_color}] }, @req_labels.pluck(:name)), {}, {class: "labels-select2-tag form-control ransack-filter", multiple: true, "data-tags": false, style: "width: 300px;"}
-      - if @visibility == :owner
-        .other.section
-          p
-            b = t('tasks.visibility.label')
-          span.form-group
-            = f.select 'access_level', options_for_select({t('tasks.index.search.all_access_levels') => '', t('tasks.visibility.private') => :private, t('tasks.visibility.public') => :public}, selected: @access_level), {}, class: 'form-control defaultSelect2 ransack-filter'
+        span.row
+          .order.section
+            p
+              b = t('tasks.index.search.order')
+            .btn-group[role="group" style="margin-left: 0.25em;"]
+              div
+                = sort_link(@search, :created_at)
+              div
+                = sort_link(@search, :average_rating)
+          .stars.section
+            p
+              b = t('tasks.index.search.min_stars')
+            div.form-group
+              = f.select 'min_stars', options_for_select(%w[0 1 2 3 4 5], selected: @min_stars), {}, class: 'form-control defaultSelect2 ransack-filter'
+          .proglanguages.section
+            p
+              b = t('tasks.index.search.proglanguages')
+            span.form-group
+              = f.collection_select :programming_language_id_in, ProgrammingLanguage.all, :id, :language_with_version, {}, {multiple: true, class: 'form-control language-box ransack-filter'}
+        span.row
+          .other.section
+            p
+              b = t('tasks.index.search.created')
+            span.form-group
+              = f.select 'created_before_days', options_for_select({t('tasks.index.search.all_time') => 0, t('tasks.index.search.today') => 1, t('tasks.index.search.last_week') => 7, t('tasks.index.search.last_month') => 30}, selected: @created_before_days), {}, class: 'form-control defaultSelect2 ransack-filter'
+          .labels.section
+            p
+              b = t('tasks.index.search.labels')
+            span.form-group
+              = f.select 'has_all_labels', options_for_select(@req_labels.map { |l| [l.name, l.name, {label_color: l.color, label_font_color: l.font_color}] }, @req_labels.pluck(:name)), {}, {class: "labels-select2-tag form-control ransack-filter", multiple: true, "data-tags": false, style: "width: 300px;"}
+          - if @visibility == :owner
+            .other.section
+              p
+                b = t('tasks.visibility.label')
+              span.form-group
+                = f.select 'access_level', options_for_select({t('tasks.index.search.all_access_levels') => '', t('tasks.visibility.private') => :private, t('tasks.visibility.public') => :public}, selected: @access_level), {}, class: 'form-control defaultSelect2 ransack-filter'
       .clear style=("clear: both")
 
     br
