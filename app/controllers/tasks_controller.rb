@@ -183,7 +183,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   private
 
-  def set_search
+  def set_search # rubocop:disable Metrics/AbcSize
     search = params[:search]
     @req_labels = []
 
@@ -191,10 +191,9 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
       @created_before_days = search[:created_before_days]
       @min_stars = search[:min_stars]
       @access_level = search[:access_level]
-      if search['has_all_labels']
-        @req_labels = Label.where(name: search['has_all_labels'].compact_blank)
-      end
+      @req_labels = Label.where(name: search['has_all_labels'].compact_blank) if search['has_all_labels']
     end
+
     @visibility = params[:visibility]&.to_sym || :owner
     @advanced_filter_active = params[:advancedFilterActive]
   end
