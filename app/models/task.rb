@@ -125,12 +125,6 @@ class Task < ApplicationRecord
       task.access_level_private!
       task.title = "#{I18n.t('tasks.copy_of_task')}: #{task.title}"
     end
-    # new_entry = @task.duplicate
-    # new_entry.user = user
-    # new_entry.groups = []
-    # new_entry.collections = []
-    # new_entry.access_level_private!
-    #
   end
 
   def initialize_derivate(user = nil)
