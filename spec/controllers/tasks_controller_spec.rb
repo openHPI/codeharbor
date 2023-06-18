@@ -405,7 +405,7 @@ RSpec.describe TasksController do
   end
 
   describe 'POST #duplicate' do
-    subject(:post_duplicate) { put :duplicate, params: {id: task.to_param} }
+    subject(:post_duplicate) { post :duplicate, params: {id: task.to_param} }
 
     let(:group) { create(:group) }
     let(:collection) { create(:collection) }
