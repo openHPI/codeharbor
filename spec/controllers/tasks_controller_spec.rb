@@ -404,6 +404,48 @@ RSpec.describe TasksController do
     end
   end
 
+  describe 'POST #duplicate' do
+    subject(:post_duplicate) { put :duplicate, params: {id: task.to_param} }
+
+    let(:group) { create(:group) }
+    let(:collection) { create(:collection) }
+
+    let!(:task) { create(:task, valid_attributes) }
+    let(:valid_attributes) do
+      {
+        user:,
+        title: 'title',
+        license: create(:license, name: 'license'),
+        groups: [group],
+        collections: [collection],
+      }
+    end
+
+    it 'creates a new Task' do
+      expect { post_duplicate }.to change(Task, :count).by(1)
+    end
+
+    it 'assigns a newly created task as @task' do
+      post_duplicate
+      expect(assigns(:task)).to be_persisted
+    end
+
+    it 'redirects to the created task' do
+      post_duplicate
+      expect(response).to redirect_to(Task.last)
+    end
+
+    it 'resets the groups' do
+      post_duplicate
+      expect(Task.last.groups).to eq([])
+    end
+
+    it 'resets the collections' do
+      post_duplicate
+      expect(Task.last.collections).to eq([])
+    end
+  end
+
   describe 'DELETE #destroy' do
     subject(:delete_request) do
       delete :destroy, params: {id: task.to_param}
