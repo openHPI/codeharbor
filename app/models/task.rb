@@ -118,12 +118,19 @@ class Task < ApplicationRecord
 
   # This method resets all permissions and assigns a useful title
   def clean_duplicate(user)
-    new_entry = @task.duplicate
-    new_entry.user = user
-    new_entry.groups = []
-    new_entry.collections = []
-    new_entry.access_level_private!
-    new_entry.title = "#{t('tasks.copy_of_task')} ##{@task.id}: #{new_entry.title}"
+    duplicate.tap do |task|
+      task.user = user
+      task.groups = []
+      task.collections = []
+      task.access_level_private!
+      task.title = "#{I18n.t('tasks.copy_of_task')}: #{task.title}"
+    end
+    # new_entry = @task.duplicate
+    # new_entry.user = user
+    # new_entry.groups = []
+    # new_entry.collections = []
+    # new_entry.access_level_private!
+    #
   end
 
   def initialize_derivate(user = nil)
