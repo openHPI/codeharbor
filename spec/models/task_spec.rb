@@ -21,6 +21,7 @@ RSpec.describe Task do
     it { is_expected.not_to be_able_to(:destroy, task) }
     it { is_expected.not_to be_able_to(:download, task) }
     it { is_expected.not_to be_able_to(:add_to_collection, task) }
+    it { is_expected.not_to be_able_to(:duplicate, task) }
     it { is_expected.not_to be_able_to(:export_external_start, task) }
     it { is_expected.not_to be_able_to(:export_external_check, task) }
     it { is_expected.not_to be_able_to(:export_external_confirm, task) }
@@ -36,6 +37,7 @@ RSpec.describe Task do
       it { is_expected.not_to be_able_to(:show, task) }
       it { is_expected.not_to be_able_to(:download, task) }
       it { is_expected.not_to be_able_to(:add_to_collection, task) }
+      it { is_expected.not_to be_able_to(:duplicate, task) }
 
       it { is_expected.not_to be_able_to(:update, task) }
       it { is_expected.not_to be_able_to(:destroy, task) }
@@ -60,6 +62,7 @@ RSpec.describe Task do
         it { is_expected.to be_able_to(:show, task) }
         it { is_expected.to be_able_to(:download, task) }
         it { is_expected.to be_able_to(:add_to_collection, task) }
+        it { is_expected.to be_able_to(:duplicate, task) }
 
         it { is_expected.to be_able_to(:export_external_start, task) }
         it { is_expected.to be_able_to(:export_external_check, task) }
@@ -77,6 +80,7 @@ RSpec.describe Task do
         it { is_expected.to be_able_to(:export, task) }
         it { is_expected.to be_able_to(:download, task) }
         it { is_expected.to be_able_to(:add_to_collection, task) }
+        it { is_expected.to be_able_to(:duplicate, task) }
 
         it { is_expected.not_to be_able_to(:update, task) }
         it { is_expected.not_to be_able_to(:destroy, task) }
@@ -91,6 +95,7 @@ RSpec.describe Task do
         let(:groups) { create_list(:group, 1, group_memberships:) }
 
         it { is_expected.to be_able_to(:update, task) }
+        it { is_expected.to be_able_to(:duplicate, task) }
         it { is_expected.not_to be_able_to(:destroy, task) }
 
         context 'when user is group-admin' do
@@ -190,10 +195,12 @@ RSpec.describe Task do
   describe '#duplicate' do
     subject(:duplicate) { task.duplicate }
 
-    let(:task) { create(:task, files:, tests:, model_solutions:) }
+    let(:task) { create(:task, files:, tests:, model_solutions:, user: task_user, access_level: :public, groups:) }
     let(:files) { build_list(:task_file, 2, :exportable) }
     let(:tests) { build_list(:test, 2) }
     let(:model_solutions) { build_list(:model_solution, 2) }
+    let(:task_user) { create(:user) }
+    let(:groups) { create_list(:group, 1) }
 
     it 'creates a new task' do
       expect(duplicate).not_to be task
@@ -201,6 +208,10 @@ RSpec.describe Task do
 
     it 'has no uuid' do
       expect(duplicate.uuid).to be_nil
+    end
+
+    it 'has the correct parent_uuid' do
+      expect(duplicate.parent_uuid).to be task.uuid
     end
 
     it 'has the same attributes' do
@@ -236,6 +247,28 @@ RSpec.describe Task do
                                                          have_attributes(file.attributes.except('created_at', 'updated_at', 'id',
                                                            'task_id'))
                                                        end)
+    end
+
+    context 'when task is cleanly duplicated' do
+      subject(:clean_duplicate) { task.clean_duplicate user }
+
+      let(:user) { create(:user) }
+
+      it 'has the current user' do
+        expect(clean_duplicate.user).to be user
+      end
+
+      it 'is private' do
+        expect(clean_duplicate.access_level).to eq(:private.to_s)
+      end
+
+      it 'is not part of a group' do
+        expect(clean_duplicate.groups).to eq([])
+      end
+
+      it 'has a modified title' do
+        expect(clean_duplicate.title).to eq("#{I18n.t('tasks.copy_of_task')}: #{task.title}")
+      end
     end
   end
 
