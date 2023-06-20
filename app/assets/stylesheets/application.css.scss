@@ -18,26 +18,7 @@
  *= require_tree .
  */
 
-@import "font-awesome";
-
-#banner {
-  padding: 10px;
-  border-bottom: 2px solid;
-  color: #282;
-  text-align: right;
-  height: 90px;
-
-  #user {
-    float: right;
-    text-align: right;
-    img {
-      float: left;
-    }
-  }
-  img {
-    float: left;
-  }
-}
+@import 'font-awesome';
 
 #columns {
   #main {
@@ -55,15 +36,12 @@
         width: 45em;
         display: inline-block;
 
-
         #title {
           display: inline-block;
         }
 
-
         #rating {
           display: inline-block;
-
         }
 
         #description {
@@ -89,11 +67,10 @@
     padding: 1em 2em;
     width: 13em;
   }
-
 }
 
 #flash-message {
-  margin-top:30px;
+  margin-top: 30px;
   margin-bottom: -20px;
 }
 

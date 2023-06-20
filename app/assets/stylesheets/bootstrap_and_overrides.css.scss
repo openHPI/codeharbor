@@ -41,7 +41,10 @@
   border: 2px #888888 solid;
 }
 
-.btn-group .btn + .btn, .btn-group .btn + .btn-group, .btn-group .btn-group + .btn, .btn-group .btn-group + .btn-group {
+.btn-group .btn + .btn,
+.btn-group .btn + .btn-group,
+.btn-group .btn-group + .btn,
+.btn-group .btn-group + .btn-group {
   margin-left: -2px;
 }
 
@@ -55,7 +58,10 @@
   color: #444444;
 }
 
-a.no-border:link, a.no-border:active, a.no-border:hover, a.no-border:visited {
+a.no-border:link,
+a.no-border:active,
+a.no-border:hover,
+a.no-border:visited {
   text-decoration: none;
   color: #444444;
 }

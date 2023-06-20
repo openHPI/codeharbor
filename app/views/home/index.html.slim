@@ -64,57 +64,61 @@
       | Next
 
 .container.homepage
-  .col-md-12 style="margin-bottom: 80px;"
-    .col-md-4 style="min-height: 160px;"
-      = image_tag "enterprise.png", class: 'img-circle', alt: 'Enterprise'
-      h2
-        = t('home.marketing.mooc.header_html')
-      p
-        = t('home.marketing.mooc.paragraph')
-    .col-md-4 style="min-height: 160px;"
-      = image_tag "education.png", class: 'img-circle', alt: 'Education'
-      h2
-        = t('home.marketing.universities.header_html')
-      p
-        = t('home.marketing.universities.paragraph')
-    .col-md-4 style="min-height: 160px;"
-      = image_tag "home.png", class: 'img-circle', alt: 'Home'
-      h2
-        = t('home.marketing.schools.header_html')
-      p
-        = t('home.marketing.schools.paragraph')
+  .row.mb-3
+    .col-md-4.col-sm-12 style="min-height: 160px;"
+      .card.text-dark.bg-light.m-1
+        = image_tag "enterprise.png", class: 'img-circle card-img-top pt-1', alt: 'Enterprise'
+        .card-body
+          h5.card-title.text-center
+            = t('home.marketing.mooc.header_html')
+          p.card-text.text-center
+            = t('home.marketing.mooc.paragraph')
+    .col-md-4.col-sm-12 style="min-height: 160px;"
+      .card.text-dark.bg-light.m-1
+        = image_tag "education.png", class: 'img-circle card-img-top pt-1', alt: 'Education'
+        .card-body
+          h5.card-title.text-center
+            = t('home.marketing.universities.header_html')
+          p.card-text.text-center
+            = t('home.marketing.universities.paragraph')
+    .col-md-4.col-sm-12 style="min-height: 160px;"
+      .card.text-dark.bg-light.m-1
+        = image_tag "home.png", class: 'img-circle card-img-top pt-1', alt: 'Home'
+        .card-body
+          h5.card-title.text-center
+            = t('home.marketing.schools.header_html')
+          p.card-text.text-center
+            = t('home.marketing.schools.paragraph')
 
-  .col-md-12.feature
-    .col-md-7
-      h2
+  .row.feature
+    .col-md-6.col-sm-12
+      h5
         span.fa.fa-file-text-o
         = ' ' + t('home.feature.exercises.header')
-      p
+      p.text-justify
         = t('home.feature.exercises.paragraph')
     .col-md-5
 
-  .col-md-12.feature
-    .col-md-5
-    .col-md-7
-      h2
+  .row.feature.justify-content-end
+    .col-md-6.col-sm-12
+      h5
         span.fa.fa-folder-open
         = ' ' + t('home.feature.collections.header')
-      p
+      p.text-justify
         = t('home.feature.collections.paragraph')
 
-  .col-md-12.feature
-    .col-md-7
-      h2
+  .row.feature
+    .col-md-6
+      h5
         span.fa.fa-group
         = ' ' + t('home.feature.groups.header')
-      p
+      p.text-justify
         = t('home.feature.groups.paragraph')
 
   - unless user_signed_in?
-    .col-md-12.feature
-      .col-md-3
-      .col-md-9
-        h2
+    .row.feature.justify-content-end
+      .col-md-6.col-sm-12
+        h5
           = t('home.sign_in.header')
         p
           = t('home.sign_in.paragraph_html', href1: (link_to t('home.sign_in.link1'), new_user_registration_path, class: 'classic-link'), href2: (link_to t('home.sign_in.link2'), new_user_session_path, class: 'classic-link'))

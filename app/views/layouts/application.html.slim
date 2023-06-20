@@ -8,10 +8,10 @@ html
     = javascript_pack_tag('application', 'data-turbolinks-track': true, defer: false, integrity: true, crossorigin: 'anonymous')
     = javascript_include_tag('application', 'data-turbolinks-track': 'reload', integrity: true, crossorigin: 'anonymous')
     = csrf_meta_tags
-  body
+  body.d-flex.flex-column.h-100
     #content
       header.py-3
-        nav.navbar.navbar-expand-lg.navbar-default.fixed-top.bg-light.text-bg-light
+        nav.navbar.navbar-expand-lg.fixed-top.bg-light.text-bg-light
           .container
             = link_to home_index_path, class: "navbar-brand"
               | CodeHarbor
@@ -88,24 +88,25 @@ html
           .col-md-12 style=("margin-top: 50px")
             = yield
         = yield :modals
-    #footer
+
+    #footer.footer.mt-auto.py-3
       .container
-        .col-md-6
-          h4
-            = t('layouts.footer.more.header')
-          = link_to t('layouts.footer.more.link'), about_home_index_path
-          br
-          br
-          | &copy;
-          = " "
-          = link_to "Hasso Plattner Institute", 'https://hpi.de/'
-          = ' - '
-          = link_to t('layouts.footer.imprint'), 'https://open.hpi.de/pages/imprint'
-          = ' - '
-          = link_to t('layouts.footer.privacy_policy'), 'https://open.hpi.de/pages/privacy_policy'
-        .col-md-6
-          h4
-            = t('layouts.footer.about.header')
-          p
-            = t('layouts.footer.about.paragraph')
-        .col-md-12
+        .row
+          .col-md-6
+            h6
+              = t('layouts.footer.more.header')
+            = link_to t('layouts.footer.more.link'), about_home_index_path
+            br
+            br
+            | &copy;
+            = " "
+            = link_to "Hasso Plattner Institute", 'https://hpi.de/'
+            = ' - '
+            = link_to t('layouts.footer.imprint'), 'https://open.hpi.de/pages/imprint'
+            = ' - '
+            = link_to t('layouts.footer.privacy_policy'), 'https://open.hpi.de/pages/privacy_policy'
+          .col-md-6
+            h6
+              = t('layouts.footer.about.header')
+            p
+              = t('layouts.footer.about.paragraph')
