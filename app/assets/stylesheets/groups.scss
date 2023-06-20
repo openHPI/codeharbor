@@ -1,7 +1,7 @@
 $group-color: #660000;
 
 .fa-group {
-  color: $group-color
+  color: $group-color;
 }
 
 .nav-container {
@@ -11,7 +11,8 @@ $group-color: #660000;
     border: 2px #dddddd solid;
     display: inline-block;
   }
-  a:hover, a:focus {
+  a:hover,
+  a:focus {
     background-color: #f0f0f0;
     color: black;
     text-decoration: none;

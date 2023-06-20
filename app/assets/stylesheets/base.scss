@@ -1,14 +1,6 @@
-html, body {
-  height: 100%;
-}
-
+html,
 body {
-  display: flex;
-  flex-direction: column;
-}
-
-#content {
-  flex: 1 0 auto;
+  height: 100%;
 }
 
 .menu-number {
@@ -21,14 +13,12 @@ body {
   margin-right: 4px;
   line-height: 16px;
   text-align: center;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.2);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
   border-radius: 100%;
 }
 
-
 #footer {
   margin-top: 20px;
-  flex-shrink: 0;
   padding-top: 10px;
   background-color: #f5f5f5;
 }
@@ -37,23 +27,13 @@ a.classic-link {
   color: blue;
 }
 
-.header {
-  margin-bottom: 30px;
-  display: inline-block;
-  width: 100%;
-
-  .header-btn {
-    padding: 9px 15px;
-  }
-}
-
 .img-circle {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 50%;
-    width:128px;
-    height:128px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 50%;
+  width: 128px;
+  height: 128px;
 }
 
 .info-box {
@@ -105,7 +85,8 @@ a.classic-link {
     border: 1px #dddddd solid;
     width: 96%;
 
-    .row-label, .inner-section .row-label {
+    .row-label,
+    .inner-section .row-label {
       float: left;
       text-align: left;
       background-color: #f5f5f5;
@@ -118,7 +99,8 @@ a.classic-link {
       min-width: 80px;
       border-right: 1px #dddddd solid;
     }
-    .row-value, .inner-section .row-value{
+    .row-value,
+    .inner-section .row-value {
       float: left;
       text-align: left;
       padding: 6px 8px;
@@ -131,7 +113,8 @@ a.classic-link {
     }
   }
 
-  .row.vertical, .inner-section .row-vertical {
+  .row.vertical,
+  .inner-section .row-vertical {
     .row-label {
       width: 100%;
       display: block;
@@ -211,12 +194,12 @@ table.vertical-table {
   padding-left: 0;
 
   .selected {
-    border-color: #7C7C7C;
+    border-color: #7c7c7c;
     z-index: 5;
   }
 
   .selected:hover {
-    border-color: #7C7C7C;
+    border-color: #7c7c7c;
     background-color: #eeeeee;
   }
 
@@ -226,7 +209,8 @@ table.vertical-table {
     border: 2px #dddddd solid;
     display: inline-block;
   }
-  a:hover, a:focus {
+  a:hover,
+  a:focus {
     background-color: #f0f0f0;
     color: black;
     text-decoration: none;
@@ -236,7 +220,8 @@ table.vertical-table {
     padding: 9px 15px;
     border-color: #888888;
   }
-  .nav-btn:hover, .nav-btn:focus {
+  .nav-btn:hover,
+  .nav-btn:focus {
     border-color: #888888;
   }
 }
@@ -267,27 +252,27 @@ table.vertical-table {
     padding-left: 0px;
   }
   .field-element-10 {
-    width: 83.3%
+    width: 83.3%;
   }
-  .field-element-9{
+  .field-element-9 {
     width: 75%;
   }
-  .field-element-8{
+  .field-element-8 {
     width: 66.6%;
   }
-  .field-element-6{
+  .field-element-6 {
     width: 50%;
   }
   .field-element-5 {
     width: 41.6%;
   }
-  .field-element-4{
+  .field-element-4 {
     width: 33.3%;
   }
-  .field-element-3{
-   width: 25%;
+  .field-element-3 {
+    width: 25%;
   }
-  .field-element-2{
+  .field-element-2 {
     width: 16.6%;
   }
   .field-element-1 {
@@ -305,7 +290,7 @@ fieldset.form-group {
 }
 
 .table-list {
-  display:block;
+  display: block;
   margin-bottom: 8px;
 }
 
