@@ -37,7 +37,7 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 2.11'
 
 # Use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.18'
+gem 'bcrypt', '~> 3.1.19'
 
 # Pagination
 gem 'will_paginate'
