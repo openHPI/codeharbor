@@ -195,7 +195,7 @@ RSpec.describe Task do
   describe '#duplicate' do
     subject(:duplicate) { task.duplicate }
 
-    let(:task) { create(:task, files:, tests:, model_solutions:, user: task_user, access_level: :public, groups:) }
+    let(:task) { create(:task, files:, tests:, model_solutions:, title: 'title', user: task_user, access_level: :public, groups:) }
     let(:files) { build_list(:task_file, 2, :exportable) }
     let(:tests) { build_list(:test, 2) }
     let(:model_solutions) { build_list(:model_solution, 2) }
@@ -267,7 +267,7 @@ RSpec.describe Task do
       end
 
       it 'has a modified title' do
-        expect(clean_duplicate.title).to eq("#{I18n.t('tasks.copy_of_task')}: #{task.title}")
+        expect(clean_duplicate.title).to eq('Copy of task: title')
       end
     end
   end

@@ -405,19 +405,18 @@ RSpec.describe TasksController do
   end
 
   describe 'POST #duplicate' do
-    subject(:post_duplicate) { post :duplicate, params: {id: task.to_param} }
+    subject(:post_duplicate) { post :duplicate, params: {id: task.id} }
 
-    let(:group) { create(:group) }
-    let(:collection) { create(:collection) }
-
+    let(:groups) { create_list(:group, 1) }
+    let(:collections) { create_list(:collection, 1) }
     let!(:task) { create(:task, valid_attributes) }
     let(:valid_attributes) do
       {
         user:,
         title: 'title',
         license: create(:license, name: 'license'),
-        groups: [group],
-        collections: [collection],
+        groups:,
+        collections:,
       }
     end
 
@@ -432,17 +431,17 @@ RSpec.describe TasksController do
 
     it 'redirects to the created task' do
       post_duplicate
-      expect(response).to redirect_to(Task.last)
+      expect(response).to redirect_to(Task.find_by(parent_uuid: task.uuid))
     end
 
     it 'resets the groups' do
       post_duplicate
-      expect(Task.last.groups).to eq([])
+      expect(Task.find_by(parent_uuid: task.uuid).groups).to eq([])
     end
 
     it 'resets the collections' do
       post_duplicate
-      expect(Task.last.collections).to eq([])
+      expect(Task.find_by(parent_uuid: task.uuid).collections).to eq([])
     end
   end
 
