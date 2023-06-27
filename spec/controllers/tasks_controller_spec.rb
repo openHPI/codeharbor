@@ -443,6 +443,22 @@ RSpec.describe TasksController do
       post_duplicate
       expect(Task.find_by(parent_uuid: task.uuid).collections).to eq([])
     end
+
+    context 'when saving fails' do
+      let(:invalid_task) { Task.new }
+
+      before do
+        # We need to stub the find method, because otherwise another object is returned from the database
+        allow(Task).to receive(:find).with(task.id.to_s).and_return(task)
+        # By design, we return an invalid task, which will fail to save
+        allow(task).to receive(:clean_duplicate).with(user).and_return(invalid_task)
+      end
+
+      it 'shows an error message' do
+        post_duplicate
+        expect(flash[:alert]).to eq(I18n.t('tasks.notification.duplicate_failed'))
+      end
+    end
   end
 
   describe 'DELETE #destroy' do
