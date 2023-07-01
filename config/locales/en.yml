@@ -820,12 +820,21 @@ en:
       back: "Back"
       #submit:
     can_only_create_5: 'You can only add 5 labels'
+    too_long: 'The entered label name is too long'
+    cannot_be_empty: 'The entered label name is empty'
 
     edit:
       header: "Editing Label"
     new:
       header: "New Label"
       selection_suffix: " (new)"
+    index:
+      merge: 'Merge And Rename To'
+      delete: 'Delete selected'
+      change_color_to: 'Change Color To'
+      delete_confirmation: 'This will delete the {selected_labels_count} selected label(s).'
+      merge_confirmation: 'This will merge the {selected_labels_count} selected label(s) and rename them to "{new_merged_name}"'
+      change_color_confirmation: 'This will change the color of the {selected_labels_count} selected label(s).'
     errorMessage: "prohibited this label from being saved."
 
   layouts:

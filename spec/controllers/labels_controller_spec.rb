@@ -9,7 +9,7 @@ RSpec.describe LabelsController do
   let(:label) { create(:label) }
 
   describe 'GET #search' do
-    subject(:get_request) { get :search, params: {search: label.name, page: 1} }
+    subject(:get_request) { get :search, params: {search: {name_i_cont: label.name}, page: 1} }
 
     context 'without being signed in' do
       it 'redirects to other page' do
@@ -27,14 +27,21 @@ RSpec.describe LabelsController do
         expect(JSON.parse(response.body, symbolize_names: true)).to eql(
           {
             pagination: {more: false},
-            results: [{id: label.name, label_color: label.color, label_font_color: label.font_color, text: label.name}],
+            results: [
+              label.attributes.merge(
+                font_color: label.font_color,
+                used_by_tasks: label.tasks.count,
+                created_at: label.created_at.to_fs(:rfc822), # LabelsController#search changes the time format to rfc822 before returning the labels
+                updated_at: label.updated_at.to_fs(:rfc822)
+              ).symbolize_keys!,
+            ],
           }
         )
       end
 
       it 'returns response containing label' do
         get_request
-        expect(response.parsed_body['results']).to include(a_hash_including('text' => label.name))
+        expect(response.parsed_body['results']).to include(a_hash_including('name' => label.name))
       end
     end
   end

@@ -1,5 +1,15 @@
+max_label_length = 15
+verify_label_name = (label_name) ->
+  if label_name == ''
+    return I18n.t('labels.cannot_be_empty');
+  if label_name.length > max_label_length
+    return I18n.t('labels.too_long');
+  return 'OK';
+
+root = exports ? this;
+root.verify_label_name = verify_label_name;
+
 ready = ->
-  max_label_length = 15
   default_label_color = "e4e4e4"
   default_label_font_color = "000000"
 
@@ -17,10 +27,17 @@ ready = ->
       dataType: 'json',
       data: (params) ->
         query = {
-          search: params.term,
+          search: {name_i_cont: params.term},
           page: params.page || 1
         }
         return query;
+
+      processResults: (data) ->
+        return {
+          pagination: data.pagination
+          results: data.results.map (l) -> {id: l.name, text: l.name, label_color: l.color, label_font_color: l.font_color}
+        };
+
     }
 
     templateSelection: (data, container) ->
@@ -57,7 +74,7 @@ ready = ->
       term = $.trim(params.term)
       selection = $('.labels-select2-tag').select2('data').map (element) -> element.id
 
-      if term == '' || term.length > max_label_length || selection.includes(term)
+      if verify_label_name(term) != 'OK' || selection.includes(term)
         return null;
 
       return {

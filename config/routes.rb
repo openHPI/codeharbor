@@ -60,8 +60,14 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :labels, only: [] do
-    get :search, on: :collection
+  resources :labels, only: %i[index] do
+    collection do
+      get :search
+      get :list
+      get :merge
+      get :set_color
+      delete :destroy
+    end
   end
 
   resources :task_files, only: [] do
