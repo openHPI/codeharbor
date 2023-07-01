@@ -291,6 +291,12 @@ legend.toggle-next
             = test.title
         .row
           .row-label
+            = t('tasks.tests.framework')
+            | :
+          .row-value
+            = test.testing_framework&.name_with_version  || t('tasks.form.none')
+        .row
+          .row-label
             = t('tasks.tests.description')
             | :
           .row-value

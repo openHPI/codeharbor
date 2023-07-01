@@ -219,7 +219,8 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   end
 
   def test_params
-    [:id, :title, :description, :internal_description, :test_type, :xml_id, :validity, :timeout, :_destroy, {files_attributes: file_params}]
+    [:id, :title, :testing_framework_id, :description, :internal_description, :test_type, :xml_id, :validity, :timeout, :_destroy,
+     {files_attributes: file_params}]
   end
 
   def model_solution_params
