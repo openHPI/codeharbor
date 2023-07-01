@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_01_095629) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_01_105422) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -274,6 +274,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_01_095629) do
     t.string "timeout"
     t.bigint "task_id"
     t.jsonb "meta_data", default: {}
+    t.bigint "testing_framework_id"
+    t.index ["testing_framework_id"], name: "index_tests_on_testing_framework_id"
   end
 
   create_table "user_identities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -330,5 +332,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_01_095629) do
   add_foreign_key "task_labels", "tasks"
   add_foreign_key "tasks", "licenses"
   add_foreign_key "tests", "tasks"
+  add_foreign_key "tests", "testing_frameworks"
   add_foreign_key "user_identities", "users"
 end
