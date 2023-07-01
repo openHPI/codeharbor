@@ -1,0 +1,30 @@
+.container[style="padding: 0px;"]
+  div.col-md-7
+    input.form-control[id="label-name-filter-input" type="text" placeholder="Filter By Name"]
+    br
+    .div.labels-table-container
+      table.table.table-bordered.table-striped.labels-table
+        thead
+          tr
+            th.sort-by-id.table-header-sort-down[style='width: 10%;'] ID
+            th.sort-by-name[style='width: 30%;'] Name
+            th.sort-by-created-at[style='width: 40%;'] Created At
+            th[style='width: 20%;'] Used By Tasks
+        tbody
+    br
+
+  .container.col-md-5
+    div
+      .input-group
+        span.input-group-btn
+          = button_tag t('labels.index.merge'), type: 'button', id: 'merge-labels-button', disabled: true, class: 'btn btn-primary'
+        input.form-control[id="merge-labels-input" type="text" placeholder="New Name"]
+
+    .div[style='margin-top: 10px;']
+      .input-group
+        span.input-group-btn
+          = button_tag t('labels.index.change_color_to'), id: 'change-label-color-button', disabled: true, class: 'btn btn-primary'
+        input.form-control[id="color-labels-input" type="color" value="#000000"]
+
+    .div[style='margin-top: 10px;']
+      = button_tag t('labels.index.delete'), id: 'delete-labels-button', disabled: true, class: 'btn btn-danger'

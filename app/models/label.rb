@@ -62,4 +62,8 @@ class Label < ApplicationRecord
   def self.ransackable_attributes(_auth_object = nil)
     %w[name]
   end
+
+  def self.ransortable_attributes(_auth_object = nil)
+    %w[id name created_at]
+  end
 end
