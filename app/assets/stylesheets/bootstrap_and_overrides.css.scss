@@ -11,8 +11,12 @@
   padding: 0px;
 }
 
-.navbar-default {
-  background-color: #f5f5f5;
+.navbar.bg-light {
+  background-color: #f5f5f5 !important;
+
+  a:hover {
+    background-color: #f5f5f5 !important;
+  }
 }
 
 .btn-main {
