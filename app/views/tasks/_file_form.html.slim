@@ -12,6 +12,6 @@
   = file.text_field :xml_id, class: 'form-control', value: file.object.xml_id.presence || nested_form_placeholder
 
 .field-element
-  = render 'file_config', file:
+  = render 'tasks/file_config', file: file
 .field-element
-  = render 'editor', f:, file:
+  = render 'tasks/editor', f: f, file: file

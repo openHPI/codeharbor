@@ -25,4 +25,4 @@
   / = test.fields_for :file do |file|
 .files-header
   = label_tag nil, "#{Task.human_attribute_name('files')}:"
-= render 'nested_file_form', f: test, nested_form_placeholder: 't-__nested_field_for_replace_with_index__-__task_tests___nested_field_for_replace_with_index___files_index__'
+= render 'tasks/nested_file_form', f: test, nested_form_placeholder: 't-__nested_field_for_replace_with_index__-__task_tests___nested_field_for_replace_with_index___files_index__'
