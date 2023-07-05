@@ -31,6 +31,8 @@ class Task < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :ratings, dependent: :destroy
 
+  has_many :task_contributions, dependent: :destroy
+
   belongs_to :user
   belongs_to :programming_language, optional: true
   belongs_to :license, optional: true
