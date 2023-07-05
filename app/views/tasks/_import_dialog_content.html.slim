@@ -5,4 +5,4 @@
       br
       = t('.path', path: task[:path])
     .import-export-task-actions
-      = render partial: 'import_actions', locals: {exists: task[:exists], updatable: task[:updatable], imported: false}
+      = render partial: 'tasks/import_actions', locals: {exists: task[:exists], updatable: task[:updatable], imported: false}
