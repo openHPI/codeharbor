@@ -21,8 +21,6 @@
             .div.d-none.execution-environment-error
               = t('.errors.prog_lang_not_empty_while_public')
             = f.collection_select :programming_language_id, ProgrammingLanguage.all, :id, :language_with_version, {include_blank: t('common.none')}, {class: 'form-control'}
-
-
           .field-element
             = f.label :description, Task.human_attribute_name('description'), class: 'form-label'
             = f.text_area :description, class: 'form-control'
@@ -87,7 +85,7 @@
           => Task.human_attribute_name("files")
           span.fa-solid.fa-caret-up
         .form-content
-          = render 'nested_file_form', f: f, nested_form_placeholder: 'f-__nested_field_for_replace_with_index__'
+          = render 'tasks/nested_file_form', f: f, nested_form_placeholder: 'f-__nested_field_for_replace_with_index__'
       fieldset.form-group
         legend.toggle-next
           span.number = '4'
@@ -112,7 +110,7 @@
                       i.fa-solid.fa-xmark style=("color: #800000")
                       =< t('.button.remove_test')
                 .test-container style="margin-left: 10px; #{display_container}"
-                  = render 'test_form', f: f, test: test
+                  = render 'tasks/test_form', f: f, test: test
             / .field-element
             = f.add_nested_fields_link :tests, ' ', class: 'btn btn-main', id: 'addTestButton' do
               i.fa-solid.fa-plus style=("color: #008000")
@@ -142,7 +140,7 @@
                       i.fa-solid.fa-xmark style=("color: #800000")
                       =< t('.button.remove_model_solution')
                 .model-solution-container style="margin-left: 10px; #{display_container}"
-                  = render 'model_solution_form', f: f, model_solution: model_solution
+                  = render 'tasks/model_solution_form', f: f, model_solution: model_solution
             / .field-element
             = f.add_nested_fields_link :model_solutions, ' ', class: 'btn btn-main', id: 'addTestButton' do
               i.fa-solid.fa-plus style=("color: #008000")
