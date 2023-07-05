@@ -164,6 +164,16 @@ RSpec.describe TasksController do
         get_request
         expect(assigns(:tests)).to include(test)
       end
+
+      context 'when test has a framework' do
+        let(:testing_framework) { create(:testing_framework) }
+        let(:test) { create(:test, task:, testing_framework:) }
+
+        it "includes the frameworks's name and version in response" do
+          get_request
+          expect(response.body).to include(testing_framework.name_with_version)
+        end
+      end
     end
   end
 
@@ -391,16 +401,21 @@ RSpec.describe TasksController do
         end
 
         let(:test) { build(:test) }
+        let(:new_testing_framework) { create(:testing_framework) }
         let!(:task) { create(:task, valid_attributes.merge(tests: [test])) }
 
-        let(:tests_attributes) { {'0' => test.attributes.merge('title' => 'new_test_title')} }
+        let(:tests_attributes) { {'0' => test.attributes.merge('title' => 'new_test_title', 'testing_framework_id' => new_testing_framework.id)} }
 
         it 'updates the requested task' do
           expect { put_update }.to change { task.reload.title }.to('new_title')
         end
 
-        it 'updates the test' do
+        it "updates the test's title" do
           expect { put_update }.to change { task.tests.first.reload.title }.to('new_test_title')
+        end
+
+        it "updates the test's framework" do
+          expect { put_update }.to change { task.tests.first.reload.testing_framework }.to(new_testing_framework)
         end
       end
 

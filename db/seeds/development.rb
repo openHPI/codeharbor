@@ -69,7 +69,7 @@ Label.create!(name: 'Data Structures', color: '3333CC')
 pl_java = ProgrammingLanguage.create!(language: 'Java', version: '17')
 pl_python = ProgrammingLanguage.create!(language: 'Python', version: '3.8')
 
-TestingFramework.create!(name: 'JUnit', version: '5')
+tf_junit = TestingFramework.create!(name: 'JUnit', version: '5')
 TestingFramework.create!(name: 'Pytest', version: '6')
 
 task1 = Task.create!(
@@ -114,7 +114,8 @@ task1_test1 = Test.create!(
   xml_id: '123456',
   validity: '1',
   timeout: '30',
-  task: task1
+  task: task1,
+  testing_framework: tf_junit
 )
 
 TaskFile.create!(
