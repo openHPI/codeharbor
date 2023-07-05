@@ -2,35 +2,37 @@ body {
   background-color: #fff;
   color: #333;
   font-family: verdana, arial, helvetica, sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 18px;
 }
 
-p, ol, ul, td {
+p,
+ol,
+ul,
+td {
   font-family: verdana, arial, helvetica, sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 18px;
 }
 
 pre {
   background-color: #eee;
   padding: 10px;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 a {
   color: #000000;
 
-
   &:hover {
     color: #fff;
-    background-color: #E5E5E5;
+    background-color: #e5e5e5;
   }
 }
 
-
 div {
-  &.field, &.actions {
+  &.field,
+  &.actions {
     margin-bottom: 10px;
   }
 }
