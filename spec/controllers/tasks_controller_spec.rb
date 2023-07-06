@@ -397,14 +397,14 @@ RSpec.describe TasksController do
 
       context 'when task has a test' do
         subject(:put_update) do
-          put :update, params: {id: task.to_param, task: changed_attributes.merge({'tests_attributes' => tests_attributes})}
+          put :update, params: {id: task.to_param, task: changed_attributes.merge(tests_attributes:)}
         end
 
         let(:test) { build(:test) }
         let(:new_testing_framework) { create(:testing_framework) }
         let!(:task) { create(:task, valid_attributes.merge(tests: [test])) }
 
-        let(:tests_attributes) { {'0' => test.attributes.merge('title' => 'new_test_title', 'testing_framework_id' => new_testing_framework.id)} }
+        let(:tests_attributes) { {'0': test.attributes.symbolize_keys.merge(title: 'new_test_title', testing_framework_id: new_testing_framework.id)} }
 
         it 'updates the requested task' do
           expect { put_update }.to change { task.reload.title }.to('new_title')
