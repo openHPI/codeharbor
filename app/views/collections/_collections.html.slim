@@ -1,6 +1,6 @@
 - if @collections.empty?
-  .panel.panel-default style=("margin-top: 40px")
-    .panel-body
+  .card style=("margin-top: 40px")
+    .card-body
       .col-md-10
         h3 style=("color: #777777")
           = t('controllers.collections.empty_state.heading')
@@ -10,29 +10,30 @@
         br
         br
 - @collections.each do |collection|
-  .panel.panel-default style=("margin-top: 20px")
-    .panel-heading
-      h3.panel-title
+  .card.m-2
+    .card-header
+      h6
         span= collection.title
-    .panel-body
-      .col-md-9
-        - if collection.tasks.empty?
-          = t('collections.noTasksAdded')
-        - else collection.tasks
-          - collection.tasks.each do |task|
-            - if task
-              .btn-group
-                - if can? :show, task
-                  = link_to task.title, task_path(task), class: 'btn btn-default', style: "border-right: none"
-                  = link_to remove_task_collection_path(collection, task: task), class: 'btn btn-default', style: "border-left: none; margin-right: 5px;" do
-                    i.fa.fa-remove style=("color: gray")
-                - else
-                  = link_to task.title, task_path(task), class: 'btn btn-default disabled', style: "border-right: none"
-                  / = link_to contribute_exercise_path(exercise), method: :post, class: 'btn btn-default', style: "border-left: none; margin-right: 5px;" do
-                  /   i.fa.fa-lock style=("color: gray")
-      .col-md-3
-        .btn-group.pull-right aria-label="..." role="group"
-          - if can? :edit, collection
-            = link_to t('collections.button.view'), collection_path(collection), class:'btn btn-default'
-            = link_to t('collections.button.edit'), edit_collection_path(collection), class:'btn btn-default'
+    .card-body
+      .row.px-3
+        .col-md-9
+          - if collection.tasks.empty?
+            = t('collections.noTasksAdded')
+          - else collection.tasks
+            - collection.tasks.each do |task|
+              - if task
+                .btn-group
+                  - if can? :show, task
+                    = link_to task.title, task_path(task), class: 'btn btn-light', style: "border-right: none"
+                    = link_to remove_task_collection_path(collection, task: task), class: 'btn btn-light', style: "border-left: none; margin-right: 5px;" do
+                      i.fa.fa-remove style=("color: gray")
+                  - else
+                    = link_to task.title, task_path(task), class: 'btn btn-light disabled', style: "border-right: none"
+                    / = link_to contribute_exercise_path(exercise), method: :post, class: 'btn btn-default', style: "border-left: none; margin-right: 5px;" do
+                    /   i.fa.fa-lock style=("color: gray")
+        .col-md-3
+          .btn-group.pull-right aria-label="..." role="group"
+            - if can? :edit, collection
+              = link_to t('collections.button.view'), collection_path(collection), class:'btn btn-light'
+              = link_to t('collections.button.edit'), edit_collection_path(collection), class:'btn btn-light'
 = will_paginate @collections
