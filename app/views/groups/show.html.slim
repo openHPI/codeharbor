@@ -5,10 +5,10 @@
 .show-table
   - if @group.description.present?
     .row.vertical
-      .row-label = t('groups.show.description')
+      .col.row-label = t('groups.show.description')
       .row-value = @group.description
   .row.vertical
-    .row-label = t('groups.show.admins')
+    .col.row-label = t('groups.show.admins')
     .row-value
       - @group.admins.each do |admin|
         .table-list
@@ -30,7 +30,7 @@
                       = render partial: 'share_account_link_button', locals: {shared_user: admin, account_link: account_link}
 
   .row.vertical
-    .row-label = t('groups.show.users')
+    .col.row-label = t('groups.show.users')
 
     .row-value
       - if @group.confirmed_members.present?
@@ -62,7 +62,7 @@
 
   - if can? :grant_access, @group
     .row.vertical
-      .row-label = t('groups.show.pending')
+      .col.row-label = t('groups.show.pending')
       .row-value
         - if @group.applicants.present?
           - @group.applicants.each do |user|
@@ -78,7 +78,7 @@
         - else
           = t('groups.show.no_pending_users')
   .row.vertical
-    .row-label = t('groups.show.tasks')
+    .col.row-label = t('groups.show.tasks')
     .row-value
       - if @group.tasks.present?
         - @group.tasks.each do |task|

@@ -15,13 +15,13 @@
           = image_tag('/images/thumb/missing.png')
     .inner-section style="width: 80%"
       .row
-        .row-label
+        .col-auto.row-label
           = t('users.full_name')
           | :
         .row-value
           = @user.name
       .row
-        .row-label
+        .col-auto.row-label
           = t('users.role')
           | :
         .row-value
@@ -32,13 +32,13 @@
     .table-header
       = t('users.private_information')
     .row
-      .row-label
+      .col-auto.row-label
         = t('users.email')
         | :
       .row-value
         = @user.email
     .row.vertical
-      .row-label
+      .col.row-label
         = t('users.account_links.created')
         |:
       .row-value
@@ -71,7 +71,7 @@
                 = t('users.show.account_links.destroy')
     - if @user.shared_account_links.any?
       .row.vertical
-        .row-label
+        .col.row-label
           = t('users.account_links.other')
           |:
         .row-value
