@@ -58,7 +58,6 @@ a.classic-link {
   border-left: 8px #dddddd solid;
   border-radius: 2px;
   padding: 8px 8px;
-  float: left;
 
   .table-header {
     height: 40px;
@@ -79,7 +78,6 @@ a.classic-link {
   }
 
   .row {
-    display: block;
     margin: 8px 2%;
     border-radius: 2px;
     border: 1px #dddddd solid;
@@ -87,24 +85,19 @@ a.classic-link {
 
     .row-label,
     .inner-section .row-label {
-      float: left;
       text-align: left;
       background-color: #f5f5f5;
       font-weight: 700;
-      font-size: 13px;
       line-height: 18px;
       color: #333;
-      display: inline;
       padding: 6px 8px;
       min-width: 80px;
       border-right: 1px #dddddd solid;
     }
     .row-value,
     .inner-section .row-value {
-      float: left;
       text-align: left;
       padding: 6px 8px;
-      display: inline;
     }
 
     .inner-section {
