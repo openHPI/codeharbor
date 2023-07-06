@@ -1,12 +1,12 @@
 .col-md-12
   = simple_form_for @task, html: { class: 'form-horizontal project exercise-validation', mulipart: true } do |f|
     - if @task.errors.any?
-      #error_explanation.panel.panel-danger
-        .panel-heading
-          h3.panel-title
+      #error_explanation.card
+        .card-header
+          h3
             = pluralize(@task.errors.count, t('error'))
             = t('tasks.error')
-        .panel-body
+        .card-body
           ul
             - @task.errors.full_messages.each do |msg|
               li
