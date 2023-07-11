@@ -71,6 +71,7 @@ class LabelsTable
       data: {
         page: @last_loaded_page + 1
         search: {s: @sort_by_column + " " + @sort_by_order, name_i_cont: @name_filter}
+        more_info: true
       },
       success: @handle_data_response
     });
@@ -122,17 +123,13 @@ class LabelsTable
     @reload_table();
 
   delete_selected_labels: () =>
-    confirm_msg = I18n.t('labels.index.delete_confirmation').replace('{selected_labels_count}', @selected_label_ids.length);
+    confirm_msg = I18n.t('labels.index.delete_confirmation', {selected_labels_count: @selected_label_ids.length});
 
     if (confirm(confirm_msg))
-      $.ajax({
-        url: "/labels",
-        type: "delete",
-        data: {
-          label_ids: @selected_label_ids
-        },
-        success: (response) => @reload_table();
-      });
+      requests = []
+      for id in @selected_label_ids
+        requests.push($.ajax({url: "/labels/#{id}", type: "delete"}));
+      $.when.apply($, requests).then( () => @reload_table() );
 
   merge_selected_labels: () =>
     new_label_name = @merge_labels_input.val();
@@ -142,14 +139,12 @@ class LabelsTable
       return;
 
     selected_labels_count = @selected_label_ids.length;
-    confirm_msg = I18n.t('labels.index.merge_confirmation')
-      .replace('{selected_labels_count}', @selected_label_ids.length)
-      .replace('{new_merged_name}', new_label_name);
+    confirm_msg = I18n.t('labels.index.merge_confirmation', {selected_labels_count: @selected_label_ids.length, new_merged_name: new_label_name})
 
     if (confirm(confirm_msg))
       $.ajax({
         url: "/labels/merge",
-        type: "get",
+        type: "post",
         data: {
           label_ids: @selected_label_ids,
           new_label_name: new_label_name
@@ -163,18 +158,19 @@ class LabelsTable
       return;
     new_color = matched_color[1];
 
-    confirm_msg = I18n.t('labels.index.change_color_confirmation').replace('{selected_labels_count}', @selected_label_ids.length);
+    confirm_msg = I18n.t('labels.index.change_color_confirmation', {selected_labels_count: @selected_label_ids.length});
 
     if (confirm(confirm_msg))
-      $.ajax({
-        url: "/labels/set_color",
-        type: "get",
-        data: {
-          label_ids: @selected_label_ids,
-          new_color: new_color
-        },
-        success: (response) => @reload_table();
-      });
+      requests = []
+      for id in @selected_label_ids
+        requests.push(
+          $.ajax({
+            url: "/labels/#{id}",
+            type: "patch",
+            data: { color: new_color }
+          })
+        );
+      $.when.apply($, requests).then( () => @reload_table() );
 
 
 $(document).on 'turbolinks:load', () ->

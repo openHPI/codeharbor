@@ -832,9 +832,9 @@ en:
       merge: 'Merge And Rename To'
       delete: 'Delete selected'
       change_color_to: 'Change Color To'
-      delete_confirmation: 'This will delete the {selected_labels_count} selected label(s).'
-      merge_confirmation: 'This will merge the {selected_labels_count} selected label(s) and rename them to "{new_merged_name}"'
-      change_color_confirmation: 'This will change the color of the {selected_labels_count} selected label(s).'
+      delete_confirmation: 'This will delete the %{selected_labels_count} selected label(s).'
+      merge_confirmation: 'This will merge the %{selected_labels_count} selected label(s) and rename them to "%{new_merged_name}"'
+      change_color_confirmation: 'This will change the color of the %{selected_labels_count} selected label(s).'
     errorMessage: "prohibited this label from being saved."
 
   layouts:

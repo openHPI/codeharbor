@@ -20,20 +20,21 @@ describe 'LabelsController', js: true do
         fill_in id: 'label-name-filter-input', with: 'loops'
         find('input', id: 'label-name-filter-input').send_keys(:enter)
         wait_for_ajax
-        matching_labels.each {|label| expect(page).to have_selector('.labels-table > tbody > tr > td > .task_label', text: label.name) }
-        not_matching_labels.each {|label| expect(page).not_to have_selector('.labels-table > tbody > tr > td > .task_label', text: label.name) }
+        matching_labels.each {|label| expect(page).to have_selector('.labels-table .task_label', text: label.name) }
+        not_matching_labels.each {|label| expect(page).not_to have_selector('.labels-table .task_label', text: label.name) }
       end
     end
 
     context 'when merging labels' do
       let!(:labels) { create_list(:label, 5) }
       let(:new_name) { 'new label name' }
+      let(:selected_label) { labels.second }
 
       context 'when only renaming one label' do
         subject(:renaming_action) do
           visit(labels_path)
           wait_for_ajax
-          find('.labels-table > tbody > tr > td > .task_label', text: labels[1].name).click
+          find('.labels-table .task_label', text: selected_label.name).click
           fill_in('merge-labels-input', with: new_name)
           accept_prompt do
             click_button('merge-labels-button')
@@ -42,8 +43,7 @@ describe 'LabelsController', js: true do
         end
 
         it 'renames the label' do
-          renaming_action
-          expect(Label.find_by(name: new_name)).not_to be_nil
+          expect { renaming_action }.to change { selected_label.reload.name }.to new_name
         end
 
         it 'does not change the number of labels' do
@@ -55,8 +55,8 @@ describe 'LabelsController', js: true do
         subject(:merge_action) do
           visit(labels_path)
           wait_for_ajax
-          find('.labels-table > tbody > tr > td > .task_label', text: labels[1].name).click
-          find('.labels-table > tbody > tr > td > .task_label', text: labels[2].name).click
+          find('.labels-table .task_label', text: merged_labels.first.name).click
+          find('.labels-table .task_label', text: merged_labels.second.name).click
           fill_in('merge-labels-input', with: new_name)
           accept_prompt do
             click_button('merge-labels-button')
@@ -64,21 +64,22 @@ describe 'LabelsController', js: true do
           wait_for_ajax
         end
 
-        let!(:task) { create(:task, labels: labels[1..3]) }
+        let!(:task) { create(:task, labels: labels[1..4]) }
+        let(:merged_labels) { labels[1..2] }
 
-        before { merge_action }
-
-        it 'deletes the old labels' do
-          expect(Label.all).not_to include labels[1], labels[2]
+        it 'renames the first selected label' do
+          expect { merge_action }.to change { merged_labels.first.reload.name }.to new_name
         end
 
-        it 'creates the new label' do
-          expect(Label.find_by(name: new_name)).not_to be_nil
+        it 'deletes the other labels' do
+          merge_action
+          expect(Label.where(id: merged_labels.second.id)).not_to exist
         end
 
         it 'updates the tasks' do
-          expect(task.reload.labels).not_to include labels[1], labels[2]
-          expect(task.reload.label_names).to include new_name
+          merge_action
+          expect(task.reload.labels).to include merged_labels.first
+          expect(task.reload.labels).not_to include merged_labels[1..]
         end
       end
     end
@@ -87,7 +88,7 @@ describe 'LabelsController', js: true do
       subject(:deletion_action) do
         visit(labels_path)
         wait_for_ajax
-        find('.labels-table > tbody > tr > td > .task_label', text: labels[1].name).click
+        find('.labels-table .task_label', text: selected_label.name).click
         accept_prompt do
           click_button('delete-labels-button')
         end
@@ -95,16 +96,17 @@ describe 'LabelsController', js: true do
       end
 
       let!(:labels) { create_list(:label, 5) }
+      let(:selected_label) { labels.second }
       let!(:task) { create(:task, labels: labels[1..3]) }
 
       it 'deletes the label' do
         deletion_action
-        expect(Label.find_by(id: labels[1].id)).to be_nil
+        expect(Label.where(id: selected_label.id)).not_to exist
       end
 
       it 'removes the label from tasks' do
         deletion_action
-        expect(task.reload.labels).not_to include labels[1]
+        expect(task.reload.labels).not_to include selected_label
       end
     end
 
@@ -112,8 +114,8 @@ describe 'LabelsController', js: true do
       subject(:recolor_action) do
         visit(labels_path)
         wait_for_ajax
-        find('.labels-table > tbody > tr > td > .task_label', text: labels[1].name).click
-        find('.labels-table > tbody > tr > td > .task_label', text: labels[2].name).click
+        find('.labels-table .task_label', text: selected_labels.first.name).click
+        find('.labels-table .task_label', text: selected_labels.second.name).click
         fill_in id: 'color-labels-input', with: '#000000'
         accept_prompt do
           click_button('change-label-color-button')
@@ -122,11 +124,12 @@ describe 'LabelsController', js: true do
       end
 
       let!(:labels) { create_list(:label, 5) }
+      let(:selected_labels) { labels[1..2] }
 
       it 'changes the color' do
         recolor_action
-        expect(Label.find_by(id: labels[1].id).color).to eq '000000'
-        expect(Label.find_by(id: labels[2].id).color).to eq '000000'
+        expect(Label.find_by(id: selected_labels.first.id).color).to eq '000000'
+        expect(Label.find_by(id: selected_labels.second.id).color).to eq '000000'
       end
     end
   end

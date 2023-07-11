@@ -1,4 +1,4 @@
-max_label_length = 15
+max_label_length = <%= Label::MAX_LENGTH %>
 verify_label_name = (label_name) ->
   if label_name == ''
     return I18n.t('labels.cannot_be_empty');
