@@ -60,13 +60,10 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :labels, only: %i[index] do
+  resources :labels, only: %i[index update destroy] do
     collection do
       get :search
-      get :list
-      get :merge
-      get :set_color
-      delete :destroy
+      post :merge
     end
   end
 

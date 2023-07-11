@@ -4,7 +4,8 @@ class Label < ApplicationRecord
   has_many :task_labels, dependent: :destroy
   has_many :tasks, through: :task_labels
 
-  validates :name, presence: true
+  MAX_LENGTH = 15
+  validates :name, presence: true, length: {minimum: 1, maximum: MAX_LENGTH}
   validates :color, presence: true, format: {with: /\A[a-fA-F0-9]{6}\z/}
 
   before_validation :choose_label_color, if: -> { color.blank? }
@@ -58,6 +59,18 @@ class Label < ApplicationRecord
     483c46 3c6e71 70ae6e beee62 f4743b
     c33c54 254e70 37718e 8ee3ef aef3e7
   ].freeze
+
+  def to_h
+    {
+      id:,
+      name:,
+      color:,
+      font_color:,
+      used_by_tasks: tasks.loaded? ? tasks.size : 0,
+      created_at: created_at.to_fs(:rfc822),
+      updated_at: updated_at.to_fs(:rfc822),
+    }
+  end
 
   def self.ransackable_attributes(_auth_object = nil)
     %w[name]
