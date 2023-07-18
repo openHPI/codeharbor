@@ -468,27 +468,28 @@
                       .col.row-value
                         = file.usage_by_lms
 .row
-  .col-md-4.col-sm-6.mb-3.p-0
-    .button-box.border.p-3.h-100
-      .button-description
-        = t('.add_to_collection_hint')
-      .wrapper
-        - if policy(@task).add_to_collection?
-          .dropdown.btn-group
-            = button_tag class: 'btn btn-light dropdown-toggle', 'data-bs-toggle': 'dropdown' do
-              = t('.button.add_to_collection')
-            ul.scrollable.dropdown-menu[role="menu"]
-              - if !current_user.collections.empty?
-                - current_user.collections.reverse.each do |collection|
+  - if !@task.contribution?
+    .col-md-4.col-sm-6.mb-3.p-0
+      .button-box.border.p-3.h-100
+        .button-description
+          = t('.add_to_collection_hint')
+        .wrapper
+          - if policy(@task).add_to_collection?
+            .dropdown.btn-group
+              = button_tag class: 'btn btn-light dropdown-toggle', 'data-bs-toggle': 'dropdown' do
+                = t('.button.add_to_collection')
+              ul.scrollable.dropdown-menu[role="menu"]
+                - if !current_user.collections.empty?
+                  - current_user.collections.reverse.each do |collection|
+                    li
+                      = link_to collection.title, add_to_collection_task_path(collection: collection), method: 'post', class: 'dropdown-item'
+                - else
                   li
-                    = link_to collection.title, add_to_collection_task_path(collection: collection), method: 'post', class: 'dropdown-item'
-              - else
-                li
-                  = link_to t('.button.add_collection'), new_collection_path(current_user)
-        - else
-          div[data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150]
-            = button_tag class: 'btn btn-outline-dark dropdown-toggle disabled', 'data-bs-toggle': 'dropdown' do
-              = t('.button.add_to_collection')
+                    = link_to t('.button.add_collection'), new_collection_path(current_user), class: 'dropdown-item'
+          - else
+            div[data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150]
+              = button_tag class: 'btn btn-outline-dark dropdown-toggle disabled', 'data-bs-toggle': 'dropdown' do
+                = t('.button.add_to_collection')
 
   .col-md-4.col-sm-6.mb-3.p-0
     .button-box.border.p-3.h-100
@@ -550,7 +551,7 @@
           i.fa-solid.fa-trash-can
           =< t('common.button.delete')
 
-      - if policy(@task).duplicate?
+      - if policy(@task).duplicate? && !@task.contribution?
         = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important' do
           i.fa-regular.fa-clone
           =< t('common.button.duplicate')
