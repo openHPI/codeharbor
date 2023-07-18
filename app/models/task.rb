@@ -4,7 +4,7 @@ require 'nokogiri'
 require 'zip'
 class Task < ApplicationRecord
   acts_as_taggable_on :state
-
+  attribute :parent_id
   validates :title, presence: true
 
   validates :uuid, uniqueness: true
@@ -30,8 +30,7 @@ class Task < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :ratings, dependent: :destroy
 
-  has_many :task_contributions, dependent: :destroy
-
+  has_one :task_contribution, dependent: :destroy
   belongs_to :user
   belongs_to :programming_language, optional: true
   belongs_to :license, optional: true
@@ -128,6 +127,10 @@ class Task < ApplicationRecord
     access_level_public? || showable_by?(user)
   end
 
+  def contribution?
+    task_contribution.present?
+  end
+
   # TODO: Find a better name for the methods
   def in_same_group?(user)
     in_same_group_member?(user) || in_same_group_admin?(user)
@@ -152,14 +155,29 @@ class Task < ApplicationRecord
     end
   end
 
-  # This method resets all permissions and assigns a useful title
-  def clean_duplicate(user)
+  # This method resets all permissions and optionaly assigns a useful title
+  def clean_duplicate(user, change_title = true)
     duplicate.tap do |task|
       task.user = user
       task.groups = []
       task.collections = []
       task.access_level_private!
-      task.title = "#{I18n.t('tasks.model.copy_of_task')}: #{task.title}"
+      if change_title
+        task.title = "#{I18n.t('tasks.model.copy_of_task')}: #{task.title}"
+      end
+    end
+  end
+
+  def merge_task(new, attributes, exclude)
+    if attributes.empty?
+      all_attributes = Task.attribute_names.map(&:to_sym)
+      copy_attributes = all_attributes - exclude.map(&:to_sym)
+    else
+      copy_attributes = attributes
+    end
+
+    copy_attributes.each do |attribute|
+      self[attribute] = new[attribute]
     end
   end
 

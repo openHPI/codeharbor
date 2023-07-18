@@ -165,6 +165,14 @@ RSpec.describe Task do
       it 'has a modified title' do
         expect(clean_duplicate.title).to eq('Copy of task: title')
       end
+
+      context 'when change_title is false' do
+        subject(:clean_duplicate) { task.clean_duplicate(user, false) }
+
+        it 'has the same title' do
+          expect(clean_duplicate.title).to eq('title')
+        end
+      end
     end
   end
 
