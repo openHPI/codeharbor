@@ -7,7 +7,14 @@
 
 .row
   .col-md-12.my-4
-    = simple_form_for @task, html: {multipart: true}, builder: MarkdownFormBuilder do |f|
+    - if @task.contribution?
+      - if action_name == 'show' || action_name == 'new'
+        - url = task_contributions_path(@task.parent_id)
+      - else
+        - url = task_contribution_path(@task.parent, @task.task_contribution)
+    - else
+      - url = nil
+    = simple_form_for @task,  url:, html: {  multipart: true }, builder: MarkdownFormBuilder do |f|
       = render('shared/form_errors', object: @task)
       fieldset.form-group
         legend.toggle-next
@@ -46,18 +53,19 @@
             = f.label :language, Task.human_attribute_name('language'), class: 'form-label'
             = f.text_field :language, class: 'form-control'
 
-          .field-element
-            = f.label :access_level, Task.human_attribute_name('access_level'), class: 'form-label'
-            .div.d-none.execution-environment-error
-              = t('.errors.not_public_without_prog_lang')
-            .radio-switch
-              = f.radio_button :access_level, :public, value: :public, checked: true
-              = label_tag 'task_access_level_public', t('tasks.visibility.public'), class: 'radio-left'
-              = f.radio_button :access_level, :private, value: :private
-              = label_tag 'task_access_level_private', t('tasks.visibility.private'), class: 'radio-right'
-            .visibility_warning
-              span.d-none#task_visibility_warning data-external-collection-membership=@task.collections.any? {|collection| collection.users.exclude?(current_user) }.to_s
-                = t('.visibility_warning')
+          - if !@task.contribution?
+            .field-element
+              = f.label :access_level,  Task.human_attribute_name("access_level"), class: 'form-label'
+              .div.d-none.execution-environment-error
+                = t('.errors.not_public_without_prog_lang')
+              .radio-switch
+                = f.radio_button :access_level, :public, value: :public, checked: true
+                = label_tag 'task_access_level_public', t('tasks.visibility.public'), class: 'radio-left'
+                = f.radio_button :access_level, :private, value: :private
+                = label_tag 'task_access_level_private', t('tasks.visibility.private'), class: 'radio-right'
+              .visibility_warning
+                span.d-none#task_visibility_warning data-external-collection-membership=@task.collections.any?{|collection| collection.users.exclude?(current_user)}.to_s
+                  = t('.visibility_warning')
           = fields_for :group_tasks do |ff|
             .field-element
               = ff.label :group_ids, Group.model_name.human(count: :many), class: 'form-label'
