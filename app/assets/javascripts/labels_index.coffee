@@ -29,6 +29,11 @@ class LabelsTable
 
     @reload_table();
 
+  update_buttons: () =>
+    @delete_labels_button.attr("disabled", @selected_label_ids.length == 0);
+    @merge_labels_button.attr("disabled", @selected_label_ids.length == 0);
+    @recolor_labels_button.attr("disabled", @selected_label_ids.length == 0);
+
   update_name_filter: () =>
     @name_filter = @name_filter_input.val();
     @reload_table();
@@ -40,6 +45,7 @@ class LabelsTable
     @more_labels_loadable = true;
     @waiting_for_response = false;
     @last_loaded_page = 0;
+    @update_buttons();
     @load_more_rows_if_necessary();
 
   append_new_row: (id, color, font_color, name, created_at, used_by_tasks) =>
@@ -103,9 +109,7 @@ class LabelsTable
       most_used_selected_label_id = @selected_label_ids.reduce (max_id, id) => if @loaded_labels[id].used_by_tasks > @loaded_labels[max_id].used_by_tasks then id else max_id;
       @merge_labels_input.val(@loaded_labels[most_used_selected_label_id].name);
 
-    @delete_labels_button.attr("disabled", @selected_label_ids.length == 0);
-    @merge_labels_button.attr("disabled", @selected_label_ids.length == 0);
-    @recolor_labels_button.attr("disabled", @selected_label_ids.length == 0);
+    @update_buttons();
 
   sort_button_clicked: (sort_by) =>
     $('.sort-by-id, .sort-by-name, .sort-by-created-at')
@@ -170,8 +174,7 @@ class LabelsTable
             data: { color: new_color }
           })
         );
-      $.when.apply($, requests).then( () => @reload_table() );
-
+      $.when.apply($, requests).then(@reload_table);
 
 $(document).on 'turbolinks:load', () ->
   table_container = $('.labels-table-container');
