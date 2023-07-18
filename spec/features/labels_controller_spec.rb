@@ -11,7 +11,7 @@ describe 'LabelsController', js: true do
   end
 
   describe '#index' do
-    context 'when using name filter' do
+    context 'when using the name filter' do
       let!(:matching_labels) { [create(:label, name: 'Loops'), create(:label, name: 'Java loops')] }
       let!(:not_matching_labels) { [create(:label, name: 'label1'), create(:label, name: 'python for loop')] }
 
@@ -67,7 +67,7 @@ describe 'LabelsController', js: true do
         let!(:task) { create(:task, labels: labels[1..4]) }
         let(:merged_labels) { labels[1..2] }
 
-        it 'renames the first selected label' do
+        it 'renames the first label selected' do
           expect { merge_action }.to change { merged_labels.first.reload.name }.to new_name
         end
 

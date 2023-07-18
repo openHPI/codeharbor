@@ -10,24 +10,32 @@ class LabelsController < ApplicationController
   def index; end
 
   def update
-    @label.update(params.permit(:color))
+    if @label.update(params.permit(:color))
+      render json: @label.to_h
+    else
+      flash.now[:alert] = @label.errors.full_messages
+      render json: @label.errors.full_messages, status: :unprocessable_entity
+    end
   end
 
   def destroy
     @label.destroy
   end
 
-  def merge
-    label_ids = params[:label_ids]
+  def merge # rubocop:disable Metrics/AbcSize
+    label_ids = params[:label_ids] || []
 
     ApplicationRecord.transaction do
-      Label.find(label_ids.first).update!(
-        name: params[:new_label_name],
-        tasks: Task.where(id: TaskLabel.select(:task_id).where(label_id: label_ids))
-      )
+      tasks = Task.where(id: TaskLabel.select(:task_id).where(label_id: label_ids))
       Label.destroy(label_ids[1..])
-    rescue StandardError => e
-      render json: e, status: :unprocessable_entity
+      Label.find(label_ids.first).update!(name: params[:new_label_name], tasks:)
+    rescue ActiveRecord::RecordNotFound => e
+      flash.now[:alert] = e.message
+      render json: e.message, status: :unprocessable_entity
+      raise ActiveRecord::Rollback
+    rescue ActiveRecord::RecordNotSaved, ActiveRecord::RecordNotDestroyed, ActiveRecord::RecordInvalid => e
+      flash.now[:alert] = e.record.errors.full_messages
+      render json: e.record.errors.full_messages, status: :unprocessable_entity
       raise ActiveRecord::Rollback
     end
   end
