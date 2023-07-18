@@ -106,8 +106,8 @@ Rails.application.routes.draw do
     resources :ratings, only: :create
 
     resources :contributions do
-        post :approve_changes
-        post :discard_changes
+      post :approve_changes
+      post :discard_changes
     end
   end
 
