@@ -29,6 +29,8 @@ class ContributionsController < ApplicationController
     params.require(:task).permit(:title, :description, :internal_description, :language,
       :programming_language_id, files_attributes: file_params, tests_attributes: test_params,
       model_solutions_attributes: model_solution_params, label_ids: [])
+      .merge(user: current_user, parent_uuid: Task.find(params[:task_id]).uuid, task_contribution: TaskContribution.new)
+
   end
 
   def file_params
