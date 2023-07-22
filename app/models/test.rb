@@ -7,6 +7,10 @@ class Test < ApplicationRecord
   accepts_nested_attributes_for :files, allow_destroy: true
   validates :title, presence: true
   validates :xml_id, presence: true
+
+  # TODO: For new tasks, this validation is currently useless, because the validation is performed
+  # before the task is saved (and thus the task_id is not yet known, i.e., is NULL). Therefore,
+  # one can create a **new task** with a test that has the same xml_id as another test of the same task.
   validates :xml_id, uniqueness: {scope: :task_id}
 
   def configuration_as_xml
