@@ -129,19 +129,20 @@ class Task < ApplicationRecord
     end
   end
 
-  # This method resets all permissions and optionaly assigns a useful title
-  def clean_duplicate(user, change_title = true)
+  # This method resets all permissions and optionally assigns a useful title
+  def clean_duplicate(user, change_title: true)
     duplicate.tap do |task|
       task.user = user
       task.groups = []
       task.collections = []
-      task.access_level_private!
+      task.access_level = :private
       if change_title
         task.title = "#{I18n.t('tasks.model.copy_of_task')}: #{task.title}"
       end
     end
   end
 
+  # TODO: I am not sure whether we need this method (or can just use the `assign_attributes` method from ActiveRecord).
   def merge_task(new, attributes, exclude)
     if attributes.empty?
       all_attributes = Task.attribute_names.map(&:to_sym)
