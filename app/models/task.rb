@@ -104,7 +104,7 @@ class Task < ApplicationRecord
   end
 
   def contribution?
-    task_contribution.present?
+    task_contribution.present? && task_contribution.status == :open
   end
 
   # This method creates a duplicate while leaving permissions and ownership unchanged
@@ -119,7 +119,7 @@ class Task < ApplicationRecord
   end
 
   # This method resets all permissions and optionally assigns a useful title
-  def clean_duplicate(user, change_title: true)
+  def clean_duplicate(user, change_title = true)
     duplicate.tap do |task|
       task.user = user
       task.groups = []
