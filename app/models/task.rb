@@ -128,7 +128,7 @@ class Task < ApplicationRecord
   end
 
   def contribution?
-    task_contribution.present? && task_contribution.status == :open
+    task_contribution.present? && task_contribution.status == 'pending'
   end
 
   # TODO: Find a better name for the methods
