@@ -4,6 +4,7 @@ en:
     app_name: CodeHarbor
     button:
       abort: Abort
+      approve: Approve
       available_versions: Available ProFormA versions
       back: Back
       cancel: Cancel
@@ -18,6 +19,9 @@ en:
       import: Import
       log_in: Log in
       'no': 'no'
+      next: Next
+      previous: Previous
+      reject: Reject
       remove: Remove
       retry: Retry
       save: Save
