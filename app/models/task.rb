@@ -108,7 +108,7 @@ class Task < ApplicationRecord
   end
 
   def contribution?
-    task_contribution.present? && task_contribution.status == :open
+    task_contribution.present? && task_contribution.status == 'pending'
   end
 
   def sync_metadata_with_nbp
