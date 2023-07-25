@@ -104,7 +104,7 @@ class Task < ApplicationRecord
   end
 
   def contribution?
-    task_contribution.present? && task_contribution.status == :open
+    task_contribution.present? && task_contribution.status == 'pending'
   end
 
   # This method creates a duplicate while leaving permissions and ownership unchanged
