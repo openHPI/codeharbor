@@ -1,7 +1,21 @@
 # frozen_string_literal: true
 
 class ContributionsController < ApplicationController
-  def approve_changes; end
+  def approve_changes;
+    contrib = TaskContribution.find(params[:contribution_id])
+    @task = Task.find(params[:task_id])
+    contrib_attributes = contrib.task.attributes.except!('parent_uuid', 'access_level', 'user_id', 'uuid', 'id')
+    @task.assign_attributes(contrib_attributes)
+    @task.files = contrib.task.files
+    @task.model_solutions = contrib.task.model_solutions
+    @task.tests = contrib.task.tests
+    contrib.status = :merged
+    if @task.save
+      redirect_to @task, notice: 'Merged'
+    else
+      redirect_to contrib.task, alert: 'Merge failed'
+    end
+  end
 
   def discard_changes
     contrib = TaskContribution.find(params[:contribution_id])
