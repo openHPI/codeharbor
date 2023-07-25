@@ -3,6 +3,7 @@ en:
   common:
     button:
       abort: Abort
+      approve: Approve
       back: Back
       cancel: Cancel
       close: Close
@@ -16,6 +17,9 @@ en:
       hide: Hide
       import: Import
       log_in: Log in
+      next: Next
+      previous: Previous
+      reject: Reject
       remove: Remove
       retry: Retry
       show: Show
