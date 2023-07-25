@@ -178,6 +178,9 @@ en:
       task:
         one: Task
         other: Tasks
+      task_contribution:
+        one: Task Contribution
+        other: Task Contributions
       task_file:
         one: Task File
         other: Task Files
