@@ -556,7 +556,6 @@
           = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important disabled' do
             i.fa-regular.fa-clone
             =< t('common.button.duplicate')
-
       - if policy(@task).generate_test?
         = link_to generate_test_task_path(@task),
                 method: :post,
@@ -570,7 +569,10 @@
                   class: 'btn btn-important disabled' do
             i.fa-solid.fa-wand-magic-sparkles
             = t('.button.generate_test')
-
+      - if @task.contribution?
+        = link_to task_contribution_discard_changes_path(Task.find_by(uuid: @task.parent_uuid), @task.task_contribution), method: :post, class: 'btn btn-important' do
+          /i.fas.fa-link-slash
+          =< t('task_contributions.buttons.decouple')
       - if current_user.present?
         = link_to t('common.button.back'), tasks_path, class: 'btn btn-important'
 

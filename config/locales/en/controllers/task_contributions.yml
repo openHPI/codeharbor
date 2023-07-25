@@ -1,0 +1,12 @@
+---
+en:
+  task_contributions:
+    approve_changes:
+      error: Could not merge tasks.
+      success: The changes were merged successfully.
+    discard_changes:
+      error: The task could not be decoupled.
+      success: The task was successfully decoupled.
+    new:
+      error: Could not create a contribution.
+      success: A contribution was created successfully.

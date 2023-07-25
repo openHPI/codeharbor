@@ -3,7 +3,15 @@
 class ContributionsController < ApplicationController
   def approve_changes; end
 
-  def discard_changes; end
+  def discard_changes
+    contrib = TaskContribution.find(params[:contribution_id])
+    contrib.status = :closed
+    if contrib.save
+      redirect_to contrib.task, notice: t('task_contributions.discard_changes.success')
+    else
+      redirect_to contrib.task, alert: t('task_contributions.discard_changes.error')
+    end
+  end
 
   def new
     @task = Task.find(params[:task_id]).clean_duplicate(current_user, false)
@@ -14,23 +22,20 @@ class ContributionsController < ApplicationController
   end
 
   def create
-    input_task = Task.new(contrib_task_params)
-    old_task = Task.find(params[:task_id])
-    @task = old_task.clean_duplicate(current_user, false).merge_task(input_task, [], %i[parent_uuid license access_level])
-
+    @task = Task.new(contrib_task_params)
+    contrib = TaskContribution.new(status: 0)
+    @task.task_contribution = contrib
     if @task.save(context: :force_validations)
-      redirect_to @task, notice: t('tasks.notification.created')
+      redirect_to @task, notice: t('task_contributions.new.success')
     else
-      redirect_to old_task, alert: t('tasks.notification.duplicate_failed')
+      redirect_to old_task, alert: t('task_contributions.new.error')
     end
   end
-
   def contrib_task_params
     params.require(:task).permit(:title, :description, :internal_description, :language,
       :programming_language_id, files_attributes: file_params, tests_attributes: test_params,
       model_solutions_attributes: model_solution_params, label_ids: [])
-      .merge(user: current_user, parent_uuid: Task.find(params[:task_id]).uuid, task_contribution: TaskContribution.new)
-
+      .merge(user: current_user, parent_uuid: Task.find(params[:task_id]).uuid, access_level: :private, task_contribution: TaskContribution.new)
   end
 
   def file_params
