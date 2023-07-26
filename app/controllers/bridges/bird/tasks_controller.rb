@@ -54,13 +54,13 @@ module Bridges
             title: 'Hello World in Java',
             description: 'Write a simple program that prints "Hello World".',
             internal_description: 'This is a simple exercise for your students to begin with Java.',
-            language: 'English'
+            language: 'en'
           ),
           Task.new(
             title: 'Hello World in Python',
             description: 'Write a simple program that prints "Hello World".',
             internal_description: 'This is a simple exercise for your students to begin with Python.',
-            language: 'English'
+            language: 'en'
           ),
         ]
       end

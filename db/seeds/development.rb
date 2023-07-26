@@ -77,7 +77,7 @@ task1 = Task.create!(
   description: 'Write a simple program that prints "Hello World".',
   internal_description: 'This is a simple exercise for your students to begin with Java.',
   uuid: 'f15cb7a3-87eb-4c4c-a998-c33e25d44cdc',
-  language: 'English',
+  language: 'en',
   programming_language: pl_java,
   user: user1,
   meta_data: {
@@ -207,7 +207,7 @@ task2 = Task.create!(
   description: 'Write a simple program that prints "Hello World".',
   internal_description: 'This is a simple exercise for your students to begin with Python.',
   uuid: 'a85825d4-397b-4c65-8550-ae607f0a70e9',
-  language: 'English',
+  language: 'en',
   programming_language: pl_python,
   user: user1,
   meta_data: {
