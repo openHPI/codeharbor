@@ -142,20 +142,6 @@ class Task < ApplicationRecord
     end
   end
 
-  # TODO: I am not sure whether we need this method (or can just use the `assign_attributes` method from ActiveRecord).
-  def merge_task(new, attributes, exclude)
-    if attributes.empty?
-      all_attributes = Task.attribute_names.map(&:to_sym)
-      copy_attributes = all_attributes - exclude.map(&:to_sym)
-    else
-      copy_attributes = attributes
-    end
-
-    copy_attributes.each do |attribute|
-      self[attribute] = new[attribute]
-    end
-  end
-
   def initialize_derivate(user = nil)
     duplicate.tap do |task|
       task.user = user if user
