@@ -34,7 +34,7 @@ describe ProformaService::ConvertProformaTaskToTask do
         proglang: {name: 'proglang-name', version: 'proglang-version'},
         uuid:,
         parent_uuid: 'parent_uuid',
-        language: 'language',
+        language: 'en',
         meta_data:,
         model_solutions:,
         files:,
@@ -59,7 +59,7 @@ describe ProformaService::ConvertProformaTaskToTask do
         programming_language: be_an(ProgrammingLanguage).and(have_attributes(language: 'proglang-name', version: 'proglang-version')),
         uuid: proforma_task.uuid,
         parent_uuid: be_blank,
-        language: 'language',
+        language: 'en',
         files: be_empty,
         tests: be_empty,
         model_solutions: be_empty
@@ -381,7 +381,7 @@ describe ProformaService::ConvertProformaTaskToTask do
           programming_language: have_attributes(language: proforma_task.proglang[:name], version: proforma_task.proglang[:version]),
           uuid: task.uuid,
           parent_uuid: be_blank,
-          language: 'language',
+          language: 'en',
 
           files: be_empty,
           tests: be_empty,
