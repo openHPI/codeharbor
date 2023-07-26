@@ -10,6 +10,7 @@ gem 'rubyzip'
 gem 'figaro'
 # Translate
 gem 'i18n'
+gem 'iso-639'
 # Use slim format
 gem 'slim-rails', '>= 3.2.0'
 # Rails

@@ -2,20 +2,20 @@
 
 module Bridges
   module Lom
+    # rubocop:disable Metrics/ClassLength
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/MethodLength
     class TasksController < ActionController::API
       OML_SCHEMA_PATH = Rails.root.join('vendor/assets/schemas/lom_1484.12.3-2020/lom.xsd')
 
       def show
-        builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') {|xml| sample_oml(xml) }
+        @task = Task.find(params[:id])
 
-        if params[:validate].present?
-          schema = Nokogiri::XML::Schema(File.read(OML_SCHEMA_PATH))
-          errors = schema.validate(builder.doc)
-
-          return render plain: errors.map(&:message).join("\n") if errors.any?
+        if @task.showable_by?(current_user)
+          render xml: Nokogiri::XML::Builder.new(encoding: 'UTF-8') {|xml| sample_oml(xml) }
+        else
+          render plain: 'Forbidden', status: :forbidden
         end
-
-        render xml: builder
       end
 
       private
@@ -28,33 +28,43 @@ module Bridges
           oml_technical(xml)
           oml_educational(xml)
           oml_rights(xml)
-          # Other top-level elements: relation, annotation, and classification.
+          oml_relation(xml)
+          oml_annotation(xml)
+          # Other top-level elements: classification.
         end
       end
 
-      # rubocop:disable Metrics/AbcSize
-      # rubocop:disable Metrics/MethodLength
       def oml_general(xml)
         xml.general do
           xml.identifier do
             xml.catalog 'UUID'
-            xml.entry task.uuid
+            xml.entry @task.uuid
           end
           xml.title do
-            xml.string task.title, language: task_lang
+            xml.string @task.title, language: iso639_lang(@task)
           end
-          xml.language task_lang
+          xml.language iso639_lang(@task)
           xml.description do
-            xml.string task.description, language: task_lang
+            xml.string @task.description, language: iso639_lang(@task)
           end
-          if task.programming_language&.language.present?
+          if @task.programming_language&.language.present?
             xml.keyword do
-              xml.string "programming language: #{task.programming_language.language}", language: 'en'
+              xml.string "programming language: #{@task.programming_language.language}", language: 'en'
             end
-            if task.programming_language&.version.present?
+            if @task.programming_language&.version.present?
               xml.keyword do
-                xml.string "programming language version: #{task.programming_language.version}", language: 'en'
+                xml.string "programming language version: #{@task.programming_language.version}", language: 'en'
               end
+            end
+          end
+          if @task.ratings.any?
+            xml.keyword do
+              xml.string "average rating: #{@task.rating_star}/5.0", language: 'en'
+            end
+          end
+          @task.labels.each do |label|
+            xml.keyword do
+              xml.string label.name, language: 'en'
             end
           end
           xml.structure do
@@ -65,7 +75,6 @@ module Bridges
           end
         end
       end
-      # rubocop:enable all
 
       def oml_lifecycle(xml)
         xml.lifeCycle do
@@ -79,12 +88,10 @@ module Bridges
             xml.role do
               xml.value 'author'
             end
-            xml.entity task_author_vcard
+            xml.entity vcard(@task.user)
             xml.date do
-              # TODO: We omit the time part, since the regex provided by the xsd schema seems to be broken regarding
-              # the time zone part. Try a validated request, e.g., with '1997-07-16T19:20:30+01:00'. It fails, but
-              # it is an example from the IEEE Standard document.
-              xml.dateTime task.updated_at.to_date.iso8601
+              # We omit the time part, since the regex provided by the xsd schema is broken regarding the time zone part.
+              xml.dateTime @task.updated_at.to_date.iso8601
             end
           end
         end
@@ -92,20 +99,23 @@ module Bridges
 
       def oml_meta_metadata(xml)
         xml.metaMetadata do
+          xml.identifier do
+            xml.catalog 'URI'
+            xml.entry request.url
+          end
           xml.metadataSchema 'ProFormA MD 1.0'
+          xml.language 'en'
         end
       end
 
       def oml_technical(xml)
         xml.technical do
           xml.format 'text/xml'
-          xml.location task_url(id: 'sample')
-          xml.location download_task_url(id: 'sample')
+          xml.location task_url(@task)
+          xml.location download_task_url(@task)
         end
       end
 
-      # rubocop:disable Metrics/AbcSize
-      # rubocop:disable Metrics/MethodLength
       def oml_educational(xml)
         xml.educational do
           xml.interactivityType do
@@ -136,12 +146,11 @@ module Bridges
             xml.string '13-'
           end
           xml.description do
-            xml.string task.internal_description, language: task_lang
+            xml.string @task.internal_description, language: iso639_lang(@task)
           end
-          xml.language task_lang
+          xml.language iso639_lang(@task)
         end
       end
-      # rubocop:enable all
 
       def oml_rights(xml)
         xml.rights do
@@ -151,54 +160,83 @@ module Bridges
           xml.copyrightAndOtherRestrictions do
             xml.value 'yes'
           end
-          xml.description do
-            xml.string 'GNU General Public License (GPLv3): https://www.gnu.org/licenses/gpl-3.0.en.html', language: 'en'
+          if @task.license.present?
+            xml.description do
+              xml.string @task.license.to_s, language: 'en'
+            end
+          else
+            xml.description do
+              xml.string 'Unknown license', language: 'en'
+            end
           end
         end
       end
 
-      def task
-        @task ||= Task.new(
-          title: 'Hello World',
-          description: 'Write a simple program that prints "Hello World".',
-          internal_description: 'This is a simple exercise for your students to begin with Java.',
-          uuid: 'f15cb7a3-87eb-4c4c-a998-c33e25d44cdc',
-          language: 'English',
-          programming_language: pl,
-          user:,
-          updated_at: Time.zone.now
-        )
+      def oml_relation(xml)
+        parent = Task.find_by(uuid: @task.parent_uuid)
+        if parent.present?
+          xml.relation do
+            xml.kind do
+              xml.source 'LOMv1.0'
+              xml.value 'isversionof'
+            end
+            xml.resource do
+              xml.identifier do
+                xml.catalog 'UUID'
+                xml.entry parent.uuid
+              end
+              xml.identifier do
+                xml.catalog 'URI'
+                xml.entry task_url(parent)
+              end
+              xml.description do
+                xml.string parent.description, language: iso639_lang(parent)
+              end
+            end
+          end
+        end
       end
 
-      def task_lang
-        # TODO: Ensure `task.language` returns 2 letter code from ISO 639:1988.
-        'en'
+      def oml_annotation(xml)
+        @task.comments.each do |comment|
+          xml.annotation do
+            xml.entity vcard(comment.user)
+            xml.date do
+              # We omit the time part, since the regex provided by the xsd schema is broken regarding the time zone part.
+              xml.dateTime comment.updated_at.to_date.iso8601
+            end
+            xml.description do
+              xml.string comment.text, language: iso639_lang(@task)
+            end
+          end
+        end
+      end
+
+      def iso639_lang(task)
+        ISO_639.find(task.language.split('-').first).alpha2
       end
 
       def task_version
-        # TODO: Traverse all parent tasks to obtain correct version. This only checks the first parent.
-        task.parent_uuid.present? ? 2 : 1
+        # TODO: Fix this N+1 query for example by adding a version column for tasks
+        version = 1
+        ancestor = @task
+        while ancestor.parent_uuid.present?
+          ancestor = Task.find_by(uuid: ancestor.parent_uuid)
+          version += 1
+        end
+        version
       end
 
-      def task_author_vcard
+      def vcard(user)
         <<~VCARD
           BEGIN:VCARD
-          FN:#{task.user.first_name} #{task.user.last_name}
+          VERSION:3.0
+          FN;CHARSET=UTF-8:#{user.name}
+          N;CHARSET=UTF-8:#{user.last_name};#{user.first_name};;;
           END:VCARD
         VCARD
       end
-
-      def pl
-        @pl ||= ProgrammingLanguage.new(language: 'Java', version: '17')
-      end
-
-      def user
-        @user ||= User.new(
-          first_name: 'John',
-          last_name: 'Doe',
-          email: 'john.doe@openhpi.de'
-        )
-      end
     end
+    # rubocop:enable all
   end
 end
