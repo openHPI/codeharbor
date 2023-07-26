@@ -3,6 +3,8 @@
 require 'nokogiri'
 require 'zip'
 class Task < ApplicationRecord
+  include TransferValues
+
   acts_as_taggable_on :state
   attribute :parent_id
 
@@ -138,6 +140,10 @@ class Task < ApplicationRecord
         task.title = "#{I18n.t('tasks.model.copy_of_task')}: #{task.title}"
       end
     end
+  end
+
+  def parent
+    parent_uuid.empty? ? nil : Task.find_by(uuid: parent_uuid)
   end
 
   def initialize_derivate(user = nil)

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ModelSolution < ApplicationRecord
+  include TransferValues
+
   belongs_to :task
   has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy
   accepts_nested_attributes_for :files, allow_destroy: true
@@ -12,8 +14,9 @@ class ModelSolution < ApplicationRecord
   validates :xml_id, uniqueness: {scope: :task_id}
 
   def duplicate
-    dup.tap do |model_solutions|
-      model_solutions.files = files.map(&:duplicate)
+    dup.tap do |model_solution|
+      model_solution.files = files.map(&:duplicate)
+      model_solution.parent_id = id
     end
   end
 end

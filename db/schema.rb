@@ -169,6 +169,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_22_075061) do
     t.bigint "task_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "parent_id", limit: 2
     t.index ["task_id"], name: "index_model_solutions_on_task_id"
   end
 
@@ -372,6 +373,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_22_075061) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "xml_id"
+    t.integer "parent_id", limit: 2
     t.index ["fileable_type", "fileable_id"], name: "index_task_files_on_fileable_type_and_fileable_id"
   end
 
@@ -426,6 +428,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_22_075061) do
     t.bigint "testing_framework_id"
     t.jsonb "configuration"
     t.index ["testing_framework_id"], name: "index_tests_on_testing_framework_id"
+    t.integer "parent_id", limit: 2
   end
 
   create_table "user_identities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
