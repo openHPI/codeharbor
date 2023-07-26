@@ -6,9 +6,9 @@ class ContributionsController < ApplicationController
     @task = Task.find(params[:task_id])
     contrib_attributes = contrib.task.attributes.except!('parent_uuid', 'access_level', 'user_id', 'uuid', 'id')
     @task.assign_attributes(contrib_attributes)
-    @task.files = contrib.task.files
-    @task.model_solutions = contrib.task.model_solutions
-    @task.tests = contrib.task.tests
+    @task.transfer_linked_files(contrib.task)
+    @task.model_solutions = @task.transfer_multiple(@task.model_solutions, contrib.task.model_solutions, {task_id: @task.id})
+    @task.tests = @task.transfer_multiple(@task.tests, contrib.task.tests, {task_id: @task.id})
     contrib.status = :merged
     if @task.save
       redirect_to @task, notice: 'Merged'
