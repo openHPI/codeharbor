@@ -2,6 +2,8 @@
 
 class Test < ApplicationRecord
   include FileConcern
+  include TransferValues
+
   belongs_to :task, autosave: true, inverse_of: :tests
   belongs_to :testing_framework, optional: true
   validates :title, presence: true
@@ -19,6 +21,7 @@ class Test < ApplicationRecord
   def duplicate
     dup.tap do |test|
       test.files = files.map(&:duplicate)
+      test.parent_id = id
     end
   end
 end
