@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Test < ApplicationRecord
+  include TransferValues
+
   belongs_to :task
   belongs_to :testing_framework, optional: true
   has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy
@@ -20,6 +22,7 @@ class Test < ApplicationRecord
   def duplicate
     dup.tap do |test|
       test.files = files.map(&:duplicate)
+      test.parent_id = id
     end
   end
 end
