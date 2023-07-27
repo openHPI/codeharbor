@@ -15,7 +15,7 @@ RSpec.describe Bridges::Lom::TasksController do
   describe 'GET #show' do
     subject(:get_request) { get :show, params: {id: task.to_param} }
 
-    shared_examples 'validate response LOM' do
+    shared_examples 'is a valid LOM reponse' do
       it 'returns HTTP OK' do
         expect(response).to have_http_status :ok
       end
@@ -30,9 +30,19 @@ RSpec.describe Bridges::Lom::TasksController do
     context 'without being signed in' do
       let(:task) { public_task }
 
-      it 'returns HTTP forbidden' do
-        get_request
-        expect(response).to have_http_status :forbidden
+      context 'when task is public' do
+        let(:task) { public_task }
+
+        include_examples 'is a valid LOM reponse'
+      end
+
+      context 'when task is private' do
+        let(:task) { private_task }
+
+        it 'returns HTTP forbidden' do
+          get_request
+          expect(response).to have_http_status :forbidden
+        end
       end
     end
 
@@ -42,13 +52,13 @@ RSpec.describe Bridges::Lom::TasksController do
       context 'when task is public' do
         let(:task) { public_task }
 
-        include_examples 'validate response LOM'
+        include_examples 'is a valid LOM reponse'
       end
 
       context 'when task is private' do
         let(:task) { private_task }
 
-        include_examples 'validate response LOM'
+        include_examples 'is a valid LOM reponse'
       end
     end
 
@@ -58,7 +68,7 @@ RSpec.describe Bridges::Lom::TasksController do
       context 'when task is public' do
         let(:task) { public_task }
 
-        include_examples 'validate response LOM'
+        include_examples 'is a valid LOM reponse'
       end
 
       context 'when task is private' do

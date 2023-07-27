@@ -205,7 +205,7 @@ class Task < ApplicationRecord
   def primary_language_tag_in_iso639?
     if language.present?
       primary_tag = language.split('-').first
-      errors.add(primary_tag, I18n.t('tasks.form.errors.iso639_primary_tag')) unless ISO_639.find(primary_tag)
+      errors.add(:language, :not_iso639) unless ISO_639.find(primary_tag)
     end
   end
 end
