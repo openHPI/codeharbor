@@ -2,16 +2,14 @@
 
 module Bridges
   module Lom
-    # rubocop:disable Metrics/ClassLength
-    # rubocop:disable Metrics/AbcSize
-    # rubocop:disable Metrics/MethodLength
+    # rubocop:disable Metrics/ClassLength, Metrics/AbcSize, Metrics/MethodLength
     class TasksController < ActionController::API
       OML_SCHEMA_PATH = Rails.root.join('vendor/assets/schemas/lom_1484.12.3-2020/lom.xsd')
 
       def show
         @task = Task.find(params[:id])
 
-        if @task.showable_by?(current_user)
+        if @task.access_level_public? || @task.author?(current_user)
           render xml: Nokogiri::XML::Builder.new(encoding: 'UTF-8') {|xml| sample_oml(xml) }
         else
           render plain: 'Forbidden', status: :forbidden

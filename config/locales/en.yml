@@ -22,6 +22,12 @@
 
 en:
   activerecord:
+    errors:
+      models:
+        task:
+          attributes:
+            language:
+              not_iso639: "is not a two letter ISO 639-1 or three letter ISO-639-2 language code"
     attributes:
       exercise:
         execution_environment: Programming language
