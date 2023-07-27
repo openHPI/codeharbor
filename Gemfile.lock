@@ -229,7 +229,7 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
-    js-routes (2.2.6)
+    js-routes (2.2.7)
       railties (>= 4)
     json (2.6.3)
     kaminari (1.2.2)
@@ -274,8 +274,8 @@ GEM
     method_source (1.0.0)
     mini_magick (4.12.0)
     mini_mime (1.1.2)
-    mini_portile2 (2.8.2)
-    minitest (5.18.1)
+    mini_portile2 (2.8.4)
+    minitest (5.19.0)
     mnemosyne-ruby (1.13.0)
       activesupport (>= 4)
       bunny
@@ -544,7 +544,7 @@ GEM
     will_paginate (4.0.0)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.8)
+    zeitwerk (2.6.9)
 
 PLATFORMS
   ruby
