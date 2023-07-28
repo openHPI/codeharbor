@@ -16,5 +16,9 @@ FactoryBot.define do
       title {}
       description {}
     end
+
+    trait :with_labels do
+      labels { build_list(:label, 3) }
+    end
   end
 end
