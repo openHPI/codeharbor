@@ -80,5 +80,18 @@ RSpec.describe Bridges::Lom::TasksController do
         end
       end
     end
+
+    context 'when signed in as a group member' do
+      let(:group_member) { create(:user) }
+      let(:task) { private_task }
+      let(:group_memberships) { [build(:group_membership, :with_admin), build(:group_membership, user: group_member)] }
+
+      before do
+        create(:group, group_memberships:, tasks: [task])
+        sign_in group_member
+      end
+
+      include_examples 'is a valid LOM reponse'
+    end
   end
 end
