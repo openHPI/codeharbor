@@ -1053,7 +1053,7 @@ en:
         programming_language:
           not_empty_while_public: "Can't be empty while visibility is set to public"
         language: 'is not in the correct format. Please use one of the following formats: de / en-US'
-        iso639_primary_tag: 'is not a two letter ISO 639-1 or three letter ISO-639-2 language code'
+        iso639_primary_tag: 'is not a valid two or three letter language code'
       none: "None"
       additional_info: "Additional Information"
       no_license: "No License"
