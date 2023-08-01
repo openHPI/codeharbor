@@ -110,9 +110,8 @@
       = form_for :comment, url: task_comments_path(task), remote: true do |f|
         .write-comment
           .input-group
-            = f.label 'new_comment_label', t('comments.new_comment'), class: 'input-group-addon'
+            = f.label 'new_comment_label', t('comments.new_comment'), class: 'btn btn-light disabled input-group-addon'
             = f.text_field :text, class: 'form-control'
-            span.input-group-btn
-              = f.submit class: 'btn btn-light'
+            = f.submit class: 'btn btn-light'
       .comment-body
 = will_paginate @tasks

@@ -452,8 +452,9 @@
             .col.row-value
               = model_solution.xml_id
 
-          .files-header
-            = label nil, t('tasks.files.label') + ':'
+          .files-header.my-1
+            strong
+              = label nil, t('tasks.files.label') + ':'
           .files
             - model_solution.files.each do |file|
               .show-table.exercise-show
@@ -523,9 +524,9 @@
       .button-description
         = t('controllers.task.add_to_collection.hint')
       .wrapper
-        /  = link_to t('exercises.show.add_to_cart'), add_to_cart_exercise_path(@task), method: 'post', class: 'btn btn-default'
+        /  = link_to t('exercises.show.add_to_cart'), add_to_cart_exercise_path(@task), method: 'post', class: 'btn btn-light'
         .dropdown.btn-group
-          = button_tag class: 'btn btn-default dropdown-toggle', data: {toggle: 'dropdown'} do
+          = button_tag class: 'btn btn-light dropdown-toggle', 'data-bs-toggle': 'dropdown' do
             => t('tasks.show.add_to_collection')
             span.caret
           ul.scrollable.dropdown-menu[role="menu"]
@@ -541,11 +542,11 @@
         .button-description
           = t('tasks.download')
         .wrapper
-          = link_to t('shared.download_zip'), download_task_path(@task), class: 'btn btn-default', 'data-turbolinks'=> false
+          = link_to t('shared.download_zip'), download_task_path(@task), class: 'btn btn-light', 'data-turbolinks'=> false
           .dropdown.btn-group
-            = button_tag class: 'btn btn-default dropdown-toggle', data: {toggle: 'dropdown'} do
+            = button_tag class: 'btn btn-light dropdown-toggle', 'data-bs-toggle': 'dropdown' do
               => t('tasks.show.export')
-              .caret
+              span.caret
             ul.scrollable.dropdown-menu[role="menu"]
               li.dropdown-header = t('tasks.show.export_to') + ': '
               - if !current_user.available_account_links.empty?
@@ -584,10 +585,9 @@
       = form_for :comment, url: task_comments_path(@task), remote: true do |f|
         .write-comment
           .input-group
-            = f.label 'new_comment_label', 'New Comment', class: 'input-group-addon'
+            = f.label 'new_comment_label', 'New Comment', class: 'btn btn-light disabled input-group-addon'
             = f.text_field :text, class: 'form-control'
-            span.input-group-btn
-              = f.submit class: 'btn btn-default'
+            = f.submit class: 'btn btn-light'
       .comment-body
 
   /.history-panel
