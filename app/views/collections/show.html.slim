@@ -29,15 +29,15 @@
           tr
             td
               - if can? :show, task
-                = link_to task.title, task_path(task), class: 'btn btn-default'
+                = link_to task.title, task_path(task), class: 'btn btn-light'
               - else
-                = link_to task.title, task_path(task), class: 'btn btn-default disabled'
+                = link_to task.title, task_path(task), class: 'btn btn-light disabled'
             td
               / Contributing to a task is not yet enabled again.
               /- if cannot? :read, task
                 span.fa.fa-lock.lock
                 = ' '
-                = link_to t('collections.show.contribute'), contribute_exercise_path(task), method: :post, class: 'btn btn-default'
+                = link_to t('collections.show.contribute'), contribute_exercise_path(task), method: :post, class: 'btn btn-light'
               = link_to remove_task_collection_path(@collection, task: task), method: :patch, class: 'pull-right' do
                 i.fa.fa-remove style=("color: #800000; font-size: 20px;")
 br
@@ -47,7 +47,7 @@ br
     = link_to t('collections.button.back'), user_messages_path(current_user), class: 'btn btn-important'
   - else
     .btn-group
-      = button_tag type: 'button', data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}, class: 'btn btn-important nav-btn-exercise dropdown-toggle dropdown-toggle split' do
+      = button_tag type: 'button', 'data-bs-toggle': 'dropdown', aria: {haspopup: "true", expanded: "false"}, class: 'btn btn-important nav-btn-exercise dropdown-toggle split' do
         => t('collections.show.share')
         span.caret
       .dropdown-menu#share-menu
@@ -56,32 +56,26 @@ br
           | :
         .input-group
           = text_field_tag 'user', nil, form: 'share', class: 'form-control'
-          .input-group-btn
-            = submit_tag t('collections.show.share'), form: 'share', class: 'btn btn-default'
+          = submit_tag t('collections.show.share'), form: 'share', class: 'btn btn-light', type: 'button'
     - if can? :edit, Collection
       .dropup.btn-group
-        = button_tag class: 'btn btn-important dropdown-toggle', data: {toggle: 'dropdown'} do
+        = button_tag class: 'btn btn-important dropdown-toggle', 'data-bs-toggle': 'dropdown' do
           => t('shared.export')
           span.caret
-        ul.scrollable.dropdown-menu[role="menu"]
-          li
-            - if @collection.tasks.empty?
-              a.dropdown-item.disabled-cursor title=t('controllers.collections.download_no_exercises')
-                = t('shared.download_zip')
-            - else
-              = link_to t('shared.download_zip'), download_all_collection_path(@collection), 'data-turbolinks': false
-
-
-          li.divider
-          li.dropdown-header = t('shared.export_to') + ': '
+        .scrollable.dropdown-menu[role="menu"]
+          - if @collection.tasks.empty?
+            a.dropdown-item.disabled-cursor title=t('controllers.collections.download_no_exercises')
+              = t('shared.download_zip')
+          - else
+            = link_to t('shared.download_zip'), download_all_collection_path(@collection), 'data-turbolinks': false, class: 'dropdown-item'
+          .dropdown-divider
+          .dropdown-header = t('shared.export_to') + ': '
           - if !current_user.available_account_links.empty?
             - current_user.available_account_links.each do |acc_link|
-              li
-                a.dropdown-item.disabled-cursor title=t('controllers.collections.temporary_disabled')
-                  = acc_link.name
+              a.dropdown-item.disabled-cursor title=t('controllers.collections.temporary_disabled')
+                = acc_link.name
           - else
-            li
-              = link_to t('tasks.show.define_account_link'), new_user_account_link_path(current_user)
+            = link_to t('tasks.show.define_account_link'), new_user_account_link_path(current_user), class: 'dropdown-item'
     = link_to remove_all_collection_path(@collection), method: :patch, data: { confirm: t('sure') }, class: 'btn btn-important' do
       i.fa.fa-remove style=("color: #800000")
       =< t('collections.show.remove_all')
