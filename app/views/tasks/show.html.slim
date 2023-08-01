@@ -16,7 +16,7 @@
             span.fa.fa-star-o.overall-rating data-rating=i
         small
           .rating-dropdown
-            span.btn.btn-xs#rate
+            .btn.btn-sm#rate
               => t('exercises.rate')
               span.caret
             .popup-rating
@@ -561,7 +561,7 @@
       .button-description
         = "Derivate, translate or port this Exercise by duplicating it. The duplicate will be owned by you."
       .wrapper
-        = link_to t('exercises.all.duplicate'), duplicate_exercise_path(@task), class:'btn btn-default'
+        = link_to t('exercises.all.duplicate'), duplicate_exercise_path(@task), class:'btn btn-light'
 
   /.related-panel
     = button_tag type: 'button', class: 'full-window-button related-button' do
@@ -588,7 +588,7 @@
             = f.label 'new_comment_label', 'New Comment', class: 'btn btn-light disabled input-group-addon'
             = f.text_field :text, class: 'form-control'
             = f.submit class: 'btn btn-light'
-      .comment-body
+        .comment-body
 
   /.history-panel
     = button_tag type: 'button', class: 'full-window-button history-button' do
@@ -619,7 +619,7 @@
             .input-group
               = text_field_tag 'text', nil, form: 'report', class: 'form-control'
               .input-group-btn
-                = submit_tag t('exercises.show.submit'), form: 'report', class: 'btn btn-default'
+                = submit_tag t('exercises.show.submit'), form: 'report', class: 'btn btn-light'
     = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important' do
         i.fa.fa-clone
         =< t('tasks.show.duplicate')

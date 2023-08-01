@@ -48,36 +48,36 @@ br
             = ' '
             .btn-group
               -if message.param_type == 'exercise'
-                = link_to  t('message.index.view'), exercise_path(message.param_id), class: 'btn btn-default btn-xs'
-                = link_to add_author_exercise_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-default btn-xs' do
+                = link_to  t('message.index.view'), exercise_path(message.param_id), class: 'btn btn-light btn-sm'
+                = link_to add_author_exercise_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
                   i.fa.fa-plus style=("color:#008000")
                   = ' ' + t('message.index.make_co_author')
-                = link_to decline_author_exercise_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-default btn-xs' do
+                = link_to decline_author_exercise_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
                   i.fa.fa-remove style=("color:#800000")
                   = ' ' + t('message.index.deny_access')
               - if message.param_type == 'collection'
-                = link_to  t('message.index.view'), view_shared_collection_path(message.param_id, user: message.sender), class: 'btn btn-default btn-xs'
-                = link_to t('message.index.save_collection'), save_shared_collection_path(message.param_id), method: 'post', class: 'btn btn-default btn-xs'
+                = link_to  t('message.index.view'), view_shared_collection_path(message.param_id, user: message.sender), class: 'btn btn-light btn-sm'
+                = link_to t('message.index.save_collection'), save_shared_collection_path(message.param_id), method: 'post', class: 'btn btn-light btn-sm'
               - if message.param_type == 'group'
-                = link_to t('message.index.view'), group_path(message.param_id), class: 'btn btn-default btn-xs'
-                = link_to grant_access_group_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-default btn-xs' do
+                = link_to t('message.index.view'), group_path(message.param_id), class: 'btn btn-light btn-sm'
+                = link_to grant_access_group_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
                   i.fa.fa-plus style=("color:#008000")
                   = ' ' + t('message.index.grant_access')
-                = link_to deny_access_group_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-default btn-xs' do
+                = link_to deny_access_group_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
                   i.fa.fa-remove style=("color:#800000")
                   = ' ' + t('message.index.deny_access')
               - if message.param_type == 'exercise_accepted' || message.param_type == 'report'
-                = link_to t('message.index.view'), exercise_path(message.param_id), class: 'btn btn-default btn-xs'
+                = link_to t('message.index.view'), exercise_path(message.param_id), class: 'btn btn-light btn-sm'
               - if message.param_type == 'group_accepted'
-                = link_to t('message.index.view'), group_path(message.param_id), class: 'btn btn-default btn-xs'
+                = link_to t('message.index.view'), group_path(message.param_id), class: 'btn btn-light btn-sm'
 
           .message-actions
             .btn-group
               - unless @option == 'sent'
-                = link_to reply_user_messages_path(recipient: message.sender), class: 'btn btn-default btn-xs' do
+                = link_to reply_user_messages_path(recipient: message.sender), class: 'btn btn-light btn-sm' do
                   i.fa.fa-mail-reply
                   = ' ' + t('message.index.reply')
-              = link_to user_message_path(current_user, message, option: @option), method: :delete, class:'btn btn-default btn-xs', data: { confirm: t('sure') } do
+              = link_to user_message_path(current_user, message, option: @option), method: :delete, class:'btn btn-light btn-sm', data: { confirm: t('sure') } do
                 i.fa.fa-trash
                 = ' ' + t('message.index.delete')
   = will_paginate
