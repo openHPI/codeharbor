@@ -22,7 +22,7 @@
     .input-group
       = f.text_field :api_key, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('account.account_links.info.token'), class: 'form-control'
       .input-group-btn
-        = button_tag "Generate", type: 'button', class: 'generate-api-key-token btn btn-default'
+        = button_tag "Generate", type: 'button', class: 'generate-api-key-token btn btn-light'
   .form-group
     .actions.btn-group[role="group"]
       = f.submit t('account.account_links.button.save'), class: 'btn btn-important'

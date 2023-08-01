@@ -4,9 +4,9 @@
       = f.text_field :text, class: 'form-control'
     .actions.btn-group.pull-right role="group"
       - if can? :edit, @comment
-        = f.submit class: 'btn btn-default btn-xs' do
+        = f.submit class: 'btn btn-light btn-sm' do
           i.fa.fa-save
           = ' ' + "Save"
-        = link_to task_comment_path(@task, @comment), class: 'btn btn-default btn-xs', method: :delete, remote: true, data: {confirm: t('sure')}
+        = link_to task_comment_path(@task, @comment), class: 'btn btn-light btn-sm', method: :delete, remote: true, data: {confirm: t('sure')}
           i.fa.fa-trash
           = ' ' + t('comments.button.delete')

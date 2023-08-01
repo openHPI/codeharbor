@@ -107,7 +107,7 @@
               - if file.object.new_record?
                 - display_container = "display: block"
                 .table-header
-                  = file.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
+                  = file.remove_nested_fields_link :text, class: 'btn btn-main btn-sm pull-right' do
                     i.fa.fa-remove style=("color: #800000")
                     =< t('exercises.form.files.remove')
               - else
@@ -116,7 +116,7 @@
                   = file.object.full_file_name
                   = ' '
                   span.fa.fa-caret-down
-                  = file.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
+                  = file.remove_nested_fields_link :text, class: 'btn btn-main btn-sm pull-right' do
                     i.fa.fa-remove style=("color: #800000")
                     =< t('exercises.form.files.remove')
               .file-container style="margin-left: 10px; #{display_container}"
@@ -136,7 +136,7 @@
               - if test.object.new_record?
                 - display_container = "display: block"
                 .table-header
-                  = test.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
+                  = test.remove_nested_fields_link :text, class: 'btn btn-main btn-sm pull-right' do
                     i.fa.fa-remove style=("color: #800000")
                     =< t('tasks.form.tests.remove')
               - else
@@ -145,7 +145,7 @@
                   = test.object.title
                   = ' '
                   span.fa.fa-caret-down
-                  = test.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
+                  = test.remove_nested_fields_link :text, class: 'btn btn-main btn-sm pull-right' do
                     i.fa.fa-remove style=("color: #800000")
                     =< t('tasks.form.tests.remove')
               .test-container style="margin-left: 10px; #{display_container}"
@@ -166,7 +166,7 @@
               - if model_solution.object.new_record?
                 - display_container = "display: block"
                 .table-header
-                  = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
+                  = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-sm pull-right' do
                     i.fa.fa-remove style=("color: #800000")
                     =< t('tasks.form.model_solution.remove')
               - else
@@ -176,7 +176,7 @@
                   = ' '
                   = model_solution.object.task.model_solutions.find_index(model_solution.object) + 1
                   span.fa.fa-caret-down
-                  = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
+                  = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-sm pull-right' do
                     i.fa.fa-remove style=("color: #800000")
                     =< t('tasks.form.model_solution.remove')
               .model-solution-container style="margin-left: 10px; #{display_container}"

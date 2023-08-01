@@ -27,7 +27,7 @@
         = render 'file_config', file: file
     .field-element
       = render 'editor', f: test, file: file
-    = file.remove_nested_fields_link :text, class: 'btn btn-main btn-xs pull-right' do
+    = file.remove_nested_fields_link :text, class: 'btn btn-main btn-sm pull-right' do
       i.fa.fa-remove style=("color: #800000")
       = ' ' + t('exercises.form.files.remove')
 
