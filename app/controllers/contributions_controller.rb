@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ContributionsController < ApplicationController
-  def approve_changes;
+  def approve_changes
     contrib = TaskContribution.find(params[:contribution_id])
     @task = Task.find(params[:task_id])
     contrib_attributes = contrib.task.attributes.except!('parent_uuid', 'access_level', 'user_id', 'uuid', 'id')
@@ -11,9 +11,9 @@ class ContributionsController < ApplicationController
     @task.tests = @task.transfer_multiple(@task.tests, contrib.task.tests, {task_id: @task.id})
     contrib.status = :merged
     if @task.save
-      redirect_to @task, notice: 'Merged'
+      redirect_to @task, notice: t('task_contributions.approve_changes.success')
     else
-      redirect_to contrib.task, alert: 'Merge failed'
+      redirect_to contrib.task, alert: t('task_contributions.approve_changes.error')
     end
   end
 
@@ -35,6 +35,8 @@ class ContributionsController < ApplicationController
     render 'new'
   end
 
+  def edit; end
+
   def create
     @task = Task.new(contrib_task_params)
     contrib = TaskContribution.new(status: 0)
@@ -45,6 +47,17 @@ class ContributionsController < ApplicationController
       redirect_to old_task, alert: t('task_contributions.new.error')
     end
   end
+
+  def update
+    @task = TaskContribution.find(params[:id]).task
+    @task.assign_attributes(contrib_task_params) # assign_attributes(contrib_task_params)
+    if @task.save(context: :force_validations)
+      redirect_to @task, notice: t('task_contributions.update.success')
+    else
+      render :edit
+    end
+  end
+
   def contrib_task_params
     params.require(:task).permit(:title, :description, :internal_description, :language,
       :programming_language_id, files_attributes: file_params, tests_attributes: test_params,
