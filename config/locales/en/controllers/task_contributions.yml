@@ -10,3 +10,6 @@ en:
     new:
       error: Could not create a contribution.
       success: A contribution was created successfully.
+    update:
+      error: Failed to update the contribution.
+      success: Updated the contribution successfully.
