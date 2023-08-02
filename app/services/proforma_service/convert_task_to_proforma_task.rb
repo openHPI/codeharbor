@@ -64,6 +64,7 @@ module ProformaService
           internal_description: test.internal_description,
           test_type: test.test_type,
           files: test.files.map {|test_file| task_file test_file },
+          configuration: test.configuration,
           meta_data: test.meta_data
         )
       end

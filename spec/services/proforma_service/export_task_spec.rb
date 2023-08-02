@@ -228,6 +228,28 @@ describe ProformaService::ExportTask do
           expect(xml_with_namespaces.xpath("#{meta_data_path}/CodeOcean:nest/CodeOcean:even/CodeOcean:deeper").text).to eql 'foobar'
         end
       end
+
+      context 'when test has custom configuration' do
+        let(:test) { build(:test, :with_unittest) }
+        let(:configuration_path) { '/xmlns:task/xmlns:tests/xmlns:test/xmlns:test-configuration/unit:unittest' }
+
+        it 'adds configuration node to task node' do
+          expect(xml_with_namespaces.xpath("#{configuration_path}/unit:entry-point").text).to eql 'reverse_task.MyStringTest'
+        end
+
+        it 'adds attributes to configuration node to task node' do
+          expect(xml_with_namespaces.xpath(configuration_path).attribute('version').value).to eql '4.12'
+        end
+      end
+
+      context 'when test has multiple custom configuration' do
+        let(:test) { build(:test, :with_multiple_custom_configurations) }
+        let(:test_configuration_path) { '/xmlns:task/xmlns:tests/xmlns:test/xmlns:test-configuration' }
+
+        it 'adds custom test-configuration nodes to task node' do
+          expect(xml_with_namespaces.xpath(test_configuration_path).children.map(&:name)).to include('unittest', 'regexptest', 'java-checkstyle')
+        end
+      end
     end
 
     context 'when task has multiple tests' do

@@ -123,8 +123,9 @@ describe ProformaService::Import do
     end
 
     context 'when task has a test' do
-      let(:tests) { build_list(:test, 1, :with_content, meta_data: test_meta_data) }
+      let(:tests) { build_list(:test, 1, :with_content, meta_data: test_meta_data, configuration: test_configuration) }
       let(:test_meta_data) {}
+      let(:test_configuration) {}
 
       it { is_expected.to be_an_equal_task_as task }
 
@@ -133,6 +134,27 @@ describe ProformaService::Import do
 
         it 'sets the meta_data' do
           expect(import_service.tests.first.meta_data).to eql test_meta_data
+        end
+      end
+
+      context 'when task has configuration' do
+        let(:test_configuration) do
+          {
+            'unit:unittest' =>
+              {
+                '@xmlns' => {'unit' => 'urn:proforma:tests:unittest:v1.1'},
+                '@framework' => 'JUnit',
+                '@version' => '4.12',
+                'unit:entry-point' => {
+                  '@xmlns' => {'unit' => 'urn:proforma:tests:unittest:v1.1'},
+                  '$1' => 'reverse_task.MyStringTest',
+                },
+              },
+          }
+        end
+
+        it 'sets the configuration' do
+          expect(import_service.tests.first.configuration).to eql test_configuration
         end
       end
     end

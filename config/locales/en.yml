@@ -1182,6 +1182,7 @@ en:
       export_to: "Export to"
       define_account_link: "Please define an account link first"
       meta_data: "Metadata"
+      configuration: Configuration
       add_to_collection: "Add to collection"
       add_collection: "Add Collection"
       license: "License"

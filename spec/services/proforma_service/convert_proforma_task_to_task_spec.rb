@@ -252,12 +252,10 @@ describe ProformaService::ConvertProformaTaskToTask do
           internal_description: 'internal_description',
           test_type: 'test_type',
           files: test_files,
-          configuration:,
           meta_data: test_meta_data
         )
       end
 
-      let(:configuration) {}
       let(:test_meta_data) {}
       let(:test_files) { [test_file] }
       let(:test_file) do
@@ -331,6 +329,22 @@ describe ProformaService::ConvertProformaTaskToTask do
 
         it 'creates a test with meta_data' do
           expect(convert_to_task_service.tests.first).to have_attributes(meta_data: test_meta_data)
+        end
+      end
+
+      context 'when test has custom configuration' do
+        let(:test) { build(:test, :with_unittest) }
+
+        it 'creates a test with the supplied test configuration' do
+          expect(convert_to_task_service.tests.first).to have_attributes(configuration: test.configuration)
+        end
+      end
+
+      context 'when test has multiple custom configuration' do
+        let(:test) { build(:test, :with_multiple_custom_configurations) }
+
+        it 'creates a test with the supplied test configurations' do
+          expect(convert_to_task_service.tests.first).to have_attributes(configuration: test.configuration)
         end
       end
 

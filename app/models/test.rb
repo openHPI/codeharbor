@@ -11,6 +11,10 @@ class Test < ApplicationRecord
 
   serialize :meta_data, HashAsJsonbSerializer
 
+  def configuration_as_xml
+    Dachsfisch::JSON2XMLConverter.perform(json: configuration.to_json)
+  end
+
   def duplicate
     dup.tap do |test|
       test.files = files.map(&:duplicate)

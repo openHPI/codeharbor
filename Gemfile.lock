@@ -1,9 +1,16 @@
 GIT
-  remote: https://github.com/openHPI/proforma.git
-  revision: d8bf59938f7605e7e01f0650b67b0ca564e7907b
-  tag: v0.8
+  remote: https://github.com/openHPI/dachsfisch.git
+  revision: a167274cf4480de84ac41fb38c5006ae60c0ac1b
   specs:
-    proforma (0.8.0)
+    dachsfisch (0.1.0)
+      nokogiri (>= 1.14.1, < 1.16.0)
+
+GIT
+  remote: https://github.com/openHPI/proforma.git
+  revision: 10642d8d4ec27e0bdaa27482dac6b6c7e47bc660
+  tag: v0.9.1
+  specs:
+    proforma (0.9.1)
       activemodel (>= 5.2.3, < 8.0.0)
       activesupport (>= 5.2.3, < 8.0.0)
       nokogiri (>= 1.10.2, < 2.0.0)
@@ -564,6 +571,7 @@ DEPENDENCIES
   coffee-rails (>= 5.0.0)
   concurrent-ruby
   config
+  dachsfisch!
   database_cleaner
   devise (~> 4.9)
   devise-bootstrap-views (~> 1.0)
