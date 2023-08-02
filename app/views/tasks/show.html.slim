@@ -315,6 +315,14 @@ legend.toggle-next
             .row-value
               pre
                 = JSON.pretty_generate test.meta_data
+        - if test.configuration.present?
+          .row.vertical
+            .row-label
+              = t('tasks.show.configuration')
+              | :
+            .row-value
+              pre
+                = test.configuration_as_xml
         .row
           .row-label
             = t('tasks.tests.test_type')

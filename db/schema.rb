@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_01_105422) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_01_201736) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -275,6 +275,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_01_105422) do
     t.bigint "task_id"
     t.jsonb "meta_data", default: {}
     t.bigint "testing_framework_id"
+    t.jsonb "configuration"
     t.index ["testing_framework_id"], name: "index_tests_on_testing_framework_id"
   end
 

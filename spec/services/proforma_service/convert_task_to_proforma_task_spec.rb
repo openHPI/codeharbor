@@ -191,10 +191,11 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
 
     context 'when exercise has a test' do
       let(:tests) { [test] }
-      let(:test) { build(:test, files: test_files, meta_data: test_meta_data) }
+      let(:test) { build(:test, files: test_files, meta_data: test_meta_data, configuration: test_configuration) }
       let(:test_files) { [test_file] }
       let(:test_file) { build(:task_file, :exportable) }
       let(:test_meta_data) {}
+      let(:test_configuration) {}
 
       it 'creates a task with one test' do
         expect(proforma_task.tests).to have(1).item
@@ -225,6 +226,27 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
 
         it 'creates a test with correct meta_data' do
           expect(proforma_task.tests.first).to have_attributes(meta_data: test_meta_data)
+        end
+      end
+
+      context 'when test has configuration' do
+        let(:test_configuration) do
+          {
+            'unit:unittest' =>
+              {
+                '@xmlns' => {'unit' => 'urn:proforma:tests:unittest:v1.1'},
+                '@framework' => 'JUnit',
+                '@version' => '4.12',
+                'unit:entry-point' => {
+                  '@xmlns' => {'unit' => 'urn:proforma:tests:unittest:v1.1'},
+                  '$1' => 'reverse_task.MyStringTest',
+                },
+              },
+          }
+        end
+
+        it 'creates a test with correct configuration' do
+          expect(proforma_task.tests.first).to have_attributes(configuration: test_configuration)
         end
       end
 

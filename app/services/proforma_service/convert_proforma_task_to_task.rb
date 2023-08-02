@@ -77,6 +77,7 @@ module ProformaService
           internal_description: test.internal_description,
           test_type: test.test_type,
           meta_data: test.meta_data,
+          configuration: test.configuration,
           files: object_files(test)
         )
       end
