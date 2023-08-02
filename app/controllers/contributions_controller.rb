@@ -27,6 +27,17 @@ class ContributionsController < ApplicationController
     end
   end
 
+  def edit; end
+
+  def update
+    @task.assign_attributes(contrib_task_params)
+    if @task.save(context: :force_validations)
+      redirect_to @task, notice: t('tasks.notification.updated')
+    else
+      render :edit
+    end
+  end
+
   def new
     @task = Task.find(params[:task_id]).clean_duplicate(current_user, false)
     @task.parent_id = params[:task_id]
