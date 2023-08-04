@@ -9,10 +9,10 @@ module Bridges
       def show
         @task = Task.find(params[:id])
 
-        if @task.access_level_public? || @task.showable_by?(current_user)
+        if @task.lom_showable_by?(current_user)
           render xml: Nokogiri::XML::Builder.new(encoding: 'UTF-8') {|xml| sample_oml(xml) }
         else
-          render plain: 'Forbidden', status: :forbidden
+          render xml: Nokogiri::XML::Builder.new(encoding: 'UTF-8') {|xml| xml.error 'Access Denied' }, status: :forbidden
         end
       end
 

@@ -122,6 +122,10 @@ class Task < ApplicationRecord
     user.nil? ? false : user.can?(:destroy, self)
   end
 
+  def lom_showable_by?(user)
+    access_level_public? || showable_by?(user)
+  end
+
   # TODO: Find a better name for the methods
   def in_same_group?(user)
     in_same_group_member?(user) || in_same_group_admin?(user)

@@ -25,6 +25,7 @@ RSpec.describe Task do
     it { is_expected.not_to be_able_to(:export_external_start, task) }
     it { is_expected.not_to be_able_to(:export_external_check, task) }
     it { is_expected.not_to be_able_to(:export_external_confirm, task) }
+    it { expect(task.lom_showable_by?(user)).to be false }
 
     context 'with a user' do
       let(:user) { create(:user) }
@@ -46,11 +47,15 @@ RSpec.describe Task do
       it { is_expected.not_to be_able_to(:export_external_check, task) }
       it { is_expected.not_to be_able_to(:export_external_confirm, task) }
 
+      it { expect(task.lom_showable_by?(user)).to be false }
+
       context 'when user is admin' do
         let(:user) { create(:admin) }
 
         it { is_expected.to be_able_to(:manage, described_class) }
         it { is_expected.to be_able_to(:manage, task) }
+
+        it { expect(task.lom_showable_by?(user)).to be true }
       end
 
       context 'when task is from user' do
@@ -70,6 +75,8 @@ RSpec.describe Task do
 
         it { is_expected.to be_able_to(:update, task) }
         it { is_expected.to be_able_to(:destroy, task) }
+
+        it { expect(task.lom_showable_by?(user)).to be true }
       end
 
       context 'when task has access_level "public"' do
@@ -84,6 +91,8 @@ RSpec.describe Task do
 
         it { is_expected.not_to be_able_to(:update, task) }
         it { is_expected.not_to be_able_to(:destroy, task) }
+
+        it { expect(task.lom_showable_by?(user)).to be true }
       end
 
       context 'when task is "private" and in same group' do
@@ -97,6 +106,8 @@ RSpec.describe Task do
         it { is_expected.to be_able_to(:update, task) }
         it { is_expected.to be_able_to(:duplicate, task) }
         it { is_expected.not_to be_able_to(:destroy, task) }
+
+        it { expect(task.lom_showable_by?(user)).to be true }
 
         context 'when user is group-admin' do
           let(:role) { :admin }

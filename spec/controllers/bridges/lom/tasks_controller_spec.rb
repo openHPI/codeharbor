@@ -9,7 +9,7 @@ RSpec.describe Bridges::Lom::TasksController do
   let(:programming_language) { create(:programming_language, :ruby) }
   let(:license) { create(:license) }
   let(:parent_uuid) { create(:task).uuid }
-  let(:task) { create(:task, :with_content, :with_labels, user:, parent_uuid:, programming_language:, license:, access_level:) }
+  let(:task) { create(:task, :with_content, :with_labels, user:, parent_uuid:, programming_language:, license:) }
 
   describe 'GET #show' do
     subject(:get_request) { get :show, params: {id: task.to_param} }
@@ -26,73 +26,27 @@ RSpec.describe Bridges::Lom::TasksController do
       end
     end
 
-    context 'without being signed in' do
-      context 'when task is public' do
-        let(:access_level) { :public }
+    context 'when allowed to access the LOM' do
+      before { allow(task).to receive(:lom_showable_by?).and_return(true) }
 
-        include_examples 'is a valid LOM response'
-      end
-
-      context 'when task is private' do
-        let(:access_level) { :private }
-
-        it 'returns HTTP forbidden' do
-          get_request
-          expect(response).to have_http_status :forbidden
-        end
+      it 'returns valid LOM xml' do
+        get_request
+        schema = Nokogiri::XML::Schema(File.read(Bridges::Lom::TasksController::OML_SCHEMA_PATH))
+        expect(schema.validate(Nokogiri::XML(response.body))).to be_empty
       end
     end
 
-    context 'when signed in as owner of the task' do
-      before { sign_in user }
+    context 'when not allowed to access the LOM' do
+      before { allow(task).to receive(:lom_showable_by?).and_return(false) }
 
-      context 'when task is public' do
-        let(:access_level) { :public }
-
-        include_examples 'is a valid LOM response'
+      it 'returns HTTP forbidden' do
+        get_request
+        expect(response).to have_http_status :forbidden
       end
-
-      context 'when task is private' do
-        let(:access_level) { :private }
-
-        include_examples 'is a valid LOM response'
-      end
-    end
-
-    context 'when signed in user is not owner of the task' do
-      before { sign_in create(:user) }
-
-      context 'when task is public' do
-        let(:access_level) { :public }
-
-        include_examples 'is a valid LOM response'
-      end
-
-      context 'when task is private' do
-        let(:access_level) { :private }
-
-        it 'returns HTTP forbidden' do
-          get_request
-          expect(response).to have_http_status :forbidden
-        end
-      end
-    end
-
-    context 'when signed in as a group member' do
-      let(:group_member) { create(:user) }
-      let(:access_level) { :private }
-      let(:group_memberships) { [build(:group_membership, :with_admin), build(:group_membership, user: group_member)] }
-
-      before do
-        create(:group, group_memberships:, tasks: [task])
-        sign_in group_member
-      end
-
-      include_examples 'is a valid LOM response'
     end
 
     context 'with additional details' do
-      let(:access_level) { :public }
+      before { allow(task).to receive(:lom_showable_by?).and_return(true) }
 
       context 'when no license is specified' do
         let(:license) { nil }
