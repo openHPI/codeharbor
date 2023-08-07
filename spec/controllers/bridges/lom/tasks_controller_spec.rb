@@ -26,14 +26,12 @@ RSpec.describe Bridges::Lom::TasksController do
       end
     end
 
+    before { allow(Task).to receive(:find).with(task.id.to_s).and_return(task) }
+
     context 'when allowed to access the LOM' do
       before { allow(task).to receive(:lom_showable_by?).and_return(true) }
 
-      it 'returns valid LOM xml' do
-        get_request
-        schema = Nokogiri::XML::Schema(File.read(Bridges::Lom::TasksController::OML_SCHEMA_PATH))
-        expect(schema.validate(Nokogiri::XML(response.body))).to be_empty
-      end
+      include_examples 'is a valid LOM response'
     end
 
     context 'when not allowed to access the LOM' do
