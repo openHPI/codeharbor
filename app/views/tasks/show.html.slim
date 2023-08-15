@@ -18,7 +18,7 @@
           .rating-dropdown
             .btn.btn-sm#rate
               => t('exercises.rate')
-              span.caret
+              span.fa.fa-caret-down
             .popup-rating
               .rating data-task-id=@task.id
                 - if @user_rating
