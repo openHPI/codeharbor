@@ -144,7 +144,7 @@ $exercise-color: #006600;
 }
 
 .popup-rating {
-  width: 120px;
+  width: 140px;
   height: 40px;
   display: none;
   background-color: white;
@@ -158,6 +158,7 @@ $exercise-color: #006600;
 
   .rating {
     z-index: 1;
+    text-align: center;
   }
 }
 
