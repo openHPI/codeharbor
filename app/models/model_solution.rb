@@ -2,6 +2,7 @@
 
 class ModelSolution < ApplicationRecord
   include TransferValues
+  include ParentValidation
 
   belongs_to :task
   has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy
@@ -12,7 +13,7 @@ class ModelSolution < ApplicationRecord
   # one can create a **new task** with a test that has the same xml_id as another test of the same task.
   # TODO: This validation is currently useless on new records, because the uuid is generated after validation
   validates :xml_id, uniqueness: {scope: :task_id}
-
+  validate :validate_file_parent_ids
   def duplicate
     dup.tap do |model_solution|
       model_solution.files = files.map(&:duplicate)
