@@ -3,6 +3,7 @@
 class Test < ApplicationRecord
   include FileConcern
   include TransferValues
+  include ParentValidation
 
   belongs_to :task, autosave: true, inverse_of: :tests
   belongs_to :testing_framework, optional: true
@@ -13,6 +14,7 @@ class Test < ApplicationRecord
   # before the task is saved (and thus the task_id is not yet known, i.e., is NULL). Therefore,
   # one can create a **new task** with a test that has the same xml_id as another test of the same task.
   validates :xml_id, uniqueness: {scope: :task_id}
+  validate :validate_file_parent_ids
 
   def configuration_as_xml
     Dachsfisch::JSON2XMLConverter.perform(json: configuration.to_json)
