@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/openHPI/dachsfisch.git
-  revision: a167274cf4480de84ac41fb38c5006ae60c0ac1b
+  revision: cec87e7caf79ffbd7dd84171cff08a43102d25fd
   specs:
     dachsfisch (0.1.0)
-      nokogiri (>= 1.14.1, < 1.16.0)
+      nokogiri (>= 1.14.1, < 2.0.0)
 
 GIT
   remote: https://github.com/openHPI/proforma.git
