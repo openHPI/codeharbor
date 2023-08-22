@@ -1,5 +1,5 @@
 # CodeHarbor
-CodeHarbor is a repository system for automatically gradeable programming exercises and enables instructors to exchange of such exxercises via the [ProFormA XML](https://github.com/ProFormA/proformaxml) format across diverse code assessment systems.
+CodeHarbor is a repository system for automatically gradeable programming exercises and enables instructors to exchange of such exercises via the [ProFormA XML](https://github.com/ProFormA/proformaxml) format across diverse code assessment systems.
 
 
 ## Current Status on `master`

@@ -10,7 +10,7 @@ module ProformaService
 
     def execute
       if single_task?
-        importer = Proforma::Importer.new(zip: @zip)
+        importer = ProformaXML::Importer.new(zip: @zip)
         import_result = importer.perform
         ProformaService::ImportTask.call(proforma_task: import_result[:task], user: @user)
       else
@@ -50,7 +50,7 @@ module ProformaService
 
       filenames.any? {|f| f[/\.xml$/] }
     rescue Zip::Error
-      raise Proforma::InvalidZip
+      raise ProformaXML::InvalidZip
     end
   end
 end

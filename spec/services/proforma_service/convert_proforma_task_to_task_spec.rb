@@ -6,7 +6,7 @@ describe ProformaService::ConvertProformaTaskToTask do
   describe '.new' do
     subject(:convert_to_task_service) { described_class.new(proforma_task:, user:, task:) }
 
-    let(:proforma_task) { Proforma::Task.new }
+    let(:proforma_task) { ProformaXML::Task.new }
     let(:user) { build(:user) }
     let(:task) { build(:task) }
 
@@ -27,7 +27,7 @@ describe ProformaService::ConvertProformaTaskToTask do
     subject(:convert_to_task_service) { described_class.call(proforma_task:, user:, task:) }
 
     let(:proforma_task) do
-      Proforma::Task.new(
+      ProformaXML::Task.new(
         title: 'title',
         description:,
         internal_description: 'internal_description',
@@ -97,7 +97,7 @@ describe ProformaService::ConvertProformaTaskToTask do
     context 'when proforma_task has a file' do
       let(:files) { [file] }
       let(:file) do
-        Proforma::TaskFile.new(
+        ProformaXML::TaskFile.new(
           id: 'id',
           content:,
           filename: 'filename.txt',
@@ -175,7 +175,7 @@ describe ProformaService::ConvertProformaTaskToTask do
       end
 
       context 'when file is a model-solution-placeholder (needed by proforma until issue #5 is resolved)' do
-        let(:file) { Proforma::TaskFile.new(id: 'ms-placeholder-file') }
+        let(:file) { ProformaXML::TaskFile.new(id: 'ms-placeholder-file') }
 
         it 'leaves files empty' do
           expect(convert_to_task_service.files).to be_empty
@@ -186,7 +186,7 @@ describe ProformaService::ConvertProformaTaskToTask do
     context 'when proforma_task has a model-solution' do
       let(:model_solutions) { [model_solution] }
       let(:model_solution) do
-        Proforma::ModelSolution.new(
+        ProformaXML::ModelSolution.new(
           id: 'ms-id',
           description: 'description',
           internal_description: 'internal-description',
@@ -195,7 +195,7 @@ describe ProformaService::ConvertProformaTaskToTask do
       end
       let(:ms_files) { [ms_file] }
       let(:ms_file) do
-        Proforma::TaskFile.new(
+        ProformaXML::TaskFile.new(
           id: 'ms-file',
           content: 'content',
           filename: 'filename.txt',
@@ -226,7 +226,7 @@ describe ProformaService::ConvertProformaTaskToTask do
       end
 
       context 'when proforma_task has two model-solutions' do
-        let(:model_solutions) { [model_solution, Proforma::ModelSolution.new(id: 'ms-id-2', files: [])] }
+        let(:model_solutions) { [model_solution, ProformaXML::ModelSolution.new(id: 'ms-id-2', files: [])] }
 
         it 'creates a task with two model-solutions' do
           expect(convert_to_task_service.model_solutions).to have(2).items
@@ -245,7 +245,7 @@ describe ProformaService::ConvertProformaTaskToTask do
     context 'when proforma_task has a test' do
       let(:tests) { [test] }
       let(:test) do
-        Proforma::Test.new(
+        ProformaXML::Test.new(
           id: 'test-id',
           title: 'title',
           description: 'description',
@@ -259,7 +259,7 @@ describe ProformaService::ConvertProformaTaskToTask do
       let(:test_meta_data) {}
       let(:test_files) { [test_file] }
       let(:test_file) do
-        Proforma::TaskFile.new(
+        ProformaXML::TaskFile.new(
           id: 'test_file_id',
           content: 'testfile-content',
           filename: 'testfile.txt',
@@ -303,7 +303,7 @@ describe ProformaService::ConvertProformaTaskToTask do
       context 'when test has multiple files' do
         let(:test_files) { [test_file, test_file2] }
         let(:test_file2) do
-          Proforma::TaskFile.new(
+          ProformaXML::TaskFile.new(
             id: 'test_file2_id',
             content: 'testfile2-content',
             filename: 'testfile2.txt',
@@ -351,11 +351,11 @@ describe ProformaService::ConvertProformaTaskToTask do
       context 'when proforma_task has multiple tests' do
         let(:tests) { [test, test2] }
         let(:test2) do
-          Proforma::Test.new(files: test_files2)
+          ProformaXML::Test.new(files: test_files2)
         end
         let(:test_files2) { [test_file2] }
         let(:test_file2) do
-          Proforma::TaskFile.new(
+          ProformaXML::TaskFile.new(
             id: 'test_file_id2',
             content: 'testfile-content',
             filename: 'testfile.txt',
@@ -410,7 +410,7 @@ describe ProformaService::ConvertProformaTaskToTask do
       context 'with file, model solution and test' do
         let(:files) { [file] }
         let(:file) do
-          Proforma::TaskFile.new(
+          ProformaXML::TaskFile.new(
             id: 'id',
             content: 'content',
             filename: 'filename.txt',
@@ -423,7 +423,7 @@ describe ProformaService::ConvertProformaTaskToTask do
         end
         let(:tests) { [test] }
         let(:test) do
-          Proforma::Test.new(
+          ProformaXML::Test.new(
             id: 'test-id',
             title: 'title',
             description: 'description',
@@ -434,7 +434,7 @@ describe ProformaService::ConvertProformaTaskToTask do
         end
         let(:test_files) { [test_file] }
         let(:test_file) do
-          Proforma::TaskFile.new(
+          ProformaXML::TaskFile.new(
             id: 'test_file_id',
             content: 'testfile-content',
             filename: 'testfile.txt',
@@ -447,7 +447,7 @@ describe ProformaService::ConvertProformaTaskToTask do
         end
         let(:model_solutions) { [model_solution] }
         let(:model_solution) do
-          Proforma::ModelSolution.new(
+          ProformaXML::ModelSolution.new(
             id: 'ms-id',
             description: 'ms-description',
             files: ms_files
@@ -455,7 +455,7 @@ describe ProformaService::ConvertProformaTaskToTask do
         end
         let(:ms_files) { [ms_file] }
         let(:ms_file) do
-          Proforma::TaskFile.new(
+          ProformaXML::TaskFile.new(
             id: 'ms-file',
             content: 'ms-content',
             filename: 'ms-filename.txt',

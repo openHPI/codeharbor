@@ -36,7 +36,7 @@ describe ProformaService::ProformaTaskFromCachedFile do
     let(:import_type) { 'import' }
 
     it 'returns a task' do
-      expect(task_from_cached_file).to be_a Proforma::Task
+      expect(task_from_cached_file).to be_a ProformaXML::Task
     end
 
     it 'sets the attributes of task' do

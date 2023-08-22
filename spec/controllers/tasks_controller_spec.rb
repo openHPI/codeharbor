@@ -771,7 +771,7 @@ RSpec.describe TasksController do
     end
 
     context 'when import fails with ProformaError' do
-      before { allow(ProformaService::Import).to receive(:call).and_raise(Proforma::PreImportValidationError) }
+      before { allow(ProformaService::Import).to receive(:call).and_raise(ProformaXML::PreImportValidationError) }
 
       it 'responds with correct status code' do
         post_request

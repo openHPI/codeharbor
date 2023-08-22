@@ -102,7 +102,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
       message: t('controllers.task.import.successfully_imported', title: task_title),
       actions: render_to_string(partial: 'import_actions', locals: {task: proforma_task, imported: true}),
     }
-  rescue Proforma::ProformaError, ActiveRecord::RecordInvalid => e
+  rescue ProformaXML::ProformaError, ActiveRecord::RecordInvalid => e
     render json: {
       status: 'failure',
       message: t('controllers.task.import.import_failed', title: task_title, error: e.message),
@@ -128,7 +128,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     ProformaService::Import.call(zip: tempfile, user:)
 
     render json: t('controllers.exercise.import_proforma_xml.success'), status: :created
-  rescue Proforma::ProformaError
+  rescue ProformaXML::ProformaError
     render json: t('controllers.exercise.import_proforma_xml.invalid'), status: :bad_request
   rescue StandardError => e
     Sentry.capture_exception(e)

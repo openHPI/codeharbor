@@ -1,21 +1,3 @@
-GIT
-  remote: https://github.com/openHPI/dachsfisch.git
-  revision: c74d5a3d74685a0838d369fe3dcbbb9166d50a5b
-  specs:
-    dachsfisch (0.1.0)
-      nokogiri (>= 1.14.1, < 2.0.0)
-
-GIT
-  remote: https://github.com/openHPI/proforma.git
-  revision: 10642d8d4ec27e0bdaa27482dac6b6c7e47bc660
-  tag: v0.9.1
-  specs:
-    proforma (0.9.1)
-      activemodel (>= 5.2.3, < 8.0.0)
-      activesupport (>= 5.2.3, < 8.0.0)
-      nokogiri (>= 1.10.2, < 2.0.0)
-      rubyzip (>= 1.2.2, < 3.0.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -135,6 +117,8 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
+    dachsfisch (0.1.0)
+      nokogiri (>= 1.14.1, < 2.0.0)
     database_cleaner (2.0.2)
       database_cleaner-active_record (>= 2, < 3)
     database_cleaner-active_record (2.1.0)
@@ -328,6 +312,12 @@ GEM
       ast (~> 2.4.1)
       racc
     pg (1.5.3)
+    proformaxml (0.10.0)
+      activemodel (>= 5.2.3, < 8.0.0)
+      activesupport (>= 5.2.3, < 8.0.0)
+      dachsfisch (>= 0.1.0, < 1.0.0)
+      nokogiri (>= 1.10.2, < 2.0.0)
+      rubyzip (>= 1.2.2, < 3.0.0)
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -571,7 +561,6 @@ DEPENDENCIES
   coffee-rails (>= 5.0.0)
   concurrent-ruby
   config
-  dachsfisch!
   database_cleaner
   devise (~> 4.9)
   devise-bootstrap-views (~> 1.0)
@@ -603,7 +592,7 @@ DEPENDENCIES
   omniauth-rails_csrf_protection (~> 1.0)
   omniauth-saml (~> 2.0)
   pg (>= 0.18, < 2.0)
-  proforma!
+  proformaxml
   pry-byebug
   pry-rails
   puma
