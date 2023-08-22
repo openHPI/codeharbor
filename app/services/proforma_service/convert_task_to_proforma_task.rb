@@ -15,7 +15,7 @@ module ProformaService
     private
 
     def create_task
-      Proforma::Task.new(
+      ProformaXML::Task.new(
         {
           title: @task.title,
           description:,
@@ -44,7 +44,7 @@ module ProformaService
 
     def model_solutions
       @task.model_solutions.map do |model_solution|
-        Proforma::ModelSolution.new(
+        ProformaXML::ModelSolution.new(
           id: model_solution.xml_id,
           description: model_solution.description,
           internal_description: model_solution.internal_description,
@@ -57,7 +57,7 @@ module ProformaService
 
     def tests
       @task.tests.map do |test|
-        Proforma::Test.new(
+        ProformaXML::Test.new(
           id: test.xml_id,
           title: test.title,
           description: test.description,
@@ -71,7 +71,7 @@ module ProformaService
     end
 
     def task_file(file)
-      task_file = Proforma::TaskFile.new(
+      task_file = ProformaXML::TaskFile.new(
         id: file.xml_id,
         filename: file.full_file_name,
         used_by_grader: file.used_by_grader || false,

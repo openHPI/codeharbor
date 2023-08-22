@@ -6,7 +6,7 @@ describe ProformaService::ImportTask do
   describe '.new' do
     subject(:import_proforma_task) { described_class.new(proforma_task:, user:) }
 
-    let(:proforma_task) { Proforma::Task.new }
+    let(:proforma_task) { ProformaXML::Task.new }
     let(:user) { build(:user) }
 
     it 'assigns proforma_task' do
@@ -35,7 +35,7 @@ describe ProformaService::ImportTask do
     end
 
     context 'when proforma_task does not provide valid information' do
-      let(:proforma_task) { Proforma::Task.new }
+      let(:proforma_task) { ProformaXML::Task.new }
 
       it 'does not create an task in db' do
         expect { import_proforma_task }.to raise_error(ActiveRecord::RecordInvalid).and(avoid_change(Task, :count))
@@ -86,7 +86,7 @@ describe ProformaService::ImportTask do
       end
 
       context 'when proforma_task does not provide valid information' do
-        let(:proforma_task) { Proforma::Task.new(uuid: task.uuid) }
+        let(:proforma_task) { ProformaXML::Task.new(uuid: task.uuid) }
 
         it 'does not create an task in db' do
           expect { import_proforma_task }.to raise_error(ActiveRecord::RecordInvalid).and(avoid_change(Task, :count))

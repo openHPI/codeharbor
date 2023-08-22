@@ -11,7 +11,7 @@ module ProformaService
     def execute
       @proforma_task = ConvertTaskToProformaTask.call(task: @task, options: @options)
       namespaces = [{prefix: 'CodeOcean', uri: 'codeocean.openhpi.de'}]
-      exporter = Proforma::Exporter.new(task: @proforma_task, custom_namespaces: namespaces)
+      exporter = ProformaXML::Exporter.new(task: @proforma_task, custom_namespaces: namespaces)
       exporter.perform
     end
   end

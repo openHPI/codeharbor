@@ -59,7 +59,6 @@ gem 'twitter-bootstrap-rails'
 gem 'ace-rails-ap'
 gem 'acts-as-taggable-on', '~> 9.0'
 gem 'config'
-gem 'dachsfisch', github: 'openHPI/dachsfisch'
 gem 'faraday'
 gem 'font-awesome-rails', '>= 4.7.0.5'
 gem 'image_processing'
@@ -71,7 +70,7 @@ gem 'net-imap', require: false
 gem 'net-pop', require: false
 gem 'net-smtp', require: false
 gem 'nokogiri'
-gem 'proforma', github: 'openHPI/proforma', tag: 'v0.9.1'
+gem 'proformaxml'
 gem 'rails_admin', '~> 3.1'
 gem 'ransack'
 gem 'select2-rails', '~> 4.0'

@@ -20,7 +20,7 @@ module ProformaService
 
     def execute
       if xml_present?
-        importer = Proforma::Importer.new(zip: @zip_file)
+        importer = ProformaXML::Importer.new(zip: @zip_file)
         result = importer.perform
         task = result[:task]
         tasks = [{path: @path, uuid: task.uuid, task:}]
