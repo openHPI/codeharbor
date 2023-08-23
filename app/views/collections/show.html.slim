@@ -1,8 +1,8 @@
-.header
+.header.p-4
   .std-heading
     i.fa.fa-folder-open
     =< @collection.title
-.collection-content
+.collection-content.px-4
   - if @user
     label.form-label
       = t('collections.show.shared_by')
@@ -41,7 +41,7 @@
               = link_to remove_task_collection_path(@collection, task: task), method: :patch, class: 'pull-right' do
                 i.fa.fa-remove style=("color: #800000; font-size: 20px;")
 br
-.actions.btn-group[role="group"]
+.actions.px-4.btn-group[role="group"]
   - if @user
     = link_to t('collections.show.collaborate'), save_shared_collection_path(@collection), method: 'post', class: 'btn btn-important'
     = link_to t('collections.button.back'), user_messages_path(current_user), class: 'btn btn-important'
