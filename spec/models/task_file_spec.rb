@@ -117,4 +117,37 @@ RSpec.describe TaskFile do
       it { is_expected.to be true }
     end
   end
+
+  describe '#task' do
+    subject(:task_result) { task_file.task }
+
+    let(:task) { create(:task) }
+    let(:fileable_object) { nil }
+    let(:fileable) { fileable_object }
+    let(:task_file) { create(:task_file, fileable:) }
+
+    context 'when fileable is Task' do
+      let(:fileable_object) { task }
+
+      it 'returns task' do
+        expect(task_result).to eq(task)
+      end
+    end
+
+    context 'when fileable is ModelSolution' do
+      let(:fileable_object) { create(:model_solution, task:) }
+
+      it 'returns task' do
+        expect(task_result).to eq(task)
+      end
+    end
+
+    context 'when fileable is Test' do
+      let(:fileable_object) { create(:test, task:) }
+
+      it 'returns task' do
+        expect(task_result).to eq(task)
+      end
+    end
+  end
 end
