@@ -7,6 +7,37 @@ RSpec.describe ModelSolution do
     it { is_expected.to belong_to(:task) }
     it { is_expected.to validate_presence_of(:xml_id) }
     it { is_expected.to validate_uniqueness_of(:xml_id).scoped_to(:task_id) }
+
+    context 'when it has a parent' do
+      let(:task) { create(:task, parent_uuid: p_uuid) }
+      let(:parent_task) { create(:task) }
+      let(:p_uuid) { nil }
+      let!(:parent_model_solution) { create(:model_solution, task: parent_task) }
+      let(:model_solution) { build(:model_solution, task:, parent_id: parent_model_solution.id) }
+
+
+      context 'when task has no parent' do
+        it 'is not valid' do
+          expect(model_solution).not_to be_valid
+        end
+      end
+
+      context 'when task has different parent' do
+        let(:p_uuid){ create(:task).uuid }
+
+        it 'is not valid' do
+          expect(model_solution).not_to be_valid
+        end
+      end
+
+      context 'when task has matching parent' do
+        let(:p_uuid) { parent_task.uuid }
+
+        it 'is valid' do
+          expect(model_solution).to be_valid
+        end
+      end
+    end
   end
 
   describe '#duplicate' do
