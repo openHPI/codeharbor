@@ -269,11 +269,13 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   end
 
   def file_params
-    %i[id content attachment path name internal_description mime_type use_attached_file used_by_grader visible usage_by_lms xml_id _destroy parent_id]
+    %i[id content attachment path name internal_description mime_type use_attached_file used_by_grader visible usage_by_lms xml_id _destroy
+       parent_id]
   end
 
   def test_params
-    [:id, :title, :testing_framework_id, :description, :internal_description, :test_type, :xml_id, :validity, :timeout, :_destroy, :parent_id, {files_attributes: file_params}]
+    [:id, :title, :testing_framework_id, :description, :internal_description, :test_type, :xml_id, :validity, :timeout, :_destroy,
+     :parent_id, {files_attributes: file_params}]
   end
 
   def model_solution_params

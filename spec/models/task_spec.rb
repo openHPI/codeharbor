@@ -361,4 +361,65 @@ RSpec.describe Task do
       end
     end
   end
+
+  describe '#parent' do
+    subject(:parent) { task.parent }
+
+    let(:task) { create(:task, parent_uuid: p_uuid) }
+    let(:p_uuid) { nil }
+    let(:parent_task) { create(:task) }
+
+    context 'when task has no parent' do
+      it 'returns nil' do
+        expect(parent).to be_nil
+      end
+    end
+
+    context 'when task has an unknown parent_uuid' do
+      let(:p_uuid) { :invalid }
+
+      it 'returns nil' do
+        expect(parent).to be_nil
+      end
+    end
+
+    context 'when task has a valid parent_uuid' do
+      let(:p_uuid) { parent_task.uuid }
+
+      it 'returns the parent_task' do
+        expect(parent).to eq(parent_task)
+      end
+    end
+  end
+
+  describe '#parent_of?' do
+    subject(:parent_of) { parent_task.parent_of?(task) }
+
+    let(:task) { create(:task, parent_uuid: p_uuid) }
+    let(:p_uuid) { nil }
+    let(:parent_task) { create(:task) }
+
+    context 'when task has no parent' do
+      it 'returns false' do
+        expect(parent_of).to be(false)
+      end
+    end
+
+    context 'when task has different parent' do
+      let(:other_task) { create(:task) }
+      let(:p_uuid) { other_task.uuid }
+
+      it 'returns false' do
+        expect(parent_of).to be(false)
+      end
+    end
+
+    context 'when parent_task is parent' do
+      let(:p_uuid) { parent_task.uuid }
+
+      it 'returns true' do
+        expect(parent_of).to be(true)
+      end
+    end
+  end
 end
