@@ -19,7 +19,9 @@ class Task < ApplicationRecord
 
   validates :language, format: {with: /\A[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*\z/, message: :not_de_or_us}
   validate :primary_language_tag_in_iso639?
-  validate :validate_file_parent_ids
+  validate :unique_pending_contribution
+  validates :parent, presence: true, if: -> { contribution? }
+  validate :no_license_change_on_duplicate, on: :update
 
   has_many :group_tasks, dependent: :destroy
   has_many :groups, through: :group_tasks
@@ -147,26 +149,11 @@ class Task < ApplicationRecord
   end
 
   def parent
-    parent_uuid.nil? ? nil : Task.find_by(uuid: parent_uuid)
+    parent_uuid.nil? ? nil : Task.find_by(uuid: parent_uuid).presence
   end
 
-  def validate_parent
-    org_ids = []
-    own_ids = []
-    parent_entry = parent
-    parent_entry & [:model_solutions].each do |solution|
-      org_ids.append(solution.id)
-    end
-    model_solutions.each do |solution|
-      if own_ids.include?(solution.parent_id)
-        errors.add(:parent_id, :duplicate)
-      else
-        own_ids.append(solution.parent_id)
-      end
-      unless org_ids.include?(solution.parent_id)
-        errors.add(:parent_id, :invalid)
-      end
-    end
+  def parent_of?(child)
+    child.parent_uuid.nil? ? false : uuid == child.parent_uuid
   end
 
   def initialize_derivate(user = nil)
