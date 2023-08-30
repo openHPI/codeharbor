@@ -2,7 +2,7 @@
   .card style=("margin-top: 40px")
     .card-body
       .row
-        .col-md-10
+        .col-md-12
           h3 style=("color: #777777")
             = 'You do not have groups yet'
           br
@@ -11,7 +11,7 @@
           br
           br
 - @groups.each do |group|
-  .card.m-3
+  .card.my-4
     .card-header
       h6
         span= group.name
@@ -23,10 +23,9 @@
               = group.confirmed_member?(current_user) ? t('groups.member_label') : t('groups.pending_label')
     .card-body
       .row.px-2
-        .col-md-9 style=("overflow-wrap: break-word;")
+        .col-md-12 style=("overflow-wrap: break-word;")
           - if group.description
             = group.description
-        .col-md-3
           .btn-group.pull-right aria-label="..." role="group"
             - if can? :view, group
               = link_to 'Show', group, class: 'btn btn-light'

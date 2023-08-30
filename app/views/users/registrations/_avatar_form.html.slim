@@ -1,4 +1,4 @@
-.form-group
+.form-group.field-element
   = f.label :avatar, class: 'form-label'
   = f.hidden_field :avatar_present, value: f.object.avatar.attached?, class: 'hidden-avatar-present'
   - if f.object.avatar.attached?

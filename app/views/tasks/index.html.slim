@@ -2,7 +2,7 @@
   = hidden_field_tag 'visibility', @visibility
   = hidden_field_tag 'page', 1, {id: 'override-page', disabled: true}
 
-  .nav-container.py-3
+  .nav-container.mb-4
     .row
       .col-md-12
         .btn-group[role="group"]
@@ -25,7 +25,7 @@
                   = label_tag 'task_import', t('controllers.task.import.choose_file'), id: 'file-label', class: 'btn btn-light'
                   = submit_tag t('controllers.task.import.label'), id: 'import-task-button', class: 'btn btn-light'        
 
-  .search-container.pt-5
+  .search-container.mb-3.py-4
     .input-group
       = f.search_field 'fulltext_search', class: 'form-control ransack-filter input-field-tag', placeholder: t('tasks.index.search.placeholder')
       = f.submit t('tasks.index.search.label'), class: 'btn btn-light search-submit-button-tag'

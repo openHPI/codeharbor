@@ -70,9 +70,10 @@ html.h-100
 
       - if @index
         .container
-          .col-md-12
-            = yield
-          = yield :modals
+          .row
+            .col-md-12
+              = yield
+            = yield :modals
       - else
         .container
           #flash-message
@@ -85,11 +86,12 @@ html.h-100
                   = flash[:notice]
               - else
                 = content_tag :div, msg, :id => "flash_#{name}"
-          .col-md-12 style=("margin-top: 50px")
-            = yield
+          .row
+            .col-md-12.p-4 style=("margin-top: 50px")
+              = yield
         = yield :modals
 
-    #footer.footer.mt-auto.py-3
+    #footer.footer.py-3.mt-auto
       .container
         .row
           .col-md-6

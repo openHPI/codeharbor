@@ -1,13 +1,13 @@
 - if @tasks.empty?
   - if Task.visibility(:owner, current_user).empty? && (@option == :owner)
-    .card.mt-5
+    .card.my-4
       .card-body
         .col-md-10
           h3.text-muted
             = t('tasks.index.search.no_tasks')
           p style=("color: #777777")
   - else
-    .card.mt-5
+    .card.my-4
       .card-body
         .col-md-10
           h3.text-muted
@@ -15,7 +15,7 @@
           p style=("color: #777777")
             = t('tasks.index.search.no_results_description')
 - @tasks.each do |task|
-  .card.my-5
+  .card.my-4
     .card-header
       h6
         span.align-middle data-toggle="tooltip" data-placement="bottom" title="#{task.title}"
