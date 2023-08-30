@@ -1,24 +1,25 @@
 = form_for :message, url: user_messages_path(@user) do |f|
-  - if @message.errors.any?
-    #error_explanation
-      h2
-        = pluralize(@message.errors.count, t('error'))
-        = t('comments.errorMessage')
-      ul
-        - @message.errors.full_messages.each do |message|
-          li= message
-  - if @recipient
-    = f.hidden_field :recipient_hidden, value: @recipient.id
-  - else
+  .mt-5
+    - if @message.errors.any?
+      #error_explanation
+        h2
+          = pluralize(@message.errors.count, t('error'))
+          = t('comments.errorMessage')
+        ul
+          - @message.errors.full_messages.each do |message|
+            li= message
+    - if @recipient
+      = f.hidden_field :recipient_hidden, value: @recipient.id
+    - else
+      .field-element
+        = f.label :recipient, t('message.recipient'), class: 'form-label'
+        = f.text_field :recipient, class: 'form-control'
     .field-element
-      = f.label :recipient, t('message.recipient'), class: 'form-label'
-      = f.text_field :recipient, class: 'form-control'
-  .field-element
-    = f.label :text, t('comments.text'), class: 'form-label'
-    = f.text_area :text, class: 'form-control'
-  br
-  .actions.btn-group role="group"
-    = button_tag type: 'submit', class: 'btn btn-important' do
-      i.fa.fa-envelope
-      = ' ' + t('message.send_message')
-    = link_to t('comments.button.cancel'), :back, class: 'btn btn-important'
+      = f.label :text, t('comments.text'), class: 'form-label'
+      = f.text_area :text, class: 'form-control'
+    br
+    .actions.btn-group role="group"
+      = button_tag type: 'submit', class: 'btn btn-important' do
+        i.fa.fa-envelope
+        = ' ' + t('message.send_message')
+      = link_to t('comments.button.cancel'), :back, class: 'btn btn-important'

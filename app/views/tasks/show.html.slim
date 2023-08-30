@@ -1,11 +1,10 @@
-.header.p-3
+.header
   .row
-    .col-md-8
+    .col-md-12
       .std-heading data-toggle="tooltip" data-placement="bottom" title="#{@task.title}"
         i.i.fa.fa-file-text-o style=("color: #008000")
         = ' '
         = truncate(@task.title, length: 100)
-    .col-md-4
       span.star-rating.pull-right style=("font-size: 2.0em")
         - [*1..5].each do |i|
           - if @task.average_rating >= i
@@ -31,292 +30,292 @@
                   - [*1..5].each do |i|
                     span.fa.fa-star-o data-rating=i
       /= render 'remove_state_tag', exercise: @task
-
-.container.px-0
-  legend.toggle-next
-    span.number = '1'
-    => t('exercises.form.basic_info')
-    span.fa.fa-caret-up
-  .show-table.exercise-show
-    .row
-      .col-auto.row-label
-        = t('exercises.title')
-        | :
-      .col.row-value data-bs-toggle="tooltip" data-bs-placement="bottom" title="#{@task.title}"
-        = truncate(@task.title, length: 120)
-
-    /- if @task_relation
+.row
+  .col-md-12.my-3
+    legend.toggle-next
+      span.number = '1'
+      => t('exercises.form.basic_info')
+      span.fa.fa-caret-up
+    .show-table.exercise-show
       .row
         .col-auto.row-label
-          = t('exercises.parent')
+          = t('exercises.title')
           | :
-        .col.row-value
-          - if @task_relation.origin
-            = link_to @task_relation.origin.title, exercise_path(@task_relation.origin)
-          - else
-            = t('exercises.parent_deleted')
+        .col.row-value data-bs-toggle="tooltip" data-bs-placement="bottom" title="#{@task.title}"
+          = truncate(@task.title, length: 120)
+
+      /- if @task_relation
+        .row
+          .col-auto.row-label
+            = t('exercises.parent')
+            | :
+          .col.row-value
+            - if @task_relation.origin
+              = link_to @task_relation.origin.title, exercise_path(@task_relation.origin)
+            - else
+              = t('exercises.parent_deleted')
+        .row
+          .col-auto.row-label
+            = t('exercises.relation')
+            | :
+          .col.row-value
+            = @task_relation.relation.name
+
       .row
         .col-auto.row-label
-          = t('exercises.relation')
+          = t('tasks.programming_language')
           | :
         .col.row-value
-          = @task_relation.relation.name
-
-    .row
-      .col-auto.row-label
-        = t('tasks.programming_language')
-        | :
-      .col.row-value
-        = @task.programming_language&.language_with_version || t('tasks.form.none')
-    .row.vertical
-      .col.row-label
-        = t('tasks.description')
-        | :
-      .row-value
-        = @task.description
-
-
-  legend.toggle-next.closed
-    span.number = '2'
-    => t('tasks.form.additional_info')
-    span.fa.fa-caret-down
-  .show-table.exercise-show style="display:none;"
-    .row.vertical
-      .col.row-label
-        = t('tasks.internal_description')
-        | :
-      .row-value
-        = @task.internal_description
-    - if @task.meta_data.present?
+          = @task.programming_language&.language_with_version || t('tasks.form.none')
       .row.vertical
         .col.row-label
-          = t('tasks.show.meta_data')
+          = t('tasks.description')
           | :
         .row-value
-          pre
-            = JSON.pretty_generate @task.meta_data
-    .row
-      .col-auto.row-label
-        = t('common.created_at')
-        | :
-      .col.row-value
-        = @task.created_at
-    .row
-      .col-auto.row-label
-        = t('common.created_by')
-        | :
-      - if !@task.user
+          = @task.description
+
+
+    legend.toggle-next.closed
+      span.number = '2'
+      => t('tasks.form.additional_info')
+      span.fa.fa-caret-down
+    .show-table.exercise-show style="display:none;"
+      .row.vertical
+        .col.row-label
+          = t('tasks.internal_description')
+          | :
+        .row-value
+          = @task.internal_description
+      - if @task.meta_data.present?
+        .row.vertical
+          .col.row-label
+            = t('tasks.show.meta_data')
+            | :
+          .row-value
+            pre
+              = JSON.pretty_generate @task.meta_data
+      .row
+        .col-auto.row-label
+          = t('common.created_at')
+          | :
         .col.row-value
-          = t('users.undefined')
-      - elsif @task.user == current_user
-        .col.row-value
-          = t('users.yourself')
-      - elsif @task.user.first_name.nil?
-        .col.row-value
-          = "User#{@task.user.id}"
-      - else
-        .col.row-value
-          = link_to @task.user.name, user_path(@task.user)
-    .row
-      .col-auto.row-label
-        = t('tasks.uuid')
-      .col.row-value
-        = @task.uuid
-    .row
-      .col-auto.row-label
-        = t('tasks.parent_uuid')
-      .col.row-value
-        = @task.parent_uuid
-    .row
-      .col-auto.row-label
-        = t('tasks.language')
-      .col.row-value
-        = @task.language
-    .row
-      .col-auto.row-label
-        = t('tasks.visibility.label')
-        | :
-      .col.row-value
-        = t("exercises.visibility.#{@task.access_level}")
-    .row
-      .col-auto.row-label
-        = t('tasks.labels')
-        | :
-      .col.row-value
-        - @task.labels.each do |label|
-          .task_label style=("background-color: #{'#' + label.color.to_s}; color: #{'#' + label.font_color.to_s};")
-            = label.name
-    .row
-      .col-auto.row-label
-        = t('tasks.groups')
-        | :
-      .col.row-value
-        - @task.groups.each_with_index do |group, index|
-          - if index > 0
-            = ', '
-          = link_to group.name, group_path(group)
-    .row
-      .col-auto.row-label
-        = t('tasks.show.license')
-        | :
-      .col.row-value
-        - if @task.license
-          = @task.license.name
-          = ': '
-          = link_to @task.license.link, @task.license.link
+          = @task.created_at
+      .row
+        .col-auto.row-label
+          = t('common.created_by')
+          | :
+        - if !@task.user
+          .col.row-value
+            = t('users.undefined')
+        - elsif @task.user == current_user
+          .col.row-value
+            = t('users.yourself')
+        - elsif @task.user.first_name.nil?
+          .col.row-value
+            = "User#{@task.user.id}"
         - else
-          = t('tasks.show.no_license')
-    /.row
-      .col-auto.row-label
-        = t('exercises.impact')
-        | :
-      .col.row-value
-        p.impact
-          = t('exercises.downloads')
-          = ': '
-          = @task.downloads.to_s
-        p.impact
-          = t('exercises.in_carts')
-          = ': '
-          = @task.in_carts
-        p.impact
-          = t('exercises.in_collections')
-          = ': '
-          = @task.in_collections
-
-  legend.toggle-next
-    span.number = '3'
-    => t('exercises.files.label')
-    span.fa.fa-caret-up
-  - if @files.empty?
-    p style="margin-left: 10px; margin-bottom: 30px"
-      = t('exercises.show.no_files')
-  .files
-    - @files.each do |file|
-      .show-table.exercise-show
-        .table-header.closed.toggle-next
-          = file.full_file_name
-          = ' '
-          span.fa.fa-caret-down
-        .file-content
-          .row
-            .col-auto.row-label
-              = t('tasks.files.name')
-              | :
-            .col.row-value
-              = file.name
-          .row
-            .col-auto.row-label
-              = t('tasks.files.path')
-              | :
-            .col.row-value
-              = file.path
-          .row
-            .col-auto.row-label
-              = t('tasks.files.internal_description')
-              | :
-            .col.row-value
-              = file.internal_description
-          .row
-            .col-auto.row-label
-              = t('tasks.files.xml_id')
-              | :
-            .col.row-value
-              = file.xml_id
-
-          - if !file.attachment.present?
-            .row
-              .editor.readonly data-file-name="#{file.name}"
-                = file.content
+          .col.row-value
+            = link_to @task.user.name, user_path(@task.user)
+      .row
+        .col-auto.row-label
+          = t('tasks.uuid')
+        .col.row-value
+          = @task.uuid
+      .row
+        .col-auto.row-label
+          = t('tasks.parent_uuid')
+        .col.row-value
+          = @task.parent_uuid
+      .row
+        .col-auto.row-label
+          = t('tasks.language')
+        .col.row-value
+          = @task.language
+      .row
+        .col-auto.row-label
+          = t('tasks.visibility.label')
+          | :
+        .col.row-value
+          = t("exercises.visibility.#{@task.access_level}")
+      .row
+        .col-auto.row-label
+          = t('tasks.labels')
+          | :
+        .col.row-value
+          - @task.labels.each do |label|
+            .task_label style=("background-color: #{'#' + label.color.to_s}; color: #{'#' + label.font_color.to_s};")
+              = label.name
+      .row
+        .col-auto.row-label
+          = t('tasks.groups')
+          | :
+        .col.row-value
+          - @task.groups.each_with_index do |group, index|
+            - if index > 0
+              = ', '
+            = link_to group.name, group_path(group)
+      .row
+        .col-auto.row-label
+          = t('tasks.show.license')
+          | :
+        .col.row-value
+          - if @task.license
+            = @task.license.name
+            = ': '
+            = link_to @task.license.link, @task.license.link
           - else
-            .row.vertical
-              .col.row-label
-                = t('exercises.files.attachment')
-                | :
-              .row-value
-                - if file.attachment.image?
-                  = image_tag(file.attachment.variant(resize_to_limit: [900, 900]))
-                - else
-                  = link_to file.attachment.filename, download_attachment_task_file_path(file), 'data-turbolinks': false
-          .row
-            .col-auto.row-label
-              = t('tasks.files.used_by_grader')
-              | :
-            .col.row-value
-              = file.used_by_grader
-          .row
-            .col-auto.row-label
-              = t('tasks.files.visible')
-              | :
-            .col.row-value
-              = file.visible
-          .row
-            .col-auto.row-label
-              = t('tasks.files.usage_by_lms')
-              | :
-            .col.row-value
-              = file.usage_by_lms
-          /.row
-            .col-auto.row-label
-              = t('exercises.files.extension')
-              | :
-            .col.row-value
-              = file.file_type.name_with_extension if file.file_type
-          /.row
-            .col-auto.row-label
-              = t('exercises.files.role')
-              | :
-            .col.row-value
-              = t("exercises.files.roles.#{file.role || 'none'}")
+            = t('tasks.show.no_license')
+      /.row
+        .col-auto.row-label
+          = t('exercises.impact')
+          | :
+        .col.row-value
+          p.impact
+            = t('exercises.downloads')
+            = ': '
+            = @task.downloads.to_s
+          p.impact
+            = t('exercises.in_carts')
+            = ': '
+            = @task.in_carts
+          p.impact
+            = t('exercises.in_collections')
+            = ': '
+            = @task.in_collections
 
-  legend.toggle-next
-    span.number = '4'
-    => t('exercises.tests.label')
-    span.fa.fa-caret-up
-  - if @tests.empty?
-    p style="margin-left: 10px; margin-bottom: 30px"
-      = t('exercises.show.no_tests')
-  .tests
-    - @tests.each do |test|
-      .show-table.exercise-show
-        .table-header.closed.toggle-next
-          = test.title
-          = ' '
-          span.fa.fa-caret-down
-        .test-content
-          .row
-            .col-auto.row-label
-              = t('tasks.tests.title')
-              | :
-            .col.row-value
-              = test.title
-          .row
-            .col-auto.row-label
-              = t('tasks.tests.framework')
+    legend.toggle-next
+      span.number = '3'
+      => t('exercises.files.label')
+      span.fa.fa-caret-up
+    - if @files.empty?
+      p style="margin-left: 10px; margin-bottom: 30px"
+        = t('exercises.show.no_files')
+    .files
+      - @files.each do |file|
+        .show-table.exercise-show
+          .table-header.closed.toggle-next
+            = file.full_file_name
+            = ' '
+            span.fa.fa-caret-down
+          .file-content
+            .row
+              .col-auto.row-label
+                = t('tasks.files.name')
+                | :
+              .col.row-value
+                = file.name
+            .row
+              .col-auto.row-label
+                = t('tasks.files.path')
+                | :
+              .col.row-value
+                = file.path
+            .row
+              .col-auto.row-label
+                = t('tasks.files.internal_description')
+                | :
+              .col.row-value
+                = file.internal_description
+            .row
+              .col-auto.row-label
+                = t('tasks.files.xml_id')
+                | :
+              .col.row-value
+                = file.xml_id
+
+            - if !file.attachment.present?
+              .row
+                .editor.readonly data-file-name="#{file.name}"
+                  = file.content
+            - else
+              .row.vertical
+                .col.row-label
+                  = t('exercises.files.attachment')
+                  | :
+                .row-value
+                  - if file.attachment.image?
+                    = image_tag(file.attachment.variant(resize_to_limit: [900, 900]))
+                  - else
+                    = link_to file.attachment.filename, download_attachment_task_file_path(file), 'data-turbolinks': false
+            .row
+              .col-auto.row-label
+                = t('tasks.files.used_by_grader')
+                | :
+              .col.row-value
+                = file.used_by_grader
+            .row
+              .col-auto.row-label
+                = t('tasks.files.visible')
+                | :
+              .col.row-value
+                = file.visible
+            .row
+              .col-auto.row-label
+                = t('tasks.files.usage_by_lms')
+                | :
+              .col.row-value
+                = file.usage_by_lms
+            /.row
+              .col-auto.row-label
+                = t('exercises.files.extension')
+                | :
+              .col.row-value
+                = file.file_type.name_with_extension if file.file_type
+            /.row
+              .col-auto.row-label
+                = t('exercises.files.role')
+                | :
+              .col.row-value
+                = t("exercises.files.roles.#{file.role || 'none'}")
+
+    legend.toggle-next
+      span.number = '4'
+      => t('exercises.tests.label')
+      span.fa.fa-caret-up
+    - if @tests.empty?
+      p style="margin-left: 10px; margin-bottom: 30px"
+        = t('exercises.show.no_tests')
+    .tests
+      - @tests.each do |test|
+        .show-table.exercise-show
+          .table-header.closed.toggle-next
+            = test.title
+            = ' '
+            span.fa.fa-caret-down
+          .test-content
+            .row
+              .col-auto.row-label
+                = t('tasks.tests.title')
+                | :
+              .col.row-value
+                = test.title
+            .row
+              .col-auto.row-label
+                = t('tasks.tests.framework')
                 | :
               .col.row-value
                 = test.testing_framework&.name_with_version || t('tasks.form.none')
             .row
               .col-auto.row-label
                 = t('tasks.tests.description')
-              | :
-            .col.row-value
-              = test.description
-          .row
-            .col-auto.row-label
-              = t('tasks.tests.internal_description')
-              | :
-            .col.row-value
-              = test.internal_description
-          - if test.meta_data.present?
-            .row.vertical
-              .col.row-label
-                = t('tasks.show.meta_data')
                 | :
-              .row-value
-                pre
-                  = JSON.pretty_generate test.meta_data
-          - if test.configuration.present?
+              .col.row-value
+                = test.description
+            .row
+              .col-auto.row-label
+                = t('tasks.tests.internal_description')
+                | :
+              .col.row-value
+                = test.internal_description
+            - if test.meta_data.present?
+              .row.vertical
+                .col.row-label
+                  = t('tasks.show.meta_data')
+                  | :
+                .row-value
+                  pre
+                    = JSON.pretty_generate test.meta_data
+            - if test.configuration.present?
               .row.vertical
                 .row-label
                   = t('tasks.show.configuration')
@@ -349,285 +348,285 @@
               .col.row-value
                 = test.timeout
 
-          .files-header
-            = label nil, t('tasks.files.label') + ':'
-          .files
-            - test.files.each do |file|
-              .show-table.exercise-show
-                .table-header.closed.toggle-next
-                  = file.full_file_name
-                  = ' '
-                  span.fa.fa-caret-down
-                .file-content
-                  .row
-                    .col-auto.row-label
-                      = t('tasks.files.name')
-                      | :
-                    .col.row-value
-                      = file.name
-                  .row
-                    .col-auto.row-label
-                      = t('tasks.files.path')
-                      | :
-                    .col.row-value
-                      = file.path
-                  .row
-                    .col-auto.row-label
-                      = t('tasks.files.internal_description')
-                      | :
-                    .col.row-value
-                      = file.internal_description
-                  .row
-                    .col-auto.row-label
-                      = t('tasks.files.xml_id')
-                      | :
-                    .col.row-value
-                      = file.xml_id
-                  - if !file.attachment.present?
-                    .row
-                      .editor.readonly data-file-name="#{file.name}"
-                        = file.content
-                  - else
-                    .row.vertical
-                      .col.row-label
-                        = t('exercises.files.attachment')
-                        | :
-                      .row-value
-                        - if file.attachment.image?
-                          = image_tag(file.attachment.variant(resize_to_limit: [900, 900]))
-                        - else
-                          = link_to file.attachment.filename, download_attachment_task_file_path(file), 'data-turbolinks': false
-                  .row
-                    .col-auto.row-label
-                      = t('tasks.files.used_by_grader')
-                      | :
-                    .col.row-value
-                      = file.used_by_grader
-                  .row
-                    .col-auto.row-label
-                      = t('tasks.files.visible')
-                      | :
-                    .col.row-value
-                      = file.visible
-                  .row
-                    .col-auto.row-label
-                      = t('tasks.files.usage_by_lms')
-                      | :
-                    .col.row-value
-                      = file.usage_by_lms
-
-  legend.toggle-next
-    span.number = '5'
-    => t('tasks.model_solution.plural')
-    span.fa.fa-caret-up
-  - if @model_solutions.empty?
-    p style="margin-left: 10px; margin-bottom: 30px"
-      = t('tasks.model_solution.none_present')
-  .model_solutions
-    - @model_solutions.each do |model_solution|
-      .show-table.exercise-show
-        .table-header.closed.toggle-next
-          = t('tasks.model_solution.singular')
-          = ' '
-          = @model_solutions.find_index(model_solution) + 1
-          = ' '
-          span.fa.fa-caret-down
-        .test-content
-          .row
-            .col-auto.row-label
-              = t('tasks.tests.description')
-              | :
-            .col.row-value
-              = model_solution.description
-          .row
-            .col-auto.row-label
-              = t('tasks.tests.internal_description')
-              | :
-            .col.row-value
-              = model_solution.internal_description
-          .row
-            .col-auto.row-label
-              = t('tasks.tests.xml_id')
-              | :
-            .col.row-value
-              = model_solution.xml_id
-
-          .files-header.my-1
-            strong
+            .files-header
               = label nil, t('tasks.files.label') + ':'
-          .files
-            - model_solution.files.each do |file|
-              .show-table.exercise-show
-                .table-header.closed.toggle-next
-                  = file.full_file_name
-                  = ' '
-                  span.fa.fa-caret-down
-                .file-content
-                  .row
-                    .col-auto.row-label
-                      = t('tasks.files.name')
-                      | :
-                    .col.row-value
-                      = file.name
-                  .row
-                    .col-auto.row-label
-                      = t('tasks.files.path')
-                      | :
-                    .col.row-value
-                      = file.path
-                  .row
-                    .col-auto.row-label
-                      = t('tasks.files.internal_description')
-                      | :
-                    .col.row-value
-                      = file.internal_description
-                  .row
-                    .col-auto.row-label
-                      = t('tasks.files.xml_id')
-                      | :
-                    .col.row-value
-                      = file.xml_id
-                  - if !file.attachment.present?
+            .files
+              - test.files.each do |file|
+                .show-table.exercise-show
+                  .table-header.closed.toggle-next
+                    = file.full_file_name
+                    = ' '
+                    span.fa.fa-caret-down
+                  .file-content
                     .row
-                      .editor.readonly data-file-name="#{file.name}"
-                        = file.content
-                  - else
-                    .row.vertical
-                      .col.row-label
-                        = t('exercises.files.attachment')
+                      .col-auto.row-label
+                        = t('tasks.files.name')
                         | :
-                      .row-value
-                        - if file.attachment.image?
-                          = image_tag(file.attachment.variant(resize_to_limit: [900, 900]))
-                        - else
-                          = link_to file.attachment.filename, download_attachment_task_file_path(file), 'data-turbolinks': false
-                  .row
-                    .col-auto.row-label
-                      = t('tasks.files.used_by_grader')
-                      | :
-                    .col.row-value
-                      = file.used_by_grader
-                  .row
-                    .col-auto.row-label
-                      = t('tasks.files.visible')
-                      | :
-                    .col.row-value
-                      = file.visible
-                  .row
-                    .col-auto.row-label
-                      = t('tasks.files.usage_by_lms')
-                      | :
-                    .col.row-value
-                      = file.usage_by_lms
-  .button-panel
-    .button-box
-      .button-description
-        = t('controllers.task.add_to_collection.hint')
-      .wrapper
-        /  = link_to t('exercises.show.add_to_cart'), add_to_cart_exercise_path(@task), method: 'post', class: 'btn btn-light'
-        .dropdown.btn-group
-          = button_tag class: 'btn btn-light dropdown-toggle', 'data-bs-toggle': 'dropdown' do
-            => t('tasks.show.add_to_collection')
-            span.caret
-          ul.scrollable.dropdown-menu[role="menu"]
-            - if !current_user.collections.empty?
-              - current_user.collections.each do |collection|
-                li
-                  = link_to collection.title, add_to_collection_task_path(collection: collection), method: 'post', class: 'dropdown-item'
-            - else
-              li
-                = link_to t('tasks.show.add_collection'), new_collection_path(current_user)
-    - if can? :export, Task
+                      .col.row-value
+                        = file.name
+                    .row
+                      .col-auto.row-label
+                        = t('tasks.files.path')
+                        | :
+                      .col.row-value
+                        = file.path
+                    .row
+                      .col-auto.row-label
+                        = t('tasks.files.internal_description')
+                        | :
+                      .col.row-value
+                        = file.internal_description
+                    .row
+                      .col-auto.row-label
+                        = t('tasks.files.xml_id')
+                        | :
+                      .col.row-value
+                        = file.xml_id
+                    - if !file.attachment.present?
+                      .row
+                        .editor.readonly data-file-name="#{file.name}"
+                          = file.content
+                    - else
+                      .row.vertical
+                        .col.row-label
+                          = t('exercises.files.attachment')
+                          | :
+                        .row-value
+                          - if file.attachment.image?
+                            = image_tag(file.attachment.variant(resize_to_limit: [900, 900]))
+                          - else
+                            = link_to file.attachment.filename, download_attachment_task_file_path(file), 'data-turbolinks': false
+                    .row
+                      .col-auto.row-label
+                        = t('tasks.files.used_by_grader')
+                        | :
+                      .col.row-value
+                        = file.used_by_grader
+                    .row
+                      .col-auto.row-label
+                        = t('tasks.files.visible')
+                        | :
+                      .col.row-value
+                        = file.visible
+                    .row
+                      .col-auto.row-label
+                        = t('tasks.files.usage_by_lms')
+                        | :
+                      .col.row-value
+                        = file.usage_by_lms
+
+    legend.toggle-next
+      span.number = '5'
+      => t('tasks.model_solution.plural')
+      span.fa.fa-caret-up
+    - if @model_solutions.empty?
+      p style="margin-left: 10px; margin-bottom: 30px"
+        = t('tasks.model_solution.none_present')
+    .model_solutions
+      - @model_solutions.each do |model_solution|
+        .show-table.exercise-show
+          .table-header.closed.toggle-next
+            = t('tasks.model_solution.singular')
+            = ' '
+            = @model_solutions.find_index(model_solution) + 1
+            = ' '
+            span.fa.fa-caret-down
+          .test-content
+            .row
+              .col-auto.row-label
+                = t('tasks.tests.description')
+                | :
+              .col.row-value
+                = model_solution.description
+            .row
+              .col-auto.row-label
+                = t('tasks.tests.internal_description')
+                | :
+              .col.row-value
+                = model_solution.internal_description
+            .row
+              .col-auto.row-label
+                = t('tasks.tests.xml_id')
+                | :
+              .col.row-value
+                = model_solution.xml_id
+
+            .files-header.my-1
+              strong
+                = label nil, t('tasks.files.label') + ':'
+            .files
+              - model_solution.files.each do |file|
+                .show-table.exercise-show
+                  .table-header.closed.toggle-next
+                    = file.full_file_name
+                    = ' '
+                    span.fa.fa-caret-down
+                  .file-content
+                    .row
+                      .col-auto.row-label
+                        = t('tasks.files.name')
+                        | :
+                      .col.row-value
+                        = file.name
+                    .row
+                      .col-auto.row-label
+                        = t('tasks.files.path')
+                        | :
+                      .col.row-value
+                        = file.path
+                    .row
+                      .col-auto.row-label
+                        = t('tasks.files.internal_description')
+                        | :
+                      .col.row-value
+                        = file.internal_description
+                    .row
+                      .col-auto.row-label
+                        = t('tasks.files.xml_id')
+                        | :
+                      .col.row-value
+                        = file.xml_id
+                    - if !file.attachment.present?
+                      .row
+                        .editor.readonly data-file-name="#{file.name}"
+                          = file.content
+                    - else
+                      .row.vertical
+                        .col.row-label
+                          = t('exercises.files.attachment')
+                          | :
+                        .row-value
+                          - if file.attachment.image?
+                            = image_tag(file.attachment.variant(resize_to_limit: [900, 900]))
+                          - else
+                            = link_to file.attachment.filename, download_attachment_task_file_path(file), 'data-turbolinks': false
+                    .row
+                      .col-auto.row-label
+                        = t('tasks.files.used_by_grader')
+                        | :
+                      .col.row-value
+                        = file.used_by_grader
+                    .row
+                      .col-auto.row-label
+                        = t('tasks.files.visible')
+                        | :
+                      .col.row-value
+                        = file.visible
+                    .row
+                      .col-auto.row-label
+                        = t('tasks.files.usage_by_lms')
+                        | :
+                      .col.row-value
+                        = file.usage_by_lms
+    .button-panel
       .button-box
         .button-description
-          = t('tasks.download')
+          = t('controllers.task.add_to_collection.hint')
         .wrapper
-          = link_to t('shared.download_zip'), download_task_path(@task), class: 'btn btn-light', 'data-turbolinks'=> false
+          /  = link_to t('exercises.show.add_to_cart'), add_to_cart_exercise_path(@task), method: 'post', class: 'btn btn-light'
           .dropdown.btn-group
             = button_tag class: 'btn btn-light dropdown-toggle', 'data-bs-toggle': 'dropdown' do
-              => t('tasks.show.export')
+              => t('tasks.show.add_to_collection')
               span.caret
             ul.scrollable.dropdown-menu[role="menu"]
-              li.dropdown-header = t('tasks.show.export_to') + ': '
-              - if !current_user.available_account_links.empty?
-                - current_user.available_account_links.each do |acc_link|
+              - if !current_user.collections.empty?
+                - current_user.collections.each do |collection|
                   li
-                    = link_to acc_link.name, export_external_start_task_path(account_link: acc_link), method: :post, remote: true, class: 'dropdown-item export-test'
+                    = link_to collection.title, add_to_collection_task_path(collection: collection), method: 'post', class: 'dropdown-item'
               - else
                 li
-                  = link_to t('tasks.show.define_account_link'), new_user_account_link_path(current_user)
+                  = link_to t('tasks.show.add_collection'), new_collection_path(current_user)
+      - if can? :export, Task
+        .button-box
+          .button-description
+            = t('tasks.download')
+          .wrapper
+            = link_to t('shared.download_zip'), download_task_path(@task), class: 'btn btn-light', 'data-turbolinks'=> false
+            .dropdown.btn-group
+              = button_tag class: 'btn btn-light dropdown-toggle', 'data-bs-toggle': 'dropdown' do
+                => t('tasks.show.export')
+                span.caret
+              ul.scrollable.dropdown-menu[role="menu"]
+                li.dropdown-header = t('tasks.show.export_to') + ': '
+                - if !current_user.available_account_links.empty?
+                  - current_user.available_account_links.each do |acc_link|
+                    li
+                      = link_to acc_link.name, export_external_start_task_path(account_link: acc_link), method: :post, remote: true, class: 'dropdown-item export-test'
+                - else
+                  li
+                    = link_to t('tasks.show.define_account_link'), new_user_account_link_path(current_user)
 
-    /.button-box
-      .button-description
-        = "Derivate, translate or port this Exercise by duplicating it. The duplicate will be owned by you."
-      .wrapper
-        = link_to t('exercises.all.duplicate'), duplicate_exercise_path(@task), class:'btn btn-light'
+      /.button-box
+        .button-description
+          = "Derivate, translate or port this Exercise by duplicating it. The duplicate will be owned by you."
+        .wrapper
+          = link_to t('exercises.all.duplicate'), duplicate_exercise_path(@task), class:'btn btn-light'
 
-  /.related-panel
-    = button_tag type: 'button', class: 'full-window-button related-button' do
-      => t('exercises.all.related_exercises')
-      span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
-      span.fa.fa-caret-down.my-caret
-  /div class=("related-box with-borders") data-exercise=@task.id
-    .slide-left.inactive
-      = button_tag do
-        i.fa.fa-caret-left
-    .content
-    .slide-right.inactive
-      = button_tag do
-        i.fa.fa-caret-right
-  .expandable-panel.with-borders
-    = button_tag type: 'button', class: 'full-window-button show-comment-button', data: {task_id: @task.id} do
-      => t('comments.show_comments')
-      span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
-      span.fa.fa-caret-down.my-caret
-    .comment-box data-task=@task.id
-      = form_for :comment, url: task_comments_path(@task), remote: true do |f|
-        .write-comment
-          .input-group
-            = f.label 'new_comment_label', 'New Comment', class: 'btn btn-light disabled input-group-addon'
-            = f.text_field :text, class: 'form-control'
-            = f.submit class: 'btn btn-light'
+    /.related-panel
+      = button_tag type: 'button', class: 'full-window-button related-button' do
+        => t('exercises.all.related_exercises')
+        span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
+        span.fa.fa-caret-down.my-caret
+    /div class=("related-box with-borders") data-exercise=@task.id
+      .slide-left.inactive
+        = button_tag do
+          i.fa.fa-caret-left
+      .content
+      .slide-right.inactive
+        = button_tag do
+          i.fa.fa-caret-right
+    .expandable-panel.with-borders
+      = button_tag type: 'button', class: 'full-window-button show-comment-button', data: {task_id: @task.id} do
+        => t('comments.show_comments')
+        span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
+        span.fa.fa-caret-down.my-caret
+      .comment-box data-task=@task.id
+        = form_for :comment, url: task_comments_path(@task), remote: true do |f|
+          .write-comment
+            .input-group
+              = f.label 'new_comment_label', 'New Comment', class: 'btn btn-light disabled input-group-addon'
+              = f.text_field :text, class: 'form-control'
+              = f.submit class: 'btn btn-light'
         .comment-body
 
-  /.history-panel
-    = button_tag type: 'button', class: 'full-window-button history-button' do
-      => t('exercises.all.history_exercises')
-      span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
-      span.fa.fa-caret-down.my-caret
-  /div class=("history-box with-borders") data-exercise=@task.id
-    .content
+    /.history-panel
+      = button_tag type: 'button', class: 'full-window-button history-button' do
+        => t('exercises.all.history_exercises')
+        span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
+        span.fa.fa-caret-down.my-caret
+    /div class=("history-box with-borders") data-exercise=@task.id
+      .content
 
-  .actions.btn-group[role="group"]
-    - if can? :edit, @task
-      = link_to edit_task_path(@task),  class: 'btn btn-important' do
-        i.fa.fa-edit
-        =< t('tasks.show.edit')
-    - if can? :destroy, @task
-      = link_to task_path(@task), class:'btn btn-important', method: :delete, data: { confirm: t('sure') } do
-        i.fa.fa-trash
-        =< t('tasks.show.delete')
-    /- if can? :report, @task
-      /.btn-group
-        = button_tag type: 'button', data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}, class: 'btn btn-important nav-btn-exercise dropdown-toggle dropdown-toggle split' do
-          => t('exercises.show.report')
-          span.caret
-        .dropdown-menu#share-menu
-          .dropdown-header style="padding-left: 2px;"
-            = t('exercises.show.report_message')
-            | :
-            .input-group
-              = text_field_tag 'text', nil, form: 'report', class: 'form-control'
-              .input-group-btn
-                = submit_tag t('exercises.show.submit'), form: 'report', class: 'btn btn-light'
-    = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important' do
+    .actions.btn-group[role="group"]
+      - if can? :edit, @task
+        = link_to edit_task_path(@task),  class: 'btn btn-important' do
+          i.fa.fa-edit
+          =< t('tasks.show.edit')
+      - if can? :destroy, @task
+        = link_to task_path(@task), class:'btn btn-important', method: :delete, data: { confirm: t('sure') } do
+          i.fa.fa-trash
+          =< t('tasks.show.delete')
+      /- if can? :report, @task
+        /.btn-group
+          = button_tag type: 'button', data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}, class: 'btn btn-important nav-btn-exercise dropdown-toggle dropdown-toggle split' do
+            => t('exercises.show.report')
+            span.caret
+          .dropdown-menu#share-menu
+            .dropdown-header style="padding-left: 2px;"
+              = t('exercises.show.report_message')
+              | :
+              .input-group
+                = text_field_tag 'text', nil, form: 'report', class: 'form-control'
+                .input-group-btn
+                  = submit_tag t('exercises.show.submit'), form: 'report', class: 'btn btn-light'
+      = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important' do
         i.fa.fa-clone
         =< t('tasks.show.duplicate')
       = link_to t('tasks.show.back'), tasks_path, class: 'btn btn-important'
 
-  /= form_tag report_exercise_path(@task), id: 'report'
+    /= form_tag report_exercise_path(@task), id: 'report'
 
-  #page_end style="margin-top: 20px"
+    #page_end style="margin-top: 20px"
 
 
-  = render 'import_export_dialog', title: t('controllers.task.import_export.dialog.export_title')
+    = render 'import_export_dialog', title: t('controllers.task.import_export.dialog.export_title')

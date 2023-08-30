@@ -1,6 +1,6 @@
-.row.p-3
-  .col-md-12
-    = simple_form_for @task, html: { class: 'form-horizontal project exercise-validation', mulipart: true } do |f|
+.row
+  .col-md-12.my-4
+    = simple_form_for @task, html: { class: 'form-horizontal project exercise-validation', multipart: true } do |f|
       - if @task.errors.any?
         #error_explanation.card
           .card-header
@@ -15,7 +15,7 @@
       fieldset.form-group
         legend.toggle-next
           span.number = '1'
-          = t('tasks.form.basic_information')
+          => t('tasks.form.basic_information')
           span.fa.fa-caret-up
         .form-content
           /- if @task_relation.present?

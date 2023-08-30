@@ -2,7 +2,7 @@
   .std-heading
     i.fa.fa-user
     = ' ' + @user.name
-.show-table
+.show-table.mt-5
   - if can? :edit, @user
     .table-header
       = t('users.public_information')
@@ -18,13 +18,13 @@
         .col-auto.row-label
           = t('users.full_name')
           | :
-        .row-value
+        .col.row-value
           = @user.name
       .row
         .col-auto.row-label
           = t('users.role')
           | :
-        .row-value
+        .col.row-value
           = @user.role
 
 - if can? :manage_accountlinks, @user
@@ -35,7 +35,7 @@
       .col-auto.row-label
         = t('users.email')
         | :
-      .row-value
+      .col.row-value
         = @user.email
     .row.vertical
       .col.row-label
@@ -95,7 +95,7 @@
       = ' '
       = t('users.show.edit')
   - if can? :delete, @user
-    = button_tag type: 'button', class: 'btn btn-important delete-user', style: 'margin-bottom: 10px' do
+    = button_tag type: 'button', class: 'btn btn-important delete-user' do
 
       i.fa.fa-trash
       = ' '

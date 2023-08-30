@@ -1,6 +1,8 @@
-.header.p-3
-  .std-heading
-    i.fa.fa-file-text-o
-    = ' ' + t('exercises.edit.header')
-    = ' ' + @task.title
+.header
+  .row
+    .col-md-12
+      .std-heading
+        i.fa.fa-file-text-o
+        = ' ' + t('exercises.edit.header')
+        = ' ' + @task.title
 = render 'form'

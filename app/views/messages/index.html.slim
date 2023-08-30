@@ -1,21 +1,20 @@
 = hidden_field_tag 'option', @option
-.nav-container
-  .col-md-9
+.nav-container.mb-5
+  .col-md-12
     .btn-group[role="group"]
       = link_to t('message.index.inbox'), user_messages_path(option: 'inbox'), class: 'btn btn-main', id: 'inbox'
       = link_to t('message.index.sent'), user_messages_path(option: 'sent'), class: 'btn btn-main', id: 'sent'
 
-  .col-md-3
     - if can? :create, Message
       = link_to new_user_message_path, class: 'btn btn-main nav-btn pull-right' do
         i.fa.fa-envelope
         = ' ' + t('message.index.new')
 br
 - if @messages.empty?
-  .card style=("margin-top: 40px")
+  .card.mb-5
     .card-body
       .col-md-10
-        h3 style=("color: #777777")
+        h5 style=("color: #777777")
           = t('message.index.no_messages')
 
 - else

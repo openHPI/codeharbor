@@ -1,19 +1,19 @@
 .login_form
-  .header
+  .header.mb-5
     .std-heading
       i.fa.fa-sign-in style='color: #444444'
       = ' ' + t('sessions.header')
   = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-    .form-group
-      = f.label :email
+    .form-group.field-element
+      = f.label :email, class: 'form-label'
       = f.email_field :email,
               required: true,
               autofocus: true,
               placeholder: t('sessions.email.placeholder'),
               autocomplete: 'email',
               class: 'form-control'
-    .form-group
-      = f.label :password
+    .form-group.field-element
+      = f.label :password, class: 'form-label'
       = f.password_field :password,
               required: true,
               placeholder: t('sessions.password.placeholder'),
@@ -25,7 +25,7 @@
         = f.label :remember_me, class: 'form-check-label' do
           = resource.class.human_attribute_name('remember_me')
 
-    .form-group
+    .form-group.py-3
       .btn-group[role='group']
         = button_tag type: 'submit', class: 'btn btn-important' do
           i.fa.fa-sign-in
