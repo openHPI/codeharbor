@@ -104,6 +104,10 @@ Rails.application.routes.draw do
     scope 'bird', module: :bird, as: 'bird' do
       resources :tasks, only: %i[index]
     end
+    scope module: :oai do
+      get :oai, to: 'oai#handle_request'
+      post :oai, to: 'oai#handle_request'
+    end
   end
 
   resources :ping, only: :index, defaults: {format: :json}

@@ -148,7 +148,7 @@ ruby -v
 First, copy our templates:
 
 ```shell
-for f in database.yml
+for f in action_mailer.yml database.yml
 do
   if [ ! -f config/$f ]
   then
