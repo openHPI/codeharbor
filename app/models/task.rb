@@ -192,6 +192,10 @@ class Task < ApplicationRecord
     labels.map(&:name)
   end
 
+  def iso639_lang
+    ISO_639.find(language.split('-').first).alpha2
+  end
+
   private
 
   def duplicate_tests
