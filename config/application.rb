@@ -7,6 +7,7 @@ require 'shakapacker'
 require 'sprockets/railtie'
 require_relative '../lib/shakapacker/sri_helper_extensions'
 require_relative '../lib/shakapacker/sri_manifest_extensions'
+require_relative '../lib/middleware/edu_sharing_content_type'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -36,5 +37,8 @@ module Codeharbor
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid
     end
+
+    # Fix invalid Content-Type header for incoming requests made by edu-sharing.
+    config.middleware.insert_before 0, Middleware::EduSharingContentType
   end
 end
