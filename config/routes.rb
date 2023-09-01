@@ -105,8 +105,7 @@ Rails.application.routes.draw do
       resources :tasks, only: %i[index]
     end
     scope module: :oai do
-      get :oai, to: 'oai#handle_request'
-      post :oai, to: 'oai#handle_request'
+      match :oai, to: 'oai#handle_request', via: %i[get post]
     end
   end
 

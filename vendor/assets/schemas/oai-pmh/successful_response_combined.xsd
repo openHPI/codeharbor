@@ -1,0 +1,33 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:annotation>
+    <xs:documentation>
+      The xml schemas need to be combined like this because Nokogiri uses libxml which has the limitation that all
+      schema declarations must be in one file.
+      https://mail.gnome.org/archives/xml/2009-November/msg00022.html
+      Additionally, Nokogiri does not download remote schemas so we downloaded them and store them locally.
+
+      This XSD is used for testing of the OaiController.
+    </xs:documentation>
+  </xs:annotation>
+
+  <xs:import
+    namespace="http://www.openarchives.org/OAI/2.0/"
+    schemaLocation="vendor/assets/schemas/oai-pmh/sub-schemas/successful_response.xsd"
+    />
+
+  <xs:import
+    namespace="http://www.openarchives.org/OAI/2.0/oai_dc/"
+    schemaLocation="vendor/assets/schemas/oai-pmh/sub-schemas/custom_oai_dc.xsd"
+    />
+
+  <xs:import
+    namespace="http://www.w3.org/XML/1998/namespace"
+    schemaLocation="vendor/assets/schemas/oai-pmh/sub-schemas/xml.xsd"
+    />
+
+  <xs:import
+    namespace="http://purl.org/dc/elements/1.1/"
+    schemaLocation="vendor/assets/schemas/oai-pmh/sub-schemas/simpledc20021212.xsd"
+    />
+</xs:schema>

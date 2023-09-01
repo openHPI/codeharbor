@@ -2,21 +2,11 @@
 
 module Bridges
   module Oai
-    class OaiError < StandardError
-      attr_reader :code
-
-      def initialize(msg, code)
-        @code = code
-        super(msg)
-      end
-    end
-
     # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/ClassLength
     class OaiController < ActionController::API
-      ADMIN_MAIL = 'TODO@placeholder.de'
       SUPPORTED_METADATA_PREFIXES = %w[oai_dc lom].freeze
-      ERROR_RESPONSE_XSD = Rails.root.join('vendor/assets/schemas/oai-pmh/error_response_combined.xsd.erb')
-      SUCCESSFUL_RESPONSE_XSD = Rails.root.join('vendor/assets/schemas/oai-pmh/successful_response_combined.xsd.erb')
+      ERROR_RESPONSE_XSD = 'vendor/assets/schemas/oai-pmh/error_response_combined.xsd'
+      SUCCESSFUL_RESPONSE_XSD = 'vendor/assets/schemas/oai-pmh/successful_response_combined.xsd'
 
       def handle_request
         builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
@@ -46,7 +36,7 @@ module Bridges
           return render_oai_error(e)
         end
 
-        render xml: builder.to_xml
+        render plain: builder.to_xml, content_type: 'text/xml'
       end
 
       def handle_get_record(xml)
@@ -63,7 +53,7 @@ module Bridges
           xml.repositoryName 'CodeHarbor'
           xml.baseURL bridges_oai_url
           xml.protocolVersion '2.0'
-          xml.adminEmail ADMIN_MAIL
+          xml.adminEmail Settings.oai_pmh.admin_mail
           tasks = Task.access_level_public.order(updated_at: :asc)
           xml.earliestDatestamp tasks.present? ? tasks.first.updated_at.iso8601 : Time.utc(1).iso8601
           xml.deletedRecord 'no'
@@ -94,7 +84,7 @@ module Bridges
           end
           xml.metadataFormat do
             xml.metadataPrefix 'lom'
-            xml.schema 'TODO'
+            xml.schema 'http://ltsc.ieee.org/xsd/lomv1.0/lom.xsd'
             xml.metadataNamespace 'http://ltsc.ieee.org/xsd/LOM'
           end
         end
@@ -154,7 +144,7 @@ module Bridges
             xml.error error.message, code: error.code
           end
         end
-        render xml: builder.to_xml
+        render plain: builder.to_xml, content_type: 'text/xml'
       end
 
       def export_record_header(xml, task)
@@ -224,13 +214,9 @@ module Bridges
 
         if params[:from]
           begin
-            tfrom = DateTime.strptime(params[:from], '%Y-%m-%d')
+            tfrom = DateTime.iso8601(params[:from])
           rescue Date::Error
-            begin
-              tfrom = Time.iso8601(params[:from])
-            rescue ArgumentError
-              raise OaiError.new("The specified time '#{params[:from]}' is not in iso8601 format", 'badArgument')
-            end
+            raise OaiError.new("The specified time '#{params[:from]}' is not in iso8601 format", 'badArgument')
           end
         end
 

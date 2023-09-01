@@ -9,3 +9,5 @@ omniauth:
     enable: false
   nbp:
     enable: false
+oai_pmh:
+  admin_mail: admin@example.org
