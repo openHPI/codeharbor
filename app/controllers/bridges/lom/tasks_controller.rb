@@ -3,7 +3,7 @@
 module Bridges
   module Lom
     class TasksController < ActionController::API
-      OML_SCHEMA_PATH = Rails.root.join('vendor/assets/schemas/lom_1484.12.3-2020/lom.xsd')
+      OML_SCHEMA_PATH = 'vendor/assets/schemas/lom_1484.12.3-2020/lom.xsd'
 
       def show
         task = Task.find(params[:id])

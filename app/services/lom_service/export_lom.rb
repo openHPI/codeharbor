@@ -94,7 +94,7 @@ module LomService
       xml.metaMetadata do
         xml.identifier do
           xml.catalog 'URI'
-          xml.entry bridges_lom_task_path(@task)
+          xml.entry bridges_lom_task_url(@task)
         end
         xml.metadataSchema 'ProFormA MD 1.0'
         xml.language 'en'
