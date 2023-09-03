@@ -31,15 +31,15 @@ toggleHideShowMore = (element) ->
   $more_tag = $toggle.children '.more-tag'
   $text = $(element).prev()
 
-  if $less_tag.hasClass 'hidden'
+  if $less_tag.hasClass 'd-none'
     $parent.css 'max-height', 'unset'
     # Save old height somewhere for later use
     $text.prop 'default-max-height', $text.css 'max-height'
     $text.css 'max-height', $text.prop('scrollHeight') + 'px'
   else
     $text.css 'max-height', $text.prop 'default-max-height'
-  $less_tag.toggleClass 'hidden'
-  $more_tag.toggleClass 'hidden'
+  $less_tag.toggleClass 'd-none'
+  $more_tag.toggleClass 'd-none'
 
 initCollapsable = (collapsables, max_height) ->
   collapsables.each ->

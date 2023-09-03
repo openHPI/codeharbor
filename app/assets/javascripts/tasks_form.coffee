@@ -27,6 +27,6 @@ initializeVisibilityWarning = ->
   warning_message = $('#task_visibility_warning')
   $('#task_access_level_private').on 'change', ->
     if warning_message.data("external-collection-membership")
-      warning_message.removeClass('hidden')
+      warning_message.removeClass('d-none')
   $('#task_access_level_public').on 'change', ->
-      warning_message.addClass('hidden')
+      warning_message.addClass('d-none')
