@@ -10,7 +10,7 @@ initializeAce = ->
 initializeEditors =->
   $('.editor').each ->
     editor = ace.edit(this)
-    hiddenContent = $(this).parent().find('.hidden')
+    hiddenContent = $(this).parent().find('.d-none')
     editor.setTheme 'ace/theme/chrome'
     this.style.fontSize = '16px'
     if $(this).hasClass('readonly')

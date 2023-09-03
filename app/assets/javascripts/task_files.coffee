@@ -45,7 +45,7 @@ initializeToggleEditorAttachment =->
 showFileUploadHideTextEditor =($content)->
   $editor = $content.find('.edit')
   $attachment = $content.find('.attachment')
-  $editor.find('.hidden').attr('disabled', true)
+  $editor.find('.d-none').attr('disabled', true)
   $editor.hide()
   $attachment.find('.use-attached-file').val(true)
   $attachment.find('.alternative-input').attr('disabled', false)
@@ -59,7 +59,7 @@ hideFileUploadShowTextEditor =($content, text)->
   $attachment.find('.alternative-input').attr('disabled', true)
   $attachment.find('.use-attached-file').val(false)
   $attachment.hide()
-  $editor.find('.hidden').attr('disabled', false)
+  $editor.find('.d-none').attr('disabled', false)
   $editor.show()
   if text
     setAceEditorValue($ace_editor[0], text)
