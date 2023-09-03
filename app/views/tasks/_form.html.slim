@@ -173,9 +173,8 @@
                 - else
                   - display_container = "display: none"
                   .table-header.closed.toggle-next
-                    = t('tasks.model_solution.singular')
-                    = ' '
-                    = model_solution.object.task.model_solutions.find_index(model_solution.object) + 1
+                    => t('tasks.model_solution.singular')
+                    => (model_solution.object.task.model_solutions.find_index(model_solution.object) + 1).to_s
                     span.fa.fa-caret-down
                     = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-sm pull-right' do
                       i.fa.fa-remove style=("color: #800000")
