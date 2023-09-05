@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ContributionsController < ApplicationController
+  # rubocop:disable Metrics/AbcSize
   def approve_changes
     contrib = TaskContribution.find(params[:contribution_id])
     @task = Task.find(params[:task_id])
@@ -16,6 +17,7 @@ class ContributionsController < ApplicationController
       redirect_to contrib.task, alert: t('task_contributions.approve_changes.error')
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def discard_changes
     contrib = TaskContribution.find(params[:contribution_id])
@@ -28,7 +30,7 @@ class ContributionsController < ApplicationController
   end
 
   def new
-    @task = Task.find(params[:task_id]).clean_duplicate(current_user, false)
+    @task = Task.find(params[:task_id]).clean_duplicate(current_user, change_title: false)
     @task.parent_id = params[:task_id]
     task_contrib = TaskContribution.new
     @task.task_contribution = task_contrib
@@ -62,7 +64,8 @@ class ContributionsController < ApplicationController
     params.require(:task).permit(:title, :description, :internal_description, :language,
       :programming_language_id, files_attributes: file_params, tests_attributes: test_params,
       model_solutions_attributes: model_solution_params, label_ids: [])
-      .merge(user: current_user, parent_uuid: Task.find(params[:task_id]).uuid, access_level: :private, task_contribution: TaskContribution.new)
+      .merge(user: current_user, parent_uuid: Task.find(params[:task_id]).uuid,
+        access_level: :private, task_contribution: TaskContribution.new)
   end
 
   def file_params
