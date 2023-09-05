@@ -15,7 +15,6 @@ RSpec.describe ModelSolution do
       let!(:parent_model_solution) { create(:model_solution, task: parent_task) }
       let(:model_solution) { build(:model_solution, task:, parent_id: parent_model_solution.id) }
 
-
       context 'when task has no parent' do
         it 'is not valid' do
           expect(model_solution).not_to be_valid
@@ -23,7 +22,7 @@ RSpec.describe ModelSolution do
       end
 
       context 'when task has different parent' do
-        let(:p_uuid){ create(:task).uuid }
+        let(:p_uuid) { create(:task).uuid }
 
         it 'is not valid' do
           expect(model_solution).not_to be_valid
