@@ -206,7 +206,7 @@ RSpec.describe Task do
       end
 
       context 'when change_title is false' do
-        subject(:clean_duplicate) { task.clean_duplicate(user, false) }
+        subject(:clean_duplicate) { task.clean_duplicate(user, change_title: false) }
 
         it 'has the same title' do
           expect(clean_duplicate.title).to eq('title')
