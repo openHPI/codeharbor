@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module TransferValues
+  # rubocop:disable Metrics/AbcSize
   def transfer_linked_files(other)
     other.files.each do |file|
       if files.exists?(file.parent_id)
@@ -17,12 +18,14 @@ module TransferValues
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def transfer_contents(other)
     assign_attributes(other.attributes.except('id', 'parent_id', 'created_date'))
     transfer_linked_files(other)
   end
 
+  # rubocop:disable Metrics/AbcSize
   def transfer_multiple(ours, others, parent)
     others.each do |other|
       if ours.exists?(other.id)
@@ -38,4 +41,5 @@ module TransferValues
     end
     ours
   end
+  # rubocop:enable Metrics/AbcSize
 end
