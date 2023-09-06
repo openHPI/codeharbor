@@ -74,7 +74,7 @@ gem 'proformaxml'
 gem 'rails_admin', '~> 3.1'
 gem 'ransack'
 gem 'select2-rails', '~> 4.0'
-gem 'sprockets', '~> 4.2.0'
+gem 'sprockets', '~> 4.2.1'
 
 # Error Tracing
 gem 'concurrent-ruby'
