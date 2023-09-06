@@ -1,28 +1,19 @@
 # frozen_string_literal: true
 
 class ContributionsController < ApplicationController
-  # rubocop:disable Metrics/AbcSize
   def approve_changes
     contrib = TaskContribution.find(params[:contribution_id])
     @task = Task.find(params[:task_id])
-    contrib_attributes = contrib.task.attributes.except!('parent_uuid', 'access_level', 'user_id', 'uuid', 'id')
-    @task.assign_attributes(contrib_attributes)
-    @task.transfer_linked_files(contrib.task)
-    @task.model_solutions = @task.transfer_multiple(@task.model_solutions, contrib.task.model_solutions, {task_id: @task.id})
-    @task.tests = @task.transfer_multiple(@task.tests, contrib.task.tests, {task_id: @task.id})
-    contrib.status = :merged
-    if @task.save
+    if @task.apply_contribution(contrib)
       redirect_to @task, notice: t('task_contributions.approve_changes.success')
     else
       redirect_to contrib.task, alert: t('task_contributions.approve_changes.error')
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
   def discard_changes
     contrib = TaskContribution.find(params[:contribution_id])
-    contrib.status = :closed
-    if contrib.save
+    if contrib.close
       redirect_to contrib.task, notice: t('task_contributions.discard_changes.success')
     else
       redirect_to contrib.task, alert: t('task_contributions.discard_changes.error')
@@ -41,7 +32,7 @@ class ContributionsController < ApplicationController
 
   def create
     @task = Task.new(contrib_task_params)
-    contrib = TaskContribution.new(status: 0)
+    contrib = TaskContribution.new(status: :pending)
     @task.task_contribution = contrib
     if @task.save(context: :force_validations)
       redirect_to @task, notice: t('task_contributions.new.success')
