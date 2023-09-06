@@ -18,6 +18,7 @@ class Task < ApplicationRecord
 
   validates :language, format: {with: /\A[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*\z/, message: :not_de_or_us}
   validate :primary_language_tag_in_iso639?
+  validate :unique_pending_contribution
 
   has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy
 
@@ -36,7 +37,7 @@ class Task < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :ratings, dependent: :destroy
 
-  has_one :task_contribution, dependent: :destroy
+  has_one :task_contribution, dependent: :destroy # TODO: Do we want to have a has_one AND a has_many association for contributions?
   belongs_to :user
   belongs_to :programming_language, optional: true
   belongs_to :license, optional: true
@@ -106,6 +107,16 @@ class Task < ApplicationRecord
 
   def self.ransackable_associations(_auth_object = nil)
     %w[labels]
+  end
+
+  def apply_contribution(contrib) # rubocop:disable Metrics/AbcSize
+    contrib_attributes = contrib.task.attributes.except!('parent_uuid', 'access_level', 'user_id', 'uuid', 'id')
+    assign_attributes(contrib_attributes)
+    transfer_linked_files(contrib.task)
+    self.model_solutions = transfer_multiple(model_solutions, contrib.task.model_solutions, {task_id: id})
+    self.tests = transfer_multiple(tests, contrib.task.tests, {task_id: id})
+    contrib.status = :merged
+    save && contrib.save
   end
 
   def contribution?
@@ -223,6 +234,16 @@ class Task < ApplicationRecord
     if language.present?
       primary_tag = language.split('-').first
       errors.add(:language, :not_iso639) unless ISO_639.find(primary_tag)
+    end
+  end
+
+  def unique_pending_contribution
+    if contribution?
+      other_existing_contrib = Task.joins(:task_contribution)
+        .where(parent_uuid:, user:, task_contribution: {status: :pending}) # TODO: Singular vs Plural?
+        .where.not(id:)
+        .any?
+      errors.add(:task_contribution, :duplicated) if other_existing_contrib
     end
   end
 end
