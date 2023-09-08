@@ -2,6 +2,7 @@
 
 require 'omni_auth/strategies/abstract_saml'
 require 'omni_auth/strategies/bird' if Settings.omniauth.bird.enable
+require 'omni_auth/strategies/nbp' if Settings.omniauth.nbp.enable
 require 'omni_auth/strategies/saml_test_id' if Settings.omniauth.samltestid.enable
 
 # Assuming you have not yet modified this file, each configuration option below
@@ -278,6 +279,7 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   config.omniauth :bird, strategy_class: OmniAuth::Strategies::Bird if Settings.omniauth.bird.enable
+  config.omniauth :nbp, strategy_class: OmniAuth::Strategies::Nbp if Settings.omniauth.nbp.enable
   config.omniauth :samltestid, strategy_class: OmniAuth::Strategies::SamlTestId if Settings.omniauth.samltestid.enable
 
   # ==> Warden configuration

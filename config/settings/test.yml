@@ -5,3 +5,5 @@ omniauth:
     enable: false
   bird:
     enable: false
+  nbp:
+    enable: false

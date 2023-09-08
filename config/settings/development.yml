@@ -8,3 +8,5 @@ omniauth:
     private_key: <%= Rails.root.join('config', 'certs', 'samltestid_key.pem') %>
   bird:
     enable: false
+  nbp:
+    enable: false
