@@ -3,7 +3,7 @@
 module Users
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     # SAML doesn't support the CSRF protection
-    protect_from_forgery except: %i[samltestid bird]
+    protect_from_forgery except: %i[samltestid bird nbp]
 
     def sso_callback # rubocop:disable Metrics/AbcSize
       # The instance variable `@user` is used by Devise internally and should be set here
@@ -30,6 +30,7 @@ module Users
     end
 
     alias bird sso_callback
+    alias nbp sso_callback
     alias samltestid sso_callback
 
     def provider
