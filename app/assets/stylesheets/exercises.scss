@@ -58,6 +58,15 @@ $exercise-color: #006600;
   }
 }
 
+// button in lg and below for nav-container should always display appropiate sizing
+@media (max-width: 991.98px) {
+  .nav-container {
+    button {
+      padding: 10px 20px;
+    }
+  }
+}
+
 .fa-file-text-o {
   color: $exercise-color;
 }
