@@ -11,12 +11,12 @@ class RefactorGroupMembership < ActiveRecord::Migration[6.1]
       t.timestamps
     end
 
-    GroupMembershipOld.where(member_type: 'User').where.not(membership_type: nil).each do |gmo|
+    GroupMembershipOld.where(member_type: 'User').where.not(membership_type: nil).find_each do |gmo|
       roles = {'admin' => :admin, 'member' => :confirmed_member, 'pending' => :applicant}
       GroupMembership.create(group_id: gmo.group_id, user_id: gmo.member_id, role: roles[gmo.membership_type])
     end
 
-    GroupMembershipOld.where(member_type: 'Task').each do |gmo|
+    GroupMembershipOld.where(member_type: 'Task').find_each do |gmo|
       GroupTask.create(group_id: gmo.group_id, task_id: gmo.member_id)
     end
 

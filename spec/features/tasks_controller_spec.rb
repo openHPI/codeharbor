@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe 'TasksController', js: true do
+describe 'TasksController', :js do
   let(:user) { create(:user) }
   let(:password) { attributes_for(:user)[:password] }
 
