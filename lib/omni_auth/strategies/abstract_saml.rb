@@ -99,6 +99,13 @@ module OmniAuth
         def try_verify(url)
           Rails.application.message_verifier('saml').verified(url)
         end
+
+        def desired_bindings
+          {
+            sso_binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+            slo_binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+          }
+        end
       end
     end
   end
