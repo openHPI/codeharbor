@@ -23,15 +23,23 @@ module ProformaService
         description:,
         internal_description: @proforma_task.internal_description,
         programming_language:,
-        uuid: @task.uuid || @proforma_task.uuid,
+        uuid:,
         parent_uuid: @proforma_task.parent_uuid,
         language: @proforma_task.language,
         meta_data: @proforma_task.meta_data,
+
+        submission_restrictions: @proforma_task.submission_restrictions,
+        external_resources: @proforma_task.external_resources,
+        grading_hints: @proforma_task.grading_hints,
 
         tests:,
         model_solutions:,
         files: files.values # this line has to be last, because tests and model_solutions have to remove their respective files first
       )
+    end
+
+    def uuid
+      @task.uuid || @proforma_task.uuid
     end
 
     def description

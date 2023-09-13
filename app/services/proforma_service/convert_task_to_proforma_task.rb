@@ -9,10 +9,17 @@ module ProformaService
     end
 
     def execute
-      create_task
+      add_namespaces
+      {task: create_task, namespaces: @namespaces.uniq}
     end
 
     private
+
+    def add_namespaces
+      codeOceanNamespace = {prefix: 'CodeOcean', uri: 'codeocean.openhpi.de'}
+      @namespaces << codeOceanNamespace if task.meta_data?.keys?.include? :CodeOcean
+      @namespaces << codeOceanNamespace if task.tests.map(&:meta_data).map(&:keys).flatten.include? :CodeOcean
+    end
 
     def create_task
       ProformaXML::Task.new(
@@ -25,7 +32,10 @@ module ProformaService
           parent_uuid: @task.parent_uuid,
           language: @task.language,
           meta_data: @task.meta_data,
-          files: @task.files.map {|file| task_file file },
+          submission_restrictions: @task.submission_restrictions,
+          external_resources: @task.external_resources,
+          grading_hints: @task.grading_hints,
+          files:,
           tests:,
           model_solutions:,
         }.compact
@@ -53,6 +63,10 @@ module ProformaService
           end
         )
       end
+    end
+
+    def files
+      @task.files.map {|file| task_file file }
     end
 
     def tests

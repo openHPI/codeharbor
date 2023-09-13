@@ -19,7 +19,7 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
   end
 
   describe '#execute' do
-    subject(:proforma_task) { convert_to_proforma_task.execute }
+    subject(:proforma_task) { convert_to_proforma_task.execute[:task] }
 
     let(:convert_to_proforma_task) { described_class.new(task:) }
     let(:task) do
@@ -276,6 +276,36 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
 
       it 'creates a task with description and language from primary description' do
         expect(proforma_task).to have_attributes(description: '<h1>H1 header</h1>')
+      end
+    end
+
+    context 'when task has submission_restrictions' do
+      let(:task) { build(:task, :with_submission_restrictions) }
+
+      it 'creates a task with correct submission_restrictions' do
+        expect(proforma_task).to have_attributes(
+          submission_restrictions: attributes_for(:task, :with_submission_restrictions)[:submission_restrictions]
+        )
+      end
+    end
+
+    context 'when task has external_resources' do
+      let(:task) { build(:task, :with_external_resources) }
+
+      it 'creates a task with correct external_resources' do
+        expect(proforma_task).to have_attributes(
+          external_resources: attributes_for(:task, :with_external_resources)[:external_resources]
+        )
+      end
+    end
+
+    context 'when task has grading_hints' do
+      let(:task) { build(:task, :with_grading_hints) }
+
+      it 'creates a task with correct grading_hints' do
+        expect(proforma_task).to have_attributes(
+          grading_hints: attributes_for(:task, :with_grading_hints)[:grading_hints]
+        )
       end
     end
   end

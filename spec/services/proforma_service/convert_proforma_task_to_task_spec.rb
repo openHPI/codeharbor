@@ -36,6 +36,9 @@ RSpec.describe ProformaService::ConvertProformaTaskToTask do
         parent_uuid: 'parent_uuid',
         language: 'en',
         meta_data:,
+        submission_restrictions:,
+        external_resources:,
+        grading_hints:,
         model_solutions:,
         files:,
         tests:
@@ -46,6 +49,9 @@ RSpec.describe ProformaService::ConvertProformaTaskToTask do
     let(:description) { 'description' }
     let(:user) { build(:user) }
     let(:meta_data) {}
+    let(:submission_restrictions) {}
+    let(:external_resources) {}
+    let(:grading_hints) {}
     let(:files) { [] }
     let(:tests) { [] }
     let(:model_solutions) { [] }
@@ -370,6 +376,33 @@ RSpec.describe ProformaService::ConvertProformaTaskToTask do
         it 'creates a task with two test' do
           expect(convert_to_task_service.tests).to have(2).items
         end
+      end
+    end
+
+    context 'when task has submission_restrictions' do
+      let(:submission_restrictions_hash) { attributes_for(:task, :with_submission_restrictions)[:submission_restrictions] }
+      let(:submission_restrictions) { submission_restrictions_hash }
+
+      it 'creates a task with correct submission_restrictions' do
+        expect(convert_to_task_service).to have_attributes(submission_restrictions: submission_restrictions_hash)
+      end
+    end
+
+    context 'when task has external_resources' do
+      let(:external_resources_hash) { attributes_for(:task, :with_external_resources)[:external_resources] }
+      let(:external_resources) { external_resources_hash }
+
+      it 'creates a task with correct external_resources' do
+        expect(convert_to_task_service).to have_attributes(external_resources: external_resources_hash)
+      end
+    end
+
+    context 'when task has grading_hints' do
+      let(:grading_hints_hash) { attributes_for(:task, :with_grading_hints)[:grading_hints] }
+      let(:grading_hints) { grading_hints_hash }
+
+      it 'creates a task with correct grading_hints' do
+        expect(convert_to_task_service).to have_attributes(grading_hints: grading_hints_hash)
       end
     end
 
