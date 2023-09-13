@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_08_01_201736) do
+ActiveRecord::Schema[7.1].define(version: 2023_09_11_195812) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -250,6 +250,9 @@ ActiveRecord::Schema[7.1].define(version: 2023_08_01_201736) do
     t.jsonb "meta_data", default: {}
     t.bigint "license_id"
     t.integer "access_level", limit: 2, default: 0, null: false, comment: "Used as enum in Rails"
+    t.jsonb "submission_restrictions"
+    t.jsonb "external_resources"
+    t.jsonb "grading_hints"
     t.index ["license_id"], name: "index_tasks_on_license_id"
     t.index ["programming_language_id"], name: "index_tasks_on_programming_language_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
