@@ -608,8 +608,7 @@
               | :
               .input-group
                 = text_field_tag 'text', nil, form: 'report', class: 'form-control'
-                .input-group-btn
-                  = submit_tag t('exercises.show.submit'), form: 'report', class: 'btn btn-light'
+                = submit_tag t('exercises.show.submit'), form: 'report', class: 'btn btn-light'
       = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important' do
         i.fa.fa-clone
         =< t('tasks.show.duplicate')
