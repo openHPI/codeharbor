@@ -74,7 +74,7 @@
           - @user.shared_account_links.each do |account_link|
             .table-list
               = account_link.name
-              .btn-group.float-right
+              .btn-group.float-end
                 = link_to t('users.show.account_links.show'), user_account_link_path(current_user, account_link), class: 'btn btn-light btn-sm'
                 = button_to remove_shared_user_user_account_link_path(account_link.user.id, account_link.id),  method: :post, params: {shared_user: current_user.id}, data: { confirm: 'Are you sure?' }, class: 'btn btn-light btn-sm', remote: true, form_class: 'remove-account-link-form' do
                   i.fa.fa-remove
