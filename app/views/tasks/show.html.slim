@@ -551,7 +551,7 @@
         .button-description
           = "Derivate, translate or port this Exercise by duplicating it. The duplicate will be owned by you."
         .wrapper
-          = link_to t('exercises.all.duplicate'), duplicate_exercise_path(@task), class:'btn btn-light'
+          = link_to t('exercises.all.duplicate'), duplicate_exercise_path(@task), class: 'btn btn-light'
 
     /.related-panel
       = button_tag type: 'button', class: 'full-window-button related-button' do
@@ -594,7 +594,7 @@
           i.fa.fa-edit
           =< t('tasks.show.edit')
       - if can? :destroy, @task
-        = link_to task_path(@task), class:'btn btn-important', method: :delete, data: { confirm: t('sure') } do
+        = link_to task_path(@task), class: 'btn btn-important', method: :delete, data: { confirm: t('sure') } do
           i.fa.fa-trash
           =< t('tasks.show.delete')
       /- if can? :report, @task

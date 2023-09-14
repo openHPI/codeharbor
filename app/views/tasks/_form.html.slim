@@ -22,24 +22,24 @@
             = f.fields_for :exercise_relation do |exercise_relation|
               = exercise_relation.hidden_field :origin_id, :value => @task_relation.origin.id
             .field-element
-              = f.label :relation, t('exercises.relation'), class:'form-label'
+              = f.label :relation, t('exercises.relation'), class: 'form-label'
               br/
               = f.fields_for :exercise_relation do |relation|
                 .controls
                   = relation.collection_select :relation_id, Relation.all, :id, :name, {}, {class: 'form-control'}
           .field-element
-            = f.label :title, t('tasks.title'), class:'form-label'
-            = f.text_field :title, class:'form-control'
+            = f.label :title, t('tasks.title'), class: 'form-label'
+            = f.text_field :title, class: 'form-control'
           .field-element
-            = f.label :programming_language, t('tasks.programming_language'), class:'form-label'
+            = f.label :programming_language, t('tasks.programming_language'), class: 'form-label'
             .div.d-none.execution-environment-error
               = t('tasks.form.errors.programming_language.not_empty_while_public')
             = f.collection_select :programming_language_id, ProgrammingLanguage.all, :id, :language_with_version, {include_blank: t('tasks.form.none')}, {class: 'form-control'}
 
 
           .field-element
-            = f.label :description, t('tasks.description'), class:'form-label'
-            = f.text_area :description, class:'form-control'
+            = f.label :description, t('tasks.description'), class: 'form-label'
+            = f.text_area :description, class: 'form-control'
 
       fieldset.form-group
         legend.toggle-next
@@ -48,17 +48,17 @@
           span.fa.fa-caret-up
         .form-content
           .field-element
-            = f.label :internal_description, t('tasks.internal_description'), class:'form-label'
-            = f.text_area :internal_description, class:'form-control'
+            = f.label :internal_description, t('tasks.internal_description'), class: 'form-label'
+            = f.text_area :internal_description, class: 'form-control'
           .field-element
-            = f.label :uuid, t('tasks.uuid'), class:'form-label'
-            = f.text_field :uuid, class:'form-control'
+            = f.label :uuid, t('tasks.uuid'), class: 'form-label'
+            = f.text_field :uuid, class: 'form-control'
           .field-element
-            = f.label :parent_uuid, t('tasks.parent_uuid'), class:'form-label'
-            = f.text_field :parent_uuid, class:'form-control'
+            = f.label :parent_uuid, t('tasks.parent_uuid'), class: 'form-label'
+            = f.text_field :parent_uuid, class: 'form-control'
           .field-element
-            = f.label :language, t('tasks.language'), class:'form-label'
-            = f.text_field :language, class:'form-control'
+            = f.label :language, t('tasks.language'), class: 'form-label'
+            = f.text_field :language, class: 'form-control'
 
           .field-element
             = f.label :access_level, t('tasks.visibility.label'), class: 'form-label'
@@ -121,7 +121,7 @@
                       =< t('exercises.form.files.remove')
                 .file-container style="margin-left: 10px; #{display_container}"
                   = render 'file_form', f: f, file: file
-            = f.add_nested_fields_link :files, ' ', class:'btn btn-main', id: 'addFileButton' do
+            = f.add_nested_fields_link :files, ' ', class: 'btn btn-main', id: 'addFileButton' do
               i.fa.fa-plus style=("color: #008000")
               =< t('exercises.form.files.add')
       fieldset.form-group
@@ -150,7 +150,7 @@
                 .test-container style="margin-left: 10px; #{display_container}"
                   = render 'test_form', f: f, test: test
             / .field-element
-            = f.add_nested_fields_link :tests, ' ', class:'btn btn-main', id: 'addTestButton' do
+            = f.add_nested_fields_link :tests, ' ', class: 'btn btn-main', id: 'addTestButton' do
               i.fa.fa-plus style=("color: #008000")
               =< t('tasks.form.tests.add')
       fieldset.form-group
@@ -180,7 +180,7 @@
                 .model-solution-container style="margin-left: 10px; #{display_container}"
                   = render 'model_solution_form', f: f, model_solution: model_solution
             / .field-element
-            = f.add_nested_fields_link :model_solutions, ' ', class:'btn btn-main', id: 'addTestButton' do
+            = f.add_nested_fields_link :model_solutions, ' ', class: 'btn btn-main', id: 'addTestButton' do
               i.fa.fa-plus style=("color: #008000")
               =< t('tasks.form.model_solutions.add')
       .form-group

@@ -75,9 +75,8 @@ br
                 = link_to reply_user_messages_path(recipient: message.sender), class: 'btn btn-light btn-sm' do
                   i.fa.fa-mail-reply
                   =< t('message.index.reply')
-              = link_to user_message_path(current_user, message, option: @option), method: :delete, class:'btn btn-light btn-sm', data: { confirm: t('sure') } do
+              = link_to user_message_path(current_user, message, option: @option), method: :delete, class: 'btn btn-light btn-sm', data: { confirm: t('sure') } do
                 i.fa.fa-trash
                 =< t('message.index.delete')
   = will_paginate
   br
-

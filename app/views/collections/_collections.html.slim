@@ -34,6 +34,6 @@
         .col-md-3
           .btn-group.float-end aria-label="..." role="group"
             - if can? :edit, collection
-              = link_to t('collections.button.view'), collection_path(collection), class:'btn btn-light'
-              = link_to t('collections.button.edit'), edit_collection_path(collection), class:'btn btn-light'
+              = link_to t('collections.button.view'), collection_path(collection), class: 'btn btn-light'
+              = link_to t('collections.button.edit'), edit_collection_path(collection), class: 'btn btn-light'
 = will_paginate @collections

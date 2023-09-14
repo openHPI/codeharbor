@@ -64,11 +64,11 @@
                 = label.name
       .exercise-buttons.btn-group-vertical.float-end aria-label="..." role="group"
         - if can? :show, task
-          = link_to t('tasks.index.view'), task_path(task), class:'btn btn-light'
-          / = link_to t('exercises.all.duplicate'), duplicate_task_path(task), class:'btn btn-light'
+          = link_to t('tasks.index.view'), task_path(task), class: 'btn btn-light'
+          / = link_to t('exercises.all.duplicate'), duplicate_task_path(task), class: 'btn btn-light'
         - if can? :edit, task
-          = link_to t('tasks.index.edit'), edit_task_path(task), class:'btn btn-light'
-          = link_to t('tasks.index.delete'), task_path(task), class:'btn btn-light', method: :delete, data: { confirm: t('sure') }
+          = link_to t('tasks.index.edit'), edit_task_path(task), class: 'btn btn-light'
+          = link_to t('tasks.index.delete'), task_path(task), class: 'btn btn-light', method: :delete, data: { confirm: t('sure') }
         / - if cannot? :edit, task
           = link_to 'Contribute', contribute_task_path(task), method: :post, class: 'btn btn-light'
     .card-footer

@@ -2,7 +2,7 @@
   = test.label :title, t('tasks.tests.title'), class: 'form-label'
   = test.text_field :title, class: 'form-control'
 .field-element
-  = test.label :testing_framework, t('tasks.tests.framework'), class:'form-label'
+  = test.label :testing_framework, t('tasks.tests.framework'), class: 'form-label'
   = test.collection_select :testing_framework_id, TestingFramework.all, :id, :name_with_version, {include_blank: t('tasks.form.none')}, {class: 'form-control'}
 .field-element
   = test.label :description, t('tasks.tests.description'), class: 'form-label'
@@ -47,8 +47,6 @@
       i.fa.fa-remove style=("color: #800000")
       =< t('exercises.form.files.remove')
 
-  = test.add_nested_fields_link :files, ' ', class:'btn btn-main', id: 'addTestFileButton' do
+  = test.add_nested_fields_link :files, ' ', class: 'btn btn-main', id: 'addTestFileButton' do
     i.fa.fa-plus style=("color: #008000")
     =< t('tasks.form.tests.add_file')
-
-
