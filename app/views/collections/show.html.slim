@@ -81,11 +81,11 @@
         = link_to remove_all_collection_path(@collection), method: :patch, data: { confirm: t('sure') }, class: 'btn btn-important' do
           i.fa.fa-remove style=("color: #800000")
           =< t('collections.show.remove_all')
-        = link_to edit_collection_path(@collection), class:'btn btn-important' do
+        = link_to edit_collection_path(@collection), class: 'btn btn-important' do
           i.fa.fa-edit
           =< t('collections.button.edit')
         - if @collection.users.include? current_user
-          = link_to leave_collection_path(@collection), class:'btn btn-important', method: :post, data: { confirm: @collection.users.count == 1 ? t('controllers.collections.leave.deletion_warning') : t('sure') } do
+          = link_to leave_collection_path(@collection), class: 'btn btn-important', method: :post, data: { confirm: @collection.users.count == 1 ? t('controllers.collections.leave.deletion_warning') : t('sure') } do
             = t('controllers.collections.leave.button')
 
         = link_to t('collections.button.back'), collections_path, class: 'btn btn-important'

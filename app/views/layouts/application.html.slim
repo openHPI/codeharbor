@@ -34,7 +34,7 @@ html
                       =< t('layouts.groups')
                   - if current_user.role === 'admin'
                     li.nav-item
-                      = link_to rails_admin.dashboard_path, 'data-turbolinks': false, class:"nav-link" do
+                      = link_to rails_admin.dashboard_path, 'data-turbolinks': false, class: "nav-link" do
                         i.fa.fa-lock
                         =< t('layouts.admin_nav.rails_admin')
               ul.navbar-nav.ms-auto
@@ -49,7 +49,7 @@ html
                       li
                         = link_to 'Profile', user_path(current_user), class: "dropdown-item"
                       li
-                        = link_to user_messages_path(current_user), class:"dropdown-item" do
+                        = link_to user_messages_path(current_user), class: "dropdown-item" do
                           => "Messages"
                           - if current_user.unread_messages_count != '0'
                             span.menu-number
