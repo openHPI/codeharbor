@@ -4,7 +4,7 @@
 $collection-color: #000080;
 
 .fa-folder-open {
-  color: $collection-color
+  color: $collection-color;
 }
 .collection-content {
   width: 60%;
@@ -13,11 +13,6 @@ $collection-color: #000080;
 .nav-container .nav-btn-collection {
   padding: 9px 15px;
   border-color: $collection-color;
-}
-
-.inner-panel {
-  margin-top: 25px;
-  color: #444444;
 }
 
 #share-menu {
