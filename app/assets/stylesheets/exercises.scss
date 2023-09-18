@@ -179,6 +179,7 @@ $exercise-color: #006600;
 .rating-dropdown {
   position: relative;
   display: inline-block;
+  cursor: pointer;
 }
 
 .rating-dropdown:hover .popup-rating {
@@ -189,10 +190,6 @@ $exercise-color: #006600;
   height: auto;
   max-height: 120px;
   overflow-x: hidden;
-}
-
-.star-rating {
-  cursor: pointer;
 }
 
 .programming-language,
@@ -561,7 +558,6 @@ legend {
 }
 
 .labels {
-  line-height: 24px;
   overflow-wrap: break-word;
 }
 
