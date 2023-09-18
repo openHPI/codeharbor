@@ -19,7 +19,7 @@
               =< (admin == current_user ? t('groups.button.demote_yourself') : t('groups.button.demote_admin'))
 
           /- unless admin == current_user
-            .btn-group.pull-right
+            .btn-group.float-end
               .dropdown.btn-group
                 = button_tag class: 'btn btn-light btn-sm dropdown-toggle', data: {toggle: 'dropdown'} do
                   => t('groups.manage_shared_account_links')
@@ -38,7 +38,7 @@
           .table-list
             => member.email
             - if can? :view, @group
-              /.btn-group.pull-right
+              /.btn-group.float-end
                 .dropdown.btn-group
                   = button_tag class: 'btn btn-light btn-sm dropdown-toggle', data: {toggle: 'dropdown'} do
                     => t('groups.manage_shared_account_links')
@@ -68,7 +68,7 @@
           - @group.applicants.each do |user|
             .table-list
               => user.email
-              .btn-group.pull-right
+              .btn-group.float-end
                 = link_to grant_access_group_path(group: @group, user: user), method: :post, class: 'btn btn-light btn-sm' do
                   i.fa.fa-plus style=("color:#008000")
                   =< t('groups.button.grant')

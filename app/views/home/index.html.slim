@@ -19,7 +19,7 @@
     button[type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"]
   .carousel-inner
     .carousel-item.active
-      = image_tag('banner1.jpg', class: 'd-block w-100', alt: '...')
+      = image_tag('banner1.jpg', class: 'd-block w-100', alt: t('home.banner1.alt_text'))
       .carousel-caption.d-none.d-md-block
         .background-transparent
           h1 = t('home.banner1.header')
@@ -31,7 +31,7 @@
         = ' / '
         = link_to "cc", 'https://creativecommons.org/licenses/by/2.0/'
     .carousel-item
-      = image_tag('banner2.jpg', class: 'd-block w-100', alt: '...')
+      = image_tag('banner2.jpg', class: 'd-block w-100', alt: t('home.banner2.alt_text'))
       .carousel-caption.d-none.d-md-block
         .background-transparent
           h1 = t('home.banner2.header')
@@ -43,7 +43,7 @@
         = ' / '
         = link_to "cc", 'https://creativecommons.org/licenses/by/2.0/'
     .carousel-item
-      = image_tag('banner3.jpg', class: 'd-block w-100', alt: '...')
+      = image_tag('banner3.jpg', class: 'd-block w-100', alt: t('home.banner3.alt_text'))
       .carousel-caption.d-none.d-md-block
         .background-transparent
           h1 = t('home.banner3.header')
@@ -57,45 +57,45 @@
   button.carousel-control-prev[type="button" data-bs-target="#myCarousel" data-bs-slide="prev"]
     span.carousel-control-prev-icon[aria-hidden="true"]
     span.visually-hidden
-      | Previous
+      = t('home.carousel.previous')
   button.carousel-control-next[type="button" data-bs-target="#myCarousel" data-bs-slide="next"]
     span.carousel-control-next-icon[aria-hidden="true"]
     span.visually-hidden
-      | Next
+      = t('home.carousel.next')
 
 .container.homepage
   .row.mb-3
-    .col-md-4.col-sm-12 style="min-height: 160px;"
-      .card.text-dark.bg-light.m-1
-        = image_tag "enterprise.png", class: 'img-circle card-img-top pt-1', alt: 'Enterprise'
+    .col-md-4.col-sm-12.mb-2
+      .card.text-dark.bg-light.m-1.h-100
+        = image_tag "enterprise.png", class: 'rounded-circle card-img-top pt-1', alt: t('home.marketing.mooc.alt_text')
         .card-body
           h5.card-title.text-center
             = t('home.marketing.mooc.header_html')
           p.card-text.text-center
             = t('home.marketing.mooc.paragraph')
-    .col-md-4.col-sm-12 style="min-height: 160px;"
-      .card.text-dark.bg-light.m-1
-        = image_tag "education.png", class: 'img-circle card-img-top pt-1', alt: 'Education'
+    .col-md-4.col-sm-12.mb-2
+      .card.text-dark.bg-light.m-1.h-100
+        = image_tag "education.png", class: 'rounded-circle card-img-top pt-1', alt: t('home.marketing.universities.alt_text')
         .card-body
           h5.card-title.text-center
             = t('home.marketing.universities.header_html')
           p.card-text.text-center
             = t('home.marketing.universities.paragraph')
-    .col-md-4.col-sm-12 style="min-height: 160px;"
-      .card.text-dark.bg-light.m-1
-        = image_tag "home.png", class: 'img-circle card-img-top pt-1', alt: 'Home'
+    .col-md-4.col-sm-12.mb-2
+      .card.text-dark.bg-light.m-1.h-100
+        = image_tag "home.png", class: 'rounded-circle card-img-top pt-1', alt: t('home.marketing.schools.alt_text')
         .card-body
           h5.card-title.text-center
             = t('home.marketing.schools.header_html')
           p.card-text.text-center
             = t('home.marketing.schools.paragraph')
 
-  .row.feature
+  .row.feature.pt-5
     .col-md-6.col-sm-12
       h5
         span.fa.fa-file-text-o
-        = ' ' + t('home.feature.exercises.header')
-      p.text-justify
+        =< t('home.feature.exercises.header')
+      p
         = t('home.feature.exercises.paragraph')
     .col-md-5
 
@@ -103,16 +103,16 @@
     .col-md-6.col-sm-12
       h5
         span.fa.fa-folder-open
-        = ' ' + t('home.feature.collections.header')
-      p.text-justify
+        =< t('home.feature.collections.header')
+      p
         = t('home.feature.collections.paragraph')
 
   .row.feature
     .col-md-6
       h5
         span.fa.fa-group
-        = ' ' + t('home.feature.groups.header')
-      p.text-justify
+        =< t('home.feature.groups.header')
+      p
         = t('home.feature.groups.paragraph')
 
   - unless user_signed_in?

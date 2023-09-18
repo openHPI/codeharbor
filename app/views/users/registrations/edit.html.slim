@@ -1,7 +1,7 @@
 .header
   .std-heading
     i.fa.fa-user style='color: #444444'
-    = ' ' + t('users.edit.header')
+    =< t('users.edit.header')
 
 = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
   = bootstrap_devise_error_messages!
@@ -39,7 +39,7 @@
             placeholder: t('users.new.password_new'),
             autocomplete: 'new-password',
             class: 'form-control'
-    small.form-text.text-muted = t('users.new.leave_blank')
+    small.form-text.text-body-secondary = t('users.new.leave_blank')
   .form-group
     = f.label :password_confirmation, t('users.new.password_new_confirmation')
     = f.password_field :password_confirmation,
@@ -57,13 +57,13 @@
             placeholder: t('users.new.password_current'),
             autocomplete: 'current-password',
             class: 'form-control'
-    small.form-text.text-muted = t('users.new.confirm_w_pwd')
+    small.form-text.text-body-secondary = t('users.new.confirm_w_pwd')
 
   .form-group
     .btn-group[role='group']
       = button_tag type: 'submit', class: 'btn btn-important' do
         i.fa.fa-user
-        = ' ' + t('users.update_user')
+        =< t('users.update_user')
       = link_to :back, class: 'btn btn-important' do
         i.fa.fa-remove style=('color: gray')
-        = ' ' + t('users.back')
+        =< t('users.back')

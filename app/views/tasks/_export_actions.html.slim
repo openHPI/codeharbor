@@ -1,21 +1,21 @@
 - if error
-  = button_tag type: 'button', class: 'btn btn-light btn-sm pull-right import-export-button', onclick: "exportTaskStart(#{task.id})" do
+  = button_tag type: 'button', class: 'btn btn-light btn-sm float-end import-export-button', onclick: "exportTaskStart(#{task.id})" do
     i.fa.fa-refresh.confirm-icon.export-button-icon
     = t('tasks.export_task.buttons.retry')
 - else
   - unless exported
     - if task_found
       - if update_right
-        = button_tag type: 'button', class: 'btn btn-light btn-sm pull-right export-action import-export-button', data: {'export-type' => 'export'} do
+        = button_tag type: 'button', class: 'btn btn-light btn-sm float-end export-action import-export-button', data: {'export-type' => 'export'} do
           i.fa.fa-check.confirm-icon.export-button-icon
           = t('tasks.export_task.buttons.overwrite')
-      = button_tag type: 'button', class: 'btn btn-light btn-sm pull-right export-action import-export-button', data: {'export-type' => 'create_new'} do
+      = button_tag type: 'button', class: 'btn btn-light btn-sm float-end export-action import-export-button', data: {'export-type' => 'create_new'} do
         i.fa.fa-check.confirm-icon-alt.export-button-icon
         = t('tasks.export_task.buttons.create_new')
     - else
-      = button_tag type: 'button', class: 'btn btn-light btn-sm pull-right export-action import-export-button', data: {'export-type' => 'export'} do
+      = button_tag type: 'button', class: 'btn btn-light btn-sm float-end export-action import-export-button', data: {'export-type' => 'export'} do
         i.fa.fa-check.confirm-icon.export-button-icon
         = t('tasks.export_task.buttons.export')
-= button_tag type: 'submit', class: 'btn btn-light btn-sm pull-right import-export-button', data: {dismiss: 'modal'} do
+= button_tag type: 'submit', class: 'btn btn-light btn-sm float-end import-export-button', data: {'bs-dismiss': 'modal'} do
   i.fa.fa-remove.abort-icon.export-button-icon
   = exported ? t('tasks.export_task.buttons.hide') : t('tasks.export_task.buttons.abort')

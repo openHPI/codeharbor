@@ -1,7 +1,7 @@
 .header
   .std-heading
     i.fa.fa-user
-    = ' ' + @user.name
+    =< @user.name
 .show-table.mt-5
   - if can? :edit, @user
     .table-header
@@ -44,10 +44,8 @@
       .row-value
         = link_to new_user_account_link_path(@user), class:'btn btn-light btn-sm', style: 'margin-bottom: 10px' do
           i.fa.fa-plus
-          = ' '
-          = t('users.show.account_links.add')
-        = ' '
-        = button_tag type: 'button', class: 'btn btn-light btn-sm show-description', style: 'margin-bottom: 10px' do
+          =< t('users.show.account_links.add')
+        =< button_tag type: 'button', class: 'btn btn-light btn-sm show-description', style: 'margin-bottom: 10px' do
           i.fa.fa-question
         .account-link-description.info-box
           span.fa.fa-info-circle
@@ -59,16 +57,14 @@
             - if account_link.shared_users.any?
               span title=t('account.account_links.shared_with_users', count: account_link.shared_users.count)
                 = " (#{t('account.account_links.shared')})"
-            .btn-group.pull-right
+            .btn-group.float-end
               = link_to t('users.show.account_links.show'), user_account_link_path(current_user, account_link), class:'btn btn-light btn-sm'
               = link_to edit_user_account_link_path(current_user, account_link), class:'btn btn-light btn-sm' do
                 i.fa.fa-edit
-                = ' '
-                = t('users.show.account_links.edit')
+                =< t('users.show.account_links.edit')
               = link_to user_account_link_path(current_user, account_link), method: :delete, data: { confirm: 'Are you sure?' }, class:'btn btn-light btn-sm' do
                 i.fa.fa-trash
-                = ' '
-                = t('users.show.account_links.destroy')
+                =< t('users.show.account_links.destroy')
     - if @user.shared_account_links.any?
       .row.vertical
         .col.row-label
@@ -78,28 +74,24 @@
           - @user.shared_account_links.each do |account_link|
             .table-list
               = account_link.name
-              .btn-group.pull-right
+              .btn-group.float-right
                 = link_to t('users.show.account_links.show'), user_account_link_path(current_user, account_link), class: 'btn btn-light btn-sm'
                 = button_to remove_shared_user_user_account_link_path(account_link.user.id, account_link.id),  method: :post, params: {shared_user: current_user.id}, data: { confirm: 'Are you sure?' }, class:'btn btn-light btn-sm', remote: true, form_class: 'remove-account-link-form' do
                   i.fa.fa-remove
-                  = ' '
-                  = t('shared.remove')
+                  =< t('shared.remove')
 .actions.btn-group[role="group"]
   - if can? :message, @user
     = link_to reply_user_messages_path(current_user, recipient: @user), class: 'btn btn-important' do
       i.fa.fa-envelope
-      = ' ' + t('message.send_message')
+      =< t('message.send_message')
   - if can? :edit, @user
     = link_to edit_user_registration_path, class:'btn btn-important' do
       i.fa.fa-edit
-      = ' '
-      = t('users.show.edit')
+      =< t('users.show.edit')
   - if can? :delete, @user
     = button_tag type: 'button', class: 'btn btn-important delete-user' do
-
       i.fa.fa-trash
-      = ' '
-      = t('users.show.delete')
+      =< t('users.show.delete')
   = link_to t('users.show.back'), :back, class:'btn btn-important'
 
 = render layout: 'users/shared/notification_modal', locals: { title: t('users.show.delete_modal.title'), confirm_notification_button: {target: user_registration_path, method: 'delete'}} do

@@ -1,7 +1,7 @@
 .header
   .std-heading
     i.fa.fa-envelope style='color: #444444'
-    = ' ' + t('users.resend_confirmation')
+    =< t('users.resend_confirmation')
 
 = form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f|
   = bootstrap_devise_error_messages!
@@ -20,9 +20,9 @@
     .btn-group[role='group']
       = button_tag type: 'submit', class: 'btn btn-important' do
         i.fa.fa-envelope
-        = ' ' + t('users.resend_confirmation')
+        =< t('users.resend_confirmation')
       = link_to :back, class: 'btn btn-important' do
         i.fa.fa-remove style=('color: gray')
-        = ' ' + t('users.back')
+        =< t('users.back')
 
 = render 'users/shared/links'

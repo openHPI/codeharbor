@@ -5,24 +5,24 @@
 -else
   = link_to task_comments_path(@task), class: 'refresh', remote: true do
     span.fa.fa-refresh
-    = ' ' + t('comments.button.refresh_comments')
+    =< t('comments.button.refresh_comments')
   - @comments.each do |comment|
     .comment-block
       .comment-user
         = comment.user.name
-        .pull-right.created-at
+        .float-end.created-at
           = t('comments.created_at') + ': '
           = t('time_ago', time: time_ago_in_words(comment.created_at))
       .comment-text.collapsable data-task=@task.id data-comment=comment.id
         = comment.text
-        .btn-group.pull-right role="group"
+        .btn-group.float-end role="group"
           - if can? :edit, comment
             = link_to edit_task_comment_path(@task, comment), class: 'btn btn-light btn-sm', remote: true do
               i.fa.fa-edit
-              = ' ' + t('comments.button.edit')
+              =< t('comments.button.edit')
             = link_to task_comment_path(@task, comment), class: 'btn btn-light btn-sm', method: :delete, remote: true, data: {confirm: t('sure')}
               i.fa.fa-trash
-              = ' ' + t('comments.button.delete')
+              =< t('comments.button.delete')
       .more-btn-wrapper
         = link_to task, class: 'more-btn' do
           span class=("more-tag")

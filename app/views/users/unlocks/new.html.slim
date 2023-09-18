@@ -1,7 +1,7 @@
 .header
   .std-heading
     i.fa.fa-unlock style='color: #444444'
-    = ' ' + t('users.resend_unlock')
+    =< t('users.resend_unlock')
 
 = form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post }) do |f|
   = bootstrap_devise_error_messages!
@@ -19,9 +19,9 @@
     .btn-group[role='group']
       = button_tag type: 'submit', class: 'btn btn-important' do
         i.fa.fa-unlock
-        = ' ' + t('users.resend_unlock')
+        =< t('users.resend_unlock')
       = link_to :back, class: 'btn btn-important' do
         i.fa.fa-remove style=('color: gray')
-        = ' ' + t('users.back')
+        =< t('users.back')
 
 = render 'users/shared/links'

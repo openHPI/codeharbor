@@ -3,14 +3,14 @@
     .card.my-4
       .card-body
         .col-md-10
-          h3.text-muted
+          h3.text-body-secondary
             = t('tasks.index.search.no_tasks')
           p style=("color: #777777")
   - else
     .card.my-4
       .card-body
         .col-md-10
-          h3.text-muted
+          h3.text-body-secondary
             = t('tasks.index.search.no_results')
           p style=("color: #777777")
             = t('tasks.index.search.no_results_description')
@@ -18,12 +18,12 @@
   .card.my-4
     .card-header
       h6
-        span.align-middle data-toggle="tooltip" data-placement="bottom" title="#{task.title}"
-          = truncate(task.title, length: 100)
         - if @visibility == :owner
-          span.align-middle.visibility.pull-left data-toggle="tooltip" data-placement="bottom" title="#{t('tasks.visibility.label')}"
+          span.align-middle.visibility data-bs-toggle="tooltip" data-bs-placement="bottom" title="#{t('tasks.visibility.label')}"
             = t("tasks.visibility.#{task.access_level}")
-        small.star-rating.pull-right
+        span.align-middle data-bs-toggle="tooltip" data-bs-placement="bottom" title="#{task.title}"
+          = truncate(task.title, length: 100)
+        small.star-rating.float-end
           span.number-rating.align-middle
             = task.average_rating.round(1)
           - [*1..5].each do |i|
@@ -34,11 +34,10 @@
                 .fa.fa-star-half-o data-rating=i
               - else
                 .fa.fa-star-o data-rating=i
-          small.text-muted.align-bottom
-            = ' '
-            = task.ratings.size
-            = ' ' + t('tasks.all.ratings')
-        span.programming-language.pull-right
+          small.text-body-secondary.align-bottom
+            =< task.ratings.size
+            =< t('tasks.all.ratings')
+        span.programming-language.float-end
           = task.programming_language&.language || t('tasks.index.no_programming_language_selected')
         / = render 'remove_state_tag', exercise: exercise
     .card-body.exercise-card
@@ -63,7 +62,7 @@
             - exercise.labels.each do |label|
               .task_label style=("background-color: #{'#' + label.color.to_s}; color: #{'#' + label.font_color.to_s};")
                 = label.name
-      .exercise-buttons.btn-group-vertical.pull-right aria-label="..." role="group"
+      .exercise-buttons.btn-group-vertical.float-end aria-label="..." role="group"
         - if can? :show, task
           = link_to t('tasks.index.view'), task_path(task), class:'btn btn-light'
           / = link_to t('exercises.all.duplicate'), duplicate_task_path(task), class:'btn btn-light'
@@ -74,15 +73,14 @@
           = link_to 'Contribute', contribute_task_path(task), method: :post, class: 'btn btn-light'
     .card-footer
       = button_tag type: 'button', class: 'btn no-border index-comment-button', data: {task: task.id} do
-        = t('comments.show_comments') + ' '
+        => t('comments.show_comments')
         span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
         span.fa.fa-caret-down.my-caret
-      = ' '
-      = button_tag type: 'button', class: 'btn no-border related-button', data: {task: task.id} do
-        = t('tasks.index.related_exercises') + ' '
+      =< button_tag type: 'button', class: 'btn no-border related-button', data: {task: task.id} do
+        => t('tasks.index.related_exercises')
         span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
         span.fa.fa-caret-down.my-caret
-      /.pull-right.stats
+      /.float-end.stats
         p.impact
           = t('exercises.downloads')
           = ': '
@@ -110,7 +108,7 @@
       = form_for :comment, url: task_comments_path(task), remote: true do |f|
         .write-comment
           .input-group
-            = f.label 'new_comment_label', t('comments.new_comment'), class: 'btn btn-light disabled input-group-addon'
+            = f.label 'new_comment_label', t('comments.new_comment'), class: 'input-group-text'
             = f.text_field :text, class: 'form-control'
             = f.submit class: 'btn btn-light'
       .comment-body

@@ -766,25 +766,34 @@ en:
     resend_confirmation: "Resend confirmmation"
     send: "Send"
 
+    carousel:
+      previous: "Previous"
+      next: "Next"
     banner1:
       header: "Your exercise repository"
       paragraph: "Search, rate and create exercises."
+      alt_text: "Exercise repository"
     banner2:
       header: "Collaborate on exercises"
       paragraph: "Improve your exercises by discussing them with your peers."
+      alt_text: "Exercise collaboration"
     banner3:
       header: "Share auto-gradeable exercises"
       paragraph: "Many auto-graders are supported."
+      alt_text: "Share exercises"
     marketing:
       mooc:
         header_html: "CodeHarbor for \n MOOCs"
         paragraph: "You're developing and running MOOCs that include auto-graded programming exercises?"
+        alt_text: "Enterprise"
       universities:
         header_html: "CodeHarbor for \n Universities"
         paragraph: "You're teaching large programming classes at university and use auto-graders for assessment?"
+        alt_text: "Education"
       schools:
         header_html: "CodeHarbor for \n Schools"
         paragraph: "You're teaching programming at school and need auto-gradeable programming exercises?"
+        alt_text: "Home"
       dojos:
         header_html: "CodeHarbor for \n informal learning "
         paragraph: "You're conducting workshops and are looking for auto-gradeable programming exercises?"

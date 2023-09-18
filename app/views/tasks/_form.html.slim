@@ -1,6 +1,6 @@
 .row
   .col-md-12.my-4
-    = simple_form_for @task, html: { class: 'form-horizontal project exercise-validation', multipart: true } do |f|
+    = simple_form_for @task, html: { class: 'project exercise-validation', multipart: true } do |f|
       - if @task.errors.any?
         #error_explanation.card
           .card-header
@@ -108,16 +108,15 @@
                 - if file.object.new_record?
                   - display_container = "display: block"
                   .table-header
-                    = file.remove_nested_fields_link :text, class: 'btn btn-main btn-sm pull-right' do
+                    = file.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
                       i.fa.fa-remove style=("color: #800000")
                       =< t('exercises.form.files.remove')
                 - else
                   - display_container = "display: none"
                   .table-header.closed.toggle-next
-                    = file.object.full_file_name
-                    = ' '
+                    => file.object.full_file_name
                     span.fa.fa-caret-down
-                    = file.remove_nested_fields_link :text, class: 'btn btn-main btn-sm pull-right' do
+                    = file.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
                       i.fa.fa-remove style=("color: #800000")
                       =< t('exercises.form.files.remove')
                 .file-container style="margin-left: 10px; #{display_container}"
@@ -137,16 +136,15 @@
                 - if test.object.new_record?
                   - display_container = "display: block"
                   .table-header
-                    = test.remove_nested_fields_link :text, class: 'btn btn-main btn-sm pull-right' do
+                    = test.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
                       i.fa.fa-remove style=("color: #800000")
                       =< t('tasks.form.tests.remove')
                 - else
                   - display_container = "display: none"
                   .table-header.closed.toggle-next
-                    = test.object.title
-                    = ' '
+                    => test.object.title
                     span.fa.fa-caret-down
-                    = test.remove_nested_fields_link :text, class: 'btn btn-main btn-sm pull-right' do
+                    = test.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
                       i.fa.fa-remove style=("color: #800000")
                       =< t('tasks.form.tests.remove')
                 .test-container style="margin-left: 10px; #{display_container}"
@@ -167,7 +165,7 @@
                 - if model_solution.object.new_record?
                   - display_container = "display: block"
                   .table-header
-                    = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-sm pull-right' do
+                    = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
                       i.fa.fa-remove style=("color: #800000")
                       =< t('tasks.form.model_solution.remove')
                 - else
@@ -176,7 +174,7 @@
                     => t('tasks.model_solution.singular')
                     => (model_solution.object.task.model_solutions.find_index(model_solution.object) + 1).to_s
                     span.fa.fa-caret-down
-                    = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-sm pull-right' do
+                    = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
                       i.fa.fa-remove style=("color: #800000")
                       =< t('tasks.form.model_solution.remove')
                 .model-solution-container style="margin-left: 10px; #{display_container}"

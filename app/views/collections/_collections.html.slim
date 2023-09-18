@@ -32,7 +32,7 @@
                     / = link_to contribute_exercise_path(exercise), method: :post, class: 'btn btn-light', style: "border-left: none; margin-right: 5px;" do
                     /   i.fa.fa-lock style=("color: gray")
         .col-md-3
-          .btn-group.pull-right aria-label="..." role="group"
+          .btn-group.float-end aria-label="..." role="group"
             - if can? :edit, collection
               = link_to t('collections.button.view'), collection_path(collection), class:'btn btn-light'
               = link_to t('collections.button.edit'), edit_collection_path(collection), class:'btn btn-light'

@@ -1,5 +1,5 @@
 doctype html
-html.h-100
+html
   head
     meta content=("text/html; charset=UTF-8") http-equiv="Content-Type" /
     title CodeHarbor
@@ -23,26 +23,25 @@ html.h-100
                   li.nav-item
                     = link_to tasks_path, class: "nav-link #{active_class(tasks_path)}"  do
                       i.fa.fa-file-text-o style=("color: #006600")
-                      = ' ' + t('layouts.tasks')
+                      =< t('layouts.tasks')
                   li.nav-item
                     = link_to collections_path, class: "nav-link #{active_class(collections_path)}"  do
                       i.fa.fa-folder-open style=("color: #000066")
-                      = ' ' + t('layouts.collections')
+                      =< t('layouts.collections')
                   li.nav-item
                     = link_to groups_path, class: "nav-link #{active_class(groups_path)}"  do
                       i.fa.fa-group style=("color: #660000")
-                      = ' ' + t('layouts.groups')
+                      =< t('layouts.groups')
                   - if current_user.role === 'admin'
                     li.nav-item
                       = link_to rails_admin.dashboard_path, 'data-turbolinks': false, class:"nav-link" do
                         i.fa.fa-lock
-                        = ' ' + t('layouts.admin_nav.rails_admin')
+                        =< t('layouts.admin_nav.rails_admin')
               ul.navbar-nav.ms-auto
                 - if user_signed_in?
                   li.nav-item.dropdown
                     a.nav-link.dropdown-toggle href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"
-                      = current_user.email
-                      = ' '
+                      => current_user.email
                       - if current_user.unread_messages_count != '0'
                         span.menu-number
                           = current_user.unread_messages_count
@@ -51,8 +50,7 @@ html.h-100
                         = link_to 'Profile', user_path(current_user), class: "dropdown-item"
                       li
                         = link_to user_messages_path(current_user), class:"dropdown-item" do
-                          = "Messages"
-                          = ' '
+                          => "Messages"
                           - if current_user.unread_messages_count != '0'
                             span.menu-number
                               = current_user.unread_messages_count
@@ -62,11 +60,11 @@ html.h-100
                   li.nav-item
                     = link_to new_user_registration_path, class: "nav-link" do
                       i.fa.fa-user
-                      = ' ' + t('home.sign_up')
+                      =< t('home.sign_up')
                   li.nav-item
                     = link_to new_user_session_path, class: "nav-link" do
                       i.fa.fa-sign-in
-                      = ' ' + t('home.login')
+                      =< t('home.login')
 
       - if @index
         .container
