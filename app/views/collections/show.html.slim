@@ -38,9 +38,8 @@
                   / Contributing to a task is not yet enabled again.
                   /- if cannot? :read, task
                     span.fa.fa-lock.lock
-                    = ' '
-                    = link_to t('collections.show.contribute'), contribute_exercise_path(task), method: :post, class: 'btn btn-light'
-                  = link_to remove_task_collection_path(@collection, task: task), method: :patch, class: 'pull-right' do
+                    =< link_to t('collections.show.contribute'), contribute_exercise_path(task), method: :post, class: 'btn btn-light'
+                  = link_to remove_task_collection_path(@collection, task: task), method: :patch, class: 'float-end' do
                     i.fa.fa-remove style=("color: #800000; font-size: 20px;")
 .row
   .col-md-12

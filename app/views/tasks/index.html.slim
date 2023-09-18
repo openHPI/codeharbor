@@ -10,10 +10,10 @@
           = button_tag t('tasks.menu_button.group'), type: 'button', class: 'btn btn-main change-hidden-field', id: :group
           = button_tag t('tasks.menu_button.public'), type: 'button', class: 'btn btn-main change-hidden-field', id: :public
         - if can? :create, Task
-          .btn-group.pull-right
+          .btn-group.float-end
             = link_to new_task_path, class: 'btn btn-main nav-btn-exercise' do
               i.fa.fa-plus style=("color: #008000")
-              = ' ' + t('tasks.index.new')
+              =< t('tasks.index.new')
             = button_tag type: 'button', 'data-bs-toggle': 'dropdown', aria: {haspopup: "true", expanded: "false"}, class: 'btn btn-main nav-btn-exercise dropdown-toggle split' do
               span.caret
             ul.dropdown-menu#xml-import
@@ -33,14 +33,14 @@
           = f.submit t('tasks.index.search.label'), class: 'btn btn-light search-submit-button-tag'
           = submit_tag t('tasks.index.search.reset'), id: 'reset-btn', type: 'button', name: nil, class: 'btn btn-light'
           = button_tag type: 'button', id: 'advanced', class: 'btn btn-light' do
-            small
-              = t('tasks.index.search.advanced') + ' '
+            span
+              => t('tasks.index.search.advanced')
             span.fa.fa-caret-down#drop style="color:#333333"
         .dropdown-content.p-3
           = hidden_field_tag 'advancedFilterActive', @advanced_filter_active
           = fields_for 'settings' do |advanced|
-            span.row.py-2
-              .order.section
+            span.row.p-2
+              .order.col-4
                 p
                   b = t('tasks.index.search.order')
                 .btn-group.btn-group-vertical[role="group"]
@@ -48,29 +48,29 @@
                     = sort_link(@search, :created_at)
                   div
                     = sort_link(@search, :average_rating)
-              .stars.section
+              .stars.col-4
                 p
                   b = t('tasks.index.search.min_stars')
                 div.form-group
                   = f.select 'min_stars', options_for_select(%w[0 1 2 3 4 5], selected: @min_stars), {}, class: 'form-control defaultSelect2 ransack-filter'
-              .proglanguages.section
+              .proglanguages.col-4
                 p
                   b = t('tasks.index.search.proglanguages')
                 span.form-group
                   = f.collection_select :programming_language_id_in, ProgrammingLanguage.all, :id, :language_with_version, {}, {multiple: true, class: 'form-control language-box ransack-filter'}
-            span.row.py-2
-              .other.section
+            span.row.p-2
+              .other.col-4
                 p
                   b = t('tasks.index.search.created')
                 span.form-group
                   = f.select 'created_before_days', options_for_select({t('tasks.index.search.all_time') => 0, t('tasks.index.search.today') => 1, t('tasks.index.search.last_week') => 7, t('tasks.index.search.last_month') => 30}, selected: @created_before_days), {}, class: 'form-control defaultSelect2 ransack-filter'
-              .labels.section
+              .labels.col-4
                 p
                   b = t('tasks.index.search.labels')
                 span.form-group
                   = f.select 'has_all_labels', options_for_select(@req_labels.map { |l| [l.name, l.name, { label_color: l.color, label_font_color: l.font_color }] }, @req_labels.pluck(:name)), {}, { class: "labels-select2-tag form-control ransack-filter", multiple: true, "data-tags": false, style: "width: 100px;" }
               - if @visibility == :owner
-                .other.section
+                .other.col-4
                   p
                     b = t('tasks.visibility.label')
                   span.form-group

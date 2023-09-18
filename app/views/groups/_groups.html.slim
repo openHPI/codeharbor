@@ -15,7 +15,7 @@
     .card-header
       h6
         span= group.name
-        span.pull-right
+        span.float-end
           - unless @option == 'all'
             - if group.admin?(current_user)
               = t('groups.admin_label')
@@ -26,7 +26,7 @@
         .col-md-12 style=("overflow-wrap: break-word;")
           - if group.description
             = group.description
-          .btn-group.pull-right aria-label="..." role="group"
+          .btn-group.float-end aria-label="..." role="group"
             - if can? :view, group
               = link_to 'Show', group, class: 'btn btn-light'
               - if can? :edit, group

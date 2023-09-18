@@ -2,13 +2,13 @@
 .nav-container.mb-5
   .col-md-12
     .btn-group[role="group"]
-      = link_to t('message.index.inbox'), user_messages_path(option: 'inbox'), class: 'btn btn-main', id: 'inbox'
-      = link_to t('message.index.sent'), user_messages_path(option: 'sent'), class: 'btn btn-main', id: 'sent'
+      = link_to t('message.index.inbox'), user_messages_path(option: 'inbox'), class: 'btn btn-main btn-tab-message', id: 'inbox'
+      = link_to t('message.index.sent'), user_messages_path(option: 'sent'), class: 'btn btn-main btn-tab-message', id: 'sent'
 
     - if can? :create, Message
-      = link_to new_user_message_path, class: 'btn btn-main nav-btn pull-right' do
+      = link_to new_user_message_path, class: 'btn btn-main nav-btn float-end' do
         i.fa.fa-envelope
-        = ' ' + t('message.index.new')
+        =< t('message.index.new')
 br
 - if @messages.empty?
   .card.mb-5
@@ -43,17 +43,16 @@ br
             = message.recipient ? message.recipient.name : t('message.index.unknown')
         .message-body
           .message-text
-            = message.text
-            = ' '
+            => message.text
             .btn-group
               -if message.param_type == 'exercise'
                 = link_to  t('message.index.view'), exercise_path(message.param_id), class: 'btn btn-light btn-sm'
                 = link_to add_author_exercise_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
                   i.fa.fa-plus style=("color:#008000")
-                  = ' ' + t('message.index.make_co_author')
+                  =< t('message.index.make_co_author')
                 = link_to decline_author_exercise_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
                   i.fa.fa-remove style=("color:#800000")
-                  = ' ' + t('message.index.deny_access')
+                  =< t('message.index.deny_access')
               - if message.param_type == 'collection'
                 = link_to  t('message.index.view'), view_shared_collection_path(message.param_id, user: message.sender), class: 'btn btn-light btn-sm'
                 = link_to t('message.index.save_collection'), save_shared_collection_path(message.param_id), method: 'post', class: 'btn btn-light btn-sm'
@@ -61,10 +60,10 @@ br
                 = link_to t('message.index.view'), group_path(message.param_id), class: 'btn btn-light btn-sm'
                 = link_to grant_access_group_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
                   i.fa.fa-plus style=("color:#008000")
-                  = ' ' + t('message.index.grant_access')
+                  =< t('message.index.grant_access')
                 = link_to deny_access_group_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
                   i.fa.fa-remove style=("color:#800000")
-                  = ' ' + t('message.index.deny_access')
+                  =< t('message.index.deny_access')
               - if message.param_type == 'exercise_accepted' || message.param_type == 'report'
                 = link_to t('message.index.view'), exercise_path(message.param_id), class: 'btn btn-light btn-sm'
               - if message.param_type == 'group_accepted'
@@ -75,10 +74,10 @@ br
               - unless @option == 'sent'
                 = link_to reply_user_messages_path(recipient: message.sender), class: 'btn btn-light btn-sm' do
                   i.fa.fa-mail-reply
-                  = ' ' + t('message.index.reply')
+                  =< t('message.index.reply')
               = link_to user_message_path(current_user, message, option: @option), method: :delete, class:'btn btn-light btn-sm', data: { confirm: t('sure') } do
                 i.fa.fa-trash
-                = ' ' + t('message.index.delete')
+                =< t('message.index.delete')
   = will_paginate
   br
 

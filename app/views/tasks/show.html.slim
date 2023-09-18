@@ -1,11 +1,10 @@
 .header
   .row
     .col-md-12
-      .std-heading data-toggle="tooltip" data-placement="bottom" title="#{@task.title}"
+      .std-heading data-bs-toggle="tooltip" data-bs-placement="bottom" title="#{@task.title}"
         i.i.fa.fa-file-text-o style=("color: #008000")
-        = ' '
-        = truncate(@task.title, length: 100)
-      span.star-rating.pull-right style=("font-size: 2.0em")
+        =< truncate(@task.title, length: 100)
+      span.star-rating.float-end style=("font-size: 2.0em")
         - [*1..5].each do |i|
           - if @task.average_rating >= i
             span.fa.fa-star.overall-rating data-rating=i
@@ -194,8 +193,7 @@
       - @files.each do |file|
         .show-table.exercise-show
           .table-header.closed.toggle-next
-            = file.full_file_name
-            = ' '
+            => file.full_file_name
             span.fa.fa-caret-down
           .file-content
             .row
@@ -279,8 +277,7 @@
       - @tests.each do |test|
         .show-table.exercise-show
           .table-header.closed.toggle-next
-            = test.title
-            = ' '
+            => test.title
             span.fa.fa-caret-down
           .test-content
             .row
@@ -354,8 +351,7 @@
               - test.files.each do |file|
                 .show-table.exercise-show
                   .table-header.closed.toggle-next
-                    = file.full_file_name
-                    = ' '
+                    => file.full_file_name
                     span.fa.fa-caret-down
                   .file-content
                     .row
@@ -426,10 +422,8 @@
       - @model_solutions.each do |model_solution|
         .show-table.exercise-show
           .table-header.closed.toggle-next
-            = t('tasks.model_solution.singular')
-            = ' '
-            = @model_solutions.find_index(model_solution) + 1
-            = ' '
+            => t('tasks.model_solution.singular')
+            => @model_solutions.find_index(model_solution) + 1
             span.fa.fa-caret-down
           .test-content
             .row
@@ -458,8 +452,7 @@
               - model_solution.files.each do |file|
                 .show-table.exercise-show
                   .table-header.closed.toggle-next
-                    = file.full_file_name
-                    = ' '
+                    => file.full_file_name
                     span.fa.fa-caret-down
                   .file-content
                     .row
@@ -582,7 +575,7 @@
         = form_for :comment, url: task_comments_path(@task), remote: true do |f|
           .write-comment
             .input-group
-              = f.label 'new_comment_label', 'New Comment', class: 'btn btn-light disabled input-group-addon'
+              = f.label 'new_comment_label', 'New Comment', class: 'input-group-text'
               = f.text_field :text, class: 'form-control'
               = f.submit class: 'btn btn-light'
         .comment-body

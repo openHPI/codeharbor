@@ -247,19 +247,6 @@ $exercise-color: #006600;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 }
 
-.section {
-  float: left;
-  position: relative;
-  height: auto;
-  box-sizing: border-box;
-  width: 32%;
-  margin-right: 10px;
-}
-
-.section > p {
-  padding-left: 3px;
-}
-
 .proglanguages {
   width: 32%;
 }
@@ -551,6 +538,7 @@ legend {
   border: 0;
   height: 28px;
   visibility: hidden;
+  opacity: 1;
   * {
     visibility: visible;
   }

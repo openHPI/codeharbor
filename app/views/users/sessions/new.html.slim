@@ -2,7 +2,7 @@
   .header.mb-5
     .std-heading
       i.fa.fa-sign-in style='color: #444444'
-      = ' ' + t('sessions.header')
+      =< t('sessions.header')
   = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
     .form-group.field-element
       = f.label :email, class: 'form-label'
@@ -29,9 +29,9 @@
       .btn-group[role='group']
         = button_tag type: 'submit', class: 'btn btn-important' do
           i.fa.fa-sign-in
-          = ' ' + t('sessions.login')
+          =< t('sessions.login')
         = link_to :back, class: 'btn btn-important' do
           i.fa.fa-remove style=('color: gray')
-          = ' ' + t('sessions.back')
+          =< t('sessions.back')
 
   = render 'users/shared/links'
