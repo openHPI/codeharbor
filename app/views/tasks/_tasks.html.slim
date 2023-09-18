@@ -24,6 +24,8 @@
         span.align-middle data-bs-toggle="tooltip" data-bs-placement="bottom" title="#{task.title}"
           = truncate(task.title, length: 100)
         small.star-rating.float-end
+          span.programming-language.align-middle
+            = task.programming_language&.language || t('tasks.index.no_programming_language_selected')
           span.number-rating.align-middle
             = task.average_rating.round(1)
           - [*1..5].each do |i|
@@ -37,8 +39,6 @@
           small.text-body-secondary.align-bottom
             =< task.ratings.size
             =< t('tasks.all.ratings')
-        span.programming-language.float-end
-          = task.programming_language&.language || t('tasks.index.no_programming_language_selected')
         / = render 'remove_state_tag', exercise: exercise
     .card-body.exercise-card
       .exercise-content
