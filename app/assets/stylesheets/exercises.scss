@@ -328,40 +328,24 @@ legend {
   background-color: #ddd;
 }
 
-.button-panel {
-  width: 100%;
-  display: inline-block;
-  margin-bottom: 20px;
-  position: relative;
+.button-box {
+  margin: 12px;
+  border-radius: 4px;
+  background-color: #fafafa;
 
-  .button-box {
-    float: left;
-    display: inline-block;
-    border: 1px gray solid;
-    border-radius: 4px;
-    padding: 12px 16px;
-    width: 30%;
-    height: 160px;
-    margin-left: 5%;
-    background-color: #fafafa;
-
-    .button-description {
-      display: block;
-      margin-bottom: 8px;
-    }
-    .wrapper {
-      width: 100%;
-      text-align: center;
-      display: block;
-      .btn-light,
-      .btn-group {
-        width: 100%;
-        margin-bottom: 5px;
-      }
-    }
+  .button-description {
+    display: block;
+    margin-bottom: 8px;
   }
-  .button-box:first-child {
-    margin-left: 0;
+  .wrapper {
+    width: 100%;
+    text-align: center;
+    display: block;
+    .btn-light,
+    .btn-group {
+      width: 100%;
+      margin-bottom: 5px;
+    }
   }
 }
 
@@ -489,7 +473,6 @@ legend {
 }
 
 .with-borders {
-  margin-top: 10px;
   border: 1px #dddddd solid;
   border-radius: 4px;
 }

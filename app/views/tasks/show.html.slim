@@ -511,15 +511,16 @@
                         | :
                       .col.row-value
                         = file.usage_by_lms
-    .button-panel
-      .button-box
+.row
+  .col-md-4.col-sm-6.mb-3
+      .button-box.border.p-3.h-100
         .button-description
           = t('controllers.task.add_to_collection.hint')
         .wrapper
           /  = link_to t('exercises.show.add_to_cart'), add_to_cart_exercise_path(@task), method: 'post', class: 'btn btn-light'
           .dropdown.btn-group
             = button_tag class: 'btn btn-light dropdown-toggle', 'data-bs-toggle': 'dropdown' do
-              => t('tasks.show.add_to_collection')
+              = t('tasks.show.add_to_collection')
             ul.scrollable.dropdown-menu[role="menu"]
               - if !current_user.collections.empty?
                 - current_user.collections.each do |collection|
@@ -528,30 +529,31 @@
               - else
                 li
                   = link_to t('tasks.show.add_collection'), new_collection_path(current_user)
-      - if can? :export, Task
-        .button-box
-          .button-description
-            = t('tasks.download')
-          .wrapper
-            = link_to t('shared.download_zip'), download_task_path(@task), class: 'btn btn-light', 'data-turbolinks'=> false
-            .dropdown.btn-group
-              = button_tag class: 'btn btn-light dropdown-toggle', 'data-bs-toggle': 'dropdown' do
-                = t('tasks.show.export')
-              ul.scrollable.dropdown-menu[role="menu"]
-                li.dropdown-header = t('tasks.show.export_to') + ': '
-                - if !current_user.available_account_links.empty?
-                  - current_user.available_account_links.each do |acc_link|
-                    li
-                      = link_to acc_link.name, export_external_start_task_path(account_link: acc_link), method: :post, remote: true, class: 'dropdown-item export-test'
-                - else
-                  li
-                    = link_to t('tasks.show.define_account_link'), new_user_account_link_path(current_user)
-
-      /.button-box
+  .col-md-4.col-sm-6.mb-3
+    - if can? :export, Task
+      .button-box.border.p-3.h-100
         .button-description
-          = "Derivate, translate or port this Exercise by duplicating it. The duplicate will be owned by you."
+          = t('tasks.download')
         .wrapper
-          = link_to t('exercises.all.duplicate'), duplicate_exercise_path(@task), class: 'btn btn-light'
+          = link_to t('shared.download_zip'), download_task_path(@task), class: 'btn btn-light', 'data-turbolinks'=> false
+          .dropdown.btn-group
+            = button_tag class: 'btn btn-light dropdown-toggle', 'data-bs-toggle': 'dropdown' do
+              = t('tasks.show.export')
+            ul.scrollable.dropdown-menu[role="menu"]
+              li.dropdown-header = t('tasks.show.export_to') + ': '
+              - if !current_user.available_account_links.empty?
+                - current_user.available_account_links.each do |acc_link|
+                  li
+                    = link_to acc_link.name, export_external_start_task_path(account_link: acc_link), method: :post, remote: true, class: 'dropdown-item export-test'
+              - else
+                li
+                  = link_to t('tasks.show.define_account_link'), new_user_account_link_path(current_user)
+
+    /.button-box
+      .button-description
+        = "Derivate, translate or port this Exercise by duplicating it. The duplicate will be owned by you."
+      .wrapper
+        = link_to t('exercises.all.duplicate'), duplicate_exercise_path(@task), class: 'btn btn-light'
 
     /.related-panel
       = button_tag type: 'button', class: 'full-window-button related-button' do
@@ -566,12 +568,13 @@
       .slide-right.inactive
         = button_tag do
           i.fa.fa-caret-right
-    .expandable-panel.with-borders
+  .col-md-12.pb-3.mt-3
+    .expandable-panel
       = button_tag type: 'button', class: 'full-window-button show-comment-button', data: {task_id: @task.id} do
         => t('comments.show_comments')
         span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
         span.fa.fa-caret-down.my-caret
-      .comment-box data-task=@task.id
+      .comment-box.with-borders data-task=@task.id
         = form_for :comment, url: task_comments_path(@task), remote: true do |f|
           .write-comment
             .input-group
