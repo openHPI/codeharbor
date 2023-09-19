@@ -62,6 +62,7 @@ done
 
 # Install dependencies
 bundle install
+yarn install
 
 # Initialize database
 rake db:setup

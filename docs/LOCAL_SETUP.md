@@ -163,6 +163,7 @@ Then, you should check all config files manually and adjust settings where neces
 
 ```shell
 bundle install
+yarn install
 ```
 
 ### Initialize the database
@@ -175,11 +176,23 @@ rake db:setup
 
 ### Start CodeHarbor
 
-For the development environment, you just need the Rails server for the main application. It will generate all assets on the fly and serve them to the browser.
+For the development environment, two server processes are required: the Rails server for the main application and a Webpack server providing JavaScript and CSS assets.
 
-```shell
-bundle exec rails server
-```
+1. Webpack dev server:
+
+This project uses [shakapacker](https://github.com/shakacode/shakapacker) to integrate Webpack with Rails to deliver Frontend assets. During development, the `webpack-dev-server` automatically launches together with the Rails server if not specified otherwise. In case of missing JavaScript or stylesheets and for Hot Module Reloading in the browser, you might want to start the `webpack-dev-server` manually *before starting Rails*:
+
+  ```shell
+  yarn run webpack-dev-server
+  ```
+
+This will launch a dedicated server on port 3035 (default setting) and allow incoming WebSocket connections from your browser.
+
+2. Rails application:
+
+  ```shell
+  bundle exec rails server
+  ```
 
 This will launch the CodeHarbor web application server on port 7500 (default setting) and allow incoming connections from your browser.
 

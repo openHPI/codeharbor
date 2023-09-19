@@ -73,7 +73,21 @@ During the first start, Vagrant will run a provision script and automatically se
 
 ## Start CodeHarbor
 
-For the development environment with Vagrant, you just need to start the Rails server for the main application. It will generate all assets on the fly and serve them to the browser. As the Rails server process will be run in the virtual machine, you always need to connect to the VM with `vagrant ssh`.
+For the development environment with Vagrant, two server processes are required: the Rails server for the main application, and a Webpack server providing JavaScript and CSS assets. As those processes will be run in the virtual machine, you always need to connect to the VM with `vagrant ssh`.
+
+1. Webpack dev server:
+
+This project uses [shakapacker](https://github.com/shakacode/shakapacker) to integrate Webpack with Rails to deliver Frontend assets. During development, the `webpack-dev-server` automatically launches together with the Rails server if not specified otherwise. In case of missing JavaScript or stylesheets and for Hot Module Reloading in the browser, you might want to start the `webpack-dev-server` manually *before starting Rails*:
+
+  ```shell
+  vagrant ssh
+  cd codeocean
+  yarn run webpack-dev-server
+  ```
+
+This will launch a dedicated server on port 3035 (default setting) and allow incoming WebSocket connections from your browser.
+
+2. Rails application:
 
   ```shell
   vagrant ssh
