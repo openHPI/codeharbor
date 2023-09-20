@@ -21,7 +21,7 @@ RSpec.describe Bridges::Lom::TasksController do
 
       it 'returns valid LOM xml' do
         get_request
-        schema = Nokogiri::XML::Schema(File.read(Bridges::Lom::TasksController::OML_SCHEMA_PATH))
+        schema = Nokogiri::XML::Schema(File.open(Bridges::Lom::TasksController::OML_SCHEMA_PATH))
         expect(schema.validate(Nokogiri::XML(response.body))).to be_empty
       end
     end
