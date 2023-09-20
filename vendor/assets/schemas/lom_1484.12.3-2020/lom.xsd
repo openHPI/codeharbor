@@ -13,8 +13,8 @@
       </xs:documentation>
       <xs:documentation>
          This file represents a composite schema for validating
-         LOM V1.0 instances.  This file is built by default to represent a 
-         composite schema for validation of the following:          
+         LOM V1.0 instances.  This file is built by default to represent a
+         composite schema for validation of the following:
 
          1) The use of LOM Base Schema vocabulary source/value pairs only
          2) Uniqueness constraints defined by 1484.12.1-2002

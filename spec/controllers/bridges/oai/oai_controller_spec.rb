@@ -78,6 +78,22 @@ RSpec.describe Bridges::Oai::OaiController do
 
         it_behaves_like 'a valid OAI-PMH error', 'idDoesNotExist'
       end
+
+      context 'when format requested is IEEE LOM' do
+        let(:metadata_prefix) { :lom }
+
+        context 'when task is public' do
+          it_behaves_like 'a successful OAI-PMH response'
+        end
+      end
+
+      context 'when format requested is invalid' do
+        let(:metadata_prefix) { :invalid }
+
+        context 'when task is public' do
+          it_behaves_like 'a valid OAI-PMH error', 'cannotDisseminateFormat'
+        end
+      end
     end
 
     context 'when verb is Identify' do
@@ -150,8 +166,14 @@ RSpec.describe Bridges::Oai::OaiController do
         it_behaves_like 'a valid OAI-PMH error', 'noRecordsMatch'
       end
 
-      context 'with invalid time bounds' do
+      context 'with invalid time bounds for the from parameter' do
         let(:from) { Time.utc(2022).rfc822 }
+
+        it_behaves_like 'a valid OAI-PMH error', 'badArgument'
+      end
+
+      context 'with invalid time bounds for the until parameter' do
+        let(:until) { Time.utc(2022).rfc822 }
 
         it_behaves_like 'a valid OAI-PMH error', 'badArgument'
       end
@@ -291,6 +313,12 @@ RSpec.describe Bridges::Oai::OaiController do
         xml = Nokogiri::XML(response.body)
         expect(xml.xpath('//xmlns:setName').map(&:text)).to match_array(labels.map(&:name).append('Label', 'Task'))
       end
+    end
+
+    context 'when verb is invalid' do
+      let(:verb) { 'invalid' }
+
+      it_behaves_like 'a valid OAI-PMH error', 'badVerb'
     end
   end
 end

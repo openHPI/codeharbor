@@ -18,10 +18,13 @@
 
   <xs:import
     namespace="http://www.openarchives.org/OAI/2.0/oai_dc/"
-    schemaLocation="vendor/assets/schemas/oai-pmh/sub-schemas/custom_oai_dc.xsd"
-    />
     schemaLocation="sub-schemas/custom_oai_dc.xsd"
     />
+
+  <xs:import
+    namespace="http://ltsc.ieee.org/xsd/LOM"
+    schemaLocation="../lom_1484.12.3-2020/lom.xsd"
+  />
 
   <xs:import
     namespace="http://www.w3.org/XML/1998/namespace"
