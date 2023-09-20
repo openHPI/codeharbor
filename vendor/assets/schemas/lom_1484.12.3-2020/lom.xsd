@@ -56,7 +56,7 @@
 
    <!-- Learning Object Metadata -->
 
-   <xs:include schemaLocation="vendor/assets/schemas/lom_1484.12.3-2020/common/anyElement.xsd"/>
+   <xs:include schemaLocation="common/anyElement.xsd"/>
 
    <!-- Element uniqueness:  use one of the following                   -->
    <!-- Use unique/loose.xsd to relax element uniqueness constraints    -->
@@ -66,7 +66,7 @@
               schemaLocation="unique/loose.xsd"/> -->
 
    <xs:import namespace="http://ltsc.ieee.org/xsd/LOM/unique"
-              schemaLocation="vendor/assets/schemas/lom_1484.12.3-2020/unique/strict.xsd"/>
+              schemaLocation="unique/strict.xsd"/>
 
    <!-- Vocabulary checking:  use one of the following                             -->
    <!-- Use vocab/loose.xsd to relax vocabulary enumeration constraints            -->
@@ -77,7 +77,7 @@
               schemaLocation="vocab/loose.xsd"/> -->
 
    <xs:import namespace="http://ltsc.ieee.org/xsd/LOM/vocab"
-              schemaLocation="vendor/assets/schemas/lom_1484.12.3-2020/vocab/strict.xsd"/>
+              schemaLocation="vocab/strict.xsd"/>
 
    <!-- <xs:import namespace="http://ltsc.ieee.org/xsd/LOM/vocab"
               schemaLocation="vocab/custom.xsd"/> -->
@@ -87,16 +87,16 @@
    <!-- Use extend/custom.xsd to allow custom metadata elements        -->
 
    <xs:import namespace="http://ltsc.ieee.org/xsd/LOM/extend"
-             schemaLocation="vendor/assets/schemas/lom_1484.12.3-2020/extend/strict.xsd"/>
+             schemaLocation="extend/strict.xsd"/>
 
    <!--<xs:import namespace="http://ltsc.ieee.org/xsd/LOM/extend"
               schemaLocation="extend/custom.xsd"/> -->
 
-   <xs:include schemaLocation="vendor/assets/schemas/lom_1484.12.3-2020/common/dataTypes.xsd"/>
-   <xs:include schemaLocation="vendor/assets/schemas/lom_1484.12.3-2020/common/elementNames.xsd"/>
-   <xs:include schemaLocation="vendor/assets/schemas/lom_1484.12.3-2020/common/elementTypes.xsd"/>
-   <xs:include schemaLocation="vendor/assets/schemas/lom_1484.12.3-2020/common/rootElement.xsd"/>
-   <xs:include schemaLocation="vendor/assets/schemas/lom_1484.12.3-2020/common/vocabValues.xsd"/>
-   <xs:include schemaLocation="vendor/assets/schemas/lom_1484.12.3-2020/common/vocabTypes.xsd"/>
+   <xs:include schemaLocation="common/dataTypes.xsd"/>
+   <xs:include schemaLocation="common/elementNames.xsd"/>
+   <xs:include schemaLocation="common/elementTypes.xsd"/>
+   <xs:include schemaLocation="common/rootElement.xsd"/>
+   <xs:include schemaLocation="common/vocabValues.xsd"/>
+   <xs:include schemaLocation="common/vocabTypes.xsd"/>
 
 </xs:schema>

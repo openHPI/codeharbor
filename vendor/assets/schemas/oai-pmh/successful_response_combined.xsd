@@ -13,21 +13,23 @@
 
   <xs:import
     namespace="http://www.openarchives.org/OAI/2.0/"
-    schemaLocation="vendor/assets/schemas/oai-pmh/sub-schemas/successful_response.xsd"
+    schemaLocation="sub-schemas/successful_response.xsd"
     />
 
   <xs:import
     namespace="http://www.openarchives.org/OAI/2.0/oai_dc/"
     schemaLocation="vendor/assets/schemas/oai-pmh/sub-schemas/custom_oai_dc.xsd"
     />
+    schemaLocation="sub-schemas/custom_oai_dc.xsd"
+    />
 
   <xs:import
     namespace="http://www.w3.org/XML/1998/namespace"
-    schemaLocation="vendor/assets/schemas/oai-pmh/sub-schemas/xml.xsd"
+    schemaLocation="sub-schemas/xml.xsd"
     />
 
   <xs:import
     namespace="http://purl.org/dc/elements/1.1/"
-    schemaLocation="vendor/assets/schemas/oai-pmh/sub-schemas/simpledc20021212.xsd"
+    schemaLocation="sub-schemas/simpledc20021212.xsd"
     />
 </xs:schema>

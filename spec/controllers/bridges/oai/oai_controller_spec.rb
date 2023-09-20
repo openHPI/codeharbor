@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.describe Bridges::Oai::OaiController do
   render_views
 
-  error_response_schema = Nokogiri::XML::Schema(File.read(Bridges::Oai::OaiController::ERROR_RESPONSE_XSD))
-  successful_response_schema = Nokogiri::XML::Schema(File.read(Bridges::Oai::OaiController::SUCCESSFUL_RESPONSE_XSD))
+  error_response_schema = Nokogiri::XML::Schema(File.open(Bridges::Oai::OaiController::ERROR_RESPONSE_XSD))
+  successful_response_schema = Nokogiri::XML::Schema(File.open(Bridges::Oai::OaiController::SUCCESSFUL_RESPONSE_XSD))
 
   shared_examples 'a successful OAI-PMH response' do
     it 'returns a valid OAI-PMH response' do
