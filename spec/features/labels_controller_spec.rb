@@ -20,8 +20,8 @@ describe 'LabelsController', :js do
         fill_in id: 'label-name-filter-input', with: 'loops'
         find('input', id: 'label-name-filter-input').send_keys(:enter)
         wait_for_ajax
-        matching_labels.each {|label| expect(page).to have_selector('.labels-table .task_label', text: label.name) }
-        not_matching_labels.each {|label| expect(page).not_to have_selector('.labels-table .task_label', text: label.name) }
+        matching_labels.each {|label| expect(page).to have_css('.labels-table .task_label', text: label.name) }
+        not_matching_labels.each {|label| expect(page).not_to have_css('.labels-table .task_label', text: label.name) }
       end
     end
 
