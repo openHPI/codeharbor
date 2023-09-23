@@ -14,8 +14,8 @@ RSpec.describe Comment do
     it { is_expected.not_to be_able_to(:new, described_class) }
     it { is_expected.not_to be_able_to(:manage, described_class) }
 
-    it { is_expected.not_to be_able_to(:show, comment) }
-    it { is_expected.not_to be_able_to(:read, comment) }
+    it { is_expected.to be_able_to(:show, comment) }
+    it { is_expected.to be_able_to(:read, comment) }
     it { is_expected.not_to be_able_to(:answer, comment) }
     it { is_expected.not_to be_able_to(:update, comment) }
     it { is_expected.not_to be_able_to(:destroy, comment) }
