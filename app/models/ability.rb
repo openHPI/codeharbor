@@ -4,6 +4,9 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
+    # abilities for logged out users/guests
+    guest_abilities
+
     return unless user
 
     alias_action :create, :show, :update, :destroy, to: :crud
@@ -38,6 +41,12 @@ class Ability
 
     # Label
     label_abilities
+  end
+
+  def guest_abilities
+    can %i[show download], Task, &:access_level_public?
+
+    can %i[show read], Comment
   end
 
   def admin_abilities(user)
