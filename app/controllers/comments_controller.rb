@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 class CommentsController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource :task
+  load_and_authorize_resource :comment, through: :task
+
   before_action :set_task
   before_action :set_comment, only: %i[edit update destroy]
   before_action :new_comment, only: :create
