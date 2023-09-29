@@ -88,7 +88,7 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'pry-byebug'
   gem 'rails-controller-testing', '>= 1.0.4'
-  gem 'rspec-collection_matchers', '~> 1.2.0'
+  gem 'rspec-collection_matchers', '~> 1.2.1'
   gem 'rspec-rails'
   gem 'rubocop'
   gem 'rubocop-capybara'
