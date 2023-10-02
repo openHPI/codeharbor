@@ -1,27 +1,25 @@
 default: &default
   default_options:
-    from: no-reply@example.com
-  smtp_settings:
-    address: 127.0.0.1
-  sendmail_settings:
-    host: localhost
-  delivery_method: :sendmail
+    from: codeharbor@openhpi.de
 
 development:
   <<: *default
   default_url_options:
     host: localhost
     port: 7500
+  # Open mails in the browser (not compatible with Vagrant)
+  delivery_method: :letter_opener
+  # Print mails to the console
+  # delivery_method: :test
 
 production:
   <<: *default
+  default_url_options:
+    host: CHANGE_ME
   delivery_method: :smtp
-  smtp_settings:
-    address: 192.168.0.1
 
 test:
   <<: *default
   default_url_options:
     host: localhost
-    port: 3000
   delivery_method: :test
