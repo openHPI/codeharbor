@@ -123,4 +123,4 @@ group :test do
 end
 gem 'sassc-rails'
 
-gem 'shakapacker', '7.0.3'
+gem 'shakapacker', '7.1.0'
