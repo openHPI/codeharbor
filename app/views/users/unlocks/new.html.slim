@@ -1,4 +1,4 @@
-.header
+.header.mb-5
   .std-heading
     i.fa.fa-unlock style='color: #444444'
     =< t('users.resend_unlock')
@@ -6,8 +6,8 @@
 = form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post }) do |f|
   = bootstrap_devise_error_messages!
 
-  .form-group
-    = f.label :email
+  .form-group.field-element
+    = f.label :email, class: 'form-label'
     = f.email_field :email,
             required: true,
             autofocus: true,
@@ -15,7 +15,7 @@
             autocomplete: 'email',
             class: 'form-control'
 
-  .form-group
+  .form-group.py-3
     .btn-group[role='group']
       = button_tag type: 'submit', class: 'btn btn-important' do
         i.fa.fa-unlock
