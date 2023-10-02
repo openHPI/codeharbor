@@ -1,4 +1,4 @@
-.header
+.header.mb-5
   .std-heading
     i.fa.fa-key style='color: #444444'
     =< t('users.change_pwd')
@@ -7,8 +7,8 @@
   = bootstrap_devise_error_messages!
   = f.hidden_field :reset_password_token
 
-  .form-group
-    = f.label :password, t('users.new.password_new')
+  .form-group.field-element
+    = f.label :password, t('users.new.password_new'), class: 'form-label'
     = f.password_field :password,
             required: true,
             autofocus: true,
@@ -17,15 +17,15 @@
             class: 'form-control'
     - if @minimum_password_length
       small.form-text.text-body-secondary = t('users.new.minimum_password_length', count: @minimum_password_length)
-  .form-group
-    = f.label :password_confirmation, t('users.new.password_new_confirmation')
+  .form-group.field-element
+    = f.label :password_confirmation, t('users.new.password_new_confirmation'), class: 'form-label'
     = f.password_field :password_confirmation,
             required: true,
             placeholder: t('users.new.password_new'),
             autocomplete: 'new-password',
             class: 'form-control'
 
-  .form-group
+  .form-group.py-3
     .btn-group[role='group']
       = button_tag type: 'submit', class: 'btn btn-important' do
         i.fa.fa-key

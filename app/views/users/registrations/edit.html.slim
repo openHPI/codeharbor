@@ -1,4 +1,4 @@
-.header
+.header.mb-5
   .std-heading
     i.fa.fa-user style='color: #444444'
     =< t('users.edit.header')
@@ -6,24 +6,24 @@
 = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
   = bootstrap_devise_error_messages!
 
-  .form-group
-    = f.label :first_name
+  .form-group.field-element
+    = f.label :first_name, class: 'form-label'
     = f.text_field :first_name,
             required: true,
             autofocus: true,
             placeholder: t('users.new.first_name'),
             autocomplete: 'given-name',
             class: 'form-control'
-  .form-group
-    = f.label :last_name
+  .form-group.field-element
+    = f.label :last_name, class: 'form-label'
     = f.text_field :last_name,
             required: true,
             placeholder: t('users.new.last_name'),
             autocomplete: 'family-name',
             class: 'form-control'
 
-  .form-group
-    = f.label :email
+  .form-group.field-element
+    = f.label :email, class: 'form-label'
     = f.email_field :email,
             required: true,
             placeholder: t('users.new.email'),
@@ -32,16 +32,16 @@
     - if devise_mapping.confirmable? && resource.pending_reconfirmation?
       p = t('users.waiting_confirmation', email: resource.unconfirmed_email)
 
-  .form-group
-    = f.label :password, t('users.new.password_new')
+  .form-group.field-element
+    = f.label :password, t('users.new.password_new'), class: 'form-label'
     = f.password_field :password,
             required: false,
             placeholder: t('users.new.password_new'),
             autocomplete: 'new-password',
             class: 'form-control'
     small.form-text.text-body-secondary = t('users.new.leave_blank')
-  .form-group
-    = f.label :password_confirmation, t('users.new.password_new_confirmation')
+  .form-group.field-element
+    = f.label :password_confirmation, t('users.new.password_new_confirmation'), class: 'form-label'
     = f.password_field :password_confirmation,
             required: false,
             placeholder: t('users.new.password_new'),
@@ -50,8 +50,8 @@
 
   = render 'avatar_form', f: f
 
-  .form-group
-    = f.label :current_password
+  .form-group.field-element
+    = f.label :current_password, class: 'form-label'
     = f.password_field :current_password,
             required: true,
             placeholder: t('users.new.password_current'),
@@ -59,7 +59,7 @@
             class: 'form-control'
     small.form-text.text-body-secondary = t('users.new.confirm_w_pwd')
 
-  .form-group
+  .form-group.py-3
     .btn-group[role='group']
       = button_tag type: 'submit', class: 'btn btn-important' do
         i.fa.fa-user
