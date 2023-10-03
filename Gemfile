@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'i18n-js', '< 4.0.0' # Newer versions require the npm package `i18n-js`
+gem 'i18n-js'
 gem 'js-routes'
 # Create Zip files
 gem 'rubyzip'
@@ -61,7 +61,7 @@ gem 'config'
 gem 'faraday'
 gem 'font-awesome-rails', '>= 4.7.0.5'
 gem 'image_processing'
-gem 'jquery-ui-rails', '>= 6.0.1'
+gem 'jquery-ui-rails'
 gem 'kramdown', '~> 2.4'
 gem 'nested_form_fields', '>= 0.8.2'
 gem 'net-http', require: false
