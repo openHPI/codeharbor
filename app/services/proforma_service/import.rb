@@ -11,8 +11,7 @@ module ProformaService
     def execute
       if single_task?
         importer = ProformaXML::Importer.new(zip: @zip)
-        import_result = importer.perform
-        ProformaService::ImportTask.call(proforma_task: import_result[:task], user: @user)
+        ProformaService::ImportTask.call(proforma_task: importer.perform, user: @user)
       else
         import_multi
       end
