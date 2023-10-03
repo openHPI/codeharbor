@@ -52,8 +52,7 @@ RSpec.describe ProformaService::ConvertZipToProformaTasks do
     subject(:convert_zip_to_tasks) { described_class.call(zip_file:) }
 
     let(:zip_file) { fixture_file_upload('proforma_import/testfile.zip', 'application/zip') }
-    let(:importer) { instance_double(ProformaXML::Importer, perform: importer_result) }
-    let(:importer_result) { {task:, custom_namespaces: []} }
+    let(:importer) { instance_double(ProformaXML::Importer, perform: task) }
     let(:task) { instance_double(ProformaXML::Task, uuid: 'uuid') }
 
     before { allow(ProformaXML::Importer).to receive(:new).and_return(importer) }

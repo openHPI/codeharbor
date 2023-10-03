@@ -19,7 +19,7 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
   end
 
   describe '#execute' do
-    subject(:proforma_task) { convert_to_proforma_task.execute[:task] }
+    subject(:proforma_task) { convert_to_proforma_task.execute }
 
     let(:convert_to_proforma_task) { described_class.new(task:) }
     let(:task) do

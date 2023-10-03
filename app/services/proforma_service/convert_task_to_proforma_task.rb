@@ -9,16 +9,15 @@ module ProformaService
     end
 
     def execute
-      add_namespaces
-      {task: create_task, namespaces: @namespaces.uniq}
+      create_task
     end
 
     private
 
     def add_namespaces
-      codeOceanNamespace = {prefix: 'CodeOcean', uri: 'codeocean.openhpi.de'}
-      @namespaces << codeOceanNamespace if task.meta_data?.keys?.include? :CodeOcean
-      @namespaces << codeOceanNamespace if task.tests.map(&:meta_data).map(&:keys).flatten.include? :CodeOcean
+      codeocean_namespace = {prefix: 'CodeOcean', uri: 'codeocean.openhpi.de'}
+      @namespaces << codeocean_namespace if task.meta_data?.keys?.include? :CodeOcean
+      @namespaces << codeocean_namespace if task.tests.map(&:meta_data).map(&:keys).flatten.include? :CodeOcean
     end
 
     def create_task
