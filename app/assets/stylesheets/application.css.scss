@@ -11,14 +11,9 @@
  * file per style scope.
  *
  *= require_self
- *= require jquery-ui
- *= require select2
- *= require select2-bootstrap
  *= require font-awesome
  *= require_tree .
  */
-
-@import 'font-awesome';
 
 #columns {
   #main {

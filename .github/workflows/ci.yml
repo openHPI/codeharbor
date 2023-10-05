@@ -63,6 +63,10 @@ jobs:
         env:
           RAILS_ENV: test
         run: bundler exec rake db:schema:load
+      - name: Precompile assets
+        env:
+          RAILS_ENV: test
+        run: bundler exec rake assets:precompile
       - name: Run tests
         env:
           RAILS_ENV: test

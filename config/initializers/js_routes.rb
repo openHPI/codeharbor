@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 JsRoutes.setup do |config|
-  config.module_type = nil
-  config.namespace = 'Routes'
+  config.documentation = false
+  config.prefix = Rails.application.config.relative_url_root
+  config.url_links = true
 end

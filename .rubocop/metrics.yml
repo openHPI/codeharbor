@@ -16,7 +16,6 @@ Metrics/BlockLength:
     - "config/**/*"
     - "**/*.rake"
     - "Rakefile"
-    - "Guardfile"
     - "**/*/Rakefile"
   Max: 50
 

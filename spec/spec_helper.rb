@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
-require 'simplecov'
-SimpleCov.start
+unless ENV.fetch('RUBYMINE_SIMPLECOV_COVERAGE_PATH', nil)
+  require 'simplecov'
+  SimpleCov.start('rails')
+end
+
 require_relative 'support/controller_helpers'
 
 require 'webmock/rspec'

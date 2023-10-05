@@ -8,8 +8,28 @@
 // layout file, like app/views/layouts/application.html.erb
 
 // JS
+import 'jquery';
+import 'jquery-ujs'
+import 'select2';
 import * as bootstrap from 'bootstrap/dist/js/bootstrap.bundle';
 window.bootstrap = bootstrap; // Publish bootstrap in global namespace
+
+// custom jquery-ui library for minimal mouse interaction support
+import 'jquery-ui/ui/widget'
+import 'jquery-ui/ui/data'
+import 'jquery-ui/ui/disable-selection'
+import 'jquery-ui/ui/scroll-parent'
+import 'jquery-ui/ui/widgets/draggable'
+import 'jquery-ui/ui/widgets/droppable'
+import 'jquery-ui/ui/widgets/resizable'
+import 'jquery-ui/ui/widgets/selectable'
+import 'jquery-ui/ui/widgets/sortable'
+import 'jquery-ui/themes/base/draggable.css'
+import 'jquery-ui/themes/base/core.css'
+import 'jquery-ui/themes/base/resizable.css'
+import 'jquery-ui/themes/base/selectable.css'
+import 'jquery-ui/themes/base/sortable.css'
+
 
 // I18n locales
 import { I18n } from "i18n-js";
@@ -26,3 +46,7 @@ i18n.defaultLocale = "en";
 i18n.enableFallback = true;
 i18n.locale = userLocale;
 window.I18n = i18n;
+
+// Routes
+import * as Routes from 'routes.js.erb';
+window.Routes = Routes;

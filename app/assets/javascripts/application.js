@@ -10,15 +10,9 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
-//= require jquery_ujs
-//= require jquery-ui
-//= require select2
 //= require turbolinks
 //= require_tree .
 //= require ace-rails-ap
 //= require ace/theme-monokai
 //= require ace/ext-options
 //= require nested_form_fields
-//= require labels
-//= require js-routes

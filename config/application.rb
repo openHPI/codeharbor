@@ -33,6 +33,8 @@ module Codeharbor
     config.autoload_paths += extra_paths
     config.eager_load_paths += extra_paths
 
+    config.relative_url_root = ENV.fetch('RAILS_RELATIVE_URL_ROOT', '/').to_s
+
     # Specify default options for Rails generators
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid
