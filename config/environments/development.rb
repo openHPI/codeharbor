@@ -76,9 +76,6 @@ Rails.application.configure do
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
 
-  # Allow console from docker virtual machine host
-  config.web_console.allowed_ips = '192.168.99.0/16'
-
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
