@@ -13,7 +13,7 @@ require_relative '../lib/middleware/edu_sharing_content_type'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module Codeharbor
+module CodeHarbor
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
