@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe ProformaService::CacheImportFile do
+RSpec.describe ProformaService::CacheImportFile do
   describe '.new' do
     subject(:cache_import_file) { described_class.new(user:, zip_file:) }
 

@@ -3,7 +3,7 @@
 require 'rails_helper'
 Rails.application.load_tasks
 # rubocop:disable RSpec/DescribeClass
-describe 'import_cache_files:cleanup' do
+RSpec.describe 'import_cache_files:cleanup' do
   before do
     allow($stdout).to receive(:write) # supress output
 

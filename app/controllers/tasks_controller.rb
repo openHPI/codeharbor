@@ -11,8 +11,9 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   def index
     page = params[:page]
-    @search = Task.visibility(@visibility, current_user).ransack(params[:search])
-    @tasks = @search.result(distinct: true).paginate(per_page: 5, page:).includes(:ratings, :programming_language, :labels).load
+    @search = Task.visibility(@visibility, current_user).ransack(params[:q])
+    @tasks = @search.result(distinct: true).paginate(page:, per_page: per_page_param).includes(:ratings, :programming_language,
+      :labels).load
   end
 
   def duplicate
@@ -184,7 +185,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   private
 
   def set_search # rubocop:disable Metrics/AbcSize
-    search = params[:search]
+    search = params[:q]
     @req_labels = []
 
     if search.is_a?(ActionController::Parameters)
@@ -200,13 +201,13 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   def restore_search_params
     search_params = session.delete(:task_search_params)&.symbolize_keys || {}
-    %i[search advancedFilterActive page min_stars].each do |key|
+    %i[q advancedFilterActive page min_stars].each do |key|
       params[key] ||= search_params[key]
     end
   end
 
   def save_search_params
-    session[:task_search_params] = {search: params[:search], advancedFilterActive: params[:advancedFilterActive], page: params[:page]}
+    session[:task_search_params] = {q: params[:q], advancedFilterActive: params[:advancedFilterActive], page: params[:page]}
   end
 
   def handle_search_params

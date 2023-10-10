@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe ProformaService::ExportTasks do
+RSpec.describe ProformaService::ExportTasks do
   describe '.new' do
     subject(:export_service) { described_class.new(tasks:) }
 

@@ -111,6 +111,7 @@ corepack enable
 node -v
 yarn -v
 ```
+If you have several node versions installed, check that you are using the correct version. To view your installed versions, run `nvm list`. `lts/hydrogen` should be the current and default version. You can adjust this by running `nvm alias default lts/hydrogen`.
 
 ### Clone the repository:
 
@@ -142,13 +143,14 @@ rvm install $(cat .ruby-version)
 ```shell
 ruby -v
 ```
+If you have several Ruby versions installed, check that you are using the latest version. To view your installed versions, run `rvm list`. The most recent should be the current and default version. You can adjust this by running `rvm use <version_nr> --default`.
 
 ### Create all necessary config files:
 
 First, copy our templates:
 
 ```shell
-for f in action_mailer.yml database.yml
+for f in action_mailer.yml database.yml mnemosyne.yml secrets.yml
 do
   if [ ! -f config/$f ]
   then
@@ -158,6 +160,9 @@ done
 ```
 
 Then, you should check all config files manually and adjust settings where necessary for your environment.
+For the basic setup you only need to 
+- generate a secret with e.g. `rails secret` and then add it into the three CHANGE_ME fields in `secrets.yml`.
+- add your username for the database in `database.yml`. For macOS, it is the same as your mac username.
 
 ### Install required project libraries
 

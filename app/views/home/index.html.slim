@@ -1,15 +1,4 @@
-#flash-message
-  - flash.each do |name, msg|
-    - if msg == alert
-      div#flash-error.alert.alert-danger style="margin-top: 30px"
-        = flash[:alert]
-    - elsif msg == notice
-      div#flash-notice.alert.alert-success style="margin-top: 30px"
-        = flash[:notice]
-    - else
-      = content_tag :div, msg, :id => "flash_#{name}"
-
-#myCarousel.carousel.pt-3.slide[data-bs-ride="carousel"]
+#myCarousel.carousel.slide.px-1[data-bs-ride="carousel"]
   .carousel-indicators
     button.active[type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" aria-current="true" aria-label="Slide 1"]
     button[type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"]

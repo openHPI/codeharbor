@@ -5,16 +5,22 @@ require 'active_support/core_ext/integer/time'
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  # Allowed IPs for the Vagrant setup
+  config.web_console.allowed_ips = '192.168.0.0/16'
+
   # In the development environment your application's code is reloaded any time
   # it changes. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
-  # Do not eager load code on boot.
-  config.eager_load = false
+  # Eager load code on boot.
+  config.eager_load = true
 
   # Show full error reports.
   config.consider_all_requests_local = true
+
+  # Enable server timing
+  config.server_timing = true
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
@@ -64,23 +70,19 @@ Rails.application.configure do
   config.assets.quiet = true
 
   # Raises error for missing translations.
-  # config.i18n.raise_on_missing_translations = true
+  config.i18n.raise_on_missing_translations = true
 
   # Annotate rendered view with file names.
   config.action_view.annotate_rendered_view_with_filenames = true
 
+  BetterErrors::Middleware.allow_ip! ENV.fetch('TRUSTED_IP', nil) if ENV['TRUSTED_IP']
+
   # Use an evented file watcher to asynchronously detect changes in source code,
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
+  # If the evented file watcher doesn't work (in Vagrant), use another one:
+  # config.file_watcher = ActiveSupport::FileUpdateChecker
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
-
-  # Raises error for missing translations
-  # config.action_view.raise_on_missing_translations = true
-
-  config.action_mailer.delivery_method = :letter_opener
-  config.action_mailer.perform_deliveries = true
-
-  Rails.application.routes.default_url_options[:host] = 'localhost:7500'
 end

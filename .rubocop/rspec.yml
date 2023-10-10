@@ -36,3 +36,14 @@ RSpec/EmptyExampleGroup:
 
 RSpec/IndexedLet:
   Max: 2
+
+
+# The Policies need to repeat examples and descriptions and might not be performant
+#
+RSpec/RepeatedExample:
+  Exclude:
+    - 'spec/policies/**'
+
+RSpec/RepeatedDescription:
+  Exclude:
+    - 'spec/policies/**'

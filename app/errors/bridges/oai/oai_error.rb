@@ -2,7 +2,7 @@
 
 module Bridges
   module Oai
-    class OaiError < StandardError
+    class OaiError < ApplicationError
       attr_reader :code
 
       def initialize(msg, code)

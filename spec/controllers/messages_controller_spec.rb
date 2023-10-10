@@ -8,7 +8,10 @@ RSpec.describe MessagesController do
   let(:user) { create(:user) }
   let(:recipient) { create(:user) }
 
-  before { sign_in user }
+  before do
+    sign_in user
+    request.headers[:referer] = user_messages_path(user)
+  end
 
   describe 'GET #reply' do
     context 'when users had a conversation before' do

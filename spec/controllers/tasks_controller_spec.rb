@@ -65,7 +65,7 @@ RSpec.describe TasksController do
 
       let!(:task1) { create(:task, user:, title: 'find me key3 (key1)', description: 'key2 key4', labels:, programming_language: ruby_lang) }
 
-      let(:params) { {search: ransack_params} }
+      let(:params) { {q: ransack_params} }
 
       shared_examples 'shows task1' do
         it 'shows only the matching task' do

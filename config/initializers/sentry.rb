@@ -3,9 +3,8 @@
 Sentry.init do |config|
   config.send_modules = true
   config.include_local_variables = true
-  config.breadcrumbs_logger = %i[sentry_logger monotonic_active_support_logger http_logger]
-  # Enable Profiling: https://docs.sentry.io/platforms/ruby/guides/profiling/
-  # config.profiles_sample_rate = 1.0
+  config.breadcrumbs_logger = %i[sentry_logger active_support_logger http_logger]
+  config.profiles_sample_rate = 1.0
 
   # Set tracesSampleRate to 1.0 to capture 100%
   # of transactions for performance monitoring.
@@ -38,5 +37,19 @@ Sentry.init do |config|
       else
         ENV.fetch('SENTRY_TRACE_SAMPLE_RATE', 1.0).to_f # sample all other transactions
     end
+  end
+
+  config.before_send_transaction = lambda do |event, _hint|
+    url_spans = %w[http.client websocket.client]
+
+    event.spans.each do |span|
+      next unless url_spans.include?(span[:op])
+      next unless span[:description]
+
+      # Replace UUIDs in URLs with asterisks to allow better grouping of similar requests
+      span[:description].gsub!(/[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}/i, '*')
+    end
+
+    event
   end
 end

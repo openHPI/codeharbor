@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module ProformaXML
-  class InvalidZip < StandardError; end
+  class InvalidZip < ApplicationError; end
 end

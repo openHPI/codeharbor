@@ -7,7 +7,7 @@ RSpec.describe LabelsController do
 
   let(:user) { create(:user) }
   let(:label) { create(:label, name: 'example label', color: 'ffffff') }
-  let(:params) { {search: {name_i_cont: label.name}, page: 1} }
+  let(:params) { {q: {name_i_cont: label.name}, page: 1} }
 
   before { create(:task, labels: [label]) }
 

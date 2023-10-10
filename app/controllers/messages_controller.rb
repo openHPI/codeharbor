@@ -9,12 +9,12 @@ class MessagesController < ApplicationController
     if @option == 'inbox'
       @messages = Message.received_by(current_user)
         .order(created_at: :desc)
-        .paginate(per_page: 5, page: params[:page])
+        .paginate(page: params[:page], per_page: per_page_param)
       mark_messages_as_read @messages
     else
       @messages = Message.sent_by(current_user)
         .order(created_at: :desc)
-        .paginate(per_page: 5, page: params[:page])
+        .paginate(page: params[:page], per_page: per_page_param)
     end
   end
 

@@ -1,18 +1,17 @@
 # CodeHarbor
-CodeHarbor is a repository system for automatically gradeable programming exercises and enables instructors to exchange of such exercises via the [ProFormA XML](https://github.com/ProFormA/proformaxml) format across diverse code assessment systems.
-
-
-## Current Status on `master`
 
 [![Build Status](https://github.com/openHPI/codeharbor/workflows/CI/badge.svg)](https://github.com/openHPI/codeharbor/actions?query=workflow%3ACI)
 [![codecov](https://codecov.io/gh/openHPI/codeharbor/branch/master/graph/badge.svg?token=lUL0Fq7Uc9)](https://codecov.io/gh/openHPI/codeharbor)
 
+## Introduction
+
+CodeHarbor is a repository system for automatically gradeable programming exercises and enables instructors to exchange of such exercises via the [ProFormA XML](https://github.com/ProFormA/proformaxml) format across diverse code assessment systems.
 
 ## Server Setup and Deployment
 Use [Capistrano](https://capistranorb.com/). Docker and Vagrant are for local development only.
 
 
-## Development
+## Development Setup
 
 Please refer to the [Local Setup Guide](docs/LOCAL_SETUP.md) for more details.
 

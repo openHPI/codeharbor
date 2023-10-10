@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe 'LabelsController', :js do
+RSpec.describe 'LabelsController', :js do
   let(:admin) { create(:admin) }
   let(:password) { attributes_for(:admin)[:password] }
 

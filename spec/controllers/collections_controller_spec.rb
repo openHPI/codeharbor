@@ -15,7 +15,10 @@ RSpec.describe CollectionsController do
 
   let(:user) { create(:user) }
 
-  before { sign_in user }
+  before do
+    sign_in user
+    request.headers[:referer] = collections_url
+  end
 
   describe 'GET #index' do
     let!(:collection) { create(:collection, valid_attributes.merge(users: [user])) }

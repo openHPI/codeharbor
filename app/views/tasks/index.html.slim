@@ -37,7 +37,7 @@
               => t('tasks.index.search.advanced')
             span.fa.fa-caret-down#drop style="color:#333333"
         .dropdown-content.p-3
-          = hidden_field_tag 'advancedFilterActive', @advanced_filter_active
+          = hidden_field_tag 'advancedFilterActive', @advanced_filter_active.to_s
           = fields_for 'settings' do |advanced|
             span.row.p-2
               .order.col-4

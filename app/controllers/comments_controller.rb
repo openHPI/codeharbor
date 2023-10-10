@@ -9,7 +9,7 @@ class CommentsController < ApplicationController
   before_action :new_comment, only: :create
 
   def index
-    @comments = Comment.where(task: @task).paginate(per_page: 5, page: params[:page]).order('created_at DESC')
+    @comments = Comment.where(task: @task).paginate(page: params[:page], per_page: per_page_param).order(created_at: :desc)
     render 'load_comments'
   end
 

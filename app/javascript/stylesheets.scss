@@ -9,3 +9,26 @@
 
 @import '~bootstrap/scss/bootstrap';
 @import 'select2/src/scss/core';
+
+
+// We define our own button style here, since `btn-outline-dark` and `btn-outline-light` do not switch colors.
+html[data-bs-theme="dark"] {
+  .btn-outline-contrast {
+    @extend .btn-outline-light;
+  }
+
+  .bg-contrast {
+    @extend .bg-light;
+  }
+}
+
+
+html[data-bs-theme="light"] {
+  .btn-outline-contrast {
+    @extend .btn-outline-dark;
+  }
+
+  .bg-contrast {
+    @extend .bg-dark;
+  }
+}

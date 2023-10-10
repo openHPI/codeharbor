@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-ENV['RAILS_ENV'] = 'test'
+ENV['RAILS_ENV'] ||= 'test'
 require 'spec_helper'
 require File.expand_path('../config/environment', __dir__)
 # Prevent database truncation if the environment is production
@@ -64,6 +64,4 @@ Shoulda::Matchers.configure do |config|
   end
 end
 
-WebMock.disable_net_connect!({
-  allow_localhost: true,
-})
+WebMock.disable_net_connect!(allow_localhost: true)

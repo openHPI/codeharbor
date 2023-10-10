@@ -3,6 +3,27 @@
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
 
+  before_validation :strip_strings
+  before_validation :remove_null_bytes
+
+  def strip_strings
+    # trim whitespace from beginning and end of string attributes
+    attribute_names.each do |name|
+      if send(name.to_sym).respond_to?(:strip)
+        send("#{name}=".to_sym, send(name).strip)
+      end
+    end
+  end
+
+  def remove_null_bytes
+    # remove null bytes from string attributes
+    attribute_names.each do |name|
+      if send(name.to_sym).respond_to?(:tr)
+        send("#{name}=".to_sym, send(name).tr("\0", ''))
+      end
+    end
+  end
+
   def self.ransackable_associations(_auth_object = nil)
     []
   end

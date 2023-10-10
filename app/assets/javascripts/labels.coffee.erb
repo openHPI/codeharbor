@@ -27,7 +27,7 @@ ready = ->
       dataType: 'json',
       data: (params) ->
         query = {
-          search: {name_i_cont: params.term},
+          q: {name_i_cont: params.term},
           page: params.page || 1
         }
         return query;

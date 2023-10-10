@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe ProformaService::ImportTask do
+RSpec.describe ProformaService::ImportTask do
   describe '.new' do
     subject(:import_proforma_task) { described_class.new(proforma_task:, user:) }
 

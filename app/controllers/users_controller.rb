@@ -20,7 +20,7 @@ class UsersController < ApplicationController
   end
 
   def index
-    @users = User.all.paginate(per_page: 10, page: params[:page])
+    @users = User.all.paginate(page: params[:page], per_page: per_page_param)
   end
 
   def show

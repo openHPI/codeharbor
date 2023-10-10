@@ -1,112 +1,40 @@
 doctype html
-html
+html lang="#{I18n.locale || I18n.default_locale}" data-default-locale="#{I18n.default_locale}"
   head
-    meta content=("text/html; charset=UTF-8") http-equiv="Content-Type" /
-    title CodeHarbor
-    = stylesheet_pack_tag('stylesheets', media: 'all', 'data-turbolinks-track': true, integrity: true, crossorigin: 'anonymous')
-    = stylesheet_link_tag('application', media: 'all', 'data-turbolinks-track': true, integrity: true, crossorigin: 'anonymous')
-    = javascript_pack_tag('application', 'data-turbolinks-track': true, defer: false, integrity: true, crossorigin: 'anonymous')
+    meta charset='utf8'
+    meta name='viewport' content='width=device-width, initial-scale=1'
+    = render('breadcrumbs_and_title')
+    title
+      = yield(:title)
+    = stylesheet_pack_tag('stylesheets', media: 'all', 'data-turbolinks-track': 'reload', integrity: true, crossorigin: 'anonymous')
+    = stylesheet_link_tag('application', media: 'all', 'data-turbolinks-track': 'reload', integrity: true, crossorigin: 'anonymous')
+    = javascript_pack_tag('application', 'data-turbolinks-track': 'reload', defer: false, integrity: true, crossorigin: 'anonymous')
     = javascript_include_tag('application', 'data-turbolinks-track': 'reload', integrity: true, crossorigin: 'anonymous')
+    = yield(:head)
     = csrf_meta_tags
   body.d-flex.flex-column.h-100
     #content
-      header.py-3
-        nav.navbar.navbar-expand-lg.fixed-top.bg-light.text-bg-light
-          .container
-            = link_to home_index_path, class: "navbar-brand"
-              | CodeHarbor
-            button.navbar-toggler[type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"]
-              span.navbar-toggler-icon
-            #navbarSupportedContent.collapse.navbar-collapse
-              - if user_signed_in?
-                ul.navbar-nav.me-auto.mb-2.mb-lg-0
-                  li.nav-item
-                    = link_to tasks_path, class: "nav-link #{active_class(tasks_path)}"  do
-                      i.fa.fa-file-text-o style=("color: #006600")
-                      =< t('layouts.tasks')
-                  li.nav-item
-                    = link_to collections_path, class: "nav-link #{active_class(collections_path)}"  do
-                      i.fa.fa-folder-open style=("color: #000066")
-                      =< t('layouts.collections')
-                  li.nav-item
-                    = link_to groups_path, class: "nav-link #{active_class(groups_path)}"  do
-                      i.fa.fa-group style=("color: #660000")
-                      =< t('layouts.groups')
-                  - if current_user.role === 'admin'
-                    li.nav-item
-                      = link_to rails_admin.dashboard_path, 'data-turbolinks': false, class: "nav-link" do
-                        i.fa.fa-lock
-                        =< t('layouts.admin_nav.rails_admin')
-              ul.navbar-nav.ms-auto
-                - if user_signed_in?
-                  li.nav-item.dropdown
-                    a.nav-link.dropdown-toggle href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"
-                      => current_user.email
-                      - if current_user.unread_messages_count != '0'
-                        span.menu-number
-                          = current_user.unread_messages_count
-                    ul.dropdown-menu aria-labelledby="navbarDropdown"
-                      li
-                        = link_to 'Profile', user_path(current_user), class: "dropdown-item"
-                      li
-                        = link_to user_messages_path(current_user), class: "dropdown-item" do
-                          => "Messages"
-                          - if current_user.unread_messages_count != '0'
-                            span.menu-number
-                              = current_user.unread_messages_count
-                  li.nav-item
-                    = link_to t('layouts.logout'), destroy_user_session_path, method: :delete, class: "nav-link"
-                - else
-                  li.nav-item
-                    = link_to new_user_registration_path, class: "nav-link" do
-                      i.fa.fa-user
-                      =< t('home.sign_up')
-                  li.nav-item
-                    = link_to new_user_session_path, class: "nav-link" do
-                      i.fa.fa-sign-in
-                      =< t('home.login')
-
-      - if @index
+      nav.navbar.bg-light.navbar-expand-lg.mb-0 role='navigation' data-bs-theme="light"
         .container
-          .row
-            .col-md-12
-              = yield
-            = yield :modals
-      - else
-        .container
-          #flash-message
-            - flash.each do |name, msg|
-              - if msg == alert
-                div#flash-error.alert.alert-danger style=("margin-top:30px; margin-bottom: -20px;")
-                  = flash[:alert]
-              - elsif msg == notice
-                div#flash-notice.alert.alert-success style=("margin-top:30px; margin-bottom: -20px;")
-                  = flash[:notice]
-              - else
-                = content_tag :div, msg, :id => "flash_#{name}"
-          .row
-            .col-md-12.p-4 style=("margin-top: 50px")
-              = yield
-        = yield :modals
-
-    #footer.footer.py-3.mt-auto
+          = link_to home_index_path, class: "navbar-brand"
+            = application_name
+          button.navbar-toggler data-bs-target='#navbar-collapse' data-bs-toggle='collapse' type='button' aria-expanded='false' aria-label='Toggle navigation' aria-controls='navbar-collapse'
+            span.navbar-toggler-icon
+          #navbar-collapse.collapse.navbar-collapse
+            = render('navigation')
+            ul.nav.navbar-nav.ms-auto
+              = render('session')
+      div data-controller=controller_name
+        = render('flash')
+        span.d-none = yield(:breadcrumbs)
       .container
         .row
-          .col-md-6
-            h6
-              = t('layouts.footer.more.header')
-            = link_to t('layouts.footer.more.link'), about_home_index_path
-            br
-            br
-            | &copy;
-            = " "
-            = link_to "Hasso Plattner Institute", 'https://hpi.de/'
-            = ' - '
-            = link_to t('layouts.footer.imprint'), 'https://open.hpi.de/pages/imprint'
-            = ' - '
-            = link_to t('layouts.footer.privacy_policy'), 'https://open.hpi.de/pages/privacy_policy'
-          .col-md-6
-            h6
-              = t('layouts.footer.about.header')
-            p
-              = t('layouts.footer.about.paragraph')
+          - if controller_name == "home" && action_name == "index"
+            .col-md-12.p-2
+              = yield
+          - else
+            .col-md-12.p-4 style=("margin-top: 32px")
+              = yield
+
+    #footer.footer.py-3.mt-auto
+      = render('footer')

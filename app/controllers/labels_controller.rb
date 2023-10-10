@@ -40,8 +40,8 @@ class LabelsController < ApplicationController
     end
   end
 
-  def search
-    paginated = Label.ransack(params[:search]).result.paginate(per_page: 3, page: params[:page])
+  def search # rubocop:disable Metrics/AbcSize
+    paginated = Label.ransack(params[:q]).result.paginate(page: params[:page], per_page: per_page_param)
 
     if current_user.role == 'admin' && params[:more_info]
       paginated = paginated.includes(:tasks)

@@ -1,0 +1,21 @@
+- if user_signed_in?
+  li.nav-item.dropdown
+    a.nav-link.dropdown-toggle#navbarDropdown href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false'
+      => current_user.email
+      - if current_user.unread_messages_count != '0'
+        span.menu-number
+          = current_user.unread_messages_count
+    ul.dropdown-menu aria-labelledby='navbarDropdown'
+      li = link_to 'Profile', user_path(current_user), class: 'dropdown-item'
+      li
+        = link_to user_messages_path(current_user), class: 'dropdown-item' do
+          => "Messages"
+          - if current_user.unread_messages_count != '0'
+            span.menu-number
+              = current_user.unread_messages_count
+  li.nav-item = link_to t('layouts.logout'), destroy_user_session_path, method: :delete, class: 'nav-link'
+- else
+  = render('navigation_collection_link', target: :new_user_registration_path, text: t('home.sign_up')) do
+    i.fa.fa-user
+  = render('navigation_collection_link', target: :new_user_session_path, text: t('home.login')) do
+    i.fa.fa-sign-in

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe ProformaService::ExportTask do
+RSpec.describe ProformaService::ExportTask do
   describe '.new' do
     subject(:export_service) { described_class.new(task:) }
 
@@ -51,7 +51,7 @@ describe ProformaService::ExportTask do
     end
 
     it 'adds description node with correct content (html) to task node' do
-      expect(xml.xpath('/task/description').text).to eql Kramdown::Document.new(task.description).to_html.strip
+      expect(xml.xpath('/task/description').text).to eql ApplicationController.helpers.render_markdown(task.description)
     end
 
     it 'adds proglang node with correct content to task node' do

@@ -9,6 +9,7 @@ inherit_from:
   - .rubocop/layout.yml
   - .rubocop/lint.yml
   - .rubocop/metrics.yml
+  - .rubocop/performance.yml
   - .rubocop/rails.yml
   - .rubocop/rspec.yml
   - .rubocop/style.yml

@@ -1,0 +1,13 @@
+- if user_signed_in?
+  ul.nav.navbar-nav
+    = render('navigation_collection_link', model: Task) do
+      i.fa.fa-file-text-o style=("color: #006600")
+    = render('navigation_collection_link', model: Collection) do
+      i.fa.fa-folder-open style=("color: #000066")
+    = render('navigation_collection_link', model: Group) do
+      i.fa.fa-group style=("color: #660000")
+    - if current_user.role === 'admin'
+      li.nav-item
+        = link_to rails_admin.dashboard_path, 'data-turbolinks': false, class: 'nav-link' do
+          i.fa.fa-lock
+          =< t('layouts.admin_nav.rails_admin')

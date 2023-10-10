@@ -76,7 +76,7 @@ class LabelsTable
       type: "get",
       data: {
         page: @last_loaded_page + 1
-        search: {s: @sort_by_column + " " + @sort_by_order, name_i_cont: @name_filter}
+        q: {s: @sort_by_column + " " + @sort_by_order, name_i_cont: @name_filter}
         more_info: true
       },
       success: @handle_data_response

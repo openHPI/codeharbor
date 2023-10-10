@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 class HomeController < ApplicationController
-  def index
-    @index = true
-  end
+  def index; end
 
   def about
     render 'about'

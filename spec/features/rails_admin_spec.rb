@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe 'RailsAdmin' do
+RSpec.describe 'RailsAdmin' do
   let(:user) { create(role) }
   let(:password) { attributes_for(role)[:password] }
 

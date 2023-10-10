@@ -5,11 +5,13 @@ source 'https://rubygems.org'
 gem 'ace-rails-ap'
 gem 'acts-as-taggable-on'
 gem 'bcrypt'
+gem 'bootsnap', require: false
 gem 'coffee-rails', '>= 5.0.0' # Use CoffeeScript for .coffee assets and views
 gem 'config'
 gem 'devise-bootstrap-views'
 gem 'faraday'
 gem 'font-awesome-rails'
+gem 'http_accept_language'
 gem 'i18n-js'
 gem 'image_processing'
 gem 'iso-639'
@@ -57,7 +59,6 @@ gem 'sentry-ruby'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'bootsnap', require: false
   gem 'letter_opener'
   gem 'listen'
   gem 'pry-byebug'

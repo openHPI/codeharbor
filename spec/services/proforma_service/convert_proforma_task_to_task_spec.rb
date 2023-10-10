@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe ProformaService::ConvertProformaTaskToTask do
+RSpec.describe ProformaService::ConvertProformaTaskToTask do
   describe '.new' do
     subject(:convert_to_task_service) { described_class.new(proforma_task:, user:, task:) }
 

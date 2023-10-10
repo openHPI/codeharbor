@@ -4,30 +4,33 @@ RailsAdmin.config do |config|
   config.asset_source = :sprockets
   ### Popular gems integration
 
-  # == Devise ==
+  ## == Devise ==
   # config.authenticate_with do
   #   warden.authenticate! scope: :user
   # end
-  config.parent_controller = 'ApplicationController'
   config.current_user_method(&:current_user)
-  # == CancanCan ==
+
+  ## == CancanCan ==
   # config.authorize_with :cancancan
+
+  ## == Pundit ==
+  # config.authorize_with :pundit
+
   config.authorize_with do
+    # Important! We need to check the authorization here, we skip CanCanCan checks in the RailsAdminController.
     unless can?(:access, :rails_admin)
       flash[:alert] = t('controllers.authorization')
       redirect_to main_app.root_path
     end
   end
 
-  config.excluded_models = %w[OmniAuth::Strategies::Bird]
-
-  ## == Pundit ==
-  # config.authorize_with :pundit
-
   ## == PaperTrail ==
   # config.audit_with :paper_trail, 'User', 'PaperTrail::Version' # PaperTrail >= 3.0.0
 
   ### More at https://github.com/sferik/rails_admin/wiki/Base-configuration
+
+  config.parent_controller = '::RailsAdminController'
+  config.excluded_models = %w[OmniAuth::Strategies::Bird OmniAuth::Strategies::Nbp]
 
   ## == Gravatar integration ==
   ## To disable Gravatar integration in Navigation Bar set to false
@@ -147,5 +150,34 @@ RailsAdmin.config do |config|
     ## With an audit adapter, you can add:
     # history_index
     # history_show
+  end
+
+  # stolen from https://github.com/kaminari/kaminari/issues/162#issuecomment-52083985
+  if defined?(WillPaginate)
+    module WillPaginate
+      module ActiveRecord
+        module RelationMethods
+          def per(value = nil)
+            per_page(value)
+          end
+
+          def total_count
+            count
+          end
+
+          def first_page?
+            self == first
+          end
+
+          def last_page?
+            self == last
+          end
+        end
+      end
+
+      module CollectionMethods
+        alias num_pages total_pages
+      end
+    end
   end
 end

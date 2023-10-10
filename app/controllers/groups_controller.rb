@@ -8,9 +8,9 @@ class GroupsController < ApplicationController
 
   def index
     @groups = if @option == 'mine'
-                current_user.groups.paginate(per_page: 5, page: params[:page])
+                current_user.groups.paginate(page: params[:page], per_page: per_page_param)
               else
-                Group.all.paginate(per_page: 5, page: params[:page])
+                Group.all.paginate(page: params[:page], per_page: per_page_param)
               end
   end
 

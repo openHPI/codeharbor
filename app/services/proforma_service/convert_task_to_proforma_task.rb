@@ -35,7 +35,7 @@ module ProformaService
     def description
       return @task.description if @options[:description_format] == 'md'
 
-      Kramdown::Document.new(@task.description).to_html.strip
+      ApplicationController.helpers.render_markdown(@task.description)
     end
 
     def proglang

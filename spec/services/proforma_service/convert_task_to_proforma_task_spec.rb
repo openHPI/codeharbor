@@ -42,7 +42,7 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
     it 'creates a task with all basic attributes' do
       expect(proforma_task).to have_attributes(
         title: task.title,
-        description: Kramdown::Document.new(task.description).to_html.strip,
+        description: ApplicationController.helpers.render_markdown(task.description),
         internal_description: task.internal_description,
         proglang: {
           name: task.programming_language.language,
@@ -62,7 +62,7 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
       let(:options) { {} }
 
       it 'converts the description markdown to text' do
-        expect(proforma_task).to have_attributes(description: Kramdown::Document.new(task.description).to_html.strip)
+        expect(proforma_task).to have_attributes(description: ApplicationController.helpers.render_markdown(task.description))
       end
 
       context 'when options contain description_format md' do
@@ -275,7 +275,7 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
       let(:description) { '# H1 header' }
 
       it 'creates a task with description and language from primary description' do
-        expect(proforma_task).to have_attributes(description: '<h1 id="h1-header">H1 header</h1>')
+        expect(proforma_task).to have_attributes(description: '<h1>H1 header</h1>')
       end
     end
   end
