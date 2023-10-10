@@ -39,6 +39,7 @@ gem 'slim-rails'
 gem 'sprockets-rails'
 gem 'terser'
 gem 'turbolinks'
+gem 'whenever', require: false
 gem 'will_paginate'
 
 # Authentication
