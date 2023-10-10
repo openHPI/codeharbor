@@ -14,12 +14,6 @@ module ProformaService
 
     private
 
-    def add_namespaces
-      codeocean_namespace = {prefix: 'CodeOcean', uri: 'codeocean.openhpi.de'}
-      @namespaces << codeocean_namespace if task.meta_data?.keys?.include? :CodeOcean
-      @namespaces << codeocean_namespace if task.tests.map(&:meta_data).map(&:keys).flatten.include? :CodeOcean
-    end
-
     def create_task
       ProformaXML::Task.new(
         {

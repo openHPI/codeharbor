@@ -22,12 +22,10 @@ RSpec.describe ProformaService::ExportTask do
         internal_description: 'internal_description',
         uuid: SecureRandom.uuid,
         programming_language: build(:programming_language, :ruby),
-        meta_data:,
         files:,
         tests:,
         model_solutions:)
     end
-    let(:meta_data) {}
     let(:files) { [] }
     let(:tests) { [] }
     let(:model_solutions) { [] }
@@ -84,14 +82,14 @@ RSpec.describe ProformaService::ExportTask do
     end
 
     context 'when task has meta_data' do
-      let(:meta_data) { {CodeOcean: {meta: 'data', nest: {even: {deeper: 'foobar'}}}} }
+      let(:task) { create(:task, :with_meta_data) }
 
       it 'adds meta_data node to task node' do
-        expect(xml_with_namespaces.xpath('/xmlns:task/xmlns:meta-data/CodeOcean:meta').text).to eql 'data'
+        expect(xml_with_namespaces.xpath('/xmlns:task/xmlns:meta-data/CodeOcean:meta/text()', xml_with_namespaces.collect_namespaces).text).to eql 'data'
       end
 
       it 'adds nested meta_data node to task node' do
-        expect(xml_with_namespaces.xpath('/xmlns:task/xmlns:meta-data/CodeOcean:nest/CodeOcean:even/CodeOcean:deeper').text).to eql 'foobar'
+        expect(xml_with_namespaces.xpath('/xmlns:task/xmlns:meta-data/CodeOcean:meta/CodeOcean:nest/CodeOcean:even/CodeOcean:deeper', xml_with_namespaces.collect_namespaces).text).to eql 'foobar'
       end
     end
 
@@ -188,8 +186,7 @@ RSpec.describe ProformaService::ExportTask do
 
     context 'when task has a test' do
       let(:tests) { [test] }
-      let(:test) { build(:test, meta_data: test_meta_data) }
-      let(:test_meta_data) {}
+      let(:test) { build(:test) }
 
       it 'adds test node to tests node' do
         expect(xml.xpath('/task/tests/test')).to have(1).item
@@ -217,15 +214,15 @@ RSpec.describe ProformaService::ExportTask do
       end
 
       context 'when test has meta_data' do
-        let(:test_meta_data) { {CodeOcean: {meta: 'data', nest: {even: {deeper: 'foobar'}}}} }
+        let(:test) { build(:test, :with_meta_data) }
         let(:meta_data_path) { '/xmlns:task/xmlns:tests/xmlns:test/xmlns:test-configuration/xmlns:test-meta-data' }
 
         it 'adds meta_data node to task node' do
-          expect(xml_with_namespaces.xpath("#{meta_data_path}/CodeOcean:meta").text).to eql 'data'
+          expect(xml_with_namespaces.xpath("#{meta_data_path}/CodeOcean:meta/text()", xml_with_namespaces.collect_namespaces).text).to eql 'data'
         end
 
         it 'adds nested meta_data node to task node' do
-          expect(xml_with_namespaces.xpath("#{meta_data_path}/CodeOcean:nest/CodeOcean:even/CodeOcean:deeper").text).to eql 'foobar'
+          expect(xml_with_namespaces.xpath("#{meta_data_path}/CodeOcean:meta/CodeOcean:nest/CodeOcean:even/CodeOcean:deeper", xml_with_namespaces.collect_namespaces).text).to eql 'foobar'
         end
       end
 
@@ -275,7 +272,6 @@ RSpec.describe ProformaService::ExportTask do
     context 'when task has external_resources' do
       let(:task) { build(:task, :with_external_resources) }
 
-
       it 'add external-resources' do
         expect(xml.xpath('/task/external-resources')).to have(1).items
       end
@@ -285,12 +281,12 @@ RSpec.describe ProformaService::ExportTask do
       end
 
       it 'add custom node to external-resource' do
-        expect(xml_with_namespaces.xpath('/xmlns:task/xmlns:external-resources/xmlns:external-resource/foo:bar').last.text).to eql 'barfoo'
+        expect(xml_with_namespaces.xpath('/xmlns:task/xmlns:external-resources/xmlns:external-resource/foo:bar', xml_with_namespaces.collect_namespaces).last.text).to eql 'barfoo'
       end
     end
+
     context 'when task has grading_hints' do
       let(:task) { build(:task, :with_grading_hints) }
-
 
       it 'add grading-hints' do
         expect(xml.xpath('/task/grading-hints')).to have(1).items

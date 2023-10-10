@@ -250,9 +250,9 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_02_220433) do
     t.jsonb "meta_data", default: {}
     t.bigint "license_id"
     t.integer "access_level", limit: 2, default: 0, null: false, comment: "Used as enum in Rails"
-    t.jsonb "submission_restrictions"
-    t.jsonb "external_resources"
-    t.jsonb "grading_hints"
+    t.jsonb "submission_restrictions", default: {}
+    t.jsonb "external_resources", default: {}
+    t.jsonb "grading_hints", default: {}
     t.index ["license_id"], name: "index_tasks_on_license_id"
     t.index ["programming_language_id"], name: "index_tasks_on_programming_language_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
