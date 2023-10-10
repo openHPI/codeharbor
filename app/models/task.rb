@@ -87,6 +87,9 @@ class Task < ApplicationRecord
   }
 
   serialize :meta_data, coder: HashAsJsonbSerializer
+  serialize :submission_restrictions, HashAsJsonbSerializer
+  serialize :external_resources, HashAsJsonbSerializer
+  serialize :grading_hints, HashAsJsonbSerializer
 
   enum access_level: {private: 0, public: 1}, _default: :private, _prefix: true
 

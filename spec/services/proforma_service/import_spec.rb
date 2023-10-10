@@ -82,7 +82,7 @@ RSpec.describe ProformaService::Import do
     end
 
     context 'when task has meta_data' do
-      let(:meta_data) { {CodeOcean: {meta: 'data', nested: {other: 'data'}}} }
+      let(:meta_data) { attributes_for(:task, :with_meta_data)[:meta_data] }
 
       it 'sets the meta_data' do
         expect(import_service.meta_data).to eql meta_data
@@ -129,8 +129,8 @@ RSpec.describe ProformaService::Import do
 
       it { is_expected.to be_an_equal_task_as task }
 
-      context 'when task has meta_data' do
-        let(:test_meta_data) { {CodeOcean: {meta: 'data', nested: {other: 'data'}}} }
+      context 'when test has meta_data' do
+        let(:test_meta_data) { attributes_for(:test, :with_meta_data)[:meta_data] }
 
         it 'sets the meta_data' do
           expect(import_service.tests.first.meta_data).to eql test_meta_data
@@ -146,7 +146,6 @@ RSpec.describe ProformaService::Import do
                 '@framework' => 'JUnit',
                 '@version' => '4.12',
                 'unit:entry-point' => {
-                  '@xmlns' => {'unit' => 'urn:proforma:tests:unittest:v1.1'},
                   '$1' => 'reverse_task.MyStringTest',
                 },
               },
