@@ -5,12 +5,15 @@ module Bridges
     # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/ClassLength
     class OaiController < ActionController::API
       SUPPORTED_METADATA_PREFIXES = %w[oai_dc lom].freeze
+      MAX_RECORDS_PER_RESPONSE = 100
       ERROR_RESPONSE_XSD = 'vendor/assets/schemas/oai-pmh/error_response_combined.xsd'
       SUCCESSFUL_RESPONSE_XSD = 'vendor/assets/schemas/oai-pmh/successful_response_combined.xsd'
 
       def handle_request
         builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
-          verb = oai_params[:verb]
+          parse_parameters!(params)
+
+          verb = @oai_params[:verb]
 
           raise OaiError.new('Missing verb parameter', 'badVerb') if verb.nil?
 
@@ -40,8 +43,8 @@ module Bridges
       end
 
       def handle_get_record(xml)
-        task = find_record!(oai_params)
-        metadata_prefix = parse_metadata_prefix!(oai_params[:metadataPrefix])
+        task = find_record!(@oai_params)
+        metadata_prefix = parse_metadata_prefix!(@oai_params[:metadataPrefix])
 
         xml.GetRecord do
           export_record(xml, task, metadata_prefix)
@@ -62,19 +65,21 @@ module Bridges
       end
 
       def handle_list_identifiers(xml)
-        parse_metadata_prefix!(oai_params[:metadataPrefix])
+        parse_metadata_prefix!(@oai_params[:metadataPrefix])
 
         xml.ListIdentifiers do
-          find_records!(oai_params).each do |task|
-            export_record_header(xml, task)
+          records = find_records!(@oai_params, @resumption_params)
 
-            # TODO: resumptionTokens for large answers
+          records.first(MAX_RECORDS_PER_RESPONSE).each do |task|
+            export_record_header(xml, task)
           end
+
+          export_resumption_token(xml, records)
         end
       end
 
       def handle_list_metadata_formats(xml)
-        find_record!(oai_params) if params[:identifier].present?
+        find_record!(@oai_params) if @oai_params[:identifier].present?
 
         xml.ListMetadataFormats do
           xml.metadataFormat do
@@ -91,14 +96,16 @@ module Bridges
       end
 
       def handle_list_records(xml)
-        metadata_prefix = parse_metadata_prefix!(oai_params[:metadataPrefix])
+        metadata_prefix = parse_metadata_prefix!(@oai_params[:metadataPrefix])
 
         xml.ListRecords do
-          find_records!(oai_params).each do |task|
-            export_record(xml, task, metadata_prefix)
+          records = find_records!(@oai_params, @resumption_params)
 
-            # TODO: resumptionTokens for large answers
+          records.first(MAX_RECORDS_PER_RESPONSE).each do |task|
+            export_record(xml, task, metadata_prefix)
           end
+
+          export_resumption_token(xml, records)
         end
       end
 
@@ -129,7 +136,7 @@ module Bridges
         }) do
           xml.responseDate Time.now.iso8601
           if include_params
-            xml.request bridges_oai_url, oai_params.to_h.symbolize_keys
+            xml.request bridges_oai_url, @oai_params
           else
             xml.request bridges_oai_url
           end
@@ -172,6 +179,20 @@ module Bridges
         end
       end
 
+      def export_resumption_token(xml, records)
+        if records.size > MAX_RECORDS_PER_RESPONSE
+          last_returned_record = records[MAX_RECORDS_PER_RESPONSE - 1]
+
+          ts_from = last_returned_record.updated_at.strftime('%Y-%m-%dT%H:%M:%S.%NZ')
+          ts_until = @resumption_params.present? ? @resumption_params[:ts_until] : Time.zone.now.strftime('%Y-%m-%dT%H:%M:%S.%NZ')
+          token = @oai_params.merge({last_id: last_returned_record.id, ts_from:, ts_until:})
+
+          xml.resumptionToken Base64.encode64(token.to_json)
+        elsif @resumption_params.present?
+          xml.resumptionToken
+        end
+      end
+
       def find_record!(params)
         raise OaiError.new('Missing identifier parameter', 'badArgument') unless params[:identifier]
 
@@ -181,11 +202,16 @@ module Bridges
         raise OaiError.new('No record found for the specified identifier', 'idDoesNotExist')
       end
 
-      def find_records!(params)
+      def find_records!(params, resumption_params = nil)
         tasks = Task.includes(:labels).access_level_public.where(updated_at: parse_time_bounds!(params))
 
         tasks = filter_tasks_by_set(tasks, params[:set]) if params[:set].present?
-        return tasks if tasks.any?
+        tasks = filter_tasks_by_resumption_params(tasks, resumption_params) if resumption_params.present?
+
+        # ordering required for resumptionTokens; returning one more record to indicate that more are available
+        tasks = tasks.order(:updated_at, :id).limit(MAX_RECORDS_PER_RESPONSE + 1)
+
+        return tasks if tasks.any? || resumption_params.present?
 
         raise OaiError.new('No records matched the specified timeframe/identifier/set', 'noRecordsMatch')
       end
@@ -200,41 +226,67 @@ module Bridges
         tasks.where(id: TaskLabel.select(:task_id).where(label_id: slices[2].to_i))
       end
 
+      def filter_tasks_by_resumption_params(tasks, resumption_params)
+        tasks.where('updated_at < :ts_until AND (updated_at > :ts_from OR (updated_at = :ts_from AND id > :last_id))', resumption_params)
+      end
+
       def valid_set_spec?(set_spec)
         set_spec.downcase.match?(/^task$|^task:label$|^task:label:[0-9]+$/)
       end
 
-      def oai_params
-        params.permit(:verb, :identifier, :from, :until, :metadataPrefix, :set)
-      end
-
-      def parse_time_bounds!(params)
-        tfrom = nil
-        tuntil = nil
-
-        if params[:from]
+      def parse_parameters!(params)
+        if params.key? :resumptionToken
           begin
-            tfrom = DateTime.iso8601(params[:from])
-          rescue Date::Error
-            raise OaiError.new("The specified time '#{params[:from]}' is not in iso8601 format", 'badArgument')
+            params = ActionController::Parameters.new(JSON.parse(Base64.decode64(params[:resumptionToken])))
+          rescue JSON::ParserError
+            raise OaiError.new('The resumptionToken could not be parsed', 'badResumptionToken')
           end
+          parse_resumption_token!(params)
         end
 
-        # If the `until` time parameter is in day granularity, we have to round to `end_of_day`, because a timeframe like
-        # `from: 2023-01-01, until: 2023-01-01` should span the entire day.
-        if params[:until]
+        @oai_params = params.permit(:verb, :identifier, :from, :until, :metadataPrefix, :set).to_h.symbolize_keys
+      end
+
+      def parse_resumption_token!(params)
+        params.require(%i[last_id ts_from ts_until])
+
+        @resumption_params = {
+          last_id: params[:last_id],
+          ts_from: Time.zone.strptime(params[:ts_from], '%Y-%m-%dT%H:%M:%S.%NZ'),
+          ts_until: Time.zone.strptime(params[:ts_until], '%Y-%m-%dT%H:%M:%S.%NZ'),
+        }
+      rescue ArgumentError, ActionController::ParameterMissing
+        raise OaiError.new('The resumptionToken could not be parsed', 'badResumptionToken')
+      end
+
+      def parse_time!(timestring, round_to: :beginning_of_day)
+        time = nil
+
+        if timestring
           begin
-            tuntil = DateTime.strptime(params[:until], '%Y-%m-%d').end_of_day
-          rescue Date::Error
+            time = Time.iso8601(timestring)
+          rescue ArgumentError
             begin
-              tuntil = Time.iso8601(params[:until])
-            rescue ArgumentError
-              raise OaiError.new("The specified time '#{params[:until]}' is not in iso8601 format", 'badArgument')
+              time = DateTime.strptime(timestring, '%Y-%m-%d').send(round_to)
+            rescue Date::Error
+              raise OaiError.new("The specified time '#{timestring}' is not in iso8601 nor %Y-%m-%d format", 'badArgument')
             end
           end
         end
 
-        tfrom..tuntil
+        if time.present? && time > Time.zone.now
+          Time.zone.now
+        else
+          time
+        end
+      end
+
+      def parse_time_bounds!(params)
+        from = parse_time!(params[:from])
+        to = parse_time!(params[:until], round_to: :end_of_day)
+        return from...(to + 1) if to.present? # construct a range spanning until the end of the last second
+
+        from..to
       end
 
       def parse_metadata_prefix!(prefix)
