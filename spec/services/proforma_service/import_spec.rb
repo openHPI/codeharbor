@@ -33,12 +33,18 @@ RSpec.describe ProformaService::Import do
         tests:,
         model_solutions:,
         uuid:,
-        user:)
+        user:,
+        submission_restrictions:,
+        external_resources:,
+        grading_hints:)
     end
 
     let(:uuid) {}
     let(:programming_language) { build(:programming_language, :ruby) }
-    let(:meta_data) {}
+    let(:meta_data) { {} }
+    let(:submission_restrictions) {}
+    let(:external_resources) {}
+    let(:grading_hints) {}
     let(:files) { [] }
     let(:model_solutions) { [] }
     let(:tests) { [] }
@@ -86,6 +92,30 @@ RSpec.describe ProformaService::Import do
 
       it 'sets the meta_data' do
         expect(import_service.meta_data).to eql meta_data
+      end
+    end
+
+    context 'when task has submission_restrictions' do
+      let(:submission_restrictions) { attributes_for(:task, :with_submission_restrictions)[:submission_restrictions] }
+
+      it 'sets the submission_restrictions' do
+        expect(import_service.submission_restrictions).to eql submission_restrictions
+      end
+    end
+
+    context 'when task has external_resources' do
+      let(:external_resources) { attributes_for(:task, :with_external_resources)[:external_resources] }
+
+      it 'sets the external_resources' do
+        expect(import_service.external_resources).to eql external_resources
+      end
+    end
+
+    context 'when task has grading_hints' do
+      let(:grading_hints) { attributes_for(:task, :with_grading_hints)[:grading_hints] }
+
+      it 'sets the grading_hints' do
+        expect(import_service.grading_hints).to eql grading_hints
       end
     end
 
@@ -137,19 +167,9 @@ RSpec.describe ProformaService::Import do
         end
       end
 
-      context 'when task has configuration' do
+      context 'when test has configuration' do
         let(:test_configuration) do
-          {
-            'unit:unittest' =>
-              {
-                '@xmlns' => {'unit' => 'urn:proforma:tests:unittest:v1.1'},
-                '@framework' => 'JUnit',
-                '@version' => '4.12',
-                'unit:entry-point' => {
-                  '$1' => 'reverse_task.MyStringTest',
-                },
-              },
-          }
+          attributes_for(:test, :with_unittest)[:unittest]
         end
 
         it 'sets the configuration' do

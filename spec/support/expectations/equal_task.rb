@@ -21,7 +21,7 @@ RSpec::Matchers.define :be_an_equal_task_as do |task2|
   def attributes_equal?(object, other)
     other_attributes = attributes_and_associations(other)
     attributes_and_associations(object).each do |k, v|
-      @last_checked = "#{k}: \n'#{v}' vs \n'#{other_attributes[k]}'"
+      @last_checked = "#{k}: \n#{v.nil? ? 'nil' : "'#{v}'"} vs \n#{other_attributes[k].nil? ? 'nil' : "'#{other_attributes[k]}'"}"
       return false unless equal?(other_attributes[k], v)
     end
     true
