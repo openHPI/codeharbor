@@ -54,7 +54,7 @@ module Bridges
           xml.baseURL bridges_oai_url
           xml.protocolVersion '2.0'
           xml.adminEmail Settings.oai_pmh.admin_mail
-          tasks = Task.access_level_public.order(updated_at: :asc)
+          tasks = Task.access_level_public.order(updated_at: :asc).limit(1)
           xml.earliestDatestamp tasks.present? ? tasks.first.updated_at.iso8601 : Time.utc(1).iso8601
           xml.deletedRecord 'no'
           xml.granularity 'YYYY-MM-DDThh:mm:ssZ'
