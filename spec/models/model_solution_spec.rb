@@ -51,7 +51,7 @@ RSpec.describe ModelSolution do
     end
 
     it 'has the same attributes' do
-      expect(duplicate).to have_attributes(model_solution.attributes.except('created_at', 'updated_at', 'id', 'fileable_id'))
+      expect(duplicate).to have_attributes(model_solution.attributes.except('created_at', 'updated_at', 'id', 'fileable_id', 'parent_id'))
     end
 
     it 'creates new files' do
@@ -60,7 +60,7 @@ RSpec.describe ModelSolution do
 
     it 'creates new files with the same attributes' do
       expect(duplicate.files).to match_array(model_solution.files.map do |file|
-                                               have_attributes(file.attributes.except('created_at', 'updated_at', 'id', 'fileable_id'))
+                                               have_attributes(file.attributes.except('created_at', 'updated_at', 'id', 'fileable_id', 'parent_id'))
                                              end)
     end
   end
