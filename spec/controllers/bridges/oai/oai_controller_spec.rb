@@ -5,6 +5,8 @@ require 'rails_helper'
 RSpec.describe Bridges::Oai::OaiController do
   render_views
 
+  before { stub_const('Bridges::Oai::OaiController::MAX_RECORDS_PER_RESPONSE', 5) }
+
   error_response_schema = Nokogiri::XML::Schema(File.open(Bridges::Oai::OaiController::ERROR_RESPONSE_XSD))
   successful_response_schema = Nokogiri::XML::Schema(File.open(Bridges::Oai::OaiController::SUCCESSFUL_RESPONSE_XSD))
 
@@ -39,8 +41,9 @@ RSpec.describe Bridges::Oai::OaiController do
   end
 
   describe 'GET bridges/oai' do
-    subject(:get_request) { get :handle_request, params: {verb:, identifier:, metadataPrefix: metadata_prefix, from:, until:, set:}.compact }
+    subject(:get_request) { get :handle_request, params: request_params }
 
+    let(:request_params) { {verb:, identifier:, metadataPrefix: metadata_prefix, from:, until:, set:}.compact }
     let(:metadata_prefix) { nil }
     let(:identifier) { nil }
     let(:from) { nil }
@@ -188,6 +191,114 @@ RSpec.describe Bridges::Oai::OaiController do
           get_request
           xml = Nokogiri::XML(response.body)
           expect(xml.xpath('//xmlns:header//xmlns:identifier').map(&:text)).to contain_exactly(tasks.first.uuid)
+        end
+      end
+
+      context 'when more than the maximum number of records are returned' do
+        subject(:request_lambda) do
+          lambda {|params|
+            get(:handle_request, params:)
+            xml = Nokogiri::XML(response.body)
+            token = xml.xpath('//xmlns:resumptionToken').text
+            [xml, token]
+          }
+        end
+
+        let(:tasks) { create_list(:task, described_class::MAX_RECORDS_PER_RESPONSE + 2, access_level: :public) }
+
+        it_behaves_like 'a successful OAI-PMH response'
+
+        it 'returns a resumptionToken' do
+          get_request
+          xml = Nokogiri::XML(response.body)
+          expect(xml.xpath('//xmlns:resumptionToken')).to be_present
+        end
+
+        context 'when parameters are set' do
+          let(:from) { tasks.first.updated_at.iso8601 }
+          let(:until) { Time.zone.now.iso8601 }
+          let(:set) { 'Task' }
+
+          it_behaves_like 'a successful OAI-PMH response'
+
+          it 'includes all parameters in the resumptionToken' do
+            _, token = request_lambda.call(request_params)
+            token_hash = JSON.parse(Base64.decode64(token)).symbolize_keys
+            expect(token_hash).to include(request_params.transform_values(&:to_s))
+            expect(token_hash).to have_key(:last_id)
+            expect(token_hash).to have_key(:ts_from)
+            expect(token_hash).to have_key(:ts_until)
+          end
+        end
+
+        context 'when the records do not change between requests' do
+          it 'returns exactly all records' do
+            returned_records = []
+
+            xml, token = request_lambda.call(request_params)
+            returned_records.concat(xml.xpath('//xmlns:header//xmlns:identifier').map(&:text))
+
+            xml, = request_lambda.call({verb:, resumptionToken: token})
+            returned_records.concat(xml.xpath('//xmlns:header//xmlns:identifier').map(&:text))
+
+            expect(returned_records).to match_array(tasks.map(&:uuid))
+          end
+
+          it 'returns an empty resumptionToken in the final response' do
+            _, token = request_lambda.call(request_params)
+            _, token = request_lambda.call({verb:, resumptionToken: token})
+
+            expect(token).to be_empty
+          end
+        end
+
+        context 'when records change between requests' do
+          let(:records_changed_after_their_return) { [tasks.first] }
+          let(:records_changed_before_their_return) { [tasks[described_class::MAX_RECORDS_PER_RESPONSE + 1]] }
+          let(:changed_records) { records_changed_after_their_return + records_changed_before_their_return }
+          let(:expected_records) { tasks - records_changed_before_their_return }
+
+          it 'returns exactly all records that did not change before they were returned' do
+            returned_records = []
+
+            xml, token = request_lambda.call(request_params)
+            returned_records.concat(xml.xpath('//xmlns:header//xmlns:identifier').map(&:text))
+
+            changed_records.each {|task| task.update(title: 'Some new title') }
+
+            xml, = request_lambda.call({verb:, resumptionToken: token})
+            returned_records.concat(xml.xpath('//xmlns:header//xmlns:identifier').map(&:text))
+
+            expect(returned_records).to match_array(expected_records.map(&:uuid))
+          end
+        end
+
+        context 'when last response is empty because of changes' do
+          let(:changed_records) { tasks[described_class::MAX_RECORDS_PER_RESPONSE..] }
+
+          it 'does not return an error' do
+            _, token = request_lambda.call(request_params)
+            changed_records.each {|task| task.update(title: 'Some new title') }
+            xml, = request_lambda.call({verb:, resumptionToken: token})
+
+            expect(xml.xpath('//xmlns:header//xmlns:identifier')).to be_empty
+            expect(xml.xpath('//xmlns:error')).to be_empty
+          end
+        end
+      end
+
+      context 'when sending an invalid resumptionToken' do
+        context 'when the resumptionToken is not a JSON' do
+          let(:request_params) { {verb:, resumptionToken: Base64.encode64('invalid token')} }
+
+          it_behaves_like 'a valid OAI-PMH error', 'badResumptionToken'
+        end
+
+        context 'when the resumptionToken contains an invalid timestamp' do
+          let(:token_hash) { {last_id: 0, ts_from: 'invalid', ts_until: 'invalid'} }
+          let(:request_params) { {verb:, resumptionToken: Base64.encode64(token_hash.to_json)} }
+
+          it_behaves_like 'a valid OAI-PMH error', 'badResumptionToken'
         end
       end
     end
