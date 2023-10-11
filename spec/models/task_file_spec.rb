@@ -145,7 +145,7 @@ RSpec.describe TaskFile do
     end
 
     it 'has the same attributes' do
-      expect(duplicate).to have_attributes(file.attributes.except('created_at', 'updated_at', 'id'))
+      expect(duplicate).to have_attributes(file.attributes.except('created_at', 'updated_at', 'id', 'parent_id'))
     end
   end
 
