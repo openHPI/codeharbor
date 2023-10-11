@@ -179,7 +179,7 @@ RSpec.describe Bridges::Oai::OaiController do
       end
 
       context 'with equal time bounds matching exactly one task' do
-        let(:from) { tasks.first.updated_at.strftime('%Y-%m-%d') }
+        let(:from) { tasks.first.updated_at.iso8601 }
         let(:until) { from }
 
         it_behaves_like 'a successful OAI-PMH response'
