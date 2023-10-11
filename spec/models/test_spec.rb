@@ -50,7 +50,7 @@ RSpec.describe Test do
     end
 
     it 'has the same attributes' do
-      expect(duplicate).to have_attributes(test.attributes.except('created_at', 'updated_at', 'id', 'fileable_id'))
+      expect(duplicate).to have_attributes(test.attributes.except('created_at', 'updated_at', 'id', 'fileable_id', 'parent_id'))
     end
 
     it 'creates new files' do
@@ -59,7 +59,7 @@ RSpec.describe Test do
 
     it 'creates new files with the same attributes' do
       expect(duplicate.files).to match_array(test.files.map do |file|
-                                               have_attributes(file.attributes.except('created_at', 'updated_at', 'id', 'fileable_id'))
+                                               have_attributes(file.attributes.except('created_at', 'updated_at', 'id', 'fileable_id', 'parent_id'))
                                              end)
     end
   end
