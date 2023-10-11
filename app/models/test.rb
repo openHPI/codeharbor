@@ -9,8 +9,6 @@ class Test < ApplicationRecord
   validates :xml_id, presence: true
   validates :xml_id, uniqueness: {scope: :task_id}
 
-  serialize :meta_data, coder: HashAsJsonbSerializer
-
   def configuration_as_xml
     Dachsfisch::JSON2XMLConverter.perform(json: configuration.to_json)
   end

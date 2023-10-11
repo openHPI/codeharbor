@@ -25,7 +25,7 @@ gem 'net-pop', require: false
 gem 'net-smtp', require: false
 gem 'nokogiri'
 gem 'pg'
-gem 'proformaxml', '1.0.0'
+gem 'proformaxml', '~> 1.2.0'
 gem 'puma'
 # TODO: Temporary switch to Rails 7.1 branch until the next release.
 # See https://github.com/rails/rails/pull/49778

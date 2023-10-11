@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_02_220433) do
+ActiveRecord::Schema[7.1].define(version: 2023_10_31_194831) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -247,12 +247,12 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_02_220433) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.jsonb "meta_data", default: {}
+    t.jsonb "meta_data", default: {}, null: false
     t.bigint "license_id"
     t.integer "access_level", limit: 2, default: 0, null: false, comment: "Used as enum in Rails"
-    t.jsonb "submission_restrictions", default: {}
-    t.jsonb "external_resources", default: {}
-    t.jsonb "grading_hints", default: {}
+    t.jsonb "submission_restrictions"
+    t.jsonb "external_resources"
+    t.jsonb "grading_hints"
     t.index ["license_id"], name: "index_tasks_on_license_id"
     t.index ["programming_language_id"], name: "index_tasks_on_programming_language_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
@@ -276,7 +276,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_02_220433) do
     t.string "validity"
     t.string "timeout"
     t.bigint "task_id"
-    t.jsonb "meta_data", default: {}
+    t.jsonb "meta_data"
     t.bigint "testing_framework_id"
     t.jsonb "configuration"
     t.index ["testing_framework_id"], name: "index_tests_on_testing_framework_id"

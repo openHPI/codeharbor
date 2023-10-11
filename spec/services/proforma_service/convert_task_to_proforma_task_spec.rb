@@ -34,7 +34,7 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
         description:)
     end
     let(:description) { 'description' }
-    let(:meta_data) {}
+    let(:meta_data) { {} }
     let(:files) { [] }
     let(:tests) { [] }
     let(:model_solutions) { [] }
@@ -75,10 +75,10 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
     end
 
     context 'when task has meta_data' do
-      let(:meta_data) { {CodeOcean: {meta: 'data', nested: {other: 'data'}}} }
+      let(:task) { create(:task, :with_meta_data) }
 
       it 'creates a task with correct meta_data' do
-        expect(proforma_task).to have_attributes(meta_data:)
+        expect(proforma_task).to have_attributes(meta_data: attributes_for(:task, :with_meta_data)[:meta_data])
       end
     end
 
@@ -222,7 +222,7 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
       end
 
       context 'when test has meta_data' do
-        let(:test_meta_data) { {CodeOcean: {meta: 'data', nested: {other: 'data'}}} }
+        let(:test_meta_data) { attributes_for(:test, :with_meta_data)[:meta_data] }
 
         it 'creates a test with correct meta_data' do
           expect(proforma_task.tests.first).to have_attributes(meta_data: test_meta_data)

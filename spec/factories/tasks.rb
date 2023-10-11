@@ -7,6 +7,7 @@ FactoryBot.define do
     user
     uuid { SecureRandom.uuid }
     language { 'de' }
+    meta_data { {} }
 
     trait :with_content do
       internal_description { 'internal_description' }
@@ -24,15 +25,25 @@ FactoryBot.define do
     trait(:with_meta_data) do
       meta_data do
         {
-          'meta-data': {
-            '@xmlns': {CodeOcean: 'custom_namespace.org'},
-            'CodeOcean:meta': {
-              '$1': 'data',
-              'CodeOcean:nest': {
-                'CodeOcean:even': {
-                  'CodeOcean:deeper': {
-                    '$1': 'foobar',
-                  },
+          '@@order' => %w[meta-data],
+          'meta-data' => {
+            '@@order' => %w[namespace:meta namespace:nested],
+            '@xmlns' => {'namespace' => 'custom_namespace.org'},
+            'namespace:meta' => {
+              '@@order' => %w[$1],
+              '$1' => 'data',
+            },
+            'namespace:nested' => {
+              '@@order' => %w[namespace:foo namespace:test],
+              'namespace:foo' => {
+                '@@order' => %w[$1],
+                '$1' => 'bar',
+              },
+              'namespace:test' => {
+                '@@order' => %w[namespace:abc],
+                'namespace:abc' => {
+                  '@@order' => %w[$1],
+                  '$1' => '123',
                 },
               },
             },
@@ -44,25 +55,31 @@ FactoryBot.define do
     trait(:with_submission_restrictions) do
       submission_restrictions do
         {
-          'submission-restrictions': {
-            '@max-size': '50',
-            'file-restriction': [
+          '@@order' => %w[submission-restrictions],
+          'submission-restrictions' => {
+            '@@order' => %w[file-restriction description internal-description],
+            '@max-size' => '50',
+            'file-restriction' => [
               {
-                '@use': 'required',
-                '@pattern-format': 'none',
-                '$1': 'restriction1',
+                '@@order' => %w[$1],
+                '@use' => 'required',
+                '@pattern-format' => 'none',
+                '$1' => 'restriction1',
               },
               {
-                '@use': 'optional',
-                '@pattern-format': 'posix-ere',
-                '$1': 'restriction2',
+                '@@order' => %w[$1],
+                '@use' => 'optional',
+                '@pattern-format' => 'posix-ere',
+                '$1' => 'restriction2',
               },
             ],
-            description: {
-              '$1': 'desc',
+            'description' => {
+              '@@order' => %w[$1],
+              '$1' => 'desc',
             },
-            'internal-description': {
-              '$1': 'int-desc',
+            'internal-description' => {
+              '@@order' => %w[$1],
+              '$1' => 'int-desc',
             },
           },
         }
@@ -72,47 +89,48 @@ FactoryBot.define do
     trait(:with_external_resources) do
       external_resources do
         {
-          'external-resources': {
-            'external-resource': [
+          '@@order' => %w[external-resources],
+          'external-resources' => {
+            '@@order' => %w[external-resource],
+            '@xmlns' => {'foo' => 'urn:custom:foobar'},
+            'external-resource' => [
               {
-                '@id': 'external-resource 1',
-                '@reference': '1',
-                '@used-by-grader': 'true',
-                '@visible': 'delayed',
-                '@usage-by-lms': 'download',
-                'internal-description': {
-                  '$1': 'internal-desc',
+                '@@order' => %w[internal-description foo:bar],
+                '@id' => 'external-resource 1',
+                '@reference' => '1',
+                '@used-by-grader' => 'true',
+                '@visible' => 'delayed',
+                '@usage-by-lms' => 'download',
+                'internal-description' => {
+                  '@@order' => %w[$1],
+                  '$1' => 'internal-desc',
                 },
-                'foo:bar': {
-                  '@xmlns': {
-                    foo: 'urn:custom:foobar',
-                  },
-                  '@version': '4',
-                  'foo:content': {
-                    '@xmlns': {
-                      foo: 'urn:custom:foobar',
-                    }, '$1': 'foobar'
+                'foo:bar' => {
+                  '@@order' => %w[foo:content],
+                  '@version' => '4',
+                  'foo:content' => {
+                    '@@order' => %w[$1],
+                    '$1' => 'foobar',
                   },
                 },
               },
               {
-                '@id': 'external-resource 2',
-                '@reference': '2',
-                '@used-by-grader': 'false',
-                '@visible': 'no',
-                '@usage-by-lms': 'edit',
-                'internal-description': {
-                  '$1': 'internal-desc',
+                '@@order' => %w[internal-description foo:bar],
+                '@id' => 'external-resource 2',
+                '@reference' => '2',
+                '@used-by-grader' => 'false',
+                '@visible' => 'no',
+                '@usage-by-lms' => 'edit',
+                'internal-description' => {
+                  '@@order' => %w[$1],
+                  '$1' => 'internal-desc',
                 },
-                'foo:bar': {
-                  '@xmlns': {
-                    foo: 'urn:custom:foobar',
-                  },
-                  '@version': '5',
-                  'foo:content': {
-                    '@xmlns': {
-                      foo: 'urn:custom:foobar',
-                    }, '$1': 'barfoo'
+                'foo:bar' => {
+                  '@version' => '5',
+                  '@@order' => %w[foo:content],
+                  'foo:content' => {
+                    '@@order' => %w[$1],
+                    '$1' => 'barfoo',
                   },
                 },
               },
@@ -125,17 +143,20 @@ FactoryBot.define do
     trait(:with_grading_hints) do
       grading_hints do
         {
-          'grading-hints': {
-            root: {
-              '@function': 'sum',
-              'test-ref': [
+          '@@order' => %w[grading-hints],
+          'grading-hints' => {
+            '@@order' => %w[root],
+            'root' => {
+              '@@order' => %w[test-ref],
+              '@function' => 'sum',
+              'test-ref' => [
                 {
-                  '@ref': '1',
-                  '@weight': '0',
+                  '@ref' => '1',
+                  '@weight' => '0',
                 },
                 {
-                  '@ref': '2',
-                  '@weight': '1',
+                  '@ref' => '2',
+                  '@weight' => '1',
                 },
               ],
             },

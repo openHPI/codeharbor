@@ -85,11 +85,11 @@ RSpec.describe ProformaService::ExportTask do
       let(:task) { create(:task, :with_meta_data) }
 
       it 'adds meta_data node to task node' do
-        expect(xml_with_namespaces.xpath('/xmlns:task/xmlns:meta-data/CodeOcean:meta/text()', xml_with_namespaces.collect_namespaces).text).to eql 'data'
+        expect(xml_with_namespaces.xpath('/xmlns:task/xmlns:meta-data/namespace:meta/text()', xml_with_namespaces.collect_namespaces).text).to eql 'data'
       end
 
       it 'adds nested meta_data node to task node' do
-        expect(xml_with_namespaces.xpath('/xmlns:task/xmlns:meta-data/CodeOcean:meta/CodeOcean:nest/CodeOcean:even/CodeOcean:deeper', xml_with_namespaces.collect_namespaces).text).to eql 'foobar'
+        expect(xml_with_namespaces.xpath('/xmlns:task/xmlns:meta-data/namespace:nested/namespace:foo', xml_with_namespaces.collect_namespaces).text).to eql 'bar'
       end
     end
 
@@ -218,11 +218,11 @@ RSpec.describe ProformaService::ExportTask do
         let(:meta_data_path) { '/xmlns:task/xmlns:tests/xmlns:test/xmlns:test-configuration/xmlns:test-meta-data' }
 
         it 'adds meta_data node to task node' do
-          expect(xml_with_namespaces.xpath("#{meta_data_path}/CodeOcean:meta/text()", xml_with_namespaces.collect_namespaces).text).to eql 'data'
+          expect(xml_with_namespaces.xpath("#{meta_data_path}/namespace:meta/text()", xml_with_namespaces.collect_namespaces).text).to eql 'data'
         end
 
         it 'adds nested meta_data node to task node' do
-          expect(xml_with_namespaces.xpath("#{meta_data_path}/CodeOcean:meta/CodeOcean:nest/CodeOcean:even/CodeOcean:deeper", xml_with_namespaces.collect_namespaces).text).to eql 'foobar'
+          expect(xml_with_namespaces.xpath("#{meta_data_path}/namespace:nested/namespace:foo", xml_with_namespaces.collect_namespaces).text).to eql 'bar'
         end
       end
 
@@ -231,11 +231,11 @@ RSpec.describe ProformaService::ExportTask do
         let(:configuration_path) { '/xmlns:task/xmlns:tests/xmlns:test/xmlns:test-configuration/unit:unittest' }
 
         it 'adds configuration node to task node' do
-          expect(xml_with_namespaces.xpath("#{configuration_path}/unit:entry-point").text).to eql 'reverse_task.MyStringTest'
+          expect(xml_with_namespaces.xpath("#{configuration_path}/unit:entry-point").text).to eql 'HelloWorldTest'
         end
 
         it 'adds attributes to configuration node to task node' do
-          expect(xml_with_namespaces.xpath(configuration_path).attribute('version').value).to eql '4.12'
+          expect(xml_with_namespaces.xpath(configuration_path).attribute('version').value).to eql '4.10'
         end
       end
 

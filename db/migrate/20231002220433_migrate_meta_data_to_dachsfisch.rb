@@ -2,7 +2,16 @@
 
 class MigrateMetaDataToDachsfisch < ActiveRecord::Migration[7.0]
   def change
-    Task.where.not(meta_data: nil).find_each {|task| task.update(meta_data: transform_meta_data(task.meta_data)) }
+    Task.where.not(meta_data: nil).in_batches&.each {|tasks| update_meta_data tasks }
+    Test.where.not(meta_data: nil).in_batches&.each {|tests| update_meta_data tests }
+    change_column_null :tasks, :meta_data, false, {}
+  end
+
+  def update_meta_data(batch)
+    batch.each do |object|
+      object.meta_data = transform_meta_data(object.meta_data)
+      object.save!(touch: false)
+    end
   end
 
   def transform_meta_data(task_meta_data)
@@ -34,4 +43,10 @@ class MigrateMetaDataToDachsfisch < ActiveRecord::Migration[7.0]
       end
     end
   end
+end
+
+class Task < ApplicationRecord
+end
+
+class Test < ApplicationRecord
 end
