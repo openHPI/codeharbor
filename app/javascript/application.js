@@ -12,7 +12,20 @@ import 'jquery';
 import 'jquery-ujs'
 import 'select2';
 import * as bootstrap from 'bootstrap/dist/js/bootstrap.bundle';
+import * as Sentry from '@sentry/browser';
+import * as SentryIntegration from '@sentry/integrations';
 window.bootstrap = bootstrap; // Publish bootstrap in global namespace
+window.Sentry = Sentry; // Publish sentry in global namespace
+window.SentryIntegrations = function() { // Publish sentry integration in global namespace
+  return [
+    new SentryIntegration.ReportingObserver(),
+    new SentryIntegration.ExtraErrorData(),
+    new SentryIntegration.HttpClient(),
+    new Sentry.BrowserProfilingIntegration(),
+    new Sentry.BrowserTracing(),
+    new Sentry.Replay(),
+  ]
+};
 
 // custom jquery-ui library for minimal mouse interaction support
 import 'jquery-ui/ui/widget'

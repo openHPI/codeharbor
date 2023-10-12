@@ -23,10 +23,38 @@ $(document).on('turbolinks:load', function() {
     // See https://github.com/rails/jquery-ujs/issues/456 for details
     $.rails.refreshCSRFTokens();
 
+    // Set current user and current contributor
+    window.current_user = JSON.parse($('meta[name="current-user"]')?.attr('content') || null);
+
     // Set locale for all JavaScript functions
     const htmlTag = $('html')
     I18n.defaultLocale = htmlTag.data('default-locale');
     I18n.locale = htmlTag.attr('lang');
+
+    // Initialize Sentry
+    const sentrySettings = $('meta[name="sentry"]')
+
+    // Workaround for Turbolinks: We must not re-initialize the Relay object when visiting another page
+    if (sentrySettings && sentrySettings.data()['enabled'] && !Sentry.Replay.prototype._isInitialized) {
+      Sentry.init({
+        dsn: sentrySettings.data('dsn'),
+        attachStacktrace: true,
+        release: sentrySettings.data('release'),
+        environment: sentrySettings.data('environment'),
+        autoSessionTracking: true,
+        tracesSampleRate: 1.0,
+        replaysSessionSampleRate: 0.0,
+        replaysOnErrorSampleRate: 1.0,
+        integrations: window.SentryIntegrations(),
+        profilesSampleRate: 1.0,
+        initialScope: scope =>{
+          if (current_user) {
+            scope.setUser(current_user);
+          }
+          return scope;
+        }
+      });
+    }
 
     // Enable all tooltips
     $('[data-bs-toggle="tooltip"]').tooltip();

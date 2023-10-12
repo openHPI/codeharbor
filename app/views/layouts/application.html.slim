@@ -12,6 +12,8 @@ html lang="#{I18n.locale || I18n.default_locale}" data-default-locale="#{I18n.de
     = javascript_include_tag('application', 'data-turbolinks-track': 'reload', integrity: true, crossorigin: 'anonymous')
     = yield(:head)
     = csrf_meta_tags
+    meta name='sentry' data-enabled=SentryJavascript.active?.to_s data-release=SentryJavascript.release data-dsn=SentryJavascript.dsn data-environment=SentryJavascript.environment
+    meta name='current-user' content=current_user&.to_page_context&.to_json
   body.d-flex.flex-column.h-100
     #content
       nav.navbar.bg-light.navbar-expand-lg.mb-0 role='navigation' data-bs-theme="light"

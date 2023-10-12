@@ -130,6 +130,12 @@ class User < ApplicationRecord
     account_links + shared_account_links
   end
 
+  def to_page_context
+    {
+      id:,
+    }
+  end
+
   private
 
   def avatar_format
