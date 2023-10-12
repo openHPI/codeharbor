@@ -78,5 +78,5 @@ br
               = link_to user_message_path(current_user, message, option: @option), method: :delete, class: 'btn btn-light btn-sm', data: { confirm: t('sure') } do
                 i.fa-solid.fa-trash-can
                 =< t('message.index.delete')
-  = will_paginate
+  = render('shared/pagination', collection: @messages)
   br

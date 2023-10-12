@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module WillPaginateHelper
-  class WillPaginateJSLinkRenderer < WillPaginate::ActionView::LinkRenderer
+  class WillPaginateJSLinkRenderer < WillPaginate::ActionView::Bootstrap4LinkRenderer
     def prepare(collection, options, template)
       options[:params] ||= {}
       options[:params]['_'] = nil
@@ -20,9 +20,5 @@ module WillPaginateHelper
         text.to_s.html_safe # rubocop:disable Rails/OutputSafety as the string is already safe and provided by WillPaginate
       end
     end
-  end
-
-  def js_will_paginate(collection, options = {})
-    will_paginate(collection, options.merge(renderer: WillPaginateHelper::WillPaginateJSLinkRenderer))
   end
 end

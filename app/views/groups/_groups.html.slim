@@ -36,4 +36,4 @@
               = 'Wait to get accepted'
             - else
               = link_to 'Request Membership', request_access_group_path(group), method: :post, class: 'btn btn-light'
-= will_paginate @groups
+= render('shared/pagination', collection: @groups)

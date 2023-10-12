@@ -6,6 +6,7 @@ gem 'ace-rails-ap'
 gem 'acts-as-taggable-on'
 gem 'bcrypt'
 gem 'bootsnap', require: false
+gem 'bootstrap-will_paginate'
 gem 'coffee-rails', '>= 5.0.0' # Use CoffeeScript for .coffee assets and views
 gem 'config'
 gem 'devise-bootstrap-views'
@@ -39,7 +40,6 @@ gem 'sprockets-rails'
 gem 'terser'
 gem 'turbolinks'
 gem 'whenever', require: false
-gem 'will_paginate'
 
 # Authentication
 gem 'devise', '~> 4.9'

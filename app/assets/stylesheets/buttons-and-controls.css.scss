@@ -64,7 +64,32 @@ input[type='radio']:checked + label {
   padding: 5px 15px;
 }
 
+.pagination .page-item,
 .btn-light {
   background-color: #ffffff;
   border-color: #cccccc;
+}
+
+// Temporary style the pagination buttons
+
+.pagination .page-item:hover .page-link,
+.pagination .page-item .page-link:focus {
+  background-color: #d3d3d3;
+  color: #000;
+  box-shadow: initial;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #f5f5f5;
+  border-color: #cccccc;
+  color: #000;
+}
+
+.page-link {
+  color: #000;
+}
+
+.pagination .page-item.disabled .page-link {
+  background-color: #ffffff;
+  color: #999999;
 }

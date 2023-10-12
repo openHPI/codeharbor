@@ -88,6 +88,8 @@ GEM
       debug_inspector (>= 0.0.1)
     bootsnap (1.16.0)
       msgpack (~> 1.2)
+    bootstrap-will_paginate (1.0.0)
+      will_paginate
     builder (3.2.4)
     bunny (2.22.0)
       amq-protocol (~> 2.3, >= 2.3.1)
@@ -531,6 +533,7 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   bootsnap
+  bootstrap-will_paginate
   cancancan
   capybara
   coffee-rails (>= 5.0.0)
@@ -596,7 +599,6 @@ DEPENDENCIES
   web-console
   webmock
   whenever
-  will_paginate
 
 BUNDLED WITH
    2.4.20

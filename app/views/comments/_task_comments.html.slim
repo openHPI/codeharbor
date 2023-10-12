@@ -31,4 +31,4 @@
             = t('comments.show_less')
 
 
-  = js_will_paginate(@comments)
+  = render('shared/pagination', collection: @comments, js: true)

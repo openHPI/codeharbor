@@ -112,4 +112,4 @@
             = f.text_field :text, class: 'form-control'
             = f.submit class: 'btn btn-light'
       .comment-body
-= will_paginate @tasks
+= render('shared/pagination', collection: @tasks)
