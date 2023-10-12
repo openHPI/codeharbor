@@ -5,16 +5,16 @@ $(document).on('turbolinks:load', ready)
 
 initializeRatings = ->
   $('.rating span').hover (->
-    $(this).removeClass("fa-star-o").addClass("fa-star")
+    $(this).removeClass("fa-regular").addClass("fa-solid")
     rating = this.getAttribute("data-rating")
     lower = $('.rating span').filter (->
       $(this).attr("data-rating") < rating
     )
-    $(lower).removeClass("fa-star-o").addClass("fa-star")
+    $(lower).removeClass("fa-regular").addClass("fa-solid")
     upper = $('.rating span').filter (->
       $(this).attr("data-rating") > rating
     )
-    $(upper).removeClass("fa-star").addClass("fa-star-o")
+    $(upper).removeClass("fa-solid").addClass("fa-regular")
   )
 
   $('.rating span').on 'click', ->
@@ -32,18 +32,18 @@ initializeRatings = ->
         stars = $('.rating span').filter (->
           $(this).attr("data-rating") <= rating
         )
-        $(stars).removeClass("fa-star-o").addClass("fa-star")
+        $(stars).removeClass("fa-regular").addClass("fa-solid")
 
         overallrating = response.overall_rating
-        $('.starrating span.fa.fa-star[data-rating=1]').attr("color", "red")
+        $('.starrating span.fa-solid.fa-star[data-rating=1]').attr("color", "red")
         for num in [1,2,3,4,5]
           do (num) ->
             if overallrating >= num
-              $('.overall-rating[data-rating='+num+']').removeClass("fa-star-o").removeClass("fa-star-half-o").addClass("fa-star")
+              $('.overall-rating[data-rating='+num+']').removeClass("fa-star").removeClass("fa-star-half-stroke").removeClass("fa-regular").addClass("fa-star").addClass("fa-solid")
             else if (overallrating + 0.5) >= num
-              $('.overall-rating[data-rating='+num+']').removeClass("fa-star-o").removeClass("fa-star").addClass("fa-star-half-o")
+              $('.overall-rating[data-rating='+num+']').removeClass("fa-star").removeClass("fa-solid").addClass("fa-star-half-stroke")
             else
-              $('.overall-rating[data-rating='+num+']').removeClass("fa-star").removeClass("fa-star-half-o").addClass("fa-star-o")
+              $('.overall-rating[data-rating='+num+']').removeClass("fa-star-half-stroke").removeClass("fa-solid").addClass("fa-star").addClass("fa-regular")
       error: (a, b, c) ->
         alert("error:" + c);
     })

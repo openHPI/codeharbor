@@ -1,6 +1,6 @@
 .header.mb-5
   .std-heading
-    i.fa.fa-envelope style='color: #444444'
+    i.fa-solid.fa-envelope style='color: #444444'
     =< t('users.resend_confirmation')
 
 = form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f|
@@ -19,10 +19,10 @@
   .form-group.py-3
     .btn-group[role='group']
       = button_tag type: 'submit', class: 'btn btn-important' do
-        i.fa.fa-envelope
+        i.fa-solid.fa-envelope
         =< t('users.resend_confirmation')
       = link_to :back, class: 'btn btn-important' do
-        i.fa.fa-remove style=('color: gray')
+        i.fa-solid.fa-xmark style=('color: gray')
         =< t('users.back')
 
 = render 'users/shared/links'

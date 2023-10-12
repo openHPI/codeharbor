@@ -16,6 +16,6 @@
   li.nav-item = link_to t('layouts.logout'), destroy_user_session_path, method: :delete, class: 'nav-link'
 - else
   = render('navigation_collection_link', target: :new_user_registration_path, text: t('home.sign_up')) do
-    i.fa.fa-user
+    i.fa-solid.fa-user
   = render('navigation_collection_link', target: :new_user_session_path, text: t('home.login')) do
-    i.fa.fa-sign-in
+    i.fa-solid.fa-right-to-bracket

@@ -1,6 +1,6 @@
 .header
   .std-heading
-    i.fa.fa-folder-open
+    i.fa-solid.fa-folder-open
     =< @collection.title
 .row
   .col-md-12.my-4
@@ -37,10 +37,10 @@
                 td
                   / Contributing to a task is not yet enabled again.
                   /- if cannot? :read, task
-                    span.fa.fa-lock.lock
+                    span.fa-solid.fa-lock.lock
                     =< link_to t('collections.show.contribute'), contribute_exercise_path(task), method: :post, class: 'btn btn-light'
                   = link_to remove_task_collection_path(@collection, task: task), method: :patch, class: 'float-end' do
-                    i.fa.fa-remove style=("color: #800000; font-size: 20px;")
+                    i.fa-solid.fa-xmark style=("color: #800000; font-size: 20px;")
 .row
   .col-md-12
     .actions.btn-group[role="group"]
@@ -79,10 +79,10 @@
               - else
                 = link_to t('tasks.show.define_account_link'), new_user_account_link_path(current_user), class: 'dropdown-item'
         = link_to remove_all_collection_path(@collection), method: :patch, data: { confirm: t('sure') }, class: 'btn btn-important' do
-          i.fa.fa-remove style=("color: #800000")
+          i.fa-solid.fa-xmark style=("color: #800000")
           =< t('collections.show.remove_all')
         = link_to edit_collection_path(@collection), class: 'btn btn-important' do
-          i.fa.fa-edit
+          i.fa-solid.fa-pen-to-square
           =< t('collections.button.edit')
         - if @collection.users.include? current_user
           = link_to leave_collection_path(@collection), class: 'btn btn-important', method: :post, data: { confirm: @collection.users.count == 1 ? t('controllers.collections.leave.deletion_warning') : t('sure') } do

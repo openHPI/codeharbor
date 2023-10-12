@@ -7,7 +7,7 @@
 
     - if can? :create, Message
       = link_to new_user_message_path, class: 'btn btn-main nav-btn float-end' do
-        i.fa.fa-envelope
+        i.fa-solid.fa-envelope
         =< t('message.index.new')
 br
 - if @messages.empty?
@@ -22,15 +22,15 @@ br
     .message-block
       .message-left
         - if message.param_type == 'exercise' || message.param_type == 'exercise_accepted' || message.param_type == 'exercise_declined'
-          span.fa.fa-file-text-o
+          span.fa-regular.fa-file-lines
         - elsif message.param_type == 'collection'
-          span.fa.fa-folder-open
+          span.fa-solid.fa-folder-open
         - elsif message.param_type == 'group' || message.param_type == 'group_accepted' || message.param_type == 'group_declined'
-          span.fa.fa-group
+          span.fa-solid.fa-users
         - elsif message.param_type == 'report'
-          span.fa.fa-cog
+          span.fa-solid.fa-gear
         - else
-          span.fa.fa-envelope
+          span.fa-solid.fa-envelope
       .message-right
         .message-user
           - if @option == 'inbox'
@@ -48,10 +48,10 @@ br
               -if message.param_type == 'exercise'
                 = link_to  t('message.index.view'), exercise_path(message.param_id), class: 'btn btn-light btn-sm'
                 = link_to add_author_exercise_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
-                  i.fa.fa-plus style=("color:#008000")
+                  i.fa-solid.fa-plus style=("color:#008000")
                   =< t('message.index.make_co_author')
                 = link_to decline_author_exercise_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
-                  i.fa.fa-remove style=("color:#800000")
+                  i.fa-solid.fa-xmark style=("color:#800000")
                   =< t('message.index.deny_access')
               - if message.param_type == 'collection'
                 = link_to  t('message.index.view'), view_shared_collection_path(message.param_id, user: message.sender), class: 'btn btn-light btn-sm'
@@ -59,10 +59,10 @@ br
               - if message.param_type == 'group'
                 = link_to t('message.index.view'), group_path(message.param_id), class: 'btn btn-light btn-sm'
                 = link_to grant_access_group_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
-                  i.fa.fa-plus style=("color:#008000")
+                  i.fa-solid.fa-plus style=("color:#008000")
                   =< t('message.index.grant_access')
                 = link_to deny_access_group_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
-                  i.fa.fa-remove style=("color:#800000")
+                  i.fa-solid.fa-xmark style=("color:#800000")
                   =< t('message.index.deny_access')
               - if message.param_type == 'exercise_accepted' || message.param_type == 'report'
                 = link_to t('message.index.view'), exercise_path(message.param_id), class: 'btn btn-light btn-sm'
@@ -73,10 +73,10 @@ br
             .btn-group
               - unless @option == 'sent'
                 = link_to reply_user_messages_path(recipient: message.sender), class: 'btn btn-light btn-sm' do
-                  i.fa.fa-mail-reply
+                  i.fa-solid.fa-reply
                   =< t('message.index.reply')
               = link_to user_message_path(current_user, message, option: @option), method: :delete, class: 'btn btn-light btn-sm', data: { confirm: t('sure') } do
-                i.fa.fa-trash
+                i.fa-solid.fa-trash-can
                 =< t('message.index.delete')
   = will_paginate
   br

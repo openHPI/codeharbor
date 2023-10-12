@@ -10,7 +10,6 @@ gem 'coffee-rails', '>= 5.0.0' # Use CoffeeScript for .coffee assets and views
 gem 'config'
 gem 'devise-bootstrap-views'
 gem 'faraday'
-gem 'font-awesome-rails'
 gem 'http_accept_language'
 gem 'i18n-js'
 gem 'image_processing'

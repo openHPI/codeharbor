@@ -1,7 +1,7 @@
 .login_form
   .header.mb-5
     .std-heading
-      i.fa.fa-sign-in style='color: #444444'
+      i.fa-solid.fa-right-to-bracket style='color: #444444'
       =< t('sessions.header')
   = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
     .form-group.field-element
@@ -28,10 +28,10 @@
     .form-group.py-3
       .btn-group[role='group']
         = button_tag type: 'submit', class: 'btn btn-important' do
-          i.fa.fa-sign-in
+          i.fa-solid.fa-right-to-bracket
           =< t('sessions.login')
         = link_to :back, class: 'btn btn-important' do
-          i.fa.fa-remove style=('color: gray')
+          i.fa-solid.fa-xmark style=('color: gray')
           =< t('sessions.back')
 
   = render 'users/shared/links'

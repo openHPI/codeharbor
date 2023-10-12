@@ -5,18 +5,18 @@
         - display_container = "display: block"
         .table-header
           = file.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
-            i.fa.fa-remove style=("color: #800000")
+            i.fa-solid.fa-xmark style=("color: #800000")
             =< t('tasks.form.files.remove')
       - else
         - display_container = "display: none"
         .table-header.closed.toggle-next
           => file.object.full_file_name
-          span.fa.fa-caret-down
+          span.fa-solid.fa-caret-down
           = file.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
-            i.fa.fa-remove style=("color: #800000")
+            i.fa-solid.fa-xmark style=("color: #800000")
             =< t('tasks.form.files.remove')
       .file-container.mx-2.my-3 style="#{display_container}"
         = render 'file_form', f: f, file: file, nested_form_placeholder: nested_form_placeholder
   = f.add_nested_fields_link :files, ' ', class: 'btn btn-main', id: 'addFileButton' do
-    i.fa.fa-plus style=("color: #008000")
+    i.fa-solid.fa-plus style=("color: #008000")
     =< t('tasks.form.files.add')

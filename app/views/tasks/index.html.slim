@@ -12,7 +12,7 @@
         - if can? :create, Task
           .btn-group.float-end
             = link_to new_task_path, class: 'btn btn-main nav-btn-exercise' do
-              i.fa.fa-plus style=("color: #008000")
+              i.fa-solid.fa-plus style=("color: #008000")
               =< t('tasks.index.new')
             = button_tag type: 'button', 'data-bs-toggle': 'dropdown', aria: {haspopup: "true", expanded: "false"}, class: 'btn btn-main nav-btn-exercise dropdown-toggle split' do
               span.caret
@@ -35,7 +35,7 @@
           = button_tag type: 'button', id: 'advanced', class: 'btn btn-light' do
             span
               => t('tasks.index.search.advanced')
-            span.fa.fa-caret-down#drop style="color:#333333"
+            span.fa-solid.fa-caret-down#drop style="color:#333333"
         .dropdown-content.p-3
           = hidden_field_tag 'advancedFilterActive', @advanced_filter_active.to_s
           = fields_for 'settings' do |advanced|

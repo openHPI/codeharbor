@@ -6,11 +6,11 @@
       = file.radio_button :used_by_grader, true, value: true
       = file.label :used_by_grader_true, data: {toggle: 'tooltip', placement: 'bottom'}, title: 'yes', class: 'radio-left small-radio radio-half' do
         span.fa-stack
-          i.fa.fa-stack-1x.fa-check.fa-2x
+          i.fa-solid.fa-check.fa-stack-1x.fa-2x
       = file.radio_button :used_by_grader, false, value: false
       = file.label :used_by_grader_false, data: {toggle: 'tooltip', placement: 'bottom'}, title: 'no', class: 'radio-right small-radio radio-half' do
         span.fa-stack
-          i.fa.fa-stack-1x.fa-times.fa-2x
+          i.fa-solid.fa-xmark.fa-stack-1x.fa-2x
 
   .form-control.placeholder
     = file.label :used_by_grader, t('tasks.files.visible'), class: 'form-label', style: 'width: unset; margin-right: 10px;'
@@ -18,15 +18,15 @@
       = file.radio_button :visible, 'yes', value: 'yes', checked: true
       = file.label :visible_yes, data: {toggle: 'tooltip', placement: 'bottom'}, title: 'yes', class: 'radio-left small-radio radio-third' do
         span.fa-stack
-          i.fa.fa-stack-1x.fa-eye.fa-2x
+          i.fa-regular.fa-eye.fa-stack-1x.fa-2x
       = file.radio_button :visible, 'no', value: 'no'
       = file.label :visible_no, data: {toggle: 'tooltip', placement: 'bottom'}, title: 'no', class: 'radio-right radio-left small-radio radio-third' do
         span.fa-stack
-          i.fa.fa-stack-1x.fa-eye-slash.fa-2x
+          i.fa-regular.fa-eye-slash.fa-stack-1x.fa-2x
       = file.radio_button :visible, 'delayed', value: 'delayed'
       = file.label :visible_delayed, data: {toggle: 'tooltip', placement: 'bottom'}, title: 'delayed', class: 'radio-right small-radio radio-third' do
         span.fa-stack
-          i.fa.fa-stack-1x.fa-clock-o.fa-2x
+          i.fa-regular.fa-clock.fa-stack-1x.fa-2x
 
   .form-control.placeholder
     = file.label :usage_by_lms, t('tasks.files.usage_by_lms'), class: 'form-label', style: 'width: unset; margin-right: 10px;'
@@ -34,12 +34,12 @@
       = file.radio_button :usage_by_lms, 'edit', value: 'edit'
       = file.label :usage_by_lms_edit, data: {toggle: 'tooltip', placement: 'bottom'}, title: 'edit', class: 'radio-left small-radio radio-third' do
         span.fa-stack
-          i.fa.fa-stack-1x.fa-pencil.fa-2x
+          i.fa-solid.fa-pencil.fa-stack-1x.fa-2x
       = file.radio_button :usage_by_lms, 'display', value: 'display'
       = file.label :usage_by_lms_display, data: {toggle: 'tooltip', placement: 'bottom'}, title: 'display', class: 'radio-right radio-left small-radio radio-third' do
         span.fa-stack
-          i.fa.fa-stack-1x.fa-eye.fa-2x
+          i.fa-regular.fa-eye.fa-stack-1x.fa-2x
       = file.radio_button :usage_by_lms, 'download', value: 'download'
       = file.label :usage_by_lms_download, data: {toggle: 'tooltip', placement: 'bottom'}, title: 'download', class: 'radio-right small-radio radio-third' do
         span.fa-stack
-          i.fa.fa-stack-1x.fa-download.fa-2x
+          i.fa-solid.fa-download.fa-stack-1x.fa-2x

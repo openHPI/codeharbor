@@ -184,8 +184,6 @@ GEM
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
     ffi (1.16.3)
-    font-awesome-rails (4.7.0.8)
-      railties (>= 3.2, < 8.0)
     glob (0.4.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
@@ -542,7 +540,6 @@ DEPENDENCIES
   devise-bootstrap-views
   factory_bot_rails
   faraday
-  font-awesome-rails
   headless
   http_accept_language
   i18n-js

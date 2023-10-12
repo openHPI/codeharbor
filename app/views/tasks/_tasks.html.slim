@@ -31,11 +31,11 @@
           - [*1..5].each do |i|
             span.fs-5.align-middle
               - if task.rating_star >= i
-                .fa.fa-star data-rating=i
+                .fa-solid.fa-star data-rating=i
               - elsif (task.rating_star + 0.5) >= i
-                .fa.fa-star-half-o data-rating=i
+                .fa-regular.fa-star-half-stroke data-rating=i
               - else
-                .fa.fa-star-o data-rating=i
+                .fa-regular.fa-star data-rating=i
           small.text-body-secondary.align-bottom
             =< task.ratings.size
             =< t('tasks.all.ratings')
@@ -74,12 +74,12 @@
     .card-footer
       = button_tag type: 'button', class: 'btn no-border index-comment-button', data: {task: task.id} do
         => t('comments.show_comments')
-        span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
-        span.fa.fa-caret-down.my-caret
+        span.fa-solid.fa-circle-notch.fa-spin.wait style="display:none;margin-right:5px;"
+        span.fa-solid.fa-caret-down.my-caret
       =< button_tag type: 'button', class: 'btn no-border related-button', data: {task: task.id} do
         => t('tasks.index.related_exercises')
-        span class="fa fa-circle-o-notch fa-spin wait" style="display:none;margin-right:5px;"
-        span.fa.fa-caret-down.my-caret
+        span.fa-solid.fa-circle-notch.fa-spin.wait style="display:none;margin-right:5px;"
+        span.fa-solid.fa-caret-down.my-caret
       /.float-end.stats
         p.impact
           = t('exercises.downloads')
@@ -98,11 +98,11 @@
 
       .slide-left.inactive
         = button_tag do
-          i.fa.fa-caret-left
+          i.fa-solid.fa-caret-left
       .content
       .slide-right.inactive
         = button_tag do
-          i.fa.fa-caret-right
+          i.fa-solid.fa-caret-right
 
     div class=("comment-box") data-task=task.id
       = form_for :comment, url: task_comments_path(task), remote: true do |f|

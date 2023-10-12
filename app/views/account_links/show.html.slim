@@ -1,6 +1,6 @@
 .header
   .std-heading
-    i.fa.fa-user
+    i.fa-solid.fa-user
     = " #{t('account.account_links.show_header')}: #{@account_link.name}"
 .show-table
   .row
@@ -25,15 +25,15 @@
               = shared_user.email
               .btn-group.float-end
                 = button_to remove_shared_user_user_account_link_path, method: :post, params: {shared_user: shared_user.id}, data: { confirm: 'Are you sure?' }, class: 'btn btn-light btn-sm', remote: true, form_class: 'remove-account-link-form' do
-                  i.fa.fa-trash
+                  i.fa-solid.fa-trash-can
                   =< t('account.account_links.button.destroy')
 
 .actions.btn-group
   - if can? :edit, @account_link
     = link_to edit_user_account_link_path(@user, @account_link), class: 'btn btn-important' do
-      i.fa.fa-edit
+      i.fa-solid.fa-pen-to-square
       =< t('account.account_links.button.edit')
     = link_to user_account_link_path(@user, @account_link), class: 'btn btn-important', method: :delete, data: {confirm: 'Are you sure?'} do
-      i.fa.fa-trash style=("color:#800000")
+      i.fa-solid.fa-trash-can style=("color:#800000")
       =< t('account.account_links.button.delete')
   = link_to t('account.account_links.button.back'), user_path(@user), class: 'btn btn-important'

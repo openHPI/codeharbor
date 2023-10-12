@@ -28,9 +28,9 @@
     .field-element
       = render 'editor', f: test, file: file
     = file.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
-      i.fa.fa-remove style=("color: #800000")
+      i.fa-solid.fa-xmark style=("color: #800000")
       =< t('exercises.form.files.remove')
 
   = test.add_nested_fields_link :files, ' ', class: 'btn btn-main', id: 'addTestFileButton' do
-    i.fa.fa-plus style=("color: #008000")
+    i.fa-solid.fa-plus style=("color: #008000")
     =< t('tasks.form.tests.add_file')

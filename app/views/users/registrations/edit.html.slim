@@ -1,6 +1,6 @@
 .header.mb-5
   .std-heading
-    i.fa.fa-user style='color: #444444'
+    i.fa-solid.fa-user style='color: #444444'
     =< t('users.edit.header')
 
 = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
@@ -62,8 +62,8 @@
   .form-group.py-3
     .btn-group[role='group']
       = button_tag type: 'submit', class: 'btn btn-important' do
-        i.fa.fa-user
+        i.fa-solid.fa-user
         =< t('users.update_user')
       = link_to :back, class: 'btn btn-important' do
-        i.fa.fa-remove style=('color: gray')
+        i.fa-solid.fa-xmark style=('color: gray')
         =< t('users.back')
