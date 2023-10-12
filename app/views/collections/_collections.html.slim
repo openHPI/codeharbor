@@ -16,7 +16,7 @@
         span= collection.title
     .card-body
       .row.px-3
-        .col-md-9
+        .col-md-9.p-0
           - if collection.tasks.empty?
             = t('collections.noTasksAdded')
           - else collection.tasks
@@ -31,7 +31,7 @@
                     = link_to task.title, task_path(task), class: 'btn btn-light disabled', style: "border-right: none"
                     / = link_to contribute_exercise_path(exercise), method: :post, class: 'btn btn-light', style: "border-left: none; margin-right: 5px;" do
                     /   i.fa-solid.fa-lock style=("color: gray")
-        .col-md-3
+        .col-md-3.p-0
           .btn-group.float-end aria-label="..." role="group"
             - if can? :edit, collection
               = link_to t('collections.button.view'), collection_path(collection), class: 'btn btn-light'
