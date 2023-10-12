@@ -56,6 +56,7 @@ jobs:
       - name: Prepare config files
         run: |
           cp config/action_mailer.yml.ci config/action_mailer.yml
+          cp config/content_security_policy.yml.ci config/content_security_policy.yml
           cp config/database.yml.ci config/database.yml
           cp config/secrets.yml.ci config/secrets.yml
           cp config/mnemosyne.yml.ci config/mnemosyne.yml

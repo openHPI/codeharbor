@@ -150,7 +150,7 @@ If you have several Ruby versions installed, check that you are using the latest
 First, copy our templates:
 
 ```shell
-for f in action_mailer.yml database.yml mnemosyne.yml secrets.yml
+for f in action_mailer.yml content_security_policy.yml database.yml mnemosyne.yml secrets.yml
 do
   if [ ! -f config/$f ]
   then

@@ -52,7 +52,7 @@ rvm install $ruby_version
 ######## CODEHARBOR INSTALL ##########
 
 # Prepare config
-for f in action_mailer.yml database.yml mnemosyne.yml secrets.yml
+for f in action_mailer.yml content_security_policy.yml database.yml mnemosyne.yml secrets.yml
 do
   if [ ! -f config/$f ]
   then

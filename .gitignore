@@ -1,5 +1,6 @@
 # Ignore application configuration
 /config/action_mailer.yml
+/config/content_security_policy.yml
 /config/database.yml
 /config/mnemosyne.yml
 /config/secrets.yml

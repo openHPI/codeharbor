@@ -1,0 +1,26 @@
+# This file allows to further customize the Content Security Policy (CSP).
+# All settings will be applied **in addition** to the application CSP.
+# Additional keys can be added if required.
+# Default directives are defined here: `initializers/content_security_policy.rb`.
+
+default: &default
+  # Optionally: Specify a custom, non-Sentry URL for reporting CSP violations.
+  # For Sentry, set the `SENTRY_CSP_REPORT_URL` environment variable.
+  # report_uri: https://example.com/csp-report
+  default_src: []
+
+
+development:
+  <<: *default
+  # Allow the webpack-dev-server in development
+  connect_src:
+    - http://localhost:3035
+    - ws://localhost:3035
+
+
+production:
+  <<: *default
+
+
+test:
+  <<: *default
