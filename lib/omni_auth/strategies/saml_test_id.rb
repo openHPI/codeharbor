@@ -14,8 +14,6 @@ module OmniAuth
         configure idp_metadata
 
         # Our Service Provider has some configuration options
-        option :idp_sso_service_url, 'https://samltest.id/idp/profile/SAML2/Redirect/SSO'
-        option :idp_sso_service_binding, 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'
         option :certificate, File.read(Settings.omniauth.samltestid.certificate)
         option :private_key, File.read(Settings.omniauth.samltestid.private_key)
 
