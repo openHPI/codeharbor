@@ -68,13 +68,13 @@ module Bridges
         parse_metadata_prefix!(@oai_params[:metadataPrefix])
 
         xml.ListIdentifiers do
-          records = find_records!(@oai_params, @resumption_params)
+          records, complete_list_size = find_records!(@oai_params, @resumption_params)
 
           records.first(MAX_RECORDS_PER_RESPONSE).each do |task|
             export_record_header(xml, task)
           end
 
-          export_resumption_token(xml, records)
+          export_resumption_token(xml, records, complete_list_size)
         end
       end
 
@@ -99,13 +99,13 @@ module Bridges
         metadata_prefix = parse_metadata_prefix!(@oai_params[:metadataPrefix])
 
         xml.ListRecords do
-          records = find_records!(@oai_params, @resumption_params)
+          records, complete_list_size = find_records!(@oai_params, @resumption_params)
 
           records.first(MAX_RECORDS_PER_RESPONSE).each do |task|
             export_record(xml, task, metadata_prefix)
           end
 
-          export_resumption_token(xml, records)
+          export_resumption_token(xml, records, complete_list_size)
         end
       end
 
@@ -179,17 +179,24 @@ module Bridges
         end
       end
 
-      def export_resumption_token(xml, records)
+      def export_resumption_token(xml, records, complete_list_size)
+        returned_records = records[...MAX_RECORDS_PER_RESPONSE]
+        cursor = @resumption_params.present? ? @resumption_params[:cursor] : 0
+
         if records.size > MAX_RECORDS_PER_RESPONSE
-          last_returned_record = records[MAX_RECORDS_PER_RESPONSE - 1]
 
-          ts_from = last_returned_record.updated_at.strftime('%Y-%m-%dT%H:%M:%S.%NZ')
-          ts_until = @resumption_params.present? ? @resumption_params[:ts_until] : Time.zone.now.strftime('%Y-%m-%dT%H:%M:%S.%NZ')
-          token = @oai_params.merge({last_id: last_returned_record.id, ts_from:, ts_until:})
+          new_token = @oai_params.merge(
+            {
+              last_id: returned_records.last.id,
+              ts_from: returned_records.last.updated_at.strftime('%Y-%m-%dT%H:%M:%S.%NZ'),
+              ts_until: @resumption_params.present? ? @resumption_params[:ts_until] : Time.zone.now.strftime('%Y-%m-%dT%H:%M:%S.%NZ'),
+              cursor: cursor + returned_records.size,
+            }
+          )
 
-          xml.resumptionToken Base64.encode64(token.to_json)
+          xml.resumptionToken Base64.encode64(new_token.to_json), cursor:, completeListSize: complete_list_size
         elsif @resumption_params.present?
-          xml.resumptionToken
+          xml.resumptionToken '', cursor:, completeListSize: complete_list_size
         end
       end
 
@@ -206,12 +213,13 @@ module Bridges
         tasks = Task.includes(:labels).access_level_public.where(updated_at: parse_time_bounds!(params))
 
         tasks = filter_tasks_by_set(tasks, params[:set]) if params[:set].present?
-        tasks = filter_tasks_by_resumption_params(tasks, resumption_params) if resumption_params.present?
+        complete_list_size = tasks.count
 
         # ordering required for resumptionTokens; returning one more record to indicate that more are available
+        tasks = filter_tasks_by_resumption_params(tasks, resumption_params) if resumption_params.present?
         tasks = tasks.order(:updated_at, :id).limit(MAX_RECORDS_PER_RESPONSE + 1)
 
-        return tasks if tasks.any? || resumption_params.present?
+        return tasks, complete_list_size if tasks.any? || resumption_params.present?
 
         raise OaiError.new('No records matched the specified timeframe/identifier/set', 'noRecordsMatch')
       end
@@ -248,12 +256,13 @@ module Bridges
       end
 
       def parse_resumption_token!(params)
-        params.require(%i[last_id ts_from ts_until])
+        params.require(%i[last_id ts_from ts_until cursor])
 
         @resumption_params = {
           last_id: params[:last_id],
           ts_from: Time.zone.strptime(params[:ts_from], '%Y-%m-%dT%H:%M:%S.%NZ'),
           ts_until: Time.zone.strptime(params[:ts_until], '%Y-%m-%dT%H:%M:%S.%NZ'),
+          cursor: params[:cursor],
         }
       rescue ArgumentError, ActionController::ParameterMissing
         raise OaiError.new('The resumptionToken could not be parsed', 'badResumptionToken')
