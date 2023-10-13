@@ -7,7 +7,9 @@ default: &default
   # Optionally: Specify a custom, non-Sentry URL for reporting CSP violations.
   # For Sentry, set the `SENTRY_CSP_REPORT_URL` environment variable.
   # report_uri: https://example.com/csp-report
-  default_src: []
+  #
+  # No additional directives, remove this line to add other directives.
+  { }
 
 
 development:
