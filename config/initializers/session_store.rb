@@ -18,4 +18,7 @@ Rails.application.config.session_store :cookie_store,
   expire_after: 1.month,
   secure: Rails.env.production?,
   path: Rails.application.config.relative_url_root,
-  same_site: :strict
+  # Signing in through SAML won't work with `SameSite=Strict`
+  # as the cookie is not sent when accessing CodeHarbor
+  # following the SSO workflow, even when initiated by CodeHarbor.
+  same_site: :lax
