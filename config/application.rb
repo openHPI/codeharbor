@@ -44,7 +44,7 @@ module CodeHarbor
     end
 
     # Allow tables in addition to existing default tags
-    config.action_view.sanitized_allowed_tags = ActionView::Base.sanitized_allowed_tags + %w[table thead tbody tfoot td tr]
+    config.action_view.sanitized_allowed_tags = ActionView::Base.sanitized_allowed_tags + %w[table thead tbody tfoot td tr details summary]
 
     # Fix invalid Content-Type header for incoming requests made by edu-sharing.
     config.middleware.insert_before 0, Middleware::EduSharingContentType
