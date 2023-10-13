@@ -3,12 +3,14 @@
 source 'https://rubygems.org'
 
 gem 'ace-rails-ap'
-gem 'acts-as-taggable-on'
+# Temporary switch to a Rails 7.1 compatible fork. See https://github.com/mbleigh/acts-as-taggable-on/pull/1110
+gem 'acts-as-taggable-on', github: 'aovertus/acts-as-taggable-on', branch: 'support_rails_7-1'
 gem 'bcrypt'
 gem 'bootsnap', require: false
 gem 'bootstrap-will_paginate'
 gem 'coffee-rails', '>= 5.0.0' # Use CoffeeScript for .coffee assets and views
-gem 'config'
+# Temporary switch to a Rails 7.1 compatible fork. See https://github.com/rubyconfig/config/pull/342
+gem 'config', github: 'jonathanhefner/rubyconfig-config', branch: 'deep_merge-require-core-only'
 gem 'devise-bootstrap-views'
 gem 'faraday'
 gem 'http_accept_language'
@@ -27,10 +29,11 @@ gem 'nokogiri'
 gem 'pg'
 gem 'proformaxml', '1.0.0'
 gem 'puma'
-gem 'rails', '~> 7.0.8'
+gem 'rails', '~> 7.1.1'
 gem 'rails_admin', '< 4.0.0'
 gem 'rails-i18n'
-gem 'ransack'
+# Temporary switch to a Rails 7.1 compatible fork. See https://github.com/activerecord-hackery/ransack/pull/1439
+gem 'ransack', github: 'yuki24/ransack', branch: 'rails-7-1'
 gem 'rubyzip'
 gem 'sassc-rails'
 gem 'shakapacker', '7.1.0'

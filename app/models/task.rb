@@ -86,7 +86,7 @@ class Task < ApplicationRecord
                                             .having('COUNT(DISTINCT name) = ?', label_names.count))
   }
 
-  serialize :meta_data, HashAsJsonbSerializer
+  serialize :meta_data, coder: HashAsJsonbSerializer
 
   enum access_level: {private: 0, public: 1}, _default: :private, _prefix: true
 

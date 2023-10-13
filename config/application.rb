@@ -13,7 +13,12 @@ require_relative '../lib/middleware/edu_sharing_content_type'
 module CodeHarbor
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.0
+    config.load_defaults 7.1
+
+    # Please, add to the `ignore` list any other `lib` subdirectories that do
+    # not contain `.rb` files, or that should not be reloaded or eager loaded.
+    # Common ones are `templates`, `generators`, or `middleware`, for example.
+    config.autoload_lib(ignore: %w[assets tasks templates middleware omni_auth])
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -28,14 +33,6 @@ module CodeHarbor
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
     config.i18n.available_locales = %i[en]
-
-    extra_paths = [
-      Rails.root.join('lib'),
-    ]
-
-    config.add_autoload_paths_to_load_path = false
-    config.autoload_paths += extra_paths
-    config.eager_load_paths += extra_paths
 
     config.relative_url_root = ENV.fetch('RAILS_RELATIVE_URL_ROOT', '/').to_s
 

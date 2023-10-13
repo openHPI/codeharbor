@@ -9,7 +9,7 @@
 - fileupload_display = file_attached ? "display: none" : "display: block"
 
 = f.label :content, t('exercises.files.content'), class: 'form-label', style: 'margin-bottom: 15px'
-a.btn.btn-main.btn-sm.toggle-input data={text_initial: t('exercises.files.upload_file'), text_toggled: t('shared.back')} href='#'
+a.btn.btn-main.btn-sm.toggle-input href='#'
   = t('tasks.edit.toggle_file')
 .toggle-divs
   .edit style=editor_display
