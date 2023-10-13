@@ -196,6 +196,7 @@ module Bridges
 
           xml.resumptionToken Base64.encode64(new_token.to_json), cursor:, completeListSize: complete_list_size
         elsif @resumption_params.present?
+          # The response completing a previous incomplete list *must* contain an empty resumption token.
           xml.resumptionToken '', cursor:, completeListSize: complete_list_size
         end
       end
