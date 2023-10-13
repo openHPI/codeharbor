@@ -22,8 +22,5 @@ development:
 test:
   enabled: false
 
-staging:
-  <<: *common
-
 production:
   <<: *common

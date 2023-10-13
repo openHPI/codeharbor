@@ -6,7 +6,7 @@ The following environment variables are specifically support in CodeHarbor and a
 |- |- |- |
 | `RAILS_ENV` | `development` | Specifies the Rails environment which can be configured using the files in `config/environments` |  
 | `RAILS_RELATIVE_URL_ROOT` | `/` | Specifies the subpath of the application, used for links and assets |  
-| `WEB_CONCURRENCY` | Number of physical CPU cores | Puma worker count in production or staging for cluster mode |
+| `WEB_CONCURRENCY` | Number of physical CPU cores | Puma worker count in production for cluster mode |
 | `RAILS_MAX_THREADS` | `5` | Maximum Puma thread count per worker |  
 | `RAILS_MIN_THREADS` | `$RAILS_MIN_THREADS` | Minimum Puma thread count per worker |
 | `PORT` | `7500` | Default port for the web server |
