@@ -196,7 +196,7 @@ module Bridges
             }
           )
 
-          xml.resumptionToken Base64.encode64(new_token.to_json), cursor:, completeListSize: complete_list_size
+          xml.resumptionToken Base64.urlsafe_encode64(new_token.to_json), cursor:, completeListSize: complete_list_size
         elsif @resumption_params.present?
           # The response completing a previous incomplete list *must* contain an empty resumption token.
           xml.resumptionToken '', cursor:, completeListSize: complete_list_size
@@ -250,7 +250,7 @@ module Bridges
 
         if params.key? :resumptionToken
           begin
-            token_params = ActionController::Parameters.new(JSON.parse(Base64.decode64(params[:resumptionToken])))
+            token_params = ActionController::Parameters.new(JSON.parse(Base64.urlsafe_decode64(params[:resumptionToken])))
             params = token_params.permit(OAI_PARAMS + RESUMPTION_PARAMS)
           rescue JSON::ParserError
             raise OaiError.new('The resumptionToken could not be parsed', 'badResumptionToken')
