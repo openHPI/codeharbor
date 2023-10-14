@@ -8,6 +8,8 @@ module Bridges
       MAX_RECORDS_PER_RESPONSE = 100
       ERROR_RESPONSE_XSD = 'vendor/assets/schemas/oai-pmh/error_response_combined.xsd'
       SUCCESSFUL_RESPONSE_XSD = 'vendor/assets/schemas/oai-pmh/successful_response_combined.xsd'
+      OAI_PARAMS = %i[verb identifier from until metadataPrefix set].freeze
+      RESUMPTION_PARAMS = %i[last_id ts_from ts_until cursor].freeze
 
       def handle_request
         builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
@@ -244,20 +246,23 @@ module Bridges
       end
 
       def parse_parameters!(params)
+        params = params.permit(OAI_PARAMS + [:resumptionToken])
+
         if params.key? :resumptionToken
           begin
-            params = ActionController::Parameters.new(JSON.parse(Base64.decode64(params[:resumptionToken])))
+            token_params = ActionController::Parameters.new(JSON.parse(Base64.decode64(params[:resumptionToken])))
+            params = token_params.permit(OAI_PARAMS + RESUMPTION_PARAMS)
           rescue JSON::ParserError
             raise OaiError.new('The resumptionToken could not be parsed', 'badResumptionToken')
           end
           parse_resumption_token!(params)
         end
 
-        @oai_params = params.permit(:verb, :identifier, :from, :until, :metadataPrefix, :set).to_h.symbolize_keys
+        @oai_params = params.slice(*OAI_PARAMS).to_h.symbolize_keys
       end
 
       def parse_resumption_token!(params)
-        params.require(%i[last_id ts_from ts_until cursor])
+        params.require(RESUMPTION_PARAMS)
 
         @resumption_params = {
           last_id: params[:last_id],
