@@ -223,7 +223,7 @@ RSpec.describe Bridges::Oai::OaiController do
 
           it 'includes all parameters in the resumptionToken' do
             _, token = request_lambda.call(request_params)
-            token_hash = JSON.parse(Base64.decode64(token)).symbolize_keys
+            token_hash = JSON.parse(Base64.urlsafe_decode64(token)).symbolize_keys
             expect(token_hash).to include(request_params.transform_values(&:to_s))
             expect(token_hash).to have_key(:last_id)
             expect(token_hash).to have_key(:ts_from)
@@ -289,14 +289,14 @@ RSpec.describe Bridges::Oai::OaiController do
 
       context 'when sending an invalid resumptionToken' do
         context 'when the resumptionToken is not a JSON' do
-          let(:request_params) { {verb:, resumptionToken: Base64.encode64('invalid token')} }
+          let(:request_params) { {verb:, resumptionToken: Base64.urlsafe_encode64('invalid token')} }
 
           it_behaves_like 'a valid OAI-PMH error', 'badResumptionToken'
         end
 
         context 'when the resumptionToken contains an invalid timestamp' do
           let(:token_hash) { {last_id: 0, ts_from: 'invalid', ts_until: 'invalid'} }
-          let(:request_params) { {verb:, resumptionToken: Base64.encode64(token_hash.to_json)} }
+          let(:request_params) { {verb:, resumptionToken: Base64.urlsafe_encode64(token_hash.to_json)} }
 
           it_behaves_like 'a valid OAI-PMH error', 'badResumptionToken'
         end
