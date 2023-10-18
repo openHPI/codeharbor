@@ -22,7 +22,7 @@
     "jquery-ujs": "^1.2.3",
     "mini-css-extract-plugin": "^2.7.5",
     "rails-erb-loader": "usabilityhub/rails-erb-loader#master",
-    "sass": "^1.69.3",
+    "sass": "^1.69.4",
     "sass-loader": "^13.2.2",
     "select2": "^4.0.13",
     "shakapacker": "7.1.0",
