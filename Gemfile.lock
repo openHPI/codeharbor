@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: https://github.com/jonathanhefner/rubyconfig-config.git
-  revision: 4a79eac3f6aed9ee154472d14e48ff770d5a9f9b
+  revision: be234a97044cc7079e92233bc5131172a4cd7185
   branch: deep_merge-require-core-only
   specs:
     config (4.2.1)
