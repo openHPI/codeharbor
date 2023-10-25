@@ -9,7 +9,7 @@ class TaskFile < ApplicationRecord
   validates :name, presence: true
   validates :attachment, presence: true, if: -> { use_attached_file == 'true' }, on: :force_validations
   validates :xml_id, presence: true
-  validates :parent_id, uniqueness: {scope: %i[fileable_id fileable_type]}
+  validates :parent_id, uniqueness: {scope: %i[fileable_id fileable_type]}, if: -> { parent_id.present? }
   validate :unique_xml_id, if: -> { !fileable.nil? }
   validate :parent_validation_check
   attr_accessor :use_attached_file, :file_marked_for_deletion
