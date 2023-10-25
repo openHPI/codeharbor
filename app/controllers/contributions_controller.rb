@@ -7,16 +7,16 @@ class ContributionsController < ApplicationController
     if @task.apply_contribution(contrib)
       redirect_to @task, notice: t('task_contributions.approve_changes.success')
     else
-      redirect_to contrib.task, alert: t('task_contributions.approve_changes.error')
+      redirect_to contrib.modifying_task, alert: t('task_contributions.approve_changes.error')
     end
   end
 
   def discard_changes
     contrib = TaskContribution.find(params[:contribution_id])
     if contrib.close
-      redirect_to contrib.task, notice: t('task_contributions.discard_changes.success')
+      redirect_to contrib.modifying_task, notice: t('task_contributions.discard_changes.success')
     else
-      redirect_to contrib.task, alert: t('task_contributions.discard_changes.error')
+      redirect_to contrib.modifying_task, alert: t('task_contributions.discard_changes.error')
     end
   end
 
