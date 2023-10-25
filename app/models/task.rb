@@ -38,7 +38,7 @@ class Task < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :ratings, dependent: :destroy
 
-  has_one :task_contribution, dependent: :destroy # TODO: Do we want to have a has_one AND a has_many association for contributions?
+  has_one :task_contribution, dependent: :destroy, inverse_of: :modifying_task # TODO: Do we want to have a has_one AND a has_many association for contributions?
   belongs_to :user
   belongs_to :programming_language, optional: true
   belongs_to :license, optional: true
@@ -114,11 +114,11 @@ class Task < ApplicationRecord
   end
 
   def apply_contribution(contrib) # rubocop:disable Metrics/AbcSize
-    contrib_attributes = contrib.task.attributes.except!('parent_uuid', 'access_level', 'user_id', 'uuid', 'id')
+    contrib_attributes = contrib.modifying_task.attributes.except!('parent_uuid', 'access_level', 'user_id', 'uuid', 'id')
     assign_attributes(contrib_attributes)
-    transfer_linked_files(contrib.task)
-    self.model_solutions = transfer_multiple(model_solutions, contrib.task.model_solutions, {task_id: id})
-    self.tests = transfer_multiple(tests, contrib.task.tests, {task_id: id})
+    transfer_linked_files(contrib.modifying_task)
+    self.model_solutions = transfer_multiple(model_solutions, contrib.modifying_task.model_solutions, {task_id: id})
+    self.tests = transfer_multiple(tests, contrib.modifying_task.tests, {task_id: id})
     contrib.status = :merged
     save && contrib.save
   end
