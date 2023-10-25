@@ -3,7 +3,7 @@
 module ParentValidation
   def parent_validation_check
     if parent_id.nil?
-      return
+     return
     end
 
     parent_entry = self.class.find(parent_id)
