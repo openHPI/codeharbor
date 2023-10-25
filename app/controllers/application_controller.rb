@@ -13,30 +13,10 @@ class ApplicationController < ActionController::Base
   before_action :require_user!
   after_action :verify_authorized
   after_action :flash_to_headers
-
   protect_from_forgery(with: :exception, prepend: true)
   rescue_from Pundit::NotAuthorizedError, with: :render_not_authorized
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
   add_flash_types :danger, :warning, :info, :success
-
-  rescue_from CanCan::AccessDenied do |_exception|
-    if current_user
-      begin
-        redirect_to({action: :index}, alert: t('controllers.authorization'))
-      rescue ActionController::UrlGenerationError
-        redirect_to root_path, alert: t('controllers.authorization')
-      end
-    else
-      redirect_to root_path, alert: t('controllers.authorization')
-    end
-  end
-
-  rescue_from ActiveRecord::RecordNotFound do |_exception|
-     redirect_to({action: :index}, alert: t('controllers.not_found'))
-  rescue ActionController::UrlGenerationError
-    redirect_to root_path, alert: t('controllers.not_found')
-  end
-
 
   private
 
