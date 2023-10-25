@@ -2,7 +2,7 @@
 
 require 'nokogiri'
 require 'zip'
-class Task < ApplicationRecord
+class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include FileConcern
   include ParentValidation
   include TransferValues
@@ -38,7 +38,8 @@ class Task < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :ratings, dependent: :destroy
 
-  has_one :task_contribution, dependent: :destroy, inverse_of: :modifying_task # TODO: Do we want to have a has_one AND a has_many association for contributions?
+  # TODO: Do we want to have a has_one AND a has_many association for contributions?
+  has_one :task_contribution, dependent: :destroy, inverse_of: :modifying_task
   belongs_to :user
   belongs_to :programming_language, optional: true
   belongs_to :license, optional: true
