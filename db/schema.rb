@@ -427,8 +427,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_22_075061) do
     t.jsonb "meta_data"
     t.bigint "testing_framework_id"
     t.jsonb "configuration"
-    t.index ["testing_framework_id"], name: "index_tests_on_testing_framework_id"
     t.integer "parent_id", limit: 2
+    t.index ["testing_framework_id"], name: "index_tests_on_testing_framework_id"
   end
 
   create_table "user_identities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
