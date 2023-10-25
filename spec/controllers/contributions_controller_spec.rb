@@ -9,7 +9,7 @@ RSpec.describe ContributionsController do
   let(:original_author) { create(:user) }
   let!(:task) { create(:task, user: original_author) }
   let(:contrib_task) { create(:task, user:, title: 'Modified title', parent_uuid: task.uuid) }
-  let(:contribution) { create(:task_contribution, task: contrib_task, status: :pending) }
+  let(:contribution) { create(:task_contribution, modifying_task: contrib_task, status: :pending) }
 
   before { sign_in user }
 
