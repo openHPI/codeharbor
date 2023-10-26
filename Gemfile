@@ -25,7 +25,7 @@ gem 'net-pop', require: false
 gem 'net-smtp', require: false
 gem 'nokogiri'
 gem 'pg'
-gem 'proformaxml', '1.0.0'
+gem 'proformaxml', '1.2.0'
 gem 'puma'
 gem 'rails', '~> 7.1.1'
 gem 'rails_admin', '< 4.0.0'
