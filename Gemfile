@@ -27,7 +27,9 @@ gem 'nokogiri'
 gem 'pg'
 gem 'proformaxml', '1.0.0'
 gem 'puma'
-gem 'rails', '~> 7.1.1'
+# TODO: Temporary switch to Rails 7.1 branch until the next release.
+# See https://github.com/rails/rails/pull/49778
+gem 'rails', github: 'rails/rails', branch: '7-1-stable'
 gem 'rails_admin', '< 4.0.0'
 gem 'rails-i18n'
 gem 'ransack'

@@ -1,7 +1,8 @@
-GEM
-  remote: https://rubygems.org/
+GIT
+  remote: https://github.com/rails/rails.git
+  revision: 68c4dd34519b315cee8d4056724148a77b93a695
+  branch: 7-1-stable
   specs:
-    ace-rails-ap (4.5)
     actioncable (7.1.1)
       actionpack (= 7.1.1)
       activesupport (= 7.1.1)
@@ -32,6 +33,7 @@ GEM
       actionview (= 7.1.1)
       activesupport (= 7.1.1)
       nokogiri (>= 1.8.5)
+      racc
       rack (>= 2.2.4)
       rack-session (>= 1.0.1)
       rack-test (>= 0.6.3)
@@ -55,10 +57,6 @@ GEM
       globalid (>= 0.3.6)
     activemodel (7.1.1)
       activesupport (= 7.1.1)
-    activemodel-serializers-xml (1.0.2)
-      activemodel (> 5.x)
-      activesupport (> 5.x)
-      builder (~> 3.1)
     activerecord (7.1.1)
       activemodel (= 7.1.1)
       activesupport (= 7.1.1)
@@ -79,6 +77,37 @@ GEM
       minitest (>= 5.1)
       mutex_m
       tzinfo (~> 2.0)
+    rails (7.1.1)
+      actioncable (= 7.1.1)
+      actionmailbox (= 7.1.1)
+      actionmailer (= 7.1.1)
+      actionpack (= 7.1.1)
+      actiontext (= 7.1.1)
+      actionview (= 7.1.1)
+      activejob (= 7.1.1)
+      activemodel (= 7.1.1)
+      activerecord (= 7.1.1)
+      activestorage (= 7.1.1)
+      activesupport (= 7.1.1)
+      bundler (>= 1.15.0)
+      railties (= 7.1.1)
+    railties (7.1.1)
+      actionpack (= 7.1.1)
+      activesupport (= 7.1.1)
+      irb
+      rackup (>= 1.0.0)
+      rake (>= 12.2)
+      thor (~> 1.0, >= 1.2.2)
+      zeitwerk (~> 2.6)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ace-rails-ap (4.5)
+    activemodel-serializers-xml (1.0.2)
+      activemodel (> 5.x)
+      activesupport (> 5.x)
+      builder (~> 3.1)
     acts-as-taggable-on (10.0.0)
       activerecord (>= 6.1, < 7.2)
     addressable (2.8.5)
@@ -340,20 +369,6 @@ GEM
     rackup (2.1.0)
       rack (>= 3)
       webrick (~> 1.8)
-    rails (7.1.1)
-      actioncable (= 7.1.1)
-      actionmailbox (= 7.1.1)
-      actionmailer (= 7.1.1)
-      actionpack (= 7.1.1)
-      actiontext (= 7.1.1)
-      actionview (= 7.1.1)
-      activejob (= 7.1.1)
-      activemodel (= 7.1.1)
-      activerecord (= 7.1.1)
-      activestorage (= 7.1.1)
-      activesupport (= 7.1.1)
-      bundler (>= 1.15.0)
-      railties (= 7.1.1)
     rails-controller-testing (1.0.5)
       actionpack (>= 5.0.1.rc1)
       actionview (>= 5.0.1.rc1)
@@ -374,14 +389,6 @@ GEM
       nested_form (~> 0.3)
       rails (>= 6.0, < 8)
       turbo-rails (~> 1.0)
-    railties (7.1.1)
-      actionpack (= 7.1.1)
-      activesupport (= 7.1.1)
-      irb
-      rackup (>= 1.0.0)
-      rake (>= 12.2)
-      thor (~> 1.0, >= 1.2.2)
-      zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.0.6)
     ransack (4.1.0)
@@ -599,7 +606,7 @@ DEPENDENCIES
   pry-rails
   puma
   rack-mini-profiler
-  rails (~> 7.1.1)
+  rails!
   rails-controller-testing
   rails-i18n
   rails_admin (< 4.0.0)
