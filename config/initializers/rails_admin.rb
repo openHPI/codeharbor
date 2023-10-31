@@ -19,7 +19,7 @@ RailsAdmin.config do |config|
   config.authorize_with do
     # Important! We need to check the authorization here, we skip CanCanCan checks in the RailsAdminController.
     unless can?(:access, :rails_admin)
-      flash[:alert] = t('controllers.authorization')
+      flash[:alert] = t('common.errors.not_authorized')
       redirect_to main_app.root_path
     end
   end

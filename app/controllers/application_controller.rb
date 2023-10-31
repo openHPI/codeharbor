@@ -52,12 +52,12 @@ class ApplicationController < ActionController::Base
   end
 
   def render_not_authorized
-    render_error t('controllers.authorization'), :unauthorized
+    render_error t('common.errors.not_authorized'), :unauthorized
   end
 
   def render_not_found
     if current_user&.role == 'admin'
-      render_error t('controllers.not_found'), :not_found
+      render_error t('common.errors.not_found_error'), :not_found
     else
       render_not_authorized
     end

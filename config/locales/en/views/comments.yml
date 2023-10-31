@@ -1,0 +1,9 @@
+---
+en:
+  comments:
+    task_comments:
+      button:
+        refresh_comments: Refresh Comments
+      info:
+        no_comments: This Task does not have comments yet
+      time_ago: "%{time} ago"

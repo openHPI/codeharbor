@@ -133,7 +133,7 @@ RSpec.describe TasksController do
 
       it 'shows a flash message' do
         get_request
-        expect(flash[:alert]).to eq I18n.t('controllers.authorization')
+        expect(flash[:alert]).to eq I18n.t('common.errors.not_authorized')
       end
     end
   end
@@ -560,7 +560,7 @@ RSpec.describe TasksController do
 
       it 'shows an error message' do
         post_duplicate
-        expect(flash[:alert]).to eq(I18n.t('tasks.notification.duplicate_failed'))
+        expect(flash[:alert]).to eq(I18n.t('tasks.controller.duplicate.error_alert'))
       end
     end
   end
@@ -686,7 +686,7 @@ RSpec.describe TasksController do
 
     it 'renders correct json' do
       post_request
-      expect(response.body).to include('successfully imported').and(include('Show task').and(include('Hide')))
+      expect(response.body).to include('successfully imported').and(include(I18n.t('tasks.import_actions.button.show_task')).and(include('Hide')))
     end
 
     context 'when import raises a validation error' do

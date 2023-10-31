@@ -1,0 +1,15 @@
+---
+en:
+  account_links:
+    controller:
+      add_shared_user:
+        granted_push: Granted push privileges to %{user}.
+        share_duplicate: This account link is already shared with %{user}.
+      create:
+        success_notice: Account link was successfully created.
+      destroy:
+        success_notice: Account link was successfully destroyed.
+      remove_shared_user:
+        removed_push: Removed push privileges for %{user}.
+      update:
+        success_notice: Account link was successfully updated.

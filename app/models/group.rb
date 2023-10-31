@@ -79,6 +79,6 @@ class Group < ApplicationRecord
   private
 
   def admin_in_group
-    errors.add(:base, I18n.t('groups.no_admin_validation')) if admins.empty?
+    errors.add(:base, :no_admin) if admins.empty?
   end
 end

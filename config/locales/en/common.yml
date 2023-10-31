@@ -1,0 +1,40 @@
+---
+en:
+  common:
+    button:
+      abort: Abort
+      back: Back
+      cancel: Cancel
+      close: Close
+      confirm: Confirm
+      delete: Delete
+      destroy: Destroy
+      download_zip: Download Zip
+      duplicate: Duplicate
+      edit: Edit
+      export: Export
+      hide: Hide
+      import: Import
+      log_in: Log in
+      next: Next
+      previous: Previous
+      remove: Remove
+      retry: Retry
+      show: Show
+      show_less: Show less
+      show_more: Show more
+      sign_up: Sign up
+      view: View
+    created_at: Created at
+    created_by: Created by
+    edit_colon: 'Edit:'
+    errors:
+      error_with_space: 'error '
+      generic: An error occurred.
+      not_authorized: You are not authorized for this action.
+      not_found_error: You are not able to access this object or it doesn't exist
+      something_went_wrong: Something went wrong
+    locales:
+      en: English
+    none: None
+    sure: Are you sure?

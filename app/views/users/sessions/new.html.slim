@@ -2,21 +2,21 @@
   .header.mb-5
     .std-heading
       i.fa-solid.fa-right-to-bracket style='color: #444444'
-      =< t('sessions.header')
+      =< t('users.sessions.new.header')
   = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
     .form-group.field-element
       = f.label :email, class: 'form-label'
       = f.email_field :email,
               required: true,
               autofocus: true,
-              placeholder: t('sessions.email.placeholder'),
+              placeholder: t('users.sessions.new.email.placeholder'),
               autocomplete: 'email',
               class: 'form-control'
     .form-group.field-element
       = f.label :password, class: 'form-label'
       = f.password_field :password,
               required: true,
-              placeholder: t('sessions.password.placeholder'),
+              placeholder: t('users.sessions.new.password.placeholder'),
               autocomplete: 'current-password',
               class: 'form-control'
     - if devise_mapping.rememberable?
@@ -29,9 +29,9 @@
       .btn-group[role='group']
         = button_tag type: 'submit', class: 'btn btn-important' do
           i.fa-solid.fa-right-to-bracket
-          =< t('sessions.login')
+          =< t('common.button.log_in')
         = link_to :back, class: 'btn btn-important' do
           i.fa-solid.fa-xmark style=('color: gray')
-          =< t('sessions.back')
+          =< t('common.button.back')
 
   = render 'users/shared/links'

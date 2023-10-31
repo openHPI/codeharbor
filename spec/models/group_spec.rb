@@ -135,7 +135,7 @@ RSpec.describe Group do
 
       it 'has correct error' do
         group.validate
-        expect(group.errors.full_messages).to include I18n.t('groups.no_admin_validation')
+        expect(group.errors.full_messages).to include I18n.t('activerecord.errors.models.group.attributes.base.no_admin')
       end
     end
   end

@@ -13,7 +13,7 @@ class RatingsController < ApplicationController
       render json: {overall_rating:, user_rating: rating}
       flash.now[:notice] = notice
     else
-      render json: {notice: t('controllers.generic_error')}
+      render json: {notice: t('common.errors.generic')}
     end
   end
 
@@ -29,7 +29,7 @@ class RatingsController < ApplicationController
   end
 
   def handle_own_rating
-    flash.now[:alert] = t('controllers.rating.own_task')
+    flash.now[:alert] = t('.controller.handle_own_rating.error')
     overall_rating = @task.average_rating
     render json: {overall_rating:, user_rating: overall_rating}
   end
@@ -38,7 +38,7 @@ class RatingsController < ApplicationController
     rating = @task.ratings.find_or_initialize_by(user: current_user)
     rating.rating = rating_params[:rating]
 
-    notice = rating.persisted? ? t('controllers.rating.success.update') : t('controllers.rating.success.create')
+    notice = rating.persisted? ? t('.controller.handle_rating.rating_updated') : t('.controller.handle_rating.rating_created')
 
     [rating, notice]
   end

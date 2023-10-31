@@ -1,14 +1,14 @@
 .field-element
-  = file.label :name, t('tasks.files.name'), class: 'form-label'
+  = file.label :name, TaskFile.human_attribute_name('name'), class: 'form-label'
   = file.text_field :name, class: 'form-control file-name'
 .field-element
-  = file.label :path, t('tasks.files.path'), class: 'form-label'
+  = file.label :path, TaskFile.human_attribute_name('path'), class: 'form-label'
   = file.text_field :path, size: 40, class: 'form-control'
 .field-element
-  = file.label :internal_description, t('tasks.files.internal_description'), class: 'form-label'
+  = file.label :internal_description, TaskFile.human_attribute_name('internal_description'), class: 'form-label'
   = file.text_area :internal_description, class: 'form-control'
 .field-element
-  = file.label :xml_id, t('tasks.tests.xml_id'), class: 'form-label'
+  = file.label :xml_id, TaskFile.human_attribute_name('xml_id'), class: 'form-label'
   = file.text_field :xml_id, class: 'form-control', value: file.object.xml_id.presence || nested_form_placeholder
 
 .field-element

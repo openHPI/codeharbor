@@ -5,11 +5,11 @@
     button[type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"]
   .carousel-inner
     .carousel-item.active
-      = image_tag('banner1.jpg', class: 'd-block w-100', alt: t('home.banner1.alt_text'))
+      = image_tag('banner1.jpg', class: 'd-block w-100', alt: t('.banner1.alt_text'))
       .carousel-caption.d-none.d-md-block
         .background-transparent
-          h1 = t('home.banner1.header')
-          p = t('home.banner1.paragraph')
+          h1 = t('.banner1.header')
+          p = t('.banner1.paragraph')
       .copyright
         | &copy;
         = " "
@@ -17,11 +17,11 @@
         = ' / '
         = link_to "cc", 'https://creativecommons.org/licenses/by/2.0/'
     .carousel-item
-      = image_tag('banner2.jpg', class: 'd-block w-100', alt: t('home.banner2.alt_text'))
+      = image_tag('banner2.jpg', class: 'd-block w-100', alt: t('.banner2.alt_text'))
       .carousel-caption.d-none.d-md-block
         .background-transparent
-          h1 = t('home.banner2.header')
-          p = t('home.banner2.paragraph')
+          h1 = t('.banner2.header')
+          p = t('.banner2.paragraph')
       .copyright
         | &copy;
         = " "
@@ -29,11 +29,11 @@
         = ' / '
         = link_to "cc", 'https://creativecommons.org/licenses/by/2.0/'
     .carousel-item
-      = image_tag('banner3.jpg', class: 'd-block w-100', alt: t('home.banner3.alt_text'))
+      = image_tag('banner3.jpg', class: 'd-block w-100', alt: t('.banner3.alt_text'))
       .carousel-caption.d-none.d-md-block
         .background-transparent
-          h1 = t('home.banner3.header')
-          p = t('home.banner3.paragraph')
+          h1 = t('.banner3.header')
+          p = t('.banner3.paragraph')
       .copyright
         | &copy;
         = " "
@@ -43,68 +43,68 @@
   button.carousel-control-prev[type="button" data-bs-target="#myCarousel" data-bs-slide="prev"]
     span.carousel-control-prev-icon[aria-hidden="true"]
     span.visually-hidden
-      = t('home.carousel.previous')
+      = t('common.button.previous')
   button.carousel-control-next[type="button" data-bs-target="#myCarousel" data-bs-slide="next"]
     span.carousel-control-next-icon[aria-hidden="true"]
     span.visually-hidden
-      = t('home.carousel.next')
+      = t('common.button.next')
 
 .container.homepage
   .row.mb-3
     .col-md-4.col-sm-12.mb-2.p-0
       .card.text-dark.bg-light.m-1.h-100
-        = image_tag "enterprise.png", class: 'rounded-circle card-img-top pt-1', alt: t('home.marketing.mooc.alt_text')
+        = image_tag "enterprise.png", class: 'rounded-circle card-img-top pt-1', alt: t('.marketing.mooc.alt_text')
         .card-body
           h5.card-title.text-center
-            = t('home.marketing.mooc.header_html')
+            = t('.marketing.mooc.header_html')
           p.card-text.text-center
-            = t('home.marketing.mooc.paragraph')
+            = t('.marketing.mooc.paragraph')
     .col-md-4.col-sm-12.mb-2.p-0
       .card.text-dark.bg-light.m-1.h-100
-        = image_tag "education.png", class: 'rounded-circle card-img-top pt-1', alt: t('home.marketing.universities.alt_text')
+        = image_tag "education.png", class: 'rounded-circle card-img-top pt-1', alt: t('.marketing.universities.alt_text')
         .card-body
           h5.card-title.text-center
-            = t('home.marketing.universities.header_html')
+            = t('.marketing.universities.header_html')
           p.card-text.text-center
-            = t('home.marketing.universities.paragraph')
+            = t('.marketing.universities.paragraph')
     .col-md-4.col-sm-12.mb-2.p-0
       .card.text-dark.bg-light.m-1.h-100
-        = image_tag "home.png", class: 'rounded-circle card-img-top pt-1', alt: t('home.marketing.schools.alt_text')
+        = image_tag "home.png", class: 'rounded-circle card-img-top pt-1', alt: t('.marketing.schools.alt_text')
         .card-body
           h5.card-title.text-center
-            = t('home.marketing.schools.header_html')
+            = t('.marketing.schools.header_html')
           p.card-text.text-center
-            = t('home.marketing.schools.paragraph')
+            = t('.marketing.schools.paragraph')
 
   .row.feature.pt-5
     .col-md-6.col-sm-12
       h5
         span.fa-regular.fa-file-lines
-        =< t('home.feature.exercises.header')
+        =< t('.feature.exercises.header')
       p
-        = t('home.feature.exercises.paragraph')
+        = t('.feature.exercises.paragraph')
     .col-md-5
 
   .row.feature.justify-content-end
     .col-md-6.col-sm-12
       h5
         span.fa-solid.fa-folder-open
-        =< t('home.feature.collections.header')
+        =< t('.feature.collections.header')
       p
-        = t('home.feature.collections.paragraph')
+        = t('.feature.collections.paragraph')
 
   .row.feature
     .col-md-6
       h5
         span.fa-solid.fa-users
-        =< t('home.feature.groups.header')
+        =< t('.feature.groups.header')
       p
-        = t('home.feature.groups.paragraph')
+        = t('.feature.groups.paragraph')
 
   - unless user_signed_in?
     .row.feature.justify-content-end
       .col-md-6.col-sm-12
         h5
-          = t('home.sign_in.header')
+          = t('.sign_in.header')
         p
-          = t('home.sign_in.paragraph_html', href1: (link_to t('home.sign_in.link1'), new_user_registration_path, class: 'classic-link'), href2: (link_to t('home.sign_in.link2'), new_user_session_path, class: 'classic-link'))
+          = t('.sign_in.paragraph_html', href1: (link_to t('.sign_in.link1'), new_user_registration_path, class: 'classic-link'), href2: (link_to t('.sign_in.link2'), new_user_session_path, class: 'classic-link'))

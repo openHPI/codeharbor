@@ -7,11 +7,11 @@
     .collection-content
       - if @user
         label.form-label
-          = t('collections.show.shared_by')
+          = t('.shared_by')
           | :
         =< @user.name
         p style="margin-top: 10px"
-          = t('collections.show.hint')
+          = t('.locked_exercise_hint')
         br
 
       table.table
@@ -23,7 +23,7 @@
           - if @collection.tasks.empty?
             tr
               td
-                = t('carts.noExercisesAdded')
+                = t('.noExercisesAdded')
               td
                 = ''
           - else
@@ -35,59 +35,55 @@
                   - else
                     = link_to task.title, task_path(task), class: 'btn btn-light disabled'
                 td
-                  / Contributing to a task is not yet enabled again.
-                  /- if cannot? :read, task
-                    span.fa-solid.fa-lock.lock
-                    =< link_to t('collections.show.contribute'), contribute_exercise_path(task), method: :post, class: 'btn btn-light'
                   = link_to remove_task_collection_path(@collection, task: task), method: :patch, class: 'float-end' do
                     i.fa-solid.fa-xmark style=("color: #800000; font-size: 20px;")
 .row
   .col-md-12
     .actions.btn-group[role="group"]
       - if @user
-        = link_to t('collections.show.collaborate'), save_shared_collection_path(@collection), method: 'post', class: 'btn btn-important'
-        = link_to t('collections.button.back'), user_messages_path(current_user), class: 'btn btn-important'
+        = link_to t('.button.collaborate'), save_shared_collection_path(@collection), method: 'post', class: 'btn btn-important'
+        = link_to t('common.button.back'), user_messages_path(current_user), class: 'btn btn-important'
       - else
         .btn-group
           = button_tag type: 'button', 'data-bs-toggle': 'dropdown', aria: {haspopup: "true", expanded: "false"}, class: 'btn btn-important nav-btn-exercise dropdown-toggle split' do
-            => t('collections.show.share')
+            => t('.button.share')
             span.caret
           .dropdown-menu#share-menu
             .dropdown-header style="padding-left: 2px;"
-              = t('collections.show.type')
+              = t('.type_hint')
               | :
             .input-group
               = text_field_tag 'user', nil, form: 'share', class: 'form-control'
-              = submit_tag t('collections.show.share'), form: 'share', class: 'btn btn-light', type: 'button'
+              = submit_tag t('.button.share'), form: 'share', class: 'btn btn-light', type: 'button'
         - if can? :edit, Collection
           .dropup.btn-group
             = button_tag class: 'btn btn-important dropdown-toggle', 'data-bs-toggle': 'dropdown' do
-              => t('shared.export')
+              => t('common.button.export')
               span.caret
             .scrollable.dropdown-menu[role="menu"]
               - if @collection.tasks.empty?
-                a.dropdown-item.disabled-cursor title=t('controllers.collections.download_no_exercises')
-                  = t('shared.download_zip')
+                a.dropdown-item.disabled-cursor title=t('.download_no_exercises')
+                  = t('common.button.download_zip')
               - else
-                = link_to t('shared.download_zip'), download_all_collection_path(@collection), 'data-turbolinks': false, class: 'dropdown-item'
+                = link_to t('common.button.download_zip'), download_all_collection_path(@collection), 'data-turbolinks': false, class: 'dropdown-item'
               .dropdown-divider
-              .dropdown-header = t('shared.export_to') + ': '
+              .dropdown-header = t('.export_to') + ': '
               - if !current_user.available_account_links.empty?
                 - current_user.available_account_links.each do |acc_link|
-                  a.dropdown-item.disabled-cursor title=t('controllers.collections.temporary_disabled')
+                  a.dropdown-item.disabled-cursor title=t('.temporarily_disabled')
                     = acc_link.name
               - else
-                = link_to t('tasks.show.define_account_link'), new_user_account_link_path(current_user), class: 'dropdown-item'
-        = link_to remove_all_collection_path(@collection), method: :patch, data: { confirm: t('sure') }, class: 'btn btn-important' do
+                = link_to t('.define_account_link'), new_user_account_link_path(current_user), class: 'dropdown-item'
+        = link_to remove_all_collection_path(@collection), method: :patch, data: { confirm: t('common.sure') }, class: 'btn btn-important' do
           i.fa-solid.fa-xmark style=("color: #800000")
-          =< t('collections.show.remove_all')
+          =< t('.button.remove_all')
         = link_to edit_collection_path(@collection), class: 'btn btn-important' do
           i.fa-solid.fa-pen-to-square
-          =< t('collections.button.edit')
+          =< t('common.button.edit')
         - if @collection.users.include? current_user
-          = link_to leave_collection_path(@collection), class: 'btn btn-important', method: :post, data: { confirm: @collection.users.count == 1 ? t('controllers.collections.leave.deletion_warning') : t('sure') } do
-            = t('controllers.collections.leave.button')
+          = link_to leave_collection_path(@collection), class: 'btn btn-important', method: :post, data: { confirm: @collection.users.count == 1 ? t('.leave.deletion_warning') : t('common.sure') } do
+            = t('.button.leave')
 
-        = link_to t('collections.button.back'), collections_path, class: 'btn btn-important'
+        = link_to t('common.button.back'), collections_path, class: 'btn btn-important'
 
 = form_tag share_collection_path, id: 'share'

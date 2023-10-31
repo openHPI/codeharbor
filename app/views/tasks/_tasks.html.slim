@@ -4,16 +4,16 @@
       .card-body
         .col-md-10
           h3.text-body-secondary
-            = t('tasks.index.search.no_tasks')
+            = t('.search.no_tasks')
           p style=("color: #777777")
   - else
     .card.my-4
       .card-body
         .col-md-10
           h3.text-body-secondary
-            = t('tasks.index.search.no_results')
+            = t('.search.no_results')
           p style=("color: #777777")
-            = t('tasks.index.search.no_results_description')
+            = t('.search.no_results_description')
 - @tasks.each do |task|
   .card.my-4
     .card-header
@@ -25,7 +25,7 @@
           = truncate(task.title, length: 100)
         small.star-rating.float-end
           span.programming-language.align-middle
-            = task.programming_language&.language || t('tasks.index.no_programming_language_selected')
+            = task.programming_language&.language || t('.no_programming_language_selected')
           span.number-rating.align-middle
             = task.average_rating.round(1)
           - [*1..5].each do |i|
@@ -38,61 +38,39 @@
                 .fa-regular.fa-star data-rating=i
           small.text-body-secondary.align-bottom
             =< task.ratings.size
-            =< t('tasks.all.ratings')
+            =< Rating.model_name.human(count: :many)
         / = render 'remove_state_tag', exercise: exercise
     .card-body.exercise-card
       .exercise-content
         .description.collapsable
           - if task.description == ''
             span style=("color: gray")
-              = t('tasks.index.no_description')
+              = t('.no_description')
           - else
             = task.description
         .more-btn-wrapper
           = link_to task, class: 'more-btn' do
             span class=("more-tag")
-              = t('comments.show_more')
+              = t('common.button.show_more')
             span class=("less-tag d-none")
-              = t('comments.show_less')
-        /.labels
-          - if exercise.labels.empty?
-            span style=("color: gray")
-              = t('tasks.defaults.no_labels')
-          - else
-            - exercise.labels.each do |label|
-              .task_label style=("background-color: #{'#' + label.color.to_s}; color: #{'#' + label.font_color.to_s};")
-                = label.name
+              = t('common.button.show_less')
       .exercise-buttons.btn-group-vertical.float-end aria-label="..." role="group"
         - if can? :show, task
-          = link_to t('tasks.index.view'), task_path(task), class: 'btn btn-light'
-          / = link_to t('exercises.all.duplicate'), duplicate_task_path(task), class: 'btn btn-light'
+          = link_to t('common.button.view'), task_path(task), class: 'btn btn-light'
         - if can? :edit, task
-          = link_to t('tasks.index.edit'), edit_task_path(task), class: 'btn btn-light'
-          = link_to t('tasks.index.delete'), task_path(task), class: 'btn btn-light', method: :delete, data: { confirm: t('sure') }
+          = link_to t('common.button.edit'), edit_task_path(task), class: 'btn btn-light'
+          = link_to t('common.button.delete'), task_path(task), class: 'btn btn-light', method: :delete, data: { confirm: t('common.sure') }
         / - if cannot? :edit, task
           = link_to 'Contribute', contribute_task_path(task), method: :post, class: 'btn btn-light'
     .card-footer
       = button_tag type: 'button', class: 'btn no-border index-comment-button', data: {task: task.id} do
-        => t('comments.show_comments')
+        => t('.button.show_comments')
         span.fa-solid.fa-circle-notch.fa-spin.wait style="display:none;margin-right:5px;"
         span.fa-solid.fa-caret-down.my-caret
       =< button_tag type: 'button', class: 'btn no-border related-button', data: {task: task.id} do
-        => t('tasks.index.related_exercises')
+        => t('.button.related_exercises')
         span.fa-solid.fa-circle-notch.fa-spin.wait style="display:none;margin-right:5px;"
         span.fa-solid.fa-caret-down.my-caret
-      /.float-end.stats
-        p.impact
-          = t('exercises.downloads')
-          = ': '
-          = task.downloads.to_s
-        p.impact
-          = t('exercises.in_carts')
-          = ': '
-          = task.in_carts
-        p.impact
-          = t('exercises.in_collections')
-          = ': '
-          = exercise.in_collections
 
     /div class=("related-box") data-exercise=exercise.id
 
@@ -108,7 +86,7 @@
       = form_for :comment, url: task_comments_path(task), remote: true do |f|
         .write-comment
           .input-group
-            = f.label 'new_comment_label', t('comments.new_comment'), class: 'input-group-text'
+            = f.label 'new_comment_label', t('.button.new_comment'), class: 'input-group-text'
             = f.text_field :text, class: 'form-control'
             = f.submit class: 'btn btn-light'
       .comment-body

@@ -1,0 +1,171 @@
+---
+en:
+  activerecord:
+    attributes:
+      account_link:
+        api_key: API key
+        check_uuid_url: Check UUID URL
+        name: Name
+        push_url: Push URL
+      account_link_user:
+        user: User
+      collection:
+        title: Title
+        users: Users
+      comment:
+        text: Text
+      group:
+        admins: Admins
+        description: Description
+        name: Name
+      group_membership:
+        role: Role
+        user_id: User ID
+      group_task:
+        task_id: Task ID
+      label:
+        color: Color
+        name: Name
+      license:
+        name: Name
+      message:
+        recipient: Recipient
+        text: Text
+      model_solution:
+        xml_id: XML ID
+      rating:
+        rating: Rating
+      task:
+        access_level: Visibility
+        description: Description
+        files: Files
+        internal_description: Internal description
+        language: Language
+        license: License
+        meta_data: Metadata
+        parent_uuid: Parent UUID
+        programming_language: Programming language
+        tests: Tests
+        title: Title
+        uuid: UUID
+      task_file:
+        attachment: Attachment
+        content: Content
+        internal_description: Internal description
+        name: Name
+        path: Path
+        usage_by_lms: Usage by lms
+        used_by_grader: Used by grader
+        visible: Visible
+        xml_id: XML ID
+      test:
+        configuration: Configuration
+        description: Description
+        internal_description: Internal description
+        test_type: Test type
+        testing_framework: Testing framework
+        timeout: Timeout
+        title: Title
+        validity: Validity
+        xml_id: XML ID
+      user:
+        email: Email
+        first_name: First name
+        last_name: Last name
+        role: Role
+      user_identity:
+        omniauth_provider: OmniAuth provider
+        provider_uid: Provider UID
+    errors:
+      models:
+        group:
+          attributes:
+            base:
+              no_admin: No admin in group
+        task:
+          attributes:
+            language:
+              not_de_or_us: 'is not in the correct format. Please use one of the following formats: de / en-US'
+              not_iso639: is not a two letter ISO 639-1 or three letter ISO-639-2 language code
+        task_file:
+          attributes:
+            xml_id:
+              not_unique: is not unique
+        user:
+          attributes:
+            avatar:
+              not_an_image: needs to be an image
+              size_over_10_mb: size needs to be less than 10MB
+    models:
+      account_link:
+        one: Account link
+        other: Account links
+      account_link_user:
+        one: Account link
+        other: Account link users
+      collection:
+        one: Collection
+        other: Collections
+      collection_task:
+        one: Collection task
+        other: Collection tasks
+      collection_user:
+        one: Collection user
+        other: Collection users
+      comment:
+        one: Comment
+        other: Comments
+      group:
+        one: Group
+        other: Groups
+      group_membership:
+        one: Group membership
+        other: Group memberships
+      group_task:
+        one: Group task
+        other: Group tasks
+      label:
+        one: Label
+        other: Labels
+      license:
+        one: License
+        other: Licenses
+      message:
+        one: Message
+        other: Messages
+      model_solution:
+        one: Model solution
+        other: Model solutions
+      programming_language:
+        one: Programming language
+        other: Programming languages
+      rating:
+        one: Rating
+        other: Ratings
+      report:
+        one: Report
+        other: Reports
+      task:
+        one: Task
+        other: Tasks
+      task_file:
+        one: Task file
+        other: Task files
+      task_label:
+        one: Task label
+        other: Task labels
+      test:
+        one: Test
+        other: Tests
+      testing_framework:
+        one: Testing framework
+        other: Testing frameworks
+      user:
+        one: User
+        other: Users
+      user_identity:
+        one: User identity
+        other: User identities
+  tasks:
+    model:
+      copy_of_task: Copy of task

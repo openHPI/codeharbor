@@ -1,0 +1,19 @@
+---
+en:
+  javascripts:
+    labels:
+      can_only_create_5: You can only add 5 labels
+      cannot_be_empty: The label name entered is empty
+      new:
+        selection_suffix: " (new)"
+      too_long: The label name entered is too long
+    labels_index:
+      change_color_confirmation: This will change the color of the %{selected_labels_count} label(s) selected.
+      delete_confirmation: This will delete the %{selected_labels_count} label(s) selected.
+      merge_confirmation: This will merge the %{selected_labels_count} label(s) selected and rename them to "%{new_merged_name}"
+    tasks_export:
+      checking_external_app: Checking if the task exists on the external app.
+    tasks_form:
+      select_groups: Select groups
+    tasks_index:
+      all_languages: All Languages

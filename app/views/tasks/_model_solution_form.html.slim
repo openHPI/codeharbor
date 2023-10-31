@@ -1,36 +1,12 @@
 .field-element
-  = model_solution.label :description, t('tasks.tests.description'), class: 'form-label'
+  = model_solution.label :description, ModelSolution.human_attribute_name('description'), class: 'form-label'
   = model_solution.text_field :description, class: 'form-control'
 .field-element
-  = model_solution.label :internal_description, t('tasks.tests.internal_description'), class: 'form-label'
+  = model_solution.label :internal_description, ModelSolution.human_attribute_name('internal_description'), class: 'form-label'
   = model_solution.text_field :internal_description, class: 'form-control'
 .field-element
-  = model_solution.label :xml_id, t('tasks.tests.xml_id'), class: 'form-label'
+  = model_solution.label :xml_id, ModelSolution.human_attribute_name('xml_id'), class: 'form-label'
   = model_solution.text_field :xml_id, class: 'form-control', value: model_solution.object.xml_id.presence || '__nested_field_for_replace_with_index__'
 .files-header
-  = label_tag nil, t('tasks.files.label') + ':'
+  = label_tag nil, Task.human_attribute_name('files') + ':'
 = render 'nested_file_form', f: model_solution, nested_form_placeholder: 'ms-__nested_field_for_replace_with_index__-__task_model_solutions___nested_field_for_replace_with_index___files_index__'
-
-/ .show-table.exercise-show
-  = test.nested_fields_for :files, style: 'margin-left: 10px' do |file|
-    .field-element
-      = test.label :name, t('exercises.files.name'), class: 'form-label'
-      = file.text_field :name, class: 'form-control file-name'
-    .field-element
-      = test.label :path, t('exercises.files.path'), class: 'form-label'
-      = file.text_field :path, size: 40, class: 'form-control'
-    .field-row
-      /.field-element-10
-        = test.label :file_types_id, t('exercises.files.extension'), class: 'form-label'
-        = file.select :file_type_id, options_for_select(FileType.all.map {|ft| [ft.name_with_extension, ft.id, {'data-extension' => ft.file_extension, 'data-editor-mode' => ft.editor_mode || 'ace/mode/java' }]}, file.object.file_type_id), {}, class: 'file-type'
-      .field-element-2
-        = render 'file_config', file: file
-    .field-element
-      = render 'editor', f: test, file: file
-    = file.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
-      i.fa-solid.fa-xmark style=("color: #800000")
-      =< t('exercises.form.files.remove')
-
-  = test.add_nested_fields_link :files, ' ', class: 'btn btn-main', id: 'addTestFileButton' do
-    i.fa-solid.fa-plus style=("color: #008000")
-    =< t('tasks.form.tests.add_file')

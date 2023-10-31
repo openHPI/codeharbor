@@ -1,0 +1,33 @@
+---
+en:
+  groups:
+    controller:
+      create:
+        success_notice: Group was successfully created.
+      delete_from_group:
+        success_notice: User deleted from group.
+      demote_admin:
+        success_notice: Demoted admin to user.
+      deny_access:
+        success_notice: User declined.
+      destroy:
+        success_notice: Group was successfully destroyed.
+      grant_access:
+        success_notice: Access granted.
+      leave:
+        cannot_leave_alert: You have to name somebody else admin first
+        success_notice: You successfully left the group
+      make_admin:
+        success_notice: Made user to admin.
+      remove_task:
+        success_notice: Task was successfully removed.
+      request_access:
+        success_notice: Your Access request has been sent.
+      send_access_request_message:
+        message: "%{user} wants to access your group: %{group}."
+      send_deny_access_message:
+        message: "%{user} did not accept you to their group: %{group}."
+      send_grant_access_messages:
+        message: "%{user} accepted you to their group: %{group}."
+      update:
+        success_notice: Group was successfully updated.

@@ -11,7 +11,7 @@ RSpec.describe HomeController do
       get :index
     end
 
-    expect_flash_message(:alert, I18n.t('controllers.authorization'))
+    expect_flash_message(:alert, I18n.t('common.errors.not_authorized'))
     expect_redirect(:root)
   end
 
@@ -22,19 +22,19 @@ RSpec.describe HomeController do
       get :index
     end
 
-    expect_flash_message(:alert, I18n.t('controllers.authorization'))
+    expect_flash_message(:alert, I18n.t('common.errors.not_authorized'))
     expect_redirect(:root)
 
     context 'with an admin' do
       let(:user) { create(:admin) }
 
-      expect_flash_message(:alert, I18n.t('controllers.not_found'))
+      expect_flash_message(:alert, I18n.t('common.errors.not_found_error'))
     end
 
     context 'with an user' do
       let(:user) { create(:user) }
 
-      expect_flash_message(:alert, I18n.t('controllers.authorization'))
+      expect_flash_message(:alert, I18n.t('common.errors.not_authorized'))
     end
   end
 

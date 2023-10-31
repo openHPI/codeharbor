@@ -1,9 +1,9 @@
 max_label_length = <%= Label::MAX_LENGTH %>
 verify_label_name = (label_name) ->
   if label_name == ''
-    return I18n.t('labels.cannot_be_empty');
+    return I18n.t('javascripts.labels.cannot_be_empty');
   if label_name.length > max_label_length
-    return I18n.t('labels.too_long');
+    return I18n.t('javascripts.labels.too_long');
   return 'OK';
 
 root = exports ? this;
@@ -46,7 +46,7 @@ ready = ->
       color = "#" + (data.label_font_color || $(data.element).attr("label_font_color") || default_label_font_color);
 
       if data.newTag == true
-        text += I18n.t('labels.new.selection_suffix');
+        text += I18n.t('javascripts.labels.new.selection_suffix');
 
       $(container).css({"background-color" : bg_color, "color" : color});
       $(container).children("span").css("color", color);
@@ -64,7 +64,7 @@ ready = ->
       color = "#" + (data.label_font_color || default_label_font_color);
 
       if data.newTag == true
-        text += I18n.t('labels.new.selection_suffix');
+        text += I18n.t('javascripts.labels.new.selection_suffix');
 
       $template = $('<div></div>').text(text).addClass("task_label");
       $template.css({"background-color" : bg_color, "color" : color});
@@ -84,7 +84,7 @@ ready = ->
       }
 
     formatSelectionTooBig: (limit) ->
-      I18n.t('labels.can_only_create_5')
+      I18n.t('javascripts.labels.can_only_create_5')
 
     $('.labels-select2-tag').on 'select2:select', clear_input
   return

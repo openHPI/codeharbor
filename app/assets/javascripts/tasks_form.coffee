@@ -15,7 +15,7 @@ initializeLoadSelect2 = ->
     width: '100%'
     multiple: true
     closeOnSelect: false
-    placeholder: I18n.t('tasks.edit.select_groups')
+    placeholder: I18n.t('javascripts.tasks_form.select_groups')
 
 initializeFileTypeSelection = ->
   $('body').on 'keyup', '.file-name', (event) ->

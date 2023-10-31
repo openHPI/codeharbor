@@ -1,0 +1,24 @@
+---
+en:
+  messages:
+    form:
+      errorMessage: prohibited this message from being saved.
+    index:
+      button:
+        deny_access: Deny access
+        grant_access: Grant access
+        inbox: Inbox
+        make_co_author: Make co-author
+        reply: Reply
+        save_collection: Save collection
+        view: View
+      from: From
+      no_messages: You do not have any messages.
+      sent: Sent
+      to: To
+      unknown: unknown
+    reply:
+      message_to: Send Message to
+    shared:
+      new: New Message
+      send_message: Send Message

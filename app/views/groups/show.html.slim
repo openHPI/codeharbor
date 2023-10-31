@@ -5,32 +5,21 @@
 .show-table.mt-5
   - if @group.description.present?
     .row.vertical
-      .col.row-label = t('groups.show.description')
+      .col.row-label = Group.human_attribute_name('description')
       .row-value = @group.description
   .row.vertical
-    .col.row-label = t('groups.show.admins')
+    .col.row-label = Group.human_attribute_name('admins')
     .row-value
       - @group.admins.each do |admin|
         .table-list
           => admin.email
           - if can?(:demote_admin, @group) && @group.admins.length > 1
-            = link_to demote_admin_group_path(group: @group, user: admin), method: :post, class: 'btn btn-light btn-sm', data: { confirm: admin == current_user ? t('groups.demote_yourself.confirm') : t('groups.demote_admin.confirm') } do
+            = link_to demote_admin_group_path(group: @group, user: admin), method: :post, class: 'btn btn-light btn-sm', data: { confirm: admin == current_user ? t('.demote_yourself.confirm') : t('.demote_admin.confirm') } do
               i.fa-solid.fa-arrow-down style=("color:#000080")
-              =< (admin == current_user ? t('groups.button.demote_yourself') : t('groups.button.demote_admin'))
-
-          /- unless admin == current_user
-            .btn-group.float-end
-              .dropdown.btn-group
-                = button_tag class: 'btn btn-light btn-sm dropdown-toggle', data: {toggle: 'dropdown'} do
-                  => t('groups.manage_shared_account_links')
-                  span.fa-solid.fa-caret-down
-                ul.scrollable.dropdown-menu[role="menu"]
-                  - current_user.account_links.each do |account_link|
-                    li
-                      = render partial: 'share_account_link_button', locals: {shared_user: admin, account_link: account_link}
+              =< (admin == current_user ? t('.button.demote_yourself') : t('.button.demote_admin'))
 
   .row.vertical
-    .col.row-label = t('groups.show.users')
+    .col.row-label = User.model_name.human(count: :many)
 
     .row-value
       - if @group.confirmed_members.present?
@@ -38,31 +27,22 @@
           .table-list
             => member.email
             - if can? :view, @group
-              /.btn-group.float-end
-                .dropdown.btn-group
-                  = button_tag class: 'btn btn-light btn-sm dropdown-toggle', data: {toggle: 'dropdown'} do
-                    => t('groups.manage_shared_account_links')
-                    span.fa-solid.fa-caret-down
-                  ul.scrollable.dropdown-menu[role="menu"]
-                    - current_user.account_links.each do |account_link|
-                      li
-                        = render partial: 'share_account_link_button', locals: {shared_user: member, account_link: account_link}
               - if can? :edit, @group
                 - if @group.group_membership_for(member).role_confirmed_member?
                   = link_to make_admin_group_path(group: @group, user: member), method: :post, class: 'btn btn-light btn-sm' do
                     i.fa-solid.fa-plus style=("color:#008000")
-                    =< t('groups.button.make_admin')
+                    =< t('.button.make_admin')
                 = link_to delete_from_group_group_path(group: @group, user: member), method: :patch, class: 'btn btn-light btn-sm' do
                   i.fa-solid.fa-xmark style=("color:#800000")
-                  =< t('groups.button.remove')
+                  =< t('common.button.remove')
       - else
-        = t('groups.show.no_users')
+        = t('.has_no_users')
 
 
 
   - if can? :grant_access, @group
     .row.vertical
-      .col.row-label = t('groups.show.pending')
+      .col.row-label = t('.pending_users')
       .row-value
         - if @group.applicants.present?
           - @group.applicants.each do |user|
@@ -71,14 +51,14 @@
               .btn-group.float-end
                 = link_to grant_access_group_path(group: @group, user: user), method: :post, class: 'btn btn-light btn-sm' do
                   i.fa-solid.fa-plus style=("color:#008000")
-                  =< t('groups.button.grant')
+                  =< t('.button.grant_access')
                 = link_to deny_access_group_path(group: @group, user: user), method: :post, class: 'btn btn-light btn-sm' do
                   i.fa-solid.fa-xmark style=("color:#800000")
-                  =< t('message.index.deny_access')
+                  =< t('.button.deny_access')
         - else
-          = t('groups.show.no_pending_users')
+          = t('.no_pending_users')
   .row.vertical
-    .col.row-label = t('groups.show.tasks')
+    .col.row-label = Task.model_name.human(count: :many)
     .row-value
       - if @group.tasks.present?
         - @group.tasks.each do |task|
@@ -88,19 +68,19 @@
               = link_to remove_task_group_path(task: task), method: :patch, class: 'btn btn-light', style: "border-left: none; margin-right: 5px;"  do
                 i.fa-solid.fa-xmark style=("color:gray;")
       - else
-        = t('groups.show.no_tasks')
+        = t('.has_no_tasks')
 
 br
 .actions.btn-group[role="group"]
   - if can? :request_access, @group
-    = link_to t('groups.button.request'), request_access_group_path(@group), method: :post, class: 'btn btn-important'
+    = link_to t('.button.request_membership'), request_access_group_path(@group), method: :post, class: 'btn btn-important'
   - if can? :edit, @group
     = link_to edit_group_path(@group), class: 'btn btn-important' do
       i.fa-solid.fa-pen-to-square
-      =< t('groups.button.edit')
+      =< t('common.button.edit')
     = link_to group_path(@group), class: 'btn btn-important', method: :delete, data: {confirm: 'Are you sure?'} do
       i.fa-solid.fa-trash-can style=("color:#800000")
-      =< t('groups.button.delete_group')
+      =< t('.button.delete_group')
   - if can? :leave, @group
-    = link_to t('groups.button.leave'), leave_group_path(@group), method: :post, class: "leave-btn btn btn-important #{@group.last_admin?(current_user) ? 'disabled' : ''}", data: {confirm: 'Are you sure?'}
-  = link_to t('groups.button.back'), :back, class: 'btn btn-important'
+    = link_to t('.button.leave'), leave_group_path(@group), method: :post, class: "leave-btn btn btn-important #{@group.last_admin?(current_user) ? 'disabled' : ''}", data: {confirm: 'Are you sure?'}
+  = link_to t('common.button.back'), :back, class: 'btn btn-important'

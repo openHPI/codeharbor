@@ -5,17 +5,17 @@ class UsersController < ApplicationController
 
   rescue_from CanCan::AccessDenied do |_exception|
     if current_user
-      redirect_to({id: current_user.id}, alert: t('controllers.authorization'))
+      redirect_to({id: current_user.id}, alert: t('common.errors.not_authorized'))
     else
-      redirect_to root_path, alert: t('controllers.authorization')
+      redirect_to root_path, alert: t('common.errors.not_authorized')
     end
   end
 
   rescue_from ActiveRecord::RecordNotFound do |_exception|
     if current_user
-      redirect_to({id: current_user.id}, alert: t('controllers.not_found'))
+      redirect_to({id: current_user.id}, alert: t('common.errors.not_found_error'))
     else
-      redirect_to root_path, alert: t('controllers.authorization')
+      redirect_to root_path, alert: t('common.errors.not_authorized')
     end
   end
 

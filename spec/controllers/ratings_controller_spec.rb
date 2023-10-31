@@ -30,7 +30,7 @@ RSpec.describe RatingsController do
       end
 
       it 'sets flash message' do
-        expect { post_request }.to change { flash[:notice] }.to(I18n.t('controllers.rating.success.create'))
+        expect { post_request }.to change { flash[:notice] }.to(I18n.t('ratings.controller.handle_rating.rating_created'))
       end
 
       it 'responds with overall_rating and user_rating' do
@@ -50,7 +50,7 @@ RSpec.describe RatingsController do
         end
 
         it 'sets flash message' do
-          expect { post_request }.to change { flash[:notice] }.to(I18n.t('controllers.rating.success.update'))
+          expect { post_request }.to change { flash[:notice] }.to(I18n.t('ratings.controller.handle_rating.rating_updated'))
         end
 
         it 'responds with overall_rating and user_rating' do
@@ -67,7 +67,7 @@ RSpec.describe RatingsController do
         end
 
         it 'sets flash message' do
-          expect { post_request }.to change { flash[:alert] }.to(I18n.t('controllers.rating.own_task'))
+          expect { post_request }.to change { flash[:alert] }.to(I18n.t('ratings.controller.handle_own_rating.error'))
         end
 
         it 'responds with overall_rating and user_rating' do
@@ -86,7 +86,7 @@ RSpec.describe RatingsController do
 
       it 'responds with error' do
         post_request
-        expect(response.body).to include(I18n.t('controllers.generic_error'))
+        expect(response.body).to include(I18n.t('common.errors.generic'))
       end
     end
   end

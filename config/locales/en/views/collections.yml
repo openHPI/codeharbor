@@ -1,0 +1,32 @@
+---
+en:
+  collections:
+    collections:
+      empty_state:
+        heading: You do not have collections yet
+        hint: You can create Collections and add exercises to it.
+      noTasksAdded: No Tasks Added
+    form:
+      button:
+        save: Save Collection
+      errorMessage: prohibited this collection from being saved.
+    index:
+      new_collection: New Collection
+    new:
+      header: New Collection
+    show:
+      button:
+        collaborate: Collaborate
+        leave: Leave
+        remove_all: Remove All
+        share: Share Collection
+      define_account_link: Please define an account link first
+      download_no_exercises: Download not possible without exercises
+      export_to: Export to
+      leave:
+        deletion_warning: You are the last user in this collection. If you leave, this collection will be permanently deleted! Are you sure?
+      locked_exercise_hint: 'Hint: For exercises marked with a lock you have to request access first before you can view them.'
+      noExercisesAdded: No Exercise Added
+      shared_by: Shared by
+      temporarily_disabled: Temporarily disabled
+      type_hint: Type in the users email address

@@ -34,7 +34,7 @@ class MessagesController < ApplicationController
                          end
 
     if @message.save
-      redirect_to user_messages_path(@user), notice: t('controllers.message.created')
+      redirect_to user_messages_path(@user), notice: t('.controller.create.sent_successfully')
     else
       render :new
     end
@@ -45,9 +45,9 @@ class MessagesController < ApplicationController
     @message.mark_as_deleted(current_user)
 
     if @message.save
-      redirect_to user_messages_path(@user, option: params[:option]), notice: t('controllers.message.deleted_notice')
+      redirect_to user_messages_path(@user, option: params[:option]), notice: t('.controller.destroy.success_notice')
     else
-      redirect_to user_messages_path(@user, option: params[:option]), alert: t('controllers.message.deleted_alert')
+      redirect_to user_messages_path(@user, option: params[:option]), alert: t('.controller.destroy.error')
     end
   end
 

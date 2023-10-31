@@ -2,19 +2,19 @@
   .row
     .col-md-6
       h6
-        = t('layouts.footer.more.header')
-      = link_to t('layouts.footer.more.link'), about_home_index_path
+        = t('.more.header')
+      = link_to t('.more.link'), about_home_index_path
       br
       br
       | &copy;
       = " "
       = link_to "Hasso Plattner Institute", 'https://hpi.de/'
       = ' - '
-      = link_to t('layouts.footer.imprint'), 'https://open.hpi.de/pages/imprint'
+      = link_to t('.imprint'), 'https://open.hpi.de/pages/imprint'
       = ' - '
-      = link_to t('layouts.footer.privacy_policy'), 'https://open.hpi.de/pages/privacy_policy'
+      = link_to t('.privacy_policy'), 'https://open.hpi.de/pages/privacy_policy'
     .col-md-6
       h6
-        = t('layouts.footer.about.header')
+        = t('.about.header')
       p
-        = t('layouts.footer.about.paragraph')
+        = t('.about.paragraph')

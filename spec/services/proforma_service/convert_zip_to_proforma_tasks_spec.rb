@@ -42,7 +42,7 @@ RSpec.describe ProformaService::ConvertZipToProformaTasks do
         let(:depth) { 6 }
 
         it 'raises error' do
-          expect { convert_zip_to_tasks }.to raise_error I18n.t('exercises.import_exercise.convert_zip.nested_too_deep')
+          expect { convert_zip_to_tasks }.to raise_error I18n.t('tasks.proforma_service.convert_zip_to_proforma_tasks.nested_too_deep')
         end
       end
     end

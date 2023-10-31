@@ -18,7 +18,7 @@ module TaskService
 
       {error: false, message: message(response_hash)}.merge(response_hash)
     rescue Faraday::Error, JSON::ParserError
-      {error: true, message: I18n.t('tasks.export_task.error')}
+      {error: true, message: I18n.t('common.errors.generic')}
     end
 
     private
@@ -30,12 +30,12 @@ module TaskService
     def message(response_hash)
       if response_hash[:uuid_found]
         if response_hash[:update_right]
-          I18n.t('tasks.export_task.check.task_found')
+          I18n.t('tasks.task_service.check_external.task_found')
         else
-          I18n.t('tasks.export_task.check.task_found_no_right')
+          I18n.t('tasks.task_service.check_external.task_found_no_right')
         end
       else
-        I18n.t('tasks.export_task.check.no_task')
+        I18n.t('tasks.task_service.check_external.no_task')
       end
     end
 
