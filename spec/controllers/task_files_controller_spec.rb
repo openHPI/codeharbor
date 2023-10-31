@@ -48,7 +48,7 @@ RSpec.describe TaskFilesController do
 
       it 'returns content of the file' do
         get_request
-        expect(response.body).to eql "{\"error\":\"#{I18n.t('controllers.task_file.extract_text_data.no_text')}\"}"
+        expect(response.body).to eql "{\"error\":\"#{I18n.t('task_files.controller.extract_text_data.no_text')}\"}"
       end
     end
   end

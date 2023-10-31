@@ -21,7 +21,7 @@ RSpec.describe 'TasksController', :js do
         input.send_keys(not_existing_label_name)
         wait_for_ajax
         input.send_keys(:enter)
-        click_button(I18n.t('tasks.form.save'))
+        click_button(I18n.t('tasks.form.button.save_task'))
         expect(page).to have_selector("option[value=\"#{not_existing_label_name}\"][selected=\"selected\"]", visible: :all)
       end
     end

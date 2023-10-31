@@ -21,7 +21,7 @@ RSpec.describe CommentsController do
 
       it 'shows a flash message' do
         get_request
-        expect(flash[:alert]).to eq I18n.t('controllers.authorization')
+        expect(flash[:alert]).to eq I18n.t('common.errors.not_authorized')
       end
     end
 

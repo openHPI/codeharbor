@@ -3,10 +3,10 @@
     .col-md-12
       .std-heading
         i.fa-solid.fa-folder-open style=("color: #444444")
-        =< t('layouts.collections')
+        =< Collection.model_name.human(count: :many)
       - if can? :create, Group
         = link_to new_collection_path, class: 'btn btn-main float-end nav-btn-collection' do
           i.fa-solid.fa-plus style=("color: #000066")
-          =< t('collections.new.header')
+          =< t('.new_collection')
 br
 = render 'collections'

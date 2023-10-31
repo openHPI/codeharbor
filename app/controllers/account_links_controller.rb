@@ -23,7 +23,7 @@ class AccountLinksController < ApplicationController
     @account_link.user = @user
     respond_to do |format|
       if @account_link.save
-        format.html { redirect_to @user, notice: t('controllers.account_links.created') }
+        format.html { redirect_to @user, notice: t('.controller.create.success_notice') }
         format.json { render :show, status: :created, location: @account_link }
       else
         format.html { render :new }
@@ -35,7 +35,7 @@ class AccountLinksController < ApplicationController
   def update
     respond_to do |format|
       if @account_link.update(account_link_params)
-        format.html { redirect_to @account_link.user, notice: t('controllers.account_links.updated') }
+        format.html { redirect_to @account_link.user, notice: t('.controller.update.success_notice') }
         format.json { render :show, status: :ok, location: @account_link }
       else
         format.html { render :edit }
@@ -47,22 +47,22 @@ class AccountLinksController < ApplicationController
   def destroy
     @account_link.destroy
     respond_to do |format|
-      format.html { redirect_to @account_link.user, notice: t('controllers.account_links.destroyed') }
+      format.html { redirect_to @account_link.user, notice: t('.controller.destroy.success_notice') }
       format.json { head :no_content }
     end
   end
 
   def remove_shared_user
     @account_link.shared_users.destroy(@shared_user)
-    flash.now[:notice] = t('controllers.account_links.removed_push', user: @shared_user.email)
+    flash.now[:notice] = t('.controller.remove_shared_user.removed_push', user: @shared_user.email)
     render_shared_user_json
   end
 
   def add_shared_user
     @account_link.shared_users << @shared_user
-    flash.now[:notice] = t('controllers.account_links.granted_push', user: @shared_user.email)
+    flash.now[:notice] = t('.controller.add_shared_user.granted_push', user: @shared_user.email)
   rescue ActiveRecord::RecordInvalid
-    flash.now[:alert] = t('controllers.account_links.share_duplicate', user: @shared_user.email)
+    flash.now[:alert] = t('.controller.add_shared_user.share_duplicate', user: @shared_user.email)
   ensure
     render_shared_user_json
   end

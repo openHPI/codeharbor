@@ -51,6 +51,6 @@ class TaskFile < ApplicationRecord
   def unique_xml_id
     task = fileable.is_a?(Task) ? fileable : fileable.task
     xml_ids = (task.all_files - [self]).map(&:xml_id)
-    errors.add(:xml, I18n.t('task_files.xml_id_not_unique')) if xml_ids.include? xml_id
+    errors.add(:xml_id, :not_unique) if xml_ids.include? xml_id
   end
 end

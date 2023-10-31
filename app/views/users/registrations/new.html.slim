@@ -1,7 +1,7 @@
 .header.mb-5
   .std-heading
     i.fa-solid.fa-user style='color: #444444'
-    =< t('users.new.header')
+    =< t('.header')
 
 = form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
   = bootstrap_devise_error_messages!
@@ -11,14 +11,14 @@
     = f.text_field :first_name,
             required: true,
             autofocus: true,
-            placeholder: t('users.new.first_name'),
+            placeholder: User.human_attribute_name('first_name'),
             autocomplete: 'given-name',
             class: 'form-control'
   .form-group.field-element
     = f.label :last_name, class: 'form-label'
     = f.text_field :last_name,
             required: true,
-            placeholder: t('users.new.last_name'),
+            placeholder: User.human_attribute_name('last_name'),
             autocomplete: 'family-name',
             class: 'form-control'
 
@@ -26,7 +26,7 @@
     = f.label :email, class: 'form-label'
     = f.email_field :email,
             required: true,
-            placeholder: t('users.new.email'),
+            placeholder: User.human_attribute_name('email'),
             autocomplete: 'email',
             class: 'form-control'
 
@@ -34,16 +34,16 @@
     = f.label :password, class: 'form-label'
     = f.password_field :password,
             required: true,
-            placeholder: t('users.new.password'),
+            placeholder: t('.password'),
             autocomplete: 'current-password',
             class: 'form-control'
     - if @minimum_password_length
-      small.form-text.text-body-secondary = t('users.new.minimum_password_length', count: @minimum_password_length)
+      small.form-text.text-body-secondary = t('users.shared.minimum_password_length', count: @minimum_password_length)
   .form-group.field-element
     = f.label :password_confirmation, class: 'form-label'
     = f.password_field :password_confirmation,
             required: true,
-            placeholder: t('users.new.password'),
+            placeholder: t('.password'),
             autocomplete: 'current-password',
             class: 'form-control'
 
@@ -53,9 +53,9 @@
     .btn-group[role='group']
       = button_tag type: 'submit', class: 'btn btn-important' do
         i.fa-solid.fa-user
-        =< t('users.save_user')
+        =< t('common.button.sign_up')
       = link_to :back, class: 'btn btn-important' do
         i.fa-solid.fa-xmark style=('color: gray')
-        =< t('users.back')
+        =< t('common.button.back')
 
 = render 'users/shared/links'

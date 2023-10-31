@@ -3,14 +3,14 @@
     - if @collection.errors.any?
       #error_explanation
         h2
-          = pluralize(@collection.errors.count, t('error'))
-          = t('collections.errorMessage')
+          = pluralize(@collection.errors.count, t('common.errors.error_with_space'))
+          = t('.errorMessage')
         ul
           - @collection.errors.full_messages.each do |message|
             li
               = message
     .field-element.form-group
-      = f.label :title, t('collections.title'), class: 'form-label'
+      = f.label :title, Collection.human_attribute_name('title'), class: 'form-label'
       = f.text_field :title, class: 'form-control'
       br
       br
@@ -18,7 +18,7 @@
       .actions.btn-group[role="group"]
         = button_tag type: 'submit', class: 'btn btn-important' do
           i.fa-solid.fa-folder-open
-          =< t('collections.button.save')
+          =< t('.button.save')
         = link_to :back, class: 'btn btn-important' do
           i.fa-solid.fa-xmark
-          =< t('exercises.form.cancel')
+          =< t('common.button.cancel')

@@ -1,0 +1,76 @@
+---
+en:
+  home:
+    about:
+      header: About CodeHarbor
+      paragraph: ''
+    account_link_documentation:
+      header: About autograders and account links
+      paragraph_html: |
+        <h3>About account links:</h3>
+        <p>
+          Account links define a connection to an autograder. <br/>
+          If you have an account link you can simply export exercises available to you into the autograder. <br/>
+          You can create your own account link if you have the push_url of an autograder that can handle OAuth2 post requests.</br>
+        </p>
+        <h3>You want to connect an autograder that already has OAuth2 and ProFormA-XML support:</h3>
+        <p>
+          If the autograder can import exercises sent via OAuth2 request in the ProFormA-XML format you will need the following things: <br/>
+          1. Push-url: The autograder needs to have an ULR codeharbor can post the exercise to. <br/>
+          2. OAuth2-token: The autograder must be able to link a token to your account to authorize exercises that will be pushed there. <br/>
+             If you do not need a specific token you can generate a token when creating an account link on codeharbor side or use whatever you want <br/>
+             as long as it is the same token on codeharbor and the autograders side.<br>
+          You also have to create a client-id and client-secret for an account link on codeharbor side. <br/>
+          If the autograder does not require a specific one you can auto-generate them.<br/>
+        </p>
+        <h3>How to prepare your own autograder:</h3>
+        <p>
+          CodeHarbor uses the OAuth 2.0 protocol to send exercises via a post request. <a href="https://oauth.net/2/">https://oauth.net/2/</a><br/>
+          CodeHarbor is the client in this case, your autograder the resource server and you are the resource owner.
+          When you are exporting an exercise, codeharbor first generates an XML-file complying with the ProFormA-XML standard for exchanging exercises. <a href="https://github.com/ProFormA/taskxml">https://github.com/ProFormA/taskxml</a>
+          Then it will make a post request to the URL you chose as the push_url. The XML-file will be in the request body and the OAuth2 token in the request headers ("request.headers['Authorization']"). <br/>
+          In your autograder you need to make sure that the OAuth2 token is validated and the corresponding user found. We recommend to add an interface for users to add an OAuth2-token. <br/>
+          The XML-file in the request-body needs to be parsed into the database. Since we are using the ProFormA-XML format you can parse the xml using xpath. <br/>
+          Finally, please respond with a 200 status code if everything went okay or a 400 if it did not. <br/>
+        </p>
+    index:
+      banner1:
+        alt_text: Exercise repository
+        header: Your exercise repository
+        paragraph: Search, rate and create exercises.
+      banner2:
+        alt_text: Exercise collaboration
+        header: Collaborate on exercises
+        paragraph: Improve your exercises by discussing them with your peers.
+      banner3:
+        alt_text: Share exercises
+        header: Share auto-gradeable exercises
+        paragraph: Many auto-graders are supported.
+      feature:
+        collections:
+          header: Create exercise collections
+          paragraph: Create collections of your favorite exercises for your future needs. Share collections with colleagues and peers. Export them to your favorite auto-grader or download them as XML.
+        exercises:
+          header: Search, discuss and create exercises
+          paragraph: CodeHarbor allows to share, rate, and discuss auto-gradeable programming exercises with colleagues and peers. Re-use existing exercises, clone exercises and adjust them to your needs. Translate exercises to other human languages or port them to other programming languages. You always keep full control with whom you share.
+        groups:
+          header: Create user-groups and share exercises with your group.
+          paragraph: If you decide not to share your exercises with everybody, declare it private and only allow access to selected groups or users.
+      marketing:
+        mooc:
+          alt_text: Enterprise
+          header_html: "CodeHarbor for \n MOOCs"
+          paragraph: You're developing and running MOOCs that include auto-graded programming exercises?
+        schools:
+          alt_text: Home
+          header_html: "CodeHarbor for \n Schools"
+          paragraph: You're teaching programming at school and need auto-gradeable programming exercises?
+        universities:
+          alt_text: Education
+          header_html: "CodeHarbor for \n Universities"
+          paragraph: You're teaching large programming classes at university and use auto-graders for assessment?
+      sign_in:
+        header: Become a member
+        link1: sign up
+        link2: log in
+        paragraph_html: If you want to join our community %{href1} now or %{href2} if you are already a member.

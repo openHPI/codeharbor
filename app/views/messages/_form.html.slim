@@ -3,8 +3,8 @@
     - if @message.errors.any?
       #error_explanation
         h2
-          = pluralize(@message.errors.count, t('error'))
-          = t('comments.errorMessage')
+          = pluralize(@message.errors.count, t('common.errors.error_with_space'))
+          = t('.errorMessage')
         ul
           - @message.errors.full_messages.each do |message|
             li= message
@@ -12,14 +12,14 @@
       = f.hidden_field :recipient_hidden, value: @recipient.id
     - else
       .field-element
-        = f.label :recipient, t('message.recipient'), class: 'form-label'
+        = f.label :recipient, Message.human_attribute_name('recipient'), class: 'form-label'
         = f.text_field :recipient, class: 'form-control'
     .field-element
-      = f.label :text, t('comments.text'), class: 'form-label'
+      = f.label :text, Message.human_attribute_name('text'), class: 'form-label'
       = f.text_area :text, class: 'form-control'
     br
     .actions.btn-group role="group"
       = button_tag type: 'submit', class: 'btn btn-important' do
         i.fa-solid.fa-envelope
-        =< t('message.send_message')
-      = link_to t('comments.button.cancel'), :back, class: 'btn btn-important'
+        =< t('messages.shared.send_message')
+      = link_to t('common.button.cancel'), :back, class: 'btn btn-important'

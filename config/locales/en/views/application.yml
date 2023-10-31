@@ -1,0 +1,17 @@
+---
+en:
+  application:
+    footer:
+      about:
+        header: About CodeHarbor
+        paragraph: CodeHarbor allows to share, rate, and discuss auto-gradeable programming exercises with colleagues. Re-use existing exercises, clone exercises and adjust them to your needs. Translate them to another human language or port them to another programming language. Always keep full control with whom you share.
+      imprint: Imprint
+      more:
+        header: More Information
+        link: About CodeHarbor
+      privacy_policy: Privacy Policy
+    navigation:
+      rails_admin: Rails admin
+    session:
+      button:
+        log_out: Log out

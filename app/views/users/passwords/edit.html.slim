@@ -1,27 +1,27 @@
 .header.mb-5
   .std-heading
     i.fa-solid.fa-key style='color: #444444'
-    =< t('users.change_pwd')
+    =< t('.change_pwd')
 
 = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f|
   = bootstrap_devise_error_messages!
   = f.hidden_field :reset_password_token
 
   .form-group.field-element
-    = f.label :password, t('users.new.password_new'), class: 'form-label'
+    = f.label :password, t('users.shared.password_new'), class: 'form-label'
     = f.password_field :password,
             required: true,
             autofocus: true,
-            placeholder: t('users.new.password_new'),
+            placeholder: t('users.shared.password_new'),
             autocomplete: 'new-password',
             class: 'form-control'
     - if @minimum_password_length
-      small.form-text.text-body-secondary = t('users.new.minimum_password_length', count: @minimum_password_length)
+      small.form-text.text-body-secondary = t('users.shared.minimum_password_length', count: @minimum_password_length)
   .form-group.field-element
-    = f.label :password_confirmation, t('users.new.password_new_confirmation'), class: 'form-label'
+    = f.label :password_confirmation, t('users.shared.password_new_confirmation'), class: 'form-label'
     = f.password_field :password_confirmation,
             required: true,
-            placeholder: t('users.new.password_new'),
+            placeholder: t('users.shared.password_new'),
             autocomplete: 'new-password',
             class: 'form-control'
 
@@ -29,9 +29,9 @@
     .btn-group[role='group']
       = button_tag type: 'submit', class: 'btn btn-important' do
         i.fa-solid.fa-key
-        =< t('users.change_my_pwd')
+        =< t('.change_my_pwd')
       = link_to :back, class: 'btn btn-important' do
         i.fa-solid.fa-xmark style=('color: gray')
-        =< t('users.back')
+        =< t('common.button.back')
 
 = render 'users/shared/links'

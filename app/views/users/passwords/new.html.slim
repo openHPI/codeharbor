@@ -1,7 +1,7 @@
 .header.mb-5
   .std-heading
     i.fa-solid.fa-key style='color: #444444'
-    =< t('users.forgot_pwd')
+    =< t('.forgot_pwd')
 
 = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f|
   = bootstrap_devise_error_messages!
@@ -11,7 +11,7 @@
     = f.email_field :email,
             required: true,
             autofocus: true,
-            placeholder: t('users.new.email'),
+            placeholder: User.human_attribute_name('email'),
             autocomplete: 'email',
             class: 'form-control'
 
@@ -19,9 +19,9 @@
     .btn-group[role='group']
       = button_tag type: 'submit', class: 'btn btn-important' do
         i.fa-solid.fa-key
-        =< t('users.send_reset_pwd')
+        =< t('.send_reset_pwd')
       = link_to :back, class: 'btn btn-important' do
         i.fa-solid.fa-xmark style=('color: gray')
-        =< t('users.back')
+        =< t('common.button.back')
 
 = render 'users/shared/links'

@@ -1,0 +1,72 @@
+---
+en:
+  users:
+    confirmations:
+      new:
+        resend_confirmation: Resend confirmation instructions
+    passwords:
+      edit:
+        change_my_pwd: Change my password
+        change_pwd: Change your password
+      new:
+        forgot_pwd: Forgot your password?
+        send_reset_pwd: Send me reset password instructions
+    registrations:
+      avatar_form:
+        remove_avatar: Remove Avatar
+      edit:
+        confirm_w_pwd: We need your current password to confirm your changes.
+        header: Edit User
+        leave_blank: Leave it blank if you don't want to change it.
+        password_current: Current password
+        update_user: Update
+        waiting_confirmation: 'Currently waiting confirmation for: %{email}'
+      new:
+        header: Sign Up
+        password: Password
+    sessions:
+      new:
+        email:
+          label: Email
+          placeholder: Email
+        header: Log In
+        password:
+          label: Password
+          placeholder: Password
+    shared:
+      error_messages:
+        not_saved:
+          one: '1 error prohibited this %{resource} from being saved:'
+          other: "%{count} errors prohibited this %{resource} from being saved:"
+      links:
+        forgot_pwd: Forgot your password?
+        no_confirmation: Didn't receive confirmation instructions?
+        no_unlock: Didn't receive unlock instructions?
+        sign_in_with: Sign in with %{provider}
+      minimum_password_length: "%{count} characters minimum"
+      notification_modal:
+        delete_modal:
+          content:
+            groups_1: Groups with only you as user will be deleted
+            groups_2: 'Groups with only you as admin and other users: Another user will be randomly declared as admin'
+            groups_3: 'Groups with other admins: no changes'
+            groups_header: 'Groups:'
+            intro: 'Deletion of your account will have the following effects:'
+            tasks_content: Your tasks will remain, but your name will be anonymized
+            tasks_header: 'Tasks:'
+      password_new: New password
+      password_new_confirmation: Confirm your new password
+    show:
+      account_links:
+        add: Add Account Link
+        created: Created Account Links
+        other: Other Account Links
+      delete_modal:
+        title: Warning
+      full_name: Full name
+      private_information: Private Information
+      public_information: Public Information
+      send_message: Send Message
+    unlocks:
+      new:
+        resend_unlock: Resend unlock instructions

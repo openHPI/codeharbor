@@ -17,13 +17,13 @@
     .col-md-5
       div
         .input-group
-          = button_tag t('labels.index.merge'), type: 'button', id: 'merge-labels-button', disabled: true, class: 'btn btn-primary'
+          = button_tag t('.merge'), type: 'button', id: 'merge-labels-button', disabled: true, class: 'btn btn-primary'
           input.form-control[id="merge-labels-input" type="text" placeholder="New Name"]
 
       .div[style='margin-top: 10px;']
         .input-group
-          = button_tag t('labels.index.change_color_to'), id: 'change-label-color-button', disabled: true, class: 'btn btn-primary'
+          = button_tag t('.change_color_to'), id: 'change-label-color-button', disabled: true, class: 'btn btn-primary'
           input.form-control[id="color-labels-input" type="color" value="#000000"]
 
       .div[style='margin-top: 10px;']
-        = button_tag t('labels.index.delete'), id: 'delete-labels-button', disabled: true, class: 'btn btn-danger'
+        = button_tag t('common.button.delete'), id: 'delete-labels-button', disabled: true, class: 'btn btn-danger'

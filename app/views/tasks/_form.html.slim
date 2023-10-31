@@ -5,8 +5,8 @@
         #error_explanation.card
           .card-header
             h3
-              = pluralize(@task.errors.count, t('error'))
-              = t('tasks.error')
+              = pluralize(@task.errors.count, t('common.errors.error_with_space'))
+              = t('.errors.not_saved')
           .card-body
             ul
               - @task.errors.full_messages.each do |msg|
@@ -15,55 +15,46 @@
       fieldset.form-group
         legend.toggle-next
           span.number = '1'
-          => t('tasks.form.basic_information')
+          => t('tasks.shared.basic_information')
           span.fa-solid.fa-caret-up
         .form-content
-          /- if @task_relation.present?
-            = f.fields_for :exercise_relation do |exercise_relation|
-              = exercise_relation.hidden_field :origin_id, :value => @task_relation.origin.id
-            .field-element
-              = f.label :relation, t('exercises.relation'), class: 'form-label'
-              br/
-              = f.fields_for :exercise_relation do |relation|
-                .controls
-                  = relation.collection_select :relation_id, Relation.all, :id, :name, {}, {class: 'form-control'}
           .field-element
-            = f.label :title, t('tasks.title'), class: 'form-label'
+            = f.label :title,  Task.human_attribute_name("title"), class: 'form-label'
             = f.text_field :title, class: 'form-control'
           .field-element
-            = f.label :programming_language, t('tasks.programming_language'), class: 'form-label'
+            = f.label :programming_language,  Task.human_attribute_name("programming_language"), class: 'form-label'
             .div.d-none.execution-environment-error
-              = t('tasks.form.errors.programming_language.not_empty_while_public')
-            = f.collection_select :programming_language_id, ProgrammingLanguage.all, :id, :language_with_version, {include_blank: t('tasks.form.none')}, {class: 'form-control'}
+              = t('.errors.prog_lang_not_empty_while_public')
+            = f.collection_select :programming_language_id, ProgrammingLanguage.all, :id, :language_with_version, {include_blank: t('common.none')}, {class: 'form-control'}
 
 
           .field-element
-            = f.label :description, t('tasks.description'), class: 'form-label'
+            = f.label :description, Task.human_attribute_name('description'), class: 'form-label'
             = f.text_area :description, class: 'form-control'
 
       fieldset.form-group
         legend.toggle-next
           span.number = '2'
-          => t('tasks.form.additional_info')
+          => t('tasks.shared.additional_info')
           span.fa-solid.fa-caret-up
         .form-content
           .field-element
-            = f.label :internal_description, t('tasks.internal_description'), class: 'form-label'
+            = f.label :internal_description,  Task.human_attribute_name("internal_description"), class: 'form-label'
             = f.text_area :internal_description, class: 'form-control'
           .field-element
-            = f.label :uuid, t('tasks.uuid'), class: 'form-label'
+            = f.label :uuid,  Task.human_attribute_name("uuid"), class: 'form-label'
             = f.text_field :uuid, class: 'form-control'
           .field-element
-            = f.label :parent_uuid, t('tasks.parent_uuid'), class: 'form-label'
+            = f.label :parent_uuid,  Task.human_attribute_name("parent_uuid"), class: 'form-label'
             = f.text_field :parent_uuid, class: 'form-control'
           .field-element
-            = f.label :language, t('tasks.language'), class: 'form-label'
+            = f.label :language,  Task.human_attribute_name("language"), class: 'form-label'
             = f.text_field :language, class: 'form-control'
 
           .field-element
-            = f.label :access_level, t('tasks.visibility.label'), class: 'form-label'
+            = f.label :access_level,  Task.human_attribute_name("access_level"), class: 'form-label'
             .div.d-none.execution-environment-error
-              = t('controllers.exercise.visibility.not_public_without_exenv')
+              = t('.errors.not_public_without_prog_lang')
             .radio-switch
               = f.radio_button :access_level, :public, value: :public, checked: true
               = label_tag 'task_access_level_public', t('tasks.visibility.public'), class: 'radio-left'
@@ -71,63 +62,41 @@
               = label_tag 'task_access_level_private', t('tasks.visibility.private'), class: 'radio-right'
             .visibility_warning
               span.d-none#task_visibility_warning data-external-collection-membership=@task.collections.any?{|collection| collection.users.exclude?(current_user)}.to_s
-                = t('tasks.form.visibility_warning')
+                = t('.visibility_warning')
           = fields_for :group_tasks do |ff|
             .field-element
-              = ff.label :group_ids, t('tasks.groups'), class: 'form-label'
+              = ff.label :group_ids, Group.model_name.human(count: :many), class: 'form-label'
               = ff.collection_select :group_ids, (current_user.member_groups).uniq, :id, :name, {selected: @task.groups.map(&:id)}, {class: "my-group form-control", multiple: true, style: "width: 300px;"}
               - if (@task.groups - current_user.member_groups).length > 0
                 .unchangeable-groups
                   span.title style='margin-right: 5px;'
-                    = t('tasks.edit.unchangeable_groups')+':'
+                    = t('.unchangeable_groups')+':'
                   - (@task.groups - current_user.member_groups).each_with_index do |group, index|
                     - if index > 0
                       = ', '
                     = group.name
 
           .field-element
-            = f.label :labels, t('tasks.labels'), class: 'form-label'
+            = f.label :labels, Label.model_name.human(count: :many), class: 'form-label'
             = f.select :label_names, options_for_select(@task.labels.map { |l| [l.name, l.name, {label_color: l.color, label_font_color: l.font_color}] }, @task.labels.map(&:name)), {}, {class: "labels-select2-tag form-control", multiple: "multiple", style: "width: 300px;"}
 
           .field-element
-            = f.label :license, t('tasks.show.license'), class: 'form-label'
+            = f.label :license, Task.human_attribute_name("license"), class: 'form-label'
             .license
               .select
-                = f.select :license_id, options_for_select(License.all.collect{ |l| [l.name, l.id, {'data-link'=> l.link}] }, @task.license_id), {include_blank: t('tasks.form.no_license')}, {class: 'form-select'}
+                = f.select :license_id, options_for_select(License.all.collect{ |l| [l.name, l.id, {'data-link'=> l.link}] }, @task.license_id), {include_blank: t('.no_license')}, {class: 'form-select'}
               .link
       fieldset.form-group
         legend.toggle-next
           span.number = '3'
-          => t('tasks.files.label')
+          => Task.human_attribute_name("files")
           span.fa-solid.fa-caret-up
         .form-content
           = render 'nested_file_form', f: f, nested_form_placeholder: 'f-__nested_field_for_replace_with_index__'
-          /.field-element
-            = f.nested_fields_for :files, style: 'margin-left: 10px' do |file|
-              .show-table.exercise-show
-                - if file.object.new_record?
-                  - display_container = "display: block"
-                  .table-header
-                    = file.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
-                      i.fa-solid.fa-xmark style=("color: #800000")
-                      =< t('exercises.form.files.remove')
-                - else
-                  - display_container = "display: none"
-                  .table-header.closed.toggle-next
-                    => file.object.full_file_name
-                    span.fa-solid.fa-caret-down
-                    = file.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
-                      i.fa-solid.fa-xmark style=("color: #800000")
-                      =< t('exercises.form.files.remove')
-                .file-container style="margin-left: 10px; #{display_container}"
-                  = render 'file_form', f: f, file: file
-            = f.add_nested_fields_link :files, ' ', class: 'btn btn-main', id: 'addFileButton' do
-              i.fa-solid.fa-plus style=("color: #008000")
-              =< t('exercises.form.files.add')
       fieldset.form-group
         legend.toggle-next
           span.number = '4'
-          => t('tasks.tests.label')
+          => Task.human_attribute_name("tests")
           span.fa-solid.fa-caret-up
         .form-content
           .field-element
@@ -138,7 +107,7 @@
                   .table-header
                     = test.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
                       i.fa-solid.fa-xmark style=("color: #800000")
-                      =< t('tasks.form.tests.remove')
+                      =< t('.button.remove_test')
                 - else
                   - display_container = "display: none"
                   .table-header.closed.toggle-next
@@ -146,17 +115,17 @@
                     span.fa-solid.fa-caret-down
                     = test.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
                       i.fa-solid.fa-xmark style=("color: #800000")
-                      =< t('tasks.form.tests.remove')
+                      =< t('.button.remove_test')
                 .test-container style="margin-left: 10px; #{display_container}"
                   = render 'test_form', f: f, test: test
             / .field-element
             = f.add_nested_fields_link :tests, ' ', class: 'btn btn-main', id: 'addTestButton' do
               i.fa-solid.fa-plus style=("color: #008000")
-              =< t('tasks.form.tests.add')
+              =< t('.button.add_test')
       fieldset.form-group
         legend.toggle-next
           span.number = '5'
-          => t('tasks.model_solution.plural')
+          => ModelSolution.model_name.human(count: :many)
           span.fa-solid.fa-caret-up
         .form-content
           .field-element
@@ -167,27 +136,27 @@
                   .table-header
                     = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
                       i.fa-solid.fa-xmark style=("color: #800000")
-                      =< t('tasks.form.model_solution.remove')
+                      =< t('.button.remove_model_solution')
                 - else
                   - display_container = "display: none"
                   .table-header.closed.toggle-next
-                    => t('tasks.model_solution.singular')
+                    => ModelSolution.model_name.human
                     => (model_solution.object.task.model_solutions.find_index(model_solution.object) + 1).to_s
                     span.fa-solid.fa-caret-down
                     = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
                       i.fa-solid.fa-xmark style=("color: #800000")
-                      =< t('tasks.form.model_solution.remove')
+                      =< t('.button.remove_model_solution')
                 .model-solution-container style="margin-left: 10px; #{display_container}"
                   = render 'model_solution_form', f: f, model_solution: model_solution
             / .field-element
             = f.add_nested_fields_link :model_solutions, ' ', class: 'btn btn-main', id: 'addTestButton' do
               i.fa-solid.fa-plus style=("color: #008000")
-              =< t('tasks.form.model_solutions.add')
+              =< t('.button.add_model_solution')
       .form-group
         .actions.btn-group[role="group"]
           = button_tag type: 'submit', class: 'btn btn-important' do
             i.fa-regular.fa-file-lines
-            =< t('tasks.form.save')
+            =< t('.button.save_task')
           = link_to :back, class: 'btn btn-important' do
             i.fa-solid.fa-xmark style=("color: gray")
-            =< t('tasks.form.cancel')
+            =< t('common.button.cancel')

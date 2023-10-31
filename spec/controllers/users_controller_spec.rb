@@ -34,14 +34,14 @@ RSpec.describe UsersController do
 
       context 'when the requested user exists' do
         let(:user_id) { another_user.id }
-        let(:desired_message) { I18n.t('controllers.authorization') }
+        let(:desired_message) { I18n.t('common.errors.not_authorized') }
 
         it_behaves_like 'redirects with a flash message'
       end
 
       context 'when the requested user does not exist' do
         let(:user_id) { -1 }
-        let(:desired_message) { I18n.t('controllers.not_found') }
+        let(:desired_message) { I18n.t('common.errors.not_found_error') }
 
         it_behaves_like 'redirects with a flash message'
       end
@@ -49,7 +49,7 @@ RSpec.describe UsersController do
 
     context 'when a user is not signed in' do
       let(:redirect_target) { root_path }
-      let(:desired_message) { I18n.t('controllers.authorization') }
+      let(:desired_message) { I18n.t('common.errors.not_authorized') }
 
       context 'when the requested user exists' do
         let(:user_id) { another_user.id }

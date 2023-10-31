@@ -5,7 +5,7 @@ module ProformaService
     def initialize(zip_file:, depth: 0, path: nil)
       super()
       @depth = depth + 1
-      raise I18n.t('exercises.import_exercise.convert_zip.nested_too_deep') if depth > 5
+      raise I18n.t('tasks.proforma_service.convert_zip_to_proforma_tasks.nested_too_deep') if depth > 5
 
       if zip_file.is_a?(ActiveStorage::Attached::One)
         @zip_file = Tempfile.new

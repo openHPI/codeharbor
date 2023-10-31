@@ -45,7 +45,7 @@ RSpec.describe TaskService::CheckExternal do
       let(:response) { {uuid_found: true, update_right: true}.to_json }
 
       it 'returns the correct hash' do
-        expect(check_external_service).to eql(error: false, message: I18n.t('tasks.export_task.check.task_found'),
+        expect(check_external_service).to eql(error: false, message: I18n.t('tasks.task_service.check_external.task_found'),
           uuid_found: true, update_right: true)
       end
 
@@ -53,7 +53,7 @@ RSpec.describe TaskService::CheckExternal do
         let(:response) { {uuid_found: false}.to_json }
 
         it 'returns the correct hash' do
-          expect(check_external_service).to eql(error: false, message: I18n.t('tasks.export_task.check.no_task'),
+          expect(check_external_service).to eql(error: false, message: I18n.t('tasks.task_service.check_external.no_task'),
             uuid_found: false)
         end
       end
@@ -62,7 +62,7 @@ RSpec.describe TaskService::CheckExternal do
         let(:response) { {uuid_found: true, update_right: false}.to_json }
 
         it 'returns the correct hash' do
-          expect(check_external_service).to eql(error: false, message: I18n.t('tasks.export_task.check.task_found_no_right'),
+          expect(check_external_service).to eql(error: false, message: I18n.t('tasks.task_service.check_external.task_found_no_right'),
             uuid_found: true, update_right: false)
         end
       end
@@ -72,7 +72,7 @@ RSpec.describe TaskService::CheckExternal do
       let(:response) { 'foo' }
 
       it 'returns the correct hash' do
-        expect(check_external_service).to eql(error: true, message: I18n.t('exercises.export_exercise.error'))
+        expect(check_external_service).to eql(error: true, message: I18n.t('common.errors.generic'))
       end
     end
 
@@ -80,7 +80,7 @@ RSpec.describe TaskService::CheckExternal do
       before { allow(Faraday).to receive(:new).and_raise(Faraday::Error, 'error') }
 
       it 'returns the correct hash' do
-        expect(check_external_service).to eql(error: true, message: I18n.t('exercises.export_exercise.error'))
+        expect(check_external_service).to eql(error: true, message: I18n.t('common.errors.generic'))
       end
     end
   end

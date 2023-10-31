@@ -13,9 +13,9 @@
           - if current_user.unread_messages_count != '0'
             span.menu-number
               = current_user.unread_messages_count
-  li.nav-item = link_to t('layouts.logout'), destroy_user_session_path, method: :delete, class: 'nav-link'
+  li.nav-item = link_to t('.button.log_out'), destroy_user_session_path, method: :delete, class: 'nav-link'
 - else
-  = render('navigation_collection_link', target: :new_user_registration_path, text: t('home.sign_up')) do
+  = render('navigation_collection_link', target: :new_user_registration_path, text: t('common.button.sign_up')) do
     i.fa-solid.fa-user
-  = render('navigation_collection_link', target: :new_user_session_path, text: t('home.login')) do
+  = render('navigation_collection_link', target: :new_user_session_path, text: t('common.button.log_in')) do
     i.fa-solid.fa-right-to-bracket

@@ -10,25 +10,25 @@ RSpec.describe 'Authentication' do
     before { visit(root_path) }
 
     it 'displays a sign in link' do
-      expect(page).to have_content(I18n.t('home.login'))
+      expect(page).to have_content(I18n.t('common.button.log_in'))
     end
 
     context 'with valid credentials' do
       it 'allows to sign in' do
-        click_link(I18n.t('home.login'))
-        fill_in(I18n.t('sessions.email.label'), with: user.email)
-        fill_in(I18n.t('sessions.password.label'), with: password)
-        click_button(I18n.t('sessions.login'))
+        click_link(I18n.t('common.button.log_in'))
+        fill_in(I18n.t('users.sessions.new.email.label'), with: user.email)
+        fill_in(I18n.t('users.sessions.new.password.label'), with: password)
+        click_button(I18n.t('common.button.log_in'))
         expect(page).to have_content(I18n.t('devise.sessions.signed_in'))
       end
     end
 
     context 'with invalid credentials' do
       it 'does not allow to sign in' do
-        click_link(I18n.t('home.login'))
+        click_link(I18n.t('common.button.log_in'))
         fill_in('Email', with: user.email)
         fill_in('Password', with: password.reverse)
-        click_button(I18n.t('sessions.login'))
+        click_button(I18n.t('common.button.log_in'))
         expect(page).to have_content(I18n.t('devise.failure.invalid', authentication_keys: 'Email'))
       end
     end
@@ -45,11 +45,11 @@ RSpec.describe 'Authentication' do
     end
 
     it 'displays a sign out link' do
-      expect(page).to have_content(I18n.t('layouts.logout'))
+      expect(page).to have_content(I18n.t('application.session.button.log_out'))
     end
 
     it 'allows to sign out' do
-      click_link(I18n.t('layouts.logout'))
+      click_link(I18n.t('application.session.button.log_out'))
       expect(page).to have_content(I18n.t('devise.sessions.signed_out'))
     end
   end

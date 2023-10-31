@@ -8,7 +8,7 @@ class Task < ApplicationRecord
   validates :title, presence: true
 
   validates :uuid, uniqueness: true
-  validates :language, format: {with: /\A[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*\z/, message: I18n.t('tasks.form.errors.language')}
+  validates :language, format: {with: /\A[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*\z/, message: :not_de_or_us}
   validate :primary_language_tag_in_iso639?
 
   has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy
@@ -157,7 +157,7 @@ class Task < ApplicationRecord
       task.groups = []
       task.collections = []
       task.access_level_private!
-      task.title = "#{I18n.t('tasks.copy_of_task')}: #{task.title}"
+      task.title = "#{I18n.t('tasks.model.copy_of_task')}: #{task.title}"
     end
   end
 

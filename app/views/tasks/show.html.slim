@@ -16,7 +16,7 @@
           .rating-dropdown
             - if can? :create, Rating
               .btn.btn-sm#rate
-                => t('exercises.rate')
+                => t('.button.rate')
                 span.fa-solid.fa-caret-down
 
               .popup-rating
@@ -32,9 +32,9 @@
                       span.fa-regular.fa-star data-rating=i
 
             - else
-              div[data-bs-toggle='tooltip' title=t('tasks.guest.disabled.tooltip') data-bs-delay=150]
+              div[data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150]
                 .btn.btn-sm#rate
-                  => t('exercises.rate')
+                  => t('.button.rate')
                   span.fa-solid.fa-caret-down
 
       /= render 'remove_state_tag', exercise: @task
@@ -42,42 +42,25 @@
   .col-md-12.my-3
     legend.toggle-next
       span.number = '1'
-      => t('exercises.form.basic_info')
+      => t('tasks.shared.basic_information')
       span.fa-solid.fa-caret-up
     .show-table.exercise-show
       .row
         .col-auto.row-label
-          = t('exercises.title')
+          = Task.human_attribute_name('title')
           | :
         .col.row-value data-bs-toggle="tooltip" data-bs-placement="bottom" title="#{@task.title}"
           = truncate(@task.title, length: 120)
 
-      /- if @task_relation
-        .row
-          .col-auto.row-label
-            = t('exercises.parent')
-            | :
-          .col.row-value
-            - if @task_relation.origin
-              = link_to @task_relation.origin.title, exercise_path(@task_relation.origin)
-            - else
-              = t('exercises.parent_deleted')
-        .row
-          .col-auto.row-label
-            = t('exercises.relation')
-            | :
-          .col.row-value
-            = @task_relation.relation.name
-
       .row
         .col-auto.row-label
-          = t('tasks.programming_language')
+          = Task.human_attribute_name("programming_language")
           | :
         .col.row-value
-          = @task.programming_language&.language_with_version || t('tasks.form.none')
+          = @task.programming_language&.language_with_version || t('common.none')
       .row.vertical
         .col.row-label
-          = t('tasks.description')
+          = Task.human_attribute_name('description')
           | :
         .row-value
           = @task.description
@@ -85,19 +68,19 @@
 
     legend.toggle-next.closed
       span.number = '2'
-      => t('tasks.form.additional_info')
+      => t('tasks.shared.additional_info')
       span.fa-solid.fa-caret-down
     .show-table.exercise-show style="display:none;"
       .row.vertical
         .col.row-label
-          = t('tasks.internal_description')
+          = Task.human_attribute_name("internal_description")
           | :
         .row-value
           = @task.internal_description
       - if @task.meta_data.present?
         .row.vertical
           .col.row-label
-            = t('tasks.show.meta_data')
+            = Task.human_attribute_name('meta_data')
             | :
           .row-value
             pre
@@ -114,9 +97,9 @@
           | :
         .col.row-value
           - if !@task.user
-            = t('users.undefined')
+            = t('.undefined')
           - elsif @task.user == current_user
-            = t('users.yourself')
+            = t('.yourself')
           - elsif @task.user.first_name.nil?
             = "User#{@task.user.id}"
           - elsif can? :show, @task.user
@@ -125,28 +108,28 @@
             = @task.user.name
       .row
         .col-auto.row-label
-          = t('tasks.uuid')
+          = Task.human_attribute_name('uuid')
         .col.row-value
           = @task.uuid
       .row
         .col-auto.row-label
-          = t('tasks.parent_uuid')
+          = Task.human_attribute_name("parent_uuid")
         .col.row-value
           = @task.parent_uuid
       .row
         .col-auto.row-label
-          = t('tasks.language')
+          = Task.human_attribute_name("language")
         .col.row-value
           = @task.language
       .row
         .col-auto.row-label
-          = t('tasks.visibility.label')
+          = Task.human_attribute_name("access_level")
           | :
         .col.row-value
-          = t("exercises.visibility.#{@task.access_level}")
+          = t("tasks.visibility.#{@task.access_level}")
       .row
         .col-auto.row-label
-          = t('tasks.labels')
+          = Label.model_name.human(count: :many)
           | :
         .col.row-value
           - @task.labels.each do |label|
@@ -154,7 +137,7 @@
               = label.name
       .row
         .col-auto.row-label
-          = t('tasks.groups')
+          = Group.model_name.human(count: :many)
           | :
         .col.row-value
           - @task.groups.each_with_index do |group, index|
@@ -166,7 +149,7 @@
               = group.name
       .row
         .col-auto.row-label
-          = t('tasks.show.license')
+          = Task.human_attribute_name("license")
           | :
         .col.row-value
           - if @task.license
@@ -174,32 +157,15 @@
             = ': '
             = link_to @task.license.link, @task.license.link
           - else
-            = t('tasks.show.no_license')
-      /.row
-        .col-auto.row-label
-          = t('exercises.impact')
-          | :
-        .col.row-value
-          p.impact
-            = t('exercises.downloads')
-            = ': '
-            = @task.downloads.to_s
-          p.impact
-            = t('exercises.in_carts')
-            = ': '
-            = @task.in_carts
-          p.impact
-            = t('exercises.in_collections')
-            = ': '
-            = @task.in_collections
+            = t('.no_license')
 
     legend.toggle-next
       span.number = '3'
-      => t('exercises.files.label')
+      => Task.human_attribute_name('files')
       span.fa-solid.fa-caret-up
     - if @files.empty?
       p style="margin-left: 10px; margin-bottom: 30px"
-        = t('exercises.show.no_files')
+        = t('tasks.show.no_files')
     .files
       - @files.each do |file|
         .show-table.exercise-show
@@ -209,25 +175,25 @@
           .file-content
             .row
               .col-auto.row-label
-                = t('tasks.files.name')
+                = TaskFile.human_attribute_name('name')
                 | :
               .col.row-value
                 = file.name
             .row
               .col-auto.row-label
-                = t('tasks.files.path')
+                = TaskFile.human_attribute_name('path')
                 | :
               .col.row-value
                 = file.path
             .row
               .col-auto.row-label
-                = t('tasks.files.internal_description')
+                = TaskFile.human_attribute_name('internal_description')
                 | :
               .col.row-value
                 = file.internal_description
             .row
               .col-auto.row-label
-                = t('tasks.files.xml_id')
+                = TaskFile.human_attribute_name('xml_id')
                 | :
               .col.row-value
                 = file.xml_id
@@ -239,7 +205,7 @@
             - else
               .row.vertical
                 .col.row-label
-                  = t('exercises.files.attachment')
+                  = TaskFile.human_attribute_name('attachment')
                   | :
                 .row-value
                   - if file.attachment.image?
@@ -248,42 +214,30 @@
                     = link_to file.attachment.filename, download_attachment_task_file_path(file), 'data-turbolinks': false
             .row
               .col-auto.row-label
-                = t('tasks.files.used_by_grader')
+                = TaskFile.human_attribute_name('used_by_grader')
                 | :
               .col.row-value
                 = file.used_by_grader
             .row
               .col-auto.row-label
-                = t('tasks.files.visible')
+                = TaskFile.human_attribute_name('visible')
                 | :
               .col.row-value
                 = file.visible
             .row
               .col-auto.row-label
-                = t('tasks.files.usage_by_lms')
+                = TaskFile.human_attribute_name('usage_by_lms')
                 | :
               .col.row-value
                 = file.usage_by_lms
-            /.row
-              .col-auto.row-label
-                = t('exercises.files.extension')
-                | :
-              .col.row-value
-                = file.file_type.name_with_extension if file.file_type
-            /.row
-              .col-auto.row-label
-                = t('exercises.files.role')
-                | :
-              .col.row-value
-                = t("exercises.files.roles.#{file.role || 'none'}")
 
     legend.toggle-next
       span.number = '4'
-      => t('exercises.tests.label')
+      => Task.human_attribute_name('tests')
       span.fa-solid.fa-caret-up
     - if @tests.empty?
       p style="margin-left: 10px; margin-bottom: 30px"
-        = t('exercises.show.no_tests')
+        = t('tasks.show.no_tests')
     .tests
       - @tests.each do |test|
         .show-table.exercise-show
@@ -293,32 +247,32 @@
           .test-content
             .row
               .col-auto.row-label
-                = t('tasks.tests.title')
+                = Test.human_attribute_name('title')
                 | :
               .col.row-value
                 = test.title
             .row
               .col-auto.row-label
-                = t('tasks.tests.framework')
+                = Test.human_attribute_name('testing_framework')
                 | :
               .col.row-value
-                = test.testing_framework&.name_with_version || t('tasks.form.none')
+                = test.testing_framework&.name_with_version || t('common.none')
             .row
               .col-auto.row-label
-                = t('tasks.tests.description')
+                = Test.human_attribute_name('description')
                 | :
               .col.row-value
                 = test.description
             .row
               .col-auto.row-label
-                = t('tasks.tests.internal_description')
+                = Test.human_attribute_name('internal_description')
                 | :
               .col.row-value
                 = test.internal_description
             - if test.meta_data.present?
               .row.vertical
                 .col.row-label
-                  = t('tasks.show.meta_data')
+                  = Task.human_attribute_name('meta_data')
                   | :
                 .row-value
                   pre
@@ -326,38 +280,38 @@
             - if test.configuration.present?
               .row.vertical
                 .row-label
-                  = t('tasks.show.configuration')
+                  = Test.human_attribute_name('configuration')
                   | :
                 .row-value
                   pre
                     = test.configuration_as_xml
             .row
               .col-auto.row-label
-                = t('tasks.tests.test_type')
+                = Test.human_attribute_name('test_type')
                 | :
               .col.row-value
                 = test.test_type
             .row
               .col-auto.row-label
-                = t('tasks.tests.xml_id')
+                = Test.human_attribute_name('xml_id')
                 | :
               .col.row-value
                 = test.xml_id
             .row
               .col-auto.row-label
-                = t('tasks.tests.validity')
+                = Test.human_attribute_name('validity')
                 | :
               .col.row-value
                 = test.validity
             .row
               .col-auto.row-label
-                = t('tasks.tests.timeout')
+                = Test.human_attribute_name('timeout')
                 | :
               .col.row-value
                 = test.timeout
 
             .files-header
-              = label nil, t('tasks.files.label') + ':'
+              = label nil, Task.human_attribute_name('files') + ':'
             .files
               - test.files.each do |file|
                 .show-table.exercise-show
@@ -367,25 +321,25 @@
                   .file-content
                     .row
                       .col-auto.row-label
-                        = t('tasks.files.name')
+                        = TaskFile.human_attribute_name('name')
                         | :
                       .col.row-value
                         = file.name
                     .row
                       .col-auto.row-label
-                        = t('tasks.files.path')
+                        = TaskFile.human_attribute_name('path')
                         | :
                       .col.row-value
                         = file.path
                     .row
                       .col-auto.row-label
-                        = t('tasks.files.internal_description')
+                        = TaskFile.human_attribute_name('internal_description')
                         | :
                       .col.row-value
                         = file.internal_description
                     .row
                       .col-auto.row-label
-                        = t('tasks.files.xml_id')
+                        = TaskFile.human_attribute_name('xml_id')
                         | :
                       .col.row-value
                         = file.xml_id
@@ -396,7 +350,7 @@
                     - else
                       .row.vertical
                         .col.row-label
-                          = t('exercises.files.attachment')
+                          = TaskFile.human_attribute_name('attachment')
                           | :
                         .row-value
                           - if file.attachment.image?
@@ -405,60 +359,60 @@
                             = link_to file.attachment.filename, download_attachment_task_file_path(file), 'data-turbolinks': false
                     .row
                       .col-auto.row-label
-                        = t('tasks.files.used_by_grader')
+                        = TaskFile.human_attribute_name('used_by_grader')
                         | :
                       .col.row-value
                         = file.used_by_grader
                     .row
                       .col-auto.row-label
-                        = t('tasks.files.visible')
+                        = TaskFile.human_attribute_name('visible')
                         | :
                       .col.row-value
                         = file.visible
                     .row
                       .col-auto.row-label
-                        = t('tasks.files.usage_by_lms')
+                        = TaskFile.human_attribute_name('usage_by_lms')
                         | :
                       .col.row-value
                         = file.usage_by_lms
 
     legend.toggle-next
       span.number = '5'
-      => t('tasks.model_solution.plural')
+      => ModelSolution.model_name.human(count: :many)
       span.fa-solid.fa-caret-up
     - if @model_solutions.empty?
       p style="margin-left: 10px; margin-bottom: 30px"
-        = t('tasks.model_solution.none_present')
+        = t('.no_model_solution_present')
     .model_solutions
       - @model_solutions.each do |model_solution|
         .show-table.exercise-show
           .table-header.closed.toggle-next
-            => t('tasks.model_solution.singular')
+            => ModelSolution.model_name.human
             => @model_solutions.find_index(model_solution) + 1
             span.fa-solid.fa-caret-down
           .test-content
             .row
               .col-auto.row-label
-                = t('tasks.tests.description')
+                = ModelSolution.human_attribute_name('description')
                 | :
               .col.row-value
                 = model_solution.description
             .row
               .col-auto.row-label
-                = t('tasks.tests.internal_description')
+                = ModelSolution.human_attribute_name('internal_description')
                 | :
               .col.row-value
                 = model_solution.internal_description
             .row
               .col-auto.row-label
-                = t('tasks.tests.xml_id')
+                = ModelSolution.human_attribute_name('xml_id')
                 | :
               .col.row-value
                 = model_solution.xml_id
 
             .files-header.my-1
               strong
-                = label nil, t('tasks.files.label') + ':'
+                = label nil, Task.human_attribute_name('files') + ':'
             .files
               - model_solution.files.each do |file|
                 .show-table.exercise-show
@@ -468,25 +422,25 @@
                   .file-content
                     .row
                       .col-auto.row-label
-                        = t('tasks.files.name')
+                        = TaskFile.human_attribute_name('name')
                         | :
                       .col.row-value
                         = file.name
                     .row
                       .col-auto.row-label
-                        = t('tasks.files.path')
+                        = TaskFile.human_attribute_name('path')
                         | :
                       .col.row-value
                         = file.path
                     .row
                       .col-auto.row-label
-                        = t('tasks.files.internal_description')
+                        = TaskFile.human_attribute_name('internal_description')
                         | :
                       .col.row-value
                         = file.internal_description
                     .row
                       .col-auto.row-label
-                        = t('tasks.files.xml_id')
+                        = TaskFile.human_attribute_name('xml_id')
                         | :
                       .col.row-value
                         = file.xml_id
@@ -497,7 +451,7 @@
                     - else
                       .row.vertical
                         .col.row-label
-                          = t('exercises.files.attachment')
+                          = TaskFile.human_attribute_name('attachment')
                           | :
                         .row-value
                           - if file.attachment.image?
@@ -506,19 +460,19 @@
                             = link_to file.attachment.filename, download_attachment_task_file_path(file), 'data-turbolinks': false
                     .row
                       .col-auto.row-label
-                        = t('tasks.files.used_by_grader')
+                        = TaskFile.human_attribute_name('used_by_grader')
                         | :
                       .col.row-value
                         = file.used_by_grader
                     .row
                       .col-auto.row-label
-                        = t('tasks.files.visible')
+                        = TaskFile.human_attribute_name('visible')
                         | :
                       .col.row-value
                         = file.visible
                     .row
                       .col-auto.row-label
-                        = t('tasks.files.usage_by_lms')
+                        = TaskFile.human_attribute_name('usage_by_lms')
                         | :
                       .col.row-value
                         = file.usage_by_lms
@@ -526,13 +480,12 @@
   .col-md-4.col-sm-6.mb-3.p-0
     .button-box.border.p-3.h-100
       .button-description
-        = t('controllers.task.add_to_collection.hint')
+        = t('.add_to_collection_hint')
       .wrapper
-        /  = link_to t('exercises.show.add_to_cart'), add_to_cart_exercise_path(@task), method: 'post', class: 'btn btn-light'
         - if can? :add_to_collection, @task
           .dropdown.btn-group
             = button_tag class: 'btn btn-light dropdown-toggle', 'data-bs-toggle': 'dropdown' do
-              = t('tasks.show.add_to_collection')
+              = t('.button.add_to_collection')
             ul.scrollable.dropdown-menu[role="menu"]
               - if !current_user.collections.empty?
                 - current_user.collections.each do |collection|
@@ -540,27 +493,27 @@
                     = link_to collection.title, add_to_collection_task_path(collection: collection), method: 'post', class: 'dropdown-item'
               - else
                 li
-                  = link_to t('tasks.show.add_collection'), new_collection_path(current_user)
+                  = link_to t('.button.add_collection'), new_collection_path(current_user)
         - else
-          div[data-bs-toggle='tooltip' title=t('tasks.guest.disabled.tooltip') data-bs-delay=150]
+          div[data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150]
             = button_tag class: 'btn btn-outline-dark dropdown-toggle disabled', 'data-bs-toggle': 'dropdown' do
-              = t('tasks.show.add_to_collection')
+              = t('.button.add_to_collection')
 
   .col-md-4.col-sm-6.mb-3.p-0
     .button-box.border.p-3.h-100
       .button-description
-        = t('tasks.download')
+        = t('.button.download_as_zip')
       .wrapper
         - if can? :download, @task
-          = link_to t('shared.download_zip'), download_task_path(@task), class: 'btn btn-light', 'data-turbolinks'=> false
+          = link_to t('common.button.download_zip'), download_task_path(@task), class: 'btn btn-light', 'data-turbolinks'=> false
         - else
-          div[data-bs-toggle='tooltip' title=t('tasks.guest.disabled.tooltip') data-bs-delay=150]
-            = link_to t('shared.download_zip'), download_task_path(@task), class: 'btn btn-outline-dark disabled', 'data-turbolinks'=> false
+          div[data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150]
+            = link_to t('common.button.download_zip'), download_task_path(@task), class: 'btn btn-outline-dark disabled', 'data-turbolinks'=> false
 
         - if can? :export, @task
           .dropdown.btn-group
             = button_tag class: 'btn btn-light dropdown-toggle', 'data-bs-toggle': 'dropdown' do
-              = t('tasks.show.export')
+              = t('.button.export')
             ul.scrollable.dropdown-menu[role="menu"]
               li.dropdown-header = t('tasks.show.export_to') + ': '
               - if !current_user.available_account_links.empty?
@@ -569,35 +522,16 @@
                     = link_to acc_link.name, export_external_start_task_path(account_link: acc_link), method: :post, remote: true, class: 'dropdown-item export-test'
               - else
                 li
-                  = link_to t('tasks.show.define_account_link'), new_user_account_link_path(current_user)
+                  = link_to t('.define_account_link'), new_user_account_link_path(current_user)
         - else
-          div[data-bs-toggle='tooltip' title=t('tasks.guest.disabled.tooltip') data-bs-delay=150]
+          div[data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150]
             = button_tag class: 'btn btn-outline-dark dropdown-toggle disabled', 'data-bs-toggle': 'dropdown' do
-              = t('tasks.show.export')
+              = t('.button.export')
 
-    /.button-box
-      .button-description
-        = "Derivate, translate or port this Exercise by duplicating it. The duplicate will be owned by you."
-      .wrapper
-        = link_to t('exercises.all.duplicate'), duplicate_exercise_path(@task), class: 'btn btn-light'
-
-    /.related-panel
-      = button_tag type: 'button', class: 'full-window-button related-button' do
-        => t('exercises.all.related_exercises')
-        span.fa-solid.fa-circle-notch.fa-spin.wait style="display:none;margin-right:5px;"
-        span.fa-solid.fa-caret-down.my-caret
-    /div class=("related-box with-borders") data-exercise=@task.id
-      .slide-left.inactive
-        = button_tag do
-          i.fa-solid.fa-caret-left
-      .content
-      .slide-right.inactive
-        = button_tag do
-          i.fa-solid.fa-caret-right
   .col-md-12.pb-3.mt-3
     .expandable-panel
       = button_tag type: 'button', class: 'full-window-button show-comment-button', data: {task_id: @task.id} do
-        => t('comments.show_comments')
+        => t('.button.show_comments')
         span.fa-solid.fa-circle-notch.fa-spin.wait style="display:none;margin-right:5px;"
         span.fa-solid.fa-caret-down.my-caret
       .comment-box.with-borders data-task=@task.id
@@ -609,58 +543,38 @@
                 = f.text_field :text, class: 'form-control'
                 = f.submit class: 'btn btn-light'
             - else
-              .input-group[data-bs-toggle='tooltip' title=t('tasks.guest.disabled.tooltip') data-bs-delay=150]
+              .input-group[data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150]
                 = f.label 'new_comment_label', 'New Comment', class: 'input-group-text'
                 = f.text_field :text, class: 'form-control', disabled: true
                 = f.submit class: 'btn btn-outline-dark disabled'
         .comment-body
 
-    /.history-panel
-      = button_tag type: 'button', class: 'full-window-button history-button' do
-        => t('exercises.all.history_exercises')
-        span.fa-solid.fa-circle-notch.fa-spin.wait style="display:none;margin-right:5px;"
-        span.fa-solid.fa-caret-down.my-caret
-    /div class=("history-box with-borders") data-exercise=@task.id
-      .content
-
     .actions.btn-group[role="group"]
       - if can? :edit, @task
         = link_to edit_task_path(@task),  class: 'btn btn-important' do
           i.fa-solid.fa-pen-to-square
-          =< t('tasks.show.edit')
+          =< t('common.button.edit')
       - if can? :destroy, @task
-        = link_to task_path(@task), class: 'btn btn-important', method: :delete, data: { confirm: t('sure') } do
+        = link_to task_path(@task), class: 'btn btn-important', method: :delete, data: { confirm: t('common.sure') } do
           i.fa-solid.fa-trash-can
-          =< t('tasks.show.delete')
-      /- if can? :report, @task
-        /.btn-group
-          = button_tag type: 'button', data: {toggle: "dropdown"}, aria: {haspopup: "true", expanded: "false"}, class: 'btn btn-important nav-btn-exercise dropdown-toggle dropdown-toggle split' do
-            => t('exercises.show.report')
-            span.caret
-          .dropdown-menu#share-menu
-            .dropdown-header style="padding-left: 2px;"
-              = t('exercises.show.report_message')
-              | :
-              .input-group
-                = text_field_tag 'text', nil, form: 'report', class: 'form-control'
-                = submit_tag t('exercises.show.submit'), form: 'report', class: 'btn btn-light'
+          =< t('common.button.delete')
 
       - if can? :duplicate, @task
         = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important' do
           i.fa-regular.fa-clone
-          =< t('tasks.show.duplicate')
+          =< t('common.button.duplicate')
       - else
-        div[data-bs-toggle='tooltip' title=t('tasks.guest.disabled.tooltip') data-bs-delay=150]
+        div[data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150]
           = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important disabled' do
             i.fa-regular.fa-clone
-            =< t('tasks.show.duplicate')
+            =< t('common.button.duplicate')
 
       - if current_user.present?
-        = link_to t('tasks.show.back'), tasks_path, class: 'btn btn-important'
+        = link_to t('common.button.back'), tasks_path, class: 'btn btn-important'
 
     /= form_tag report_exercise_path(@task), id: 'report'
 
     #page_end style="margin-top: 20px"
 
 
-    = render 'import_export_dialog', title: t('controllers.task.import_export.dialog.export_title')
+    = render 'import_export_dialog', title: t('.button.export_tasks')

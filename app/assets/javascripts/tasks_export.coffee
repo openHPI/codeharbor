@@ -18,7 +18,7 @@ exportTaskStart = (taskID) ->
   $messageDiv = $taskDiv.children('.import-export-message')
   $actionsDiv = $taskDiv.children('.import-export-task-actions')
 
-  $messageDiv.html(I18n.t('tasks.export_task.checking_external_app'))
+  $messageDiv.html(I18n.t('javascripts.tasks_export.checking_external_app'))
   $actionsDiv.html('<div class="spinner-border"></div>')
 
   $.ajax({

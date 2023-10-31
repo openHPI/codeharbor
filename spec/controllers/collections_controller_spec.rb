@@ -201,7 +201,7 @@ RSpec.describe CollectionsController do
     end
 
     it 'sets flash message' do
-      expect(post_request.request.flash[:notice]).to eql I18n.t('controllers.collections.share.notice')
+      expect(post_request.request.flash[:notice]).to eql I18n.t('collections.controller.share.success_notice')
     end
 
     context 'when no email is given' do
@@ -217,7 +217,7 @@ RSpec.describe CollectionsController do
       end
 
       it 'sets flash message' do
-        expect(post_request.request.flash[:alert]).to eql I18n.t('controllers.collections.share.alert')
+        expect(post_request.request.flash[:alert]).to eql I18n.t('common.errors.something_went_wrong')
       end
     end
   end

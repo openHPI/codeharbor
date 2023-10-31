@@ -3,10 +3,10 @@
     .card-body
       .col-md-10
         h3 style=("color: #777777")
-          = t('controllers.collections.empty_state.heading')
+          = t('.empty_state.heading')
         br
         p style=("color: #777777")
-          = t('controllers.collections.empty_state.hint')
+          = t('.empty_state.hint')
         br
         br
 - @collections.each do |collection|
@@ -18,7 +18,7 @@
       .row.px-3
         .col-md-9.p-0
           - if collection.tasks.empty?
-            = t('collections.noTasksAdded')
+            = t('.noTasksAdded')
           - else collection.tasks
             - collection.tasks.each do |task|
               - if task
@@ -34,6 +34,6 @@
         .col-md-3.p-0
           .btn-group.float-end aria-label="..." role="group"
             - if can? :edit, collection
-              = link_to t('collections.button.view'), collection_path(collection), class: 'btn btn-light'
-              = link_to t('collections.button.edit'), edit_collection_path(collection), class: 'btn btn-light'
+              = link_to t('common.button.view'), collection_path(collection), class: 'btn btn-light'
+              = link_to t('common.button.edit'), edit_collection_path(collection), class: 'btn btn-light'
 = render('shared/pagination', collection: @collections)

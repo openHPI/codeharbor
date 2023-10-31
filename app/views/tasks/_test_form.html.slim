@@ -1,52 +1,28 @@
 .field-element
-  = test.label :title, t('tasks.tests.title'), class: 'form-label'
+  = test.label :title, Test.human_attribute_name('title'), class: 'form-label'
   = test.text_field :title, class: 'form-control'
 .field-element
-  = test.label :testing_framework, t('tasks.tests.framework'), class: 'form-label'
-  = test.collection_select :testing_framework_id, TestingFramework.all, :id, :name_with_version, {include_blank: t('tasks.form.none')}, {class: 'form-control'}
+  = test.label :testing_framework, Test.human_attribute_name('testing_framework'), class: 'form-label'
+  = test.collection_select :testing_framework_id, TestingFramework.all, :id, :name_with_version, {include_blank: t('common.none')}, {class: 'form-control'}
 .field-element
-  = test.label :description, t('tasks.tests.description'), class: 'form-label'
+  = test.label :description, Test.human_attribute_name('description'), class: 'form-label'
   = test.text_field :description, class: 'form-control'
 .field-element
-  = test.label :internal_description, t('tasks.tests.internal_description'), class: 'form-label'
+  = test.label :internal_description, Test.human_attribute_name('internal_description'), class: 'form-label'
   = test.text_field :internal_description, class: 'form-control'
 .field-element
-  = test.label :test_type, t('tasks.tests.test_type'), class: 'form-label'
+  = test.label :test_type, Test.human_attribute_name('test_type'), class: 'form-label'
   = test.text_field :test_type, class: 'form-control'
 .field-element
-  = test.label :xml_id, t('tasks.tests.xml_id'), class: 'form-label'
+  = test.label :xml_id, Test.human_attribute_name('xml_id'), class: 'form-label'
   = test.text_field :xml_id, class: 'form-control', value: test.object.xml_id.presence || '__nested_field_for_replace_with_index__'
 .field-element
-  = test.label :validity, t('tasks.tests.validity'), class: 'form-label'
+  = test.label :validity, Test.human_attribute_name('validity'), class: 'form-label'
   = test.number_field :validity, class: 'form-control', in: 0.0..1.0, step: 0.01
 .field-element
-  = test.label :timeout, t('tasks.tests.timeout'), class: 'form-label'
+  = test.label :timeout, Test.human_attribute_name('timeout'), class: 'form-label'
   = test.number_field :timeout, class: 'form-control', min: 1, step: 1
   / = test.fields_for :file do |file|
 .files-header
-  = label_tag nil, t('tasks.files.label') + ':'
+  = label_tag nil, Task.human_attribute_name('files') + ':'
 = render 'nested_file_form', f: test, nested_form_placeholder: 't-__nested_field_for_replace_with_index__-__task_tests___nested_field_for_replace_with_index___files_index__'
-
-/ .show-table.exercise-show
-  = test.nested_fields_for :files, style: 'margin-left: 10px' do |file|
-    .field-element
-      = test.label :name, t('exercises.files.name'), class: 'form-label'
-      = file.text_field :name, class: 'form-control file-name'
-    .field-element
-      = test.label :path, t('exercises.files.path'), class: 'form-label'
-      = file.text_field :path, size: 40, class: 'form-control'
-    .field-row
-      /.field-element-10
-        = test.label :file_types_id, t('exercises.files.extension'), class: 'form-label'
-        = file.select :file_type_id, options_for_select(FileType.all.map {|ft| [ft.name_with_extension, ft.id, {'data-extension' => ft.file_extension, 'data-editor-mode' => ft.editor_mode || 'ace/mode/java' }]}, file.object.file_type_id), {}, class: 'file-type'
-      .field-element-2
-        = render 'file_config', file: file
-    .field-element
-      = render 'editor', f: test, file: file
-    = file.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
-      i.fa-solid.fa-xmark style=("color: #800000")
-      =< t('exercises.form.files.remove')
-
-  = test.add_nested_fields_link :files, ' ', class: 'btn btn-main', id: 'addTestFileButton' do
-    i.fa-solid.fa-plus style=("color: #008000")
-    =< t('tasks.form.tests.add_file')
