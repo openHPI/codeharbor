@@ -77,14 +77,11 @@
           | :
         .row-value
           = @task.internal_description
-      - if @task.meta_data.present?
-        .row.vertical
-          .col.row-label
-            = Task.human_attribute_name('meta_data')
-            | :
-          .row-value
-            pre
-              = JSON.pretty_generate @task.meta_data
+
+      = render 'dachsfisch_json_as_xml', dachsfisch_attribute: @task.meta_data, name: 'meta_data'
+      = render 'dachsfisch_json_as_xml', dachsfisch_attribute: @task.submission_restrictions, name: 'submission_restrictions'
+      = render 'dachsfisch_json_as_xml', dachsfisch_attribute: @task.external_resources, name: 'external_resources'
+      = render 'dachsfisch_json_as_xml', dachsfisch_attribute: @task.grading_hints, name: 'grading_hints'
       .row
         .col-auto.row-label
           = t('common.created_at')
@@ -269,14 +266,8 @@
                 | :
               .col.row-value
                 = test.internal_description
-            - if test.meta_data.present?
-              .row.vertical
-                .col.row-label
-                  = Task.human_attribute_name('meta_data')
-                  | :
-                .row-value
-                  pre
-                    = JSON.pretty_generate test.meta_data
+
+            = render 'dachsfisch_json_as_xml', dachsfisch_attribute: test.meta_data, name: 'meta_data'
             - if test.configuration.present?
               .row.vertical
                 .row-label
