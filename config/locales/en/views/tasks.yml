@@ -57,6 +57,10 @@ en:
         placeholder: Search for task or label
         reset: Reset
         today: Today
+    javascripts:
+      all_languages: All Languages
+      checking_external_app: Checking if the task exists on the external app.
+      select_groups: Select groups
     nested_file_form:
       add_file: Add file
       remove_file: Remove file
