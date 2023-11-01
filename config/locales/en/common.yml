@@ -37,4 +37,10 @@ en:
     locales:
       en: English
     none: None
+    notices:
+      object_created: "%{model} has successfully been created."
+      object_deleted: "%{model} has successfully been deleted."
+      object_duplicated: "%{model} has successfully been duplicated."
+      object_removed: "%{model} has successfully been removed."
+      object_updated: "%{model} has successfully been updated."
     sure: Are you sure?

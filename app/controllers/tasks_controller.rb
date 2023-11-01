@@ -19,7 +19,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   def duplicate
     new_entry = @task.clean_duplicate(current_user)
     if new_entry.save(context: :force_validations)
-      redirect_to new_entry, notice: t('.success_notice')
+      redirect_to new_entry, notice: t('common.notices.object_duplicated', model: Task.model_name.human)
     else
       redirect_to @task, alert: t('.error_alert')
     end
@@ -45,7 +45,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     @task.user = current_user
 
     if @task.save(context: :force_validations)
-      redirect_to @task, notice: t('.success_notice')
+      redirect_to @task, notice: t('common.notices.object_created', model: Task.model_name.human)
     else
       render :new
     end
@@ -55,7 +55,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     @task.assign_attributes(task_params)
     TaskService::HandleGroups.call(user: current_user, task: @task, group_tasks_params:)
     if @task.save(context: :force_validations)
-      redirect_to @task, notice: t('.success_notice')
+      redirect_to @task, notice: t('common.notices.object_updated', model: Task.model_name.human)
     else
       render :edit
     end
@@ -63,7 +63,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   def destroy
     @task.destroy!
-    redirect_to tasks_url, notice: t('.success_notice')
+    redirect_to tasks_url, notice: t('common.notices.object_deleted', model: Task.model_name.human)
   end
 
   def add_to_collection

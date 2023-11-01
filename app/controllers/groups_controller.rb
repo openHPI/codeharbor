@@ -26,7 +26,7 @@ class GroupsController < ApplicationController
     @group = Group.new(group_params)
     @group.group_memberships << GroupMembership.new(user: current_user, role: :admin)
     if @group.save
-      redirect_to @group, notice: t('.success_notice')
+      redirect_to @group, notice: t('common.notices.object_created', model: Group.model_name.human)
     else
       render :new
     end
@@ -34,7 +34,7 @@ class GroupsController < ApplicationController
 
   def update
     if @group.update(group_params)
-      redirect_to @group, notice: t('.success_notice')
+      redirect_to @group, notice: t('common.notices.object_updated', model: Group.model_name.human)
     else
       render :edit
     end
@@ -42,7 +42,7 @@ class GroupsController < ApplicationController
 
   def destroy
     @group.destroy
-    redirect_to groups_url, notice: t('.success_notice')
+    redirect_to groups_url, notice: t('common.notices.object_deleted', model: Group.model_name.human)
   end
 
   def leave
@@ -68,7 +68,7 @@ class GroupsController < ApplicationController
   def remove_task
     task = Task.find(params[:task])
     @group.tasks.delete(task)
-    redirect_to @group, notice: t('.success_notice')
+    redirect_to @group, notice: t('common.notices.object_removed', model: Task.model_name.human)
   end
 
   def grant_access

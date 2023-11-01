@@ -18,12 +18,12 @@ class AccountLinksController < ApplicationController
 
   def edit; end
 
-  def create
+  def create # rubocop:disable Metrics/AbcSize
     @account_link = AccountLink.new(account_link_params)
     @account_link.user = @user
     respond_to do |format|
       if @account_link.save
-        format.html { redirect_to @user, notice: t('.success_notice') }
+        format.html { redirect_to @user, notice: t('common.notices.object_created', model: AccountLink.model_name.human) }
         format.json { render :show, status: :created, location: @account_link }
       else
         format.html { render :new }
@@ -35,7 +35,7 @@ class AccountLinksController < ApplicationController
   def update
     respond_to do |format|
       if @account_link.update(account_link_params)
-        format.html { redirect_to @account_link.user, notice: t('.success_notice') }
+        format.html { redirect_to @account_link.user, notice: t('common.notices.object_updated', model: AccountLink.model_name.human) }
         format.json { render :show, status: :ok, location: @account_link }
       else
         format.html { render :edit }
@@ -47,7 +47,7 @@ class AccountLinksController < ApplicationController
   def destroy
     @account_link.destroy
     respond_to do |format|
-      format.html { redirect_to @account_link.user, notice: t('.success_notice') }
+      format.html { redirect_to @account_link.user, notice: t('common.notices.object_deleted', model: AccountLink.model_name.human) }
       format.json { head :no_content }
     end
   end
