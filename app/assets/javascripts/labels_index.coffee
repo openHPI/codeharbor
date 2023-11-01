@@ -127,7 +127,7 @@ class LabelsTable
     @reload_table();
 
   delete_selected_labels: () =>
-    confirm_msg = I18n.t('javascripts.labels_index.delete_confirmation', {selected_labels_count: @selected_label_ids.length});
+    confirm_msg = I18n.t('labels.javascripts.delete_confirmation', {selected_labels_count: @selected_label_ids.length});
 
     if (confirm(confirm_msg))
       requests = []
@@ -143,7 +143,7 @@ class LabelsTable
       return;
 
     selected_labels_count = @selected_label_ids.length;
-    confirm_msg = I18n.t('javascripts.labels_index.merge_confirmation', {selected_labels_count: @selected_label_ids.length, new_merged_name: new_label_name})
+    confirm_msg = I18n.t('labels.javascripts.merge_confirmation', {selected_labels_count: @selected_label_ids.length, new_merged_name: new_label_name})
 
     if (confirm(confirm_msg))
       $.ajax({
@@ -162,7 +162,7 @@ class LabelsTable
       return;
     new_color = matched_color[1];
 
-    confirm_msg = I18n.t('javascripts.labels_index.change_color_confirmation', {selected_labels_count: @selected_label_ids.length});
+    confirm_msg = I18n.t('labels.javascripts.change_color_confirmation', {selected_labels_count: @selected_label_ids.length});
 
     if (confirm(confirm_msg))
       requests = []
