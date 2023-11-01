@@ -24,7 +24,7 @@ class CollectionsController < ApplicationController
 
   def create
     if @collection.save
-      redirect_to collections_path, notice: t('.controller.create.success_notice')
+      redirect_to collections_path, notice: t('.success_notice')
     else
       render :new
     end
@@ -32,7 +32,7 @@ class CollectionsController < ApplicationController
 
   def update
     if @collection.update(collection_params)
-      redirect_to collections_path, notice: t('.controller.update.success_notice')
+      redirect_to collections_path, notice: t('.success_notice')
     else
       render :edit
     end
@@ -40,17 +40,17 @@ class CollectionsController < ApplicationController
 
   def remove_task
     if @collection.remove_task(params[:task])
-      redirect_to @collection, notice: t('.controller.remove_task.success_notice')
+      redirect_to @collection, notice: t('.success_notice')
     else
-      redirect_to @collection, alert: t('.controller.remove_task.cannot_remove_alert')
+      redirect_to @collection, alert: t('.cannot_remove_alert')
     end
   end
 
   def remove_all
     if @collection.remove_all
-      redirect_to @collection, notice: t('.controller.remove_all.success_notice')
+      redirect_to @collection, notice: t('.success_notice')
     else
-      redirect_to @collection, alert: t('.controller.remove_all.cannot_remove_alert')
+      redirect_to @collection, alert: t('.cannot_remove_alert')
     end
   end
 
@@ -59,12 +59,12 @@ class CollectionsController < ApplicationController
     errors = push_exercises
 
     if errors.empty?
-      redirect_to @collection, notice: t('.controller.push_collection.push_external_notice', account_link: account_link.name)
+      redirect_to @collection, notice: t('.push_external_notice', account_link: account_link.name)
     else
       errors.each do |error|
         logger.debug(error)
       end
-      redirect_to @collection, alert: t('.controller.push_collection.not_working', account_link: account_link.name)
+      redirect_to @collection, alert: t('.not_working', account_link: account_link.name)
     end
   end
 
@@ -76,7 +76,7 @@ class CollectionsController < ApplicationController
 
   def share
     if share_message.save
-      redirect_to collection_path(@collection), notice: t('.controller.share.success_notice')
+      redirect_to collection_path(@collection), notice: t('.success_notice')
     else
       redirect_to collection_path(@collection), alert: t('common.errors.something_went_wrong')
     end
@@ -94,7 +94,7 @@ class CollectionsController < ApplicationController
 
     @collection.users << current_user
     if @collection.save
-      redirect_to @collection, notice: t('.controller.save_shared.success_notice')
+      redirect_to @collection, notice: t('.success_notice')
     else
       redirect_to users_messages_path, alert: t('common.errors.something_went_wrong')
     end
@@ -103,10 +103,10 @@ class CollectionsController < ApplicationController
   def leave
     if @collection.users.count == 1
       @collection.destroy
-      redirect_to collections_path, notice: t('.controller.leave.deletion_notice')
+      redirect_to collections_path, notice: t('.deletion_notice')
     else
       @collection.users.delete(current_user)
-      redirect_to collections_path, notice: t('.controller.leave.left_successfully')
+      redirect_to collections_path, notice: t('.left_successfully')
     end
   end
 
@@ -119,7 +119,7 @@ class CollectionsController < ApplicationController
 
   def share_message
     user = User.find_by(email: params[:user])
-    text = t('.controller.share_message.text', user: current_user.name, collection: @collection.title)
+    text = t('collections.share_message.text', user: current_user.name, collection: @collection.title)
     Message.new(sender: current_user, recipient: user, param_type: 'collection', param_id: @collection.id, text:)
   end
 

@@ -1,9 +1,8 @@
 ---
 en:
   ratings:
-    controller:
-      handle_own_rating:
-        error: You cannot rate your own task
-      handle_rating:
-        rating_created: Rating was successfully created.
-        rating_updated: Rating was successfully updated.
+    handle_own_rating:
+      error: You cannot rate your own task
+    handle_rating:
+      rating_created: Rating was successfully created.
+      rating_updated: Rating was successfully updated.

@@ -19,9 +19,9 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   def duplicate
     new_entry = @task.clean_duplicate(current_user)
     if new_entry.save(context: :force_validations)
-      redirect_to new_entry, notice: t('.controller.duplicate.success_notice')
+      redirect_to new_entry, notice: t('.success_notice')
     else
-      redirect_to @task, alert: t('.controller.duplicate.error_alert')
+      redirect_to @task, alert: t('.error_alert')
     end
   end
 
@@ -45,7 +45,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     @task.user = current_user
 
     if @task.save(context: :force_validations)
-      redirect_to @task, notice: t('.controller.create.success_notice')
+      redirect_to @task, notice: t('.success_notice')
     else
       render :new
     end
@@ -55,7 +55,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     @task.assign_attributes(task_params)
     TaskService::HandleGroups.call(user: current_user, task: @task, group_tasks_params:)
     if @task.save(context: :force_validations)
-      redirect_to @task, notice: t('.controller.update.success_notice')
+      redirect_to @task, notice: t('.success_notice')
     else
       render :edit
     end
@@ -63,15 +63,15 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   def destroy
     @task.destroy!
-    redirect_to tasks_url, notice: t('.controller.destroy.success_notice')
+    redirect_to tasks_url, notice: t('.success_notice')
   end
 
   def add_to_collection
     collection = Collection.find(params[:collection])
     if collection.add_task(@task)
-      redirect_to @task, notice: t('.controller.add_to_collection.success_notice')
+      redirect_to @task, notice: t('.success_notice')
     else
-      redirect_to @task, alert: t('.controller.add_to_collection.error')
+      redirect_to @task, alert: t('.error')
     end
   end
 
@@ -83,7 +83,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   def import_start
     zip_file = params[:zip_file]
     unless zip_file.is_a?(ActionDispatch::Http::UploadedFile)
-      return render json: {status: 'failure', message: t('.controller.import_start.choose_file_error')}
+      return render json: {status: 'failure', message: t('.choose_file_error')}
     end
 
     @data = ProformaService::CacheImportFile.call(user: current_user, zip_file:)
@@ -100,13 +100,13 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     task_title = proforma_task.title
     render json: {
       status: 'success',
-      message: t('.controller.import_confirm.success', title: task_title),
+      message: t('.success', title: task_title),
       actions: render_to_string(partial: 'import_actions', locals: {task: proforma_task, imported: true}),
     }
   rescue ProformaXML::ProformaError, ActiveRecord::RecordInvalid => e
     render json: {
       status: 'failure',
-      message: t('.controller.import_confirm.error', title: task_title, error: e.message),
+      message: t('.error', title: task_title, error: e.message),
       actions: '',
     }
   end
@@ -128,12 +128,12 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
 
     ProformaService::Import.call(zip: tempfile, user:)
 
-    render json: t('.controller.import_confirm.success'), status: :created
+    render json: t('.success'), status: :created
   rescue ProformaXML::ProformaError
-    render json: t('.controller.import_external.invalid'), status: :bad_request
+    render json: t('.invalid'), status: :bad_request
   rescue StandardError => e
     Sentry.capture_exception(e)
-    render json: t('.controller.import_external.internal_error'), status: :internal_server_error
+    render json: t('.internal_error'), status: :internal_server_error
   end
 
   def export_external_start
@@ -169,13 +169,13 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
 
     if error.nil?
       render json: {
-        message: t('.controller.export_external_confirm.success', title: task_title),
+        message: t('.success', title: task_title),
         status: 'success', actions: render_export_actions(task: export_task, exported: true)
       }
     else
       export_task.destroy if push_type == 'create_new'
       render json: {
-        message: t('.controller.export_external_confirm.error', title: task_title, error:),
+        message: t('.error', title: task_title, error:),
         status: 'fail', actions: render_export_actions(task: @task, exported: false, error:)
       }
     end

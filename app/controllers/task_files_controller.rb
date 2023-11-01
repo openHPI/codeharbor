@@ -12,7 +12,7 @@ class TaskFilesController < ApplicationController
   end
 
   def extract_text_data
-    return render json: {error: t('.controller.extract_text_data.no_text')} unless @task_file.text_data?
+    return render json: {error: t('.no_text')} unless @task_file.text_data?
 
     render json: {
       text_data: @task_file.extract_text_data,

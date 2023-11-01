@@ -1,8 +1,7 @@
 ---
 en:
   comments:
-    controller:
-      create:
-        error: An error ocurred while creating your comment.
-      update:
-        error: An error ocurred while updating your comment.
+    create:
+      error: An error ocurred while creating your comment.
+    update:
+      error: An error ocurred while updating your comment.

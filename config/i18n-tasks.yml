@@ -31,14 +31,11 @@ data:
   write:
     - ['{devise, simple_form}.*', 'config/locales/%{locale}/external/\1.yml']
     - ['common.*', 'config/locales/%{locale}/common.yml']
-    - ['javascripts.*', 'config/locales/%{locale}/javascripts.yml']
     - ['activerecord.*', 'config/locales/%{locale}/models.yml']
     - ['{:}.model.*', 'config/locales/%{locale}/models.yml']
-    - ['{:}.controller.*', 'config/locales/%{locale}/controllers/\1.yml']
     - ['{:}.{*_service}.*', 'config/locales/%{locale}/controllers/\1.yml']
-    - ['{:}.*', 'config/locales/%{locale}/views/\1.yml']
     ## Catch-all default:
-    - config/locales/%{locale}/unsorted.yml
+    # - config/locales/%{locale}/unsorted.yml
 
   # External locale data (e.g. gems).
   # This data is not considered unused and is never written to.
@@ -94,8 +91,6 @@ search:
     - app/assets/videos
     - app/assets/builds
     - spec/fixtures
-    # excluding controllers because i18n_tasks relative key matching for controllers is broken and reports missing key false positives
-    - app/controllers
 
   ## Alternatively, the only files or `File.fnmatch patterns` to search in `paths`:
   ## If specified, this settings takes priority over `exclude`, but `exclude` still applies.
@@ -139,7 +134,6 @@ search:
 ignore_unused:
   - 'activerecord.{attributes,errors,models}.*'
   - '{devise,simple_form}.*'
-  - '{:}.controller.*'
 
 ## Exclude these keys from the `i18n_tasks eq-base' report:
 # ignore_eq_base:

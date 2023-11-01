@@ -21,7 +21,7 @@ class CommentsController < ApplicationController
     if @comment.save
       index
     else
-      flash.now[:alert] = t('.controller.create.error')
+      flash.now[:alert] = t('.error')
       head :ok
     end
   end
@@ -30,7 +30,7 @@ class CommentsController < ApplicationController
     if @comment.update(comment_params)
       index
     else
-      flash.now[:alert] = t('.controller.update.error')
+      flash.now[:alert] = t('.error')
       head :ok
     end
   end
