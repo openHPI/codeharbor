@@ -31,7 +31,7 @@
               = link_to 'Show', group, class: 'btn btn-light'
               - if can? :edit, group
                 = link_to 'Edit', edit_group_path(group), class: 'btn btn-light'
-                = link_to 'Destroy', group, data: {confirm: 'Are you sure?'}, method: :delete, class: 'btn btn-light'
+                = link_to 'Destroy', group, data: {confirm: t('common.sure')}, method: :delete, class: 'btn btn-light'
             - elsif group.applicants.include?(current_user)
               = 'Wait to get accepted'
             - else

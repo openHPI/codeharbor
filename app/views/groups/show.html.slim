@@ -78,9 +78,9 @@ br
     = link_to edit_group_path(@group), class: 'btn btn-important' do
       i.fa-solid.fa-pen-to-square
       =< t('common.button.edit')
-    = link_to group_path(@group), class: 'btn btn-important', method: :delete, data: {confirm: 'Are you sure?'} do
+    = link_to group_path(@group), class: 'btn btn-important', method: :delete, data: {confirm: t('common.sure')} do
       i.fa-solid.fa-trash-can style=("color:#800000")
       =< t('.button.delete_group')
   - if can? :leave, @group
-    = link_to t('.button.leave'), leave_group_path(@group), method: :post, class: "leave-btn btn btn-important #{@group.last_admin?(current_user) ? 'disabled' : ''}", data: {confirm: 'Are you sure?'}
+    = link_to t('.button.leave'), leave_group_path(@group), method: :post, class: "leave-btn btn btn-important #{@group.last_admin?(current_user) ? 'disabled' : ''}", data: {confirm: t('common.sure')}
   = link_to t('common.button.back'), :back, class: 'btn btn-important'
