@@ -560,7 +560,7 @@ RSpec.describe TasksController do
 
       it 'shows an error message' do
         post_duplicate
-        expect(flash[:alert]).to eq(I18n.t('tasks.controller.duplicate.error_alert'))
+        expect(flash[:alert]).to eq(I18n.t('tasks.duplicate.error_alert'))
       end
     end
   end

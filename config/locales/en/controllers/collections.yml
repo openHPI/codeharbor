@@ -1,26 +1,25 @@
 ---
 en:
   collections:
-    controller:
-      create:
-        success_notice: Collection was successfully created.
-      leave:
-        deletion_notice: Collection was successfully deleted.
-        left_successfully: You successfully left the collection.
-      push_collection:
-        not_working: Your account link %{account_link} does not seem to be working.
-        push_external_notice: Exercise pushed to %{account_link}
-      remove_all:
-        cannot_remove_alert: You cannot remove all tasks
-        success_notice: All Tasks were successfully removed
-      remove_task:
-        cannot_remove_alert: You cannot remove this task.
-        success_notice: Task was successfully removed.
-      save_shared:
-        success_notice: You can now collaborate to collection.
-      share:
-        success_notice: Your collection has been sent.
-      share_message:
-        text: "%{user} sent you their Collection %{collection}."
-      update:
-        success_notice: Collection was successfully updated.
+    create:
+      success_notice: Collection was successfully created.
+    leave:
+      deletion_notice: Collection was successfully deleted.
+      left_successfully: You successfully left the collection.
+    push_collection:
+      not_working: Your account link %{account_link} does not seem to be working.
+      push_external_notice: Exercise pushed to %{account_link}
+    remove_all:
+      cannot_remove_alert: You cannot remove all tasks
+      success_notice: All Tasks were successfully removed
+    remove_task:
+      cannot_remove_alert: You cannot remove this task.
+      success_notice: Task was successfully removed.
+    save_shared:
+      success_notice: You can now collaborate to collection.
+    share:
+      success_notice: Your collection has been sent.
+    share_message:
+      text: "%{user} sent you their Collection %{collection}."
+    update:
+      success_notice: Collection was successfully updated.

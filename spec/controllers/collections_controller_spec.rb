@@ -201,7 +201,7 @@ RSpec.describe CollectionsController do
     end
 
     it 'sets flash message' do
-      expect(post_request.request.flash[:notice]).to eql I18n.t('collections.controller.share.success_notice')
+      expect(post_request.request.flash[:notice]).to eql I18n.t('collections.share.success_notice')
     end
 
     context 'when no email is given' do
