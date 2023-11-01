@@ -10,18 +10,18 @@ RSpec.describe I18n do
 
   it 'does not have missing keys' do
     expect(missing_keys).to be_empty,
-      "Missing #{missing_keys.leaves.count} i18n keys, " \
-      "run `i18n_tasks missing' to show them. " \
-      'If this is a false positive you can add exceptions for translation keys ' \
-      "in config/i18n_tasks.yml under 'ignore'. See https://github.com/glebm/i18n-tasks#configuration  " \
+      "Missing #{missing_keys.leaves.count} I18n keys, " \
+      'run `i18n-tasks missing` to show them. ' \
+      'If this is a false positive, you can add exceptions for translation keys ' \
+      "in `config/i18n_tasks.yml` under 'ignore'. See https://github.com/glebm/i18n-tasks#configuration  " \
       'for more details.'
   end
 
   it 'does not have unused keys' do
     expect(unused_keys).to be_empty,
-      "#{unused_keys.leaves.count} unused i18n keys, run `i18n_tasks unused' to show them. " \
-      'If this is a false positive you can add exceptions for translation keys ' \
-      "in config/i18n_tasks.yml under 'ignore_unused'. See https://github.com/glebm/i18n-tasks#configuration  " \
+      "#{unused_keys.leaves.count} unused I18n keys, run `i18n-tasks unused` to show them. " \
+      'If this is a false positive, you can add exceptions for translation keys ' \
+      "in `config/i18n_tasks.yml` under 'ignore_unused'. See https://github.com/glebm/i18n-tasks#configuration  " \
       'for more details.'
   end
 
@@ -29,13 +29,13 @@ RSpec.describe I18n do
     non_normalized = i18n.non_normalized_paths
     error_message = "The following files need to be normalized:\n" \
                     "#{non_normalized.map {|path| "  #{path}" }.join("\n")}\n" \
-                    "Please run `i18n_tasks normalize' to fix"
+                    'Please run `i18n-tasks normalize` to fix these.'
     expect(non_normalized).to be_empty, error_message
   end
 
   it 'does not have inconsistent interpolations' do
     error_message = "#{inconsistent_interpolations.leaves.count} i18n keys have inconsistent interpolations.\n" \
-                    "Run `i18n_tasks check-consistent-interpolations' to show them"
+                    'Run `i18n-tasks check-consistent-interpolations` to show them.'
     expect(inconsistent_interpolations).to be_empty, error_message
   end
 end
