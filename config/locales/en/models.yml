@@ -38,13 +38,16 @@ en:
       task:
         access_level: Visibility
         description: Description
+        external_resources: External Resources
         files: Files
+        grading_hints: Grading Hints
         internal_description: Internal description
         language: Language
         license: License
         meta_data: Metadata
         parent_uuid: Parent UUID
         programming_language: Programming language
+        submission_restrictions: Submission Restrictions
         tests: Tests
         title: Title
         uuid: UUID
