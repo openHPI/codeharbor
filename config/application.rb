@@ -38,6 +38,8 @@ module CodeHarbor
 
     # config.action_cable.mount_path = "#{ENV.fetch('RAILS_RELATIVE_URL_ROOT', '')}/cable"
 
+    config.action_mailer.preview_paths << Rails.root.join('spec/mailers/previews')
+
     # Specify default options for Rails generators
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid
