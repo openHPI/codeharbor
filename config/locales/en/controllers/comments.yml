@@ -2,6 +2,6 @@
 en:
   comments:
     create:
-      error: An error ocurred while creating your comment.
+      error: An error occurred while creating your comment.
     update:
-      error: An error ocurred while updating your comment.
+      error: An error occurred while updating your comment.
