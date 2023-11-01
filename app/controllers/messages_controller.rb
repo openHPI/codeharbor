@@ -45,7 +45,8 @@ class MessagesController < ApplicationController
     @message.mark_as_deleted(current_user)
 
     if @message.save
-      redirect_to user_messages_path(@user, option: params[:option]), notice: t('.success_notice')
+      redirect_to user_messages_path(@user, option: params[:option]),
+        notice: t('common.notices.object_deleted', model: Message.model_name.human)
     else
       redirect_to user_messages_path(@user, option: params[:option]), alert: t('.error')
     end

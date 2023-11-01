@@ -5,4 +5,3 @@ en:
       sent_successfully: Message was successfully sent.
     destroy:
       error: An error occured while deleting the message.
-      success_notice: Message was successfully deleted.

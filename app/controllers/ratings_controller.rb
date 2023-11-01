@@ -38,7 +38,12 @@ class RatingsController < ApplicationController
     rating = @task.ratings.find_or_initialize_by(user: current_user)
     rating.rating = rating_params[:rating]
 
-    notice = rating.persisted? ? t('ratings.handle_rating.rating_updated') : t('ratings.handle_rating.rating_created')
+    notice = if rating.persisted?
+               t('common.notices.object_updated',
+                 model: Rating.model_name.human)
+             else
+               t('common.notices.object_created', model: Rating.model_name.human)
+             end
 
     [rating, notice]
   end

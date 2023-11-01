@@ -24,7 +24,7 @@ class CollectionsController < ApplicationController
 
   def create
     if @collection.save
-      redirect_to collections_path, notice: t('.success_notice')
+      redirect_to collections_path, notice: t('common.notices.object_created', model: Collection.model_name.human)
     else
       render :new
     end
@@ -32,7 +32,7 @@ class CollectionsController < ApplicationController
 
   def update
     if @collection.update(collection_params)
-      redirect_to collections_path, notice: t('.success_notice')
+      redirect_to collections_path, notice: t('common.notices.object_updated', model: Collection.model_name.human)
     else
       render :edit
     end
@@ -40,7 +40,7 @@ class CollectionsController < ApplicationController
 
   def remove_task
     if @collection.remove_task(params[:task])
-      redirect_to @collection, notice: t('.success_notice')
+      redirect_to @collection, notice: t('common.notices.object_removed', model: Task.model_name.human)
     else
       redirect_to @collection, alert: t('.cannot_remove_alert')
     end
@@ -103,7 +103,7 @@ class CollectionsController < ApplicationController
   def leave
     if @collection.users.count == 1
       @collection.destroy
-      redirect_to collections_path, notice: t('.deletion_notice')
+      redirect_to collections_path, notice: t('common.notices.object_deleted', model: Collection.model_name.human)
     else
       @collection.users.delete(current_user)
       redirect_to collections_path, notice: t('.left_successfully')

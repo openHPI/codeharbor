@@ -30,7 +30,7 @@ RSpec.describe RatingsController do
       end
 
       it 'sets flash message' do
-        expect { post_request }.to change { flash[:notice] }.to(I18n.t('ratings.handle_rating.rating_created'))
+        expect { post_request }.to change { flash[:notice] }.to(I18n.t('common.notices.object_created', model: Rating.model_name.human))
       end
 
       it 'responds with overall_rating and user_rating' do
@@ -50,7 +50,7 @@ RSpec.describe RatingsController do
         end
 
         it 'sets flash message' do
-          expect { post_request }.to change { flash[:notice] }.to(I18n.t('ratings.handle_rating.rating_updated'))
+          expect { post_request }.to change { flash[:notice] }.to(I18n.t('common.notices.object_updated', model: Rating.model_name.human))
         end
 
         it 'responds with overall_rating and user_rating' do
