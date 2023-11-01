@@ -81,12 +81,73 @@ task1 = Task.create!(
   programming_language: pl_java,
   user: user1,
   meta_data: {
-    CodeOcean: {
-      files: {
-        'CO-42': {
-          role: 'main_file',
+    '@@order': ['meta-data'],
+    'meta-data': {
+      '@xmlns': {
+        CodeOcean: 'codeocean.openhpi.de',
+      },
+      '@@order': ['CodeOcean:files'],
+      'CodeOcean:files': {
+        '@@order': ['CodeOcean:CO-42'],
+        'CodeOcean:CO-42': {
+          '@@order': ['CodeOcean:role'],
+          'CodeOcean:role': {
+            '$1': 'main_file',
+            '@@order': ['$1'],
+          },
         },
       },
+    },
+  },
+  submission_restrictions: {
+    '@@order' => ['submission-restrictions'],
+    'submission-restrictions' => {
+      '@@order' => ['file-restriction'],
+      '@max-size' => '1400',
+      'file-restriction' => {
+        '$1' => 'HelloWorld.java',
+        '@@order' => ['$1'],
+      },
+    },
+  },
+  grading_hints: {
+    '@@order' => ['grading-hints'],
+    'grading-hints' => {
+      'root' => {
+        '@@order' => ['test-ref'],
+        'test-ref' => [{'@ref' => '2', '@weight' => '1'}],
+        '@function' => 'sum',
+      },
+      '@@order' => ['root'],
+    },
+  },
+  external_resources: {
+    '@@order' => %w[external-resources],
+    'external-resources' => {
+      '@@order' => %w[external-resource],
+      '@xmlns' => {'foo' => 'urn:custom:foobar'},
+      'external-resource' => [
+        {
+          '@@order' => %w[internal-description foo:bar],
+          '@id' => 'external-resource 1',
+          '@reference' => '1',
+          '@used-by-grader' => 'true',
+          '@visible' => 'delayed',
+          '@usage-by-lms' => 'download',
+          'internal-description' => {
+            '@@order' => %w[$1],
+            '$1' => 'internal-desc',
+          },
+          'foo:bar' => {
+            '@@order' => %w[foo:content],
+            '@version' => '4',
+            'foo:content' => {
+              '@@order' => %w[$1],
+              '$1' => 'foobar',
+            },
+          },
+        },
+      ],
     },
   }
 )
@@ -211,10 +272,30 @@ task2 = Task.create!(
   programming_language: pl_python,
   user: user1,
   meta_data: {
-    CodeOcean: {
-      files: {
-        'CO-1337': {
-          role: 'main_file',
+    '@@order': [
+      'meta-data',
+    ],
+    'meta-data': {
+      '@xmlns': {
+        CodeOcean: 'codeocean.openhpi.de',
+      },
+      '@@order': [
+        'CodeOcean:files',
+      ],
+      'CodeOcean:files': {
+        '@@order': [
+          'CodeOcean:CO-42',
+        ],
+        'CodeOcean:CO-42': {
+          '@@order': [
+            'CodeOcean:role',
+          ],
+          'CodeOcean:role': {
+            '$1': 'main_file',
+            '@@order': [
+              '$1',
+            ],
+          },
         },
       },
     },
