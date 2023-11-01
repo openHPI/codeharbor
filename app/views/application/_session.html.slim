@@ -6,10 +6,10 @@
         span.menu-number
           = current_user.unread_messages_count
     ul.dropdown-menu aria-labelledby='navbarDropdown'
-      li = link_to 'Profile', user_path(current_user), class: 'dropdown-item'
+      li = link_to t('.profile'), user_path(current_user), class: 'dropdown-item'
       li
         = link_to user_messages_path(current_user), class: 'dropdown-item' do
-          => "Messages"
+          => Message.model_name.human(count: :many)
           - if current_user.unread_messages_count != '0'
             span.menu-number
               = current_user.unread_messages_count
