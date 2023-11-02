@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ContributionsController < ApplicationController
+  load_and_authorize_resource class: TaskContribution, except: %i[create new]
   def approve_changes
     contrib = TaskContribution.find(params[:contribution_id])
     @task = Task.find(params[:task_id])
@@ -14,7 +15,8 @@ class ContributionsController < ApplicationController
   def discard_changes
     contrib = TaskContribution.find(params[:contribution_id])
     if contrib.close
-      redirect_to contrib.modifying_task, notice: t('task_contributions.discard_changes.success')
+      path = contrib.modifying_task.user.id == current_user.id ? contrib.modifying_task : Task
+      redirect_to path, notice: t('task_contributions.discard_changes.success')
     else
       redirect_to contrib.modifying_task, alert: t('task_contributions.discard_changes.error')
     end
@@ -25,6 +27,7 @@ class ContributionsController < ApplicationController
     @task.parent_id = params[:task_id]
     task_contrib = TaskContribution.new
     @task.task_contribution = task_contrib
+    authorize! :new, task_contrib
     render 'new'
   end
 
@@ -34,6 +37,7 @@ class ContributionsController < ApplicationController
     @task = Task.new(contrib_task_params)
     contrib = TaskContribution.new(status: :pending)
     @task.task_contribution = contrib
+    authorize! :create, contrib
     if @task.save(context: :force_validations)
       redirect_to @task, notice: t('task_contributions.new.success')
     else

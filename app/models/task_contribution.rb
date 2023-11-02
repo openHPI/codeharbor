@@ -11,6 +11,6 @@ class TaskContribution < ApplicationRecord
   end
 
   def base_task
-    task.parent
+    modifying_task.parent
   end
 end
