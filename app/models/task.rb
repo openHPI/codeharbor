@@ -219,6 +219,11 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
     title
   end
 
+  def contributions
+    Task.joins(:task_contribution)
+        .where(parent_uuid: uuid, task_contribution: {status: :pending})
+  end
+
   private
 
   def duplicate_tests
@@ -246,10 +251,7 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def unique_pending_contribution
     if contribution?
-      other_existing_contrib = Task.joins(:task_contribution)
-        .where(parent_uuid:, user:, task_contribution: {status: :pending}) # TODO: Singular vs Plural?
-        .where.not(id:)
-        .any?
+      other_existing_contrib = parent&.contributions&.where(user:)&.any?
       errors.add(:task_contribution, :duplicated) if other_existing_contrib
     end
   end
