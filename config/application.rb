@@ -18,7 +18,7 @@ module CodeHarbor
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
-    config.autoload_lib(ignore: %w[assets tasks templates middleware omni_auth])
+    config.autoload_lib(ignore: %w[assets tasks templates middleware omni_auth i18n_tasks])
 
     # Configuration for the application, engines, and railties goes here.
     #
