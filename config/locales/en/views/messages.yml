@@ -14,6 +14,7 @@ en:
         view: View
       from: From
       no_messages: You do not have any messages.
+      reply: Reply
       sent: Sent
       to: To
       unknown: unknown

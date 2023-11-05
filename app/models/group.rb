@@ -76,6 +76,10 @@ class Group < ApplicationRecord
     group_membership_for(user)&.role_admin? && admins.size == 1
   end
 
+  def to_s
+    name
+  end
+
   private
 
   def admin_in_group

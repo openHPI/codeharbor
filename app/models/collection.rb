@@ -23,4 +23,8 @@ class Collection < ApplicationRecord
       tasks.delete(task)
     end
   end
+
+  def to_s
+    title
+  end
 end

@@ -55,6 +55,7 @@ class Ability
     can :access, :rails_admin
 
     can :manage, :all
+    cannot :index, User # There is no index page for users
   end
 
   def account_link_abilities(user)

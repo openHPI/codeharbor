@@ -14,4 +14,12 @@ class AccountLink < ApplicationRecord
   def usable_by?(user)
     self.user == user || user.in?(shared_users)
   end
+
+  def self.parent_resource
+    User
+  end
+
+  def to_s
+    name
+  end
 end

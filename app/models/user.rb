@@ -136,6 +136,10 @@ class User < ApplicationRecord
     }
   end
 
+  def to_s
+    name
+  end
+
   private
 
   def avatar_format

@@ -12,6 +12,7 @@ en:
       errorMessage: prohibited this collection from being saved.
     index:
       new_collection: New Collection
+      view_shared: View Shared Collection
     new:
       header: New Collection
     show:
