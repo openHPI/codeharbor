@@ -16,6 +16,10 @@ class Message < ApplicationRecord
     self.recipient_status = 'd' if recipient == user
   end
 
+  def self.parent_resource
+    User
+  end
+
   private
 
   def destroy_deleted_message

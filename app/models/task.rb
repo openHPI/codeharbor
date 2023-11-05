@@ -194,6 +194,10 @@ class Task < ApplicationRecord
     ISO_639.find(language.split('-').first).alpha2
   end
 
+  def to_s
+    title
+  end
+
   private
 
   def duplicate_tests

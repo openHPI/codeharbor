@@ -1,0 +1,36 @@
+---
+en:
+  breadcrumbs:
+    confirmations:
+      create: Confirm Account
+      new: Confirm Account
+      show: Confirm Account
+    home:
+      about: About
+      account_link_documentation: About Account Links
+      index: Cover Page
+    passwords:
+      create: Forgot Password
+      edit: Change Password
+      new: Forgot Password
+      update: Change Password
+    registrations:
+      create: Sign Up
+      edit: Update Profile
+      new: Sign Up
+      update: Update Profile
+    sessions:
+      create: Sign In
+      new: Sign In
+    unlocks:
+      create: Unlock Account
+      new: Unlock Account
+      show: Unlock Account
+  shared:
+    create: Create
+    delete: Delete
+    edit: Edit
+    index: Index
+    new: New
+    show: Show
+    update: Update
