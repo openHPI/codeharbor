@@ -29,8 +29,9 @@ en:
     created_by: Created by
     edit_colon: 'Edit:'
     errors:
-      error_with_space: 'error '
+      changes_not_saved: 'Your changes could not be saved due to errors:'
       generic: An error occurred.
+      model_not_saved: "%{model} could not be saved due to errors:"
       not_authorized: You are not authorized for this action.
       not_found_error: You are not able to access this object or it doesn't exist
       something_went_wrong: Something went wrong

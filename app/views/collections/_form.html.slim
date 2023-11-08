@@ -1,14 +1,6 @@
 = form_for(@collection) do |f|
   .mt-5
-    - if @collection.errors.any?
-      #error_explanation
-        h2
-          = pluralize(@collection.errors.count, t('common.errors.error_with_space'))
-          = t('.errorMessage')
-        ul
-          - @collection.errors.full_messages.each do |message|
-            li
-              = message
+    = render('shared/form_errors', object: @collection, model: Collection, title: t('common.errors.model_not_saved'))
     .field-element.form-group
       = f.label :title, Collection.human_attribute_name('title'), class: 'form-label'
       = f.text_field :title, class: 'form-control'

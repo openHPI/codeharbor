@@ -4,6 +4,7 @@ en:
     confirmations:
       new:
         resend_confirmation: Resend confirmation instructions
+        validation_error: 'Could not send instructions due to errors:'
     passwords:
       edit:
         change_my_pwd: Change my password
@@ -11,6 +12,7 @@ en:
       new:
         forgot_pwd: Forgot your password?
         send_reset_pwd: Send me reset password instructions
+        validation_error: 'Could not send email due to errors:'
     registrations:
       avatar_form:
         remove_avatar: Remove Avatar
@@ -34,10 +36,6 @@ en:
           label: Password
           placeholder: Password
     shared:
-      error_messages:
-        not_saved:
-          one: '1 error prohibited this %{resource} from being saved:'
-          other: "%{count} errors prohibited this %{resource} from being saved:"
       links:
         forgot_pwd: Forgot your password?
         no_confirmation: Didn't receive confirmation instructions?
@@ -70,3 +68,4 @@ en:
     unlocks:
       new:
         resend_unlock: Resend unlock instructions
+        validation_error: 'Could not send instructions due to errors:'

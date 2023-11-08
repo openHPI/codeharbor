@@ -9,7 +9,6 @@ en:
     form:
       button:
         save: Save Collection
-      errorMessage: prohibited this collection from being saved.
     index:
       new_collection: New Collection
     new:

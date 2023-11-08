@@ -4,7 +4,7 @@
     =< t('.change_pwd')
 
 = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f|
-  = bootstrap_devise_error_messages!
+  = render('shared/form_errors', object: resource, model: resource.class, title: t('common.errors.changes_not_saved'))
   = f.hidden_field :reset_password_token
 
   .form-group.field-element

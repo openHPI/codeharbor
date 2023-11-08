@@ -1,29 +1,23 @@
 = form_for @group do |f|
-  - if @group.errors.any?
-    #error_explanation
-      h2
-        = pluralize(@group.errors.count, t('common.errors.error_with_space'))
-        = t('.errorMessage')
-      ul
-        - @group.errors.full_messages.each do |message|
-          li = message
+  .mt-5
+    = render('shared/form_errors', object: @group, model: Group, title: t('common.errors.model_not_saved'))
 
-  .field-element.form-group.mt-5
-    = f.label :name, 'Title', class: 'form-label'
-    = f.text_field :name, class: 'form-control'
-  .field-element.form-group
-    = f.label :description, 'Description', class: 'form-label'
-    br/
-    .controls
-      = f.text_field :description, class: 'form-control'
-  br
-  br
+    .field-element.form-group
+      = f.label :name, 'Title', class: 'form-label'
+      = f.text_field :name, class: 'form-control'
+    .field-element.form-group
+      = f.label :description, 'Description', class: 'form-label'
+      br/
+      .controls
+        = f.text_field :description, class: 'form-control'
+    br
+    br
 
-  .form-group
-    .actions.btn-group[role="group"]
-      = button_tag type: 'submit', class: 'btn btn-important' do
-        i.fa-solid.fa-users style=("color: #660000")
-        =< t('.button.save')
-      = link_to :back, class: 'btn btn-important' do
-        i.fa-solid.fa-xmark style=("color: gray")
-        =< t('common.button.cancel')
+    .form-group
+      .actions.btn-group[role="group"]
+        = button_tag type: 'submit', class: 'btn btn-important' do
+          i.fa-solid.fa-users style=("color: #660000")
+          =< t('.button.save')
+        = link_to :back, class: 'btn btn-important' do
+          i.fa-solid.fa-xmark style=("color: gray")
+          =< t('common.button.cancel')

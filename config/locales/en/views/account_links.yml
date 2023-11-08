@@ -6,7 +6,6 @@ en:
     form:
       button:
         save: Save Account Link
-      errorMessage: " prohibited this account_link from being saved."
       info:
         check_uuid_url: 'The address on the autograder side that can be queried to determine if the exercise already exists.
 
