@@ -16,30 +16,32 @@ html lang="#{I18n.locale || I18n.default_locale}" data-default-locale="#{I18n.de
     = csrf_meta_tags
     meta name='sentry' data-enabled=SentryJavascript.active?.to_s data-release=SentryJavascript.release data-dsn=SentryJavascript.dsn data-environment=SentryJavascript.environment
     meta name='current-user' content=current_user&.to_page_context&.to_json
-  body.d-flex.flex-column.h-100
+  body.d-flex.flex-column
     #content
-      nav.navbar.bg-light.navbar-expand-lg.mb-0 role='navigation' data-bs-theme="light"
-        .container
-          = link_to home_index_path, class: "navbar-brand"
-            i.fa-solid.fa-anchor.me-2#logo
-            = application_name
-          button.navbar-toggler data-bs-target='#navbar-collapse' data-bs-toggle='collapse' type='button' aria-expanded='false' aria-label='Toggle navigation' aria-controls='navbar-collapse'
-            span.navbar-toggler-icon
-          #navbar-collapse.collapse.navbar-collapse
-            = render('navigation')
-            ul.nav.navbar-nav.ms-auto
-              = render('session')
-      div data-controller=controller_name
-        = render('flash')
-        span.d-none = yield(:breadcrumbs)
-      .container
+      header.sticky-top
+        nav.navbar.bg-light.navbar-expand-lg.text-bg-light role='navigation'
+          .container
+            = link_to home_index_path, class: "navbar-brand"
+              i.fa-solid.fa-anchor.me-2.text-secondary
+              = application_name
+            button.navbar-toggler.rounded-0.m-2 data-bs-target='#navbar-collapse' data-bs-toggle='collapse' type='button' aria-expanded='false' aria-label='Toggle navigation' aria-controls='navbar-collapse'
+              span.navbar-toggler-icon
+            #navbar-collapse.collapse.navbar-collapse
+              = render('navigation')
+              ul.navbar-nav.ms-auto
+                = render('session')
+      main
+        div data-controller=controller_name
+          = render('flash')
+          span.d-none = yield(:breadcrumbs)
         .row
-          - if controller_name == "home" && action_name == "index"
-            .col-md-12.p-2
+          .col-md-12
+            - if controller_name == "home" && action_name == "index"
               = yield
-          - else
-            .col-md-12.p-4 style=("margin-top: 32px")
-              = yield
+            - else
+              .container
+                .pt-5
+                  = yield
 
-    #footer.footer.py-3.mt-auto
+    #footer.footer.py-5.mt-auto
       = render('footer')

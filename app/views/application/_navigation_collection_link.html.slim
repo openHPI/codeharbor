@@ -1,6 +1,6 @@
 - if defined?(model) && can?(:index, model) || defined?(target) && defined?(text)
   - path = defined?(target) ? target : "#{model.model_name.collection}_path".to_sym
   li.nav-item
-    = link_to(send(path), class: "nav-link #{active_class(send(path))}") do
+    = link_to(send(path), class: "nav-link text-center #{active_class(send(path))}") do
       = yield
       =< defined?(text) ? text : model.model_name.collection.capitalize

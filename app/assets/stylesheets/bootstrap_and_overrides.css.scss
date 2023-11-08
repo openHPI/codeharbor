@@ -1,9 +1,20 @@
-.navbar.bg-light {
-  background-color: #f5f5f5 !important;
+/* NAVBAR */
+.navbar {
+  padding: 0;
+}
 
-  a:hover {
-    background-color: #f5f5f5 !important;
-  }
+.navbar .dropdown-menu a {
+  font-size: 14px;
+}
+
+.nav-link {
+  padding: 18px 0;
+  min-width: 80px;
+}
+
+.nav-link.active {
+  padding: 18px 0 15px 0;
+  border-bottom: solid;
 }
 
 .btn-main {
