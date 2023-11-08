@@ -221,7 +221,7 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def contributions
     Task.joins(:task_contribution)
-        .where(parent_uuid: uuid, task_contribution: {status: :pending})
+      .where(parent_uuid: uuid, task_contribution: {status: :pending})
   end
 
   private
