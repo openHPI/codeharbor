@@ -34,39 +34,37 @@ en:
           Finally, please respond with a 200 status code if everything went okay or a 400 if it did not. <br/>
         </p>
     index:
-      banner1:
-        alt_text: Exercise repository
-        header: Your exercise repository
-        paragraph: Search, rate and create exercises.
-      banner2:
-        alt_text: Exercise collaboration
-        header: Collaborate on exercises
-        paragraph: Improve your exercises by discussing them with your peers.
-      banner3:
-        alt_text: Share exercises
-        header: Share auto-gradeable exercises
-        paragraph: Many auto-graders are supported.
       feature:
         collections:
+          alt_text: Image of a document folder open on top a laptop
           header: Create exercise collections
           paragraph: Create collections of your favorite exercises for your future needs. Share collections with colleagues and peers. Export them to your favorite auto-grader or download them as XML.
         exercises:
+          alt_text: Image of a computer with a magnifier glass searching for a text
           header: Search, discuss and create exercises
           paragraph: CodeHarbor allows to share, rate, and discuss auto-gradeable programming exercises with colleagues and peers. Re-use existing exercises, clone exercises and adjust them to your needs. Translate exercises to other human languages or port them to other programming languages. You always keep full control with whom you share.
         groups:
+          alt_text: Image of a connected users using different devices
           header: Create user-groups and share exercises with your group.
           paragraph: If you decide not to share your exercises with everybody, declare it private and only allow access to selected groups or users.
+        header: Features
+      hero:
+        alt_text: CodeHarbor hero image with a computer on a desk and a sail boat next to it
+        subtitle: Collaborative Auto Grader Repository
+        title1: Code
+        title2: Harbor
       marketing:
         mooc:
-          alt_text: Enterprise
+          alt_text: Image represents MOOCs on the cloud
           header_html: "CodeHarbor for \n MOOCs"
           paragraph: You're developing and running MOOCs that include auto-graded programming exercises?
         schools:
-          alt_text: Home
+          alt_text: Image of a school building
           header_html: "CodeHarbor for \n Schools"
           paragraph: You're teaching programming at school and need auto-gradeable programming exercises?
+        title: Use Cases
         universities:
-          alt_text: Education
+          alt_text: Image of an university building
           header_html: "CodeHarbor for \n Universities"
           paragraph: You're teaching large programming classes at university and use auto-graders for assessment?
       sign_in:
@@ -74,3 +72,16 @@ en:
         link1: sign up
         link2: log in
         paragraph_html: If you want to join our community %{href1} now or %{href2} if you are already a member.
+    partners:
+      bmbf:
+        alt_text: Sponsored by the German Federal Ministry of Education and Research
+        logo: home/logos/bmbf.en.svg
+      eu:
+        alt_text: Funded by the European Union – NextGenerationEU
+        logo: home/logos/eu.en.svg
+      hpi:
+        alt_text: Logo of the Hasso Plattner Institute
+        logo: home/logos/hpi.de.svg
+      mbr:
+        alt_text: Logo of the "Mein Bildungsraum" project
+        logo: home/logos/mbr.de.svg

@@ -1,60 +1,4 @@
-
-#columns {
-  #main {
-    margin-left: 17em;
-    padding: 1em;
-    background: white;
-
-    #exercise {
-      width: 55em;
-      padding-left: 1em;
-      padding-bottom: 1em;
-      border: 1px solid;
-
-      #left-column {
-        width: 45em;
-        display: inline-block;
-
-        #title {
-          display: inline-block;
-        }
-
-        #rating {
-          display: inline-block;
-        }
-
-        #description {
-          padding: 0.5em;
-          padding-bottom: 0.2em;
-          border: 1px solid;
-          max-width: 37em;
-        }
-
-        #labels {
-          padding-top: 0.5em;
-        }
-      }
-
-      #right-column {
-        display: inline-block;
-      }
-    }
-  }
-
-  #side {
-    float: left;
-    padding: 1em 2em;
-    width: 13em;
-  }
-}
-
-.fa-solid, .fa-regular {
-  color: #444444;
-}
-
-.disabled-cursor {
-  cursor: not-allowed;
-}
+/* Put all the customization of base styling that affect the whole platform here */
 
 html,
 body {
@@ -78,7 +22,7 @@ body {
 #footer {
   margin-top: 20px;
   padding-top: 10px;
-  background-color: #f5f5f5;
+  background-color: #f8f9fa;
 }
 
 a.classic-link {
