@@ -1,110 +1,95 @@
-#myCarousel.carousel.slide.px-1[data-bs-ride="carousel"]
-  .carousel-indicators
-    button.active[type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" aria-current="true" aria-label="Slide 1"]
-    button[type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"]
-    button[type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"]
-  .carousel-inner
-    .carousel-item.active
-      = image_tag('banner1.jpg', class: 'd-block w-100', alt: t('.banner1.alt_text'))
-      .carousel-caption.d-none.d-md-block
-        .background-transparent
-          h1 = t('.banner1.header')
-          p = t('.banner1.paragraph')
-      .copyright
-        | &copy;
-        = " "
-        = "Bengdt Nyman"
-        = ' / '
-        = link_to "cc", 'https://creativecommons.org/licenses/by/2.0/'
-    .carousel-item
-      = image_tag('banner2.jpg', class: 'd-block w-100', alt: t('.banner2.alt_text'))
-      .carousel-caption.d-none.d-md-block
-        .background-transparent
-          h1 = t('.banner2.header')
-          p = t('.banner2.paragraph')
-      .copyright
-        | &copy;
-        = " "
-        = "Solent Creatives"
-        = ' / '
-        = link_to "cc", 'https://creativecommons.org/licenses/by/2.0/'
-    .carousel-item
-      = image_tag('banner3.jpg', class: 'd-block w-100', alt: t('.banner3.alt_text'))
-      .carousel-caption.d-none.d-md-block
-        .background-transparent
-          h1 = t('.banner3.header')
-          p = t('.banner3.paragraph')
-      .copyright
-        | &copy;
-        = " "
-        = "Tim Peacock"
-        = ' / '
-        = link_to "cc", 'https://creativecommons.org/licenses/by/2.0/'
-  button.carousel-control-prev[type="button" data-bs-target="#myCarousel" data-bs-slide="prev"]
-    span.carousel-control-prev-icon[aria-hidden="true"]
-    span.visually-hidden
-      = t('common.button.previous')
-  button.carousel-control-next[type="button" data-bs-target="#myCarousel" data-bs-slide="next"]
-    span.carousel-control-next-icon[aria-hidden="true"]
-    span.visually-hidden
-      = t('common.button.next')
+section#hero.hero
+  .container
+    .row
+      .col-lg-6.col-md-7.col-sm-12.my-auto
+        .container-fluid.px-4.py-5.my-5.text-center
+          .lc-block.mb-4
+            h2.display-3.fw-bold
+              i.fa.fa-solid.fa-anchor.me-1
+              = t('.hero.title1')
+              span.text-secondary
+                = t('.hero.title2')
+          .lc-block.mx-auto.mb-5
+            p.lead
+              = t('.hero.subtitle')
+          - unless user_signed_in?
+            .lc-block.d-grid.gap-2.d-sm-flex.justify-content-sm-center.mb-5
+              = link_to t('common.button.sign_up').titleize, new_user_registration_path, class: 'btn btn-main btn-light btn-lg px-4 gap-3'
+      .col-lg-6.col-md-5.col-sm-12
+        .lc-block.d-grid.gap-2.d-md-flex.justify-content-sm-center
+          = image_tag('home/computer_desk.jpeg', class: 'img-fluid', alt: t('.hero.alt_text'))
 
-.container.homepage
-  .row.mb-3
-    .col-md-4.col-sm-12.mb-2.p-0
-      .card.text-dark.bg-light.m-1.h-100
-        = image_tag "enterprise.png", class: 'rounded-circle card-img-top pt-1', alt: t('.marketing.mooc.alt_text')
-        .card-body
-          h5.card-title.text-center
+section#services.services.sections-bg
+  .container.pb-5
+    .section-header.py-5
+      h2.text-center
+        = t('.marketing.title')
+    .row.gy-4
+      .col-lg-4.col-md-6
+        .service-item.position-relative.text-center
+          = image_tag('home/mooc.jpeg', class: 'img-fluid', alt: t('.marketing.mooc.alt_text'))
+          h5.py-2
             = t('.marketing.mooc.header_html')
-          p.card-text.text-center
+          p
             = t('.marketing.mooc.paragraph')
-    .col-md-4.col-sm-12.mb-2.p-0
-      .card.text-dark.bg-light.m-1.h-100
-        = image_tag "education.png", class: 'rounded-circle card-img-top pt-1', alt: t('.marketing.universities.alt_text')
-        .card-body
-          h5.card-title.text-center
+      .col-lg-4.col-md-6
+        .service-item.position-relative.text-center
+          = image_tag('home/university.jpeg', class: 'img-fluid', alt: t('.marketing.universities.alt_text'))
+          h5.py-2
             = t('.marketing.universities.header_html')
-          p.card-text.text-center
+          p
             = t('.marketing.universities.paragraph')
-    .col-md-4.col-sm-12.mb-2.p-0
-      .card.text-dark.bg-light.m-1.h-100
-        = image_tag "home.png", class: 'rounded-circle card-img-top pt-1', alt: t('.marketing.schools.alt_text')
-        .card-body
-          h5.card-title.text-center
+      .col-lg-4.col-md-6
+        .service-item.position-relative.text-center
+          = image_tag('home/school.jpeg', class: 'img-fluid', alt: t('.marketing.schools.alt_text'))
+          h5.py-2
             = t('.marketing.schools.header_html')
-          p.card-text.text-center
+          p
             = t('.marketing.schools.paragraph')
 
-  .row.feature.pt-5
-    .col-md-6.col-sm-12
-      h5
-        span.fa-regular.fa-file-lines
-        =< t('.feature.exercises.header')
-      p
-        = t('.feature.exercises.paragraph')
-    .col-md-5
+section#features.features
+  .container.pb-5
+    .section-header.py-5
+      h2.text-center
+        = t('.feature.header')
+    .row.gy-4.m-5
+      .col-sm-8
+        h3.pb-2
+          =< t('.feature.exercises.header')
+        p.lh-base
+          = t('.feature.exercises.paragraph')
+      .col-sm-4
+        = image_tag('home/magnifier.jpeg', class: 'img-fluid', alt: t('.feature.exercises.alt_text'))
+    .row.gy-4.mx-5
+      .col-sm-4
+        = image_tag('home/folder.jpeg', class: 'img-fluid', alt: t('.feature.collections.alt_text'))
+      .col-sm-8
+        h3.pb-2
+          =< t('.feature.collections.header')
+        p.lh-base
+          = t('.feature.collections.paragraph')
+    .row.gy-4.m-5
+      .col-sm-8
+        h3.pb-2
+          =< t('.feature.groups.header')
+        p.lh-base
+          = t('.feature.groups.paragraph')
+      .col-sm-4
+        = image_tag('home/user_group.jpeg', class: 'img-fluid', alt: t('.feature.groups.alt_text'))
 
-  .row.feature.justify-content-end
-    .col-md-6.col-sm-12
-      h5
-        span.fa-solid.fa-folder-open
-        =< t('.feature.collections.header')
-      p
-        = t('.feature.collections.paragraph')
-
-  .row.feature
-    .col-md-6
-      h5
-        span.fa-solid.fa-users
-        =< t('.feature.groups.header')
-      p
-        = t('.feature.groups.paragraph')
-
-  - unless user_signed_in?
-    .row.feature.justify-content-end
-      .col-md-6.col-sm-12
-        h5
+- unless user_signed_in?
+  section#call-to-action.call-to-action
+    .container.pb-5.text-center
+      .section-header
+        h2.pb-3
           = t('.sign_in.header')
-        p
-          = t('.sign_in.paragraph_html', href1: (link_to t('.sign_in.link1'), new_user_registration_path, class: 'classic-link'), href2: (link_to t('.sign_in.link2'), new_user_session_path, class: 'classic-link'))
+      p
+        = t('.sign_in.paragraph_html', href1: (link_to t('.sign_in.link1'), new_user_registration_path, class: 'classic-link'), href2: (link_to t('.sign_in.link2'), new_user_session_path, class: 'classic-link'))
+
+section#partners.partners
+  .container.pb-5
+    .row.gy-5.p-2
+      = render 'partners', partner: 'mbr'
+      = render 'partners', partner: 'bmbf'
+      = render 'partners', partner: 'eu'
+      = render 'partners', partner: 'hpi'

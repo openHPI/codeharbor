@@ -2,48 +2,27 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.background-transparent {
-  width: 100%;
-  padding: 2px;
-  background: #ffffff;
-  background: rgba(255, 255, 255, 0.8);
-  margin-bottom: 10px;
+.services {
+  &.sections-bg {
+    background-color: #f6f6f6;
+  }
+
+  .service-item {
+    padding: 40px;
+    background-color: #fff;
+    height: 100%;
+    transition: .3s;
+    border: 1px #ddd solid;
+
+    &:hover {
+      transform:scale(1.05);
+      border: 2px #ddd solid;
+    }
+  }
 }
 
-.background-transparent p {
-  font-size: 21px;
-  color: black;
-  text-shadow: none;
-  padding-bottom: 5px;
-}
-
-.background-transparent h1 {
-  font-size: 32px;
-  color: black;
-  text-shadow: none;
-}
-
-.carousel-caption {
-  left: 0 !important;
-  right: 0 !important;
-}
-
-.feature {
-  margin-bottom: 50px;
-}
-
-.homepage {
-  margin-top: 10px;
-  color: #444444;
-}
-
-.copyright {
-  color: white;
-  position: absolute;
-  right: 20px;
-  bottom: 16px;
-
-  a {
-    color: white;
+.features, .call-to-action {
+  p {
+    font-size: large;
   }
 }
