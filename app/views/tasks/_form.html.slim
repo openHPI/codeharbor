@@ -1,17 +1,7 @@
 .row
   .col-md-12.my-4
     = simple_form_for @task, html: { class: 'project exercise-validation', multipart: true } do |f|
-      - if @task.errors.any?
-        #error_explanation.card
-          .card-header
-            h3
-              = pluralize(@task.errors.count, t('common.errors.error_with_space'))
-              = t('.errors.not_saved')
-          .card-body
-            ul
-              - @task.errors.full_messages.each do |msg|
-                li
-                  = msg
+      = render('shared/form_errors', object: @task, model: Task, title: t('common.errors.model_not_saved'))
       fieldset.form-group
         legend.toggle-next
           span.number = '1'

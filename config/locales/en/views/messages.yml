@@ -1,8 +1,6 @@
 ---
 en:
   messages:
-    form:
-      errorMessage: prohibited this message from being saved.
     index:
       button:
         deny_access: Deny access

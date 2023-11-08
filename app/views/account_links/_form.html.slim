@@ -1,14 +1,6 @@
 = form_for([@user, @account_link]) do |f|
   .mt-4
-    - if @account_link.errors.any?
-      #error_explanation
-        h2
-          = pluralize(@account_link.errors.count, t('common.errors.error_with_space'))
-          = t('.errorMessage')
-        ul
-          - @account_link.errors.full_messages.each do |message|
-            li
-              = message
+    = render('shared/form_errors', object: @account_link, model: AccountLink, title: t('common.errors.model_not_saved'))
     .field-element.form-group
       = f.label :name, AccountLink.human_attribute_name('name'), class: 'form-label'
       = f.text_field :name, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('.info.name'), class: 'form-control'

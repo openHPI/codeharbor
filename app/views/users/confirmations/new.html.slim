@@ -4,7 +4,7 @@
     =< t('.resend_confirmation')
 
 = form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f|
-  = bootstrap_devise_error_messages!
+  = render('shared/form_errors', object: resource, model: resource.class, title: t('.validation_error'))
 
   .form-group.field-element
     = f.label :email, class: 'form-label'

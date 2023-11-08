@@ -20,7 +20,6 @@ en:
         save_task: Save Task
       errors:
         not_public_without_prog_lang: Can't be public while programming language is not set
-        not_saved: prohibited this project from being saved
         prog_lang_not_empty_while_public: Can't be empty while visibility is set to public
       no_license: No License
       unchangeable_groups: Unchangeable groups

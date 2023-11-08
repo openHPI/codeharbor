@@ -1,0 +1,10 @@
+- if object.errors.any?
+  .alert.alert-danger.alert-dismissible
+    - if object.errors.size == 1
+      = object.errors.full_messages.first
+    - else
+      h4 = title % {model: model.model_name.human}
+      ul
+        - object.errors.full_messages.each do |message|
+          li = message
+    button.btn-close type="button" data-bs-dismiss="alert" aria-label="Close"

@@ -1,13 +1,7 @@
 = form_for :message, url: user_messages_path(@user) do |f|
   .mt-5
-    - if @message.errors.any?
-      #error_explanation
-        h2
-          = pluralize(@message.errors.count, t('common.errors.error_with_space'))
-          = t('.errorMessage')
-        ul
-          - @message.errors.full_messages.each do |message|
-            li= message
+    = render('shared/form_errors', object: @message, model: Message, title: t('common.errors.model_not_saved'))
+
     - if @recipient
       = f.hidden_field :recipient_hidden, value: @recipient.id
     - else

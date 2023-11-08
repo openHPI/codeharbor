@@ -4,7 +4,6 @@ en:
     form:
       button:
         save: Save Group
-      errorMessage: prohibited this group from being saved.
     groups:
       admin_label: Admin
       member_label: Member
