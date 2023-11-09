@@ -23,7 +23,7 @@
 .field-element
   = test.label :timeout, Test.human_attribute_name('timeout'), class: 'form-label'
   = test.number_field :timeout, class: 'form-control', min: 1, step: 1
-  / = test.fields_for :file do |file|
+/ = test.fields_for :file do |file|
 .files-header
   = label_tag nil, "#{Task.human_attribute_name('files')}:"
 = render 'tasks/nested_file_form', f: test, nested_form_placeholder: 't-__nested_field_for_replace_with_index__-__task_tests___nested_field_for_replace_with_index___files_index__'
