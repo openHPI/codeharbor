@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/rails/rails.git
-  revision: 7f6714ed182d3d8968f580a60cbaabe7a3b45463
+  revision: f6987c46572666c439a1ad68b3ab5b41645f2bcf
   branch: 7-1-stable
   specs:
     actioncable (7.1.1)
@@ -541,7 +541,7 @@ GEM
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
     stackprof (0.2.25)
-    stringio (3.0.8)
+    stringio (3.0.9)
     temple (0.10.3)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
