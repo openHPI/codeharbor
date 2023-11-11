@@ -17,7 +17,7 @@ RSpec.describe 'TasksController', :js do
       let(:not_existing_label_name) { 'some new label' }
 
       it 'displays labels after invalid submission attempt' do
-        input = find('select', id: 'task_label_names').sibling('span', class: 'select2').find('input')
+        input = find('select', id: 'task_label_names').sibling('span', class: 'select2').find('textarea')
         input.send_keys(not_existing_label_name)
         wait_for_ajax
         input.send_keys(:enter)
