@@ -39,7 +39,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:7":
+"@babel/core@npm:7.23.3":
   version: 7.23.3
   resolution: "@babel/core@npm:7.23.3"
   dependencies:
@@ -1085,7 +1085,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-runtime@npm:7":
+"@babel/plugin-transform-runtime@npm:7.23.3":
   version: 7.23.3
   resolution: "@babel/plugin-transform-runtime@npm:7.23.3"
   dependencies:
@@ -1204,7 +1204,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/preset-env@npm:7":
+"@babel/preset-env@npm:7.23.3":
   version: 7.23.3
   resolution: "@babel/preset-env@npm:7.23.3"
   dependencies:
@@ -1314,7 +1314,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:7, @babel/runtime@npm:^7.8.4":
+"@babel/runtime@npm:7.23.2, @babel/runtime@npm:^7.8.4":
   version: 7.23.2
   resolution: "@babel/runtime@npm:7.23.2"
   dependencies:
@@ -1531,7 +1531,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@popperjs/core@npm:^2.11.7":
+"@popperjs/core@npm:^2.11.8":
   version: 2.11.8
   resolution: "@popperjs/core@npm:2.11.8"
   checksum: 4681e682abc006d25eb380d0cf3efc7557043f53b6aea7a5057d0d1e7df849a00e281cd8ea79c902a35a414d7919621fc2ba293ecec05f413598e0b23d5a1e63
@@ -2269,7 +2269,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-loader@npm:9":
+"babel-loader@npm:9.1.3":
   version: 9.1.3
   resolution: "babel-loader@npm:9.1.3"
   dependencies:
@@ -2392,7 +2392,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bootstrap@npm:^5.3.1":
+"bootstrap@npm:^5.3.2":
   version: 5.3.2
   resolution: "bootstrap@npm:5.3.2"
   peerDependencies:
@@ -2597,37 +2597,37 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "codeharbor@workspace:."
   dependencies:
-    "@babel/core": "npm:7"
-    "@babel/plugin-transform-runtime": "npm:7"
-    "@babel/preset-env": "npm:7"
-    "@babel/runtime": "npm:7"
+    "@babel/core": "npm:7.23.3"
+    "@babel/plugin-transform-runtime": "npm:7.23.3"
+    "@babel/preset-env": "npm:7.23.3"
+    "@babel/runtime": "npm:7.23.2"
     "@fortawesome/fontawesome-free": "npm:^6.4.2"
-    "@popperjs/core": "npm:^2.11.7"
+    "@popperjs/core": "npm:^2.11.8"
     "@sentry/browser": "npm:^7.80.0"
     "@sentry/integrations": "npm:^7.80.0"
     "@webpack-cli/serve": "npm:^2.0.5"
-    babel-loader: "npm:9"
-    bootstrap: "npm:^5.3.1"
-    compression-webpack-plugin: "npm:10"
-    css-loader: "npm:^6.7.3"
-    css-minimizer-webpack-plugin: "npm:^5.0.0"
+    babel-loader: "npm:9.1.3"
+    bootstrap: "npm:^5.3.2"
+    compression-webpack-plugin: "npm:10.0.0"
+    css-loader: "npm:^6.8.1"
+    css-minimizer-webpack-plugin: "npm:^5.0.1"
     i18n-js: "npm:^4.3.2"
     jquery: "npm:^3.7.1"
     jquery-ui: "npm:^1.13.2"
     jquery-ujs: "npm:^1.2.3"
-    mini-css-extract-plugin: "npm:^2.7.5"
+    mini-css-extract-plugin: "npm:^2.7.6"
     rails-erb-loader: "usabilityhub/rails-erb-loader#master"
     sass: "npm:^1.69.5"
-    sass-loader: "npm:^13.2.2"
-    select2: "npm:^4.0.13"
+    sass-loader: "npm:^13.3.2"
+    select2: "npm:^4.1.0-rc.0"
     shakapacker: "npm:7.2.0-rc.0"
-    style-loader: "npm:^3.3.2"
-    terser-webpack-plugin: "npm:5"
-    webpack: "npm:5"
-    webpack-assets-manifest: "npm:5"
-    webpack-cli: "npm:5"
-    webpack-dev-server: "npm:^4.13.3"
-    webpack-merge: "npm:5"
+    style-loader: "npm:^3.3.3"
+    terser-webpack-plugin: "npm:5.3.9"
+    webpack: "npm:5.89.0"
+    webpack-assets-manifest: "npm:5.1.0"
+    webpack-cli: "npm:5.1.4"
+    webpack-dev-server: "npm:^4.15.1"
+    webpack-merge: "npm:5.10.0"
     webpack-subresource-integrity: "npm:^5.2.0-rc.1"
   languageName: unknown
   linkType: soft
@@ -2715,7 +2715,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"compression-webpack-plugin@npm:10":
+"compression-webpack-plugin@npm:10.0.0":
   version: 10.0.0
   resolution: "compression-webpack-plugin@npm:10.0.0"
   dependencies:
@@ -2829,7 +2829,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-loader@npm:^6.7.3":
+"css-loader@npm:^6.8.1":
   version: 6.8.1
   resolution: "css-loader@npm:6.8.1"
   dependencies:
@@ -2847,7 +2847,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-minimizer-webpack-plugin@npm:^5.0.0":
+"css-minimizer-webpack-plugin@npm:^5.0.1":
   version: 5.0.1
   resolution: "css-minimizer-webpack-plugin@npm:5.0.1"
   dependencies:
@@ -4509,7 +4509,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mini-css-extract-plugin@npm:^2.7.5":
+"mini-css-extract-plugin@npm:^2.7.6":
   version: 2.7.6
   resolution: "mini-css-extract-plugin@npm:2.7.6"
   dependencies:
@@ -5652,7 +5652,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass-loader@npm:^13.2.2":
+"sass-loader@npm:^13.3.2":
   version: 13.3.2
   resolution: "sass-loader@npm:13.3.2"
   dependencies:
@@ -5719,10 +5719,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"select2@npm:^4.0.13":
-  version: 4.0.13
-  resolution: "select2@npm:4.0.13"
-  checksum: a393866565a5f878ca21276ed32793595851debb35ff48a8c368640e732619349f547d335b438b45ff5647145eb6c5af868cd5153740de58306a2dca2498550f
+"select2@npm:^4.1.0-rc.0":
+  version: 4.1.0-rc.0
+  resolution: "select2@npm:4.1.0-rc.0"
+  checksum: 6e25a387ad059b341bd154374894a730d862a65913a86b84d3a9d5b31d71219f415c2f79ec8d40761efb4d8dc3e11155cdf14b2902cf6e4f99a21148f2688e69
   languageName: node
   linkType: hard
 
@@ -6105,7 +6105,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"style-loader@npm:^3.3.2":
+"style-loader@npm:^3.3.3":
   version: 3.3.3
   resolution: "style-loader@npm:3.3.3"
   peerDependencies:
@@ -6197,7 +6197,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"terser-webpack-plugin@npm:5, terser-webpack-plugin@npm:^5.3.7":
+"terser-webpack-plugin@npm:5.3.9, terser-webpack-plugin@npm:^5.3.7":
   version: 5.3.9
   resolution: "terser-webpack-plugin@npm:5.3.9"
   dependencies:
@@ -6408,7 +6408,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-assets-manifest@npm:5":
+"webpack-assets-manifest@npm:5.1.0":
   version: 5.1.0
   resolution: "webpack-assets-manifest@npm:5.1.0"
   dependencies:
@@ -6425,7 +6425,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-cli@npm:5":
+"webpack-cli@npm:5.1.4":
   version: 5.1.4
   resolution: "webpack-cli@npm:5.1.4"
   dependencies:
@@ -6472,7 +6472,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:^4.13.3":
+"webpack-dev-server@npm:^4.15.1":
   version: 4.15.1
   resolution: "webpack-dev-server@npm:4.15.1"
   dependencies:
@@ -6519,7 +6519,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-merge@npm:5, webpack-merge@npm:^5.7.3":
+"webpack-merge@npm:5.10.0, webpack-merge@npm:^5.7.3":
   version: 5.10.0
   resolution: "webpack-merge@npm:5.10.0"
   dependencies:
@@ -6550,7 +6550,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:5":
+"webpack@npm:5.89.0":
   version: 5.89.0
   resolution: "webpack@npm:5.89.0"
   dependencies:
