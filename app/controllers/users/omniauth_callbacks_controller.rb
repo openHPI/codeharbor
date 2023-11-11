@@ -21,7 +21,7 @@ module Users
         if is_navigational_format? && @user.errors.any?
           # We show validation errors to the user, for example because required data from the IdP was missing
           set_flash_message(:alert, :failure, kind: OmniAuth::Utils.camelize(provider),
-            reason: @user.errors.full_messages.join("\n"))
+            reason: @user.errors.full_messages.join(', '))
         end
         # Removing extra as it can overflow some session stores
         session["devise.#{provider}_data"] = request.env['omniauth.auth'].except('extra')
