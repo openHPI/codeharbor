@@ -1,6 +1,6 @@
 = form_for([@user, @account_link]) do |f|
   .mt-4
-    = render('shared/form_errors', object: @account_link, model: AccountLink, title: t('common.errors.model_not_saved'))
+    = render('shared/form_errors', object: @account_link)
     .field-element.form-group
       = f.label :name, AccountLink.human_attribute_name('name'), class: 'form-label'
       = f.text_field :name, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('.info.name'), class: 'form-control'

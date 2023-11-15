@@ -1,6 +1,6 @@
 = form_for @group do |f|
   .mt-5
-    = render('shared/form_errors', object: @group, model: Group, title: t('common.errors.model_not_saved'))
+    = render('shared/form_errors', object: @group)
 
     .field-element.form-group
       = f.label :name, 'Title', class: 'form-label'
