@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ContributionsController do
+RSpec.describe TaskContributionsController do
   render_views
 
   let(:user) { create(:user) }

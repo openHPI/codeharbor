@@ -9,9 +9,9 @@
   .col-md-12.my-4
     - if @task.contribution?
       - if action_name == 'show' || action_name == 'new'
-        - url = task_contributions_path(@task.parent_id)
+        - url =  task_task_contributions_path(@task.parent_id)
       - else
-        - url = task_contribution_path(@task.parent, @task.task_contribution)
+        - url = task_task_contribution_path(@task.parent, @task.task_contribution)
     - else
       - url = nil
     = simple_form_for @task,  url:, html: {  multipart: true }, builder: MarkdownFormBuilder do |f|
