@@ -7,9 +7,9 @@ RSpec.describe ContributionsController do
 
   let(:user) { create(:user) }
   let(:original_author) { create(:user) }
-  let!(:task) { create(:task, user: original_author) }
-  let(:contrib_task) { create(:task, user:, title: 'Modified title', parent_uuid: task.uuid) }
-  let(:contribution) { create(:task_contribution, modifying_task: contrib_task, status: :pending) }
+  let!(:task) { create(:task, user: original_author, access_level: 'public') }
+  let(:contrib_task) { build(:task, user:, title: 'Modified title', parent_uuid: task.uuid) }
+  let(:contribution) { build(:task_contribution, modifying_task: contrib_task, status: :pending) }
 
   before { sign_in user }
 
@@ -56,6 +56,11 @@ RSpec.describe ContributionsController do
   end
 
   describe 'POST #approve_changes' do
+    before do
+      task.save!
+      contribution.save!
+    end
+
     context 'with valid params' do
       subject(:post_request) { post :approve_changes, params: {task_id: task.id, contribution_id: contribution.id} }
 
@@ -80,6 +85,11 @@ RSpec.describe ContributionsController do
   end
 
   describe 'POST #discard_changes' do
+    before do
+      task.save!
+      contribution.save!
+    end
+
     context 'with valid params' do
       subject(:post_request) { post :discard_changes, params: {task_id: task.id, contribution_id: contribution.id} }
 
