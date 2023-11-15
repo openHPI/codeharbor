@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-class ContributionsController < ApplicationController
-  load_and_authorize_resource class: TaskContribution, except: %i[create new]
+class TaskContributionsController < ApplicationController
+  load_and_authorize_resource class: TaskContribution, except: %i[create new approve_changes]
   def approve_changes
     contrib = TaskContribution.find(params[:contribution_id])
     @task = Task.find(params[:task_id])
     if @task.apply_contribution(contrib)
-      redirect_to @task, notice: t('task_contributions.approve_changes.success')
+      redirect_to @task, notice: t('.success')
     else
-      redirect_to contrib.modifying_task, alert: t('task_contributions.approve_changes.error')
+      redirect_to contrib.modifying_task, alert: t('.error')
     end
   end
 
@@ -16,9 +16,9 @@ class ContributionsController < ApplicationController
     contrib = TaskContribution.find(params[:contribution_id])
     if contrib.close
       path = contrib.modifying_task.user.id == current_user.id ? contrib.modifying_task : Task
-      redirect_to path, notice: t('task_contributions.discard_changes.success')
+      redirect_to path, notice: t('.success')
     else
-      redirect_to contrib.modifying_task, alert: t('task_contributions.discard_changes.error')
+      redirect_to contrib.modifying_task, alert: t('.error')
     end
   end
 
@@ -39,9 +39,9 @@ class ContributionsController < ApplicationController
     @task.task_contribution = contrib
     authorize! :create, contrib
     if @task.save(context: :force_validations)
-      redirect_to @task, notice: t('task_contributions.new.success')
+      redirect_to @task, notice: t('.success')
     else
-      redirect_to Task.find(params[:task_id]), alert: t('task_contributions.new.error')
+      redirect_to Task.find(params[:task_id]), alert: t('.error')
     end
   end
 
@@ -49,7 +49,7 @@ class ContributionsController < ApplicationController
     @task = TaskContribution.find(params[:id]).task
     @task.assign_attributes(contrib_task_params) # assign_attributes(contrib_task_params)
     if @task.save(context: :force_validations)
-      redirect_to @task, notice: t('task_contributions.update.success')
+      redirect_to @task, notice: t('.success')
     else
       render :edit
     end
