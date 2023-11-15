@@ -1,6 +1,6 @@
 = form_for(@collection) do |f|
   .mt-5
-    = render('shared/form_errors', object: @collection, model: Collection, title: t('common.errors.model_not_saved'))
+    = render('shared/form_errors', object: @collection)
     .field-element.form-group
       = f.label :title, Collection.human_attribute_name('title'), class: 'form-label'
       = f.text_field :title, class: 'form-control'

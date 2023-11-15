@@ -1,6 +1,6 @@
 = form_for :message, url: user_messages_path(@user) do |f|
   .mt-5
-    = render('shared/form_errors', object: @message, model: Message, title: t('common.errors.model_not_saved'))
+    = render('shared/form_errors', object: @message)
 
     - if @recipient
       = f.hidden_field :recipient_hidden, value: @recipient.id

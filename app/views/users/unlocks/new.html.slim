@@ -4,7 +4,7 @@
     =< t('.resend_unlock')
 
 = form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post }) do |f|
-  = render('shared/form_errors', object: resource, model: resource.class, title: t('.validation_error'))
+  = render('shared/form_errors', object: resource, title: t('.validation_error'))
 
   .form-group.field-element
     = f.label :email, class: 'form-label'
