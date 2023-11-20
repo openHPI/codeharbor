@@ -1,0 +1,6 @@
+Hello <%= @task_author.name %>
+
+<%= @contrib_author.name %> asked to contribute to your Task "<%= @task_contrib.base_task.title %>".
+If you want to review or merge the changes click the link below.
+Otherwise ignore this Email.
+<%= task_contribution_url(@task_contrib.base_task, @task_contrib) %>
