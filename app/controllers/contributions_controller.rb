@@ -39,9 +39,9 @@ class ContributionsController < ApplicationController
     @task.task_contribution = contrib
     authorize! :create, contrib
     if @task.save(context: :force_validations)
-      redirect_to @task, notice: t('task_contributions.new.success')
+      redirect_to @task, notice: t('task_contributions.create.success')
     else
-      redirect_to Task.find(params[:task_id]), alert: t('task_contributions.new.error')
+      redirect_to Task.find(params[:task_id]), alert: t('task_contributions.create.error')
     end
   end
 
