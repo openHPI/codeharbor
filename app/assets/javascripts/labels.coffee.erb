@@ -90,7 +90,7 @@ ready = ->
   return
 
 clear_input = ->
-  $('.labels-select2-tag').siblings(".select2").find("input").val("");
+  $('.labels-select2-tag').siblings(".select2").find("textarea").val("");
   return
 
 $(document).on 'turbolinks:load', ready
