@@ -7,7 +7,7 @@ en:
     discard_changes:
       error: The task could not be decoupled.
       success: The task was successfully decoupled.
-    new:
+    create:
       error: Could not create a contribution.
       success: A contribution was created successfully.
     update:
