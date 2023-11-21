@@ -42,7 +42,7 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
     it 'creates a task with all basic attributes' do
       expect(proforma_task).to have_attributes(
         title: task.title,
-        description: ApplicationController.helpers.render_markdown(task.description),
+        description: 'description',
         internal_description: task.internal_description,
         proglang: {
           name: task.programming_language.language,
@@ -57,19 +57,23 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
       )
     end
 
-    context 'with options' do
-      let(:convert_to_proforma_task) { described_class.new(task:, options:) }
-      let(:options) { {} }
+    context 'with complex description' do
+      let(:description) { "first part\n\nsecond part" }
 
-      it 'converts the description markdown to text' do
-        expect(proforma_task).to have_attributes(description: ApplicationController.helpers.render_markdown(task.description))
-      end
+      context 'with options' do
+        let(:convert_to_proforma_task) { described_class.new(task:, options:) }
+        let(:options) { {} }
 
-      context 'when options contain description_format md' do
-        let(:options) { {description_format: 'md'} }
+        it 'converts the description markdown to text' do
+          expect(proforma_task).to have_attributes(description: "<p>first part</p>\n\n<p>second part</p>")
+        end
 
-        it 'does not convert the description markdown' do
-          expect(proforma_task).to have_attributes(description: task.description)
+        context 'when options contain description_format md' do
+          let(:options) { {description_format: 'md'} }
+
+          it 'does not convert the description markdown' do
+            expect(proforma_task).to have_attributes(description: task.description)
+          end
         end
       end
     end
@@ -102,8 +106,8 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
       context 'when file has no "usage_by_lms" defined' do
         let(:file) { build(:task_file) }
 
-        it 'creates a task-file with the correct default value' do
-          expect(proforma_task.files.first).to have_attributes(usage_by_lms: 'download')
+        it 'does not set usage_by_lms' do
+          expect(proforma_task.files.first).to have_attributes(usage_by_lms: nil)
         end
       end
 
