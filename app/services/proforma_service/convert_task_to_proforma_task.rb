@@ -38,7 +38,8 @@ module ProformaService
     def description
       return @task.description if @options[:description_format] == 'md'
 
-      ApplicationController.helpers.render_markdown(@task.description)
+      string = ApplicationController.helpers.render_markdown(@task.description)
+      string.scan(/<\w/).length == 1 ? string.gsub(%r{</?p>}, '') : string
     end
 
     def proglang
@@ -83,7 +84,7 @@ module ProformaService
         filename: file.full_file_name,
         used_by_grader: file.used_by_grader || false,
         visible: file.visible,
-        usage_by_lms: file.usage_by_lms || 'download',
+        usage_by_lms: file.usage_by_lms,
         internal_description: file.internal_description
       )
       add_content_to_task_file(file, task_file)

@@ -19,6 +19,7 @@ RSpec.describe ProformaService::ExportTask do
     let(:export_service) { described_class.new(task:) }
     let(:task) do
       create(:task,
+        description:,
         internal_description: 'internal_description',
         uuid: SecureRandom.uuid,
         programming_language: build(:programming_language, :ruby),
@@ -26,6 +27,7 @@ RSpec.describe ProformaService::ExportTask do
         tests:,
         model_solutions:)
     end
+    let(:description) { 'description ' }
     let(:files) { [] }
     let(:tests) { [] }
     let(:model_solutions) { [] }
@@ -48,8 +50,16 @@ RSpec.describe ProformaService::ExportTask do
       expect(xml.xpath('/task/title').text).to eql task.title
     end
 
-    it 'adds description node with correct content (html) to task node' do
-      expect(xml.xpath('/task/description').text).to eql ApplicationController.helpers.render_markdown(task.description)
+    it 'adds description node with correct content (simple string) to task node' do
+      expect(xml.xpath('/task/description').text).to eql 'description'
+    end
+
+    context 'with complex description' do
+      let(:description) { "first part\n\nsecond part" }
+
+      it 'adds description node with correct content (simple string) to task node' do
+        expect(xml.xpath('/task/description').text).to eql "<p>first part</p>\n\n<p>second part</p>"
+      end
     end
 
     it 'adds proglang node with correct content to task node' do
