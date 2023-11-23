@@ -5,7 +5,7 @@ module TransferValues
   def transfer_linked_files(other)
     other.files.each do |file|
       if files.exists?(file.parent_id)
-        old_file = files.find(file.parent_id)
+        old_file = files.find {|f| f.id == file.parent_id } # Required to force searching a copy in memory instead of db
         old_file.assign_attributes(file.attributes.except('id', 'parent_id', 'created_date', 'fileable_id'))
       else
         temp_file = TaskFile.new(file.attributes.except('id').merge(fileable_id: id))
