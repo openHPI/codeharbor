@@ -21,11 +21,11 @@ RSpec.describe ContributionsController do
   end
 
   describe 'POST #create' do
+    subject(:post_request) { post :create, params: {task_id: task.id, task: task_params} }
+
+    let(:task_params) { attributes_for(:task) }
+
     context 'with valid params' do
-      subject(:post_request) { post :create, params: {task_id: task.id, task: task_params} }
-
-      let(:task_params) { attributes_for(:task) }
-
       it 'creates a new Task and TaskContribution' do
         expect { post_request }
           .to change(Task, :count).by(1)
@@ -51,6 +51,21 @@ RSpec.describe ContributionsController do
         post_request
         expect(response).to have_http_status(:redirect)
         expect(response).to redirect_to(assigns(:task))
+      end
+    end
+
+    context 'when new task is invalid' do
+      let(:task_params) { {title: ''} }
+
+      it 'shows a flash message' do
+        post_request
+        expect(flash[:alert]).to eq(I18n.t('task_contributions.create.error'))
+      end
+
+      it 'redirects to the original task' do
+        post_request
+        expect(response).to have_http_status(:redirect)
+        expect(response).to redirect_to(task)
       end
     end
   end
@@ -82,6 +97,26 @@ RSpec.describe ContributionsController do
         expect(response).to redirect_to(task)
       end
     end
+
+    context 'when apply_contribution fails' do
+      subject(:post_request) { post :approve_changes, params: {task_id: task.id, contribution_id: contribution.id} }
+
+      before do
+        allow(Task).to receive(:find).with(task.id.to_s).and_return(task)
+        allow(task).to receive(:apply_contribution).with(contribution).and_return(false)
+      end
+
+      it 'shows a flash message' do
+        post_request
+        expect(flash[:alert]).to eq(I18n.t('task_contributions.approve_changes.error'))
+      end
+
+      it 'redirects to the modifying task' do
+        post_request
+        expect(response).to have_http_status(:redirect)
+        expect(response).to redirect_to(contrib_task)
+      end
+    end
   end
 
   describe 'POST #discard_changes' do
@@ -100,6 +135,43 @@ RSpec.describe ContributionsController do
 
       it 'redirects to the modified task' do
         post_request
+        expect(response).to have_http_status(:redirect)
+        expect(response).to redirect_to(contrib_task)
+      end
+    end
+
+    context 'when TaskContribution.close fails' do
+      subject(:post_request) { post :discard_changes, params: {task_id: task.id, contribution_id: contribution.id} }
+
+      before do
+        allow(TaskContribution).to receive(:find).with(contribution.id.to_s).and_return(contribution)
+        allow(contribution).to receive(:close).and_return(false)
+      end
+
+      it 'shows a flash message' do
+        post_request
+        expect(flash[:alert]).to eq(I18n.t('task_contributions.discard_changes.error'))
+      end
+
+      it 'redirects to the modified task' do
+        post_request
+        expect(response).to have_http_status(:redirect)
+        expect(response).to redirect_to(contrib_task)
+      end
+    end
+  end
+
+  describe 'GET #show' do
+    subject(:get_request) { get :show, params: {task_id: task.id, id: contribution.id} }
+
+    before do
+      task.save!
+      contribution.save!
+    end
+
+    context 'when contribution exists' do
+      it 'redirects to the associated task' do
+        get_request
         expect(response).to have_http_status(:redirect)
         expect(response).to redirect_to(contrib_task)
       end

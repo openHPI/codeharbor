@@ -36,6 +36,7 @@ RSpec.describe TaskContribution do
           it { is_expected.not_to be_able_to(:create, contribution) }
           it { is_expected.to be_able_to(:show, contribution) }
           it { is_expected.to be_able_to(:discard_changes, contribution) }
+          it { is_expected.to be_able_to(:destroy, contribution) }
         end
       end
     end
