@@ -55,16 +55,6 @@ class ContributionsController < ApplicationController
     end
   end
 
-  def update
-    @task = TaskContribution.find(params[:id]).task
-    @task.assign_attributes(contrib_task_params) # assign_attributes(contrib_task_params)
-    if @task.save(context: :force_validations)
-      redirect_to @task, notice: t('task_contributions.update.success')
-    else
-      render :edit
-    end
-  end
-
   def contrib_task_params
     params.require(:task).permit(:title, :description, :internal_description, :language,
       :programming_language_id, files_attributes: file_params, tests_attributes: test_params,
