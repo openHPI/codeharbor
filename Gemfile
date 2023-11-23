@@ -49,7 +49,7 @@ gem 'omniauth-rails_csrf_protection', '~> 1.0'
 gem 'omniauth-saml', '~> 2.0'
 
 # Authorization
-gem 'cancancan'
+gem 'pundit'
 
 # Error Tracing
 gem 'mnemosyne-ruby'
@@ -79,6 +79,7 @@ group :test do
   gem 'factory_bot_rails'
   gem 'headless'
   gem 'i18n-tasks'
+  gem 'pundit-matchers'
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'
   gem 'rspec-github', require: false

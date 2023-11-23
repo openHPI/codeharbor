@@ -2,6 +2,8 @@
 
 module Users
   class RegistrationsController < Devise::RegistrationsController
+    skip_before_action :require_user!
+    skip_after_action :verify_authorized
     before_action :configure_sign_up_params, only: [:create] # rubocop:disable Rails/LexicallyScopedActionFilter
     before_action :configure_account_update_params, only: [:update]
 

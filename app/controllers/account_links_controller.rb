@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
 class AccountLinksController < ApplicationController
-  load_and_authorize_resource
-
+  before_action :load_and_authorize_account_link, except: %i[new create]
   before_action :set_user
-  before_action :set_account_link, only: %i[show edit update destroy]
   before_action :set_shared_user, only: %i[remove_shared_user add_shared_user]
 
   def show; end
@@ -14,6 +12,7 @@ class AccountLinksController < ApplicationController
       push_url: "#{Settings.codeocean.url}/import_task",
       check_uuid_url: "#{Settings.codeocean.url}/import_uuid_check"
     )
+    authorize @account_link
   end
 
   def edit; end
@@ -21,6 +20,8 @@ class AccountLinksController < ApplicationController
   def create # rubocop:disable Metrics/AbcSize
     @account_link = AccountLink.new(account_link_params)
     @account_link.user = @user
+    authorize @account_link
+
     respond_to do |format|
       if @account_link.save
         format.html { redirect_to @user, notice: t('common.notices.object_created', model: AccountLink.model_name.human) }
@@ -75,8 +76,9 @@ class AccountLinksController < ApplicationController
   end
 
   # Use callbacks to share common setup or constraints between actions.
-  def set_account_link
+  def load_and_authorize_account_link
     @account_link = AccountLink.find(params[:id])
+    authorize @account_link
   end
 
   def set_shared_user

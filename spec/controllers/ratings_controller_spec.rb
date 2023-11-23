@@ -6,7 +6,7 @@ RSpec.describe RatingsController do
   render_views
 
   let(:user) { create(:user) }
-  let(:task) { create(:task) }
+  let(:task) { create(:task, access_level: :public) }
   let(:rating) { 4 }
 
   let(:valid_attributes) do

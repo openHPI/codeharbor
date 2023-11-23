@@ -3,17 +3,20 @@
 require 'zip'
 
 class TasksController < ApplicationController # rubocop:disable Metrics/ClassLength
-  load_and_authorize_resource except: %i[import_external import_uuid_check]
-
   before_action :handle_search_params, only: :index
   before_action :set_search, only: [:index]
   skip_before_action :verify_authenticity_token, only: %i[import_external import_uuid_check]
+  skip_before_action :require_user!, only: %i[show]
+
+  before_action :load_and_authorize_task, except: %i[index new create import_start import_confirm import_uuid_check import_external]
+  before_action :only_authorize_action, only: %i[import_start import_confirm import_uuid_check import_external]
 
   def index
     page = params[:page]
     @search = Task.visibility(@visibility, current_user).ransack(params[:q])
     @tasks = @search.result(distinct: true).paginate(page:, per_page: per_page_param).includes(:ratings, :programming_language,
       :labels).load
+    authorize @tasks
   end
 
   def duplicate
@@ -35,14 +38,18 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   def new
     @task = Task.new
+    authorize @task
   end
 
   def edit; end
 
   def create
     @task = Task.new(task_params)
+
     TaskService::HandleGroups.call(user: current_user, task: @task, group_tasks_params:)
     @task.user = current_user
+
+    authorize @task
 
     if @task.save(context: :force_validations)
       redirect_to @task, notice: t('common.notices.object_created', model: Task.model_name.human)
@@ -107,6 +114,12 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     render json: {
       status: 'failure',
       message: t('.error', title: task_title, error: e.message),
+      actions: '',
+    }
+  rescue Pundit::NotAuthorizedError
+    render json: {
+      status: 'failure',
+      message: t('common.errors.not_authorized'),
       actions: '',
     }
   end
@@ -183,6 +196,15 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   # rubocop:enable Metrics/AbcSize
 
   private
+
+  def load_and_authorize_task
+    @task = Task.find(params[:id])
+    authorize @task
+  end
+
+  def only_authorize_action
+    authorize Task
+  end
 
   def set_search # rubocop:disable Metrics/AbcSize
     search = params[:q]

@@ -16,7 +16,7 @@
       .comment-text.collapsable data-task=@task.id data-comment=comment.id
         = comment.text
         .btn-group.float-end role="group"
-          - if can? :edit, comment
+          - if policy(comment).edit?
             = link_to edit_task_comment_path(@task, comment), class: 'btn btn-light btn-sm', remote: true do
               i.fa-solid.fa-pen-to-square
               =< t('common.button.edit')

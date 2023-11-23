@@ -57,10 +57,6 @@ class User < ApplicationRecord
     save!(validate: false)
   end
 
-  def can?(permission, object)
-    Ability.new(self).can?(permission, object)
-  end
-
   def self.from_omniauth(auth) # rubocop:disable Metrics/AbcSize
     identity = {omniauth_provider: auth.provider, provider_uid: auth.uid}
 

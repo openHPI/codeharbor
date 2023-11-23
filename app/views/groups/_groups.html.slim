@@ -27,9 +27,9 @@
           - if group.description
             = group.description
           .btn-group.float-end aria-label="..." role="group"
-            - if can? :view, group
+            - if policy(group).show?
               = link_to 'Show', group, class: 'btn btn-light'
-              - if can? :edit, group
+              - if policy(group).edit?
                 = link_to 'Edit', edit_group_path(group), class: 'btn btn-light'
                 = link_to 'Destroy', group, data: {confirm: t('common.sure')}, method: :delete, class: 'btn btn-light'
             - elsif group.applicants.include?(current_user)

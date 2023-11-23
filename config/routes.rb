@@ -88,7 +88,7 @@ Rails.application.routes.draw do
       post :import_start
       post :import_confirm
     end
-    resources :comments
+    resources :comments, only: %i[index edit create update destroy]
     resources :ratings, only: :create
   end
 

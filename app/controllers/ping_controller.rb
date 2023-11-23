@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class PingController < ApplicationController
+  skip_before_action :require_user!
+  skip_after_action :verify_authorized
   before_action :postgres_connected!
 
   def index

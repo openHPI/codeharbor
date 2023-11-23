@@ -1,25 +1,28 @@
 # frozen_string_literal: true
 
 class MessagesController < ApplicationController
+  before_action :load_and_authorize_message, only: %i[destroy]
   before_action :set_user
-  before_action :set_message, only: %i[destroy]
   before_action :set_option, only: %i[index]
 
-  def index
+  def index # rubocop:disable Metrics/AbcSize
     if @option == 'inbox'
       @messages = Message.received_by(current_user)
         .order(created_at: :desc)
         .paginate(page: params[:page], per_page: per_page_param)
+      authorize @messages
       mark_messages_as_read @messages
     else
       @messages = Message.sent_by(current_user)
         .order(created_at: :desc)
         .paginate(page: params[:page], per_page: per_page_param)
+      authorize @messages
     end
   end
 
   def new
     @message = Message.new
+    authorize @message
   end
 
   # rubocop:disable Metrics/AbcSize
@@ -32,6 +35,7 @@ class MessagesController < ApplicationController
                          else
                            User.find(params[:message][:recipient_hidden])
                          end
+    authorize @message
 
     if @message.save
       redirect_to user_messages_path(@user), notice: t('.sent_successfully')
@@ -54,9 +58,9 @@ class MessagesController < ApplicationController
 
   def reply
     @recipient = User.find(params[:recipient])
-    raise CanCan::AccessDenied if Message.received_by(current_user).sent_by(@recipient).empty?
+    @message = Message.new(recipient: @recipient)
+    authorize @message
 
-    @message = Message.new
     render :reply
   end
 
@@ -74,7 +78,7 @@ class MessagesController < ApplicationController
     @option = params[:option] || 'inbox'
   end
 
-  def set_message
+  def load_and_authorize_message
     @message = Message.find(params[:id])
   end
 

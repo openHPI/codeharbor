@@ -2,6 +2,8 @@
 
 module Users
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
+    skip_before_action :require_user!
+    skip_after_action :verify_authorized
     # SAML doesn't support the CSRF protection
     protect_from_forgery except: %i[samltestid bird nbp]
 

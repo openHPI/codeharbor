@@ -1,4 +1,4 @@
-id = <%= @task.id %>
+id = <%= params[:task_id] %>
 commentBox =  $(".comment-box[data-task=" + id +"] > .comment-body")
 $(commentBox).html("<%= escape_javascript(render :partial => 'comments/task_comments', :locals => {:comment => @comment, :task => @task}) %>");
 
