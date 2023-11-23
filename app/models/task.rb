@@ -8,6 +8,8 @@ class Task < ApplicationRecord
   validates :title, presence: true
 
   validates :uuid, uniqueness: true
+
+  before_validation :lowercase_language
   validates :language, format: {with: /\A[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*\z/, message: :not_de_or_us}
   validate :primary_language_tag_in_iso639?
 
@@ -210,6 +212,10 @@ class Task < ApplicationRecord
 
   def duplicate_model_solutions
     model_solutions.map(&:duplicate)
+  end
+
+  def lowercase_language
+    language.downcase! if language.present?
   end
 
   def primary_language_tag_in_iso639?
