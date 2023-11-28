@@ -22,6 +22,7 @@ en:
         collaborate: Collaborate
         leave: Leave
         share: Share Collection
+        delete: Delete Collection
       define_account_link: Please define an account link first
       download_no_exercises: Download not possible without exercises
       export_to: Export to

@@ -88,7 +88,7 @@
           =< t('common.button.edit')
         - if @collection.users.include? current_user
           = link_to leave_collection_path(@collection), class: 'btn btn-important', method: :post, data: { confirm: @collection.users.count == 1 ? t('.leave.deletion_warning') : t('common.sure') } do
-            = t('.button.leave')
+            = @collection.users.count == 1 ? t('.button.delete') : t('.button.leave')
 
         = link_to t('common.button.back'), collections_path, class: 'btn btn-important'
 
