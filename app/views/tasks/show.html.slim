@@ -63,7 +63,7 @@
           = Task.human_attribute_name('description')
           | :
         .row-value
-          = @task.description
+          = render_markdown(@task.description)
 
 
     legend.toggle-next.closed
