@@ -8,11 +8,26 @@ RSpec.describe HomeController do
   describe '#render_not_authorized' do
     before do
       allow(controller).to receive(:index) { controller.send(:render_not_authorized) }
+      sign_in user if defined?(user)
       get :index
     end
 
-    expect_flash_message(:alert, I18n.t('common.errors.not_authorized'))
-    expect_redirect(:root)
+    expect_flash_message(:alert, I18n.t('common.errors.not_signed_in'))
+    expect_redirect(:new_user_session)
+
+    context 'with an admin' do
+      let(:user) { create(:admin) }
+
+      expect_flash_message(:alert, I18n.t('common.errors.not_authorized'))
+      expect_redirect(:root)
+    end
+
+    context 'with an user' do
+      let(:user) { create(:user) }
+
+      expect_flash_message(:alert, I18n.t('common.errors.not_authorized'))
+      expect_redirect(:root)
+    end
   end
 
   describe '#render_not_found' do
@@ -22,19 +37,21 @@ RSpec.describe HomeController do
       get :index
     end
 
-    expect_flash_message(:alert, I18n.t('common.errors.not_authorized'))
-    expect_redirect(:root)
+    expect_flash_message(:alert, I18n.t('common.errors.not_signed_in'))
+    expect_redirect(:new_user_session)
 
     context 'with an admin' do
       let(:user) { create(:admin) }
 
       expect_flash_message(:alert, I18n.t('common.errors.not_found_error'))
+      expect_redirect(:root)
     end
 
     context 'with an user' do
       let(:user) { create(:user) }
 
       expect_flash_message(:alert, I18n.t('common.errors.not_authorized'))
+      expect_redirect(:root)
     end
   end
 

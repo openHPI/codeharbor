@@ -63,13 +63,16 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def render_error(message, status)
+  def render_error(message, status) # rubocop:disable Metrics/AbcSize
     set_sentry_context
     respond_to do |format|
       format.any do
         # Prevent redirect loop
-        if request.url == request.referer
+        if request.url == request.referer || request.referer&.match?(new_user_session_path)
           redirect_to :root, alert: message
+        elsif current_user.nil? && status == :unauthorized
+          store_location_for(:user, request.fullpath) if current_user.nil?
+          redirect_to new_user_session_path, alert: t('common.errors.not_signed_in')
         else
           redirect_back fallback_location: :root, allow_other_host: false, alert: message
         end

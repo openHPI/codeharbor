@@ -13,7 +13,7 @@ RSpec.describe CommentsController do
   describe 'GET #index' do
     subject(:get_request) { get :index, params: {task_id: task.id}, format: :js, xhr: true }
 
-    shared_examples 'error redirect' do
+    shared_examples 'error redirect' do |error_message|
       it 'redirects to root page' do
         get_request
         expect(response).to have_http_status :redirect
@@ -21,7 +21,7 @@ RSpec.describe CommentsController do
 
       it 'shows a flash message' do
         get_request
-        expect(flash[:alert]).to eq I18n.t('common.errors.not_authorized')
+        expect(flash[:alert]).to eq I18n.t("common.errors.#{error_message}")
       end
     end
 
@@ -39,7 +39,7 @@ RSpec.describe CommentsController do
 
     context 'when not signed in' do
       context 'when task access level is private' do
-        it_behaves_like 'error redirect'
+        it_behaves_like 'error redirect', 'not_signed_in'
       end
 
       context 'when task access level is public' do
@@ -66,7 +66,7 @@ RSpec.describe CommentsController do
         end
 
         context 'when task is private' do
-          it_behaves_like 'error redirect'
+          it_behaves_like 'error redirect', 'not_authorized'
         end
       end
     end

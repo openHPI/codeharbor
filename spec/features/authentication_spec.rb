@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Authentication' do
-  let(:user) { create(:admin) }
-  let(:password) { attributes_for(:admin)[:password] }
+  let(:user) { create(:user) }
+  let(:password) { attributes_for(:user)[:password] }
 
   context 'when signed out' do
     before { visit(root_path) }
@@ -30,6 +30,38 @@ RSpec.describe 'Authentication' do
         fill_in('Password', with: password.reverse)
         click_button(I18n.t('common.button.log_in'))
         expect(page).to have_content(I18n.t('devise.failure.invalid', authentication_keys: 'Email'))
+      end
+    end
+
+    context 'when a restricted sub-page is opened' do
+      let(:task) { create(:task, user:, access_level: :private) }
+
+      before { visit(task_path(task)) }
+
+      it 'displays a sign in link' do
+        expect(page).to have_content(I18n.t('common.button.log_in'))
+      end
+
+      it 'shows a notification' do
+        expect(page).to have_content(I18n.t('common.errors.not_signed_in'))
+      end
+
+      it 'redirects to the desired page immediately after sign-in' do
+        fill_in(I18n.t('users.sessions.new.email.label'), with: user.email)
+        fill_in(I18n.t('users.sessions.new.password.label'), with: password)
+        click_button(I18n.t('common.button.log_in'))
+        expect(page).to have_content(task.title)
+      end
+
+      context 'when a user still has no access' do
+        let(:task) { create(:task, access_level: :private) }
+
+        it 'informs the user about missing permissions' do
+          fill_in(I18n.t('users.sessions.new.email.label'), with: user.email)
+          fill_in(I18n.t('users.sessions.new.password.label'), with: password)
+          click_button(I18n.t('common.button.log_in'))
+          expect(page).to have_content(I18n.t('common.errors.not_authorized'))
+        end
       end
     end
   end
