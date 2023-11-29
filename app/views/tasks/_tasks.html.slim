@@ -47,7 +47,7 @@
             span style=("color: gray")
               = t('.no_description')
           - else
-            = task.description
+            = render_markdown(task.description)
         .more-btn-wrapper
           = link_to task, class: 'more-btn' do
             span class=("more-tag")
