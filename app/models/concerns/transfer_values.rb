@@ -28,8 +28,8 @@ module TransferValues
   # rubocop:disable Metrics/AbcSize
   def transfer_multiple(ours, others, parent)
     others.each do |other|
-      if ours.exists?(other.id)
-        ours.find(other.id).transfer_contents
+      if ours.exists?(other.parent_id)
+        ours.find {|our| our.id = other.parent_id }.transfer_contents other
       else
         ours.append(other.class.name.constantize.new(other.attributes.except('id').merge(parent)))
       end
