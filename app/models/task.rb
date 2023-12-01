@@ -67,13 +67,13 @@ class Task < ApplicationRecord
     r = left_outer_joins(:programming_language)
     # NOTE: Splitting by spaces like this is not ideal. For example, it breaks for labels containing spaces.
     input.split(/[,\s]+/).each do |keyword|
-      r = r.where(["title ILIKE :keyword
-                    OR description ILIKE :keyword
-                    OR internal_description ILIKE :keyword
+      r = r.where(["tasks.title ILIKE :keyword
+                    OR tasks.description ILIKE :keyword
+                    OR tasks.internal_description ILIKE :keyword
                     OR programming_languages.language ILIKE :keyword
-                    OR EXISTS (SELECT name FROM task_labels JOIN labels ON label_id = labels.id
+                    OR EXISTS (SELECT labels.name FROM task_labels JOIN labels ON task_labels.label_id = labels.id
                                 WHERE task_id = tasks.id
-                                AND name ILIKE :keyword)",
+                                AND labels.name ILIKE :keyword)",
                    {keyword: "%#{keyword}%"}])
     end
     return r
