@@ -95,12 +95,15 @@ module ProformaService
       object.files.map {|file| files.delete(file.id) }
     end
 
-    def programming_language
-      proglang_name = @proforma_task.proglang&.dig :name
-      proglang_version = @proforma_task.proglang&.dig :version
+    def programming_language # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+      proglang_name = @proforma_task.proglang&.dig(:name).try(:downcase)
+      proglang_version = @proforma_task.proglang&.dig(:version).try(:downcase)&.to_s
       return @task.programming_language if proglang_name.nil? || proglang_version.nil?
 
-      ProgrammingLanguage.where(language: proglang_name, version: proglang_version).first_or_initialize
+      ProgrammingLanguage.where('LOWER(language) = ? AND LOWER(version) = ?', proglang_name, proglang_version).first_or_initialize do |pl|
+        pl.language = @proforma_task.proglang&.dig(:name)
+        pl.version = @proforma_task.proglang&.dig(:version)
+      end
     end
 
     def model_solutions
