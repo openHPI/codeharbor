@@ -25,7 +25,7 @@
                 .btn-group
                   - if can? :show, task
                     = link_to task.title, task_path(task), class: 'btn btn-light', style: "border-right: none"
-                    = link_to remove_task_collection_path(collection, task: task), class: 'btn btn-light', style: "border-left: none; margin-right: 5px;" do
+                    = link_to remove_task_collection_path(collection, task: task), method: :patch, class: 'btn btn-light', style: "border-left: none; margin-right: 5px;" do
                       i.fa-solid.fa-xmark style=("color: gray")
                   - else
                     = link_to task.title, task_path(task), class: 'btn btn-light disabled', style: "border-right: none"
