@@ -35,7 +35,7 @@ module OmniAuth
 
       # This Lambda is responsible for terminating the session and will
       # only be used for identity-provider-initiated logout requests
-      option :idp_slo_session_destroy, (proc {|env, session|
+      option :idp_slo_session_destroy, proc {|env, session|
         if Rails.env.development?
           # For development purposes, we want to assume a secure connection behind an TLS-terminating proxy.
           # If this option is not set, our session cookie is not sent by Rack (due to the `secure` flag)
@@ -53,7 +53,7 @@ module OmniAuth
         # Our mechanism will only work through HTTPS and with the following two options
         env['rack.session'].options[:secure] = true
         env['rack.session'].options[:same_site] = :none
-      })
+      }
 
       # The attributes used in the `info` and `uid` hash below might be overwritten
       # by provider-specific mappings if required. We chose to include a suitable default mapping

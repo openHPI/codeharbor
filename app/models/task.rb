@@ -76,7 +76,7 @@ class Task < ApplicationRecord
                                 AND labels.name ILIKE :keyword)",
                    {keyword: "%#{keyword}%"}])
     end
-    return r
+    r
   }
   scope :has_all_labels, lambda {|*input|
     label_names = input.flatten.compact_blank.uniq
