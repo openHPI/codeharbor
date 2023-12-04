@@ -26,7 +26,7 @@ module CSP
   end
 
   def self.apply_omniauth_settings_for(policy)
-    Devise.omniauth_configs.each do |_provider, config|
+    Devise.omniauth_configs.each_value do |config|
       options = config.strategy_class.default_options
       settings = options.slice(:idp_sso_service_url, :idp_slo_service_url).map do |_key, value|
         get_host_source(value)
