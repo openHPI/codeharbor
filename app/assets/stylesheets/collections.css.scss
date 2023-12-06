@@ -27,6 +27,21 @@ $collection-color: #000080;
   margin-right: 5px;
 }
 
+.collection-subinfo {
+  margin-top: 5px;
+  font-size: 16px;
+}
+
+.collection-checkmark {
+  width: 10px;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.create-collection {
+  margin: 0 10px;
+}
+
 #collection-tasks-sortable {
   .row {
     border-bottom: 1px solid #ccc;
