@@ -1,0 +1,20 @@
+---
+de:
+  home:
+    partners:
+      bmbf:
+        alt_text: Gefördert vom Bundesministerium für Bildung und Forschung
+        disclaimer_html: |
+          Das Bundesministerium für Bildung und Forschung (BMBF) fördert dieses Projekt im Rahmen der "Initiative Nationale Bildungsplattform".<br>
+          BMBF Förderkennzeichen: CoHaP2 (16INB2009)
+        logo: home/logos/bmbf.de.svg
+      eu:
+        alt_text: Finanziert von der Europäische Union – NextGenerationEU
+        disclaimer_html: Finanziert durch die Europäische Union – NextGenerationEU. Die geäußerten Ansichten und Meinungen sind ausschließlich die des Autors/der Autoren und spiegeln nicht unbedingt die Ansichten der Europäischen Union oder der Europäischen Kommission wieder. Weder die Europäische Union noch die Europäische Kommission können für sie verantwortlich gemacht werden.
+        logo: home/logos/eu.de.svg
+      hpi:
+        alt_text: Logo des Hasso-Plattner-Instituts
+        logo: home/logos/hpi.de.svg
+      mbr:
+        alt_text: Logo des Projekts "Mein Bildungsraum"
+        logo: home/logos/mbr.de.svg
