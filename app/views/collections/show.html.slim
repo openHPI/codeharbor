@@ -2,6 +2,13 @@
   .std-heading
     i.fa-solid.fa-folder-open
     =< @collection.title
+    div.collection-subinfo
+      i.fa-solid.fa-users
+      - if @collection.users.length == 1
+        =< t('.no_other_user')
+      - else
+        =< t('.num_of_other_users', count: @collection.users.length - 1)
+
 .row
   .col-md-12.mt-4
     .collection-content
