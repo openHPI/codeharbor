@@ -20,9 +20,9 @@ en:
     show:
       button:
         collaborate: Collaborate
+        delete: Delete Collection
         leave: Leave
         share: Share Collection
-        delete: Delete Collection
       define_account_link: Please define an account link first
       download_no_exercises: Download not possible without exercises
       export_to: Export to
@@ -33,3 +33,8 @@ en:
       shared_by: Shared by
       temporarily_disabled: Temporarily disabled
       type_hint: Type in the users email address
+      no_other_user: No other user has access to this collection
+      num_of_other_users:
+        one: One other user has access to this collection
+        other: "%{count} other users have access to this collection"
+

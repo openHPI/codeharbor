@@ -36,12 +36,17 @@ Rails.application.routes.draw do
   end
 
   resources :collections do
+    collection do
+      post :create_ajax
+    end
+
     member do
       get :download_all
       get :view_shared # ???
 
       patch :remove_all
       patch :remove_task
+      patch :remove_task_ajax
 
       post :push_collection # later
       post :save_shared # ???

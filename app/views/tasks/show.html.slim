@@ -478,13 +478,25 @@
             = button_tag class: 'btn btn-light dropdown-toggle', 'data-bs-toggle': 'dropdown' do
               = t('.button.add_to_collection')
             ul.scrollable.dropdown-menu[role="menu"]
-              - if !current_user.collections.empty?
-                - current_user.collections.reverse.each do |collection|
-                  li
-                    = link_to collection.title, add_to_collection_task_path(collection: collection), method: 'post', class: 'dropdown-item'
-              - else
+              - current_user.collections.reverse.each do |collection|
                 li
-                  = link_to t('.button.add_collection'), new_collection_path(current_user)
+                  - if collection.tasks.include?(@task)
+                    = link_to remove_task_collection_path(collection, task: @task), method: :patch, class: 'dropdown-item', data: { confirm: t('.remove_task_from_collection_warning') } do
+                      span.collection-checkmark
+                        = "✓ #{collection.title}"
+                  - else
+                    = link_to add_to_collection_task_path(collection: collection), method: :post, class: 'dropdown-item' do
+                      span.collection-checkmark
+                        = collection.title
+
+              li
+                hr.dropdown-divider
+              li
+                = form_with model: Collection.new, url: create_ajax_collections_path do |f|
+                  .create-collection.input-group
+                    = f.text_field :title, class: 'form-control', placeholder: t('.create_collection_placeholder')
+                    = f.hidden_field :task_ids, value: @task.id
+                    = f.submit class: 'btn btn-light submit', value: t('.button.create_collection')
         - else
           div[data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150]
             = button_tag class: 'btn btn-outline-dark dropdown-toggle disabled', 'data-bs-toggle': 'dropdown' do

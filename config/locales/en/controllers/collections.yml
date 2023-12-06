@@ -1,6 +1,12 @@
 ---
 en:
   collections:
+    create:
+      error: The collection could not be created
+      success_notice: Collection has succefully been created. (The task was automatically added)
+    create_ajax:
+      error: The collection could not be created.
+      success_notice: The collection has successfully been created. (The task has automatically been added)
     leave:
       left_successfully: You successfully left the collection.
     push_collection:
@@ -11,7 +17,12 @@ en:
       success_notice: All Tasks were successfully removed
     remove_task:
       cannot_remove_alert: You cannot remove this task.
+    remove_task_ajax:
+      error: Task could not be removed from collection.
+      success_notice: Task has successfully been removed from collection.
     save_shared:
+      errors:
+        already_member: You are already a member of this collection.
       success_notice: You can now collaborate to this collection.
     share:
       success_notice: Your collection has been sent.

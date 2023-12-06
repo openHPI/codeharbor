@@ -3,7 +3,7 @@
 require 'zip'
 
 class CollectionsController < ApplicationController
-  before_action :load_and_authorize_collection, except: %i[index new create]
+  before_action :load_and_authorize_collection, except: %i[index new create create_ajax]
 
   def index
     @collections = Collection.includes(:users, tasks: %i[user groups])
@@ -36,6 +36,19 @@ class CollectionsController < ApplicationController
     end
   end
 
+  def create_ajax
+    @collection = Collection.new(collection_params)
+    @collection.users << current_user
+    authorize @collection
+
+    if @collection.save
+      redirect_to @collection.tasks.first, notice: t('.success_notice')
+    else
+      flash.now[:alert] = t('.error')
+      head :ok
+    end
+  end
+
   def update
     if @collection.update(collection_params)
       redirect_to collections_path, notice: t('common.notices.object_updated', model: Collection.model_name.human)
@@ -49,6 +62,15 @@ class CollectionsController < ApplicationController
       redirect_to @collection, notice: t('common.notices.object_removed', model: Task.model_name.human)
     else
       redirect_to @collection, alert: t('.cannot_remove_alert')
+    end
+  end
+
+  def remove_task_ajax
+    if @collection.remove_task(params[:task])
+      redirect_to Task.find_by(id: params[:task]), notice: t('.success_notice')
+    else
+      flash.now[:alert] = t('.error')
+      head :ok
     end
   end
 
@@ -93,6 +115,8 @@ class CollectionsController < ApplicationController
   end
 
   def save_shared
+    return redirect_to user_messages_path(user), alert: t('.errors.already_member') if @collection.users.include? user
+
     @collection.users << current_user
     if @collection.save
       redirect_to @collection, notice: t('.success_notice')
@@ -138,6 +162,6 @@ class CollectionsController < ApplicationController
   end
 
   def collection_params
-    params.require(:collection).permit(:title, :description, collection_tasks_attributes: collection_tasks_params)
+    params.require(:collection).permit(:title, :task_ids, :description, collection_tasks_attributes: collection_tasks_params)
   end
 end
