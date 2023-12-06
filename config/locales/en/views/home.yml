@@ -75,9 +75,13 @@ en:
     partners:
       bmbf:
         alt_text: Sponsored by the German Federal Ministry of Education and Research
+        disclaimer_html: |
+          The Federal Ministry of Education and Research (BMBF) is funding this project within the framework of the "Initiative National Education Platform".<br>
+          BMBF Grant Number: CoHaP2 (16INB2009)
         logo: home/logos/bmbf.en.svg
       eu:
         alt_text: Funded by the European Union – NextGenerationEU
+        disclaimer_html: Funded by the European Union – NextGenerationEU. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or European Commission. Neither the European Union nor the European Commission can be held responsible for them.
         logo: home/logos/eu.en.svg
       hpi:
         alt_text: Logo of the Hasso Plattner Institute
