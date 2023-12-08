@@ -4,7 +4,7 @@ class Label < ApplicationRecord
   has_many :task_labels, dependent: :destroy
   has_many :tasks, through: :task_labels
 
-  MAX_LENGTH = 15
+  MAX_LENGTH = 30
   validates :name, presence: true, length: {minimum: 1, maximum: MAX_LENGTH}, uniqueness: {case_sensitive: false}
   validates :color, presence: true, format: {with: /\A[a-fA-F0-9]{6}\z/}
 
