@@ -1,6 +1,6 @@
 - if user_signed_in?
   li.nav-item.dropdown
-    a.nav-link.text-center.dropdown-toggle#navbarDropdown href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false'
+    a.nav-link.px-3.dropdown-toggle#navbarDropdown href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false'
       => current_user.email
       - if current_user.unread_messages_count != '0'
         span.menu-number
@@ -13,7 +13,7 @@
           - if current_user.unread_messages_count != '0'
             span.menu-number
               = current_user.unread_messages_count
-  li.nav-item = link_to t('.button.log_out'), destroy_user_session_path, method: :delete, class: 'nav-link text-center'
+  li.nav-item = link_to t('.button.log_out'), destroy_user_session_path, method: :delete, class: 'nav-link px-3'
 - else
   = render('navigation_collection_link', target: :new_user_registration_path, text: t('common.button.sign_up')) do
     i.fa-solid.fa-user
