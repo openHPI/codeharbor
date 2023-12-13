@@ -101,6 +101,7 @@ en:
         no_results_description: Try different options by clicking on 'Advanced'.
         no_tasks: You do not have tasks yet
     visibility:
+      contribution: Contribution
       label: Visibility
       private: Private
       public: Public
