@@ -1,0 +1,19 @@
+---
+de:
+  application:
+    footer:
+      about:
+        header: Über CodeHarbor
+        paragraph: CodeHarbor ermöglicht das Teilen, Bewerten und Diskutieren von automatisch bewertbaren Programmieraufgaben mit Kollegen. Wiederverwenden Sie vorhandene Aufgaben, klonen Sie Aufgaben und passen Sie sie an Ihre Bedürfnisse an. Übersetzen Sie sie in eine andere menschliche Sprache oder portieren Sie sie in eine andere Programmiersprache. Behalten Sie immer die volle Kontrolle darüber, mit wem Sie teilen.
+      hasso_plattner_institute: Hasso-Plattner-Institut
+      imprint: Impressum
+      more:
+        header: Weitere Informationen
+        link: Über CodeHarbor
+      privacy_policy: Datenschutzerklärung
+    navigation:
+      rails_admin: Rails-Administrator
+    session:
+      button:
+        log_out: Abmelden
+      profile: Profil

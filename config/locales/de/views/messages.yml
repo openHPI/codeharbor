@@ -1,0 +1,23 @@
+---
+de:
+  messages:
+    index:
+      button:
+        deny_access: Zugriff verweigern
+        grant_access: Zugriff gewähren
+        inbox: Posteingang
+        make_co_author: Als Co-Autor festlegen
+        reply: Antworten
+        save_collection: Sammlung speichern
+        view: Ansehen
+      from: Von
+      no_messages: Sie haben keine Nachrichten.
+      reply: Antworten
+      sent: Gesendet
+      to: An
+      unknown: unbekannt
+    reply:
+      message_to: Nachricht senden an
+    shared:
+      new: Neue Nachricht
+      send_message: Nachricht senden

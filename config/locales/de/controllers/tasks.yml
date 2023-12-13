@@ -1,0 +1,28 @@
+---
+de:
+  tasks:
+    add_to_collection:
+      error: Aufgabe ist bereits in der Sammlung.
+      success_notice: Aufgabe wurde erfolgreich zur Sammlung hinzugefügt.
+    duplicate:
+      error_alert: Die Aufgabe konnte nicht dupliziert werden.
+    export_external_confirm:
+      error: 'Der Export der Aufgabe (%{title}) ist fehlgeschlagen. <br> Fehler: %{error}'
+      success: Aufgabe (%{title}) erfolgreich exportiert.
+    import_confirm:
+      error: 'Der Import der Aufgabe (%{title}) ist fehlgeschlagen. <br> Fehler: %{error}'
+      success: Aufgabe (%{title}) erfolgreich importiert.
+    import_external:
+      internal_error: Bei der Importierung der Übung ist ein interner Fehler aufgetreten.
+      invalid: Ungültige Übung
+      success: Erfolg
+    import_start:
+      choose_file_error: Sie müssen eine Datei auswählen.
+    proforma_service:
+      convert_zip_to_proforma_tasks:
+        nested_too_deep: Die Zip-Datei ist zu tief verschachtelt.
+    task_service:
+      check_external:
+        no_task: In der externen App wurde keine entsprechende Aufgabe gefunden. Beim Pushen dieser Aufgabe wird eine neue Aufgabe in der externen App erstellt, die mit dieser Aufgabe in CodeHarbor verknüpft ist. Alle Änderungen an einer der Aufgaben können auf die jeweils andere Plattform übertragen werden.
+        task_found: 'In der externen App wurde eine entsprechende Aufgabe gefunden. Sie können: <ul><li><b>Überschreiben</b> Sie die Aufgabe in der externen App. Dadurch werden alle Änderungen, die in CodeHarbor vorgenommen wurden, auf die externe App übertragen.<br>Vorsicht: Dadurch werden alle potenziellen Änderungen in der externen App überschrieben. Dadurch wird die Aufgabe geändert (und möglicherweise zerstört), auch wenn sie derzeit in einem Kurs verwendet wird.</li><li><b>Erstellen Sie eine neue</b> Aufgabe, die den aktuellen Zustand dieser Aufgabe kopiert. Dadurch wird eine Kopie dieser Aufgabe in CodeHarbor erstellt, die dann als völlig neue Übung in der externen App exportiert wird.</li></ul>'
+        task_found_no_right: 'In der externen App wurde eine entsprechende Aufgabe gefunden, aber Sie haben keine Rechte, sie zu bearbeiten. Sie können: <ul><li><b>Erstellen Sie eine neue</b> Aufgabe, die den aktuellen Zustand dieser Aufgabe kopiert. Dadurch wird eine Kopie dieser Aufgabe in CodeHarbor erstellt, die dann als völlig neue Aufgabe in der externen App exportiert wird.</li></ul>'

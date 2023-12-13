@@ -1,0 +1,7 @@
+---
+de:
+  comments:
+    create:
+      error: Es ist ein Fehler aufgetreten beim Erstellen Ihres Kommentars.
+    update:
+      error: Es ist ein Fehler aufgetreten beim Aktualisieren Ihres Kommentars.

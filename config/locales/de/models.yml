@@ -1,0 +1,179 @@
+---
+de:
+  activerecord:
+    attributes:
+      account_link:
+        api_key: API-Schlüssel
+        check_uuid_url: UUID-URL überprüfen
+        name: Name
+        push_url: Push-URL
+      account_link_user:
+        user: Benutzer
+      collection:
+        description: Beschreibung
+        title: Titel
+        users: Benutzer
+      comment:
+        text: Text
+      group:
+        admins: Admins
+        description: Beschreibung
+        name: Name
+      group_membership:
+        role: Rolle
+        user_id: Benutzer-ID
+      group_task:
+        task_id: Aufgaben-ID
+      label:
+        color: Farbe
+        name: Name
+      license:
+        name: Name
+      message:
+        recipient: Empfänger
+        text: Text
+      model_solution:
+        xml_id: XML-ID
+      rating:
+        rating: Bewertung
+      task:
+        access_level: Sichtbarkeit
+        description: Beschreibung
+        external_resources: Externe Ressourcen
+        files: Dateien
+        grading_hints: Bewertungshinweise
+        internal_description: Interne Beschreibung
+        language: Sprache
+        license: Lizenz
+        meta_data: Metadaten
+        parent_uuid: Übergeordnete UUID
+        programming_language: Programmiersprache
+        submission_restrictions: Abgabe-Einschränkungen
+        tests: Tests
+        title: Titel
+        uuid: UUID
+      task_file:
+        attachment: Anhang
+        content: Inhalt
+        internal_description: Interne Beschreibung
+        name: Name
+        path: Pfad
+        usage_by_lms: Verwendung durch LMS
+        used_by_grader: Verwendet durch Grader
+        visible: Sichtbar
+        xml_id: XML-ID
+      test:
+        configuration: Konfiguration
+        description: Beschreibung
+        internal_description: Interne Beschreibung
+        test_type: Testtyp
+        testing_framework: Testframework
+        timeout: Timeout
+        title: Titel
+        validity: Gültigkeit
+        xml_id: XML-ID
+      user:
+        email: E-Mail
+        first_name: Vorname
+        last_name: Nachname
+        role: Rolle
+      user_identity:
+        omniauth_provider: OmniAuth-Anbieter
+        provider_uid: Anbieter-UID
+    errors:
+      models:
+        collection:
+          attributes:
+            description:
+              too_long: ist %{excess} Zeichen länger als die maximale Länge von %{max_length} Zeichen
+        group:
+          attributes:
+            base:
+              no_admin: Kein Administrator in der Gruppe
+        task:
+          attributes:
+            language:
+              not_de_or_us: 'ist nicht im richtigen Format. Bitte verwenden Sie eines der folgenden Formate: de / en-US'
+              not_iso639: ist kein zweistelliger ISO-639-1- oder dreistelliger ISO-639-2-Sprachcode
+        task_file:
+          attributes:
+            xml_id:
+              not_unique: ist nicht eindeutig
+        user:
+          attributes:
+            avatar:
+              not_an_image: muss ein Bild sein
+              size_over_10_mb: Größe muss kleiner als 10MB sein
+    models:
+      account_link:
+        one: Konto-Link
+        other: Konto-Links
+      account_link_user:
+        one: Konto-Link
+        other: Konto-Link-Benutzer
+      collection:
+        one: Sammlung
+        other: Sammlungen
+      collection_task:
+        one: Sammlungsaufgabe
+        other: Sammlungsaufgaben
+      collection_user:
+        one: Sammlungsbenutzer
+        other: Sammlungsbenutzer
+      comment:
+        one: Kommentar
+        other: Kommentare
+      group:
+        one: Gruppe
+        other: Gruppen
+      group_membership:
+        one: Gruppenmitgliedschaft
+        other: Gruppenmitgliedschaften
+      group_task:
+        one: Gruppenaufgabe
+        other: Gruppenaufgaben
+      label:
+        one: Label
+        other: Labels
+      license:
+        one: Lizenz
+        other: Lizenzen
+      message:
+        one: Nachricht
+        other: Nachrichten
+      model_solution:
+        one: Musterlösung
+        other: Musterlösungen
+      programming_language:
+        one: Programmiersprache
+        other: Programmiersprachen
+      rating:
+        one: Bewertung
+        other: Bewertungen
+      report:
+        one: Bericht
+        other: Berichte
+      task:
+        one: Aufgabe
+        other: Aufgaben
+      task_file:
+        one: Aufgabendatei
+        other: Aufgabendateien
+      task_label:
+        one: Aufgabenlabel
+        other: Aufgabenlabels
+      test:
+        one: Test
+        other: Tests
+      testing_framework:
+        one: Test-Framework
+        other: Test-Frameworks
+      user:
+        one: Benutzer
+        other: Benutzer
+      user_identity:
+        one: Benutzeridentität
+        other: Benutzeridentitäten
+  tasks:
+    model:
+      copy_of_task: Kopie der Aufgabe

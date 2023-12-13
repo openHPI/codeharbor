@@ -1,0 +1,24 @@
+---
+de:
+  groups:
+    delete_from_group:
+      success_notice: Benutzer aus Gruppe gelöscht.
+    demote_admin:
+      success_notice: Admin zu Benutzer heruntergestuft.
+    deny_access:
+      success_notice: Benutzer abgelehnt.
+    grant_access:
+      success_notice: Zugriff gewährt.
+    leave:
+      cannot_leave_alert: Du musst zuerst jemand anderen zum Admin ernennen
+      success_notice: Du hast erfolgreich die Gruppe verlassen
+    make_admin:
+      success_notice: Benutzer zum Admin gemacht.
+    request_access:
+      success_notice: Deine Zugriffsanfrage wurde gesendet.
+    send_access_request_message:
+      message: "%{user} möchte auf deine Gruppe zugreifen: %{group}."
+    send_deny_access_message:
+      message: "%{user} hat dich nicht in ihre Gruppe aufgenommen: %{group}."
+    send_grant_access_messages:
+      message: "%{user} hat dich in ihre Gruppe aufgenommen: %{group}."

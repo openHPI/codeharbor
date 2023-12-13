@@ -1,0 +1,71 @@
+---
+de:
+  users:
+    confirmations:
+      new:
+        resend_confirmation: Bestätigungsinstruktionen erneut senden
+        validation_error: 'Aufgrund von Fehlern konnten die Instruktionen nicht gesendet werden:'
+    passwords:
+      edit:
+        change_my_pwd: Passwort ändern
+        change_pwd: Passwort ändern
+      new:
+        forgot_pwd: Passwort vergessen?
+        send_reset_pwd: Senden Sie mir Reset-Passwort-Instruktionen
+        validation_error: 'Aufgrund von Fehlern konnte die E-Mail nicht gesendet werden:'
+    registrations:
+      avatar_form:
+        remove_avatar: Avatar entfernen
+      edit:
+        confirm_w_pwd: Wir benötigen Ihr aktuelles Passwort, um Ihre Änderungen zu bestätigen.
+        header: Benutzer bearbeiten
+        leave_blank: Lassen Sie es leer, wenn Sie es nicht ändern möchten.
+        password_current: Aktuelles Passwort
+        update_user: Aktualisieren
+        waiting_confirmation: 'Aktuell in Wartestellung für Bestätigung: %{email}'
+      new:
+        header: Registrieren
+        password: Passwort
+    sessions:
+      new:
+        email:
+          label: E-Mail
+          placeholder: E-Mail
+        header: Einloggen
+        password:
+          label: Passwort
+          placeholder: Passwort
+    shared:
+      links:
+        forgot_pwd: Passwort vergessen?
+        no_confirmation: Keine Bestätigungsinstruktionen erhalten?
+        no_unlock: Keine Entsperrungsinstruktionen erhalten?
+        sign_in_with: Mit %{provider} anmelden
+      minimum_password_length: Mindestens %{count} Zeichen
+      notification_modal:
+        delete_modal:
+          content:
+            groups_1: Gruppen, in denen Sie der einzige Benutzer sind, werden gelöscht
+            groups_2: 'Gruppen, in denen Sie der Administrator und andere Benutzer sind: Ein anderer Benutzer wird zufällig zum Administrator erklärt'
+            groups_3: 'Gruppen mit anderen Administratoren: keine Änderungen'
+            groups_header: 'Gruppen:'
+            intro: 'Die Löschung Ihres Kontos hat folgende Auswirkungen:'
+            tasks_content: Ihre Aufgaben bleiben bestehen, aber Ihr Name wird anonymisiert
+            tasks_header: 'Aufgaben:'
+      password_new: Neues Passwort
+      password_new_confirmation: Bestätigen Sie Ihr neues Passwort
+    show:
+      account_links:
+        add: Account-Link hinzufügen
+        created: Erstellte Account-Links
+        other: Andere Account-Links
+      delete_modal:
+        title: Warnung
+      full_name: Vollständiger Name
+      private_information: Private Informationen
+      public_information: Öffentliche Informationen
+      send_message: Nachricht senden
+    unlocks:
+      new:
+        resend_unlock: Entsperrungsinstruktionen erneut senden
+        validation_error: 'Aufgrund von Fehlern konnten die Instruktionen nicht gesendet werden:'

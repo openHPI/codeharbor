@@ -1,0 +1,34 @@
+---
+de:
+  collections:
+    collections:
+      empty_state:
+        heading: Sie haben noch keine Aufgabensammlungen
+        hint: Sie können Aufgabensammlungen erstellen und Aufgaben hinzufügen.
+    form:
+      button:
+        remove_all: Alle entfernen
+        save: Aufgabensammlung speichern
+    index:
+      new_collection: Neue Aufgabensammlung
+      view_shared: Geteilte Aufgabensammlung anzeigen
+    new:
+      header: Neue Aufgabensammlung
+    shared:
+      no_description: Keine Beschreibung
+      no_tasks_added: Keine Aufgaben hinzugefügt
+    show:
+      button:
+        collaborate: Zusammenarbeiten
+        leave: Verlassen
+        share: Aufgabensammlung teilen
+      define_account_link: Bitte erstellen Sie zuerst einen Account-Link
+      download_no_exercises: Download nicht möglich ohne Aufgaben
+      export_to: Exportieren nach
+      leave:
+        deletion_warning: Sie sind der/die letzte Benutzer:in in dieser Aufgabensammlung. Wenn Sie gehen, wird diese Aufgabensammlung dauerhaft gelöscht! Sind Sie sicher?
+      locked_exercise_hint: 'Hinweis: Für Aufgaben mit einem Schloss-Symbol müssen Sie zuerst Zugriff beantragen, um sie anzeigen zu können.'
+      noExercisesAdded: Keine Aufgabe hinzugefügt
+      shared_by: Geteilt von
+      temporarily_disabled: Vorübergehend deaktiviert
+      type_hint: Geben Sie die E-Mail-Adresse des/der Benutzer:in ein

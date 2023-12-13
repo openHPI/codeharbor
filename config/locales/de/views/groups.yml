@@ -1,0 +1,33 @@
+---
+de:
+  groups:
+    form:
+      button:
+        save: Gruppe speichern
+    groups:
+      admin_label: Admin
+      member_label: Mitglied
+      pending_label: Ausstehend
+    new:
+      header: Neue Gruppe
+    share_account_link_button:
+      share_tooltip: Teilen Sie den Kontolink für %{account_link} mit %{user}
+      unshare_tooltip: Teilen des Kontolinks für %{account_link} mit %{user} beenden
+    show:
+      button:
+        delete_group: Gruppe löschen
+        demote_admin: Admin degradieren
+        demote_yourself: Dich selbst degradieren
+        deny_access: Zugriff verweigern
+        grant_access: Zugriff gewähren
+        leave: Gruppe verlassen
+        make_admin: Admin machen
+        request_membership: Mitgliedschaft beantragen
+      demote_admin:
+        confirm: Bist du sicher, dass du den Admin degradieren möchtest?
+      demote_yourself:
+        confirm: Bist du sicher, dass du dich selbst degradieren möchtest?
+      has_no_tasks: Die Gruppe hat noch keine Aufgaben
+      has_no_users: Die Gruppe hat keine Benutzer
+      no_pending_users: Die Gruppe hat keine ausstehenden Benutzer
+      pending_users: Ausstehende Benutzer
