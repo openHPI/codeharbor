@@ -12,7 +12,7 @@ en:
     remove_task:
       cannot_remove_alert: You cannot remove this task.
     save_shared:
-      success_notice: You can now collaborate to collection.
+      success_notice: You can now collaborate to this collection.
     share:
       success_notice: Your collection has been sent.
     share_message:
