@@ -5,31 +5,31 @@ en:
       header: About CodeHarbor
       paragraph: ''
     account_link_documentation:
-      header: About autograders and account links
+      header: About auto-graders and account links
       paragraph_html: |
         <h3>About account links:</h3>
         <p>
-          Account links define a connection to an autograder. <br/>
-          If you have an account link you can simply export exercises available to you into the autograder. <br/>
-          You can create your own account link if you have the push_url of an autograder that can handle OAuth2 post requests.</br>
+          Account links define a connection to an auto-grader. <br/>
+          If you have an account link you can simply export exercises available to you into the auto-grader. <br/>
+          You can create your own account link if you have the push_url of an auto-grader that can handle OAuth2 post requests.</br>
         </p>
-        <h3>You want to connect an autograder that already has OAuth2 and ProFormA-XML support:</h3>
+        <h3>You want to connect an auto-grader that already has OAuth2 and ProFormA-XML support:</h3>
         <p>
-          If the autograder can import exercises sent via OAuth2 request in the ProFormA-XML format you will need the following things: <br/>
-          1. Push-url: The autograder needs to have an ULR codeharbor can post the exercise to. <br/>
-          2. OAuth2-token: The autograder must be able to link a token to your account to authorize exercises that will be pushed there. <br/>
-             If you do not need a specific token you can generate a token when creating an account link on codeharbor side or use whatever you want <br/>
-             as long as it is the same token on codeharbor and the autograders side.<br>
-          You also have to create a client-id and client-secret for an account link on codeharbor side. <br/>
-          If the autograder does not require a specific one you can auto-generate them.<br/>
+          If the auto-grader can import exercises sent via OAuth2 request in the ProFormA-XML format you will need the following things: <br/>
+          1. Push-url: The auto-grader needs to have an ULR CodeHarbor can post the exercise to. <br/>
+          2. OAuth2-token: The auto-grader must be able to link a token to your account to authorize exercises that will be pushed there. <br/>
+             If you do not need a specific token you can generate a token when creating an account link on CodeHarbor side or use whatever you want <br/>
+             as long as it is the same token on CodeHarbor and the auto-graders side.<br>
+          You also have to create a client-id and client-secret for an account link on CodeHarbor side. <br/>
+          If the auto-grader does not require a specific one you can auto-generate them.<br/>
         </p>
-        <h3>How to prepare your own autograder:</h3>
+        <h3>How to prepare your own auto-grader:</h3>
         <p>
           CodeHarbor uses the OAuth 2.0 protocol to send exercises via a post request. <a href="https://oauth.net/2/">https://oauth.net/2/</a><br/>
-          CodeHarbor is the client in this case, your autograder the resource server and you are the resource owner.
-          When you are exporting an exercise, codeharbor first generates an XML-file complying with the ProFormA-XML standard for exchanging exercises. <a href="https://github.com/ProFormA/taskxml">https://github.com/ProFormA/taskxml</a>
+          CodeHarbor is the client in this case, your auto-grader the resource server and you are the resource owner.
+          When you are exporting an exercise, CodeHarbor first generates an XML-file complying with the ProFormA-XML standard for exchanging exercises. <a href="https://github.com/ProFormA/taskxml">https://github.com/ProFormA/taskxml</a>
           Then it will make a post request to the URL you chose as the push_url. The XML-file will be in the request body and the OAuth2 token in the request headers ("request.headers['Authorization']"). <br/>
-          In your autograder you need to make sure that the OAuth2 token is validated and the corresponding user found. We recommend to add an interface for users to add an OAuth2-token. <br/>
+          In your auto-grader you need to make sure that the OAuth2 token is validated and the corresponding user found. We recommend to add an interface for users to add an OAuth2-token. <br/>
           The XML-file in the request-body needs to be parsed into the database. Since we are using the ProFormA-XML format you can parse the xml using xpath. <br/>
           Finally, please respond with a 200 status code if everything went okay or a 400 if it did not. <br/>
         </p>

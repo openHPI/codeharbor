@@ -7,18 +7,18 @@ en:
       button:
         save: Save Account Link
       info:
-        check_uuid_url: The address on the autograder side that can be queried to determine if the exercise already exists.
+        check_uuid_url: The address on the auto-grader side that can be queried to determine if the exercise already exists.
         name: Can be anything to Identify your account link.
-        push_url: The address on the autograder side your exercise can be exported to. If you don't know what to write here, ask the autograders admins.
+        push_url: The address on the auto-grader side your exercise can be exported to. If you don't know what to write here, ask the auto-graders admins.
         token: Will be used to authenticate your export request. Has to be the same on both sides.
     new:
       header: New Account Link
     show:
       description_html: |
-        Account links define a connection to an autograder. <br/>
-        If you have an account link you can simply export exercises available to you into the autograder. <br/>
-        You can create your own account link if you have the push_url of an autograder that can handle OAuth2 post requests.</br>
-        For more information on how to establish a connection to an autograder please click the following link:</br>
+        Account links define a connection to an auto-grader. <br/>
+        If you have an account link you can simply export exercises available to you into the auto-grader. <br/>
+        You can create your own account link if you have the push_url of an auto-grader that can handle OAuth2 post requests.</br>
+        For more information on how to establish a connection to an auto-grader please click the following link:</br>
       shared: shared
       shared_users: Users you have shared access with
       shared_with_users: Shared with %{count} other users.
