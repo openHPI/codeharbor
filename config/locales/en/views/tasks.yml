@@ -98,7 +98,7 @@ en:
       no_programming_language_selected: No programming language selected
       search:
         no_results: No results
-        no_results_description: Try different options by clicking on Advanced.
+        no_results_description: Try different options by clicking on 'Advanced'.
         no_tasks: You do not have tasks yet
     visibility:
       label: Visibility
