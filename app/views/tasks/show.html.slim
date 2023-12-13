@@ -479,7 +479,7 @@
               = t('.button.add_to_collection')
             ul.scrollable.dropdown-menu[role="menu"]
               - if !current_user.collections.empty?
-                - current_user.collections.each do |collection|
+                - current_user.collections.reverse.each do |collection|
                   li
                     = link_to collection.title, add_to_collection_task_path(collection: collection), method: 'post', class: 'dropdown-item'
               - else
