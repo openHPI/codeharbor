@@ -564,14 +564,14 @@
               =< t('common.button.duplicate')
       - else
         - if policy(@task.parent).edit?
-          = link_to task_task_contribution_approve_changes_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
+          = link_to approve_changes_task_contribution_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
             i.fa-solid.fa-check
             =< t('common.button.approve')
-          = link_to task_contribution_discard_changes_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
+          = link_to discard_changes_task_contribution_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
             i.fa-solid.fa-xmark
             =< t('common.button.reject')
         - else
-          = link_to task_contribution_discard_changes_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
+          = link_to discard_changes_task_contribution_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
             i.fa-solid.fa-link-slash
             =< t('task_contributions.buttons.decouple')
       - if policy(@task).generate_test?

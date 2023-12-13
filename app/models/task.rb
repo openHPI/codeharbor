@@ -136,13 +136,15 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   # This method creates a duplicate while leaving permissions and ownership unchanged
-  def duplicate
+  def duplicate(set_parent_identifiers: true)
     dup.tap do |task|
-      task.parent_uuid = task.uuid
+      if set_parent_identifiers
+        task.parent_uuid = task.uuid
+      end
       task.uuid = nil
-      task.tests = duplicate_tests
-      task.files = duplicate_files
-      task.model_solutions = duplicate_model_solutions
+      task.tests = duplicate_tests(set_parent_id: set_parent_identifiers)
+      task.files = duplicate_files(set_parent_id: set_parent_identifiers)
+      task.model_solutions = duplicate_model_solutions(set_parent_id: set_parent_identifiers)
     end
   end
 
@@ -226,16 +228,16 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   private
 
-  def duplicate_tests
-    tests.map(&:duplicate)
+  def duplicate_tests(set_parent_id: true)
+    tests.map {|test| test.duplicate(set_parent_id:) }
   end
 
-  def duplicate_files
-    files.map(&:duplicate)
+  def duplicate_files(set_parent_id: true)
+    files.map {|file| file.duplicate(set_parent_id:) }
   end
 
-  def duplicate_model_solutions
-    model_solutions.map(&:duplicate)
+  def duplicate_model_solutions(set_parent_id: true)
+    model_solutions.map {|model_solution| model_solution.duplicate(set_parent_id:) }
   end
 
   def lowercase_language

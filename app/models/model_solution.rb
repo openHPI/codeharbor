@@ -17,10 +17,12 @@ class ModelSolution < ApplicationRecord
   # TODO: This validation is currently useless on new records, because the uuid is generated after validation
   validates :xml_id, uniqueness: {scope: :task_id}
 
-  def duplicate
+  def duplicate(set_parent_id: true)
     dup.tap do |model_solution|
-      model_solution.files = files.map(&:duplicate)
-      model_solution.parent_id = id
+      model_solution.files = files.map {|file| file.duplicate(set_parent_id:) }
+      if set_parent_id
+        model_solution.parent_id = id
+      end
     end
   end
 end
