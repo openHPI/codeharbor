@@ -3,28 +3,26 @@
 class ContributionsController < ApplicationController
   load_and_authorize_resource class: TaskContribution, except: %i[create new]
   def approve_changes
-    contrib = TaskContribution.find(params[:contribution_id])
+    contrib = TaskContribution.find(params[:id])
     @task = Task.find(params[:task_id])
     if @task.apply_contribution(contrib)
-      TaskContributionMailer.approval_info(contrib).deliver_later # TODO: Should it be deliver_now?
+      TaskContributionMailer.approval_info(contrib).deliver_later
       redirect_to @task, notice: t('task_contributions.approve_changes.success')
     else
       redirect_to contrib.modifying_task, alert: t('task_contributions.approve_changes.error')
     end
   end
 
-  # rubocop:disable Metrics/AbcSize
   def discard_changes
-    contrib = TaskContribution.find(params[:contribution_id])
+    contrib = TaskContribution.find(params[:id])
     if contrib.close
       TaskContributionMailer.rejection_info(contrib).deliver_later
-      path = contrib.modifying_task.user.id == current_user.id ? contrib.modifying_task : Task
+      path = contrib.modifying_task.user == current_user ? contrib.modifying_task : Task
       redirect_to path, notice: t('task_contributions.discard_changes.success')
     else
       redirect_to contrib.modifying_task, alert: t('task_contributions.discard_changes.error')
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
   def show
     contrib = TaskContribution.find(params[:id])
@@ -39,8 +37,6 @@ class ContributionsController < ApplicationController
     authorize! :new, task_contrib
     render 'new'
   end
-
-  def edit; end
 
   def create
     @task = Task.new(contrib_task_params)
