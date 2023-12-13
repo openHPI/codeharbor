@@ -20,10 +20,12 @@ class Test < ApplicationRecord
     Dachsfisch::JSON2XMLConverter.perform(json: configuration.to_json)
   end
 
-  def duplicate
+  def duplicate(set_parent_id: true)
     dup.tap do |test|
-      test.files = files.map(&:duplicate)
-      test.parent_id = id
+      test.files = files.map {|file| file.duplicate(set_parent_id:) }
+      if set_parent_id
+        test.parent_id = id
+      end
     end
   end
 end

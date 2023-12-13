@@ -38,10 +38,12 @@ class TaskFile < ApplicationRecord
     self.name = File.basename(full_file_name)
   end
 
-  def duplicate
+  def duplicate(set_parent_id: true)
     dup.tap do |file|
       file.attachment.attach(attachment.blob) if attachment.attached?
-      file.parent_id = id
+      if set_parent_id
+        file.parent_id = id
+      end
     end
   end
 

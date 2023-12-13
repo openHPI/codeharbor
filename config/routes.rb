@@ -105,9 +105,11 @@ Rails.application.routes.draw do
     resources :comments, only: %i[index edit create update destroy]
     resources :ratings, only: :create
 
-    resources :contributions do
-      post :approve_changes
-      post :discard_changes
+    resources :contributions, only: %i[show new create] do
+      member do
+        post :approve_changes
+        post :discard_changes
+      end
     end
   end
 
