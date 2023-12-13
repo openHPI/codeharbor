@@ -1,0 +1,24 @@
+---
+de:
+  account_links:
+    edit:
+      header: Bearbeiten des Kontolinks
+    form:
+      button:
+        save: Kontolink speichern
+      info:
+        check_uuid_url: Die Adresse auf der Autograder-Seite, die abgefragt werden kann, um festzustellen, ob die Übung bereits existiert.
+        name: Kann beliebig sein, um Ihren Kontolink zu identifizieren.
+        push_url: Die Adresse auf der Autograder-Seite, zu der Ihre Übung exportiert werden kann. Wenn Sie nicht wissen, was Sie hier schreiben sollen, fragen Sie die Autograder-Administratoren.
+        token: Wird zur Authentifizierung Ihrer Exportanfrage verwendet. Muss auf beiden Seiten identisch sein.
+    new:
+      header: Neuer Kontolink
+    show:
+      description_html: |
+        Account-Links definieren eine Verbindung zu einem Autograder. <br/>
+        Wenn Sie einen Account-Link haben, können Sie einfach Übungen in den Autograder exportieren, die für Sie verfügbar sind. <br/>
+        Sie können Ihren eigenen Account-Link erstellen, wenn Sie die push_url eines Autograders haben, der OAuth2 POST-Anfragen verarbeiten kann.</br>
+        Weitere Informationen zur Herstellung einer Verbindung zu einem Autograder finden Sie unter folgendem Link:</br>
+      shared: geteilt
+      shared_users: Benutzer, mit denen Sie den Zugriff geteilt haben
+      shared_with_users: Mit %{count} anderen Benutzern geteilt.

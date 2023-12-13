@@ -1,6 +1,77 @@
 ---
 de:
   home:
+    about:
+      header: Über CodeHarbor
+      paragraph: ''
+    account_link_documentation:
+      header: Über Autograder und Account-Links
+      paragraph_html: |
+        <h3>Über Kontolinks:</h3>
+        <p>
+          Kontolinks definieren eine Verbindung zu einem Autograder. <br/>
+          Wenn Sie einen Kontolink haben, können Sie einfach Übungen in den Autograder exportieren, die für Sie verfügbar sind. <br/>
+          Sie können Ihren eigenen Kontolink erstellen, wenn Sie die push_url eines Autograders haben, der OAuth2-POST-Anfragen verarbeiten kann.</br>
+        </p>
+        <h3>Sie möchten einen Autograder verbinden, der bereits OAuth2- und ProFormA-XML-Unterstützung hat:</h3>
+        <p>
+          Wenn der Autograder Übungen, die über OAuth2-Anfragen im ProFormA-XML-Format gesendet werden, importieren kann, benötigen Sie folgende Dinge: <br/>
+          1. Push-URL: Der Autograder benötigt einen URL-Code, an den CodeHarbor die Übung senden kann. <br/>
+          2. OAuth2-Token: Der Autograder muss in der Lage sein, einen Token mit Ihrem Konto zu verknüpfen, um Übungen zu autorisieren, die dort geschoben werden. <br/>
+             Wenn Sie keinen spezifischen Token benötigen, können Sie einen Token generieren, wenn Sie einen Kontolink auf der CodeHarbor-Seite erstellen, oder einen beliebigen Token verwenden, <br/>
+             solange es derselbe Token auf der CodeHarbor- und der Autograder-Seite ist.<br>
+          Sie müssen auch eine Client-ID und ein Client-Secret für einen Kontolink auf der CodeHarbor-Seite erstellen. <br/>
+          Wenn der Autograder keine spezifische Anforderung hat, können Sie sie automatisch generieren lassen.<br/>
+        </p>
+        <h3>Wie Sie Ihren eigenen Autograder vorbereiten können:</h3>
+        <p>
+          CodeHarbor verwendet das OAuth 2.0-Protokoll, um Übungen über eine POST-Anfrage zu senden. <a href="https://oauth.net/2/">https://oauth.net/2/</a><br/>
+          CodeHarbor ist in diesem Fall der Client, Ihr Autograder der Ressourcenserver und Sie sind der Ressourcenbesitzer.
+          Wenn Sie eine Übung exportieren, generiert CodeHarbor zunächst eine XML-Datei, die dem ProFormA-XML-Standard für den Austausch von Übungen entspricht. <a href="https://github.com/ProFormA/taskxml">https://github.com/ProFormA/taskxml</a>
+          Anschließend wird eine POST-Anfrage an die von Ihnen gewählte push_url gesendet. Die XML-Datei befindet sich im Anfragekörper und der OAuth2-Token in den Anforderungsheadern ("request.headers['Authorization']"). <br/>
+          In Ihrem Autograder müssen Sie sicherstellen, dass der OAuth2-Token validiert wird und der entsprechende Benutzer gefunden wird. Wir empfehlen, eine Schnittstelle hinzuzufügen, damit Benutzer einen OAuth2-Token hinzufügen können. <br/>
+          Die XML-Datei im Anfragekörper muss in die Datenbank geparst werden. Da wir das ProFormA-XML-Format verwenden, können Sie das XML mit XPath parsen. <br/>
+          Schließlich antworten Sie bitte mit einem Statuscode 200, wenn alles in Ordnung war, oder mit einem Statuscode 400, wenn dies nicht der Fall war. <br/>
+        </p>
+    index:
+      feature:
+        collections:
+          alt_text: Bild eines geöffneten Dokumentenordners auf einem Laptop
+          header: Übungs-Sammlungen erstellen
+          paragraph: Erstellen Sie Sammlungen Ihrer Lieblingsübungen für zukünftigen Bedarf. Teilen Sie Sammlungen mit Kollegen und Peers. Exportieren Sie sie an Ihren bevorzugten Autograder oder laden Sie sie als XML herunter.
+        exercises:
+          alt_text: Bild eines Computers mit einer Lupe, der nach einem Text sucht
+          header: Suchen, diskutieren und erstellen Sie Übungen
+          paragraph: Mit CodeHarbor können Sie auto-bewertbare Programmierübungen mit Kollegen und Peers teilen, bewerten und diskutieren. Verwenden Sie vorhandene Übungen erneut, klonen Sie Übungen und passen Sie sie an Ihre Bedürfnisse an. Übersetzen Sie Übungen in andere menschliche Sprachen oder portieren Sie sie in andere Programmiersprachen. Sie behalten immer die volle Kontrolle darüber, mit wem Sie teilen.
+        groups:
+          alt_text: Bild von verbundenen Benutzern, die verschiedene Geräte verwenden
+          header: Benutzergruppen erstellen und Übungen mit Ihrer Gruppe teilen.
+          paragraph: Wenn Sie sich entscheiden, Ihre Übungen nicht mit allen zu teilen, geben Sie sie als privat an und ermöglichen Sie nur ausgewählten Gruppen oder Benutzern den Zugriff.
+        header: Funktionen
+      hero:
+        alt_text: CodeHarbor-Held mit einem Computer auf einem Schreibtisch und einem Segelboot daneben
+        subtitle: Kollaboratives Autograder-Repository
+        title1: Code
+        title2: Harbor
+      marketing:
+        mooc:
+          alt_text: Bild repräsentiert MOOCs in der Cloud
+          header_html: "CodeHarbor für \n MOOCs"
+          paragraph: Entwickeln und ausführen Sie MOOCs, die auto-bewertbare Programmierübungen enthalten?
+        schools:
+          alt_text: Bild eines Schulgebäudes
+          header_html: "CodeHarbor für \n Schulen"
+          paragraph: Unterrichten Sie Programmierung in der Schule und benötigen Sie auto-bewertbare Programmierübungen?
+        title: Anwendungsfälle
+        universities:
+          alt_text: Bild eines Universitätsgebäudes
+          header_html: "CodeHarbor für \n Universitäten"
+          paragraph: Unterrichten Sie große Programmierkurse an der Universität und verwenden Sie Autograder zur Bewertung?
+      sign_in:
+        header: Mitglied werden
+        link1: Registrieren
+        link2: Anmelden
+        paragraph_html: Wenn Sie unserer Community beitreten möchten, klicken Sie jetzt auf %{href1} oder auf %{href2}, wenn Sie bereits Mitglied sind.
     partners:
       bmbf:
         alt_text: Gefördert vom Bundesministerium für Bildung und Forschung

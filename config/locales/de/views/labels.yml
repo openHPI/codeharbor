@@ -1,0 +1,15 @@
+---
+de:
+  labels:
+    index:
+      change_color_to: Farbe ändern in
+      merge: Zusammenführen und umbenennen in
+    javascripts:
+      can_only_create_5: Sie können nur 5 Labels hinzufügen
+      cannot_be_empty: Der eingegebene Label-Name ist leer
+      change_color_confirmation: Dies wird die Farbe der ausgewählten %{selected_labels_count} Label(s) ändern.
+      delete_confirmation: Dies wird die ausgewählten %{selected_labels_count} Label(s) löschen.
+      merge_confirmation: Dies wird die ausgewählten %{selected_labels_count} Label(s) zusammenführen und in "%{new_merged_name}" umbenennen
+      new:
+        selection_suffix: " (neu)"
+      too_long: Der eingegebene Label-Name ist zu lang
