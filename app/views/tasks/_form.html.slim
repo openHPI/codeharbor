@@ -12,7 +12,7 @@
         - url = task_contribution_path(@task.parent, @task.task_contribution)
     - else
       - url = nil
-    = simple_form_for @task,  url:, html: { class: 'project exercise-validation', multipart: true } do |f|
+    = simple_form_for @task, url:, html: { class: 'project exercise-validation', multipart: true } do |f|
       = render('shared/form_errors', object: @task)
       fieldset.form-group
         legend.toggle-next

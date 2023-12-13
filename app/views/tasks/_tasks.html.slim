@@ -20,7 +20,10 @@
       h6
         - if @visibility == :owner
           span.align-middle.visibility data-bs-toggle="tooltip" data-bs-placement="bottom" title="#{t('tasks.visibility.label')}"
-            = t("tasks.visibility.#{task.access_level}")
+            - if task.contribution?
+              = t("tasks.visibility.contribution")
+            - else
+              = t("tasks.visibility.#{task.access_level}")
         span.align-middle data-bs-toggle="tooltip" data-bs-placement="bottom" title="#{task.title}"
           = truncate(task.title, length: 100)
         small.star-rating.float-end
