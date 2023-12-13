@@ -7,18 +7,10 @@ en:
       button:
         save: Save Account Link
       info:
-        check_uuid_url: 'The address on the autograder side that can be queried to determine if the exercise already exists.
-
-          '
-        name: 'Can be anything to Identify your account link.
-
-          '
-        push_url: 'The address on the autograder side your exercise can be exported to. If you don''t know what to write here, ask the autograders admins.
-
-          '
-        token: 'Will be used to authenticate your export request. Has to be the same on both sides.
-
-          '
+        check_uuid_url: The address on the autograder side that can be queried to determine if the exercise already exists.
+        name: Can be anything to Identify your account link.
+        push_url: The address on the autograder side your exercise can be exported to. If you don't know what to write here, ask the autograders admins.
+        token: Will be used to authenticate your export request. Has to be the same on both sides.
     new:
       header: New Account Link
     show:
