@@ -43,10 +43,6 @@ class ApplicationPolicy
     @user.present?
   end
 
-  def no_one
-    false
-  end
-
   class Scope
     def initialize(user, scope)
       @user = user

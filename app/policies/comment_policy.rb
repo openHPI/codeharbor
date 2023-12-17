@@ -25,7 +25,7 @@ class CommentPolicy < ApplicationPolicy
 
   def task_authorized?
     if @record.respond_to?(:map)
-      @record.map(&:tasks).uniq.all? {|task| Pundit.policy(@user, task).show? }
+      @record.map(&:task).uniq.all? {|task| Pundit.policy(@user, task).show? }
     else
       Pundit.policy(@user, comment.task).show?
     end

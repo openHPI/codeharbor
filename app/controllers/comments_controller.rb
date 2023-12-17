@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class CommentsController < ApplicationController
-  before_action :load_and_authorize_task, only: %i[index edit]
+  before_action :load_and_authorize_task
   before_action :load_and_authorize_comment, only: %i[edit update destroy]
   skip_before_action :require_user!, only: %i[index]
 
   def index
     @comments = Comment.where(task: @task).paginate(page: params[:page], per_page: per_page_param).order(created_at: :desc)
-    authorize @comments
+    authorize @comments, :index?
     render 'load_comments'
   end
 
