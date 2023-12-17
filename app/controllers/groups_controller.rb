@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class GroupsController < ApplicationController
+  before_action :load_and_authorize_group, except: %i[index new create]
   before_action :set_option, only: [:index]
   before_action :set_user, only: %i[grant_access delete_from_group deny_access make_admin demote_admin]
-  before_action :load_and_authorize_group, except: %i[index new create]
 
   def index
     @groups = if @option == 'mine'

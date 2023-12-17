@@ -41,9 +41,16 @@ RSpec.describe UsersController do
 
       context 'when the requested user does not exist' do
         let(:user_id) { -1 }
-        let(:desired_message) { I18n.t('common.errors.not_found_error') }
+        let(:desired_message) { I18n.t('common.errors.not_authorized') }
 
         it_behaves_like 'redirects with a flash message'
+
+        context 'when accessing user is admin' do
+          let(:user) { create(:admin) }
+          let(:desired_message) { I18n.t('common.errors.not_found_error') }
+
+          it_behaves_like 'redirects with a flash message'
+        end
       end
     end
 

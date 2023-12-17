@@ -3,13 +3,13 @@
 require 'zip'
 
 class TasksController < ApplicationController # rubocop:disable Metrics/ClassLength
+  before_action :load_and_authorize_task, except: %i[index new create import_start import_confirm import_uuid_check import_external]
+  before_action :only_authorize_action, only: %i[import_start import_confirm import_uuid_check import_external]
+
   before_action :handle_search_params, only: :index
   before_action :set_search, only: [:index]
   skip_before_action :verify_authenticity_token, only: %i[import_external import_uuid_check]
-  skip_before_action :require_user!, only: %i[show]
-
-  before_action :load_and_authorize_task, except: %i[index new create import_start import_confirm import_uuid_check import_external]
-  before_action :only_authorize_action, only: %i[import_start import_confirm import_uuid_check import_external]
+  skip_before_action :require_user!, only: %i[show import_external import_uuid_check]
 
   def index
     page = params[:page]

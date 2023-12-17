@@ -10,8 +10,10 @@ class ApplicationPolicy
     require_user! if user_required?
   end
 
-  def method_missing(_method_name, *_args)
-    false
+  def method_missing(method_name, *_args)
+    return false if RESOURCE_ACTIONS.include?(method_name)
+
+    super
   end
 
   def respond_to_missing?(method_name, include_private = false)
@@ -25,7 +27,7 @@ class ApplicationPolicy
   end
 
   def require_user!
-    raise Pundit::NotAuthorizedError unless @user
+    raise Pundit::NotAuthorizedError.new(I18n.t('common.errors.not_signed_in')) unless @user
   end
 
   def record_owner?
