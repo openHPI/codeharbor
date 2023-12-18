@@ -18,6 +18,7 @@ gem 'iso-639'
 gem 'jbuilder'
 gem 'js-routes'
 gem 'kramdown'
+gem 'kramdown-parser-gfm'
 gem 'nested_form_fields'
 gem 'net-http'
 gem 'net-imap', require: false
