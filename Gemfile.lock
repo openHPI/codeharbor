@@ -323,7 +323,7 @@ GEM
     orm_adapter (0.5.0)
     package_json (0.1.0)
     parallel (1.24.0)
-    parser (3.2.2.4)
+    parser (3.3.0.4)
       ast (~> 2.4.1)
       racc
     pg (1.5.4)
@@ -422,7 +422,7 @@ GEM
     rbtree (0.4.6)
     rdoc (6.6.2)
       psych (>= 4.0.0)
-    regexp_parser (2.8.3)
+    regexp_parser (2.9.0)
     reline (0.4.2)
       io-console (~> 0.5)
     responders (3.1.1)
@@ -451,11 +451,11 @@ GEM
       rspec-mocks (~> 3.12)
       rspec-support (~> 3.12)
     rspec-support (3.12.1)
-    rubocop (1.59.0)
+    rubocop (1.60.1)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
-      parser (>= 3.2.2.4)
+      parser (>= 3.3.0.2)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml (>= 3.2.5, < 4.0)
@@ -667,4 +667,4 @@ DEPENDENCIES
   whenever
 
 BUNDLED WITH
-   2.4.21
+   2.5.5
