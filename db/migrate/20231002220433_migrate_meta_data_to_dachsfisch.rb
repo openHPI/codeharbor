@@ -35,11 +35,11 @@ class MigrateMetaDataToDachsfisch < ActiveRecord::Migration[7.0]
       case value.class.name
         when 'Hash'
           # underscore is used to disambiguate tag names from ruby methods
-          xml[namespace].send("#{key}_") do |meta_data_xml|
+          xml[namespace].send(:"#{key}_") do |meta_data_xml|
             inner_meta_data(meta_data_xml, namespace, value)
           end
         else
-          xml[namespace].send("#{key}_", value)
+          xml[namespace].send(:"#{key}_", value)
       end
     end
   end

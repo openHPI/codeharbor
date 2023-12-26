@@ -244,7 +244,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   def user_for_api_request
     authorization_header = request.headers['Authorization']
-    api_key = authorization_header&.split(' ')&.second
+    api_key = authorization_header&.split&.second
     user_by_api_key(api_key)
   end
 
