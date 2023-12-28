@@ -80,6 +80,7 @@ class MessagesController < ApplicationController
 
   def load_and_authorize_message
     @message = Message.find(params[:id])
+    authorize @message
   end
 
   def set_user

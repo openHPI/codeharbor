@@ -16,14 +16,14 @@ RSpec.describe TaskPolicy do
       let(:access_level) { :private }
 
       it { expect(task.lom_showable_by?(user)).to be false }
-      it { is_expected.to forbid_all_actions }
+      it { is_expected.to permit_only_actions(%i[import_uuid_check import_external]) }
     end
 
     context 'when task is public' do
       let(:access_level) { :public }
 
       it { expect(task.lom_showable_by?(user)).to be true }
-      it { is_expected.to permit_only_actions(%i[show]) }
+      it { is_expected.to permit_only_actions(%i[show import_uuid_check import_external]) }
     end
   end
 

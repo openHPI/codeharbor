@@ -125,21 +125,21 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   end
 
   def import_uuid_check
-    user = user_for_api_request
-    return render json: {}, status: :unauthorized if user.nil?
+    @current_user ||= user_for_api_request
+    return render json: {}, status: :unauthorized if current_user.nil?
 
     task = Task.find_by(uuid: params[:uuid])
     return render json: {uuid_found: false} if task.nil?
-    return render json: {uuid_found: true, update_right: false} unless task.can_access(user)
+    return render json: {uuid_found: true, update_right: false} unless task.can_access(current_user)
 
     render json: {uuid_found: true, update_right: true}
   end
 
   def import_external
-    user = user_for_api_request
+    @current_user ||= user_for_api_request
     tempfile = tempfile_from_string(request.body.read.force_encoding('UTF-8'))
 
-    ProformaService::Import.call(zip: tempfile, user:)
+    ProformaService::Import.call(zip: tempfile, user: current_user)
 
     render json: t('.success'), status: :created
   rescue ProformaXML::ProformaError

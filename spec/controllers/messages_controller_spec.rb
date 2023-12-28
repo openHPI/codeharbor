@@ -91,4 +91,29 @@ RSpec.describe MessagesController do
       end
     end
   end
+
+  describe 'DELETE #destroy' do
+    subject(:delete_request) { delete :destroy, params: {user_id: user, id: message.id} }
+
+    let!(:message) { create(:message, sender: recipient, recipient: user, sender_status:) }
+    let(:sender_status) { 's' }
+
+    context 'when message was not deleted by sender' do
+      it 'marks the message as deleted' do
+        expect { delete_request }.to change { message.reload.recipient_status }.to('d')
+      end
+
+      it 'does not delete the message' do
+        expect { delete_request }.not_to change(Message, :count)
+      end
+    end
+
+    context 'when message was deleted by sender' do
+      let(:sender_status) { 'd' }
+
+      it 'deletes the message' do
+        expect { delete_request }.to change(Message, :count).by(-1)
+      end
+    end
+  end
 end

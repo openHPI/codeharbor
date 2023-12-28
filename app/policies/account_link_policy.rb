@@ -5,7 +5,11 @@ class AccountLinkPolicy < ApplicationPolicy
     @record
   end
 
-  %i[create? new? update? edit? destroy? add_shared_user?].each do |action|
+  def new?
+    everyone
+  end
+
+  %i[create? update? edit? destroy? add_shared_user?].each do |action|
     define_method(action) { admin? || record_owner? }
   end
 
