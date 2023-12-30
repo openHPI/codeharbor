@@ -4,6 +4,6 @@
       - next unless flash[severity].present?
 
       - flash_mapping = {alert: :warning, notice: :success}
-      div.alert.flash class="alert-#{flash_mapping.fetch(severity, severity)}" class="alert-#{flash_mapping.fetch(severity, severity)} alert-dismissible fade show"
+      div.alert.flash.my-2 class="alert-#{flash_mapping.fetch(severity, severity)}" class="alert-#{flash_mapping.fetch(severity, severity)} alert-dismissible fade show"
         p.mb-0 id="flash-#{severity}" == flash[severity]
         button.btn-close type="button" data-bs-dismiss="alert" aria-label="Close"
