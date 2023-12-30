@@ -543,6 +543,16 @@ legend {
 
 .more-btn-wrapper {
   text-align: right;
+
+  button {
+    cursor: pointer;
+    border: 1px solid grey;
+    border-radius: 0 0 5px 5px;
+    border-top: none;
+    padding-left: 7px;
+    padding-right: 7px;
+    background: white;
+  }
 }
 
 .animated-sliding {

@@ -1,6 +1,7 @@
 ready = ->
   initializeSelect2()
   initCollapsable($('.description'), '95px')
+  window.addEventListener 'resize', -> initCollapsable($('.description'), '95px')
   initializeDynamicHideShow()
   initializeFilter()
   initializeIndexComments()
@@ -46,6 +47,7 @@ initCollapsable = (collapsables, max_height) ->
     if $(this).prop('scrollHeight') > $(this).prop('clientHeight')
       $(this).css 'height', 'unset'
       $(this).css 'max-height', max_height
+      $(this).siblings('.more-btn-wrapper').show()
     else
       $(this).siblings('.more-btn-wrapper').hide()
     addAnimatedSliding()
