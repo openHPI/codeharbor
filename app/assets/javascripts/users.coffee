@@ -15,6 +15,6 @@ ready =->
 
   $('.delete-user').on 'click', (event) ->
     event.preventDefault()
-    $('#notification-modal').modal()
+    new bootstrap.Modal('#notification-modal').show();
 
 $(document).on('turbolinks:load', ready)

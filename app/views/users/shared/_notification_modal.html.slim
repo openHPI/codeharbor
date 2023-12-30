@@ -2,10 +2,9 @@
   .modal-dialog
     .modal-content
       .modal-header
-        = button_tag class: 'btn-close', data: {'bs-dismiss': 'modal'} do
-          = 'x'
         h4.modal-title
           = title
+        = button_tag class: 'btn-close', data: {'bs-dismiss': 'modal'} do
       .modal-body id='notification-modal-body'
         = yield
       .modal-footer
