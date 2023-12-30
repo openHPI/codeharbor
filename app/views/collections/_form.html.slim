@@ -1,11 +1,15 @@
 = form_for(@collection) do |f|
   .mt-5
     = render('shared/form_errors', object: @collection)
-    .field-element.form-group
-      = f.label :title, Collection.human_attribute_name('title'), class: 'form-label'
-      = f.text_field :title, class: 'form-control'
-      br
-      br
+    .form-group
+      .field-element
+        = f.label :title, Collection.human_attribute_name('title'), class: 'form-label'
+        = f.text_field :title, class: 'form-control'
+      .field-element
+        = f.label :description, Collection.human_attribute_name('description'), class: 'form-label'
+        = f.text_area :description, class: 'form-control', rows: 10
+        br
+        br
     .form-group
       .actions.btn-group[role="group"]
         = button_tag type: 'submit', class: 'btn btn-important' do

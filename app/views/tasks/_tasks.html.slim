@@ -49,11 +49,14 @@
           - else
             = render_markdown(task.description)
         .more-btn-wrapper
-          = link_to task, class: 'more-btn' do
-            span class=("more-tag")
+          = button_to task, class: 'more-btn' do
+            .more-tag
               = t('common.button.show_more')
-            span class=("less-tag d-none")
+              span.fa-solid.fa-caret-down.ms-1
+            .less-tag.d-none
               = t('common.button.show_less')
+              span.fa-solid.fa-caret-up.ms-1
+
       .exercise-buttons.btn-group-vertical.float-end aria-label="..." role="group"
         - if can? :show, task
           = link_to t('common.button.view'), task_path(task), class: 'btn btn-light'

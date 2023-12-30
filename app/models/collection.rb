@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
 class Collection < ApplicationRecord
+  MAX_DESCRIPTION_LENGTH = 4000
+
   validates :title, presence: true
   validates :users, presence: true
+  validate :description_is_not_too_long
 
   has_many :collection_users, dependent: :destroy
   has_many :users, through: :collection_users
@@ -26,5 +29,12 @@ class Collection < ApplicationRecord
 
   def to_s
     title
+  end
+
+  def description_is_not_too_long
+    excess = description.length - MAX_DESCRIPTION_LENGTH
+    if excess.positive?
+      errors.add(:description, :too_long, excess:, max_length: MAX_DESCRIPTION_LENGTH)
+    end
   end
 end

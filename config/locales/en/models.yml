@@ -10,6 +10,7 @@ en:
       account_link_user:
         user: User
       collection:
+        description: Description
         title: Title
         users: Users
       comment:
@@ -81,6 +82,10 @@ en:
         provider_uid: Provider UID
     errors:
       models:
+        collection:
+          attributes:
+            description:
+              too_long: is %{excess} characters longer than the maximum length of %{max_length}
         group:
           attributes:
             base:

@@ -3,22 +3,34 @@
     i.fa-solid.fa-folder-open
     =< @collection.title
 .row
-  .col-md-12.my-4
+  .col-md-12.mt-4
     .collection-content
+      .description.collapsable.w-100
+        - if @collection.description.blank?
+          span style=("color: gray")
+            = t('collections.shared.no_description')
+        - else
+          = render_markdown(@collection.description)
+      .more-btn-wrapper
+        = button_to @collection, class: 'more-btn' do
+          .more-tag
+            = t('common.button.show_more')
+            span.fa-solid.fa-caret-down.ms-1
+          .less-tag.d-none
+            = t('common.button.show_less')
+            span.fa-solid.fa-caret-up.ms-1
+
       - if @user
+        br
         label.form-label
           = t('.shared_by')
           | :
         =< @user.name
         p style="margin-top: 10px"
           = t('.locked_exercise_hint')
-        br
 
-      table.table
-        thead
-          tr
-            th
-              = ''
+
+      table.table.mt-2
         tbody
           - if @collection.tasks.empty?
             tr
