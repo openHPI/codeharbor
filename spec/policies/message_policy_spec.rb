@@ -5,11 +5,13 @@ require 'rails_helper'
 RSpec.describe MessagePolicy do
   subject { described_class.new(user, message) }
 
-  let(:user) { nil }
   let(:recipient) { create(:user) }
   let(:sender) { create(:user) }
   let(:message) { create(:message, sender:, recipient:) }
-  let(:role) { 'member' }
+
+  context 'without a user' do
+    it { expect { described_class.new(nil, message) }.to raise_error(Pundit::NotAuthorizedError) }
+  end
 
   context 'with a user' do
     let(:user) { create(:user) }
@@ -32,6 +34,12 @@ RSpec.describe MessagePolicy do
       let(:user) { sender }
 
       it { is_expected.to forbid_only_actions(%i[reply]) }
+
+      context 'when user got a message from recipient' do
+        before { create(:message, sender: recipient, recipient: user) }
+
+        it { is_expected.to permit_all_actions }
+      end
     end
   end
 end

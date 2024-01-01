@@ -5,13 +5,14 @@ require 'rails_helper'
 RSpec.describe TaskPolicy do
   subject { described_class.new(user, task) }
 
-  let(:user) { nil }
   let(:task_user) { create(:user) }
   let(:groups) { [] }
   let(:access_level) { :private }
   let(:task) { create(:task, user: task_user, access_level:, groups:) }
 
   context 'without a user' do
+    let(:user) { nil }
+
     context 'when task is private' do
       let(:access_level) { :private }
 

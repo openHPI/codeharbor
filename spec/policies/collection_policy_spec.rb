@@ -5,10 +5,13 @@ require 'rails_helper'
 RSpec.describe CollectionPolicy do
   subject { described_class.new(user, collection) }
 
-  let(:user) { nil }
   let(:collection_user) { create(:user) }
   let(:collection) { create(:collection, users:) }
   let(:users) { [collection_user] }
+
+  context 'without a user' do
+    it { expect { described_class.new(nil, collection) }.to raise_error(Pundit::NotAuthorizedError) }
+  end
 
   context 'with a user' do
     let(:user) { create(:user) }

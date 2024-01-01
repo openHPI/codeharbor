@@ -5,7 +5,6 @@ require 'rails_helper'
 RSpec.describe CommentPolicy do
   subject { described_class.new(user, comment) }
 
-  let(:user) { nil }
   let(:comment_user) { create(:user) }
   let(:task_user) { create(:user) }
   let(:access_level) { :private }
@@ -16,6 +15,8 @@ RSpec.describe CommentPolicy do
     let(:access_level) { :public }
 
     context 'without a user' do
+      let(:user) { nil }
+
       it { is_expected.to permit_only_actions(%i[index]) }
     end
 
@@ -42,6 +43,8 @@ RSpec.describe CommentPolicy do
     let(:access_level) { :private }
 
     context 'without a user' do
+      let(:user) { nil }
+
       it { is_expected.to forbid_all_actions }
     end
 

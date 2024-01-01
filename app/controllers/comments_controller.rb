@@ -7,7 +7,7 @@ class CommentsController < ApplicationController
 
   def index
     @comments = Comment.where(task: @task).paginate(page: params[:page], per_page: per_page_param).order(created_at: :desc)
-    authorize @comments, :index?
+    authorize @comments, :index? # explicit because index route is rendered in create/update/destroy route on success
     render 'load_comments'
   end
 

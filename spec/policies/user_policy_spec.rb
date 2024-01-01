@@ -5,8 +5,11 @@ require 'rails_helper'
 RSpec.describe UserPolicy do
   subject { described_class.new(current_user, user) }
 
-  let(:current_user) { nil }
   let(:user) { create(:user) }
+
+  context 'without a current_user' do
+    it { expect { described_class.new(nil, user) }.to raise_error(Pundit::NotAuthorizedError) }
+  end
 
   context 'with a current_user' do
     let(:current_user) { create(:user) }

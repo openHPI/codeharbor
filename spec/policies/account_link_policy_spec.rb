@@ -5,10 +5,13 @@ require 'rails_helper'
 RSpec.describe AccountLinkPolicy do
   subject { described_class.new(user, account_link) }
 
-  let(:user) { nil }
   let(:account_link_user) { create(:user) }
   let(:account_link) { create(:account_link, user: account_link_user, shared_users:) }
   let(:shared_users) { [] }
+
+  context 'without a user' do
+    it { expect { described_class.new(nil, account_link) }.to raise_error(Pundit::NotAuthorizedError) }
+  end
 
   context 'with a user' do
     let(:user) { create(:user) }

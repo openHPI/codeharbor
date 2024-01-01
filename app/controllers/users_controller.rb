@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
+  before_action :load_and_authorize_user
+
   rescue_from Pundit::NotAuthorizedError do |_exception|
     if current_user
       redirect_to({id: current_user.id}, alert: t('common.errors.not_authorized'))
@@ -19,7 +21,11 @@ class UsersController < ApplicationController
     end
   end
 
-  def show
+  def show; end
+
+  private
+
+  def load_and_authorize_user
     @user = User.find(params[:id])
     authorize @user
   end

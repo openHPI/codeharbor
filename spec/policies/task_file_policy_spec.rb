@@ -5,7 +5,6 @@ require 'rails_helper'
 RSpec.describe TaskFilePolicy do
   subject { described_class.new(user, task_file) }
 
-  let(:user) { nil }
   let(:task_user) { create(:user) }
   let(:groups) { [] }
 
@@ -13,6 +12,10 @@ RSpec.describe TaskFilePolicy do
   let(:task) { create(:task, user: task_user, access_level:, groups:) }
   let(:fileable) { task }
   let(:task_file) { create(:task_file, fileable:) }
+
+  context 'without a user' do
+    it { expect { described_class.new(nil, task_file) }.to raise_error(Pundit::NotAuthorizedError) }
+  end
 
   context 'with a user and private task' do
     let(:user) { create(:user) }
