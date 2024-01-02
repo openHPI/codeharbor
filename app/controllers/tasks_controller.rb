@@ -4,12 +4,13 @@ require 'zip'
 
 class TasksController < ApplicationController # rubocop:disable Metrics/ClassLength
   before_action :load_and_authorize_task, except: %i[index new create import_start import_confirm import_uuid_check import_external]
+  before_action :set_user_for_api_request, only: %i[import_uuid_check import_external]
   before_action :only_authorize_action, only: %i[import_start import_confirm import_uuid_check import_external]
 
   before_action :handle_search_params, only: :index
   before_action :set_search, only: [:index]
-  skip_before_action :verify_authenticity_token, only: %i[import_external import_uuid_check]
-  skip_before_action :require_user!, only: %i[show import_external import_uuid_check]
+  skip_before_action :verify_authenticity_token, only: %i[import_uuid_check import_external]
+  before_action :require_user!, except: %i[show]
 
   def index
     page = params[:page]
@@ -125,9 +126,6 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   end
 
   def import_uuid_check
-    @current_user ||= user_for_api_request
-    return render json: {}, status: :unauthorized if current_user.nil?
-
     task = Task.find_by(uuid: params[:uuid])
     return render json: {uuid_found: false} if task.nil?
     return render json: {uuid_found: true, update_right: false} unless task.can_access(current_user)
@@ -136,7 +134,6 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   end
 
   def import_external
-    @current_user ||= user_for_api_request
     tempfile = tempfile_from_string(request.body.read.force_encoding('UTF-8'))
 
     ProformaService::Import.call(zip: tempfile, user: current_user)
@@ -264,10 +261,10 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     params.permit(:import_id, :subfile_id, :import_type)
   end
 
-  def user_for_api_request
+  def set_user_for_api_request
     authorization_header = request.headers['Authorization']
     api_key = authorization_header&.split&.second
-    user_by_api_key(api_key)
+    @current_user = user_by_api_key(api_key)
   end
 
   def user_by_api_key(api_key)

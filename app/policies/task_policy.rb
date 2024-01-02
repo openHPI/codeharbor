@@ -14,7 +14,7 @@ class TaskPolicy < ApplicationPolicy
   end
 
   %i[import_uuid_check? import_external?].each do |action|
-    define_method(action) { true } # allow unauthenticated access for API routes
+    define_method(action) { everyone }
   end
 
   %i[index? new? import_start? import_confirm?].each do |action|

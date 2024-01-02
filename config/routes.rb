@@ -93,8 +93,8 @@ Rails.application.routes.draw do
   end
 
   controller :tasks do # import-api endpoints
-    post 'import_task' => :import_external
-    post :import_uuid_check
+    post :import_task, action: :import_external, defaults: {format: :json}
+    post :import_uuid_check, defaults: {format: :json}
   end
 
   scope 'bridges', module: :bridges, as: 'bridges' do

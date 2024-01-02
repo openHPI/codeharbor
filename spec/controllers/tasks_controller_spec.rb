@@ -722,7 +722,7 @@ RSpec.describe TasksController do
   end
 
   describe 'POST #import_uuid_check' do
-    subject(:post_request) { post :import_uuid_check, params: {uuid:} }
+    subject(:post_request) { post :import_uuid_check, params: {uuid:, format: :json} }
 
     let!(:task) { create(:task, valid_attributes) }
     let(:headers) { {'Authorization' => "Bearer #{account_link.api_key}"} }
