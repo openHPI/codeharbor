@@ -1,7 +1,11 @@
 .header
   .std-heading
     i.fa-solid.fa-folder-open
-    =< @collection.title
+    =<> @collection.title
+    - if @collection.visibility_level_public?
+      i.fa-solid.fa-lock-open.lock-icon title=(t('collections.visibility.public'))
+    - else
+      i.fa-solid.fa-lock.lock-icon title=(t('collections.visibility.private'))
     div.collection-subinfo
       i.fa-solid.fa-users
       - if @collection.users.length == 1
@@ -56,22 +60,22 @@
 .row
   .col-md-12
     .actions.btn-group[role="group"]
-      - if @user
+      - if action_name == 'view_shared'
         = link_to t('.button.collaborate'), save_shared_collection_path(@collection), method: 'post', class: 'btn btn-important'
         = link_to t('common.button.back'), user_messages_path(current_user), class: 'btn btn-important'
       - else
-        .btn-group
-          = button_tag type: 'button', 'data-bs-toggle': 'dropdown', aria: {haspopup: "true", expanded: "false"}, class: 'btn btn-important nav-btn-exercise dropdown-toggle split' do
-            => t('.button.share')
-            span.caret
-          .dropdown-menu#share-menu
-            .dropdown-header style="padding-left: 2px;"
-              = t('.type_hint')
-              | :
-            .input-group
-              = text_field_tag 'user', nil, form: 'share', class: 'form-control'
-              = submit_tag t('.button.share'), form: 'share', class: 'btn btn-light', type: 'button'
         - if policy(@collection).edit?
+          .btn-group
+            = button_tag type: 'button', 'data-bs-toggle': 'dropdown', aria: {haspopup: "true", expanded: "false"}, class: 'btn btn-important nav-btn-exercise dropdown-toggle split' do
+              => t('.button.share')
+              span.caret
+            .dropdown-menu#share-menu
+              .dropdown-header style="padding-left: 2px;"
+                = t('.type_hint')
+                | :
+              .input-group
+                = text_field_tag 'user', nil, form: 'share', class: 'form-control'
+                = submit_tag t('.button.share'), form: 'share', class: 'btn btn-light', type: 'button'
           .dropup.btn-group
             = button_tag class: 'btn btn-important dropdown-toggle', 'data-bs-toggle': 'dropdown' do
               => t('common.button.export')
@@ -90,13 +94,12 @@
                     = acc_link.name
               - else
                 = link_to t('.define_account_link'), new_user_account_link_path(current_user), class: 'dropdown-item'
-        = link_to edit_collection_path(@collection), class: 'btn btn-important' do
-          i.fa-solid.fa-pen-to-square
-          =< t('common.button.edit')
-        - if @collection.users.include? current_user
-          = link_to leave_collection_path(@collection), class: 'btn btn-important', method: :post, data: { confirm: @collection.users.count == 1 ? t('.leave.deletion_warning') : t('common.sure') } do
-            = @collection.users.count == 1 ? t('.button.delete') : t('.button.leave')
-
+          =  link_to edit_collection_path(@collection), class: 'btn btn-important' do
+            i.fa-solid.fa-pen-to-square
+            =< t('common.button.edit')
+          - if @collection.users.include? current_user
+            = link_to leave_collection_path(@collection), class: 'btn btn-important', method: :post, data: { confirm: @collection.users.count == 1 ? t('.leave.deletion_warning') : t('common.sure') } do
+              = @collection.users.count == 1 ? t('.button.delete') : t('.button.leave')
         = link_to t('common.button.back'), collections_path, class: 'btn btn-important'
 
 = form_tag share_collection_path, id: 'share'

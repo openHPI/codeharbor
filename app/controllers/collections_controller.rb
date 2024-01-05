@@ -6,8 +6,7 @@ class CollectionsController < ApplicationController
   before_action :load_and_authorize_collection, except: %i[index new create create_ajax]
 
   def index
-    @collections = Collection.includes(:users, tasks: %i[user groups])
-      .where(collection_users: {user: current_user})
+    @collections = Collection.member(current_user).or(Collection.public_access).includes(:users, tasks: %i[user groups])
       .order(id: :asc)
       .paginate(page: params[:page], per_page: per_page_param)
       .load
@@ -162,6 +161,6 @@ class CollectionsController < ApplicationController
   end
 
   def collection_params
-    params.require(:collection).permit(:title, :task_ids, :description, collection_tasks_attributes: collection_tasks_params)
+    params.require(:collection).permit(:title, :task_ids, :visibility_level, :description, collection_tasks_attributes: collection_tasks_params)
   end
 end
