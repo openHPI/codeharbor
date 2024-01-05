@@ -82,6 +82,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_11_200306) do
     t.datetime "updated_at", null: false
     t.string "title"
     t.string "description", default: "", null: false
+    t.integer "visibility_level", limit: 2, default: 0, null: false, comment: "Used as enum in Rails"
   end
 
   create_table "comments", id: :serial, force: :cascade do |t|

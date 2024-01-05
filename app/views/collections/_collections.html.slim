@@ -14,6 +14,11 @@
     .card-header
       h6
         span= collection.title
+        - if collection.visibility_level_public?
+          i.fa-solid.fa-lock-open.float-end title=(t('collections.visibility.public'))
+        - else
+          i.fa-solid.fa-lock.float-end title=(t('collections.visibility.private'))
+
     .card-body
       .row.px-3
         .col
@@ -44,7 +49,8 @@
                     = link_to task.title, task_path(task), class: 'btn btn-light disabled'
         .col-auto
           .btn-group.float-end aria-label="..." role="group"
-            - if policy(collection).edit?
+            - if policy(collection).show?
               = link_to t('common.button.view'), collection_path(collection), class: 'btn btn-light'
+            - if policy(collection).edit?
               = link_to t('common.button.edit'), edit_collection_path(collection), class: 'btn btn-light'
 = render('shared/pagination', collection: @collections)
