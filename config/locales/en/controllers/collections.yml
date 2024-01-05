@@ -1,9 +1,6 @@
 ---
 en:
   collections:
-    create:
-      error: The collection could not be created
-      success_notice: Collection has succefully been created. (The task was automatically added)
     create_ajax:
       error: The collection could not be created.
       success_notice: The collection has successfully been created. (The task has automatically been added)

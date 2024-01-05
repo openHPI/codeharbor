@@ -6,10 +6,12 @@ $collection-color: #000080;
 .fa-solid.fa-folder-open {
   color: $collection-color;
 }
+
 .collection-content {
   width: 60%;
   margin-bottom: 40px;
 }
+
 .nav-container .nav-btn-collection {
   padding: 10px 15px;
 }
@@ -70,4 +72,13 @@ $collection-color: #000080;
       display: none;
     }
   }
+}
+
+.collection-edit-visibility {
+  width: unset;
+  margin-right: 10px;
+}
+
+.lock-icon {
+  font-size: 20px;
 }
