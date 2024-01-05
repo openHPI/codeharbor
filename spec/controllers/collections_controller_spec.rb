@@ -252,11 +252,13 @@ RSpec.describe CollectionsController do
 
   describe 'POST #view_shared' do
     let(:collection_owner) { create(:user) }
-    let(:collection) { create(:collection, valid_attributes.merge(users: [collection_owner, user])) }
+    let(:collection) { create(:collection, valid_attributes.merge(users: [collection_owner])) }
     let(:get_request) { get :view_shared, params: }
     let(:params) { {id: collection.id, user: collection_owner.id} }
 
     context 'when user has been invited' do
+      before { create(:message, sender: collection.users.first, recipient: user, param_type: 'collection', param_id: collection.id, text: 'Invitation') }
+
       it 'assigns collection' do
         get_request
         expect(assigns(:collection)).to eq(collection)
