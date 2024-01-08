@@ -60,7 +60,7 @@ RSpec.describe TaskFilePolicy do
     let(:access_level) { :public }
 
     # why only permit downloading attachments when the text could be extracted after downloading anyway?
-    it { is_expected.to permit_only_actions(%i[download_attachment]) }
+    it { is_expected.to permit_only_actions(%i[download_attachment extract_text_data]) }
 
     context 'when task is from user' do
       let(:task_user) { user }

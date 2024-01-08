@@ -15,6 +15,8 @@ class TaskFilePolicy < ApplicationPolicy
   end
 
   def extract_text_data?
-    corresponding_task.updateable_by?(@user)
+    download_attachment?
+    # This was originally only permitted for users who can edit the file because it is only used in the update frontend.
+    # Since it does not update something itself it can be allowed for users that can view/download a task.
   end
 end

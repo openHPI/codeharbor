@@ -4,13 +4,13 @@ require 'zip'
 
 class TasksController < ApplicationController # rubocop:disable Metrics/ClassLength
   before_action :load_and_authorize_task, except: %i[index new create import_start import_confirm import_uuid_check import_external]
-  before_action :set_user_for_api_request, only: %i[import_uuid_check import_external]
   before_action :only_authorize_action, only: %i[import_start import_confirm import_uuid_check import_external]
 
   before_action :handle_search_params, only: :index
   before_action :set_search, only: [:index]
+  prepend_before_action :set_user_for_api_request, only: %i[import_uuid_check import_external]
   skip_before_action :verify_authenticity_token, only: %i[import_uuid_check import_external]
-  before_action :require_user!, except: %i[show]
+  skip_before_action :require_user!, only: %i[show]
 
   def index
     page = params[:page]
@@ -115,12 +115,6 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     render json: {
       status: 'failure',
       message: t('.error', title: task_title, error: e.message),
-      actions: '',
-    }
-  rescue Pundit::NotAuthorizedError
-    render json: {
-      status: 'failure',
-      message: t('common.errors.not_authorized'),
       actions: '',
     }
   end

@@ -696,27 +696,39 @@ RSpec.describe TasksController do
         params: {import_id: import_data[1][:import_id], subfile_id: import_data[0], import_type: 'export'}, xhr: true
     end
 
-    before { sign_in user }
-
     let(:zip_file) { fixture_file_upload('proforma_import/testfile_multi.zip', 'application/zip') }
     let(:data) { ProformaService::CacheImportFile.call(user:, zip_file:) }
     let(:import_data) { data.first }
 
-    it 'creates the task' do
-      expect { post_request }.to change(Task, :count).by(1)
-    end
+    context 'when signed in' do
+      before { sign_in user }
 
-    it 'renders correct json' do
-      post_request
-      expect(response.body).to include('successfully imported').and(include(I18n.t('tasks.import_actions.button.show_task')).and(include('Hide')))
-    end
-
-    context 'when import raises a validation error' do
-      before { allow(ProformaService::ImportTask).to receive(:call).and_raise(ActiveRecord::RecordInvalid) }
+      it 'creates the task' do
+        expect { post_request }.to change(Task, :count).by(1)
+      end
 
       it 'renders correct json' do
         post_request
-        expect(response.body).to include('failed').and(include('Record invalid').and(include('"actions":""')))
+        expect(response.body).to include('successfully imported').and(include(I18n.t('tasks.import_actions.button.show_task')).and(include('Hide')))
+      end
+
+      context 'when import raises a validation error' do
+        before { allow(ProformaService::ImportTask).to receive(:call).and_raise(ActiveRecord::RecordInvalid) }
+
+        it 'renders correct json' do
+          post_request
+          expect(response.body).to include('failed').and(include('Record invalid').and(include('"actions":""')))
+        end
+      end
+    end
+
+    context 'when signed out' do
+      it 'does not create the task' do
+        expect { post_request }.not_to change(Task, :count)
+      end
+
+      it 'redirects to sign_in' do
+        expect(post_request).to redirect_to(new_user_session_path)
       end
     end
   end

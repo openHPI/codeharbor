@@ -11,7 +11,10 @@ class ApplicationPolicy
   end
 
   def method_missing(method_name, *_args)
-    return false if RESOURCE_ACTIONS.include?(method_name)
+    if RESOURCE_ACTIONS.include?(method_name)
+      Rails.logger.debug { "Pundit policy does not have method #{method_name}. Returning false as default." }
+      return false
+    end
 
     super
   end

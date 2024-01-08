@@ -7,7 +7,6 @@ RSpec.describe CommentPolicy do
 
   let(:comment_user) { create(:user) }
   let(:task_user) { create(:user) }
-  let(:access_level) { :private }
   let(:task) { create(:task, access_level:, user: task_user) }
   let(:comment) { create(:comment, user: comment_user, task:) }
 
