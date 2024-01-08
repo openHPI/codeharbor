@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_28_141153) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_08_202045) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -140,7 +140,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_28_141153) do
   end
 
   create_table "messages", id: :serial, force: :cascade do |t|
-    t.string "text"
+    t.text "text"
     t.integer "sender_id"
     t.integer "recipient_id"
     t.datetime "created_at", null: false
@@ -152,8 +152,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_28_141153) do
   end
 
   create_table "model_solutions", force: :cascade do |t|
-    t.string "description"
-    t.string "internal_description"
+    t.text "description"
+    t.text "internal_description"
     t.string "xml_id"
     t.bigint "task_id"
     t.datetime "created_at", null: false
@@ -239,8 +239,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_28_141153) do
 
   create_table "tasks", id: :serial, force: :cascade do |t|
     t.string "title"
-    t.string "description"
-    t.string "internal_description"
+    t.text "description"
+    t.text "internal_description"
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.uuid "parent_uuid"
     t.string "language"
@@ -270,8 +270,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_28_141153) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "title"
-    t.string "description"
-    t.string "internal_description"
+    t.text "description"
+    t.text "internal_description"
     t.string "test_type"
     t.string "xml_id"
     t.string "validity"
