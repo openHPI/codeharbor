@@ -65,12 +65,8 @@ class CollectionsController < ApplicationController
   end
 
   def remove_task_ajax
-    if @collection.remove_task(params[:task])
-      redirect_to Task.find_by(id: params[:task]), notice: t('.success_notice')
-    else
-      flash.now[:alert] = t('.error')
-      head :ok
-    end
+    @collection.remove_task(params[:task])
+    redirect_to Task.find_by(id: params[:task]), notice: t('.success_notice')
   end
 
   def remove_all
