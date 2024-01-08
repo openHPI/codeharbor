@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class ChangeColumnTypesToText < ActiveRecord::Migration[7.1]
   def up
     change_column :messages, :text, :text

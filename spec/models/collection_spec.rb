@@ -72,6 +72,9 @@ RSpec.describe Collection do
   describe '#valid?' do
     it { is_expected.to validate_presence_of(:title) }
     it { is_expected.to validate_presence_of(:users) }
+    it { expect(build(:collection, title: 'some title', description: '')).to be_valid }
+    it { expect(build(:collection, title: 'some title', description: 'X' * 4000)).to be_valid }
+    it { expect(build(:collection, title: 'some title', description: 'X' * 4001)).not_to be_valid }
   end
 
   describe '#add_task' do
