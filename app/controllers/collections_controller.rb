@@ -14,7 +14,9 @@ class CollectionsController < ApplicationController
     authorize @collections
   end
 
-  def show; end
+  def show
+    @num_of_invites = Message.where(param_type: 'collection', param_id: @collection.id).count
+  end
 
   def new
     @collection = Collection.new
