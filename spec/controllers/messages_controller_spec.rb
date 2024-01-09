@@ -92,6 +92,15 @@ RSpec.describe MessagesController do
     end
   end
 
+  describe 'GET #new' do
+    subject(:get_request) { get :new, params: {user_id: user} }
+
+    it 'assigns a new message as @message' do
+      get_request
+      expect(assigns(:message)).to be_a_new(Message)
+    end
+  end
+
   describe 'DELETE #destroy' do
     subject(:delete_request) { delete :destroy, params: {user_id: user, id: message.id} }
 
