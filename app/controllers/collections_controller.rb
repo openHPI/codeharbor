@@ -110,7 +110,7 @@ class CollectionsController < ApplicationController
   end
 
   def save_shared
-    return redirect_to user_messages_path(user), alert: t('.errors.already_member') if @collection.users.include? user
+    return redirect_to user_messages_path(current_user), alert: t('.errors.already_member') if @collection.users.include? current_user
 
     @collection.users << current_user
     if @collection.save
