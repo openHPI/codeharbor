@@ -37,11 +37,9 @@ $collection-color: #000080;
   flex-direction: column;
   span {
     i {
-      &:first-child {
-        width: 20px;
-      }
+      width: 20px;
+      text-align: center;
     }
-
     padding: 5px;
   }
 }
