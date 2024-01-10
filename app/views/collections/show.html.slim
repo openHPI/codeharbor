@@ -14,14 +14,13 @@
           i.fa-solid.fa-lock.lock-icon
           =< t('.visibility.private')
       span
-        span
         i.fa-solid.fa-users
         - if @collection.users.size == 1
           =< t('.no_other_user')
         - else
           =< t('.num_of_other_users', count: @collection.users.size - 1)
       span
-        i.fa-solid.fa-message
+        i.fa-regular.fa-envelope
         - if @num_of_invites == 0
           =< t('.no_invites')
         - else
