@@ -2,7 +2,7 @@
 
 class MessagesController < ApplicationController
   before_action :load_and_authorize_message, only: %i[destroy]
-  before_action :set_user
+  before_action :load_and_authorize_user
   before_action :set_option, only: %i[index]
 
   def index # rubocop:disable Metrics/AbcSize
@@ -83,8 +83,9 @@ class MessagesController < ApplicationController
     authorize @message
   end
 
-  def set_user
+  def load_and_authorize_user
     @user = User.find(params[:user_id])
+    authorize @user, :show?
   end
 
   # Never trust parameters from the scary internet, only allow the following list through.
