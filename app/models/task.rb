@@ -111,15 +111,15 @@ class Task < ApplicationRecord
   end
 
   def showable_by?(user)
-    user.nil? ? false : user.can?(:show, self)
+    user.nil? ? false : Pundit.policy(user, self).show?
   end
 
   def updateable_by?(user)
-    user.nil? ? false : user.can?(:update, self)
+    user.nil? ? false : Pundit.policy(user, self).update?
   end
 
   def destroyable_by?(user)
-    user.nil? ? false : user.can?(:destroy, self)
+    user.nil? ? false : Pundit.policy(user, self).destroy?
   end
 
   def lom_showable_by?(user)

@@ -3,26 +3,31 @@
 require 'zip'
 
 class CollectionsController < ApplicationController
-  load_and_authorize_resource
-  before_action :set_collection, only: %i[show edit update remove_task remove_all download_all share view_shared save_shared]
-  before_action :new_collection, only: :create
+  before_action :load_and_authorize_collection, except: %i[index new create]
 
   def index
     @collections = Collection.includes(:collection_users)
       .where(collection_users: {user: current_user})
       .distinct
       .paginate(page: params[:page], per_page: per_page_param)
+
+    authorize @collections
   end
 
   def show; end
 
   def new
     @collection = Collection.new
+    authorize @collection
   end
 
   def edit; end
 
   def create
+    @collection = Collection.new(collection_params)
+    @collection.users << current_user
+    authorize @collection
+
     if @collection.save
       redirect_to collections_path, notice: t('common.notices.object_created', model: Collection.model_name.human)
     else
@@ -83,15 +88,10 @@ class CollectionsController < ApplicationController
   end
 
   def view_shared
-    @user = User.find(params[:user])
-    raise CanCan::AccessDenied if @collection.users.exclude?(@user)
-
     render :show
   end
 
   def save_shared
-    raise CanCan::AccessDenied unless Message.received_by(current_user).exists?(param_type: 'collection', param_id: @collection.id)
-
     @collection.users << current_user
     if @collection.save
       redirect_to @collection, notice: t('.success_notice')
@@ -112,11 +112,6 @@ class CollectionsController < ApplicationController
 
   private
 
-  def new_collection
-    @collection = Collection.new(collection_params)
-    @collection.users << current_user
-  end
-
   def share_message
     user = User.find_by(email: params[:user])
     text = t('collections.share_message.text', user: current_user.name, collection: @collection.title)
@@ -132,10 +127,9 @@ class CollectionsController < ApplicationController
     errors
   end
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_collection
+  def load_and_authorize_collection
     @collection = Collection.find(params[:id])
-    raise CanCan::AccessDenied if @collection.users.exclude?(current_user) && action_name != 'save_shared'
+    authorize @collection
   end
 
   # Never trust parameters from the scary internet, only allow the following list through.

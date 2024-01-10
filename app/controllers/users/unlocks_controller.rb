@@ -2,6 +2,8 @@
 
 module Users
   class UnlocksController < Devise::UnlocksController
+    skip_before_action :require_user!
+    skip_after_action :verify_authorized
     # GET /resource/unlock/new
     # def new
     #   super

@@ -26,7 +26,7 @@ RSpec.describe AccountLinksController do
         expect(response).to have_http_status :ok
       end
 
-      it 'does not show an internal server error on CanCan::AccessDenied' do
+      it 'does not show an internal server error on Pundit::NotAuthorizedError' do
         get :show, params: {id: account_link_from_another_user.id, user_id: another_user.id}
         expect(response).not_to have_http_status :internal_server_error
       end

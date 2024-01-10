@@ -17,8 +17,8 @@ RailsAdmin.config do |config|
   # config.authorize_with :pundit
 
   config.authorize_with do
-    # Important! We need to check the authorization here, we skip CanCanCan checks in the RailsAdminController.
-    unless can?(:access, :rails_admin)
+    # Important! We need to check the authorization here, we skip pundit checks in the RailsAdminController.
+    unless current_user&.role == 'admin'
       flash[:alert] = t('common.errors.not_authorized')
       redirect_to main_app.root_path
     end

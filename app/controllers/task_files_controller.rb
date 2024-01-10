@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
 class TaskFilesController < ApplicationController
-  load_and_authorize_resource
-
-  rescue_from CanCan::AccessDenied, ActiveRecord::RecordNotFound do |_exception|
-    redirect_to root_path, alert: t('common.errors.not_authorized')
-  end
+  before_action :load_and_authorize_task_file
 
   def download_attachment
     redirect_to rails_blob_path(@task_file.attachment, disposition: 'attachment')
@@ -17,5 +13,12 @@ class TaskFilesController < ApplicationController
     render json: {
       text_data: @task_file.extract_text_data,
     }
+  end
+
+  private
+
+  def load_and_authorize_task_file
+    @task_file = TaskFile.find(params[:id])
+    authorize @task_file
   end
 end

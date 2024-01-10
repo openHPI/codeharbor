@@ -25,7 +25,7 @@ module TaskService
 
     def add_groups(groups)
       groups.each do |group|
-        next unless ability.can? :add_task, group
+        next unless Pundit.policy(@user, group).add_task?
 
         @task.groups << group
       end
@@ -33,14 +33,10 @@ module TaskService
 
     def remove_groups(groups)
       groups.each do |group|
-        next unless ability.can? :remove_task, group
+        next unless Pundit.policy(@user, group).remove_task?
 
         @task.groups.destroy(group)
       end
-    end
-
-    def ability
-      @ability ||= Ability.new(@user)
     end
   end
 end

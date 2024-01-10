@@ -18,7 +18,7 @@ RSpec.describe LabelsController do
       it 'redirects to other page' do
         get_request
         expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(root_url)
+        expect(response).to redirect_to(new_user_session_path)
       end
     end
 
@@ -99,7 +99,7 @@ RSpec.describe LabelsController do
       it 'redirects to another page' do
         merge_request
         expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(root_url)
+        expect(response).to redirect_to(new_user_session_path)
       end
     end
 

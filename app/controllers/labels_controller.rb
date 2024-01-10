@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 class LabelsController < ApplicationController
-  load_and_authorize_resource
-
-  rescue_from CanCan::AccessDenied do |_exception|
-    redirect_to root_path, alert: t('common.errors.not_authorized')
-  end
+  before_action :load_and_authorize_label, except: %i[index merge search]
+  before_action :only_authorize_action, only: %i[index merge search]
 
   def index; end
 
@@ -48,5 +45,16 @@ class LabelsController < ApplicationController
     end
 
     render json: {results: paginated.map(&:to_h), pagination: {more: paginated.next_page.present?}}
+  end
+
+  private
+
+  def load_and_authorize_label
+    @label = Label.find(params[:id])
+    authorize @label
+  end
+
+  def only_authorize_action
+    authorize Label
   end
 end

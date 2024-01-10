@@ -3,7 +3,7 @@
     i.fa-solid.fa-user
     =< @user.name
 .show-table.mt-5
-  - if can? :edit, @user
+  - if policy(@user).edit?
     .table-header
       = t('.public_information')
   .row
@@ -27,7 +27,7 @@
         .col.row-value
           = @user.role
 
-- if can? :manage_accountlinks, @user
+- if policy(@user).manage_accountlinks?
   .show-table
     .table-header
       = t('.private_information')
@@ -80,15 +80,15 @@
                   i.fa-solid.fa-xmark
                   =< t('common.button.remove')
 .actions.btn-group[role="group"]
-  - if can? :message, @user
+  - if policy(@user).message?
     = link_to reply_user_messages_path(current_user, recipient: @user), class: 'btn btn-important' do
       i.fa-solid.fa-envelope
       =< t('.send_message')
-  - if can? :edit, @user
+  - if policy(@user).edit?
     = link_to edit_user_registration_path, class: 'btn btn-important' do
       i.fa-solid.fa-pen-to-square
       =< t('common.button.edit')
-  - if can? :delete, @user
+  - if policy(@user).delete?
     = button_tag type: 'button', class: 'btn btn-important delete-user' do
       i.fa-solid.fa-trash-can
       =< t('common.button.delete')

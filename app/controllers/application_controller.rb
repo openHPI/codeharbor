@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::Base
   include ApplicationHelper
+  include Pundit::Authorization
 
   MEMBER_ACTIONS = %i[destroy edit show update].freeze
   MONITORING_USER_AGENT = /updown\.io/
@@ -9,13 +10,19 @@ class ApplicationController < ActionController::Base
   around_action :mnemosyne_trace
   around_action :switch_locale
   before_action :set_sentry_context, :set_document_policy
+  before_action :require_user!
+  after_action :verify_authorized
   after_action :flash_to_headers
   protect_from_forgery(with: :exception, prepend: true)
-  rescue_from CanCan::AccessDenied, with: :render_not_authorized
+  rescue_from Pundit::NotAuthorizedError, with: :render_not_authorized
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
   add_flash_types :danger, :warning, :info, :success
 
   private
+
+  def require_user!
+    raise Pundit::NotAuthorizedError unless current_user
+  end
 
   def flash_to_headers
     return unless request.xhr?

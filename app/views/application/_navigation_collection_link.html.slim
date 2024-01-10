@@ -1,4 +1,4 @@
-- if defined?(model) && can?(:index, model) || defined?(target) && defined?(text)
+- if defined?(model) && policy(model).index? || defined?(target) && defined?(text)
   - path = defined?(target) ? target : "#{model.model_name.collection}_path".to_sym
   li.nav-item
     = link_to(send(path), class: "nav-link px-3 #{active_class(send(path))}") do

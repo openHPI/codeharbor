@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 class GroupsController < ApplicationController
-  load_and_authorize_resource
-  before_action :set_group, only: %i[show edit update destroy request_access grant_access delete_from_group make_admin]
+  before_action :load_and_authorize_group, except: %i[index new create]
   before_action :set_option, only: [:index]
   before_action :set_user, only: %i[grant_access delete_from_group deny_access make_admin demote_admin]
 
@@ -12,12 +11,14 @@ class GroupsController < ApplicationController
               else
                 Group.all.paginate(page: params[:page], per_page: per_page_param)
               end
+    authorize @groups
   end
 
   def show; end
 
   def new
     @group = Group.new
+    authorize @group
   end
 
   def edit; end
@@ -25,6 +26,8 @@ class GroupsController < ApplicationController
   def create
     @group = Group.new(group_params)
     @group.group_memberships << GroupMembership.new(user: current_user, role: :admin)
+    authorize @group
+
     if @group.save
       redirect_to @group, notice: t('common.notices.object_created', model: Group.model_name.human)
     else
@@ -130,13 +133,13 @@ class GroupsController < ApplicationController
       sender_status: 'd')
   end
 
-  # Use callbacks to share common setup or constraints between actions.
   def set_option
     @option = params[:option] || 'mine'
   end
 
-  def set_group
+  def load_and_authorize_group
     @group = Group.find(params[:id])
+    authorize @group
   end
 
   def set_user

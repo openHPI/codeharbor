@@ -83,4 +83,47 @@ RSpec.describe CommentsController do
       expect(response).to have_http_status :ok
     end
   end
+
+  describe 'POST #create' do
+    subject(:post_request) { post :create, params: {task_id: task.id, comment: comment_params}, format: :js, xhr: true }
+
+    let(:access_level) { :public }
+
+    before { sign_in user }
+
+    context 'with valid params' do
+      let(:comment_params) { {text: 'some text'} }
+
+      it 'renders load_comments view' do
+        post_request
+        expect(response).to render_template('load_comments')
+      end
+
+      it 'creates new comment' do
+        expect { post_request }.to change(Comment, :count).by(1)
+      end
+    end
+
+    context 'with invalid params' do
+      let(:comment_params) { {text: ''} }
+
+      it 'sets a flash alert' do
+        expect { post_request }.to change { flash[:alert] }.to(I18n.t('comments.create.error'))
+      end
+
+      context 'when user cannot access task' do
+        let(:task_owner) { create(:user) }
+        let(:access_level) { :private }
+
+        it 'redirects to the user profile' do
+          post_request
+          expect(response).to redirect_to(root_path)
+        end
+
+        it 'displays an error message' do
+          expect { post_request }.to change { flash[:alert] }.to(I18n.t('common.errors.not_authorized'))
+        end
+      end
+    end
+  end
 end

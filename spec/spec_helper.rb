@@ -25,6 +25,7 @@ unless ENV.fetch('RUBYMINE_SIMPLECOV_COVERAGE_PATH', nil)
 end
 
 require 'webmock/rspec'
+require 'pundit/matchers'
 
 RSpec::Matchers.define_negated_matcher :avoid_change, :change
 RSpec::Matchers.define_negated_matcher :not_include, :include

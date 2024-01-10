@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 class RatingsController < ApplicationController
-  load_and_authorize_resource
-  before_action :set_task
+  before_action :load_and_authorize_task
 
   def create
     return handle_own_rating if @task.user == current_user
 
     rating, notice = handle_rating
+    authorize rating
+
     if rating.save
       overall_rating = @task.average_rating
       render json: {overall_rating:, user_rating: rating}
@@ -19,8 +20,9 @@ class RatingsController < ApplicationController
 
   private
 
-  def set_task
+  def load_and_authorize_task
     @task = Task.find(params[:task_id])
+    authorize @task, :show?
   end
 
   # Never trust parameters from the scary internet, only allow the following list through.

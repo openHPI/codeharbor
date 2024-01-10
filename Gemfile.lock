@@ -112,7 +112,6 @@ GEM
       amq-protocol (~> 2.3, >= 2.3.1)
       sorted_set (~> 1, >= 1.0.2)
     byebug (11.1.3)
-    cancancan (3.5.0)
     capybara (3.39.2)
       addressable
       matrix
@@ -347,6 +346,13 @@ GEM
     public_suffix (5.0.4)
     puma (6.4.2)
       nio4r (~> 2.0)
+    pundit (2.3.1)
+      activesupport (>= 3.0.0)
+    pundit-matchers (3.1.2)
+      rspec-core (~> 3.12)
+      rspec-expectations (~> 3.12)
+      rspec-mocks (~> 3.12)
+      rspec-support (~> 3.12)
     racc (1.7.3)
     rack (3.0.8)
     rack-mini-profiler (3.3.0)
@@ -591,7 +597,6 @@ DEPENDENCIES
   binding_of_caller
   bootsnap
   bootstrap-will_paginate
-  cancancan
   capybara
   coffee-rails (>= 5.0.0)
   config
@@ -627,6 +632,8 @@ DEPENDENCIES
   pry-byebug
   pry-rails
   puma
+  pundit
+  pundit-matchers
   rack-mini-profiler
   rails (~> 7.1.0)
   rails-controller-testing

@@ -3,7 +3,7 @@
     div style="width: 60%; margin: 0; display: inline-block;"
       = f.text_field :text, class: 'form-control'
     .actions.btn-group.float-end role="group"
-      - if can? :edit, @comment
+      - if policy(@comment).edit?
         = f.submit class: 'btn btn-light btn-sm' do
           i.fa-solid.fa-floppy-disk
           =< "Save"

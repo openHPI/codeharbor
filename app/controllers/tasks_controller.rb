@@ -3,17 +3,21 @@
 require 'zip'
 
 class TasksController < ApplicationController # rubocop:disable Metrics/ClassLength
-  load_and_authorize_resource except: %i[import_external import_uuid_check]
+  before_action :load_and_authorize_task, except: %i[index new create import_start import_confirm import_uuid_check import_external]
+  before_action :only_authorize_action, only: %i[import_start import_confirm import_uuid_check import_external]
 
   before_action :handle_search_params, only: :index
   before_action :set_search, only: [:index]
-  skip_before_action :verify_authenticity_token, only: %i[import_external import_uuid_check]
+  prepend_before_action :set_user_for_api_request, only: %i[import_uuid_check import_external]
+  skip_before_action :verify_authenticity_token, only: %i[import_uuid_check import_external]
+  skip_before_action :require_user!, only: %i[show]
 
   def index
     page = params[:page]
     @search = Task.visibility(@visibility, current_user).ransack(params[:q])
     @tasks = @search.result(distinct: true).paginate(page:, per_page: per_page_param).includes(:ratings, :programming_language,
       :labels).load
+    authorize @tasks
   end
 
   def duplicate
@@ -35,14 +39,18 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   def new
     @task = Task.new
+    authorize @task
   end
 
   def edit; end
 
   def create
     @task = Task.new(task_params)
+
     TaskService::HandleGroups.call(user: current_user, task: @task, group_tasks_params:)
     @task.user = current_user
+
+    authorize @task
 
     if @task.save(context: :force_validations)
       redirect_to @task, notice: t('common.notices.object_created', model: Task.model_name.human)
@@ -112,21 +120,17 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   end
 
   def import_uuid_check
-    user = user_for_api_request
-    return render json: {}, status: :unauthorized if user.nil?
-
     task = Task.find_by(uuid: params[:uuid])
     return render json: {uuid_found: false} if task.nil?
-    return render json: {uuid_found: true, update_right: false} unless task.can_access(user)
+    return render json: {uuid_found: true, update_right: false} unless task.can_access(current_user)
 
     render json: {uuid_found: true, update_right: true}
   end
 
   def import_external
-    user = user_for_api_request
     tempfile = tempfile_from_string(request.body.read.force_encoding('UTF-8'))
 
-    ProformaService::Import.call(zip: tempfile, user:)
+    ProformaService::Import.call(zip: tempfile, user: current_user)
 
     render json: t('.success'), status: :created
   rescue ProformaXML::ProformaError
@@ -183,6 +187,15 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   # rubocop:enable Metrics/AbcSize
 
   private
+
+  def load_and_authorize_task
+    @task = Task.find(params[:id])
+    authorize @task
+  end
+
+  def only_authorize_action
+    authorize Task
+  end
 
   def set_search # rubocop:disable Metrics/AbcSize
     search = params[:q]
@@ -242,10 +255,10 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     params.permit(:import_id, :subfile_id, :import_type)
   end
 
-  def user_for_api_request
+  def set_user_for_api_request
     authorization_header = request.headers['Authorization']
     api_key = authorization_header&.split&.second
-    user_by_api_key(api_key)
+    @current_user = user_by_api_key(api_key)
   end
 
   def user_by_api_key(api_key)

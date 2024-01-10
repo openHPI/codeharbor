@@ -13,7 +13,7 @@
       - @group.admins.each do |admin|
         .table-list
           => admin.email
-          - if can?(:demote_admin, @group) && @group.admins.length > 1
+          - if policy(@group).demote_admin? && @group.admins.length > 1
             = link_to demote_admin_group_path(group: @group, user: admin), method: :post, class: 'btn btn-light btn-sm', data: { confirm: admin == current_user ? t('.demote_yourself.confirm') : t('.demote_admin.confirm') } do
               i.fa-solid.fa-arrow-down style=("color:#000080")
               =< (admin == current_user ? t('.button.demote_yourself') : t('.button.demote_admin'))
@@ -26,8 +26,8 @@
         - (@group.confirmed_members).each do |member|
           .table-list
             => member.email
-            - if can? :view, @group
-              - if can? :edit, @group
+            - if policy(@group).show?
+              - if policy(@group).edit?
                 - if @group.group_membership_for(member).role_confirmed_member?
                   = link_to make_admin_group_path(group: @group, user: member), method: :post, class: 'btn btn-light btn-sm' do
                     i.fa-solid.fa-plus style=("color:#008000")
@@ -40,7 +40,7 @@
 
 
 
-  - if can? :grant_access, @group
+  - if policy(@group).grant_access?
     .row.vertical
       .col.row-label = t('.pending_users')
       .row-value
@@ -72,15 +72,15 @@
 
 br
 .actions.btn-group[role="group"]
-  - if can? :request_access, @group
+  - if policy(@group).request_access?
     = link_to t('.button.request_membership'), request_access_group_path(@group), method: :post, class: 'btn btn-important'
-  - if can? :edit, @group
+  - if policy(@group).edit?
     = link_to edit_group_path(@group), class: 'btn btn-important' do
       i.fa-solid.fa-pen-to-square
       =< t('common.button.edit')
     = link_to group_path(@group), class: 'btn btn-important', method: :delete, data: {confirm: t('common.sure')} do
       i.fa-solid.fa-trash-can style=("color:#800000")
       =< t('.button.delete_group')
-  - if can? :leave, @group
+  - if policy(@group).leave?
     = link_to t('.button.leave'), leave_group_path(@group), method: :post, class: "leave-btn btn btn-important #{@group.last_admin?(current_user) ? 'disabled' : ''}", data: {confirm: t('common.sure')}
   = link_to t('common.button.back'), :back, class: 'btn btn-important'

@@ -2,6 +2,8 @@
 
 module Users
   class ConfirmationsController < Devise::ConfirmationsController
+    skip_before_action :require_user!
+    skip_after_action :verify_authorized
     # GET /resource/confirmation/new
     # def new
     #   super

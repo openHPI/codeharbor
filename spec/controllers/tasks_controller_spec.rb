@@ -11,10 +11,10 @@ RSpec.describe TasksController do
 
   let(:invalid_attributes) { {title: ''} }
 
-  before { sign_in user }
-
   describe 'GET #index' do
     subject(:get_request) { get :index, params: }
+
+    before { sign_in user }
 
     let(:get_request_without_params) { get :index, params: {} }
     let!(:task) { create(:task, valid_attributes) }
@@ -141,6 +141,8 @@ RSpec.describe TasksController do
   describe 'GET #show' do
     subject(:get_request) { get :show, params: {id: task.to_param} }
 
+    before { sign_in user }
+
     let!(:task) { create(:task, valid_attributes) }
 
     it 'assigns the requested task to instance variable' do
@@ -178,6 +180,8 @@ RSpec.describe TasksController do
   end
 
   describe 'GET #new' do
+    before { sign_in user }
+
     it 'assigns a new task as @task' do
       get :new, params: {}
       expect(assigns(:task)).to be_a_new(Task)
@@ -185,6 +189,8 @@ RSpec.describe TasksController do
   end
 
   describe 'GET #edit' do
+    before { sign_in user }
+
     let!(:task) { create(:task, valid_attributes) }
 
     it 'assigns the requested task as @task' do
@@ -194,6 +200,8 @@ RSpec.describe TasksController do
   end
 
   describe 'POST #create' do
+    before { sign_in user }
+
     context 'with valid params' do
       subject(:post_request) { post :create, params: {task: valid_params} }
 
@@ -321,6 +329,8 @@ RSpec.describe TasksController do
 
   describe 'PUT #update' do
     subject(:put_update) { put :update, params: {id: task.to_param, task: changed_attributes} }
+
+    before { sign_in user }
 
     let!(:existing_label) { create(:label) }
     let!(:new_label) { create(:label) }
@@ -511,6 +521,8 @@ RSpec.describe TasksController do
   describe 'POST #duplicate' do
     subject(:post_duplicate) { post :duplicate, params: {id: task.id} }
 
+    before { sign_in user }
+
     let(:groups) { create_list(:group, 1) }
     let(:collections) { create_list(:collection, 1) }
     let!(:task) { create(:task, valid_attributes) }
@@ -570,6 +582,8 @@ RSpec.describe TasksController do
       delete :destroy, params: {id: task.to_param}
     end
 
+    before { sign_in user }
+
     let!(:task) { create(:task, valid_attributes) }
 
     it 'destroys the requested task' do
@@ -585,10 +599,13 @@ RSpec.describe TasksController do
   describe 'GET #download' do
     subject(:get_request) { get :download, params: {id: task.id} }
 
+    before do
+      sign_in user
+      allow(ProformaService::ExportTask).to receive(:call).with(task:).and_return(zip)
+    end
+
     let(:task) { create(:task, valid_attributes) }
     let(:zip) { instance_double(StringIO, string: 'dummy') }
-
-    before { allow(ProformaService::ExportTask).to receive(:call).with(task:).and_return(zip) }
 
     it 'calls the ExportTask service' do
       get_request
@@ -616,9 +633,12 @@ RSpec.describe TasksController do
 
     subject(:post_request) { post :import_start, params: {zip_file:}, format: :js, xhr: true }
 
-    let(:zip_file) { fixture_file_upload('proforma_import/testfile.zip', 'application/zip') }
+    before do
+      sign_in user
+      allow(ProformaService::CacheImportFile).to receive(:call).and_call_original
+    end
 
-    before { allow(ProformaService::CacheImportFile).to receive(:call).and_call_original }
+    let(:zip_file) { fixture_file_upload('proforma_import/testfile.zip', 'application/zip') }
 
     it 'renders correct views' do
       post_request
@@ -680,27 +700,41 @@ RSpec.describe TasksController do
     let(:data) { ProformaService::CacheImportFile.call(user:, zip_file:) }
     let(:import_data) { data.first }
 
-    it 'creates the task' do
-      expect { post_request }.to change(Task, :count).by(1)
-    end
+    context 'when signed in' do
+      before { sign_in user }
 
-    it 'renders correct json' do
-      post_request
-      expect(response.body).to include('successfully imported').and(include(I18n.t('tasks.import_actions.button.show_task')).and(include('Hide')))
-    end
-
-    context 'when import raises a validation error' do
-      before { allow(ProformaService::ImportTask).to receive(:call).and_raise(ActiveRecord::RecordInvalid) }
+      it 'creates the task' do
+        expect { post_request }.to change(Task, :count).by(1)
+      end
 
       it 'renders correct json' do
         post_request
-        expect(response.body).to include('failed').and(include('Record invalid').and(include('"actions":""')))
+        expect(response.body).to include('successfully imported').and(include(I18n.t('tasks.import_actions.button.show_task')).and(include('Hide')))
+      end
+
+      context 'when import raises a validation error' do
+        before { allow(ProformaService::ImportTask).to receive(:call).and_raise(ActiveRecord::RecordInvalid) }
+
+        it 'renders correct json' do
+          post_request
+          expect(response.body).to include('failed').and(include('Record invalid').and(include('"actions":""')))
+        end
+      end
+    end
+
+    context 'when signed out' do
+      it 'does not create the task' do
+        expect { post_request }.not_to change(Task, :count)
+      end
+
+      it 'redirects to sign_in' do
+        expect(post_request).to redirect_to(new_user_session_path)
       end
     end
   end
 
   describe 'POST #import_uuid_check' do
-    subject(:post_request) { post :import_uuid_check, params: {uuid:} }
+    subject(:post_request) { post :import_uuid_check, params: {uuid:, format: :json} }
 
     let!(:task) { create(:task, valid_attributes) }
     let(:headers) { {'Authorization' => "Bearer #{account_link.api_key}"} }
@@ -756,6 +790,7 @@ RSpec.describe TasksController do
     let(:headers) { {'Authorization' => "Bearer #{account_link.api_key}"} }
 
     before do
+      sign_in user
       request.headers.merge! headers
       allow(ProformaService::Import).to receive(:call)
     end
@@ -790,6 +825,8 @@ RSpec.describe TasksController do
   end
 
   describe 'POST #export_external_start' do
+    before { sign_in user }
+
     let(:task) { create(:task, valid_attributes) }
     let(:account_link) { create(:account_link, user: account_link_user) }
     let(:account_link_user) { user }
@@ -806,6 +843,12 @@ RSpec.describe TasksController do
   describe 'POST #export_external_check' do
     render_views
 
+    before do
+      sign_in user
+      allow(TaskService::CheckExternal).to receive(:call).with(uuid: task.uuid,
+        account_link:).and_return(external_check_hash)
+    end
+
     let!(:task) { create(:task, valid_attributes).reload }
     let(:account_link) { create(:account_link, user: account_link_user) }
     let(:account_link_user) { user }
@@ -816,11 +859,6 @@ RSpec.describe TasksController do
     let(:message) { 'message' }
     let(:uuid_found) { true }
     let(:error) { nil }
-
-    before do
-      allow(TaskService::CheckExternal).to receive(:call).with(uuid: task.uuid,
-        account_link:).and_return(external_check_hash)
-    end
 
     it 'renders the correct contents as json' do
       post_request
@@ -867,6 +905,16 @@ RSpec.describe TasksController do
   describe 'POST #export_external_confirm' do
     render_views
 
+    before do
+      sign_in user
+      allow(ProformaService::ExportTask).to receive(:call)
+        .with(task: an_instance_of(Task), options: {description_format: 'md'})
+        .and_return('zip stream')
+      allow(TaskService::PushExternal).to receive(:call)
+        .with(zip: 'zip stream', account_link:)
+        .and_return(error)
+    end
+
     let!(:task) { create(:task, valid_attributes) }
     let(:account_link) { create(:account_link, user: account_link_user) }
     let(:account_link_user) { user }
@@ -876,15 +924,6 @@ RSpec.describe TasksController do
     end
     let(:push_type) { 'export' }
     let(:error) {}
-
-    before do
-      allow(ProformaService::ExportTask).to receive(:call)
-        .with(task: an_instance_of(Task), options: {description_format: 'md'})
-        .and_return('zip stream')
-      allow(TaskService::PushExternal).to receive(:call)
-        .with(zip: 'zip stream', account_link:)
-        .and_return(error)
-    end
 
     it 'does not create a new task' do
       expect { post_request }.not_to change(Task, :count)
@@ -941,6 +980,8 @@ RSpec.describe TasksController do
   end
 
   describe 'POST #add_to_collection' do
+    before { sign_in user }
+
     let!(:task) { create(:task, valid_attributes) }
     let(:valid_session) { {user_id: collection.users.first.id} }
 
