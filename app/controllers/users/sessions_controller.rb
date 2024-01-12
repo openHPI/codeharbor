@@ -45,7 +45,10 @@ module Users
     def after_sign_out_path_for(_)
       provider = session['omniauth_provider']
       if session['saml_uid'] && session['saml_session_index'] && provider
-        strategy_class = Devise.omniauth_configs[provider.to_sym].strategy_class
+        provider_config = Devise.omniauth_configs[provider.to_sym]
+        return super unless provider_config
+
+        strategy_class = provider_config.strategy_class
         return spslo_path_for(provider) if strategy_class.default_options.idp_slo_service_url
       end
 
