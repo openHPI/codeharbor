@@ -37,6 +37,9 @@ en:
       shared_by: Shared by
       temporarily_disabled: Temporarily disabled
       type_hint: Type in the users email address
+      visibility:
+        private: This collection is private
+        public: This collection is public
     visibility:
       private: Private
       public: Public

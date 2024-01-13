@@ -2,20 +2,25 @@
   .std-heading
     i.fa-solid.fa-folder-open
     =<> @collection.title
-    - if @collection.visibility_level_public?
-      i.fa-solid.fa-lock-open.lock-icon title=(t('collections.visibility.public'))
-    - else
-      i.fa-solid.fa-lock.lock-icon title=(t('collections.visibility.private'))
-    div.collection-subinfo
-      i.fa-solid.fa-users
-      - if @collection.users.length == 1
-        =< t('.no_other_user')
-      - else
-        =< t('.num_of_other_users', count: @collection.users.length - 1)
-
+    hr.mb-2
 .row
-  .col-md-12.mt-4
-    .collection-content
+  .col-md-12
+    .collection-subinfo
+      span
+        - if @collection.visibility_level_public?
+          i.fa-solid.fa-lock-open.lock-icon
+          =< t('.visibility.public')
+        - else
+          i.fa-solid.fa-lock.lock-icon
+          =< t('.visibility.private')
+      span
+        i.fa-solid.fa-users
+        - if @collection.users.length == 1
+          =< t('.no_other_user')
+        - else
+          =< t('.num_of_other_users', count: @collection.users.length - 1)
+
+    .collection-content.mt-2.pt-2
       .description.collapsable.w-100
         - if @collection.description.blank?
           span style=("color: gray")
