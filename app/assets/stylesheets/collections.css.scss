@@ -10,6 +10,8 @@ $collection-color: #000080;
 .collection-content {
   width: 60%;
   margin-bottom: 40px;
+  border-top: 1px solid lightgrey;
+
 }
 
 .nav-container .nav-btn-collection {
@@ -30,8 +32,18 @@ $collection-color: #000080;
 }
 
 .collection-subinfo {
-  margin-top: 5px;
-  font-size: 16px;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  span {
+    i {
+      &:first-child {
+        width: 20px;
+      }
+    }
+
+    padding: 5px;
+  }
 }
 
 .collection-checkmark {
@@ -77,8 +89,4 @@ $collection-color: #000080;
 .collection-edit-visibility {
   width: unset;
   margin-right: 10px;
-}
-
-.lock-icon {
-  font-size: 20px;
 }
