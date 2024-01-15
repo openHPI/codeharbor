@@ -17,7 +17,7 @@ class CollectionPolicy < ApplicationPolicy
     admin? || collection.users.include?(@user) || collection.visibility_level_public?
   end
 
-  %i[create? create_ajax? show? update? edit? destroy? leave? add_task? remove_task? remove_task_ajax? remove_all? push_collection?
+  %i[create? create_ajax? update? edit? destroy? leave? add_task? remove_task? remove_task_ajax? remove_all? push_collection?
      download_all? share?].each do |action|
     define_method(action) { admin? || collection.users.include?(@user) }
   end

@@ -21,11 +21,36 @@ RSpec.describe CollectionsController do
   end
 
   describe 'GET #index' do
-    let!(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
+    let(:users) { [user] }
+    let(:visibility_level) { :private }
+    let!(:collection) { create(:collection, valid_attributes.merge(users:, visibility_level:)) }
 
     it 'assigns all collections as @collections' do
       get :index, params: {}
       expect(assigns(:collections)).to include collection
+    end
+
+    it 'renders correct actions-buttons' do
+      get :index, params: {}
+      expect(response.body).to include(I18n.t('common.button.view')).and(include(I18n.t('common.button.edit')))
+    end
+
+    context 'when user is not in collection' do
+      let(:users) { [create(:user)] }
+
+      it 'does add collection to @collections' do
+        get :index, params: {}
+        expect(assigns(:collections)).not_to include collection
+      end
+
+      context 'when collection is public' do
+        let(:visibility_level) { :public }
+
+        it 'renders correct actions-buttons' do
+          get :index, params: {}
+          expect(response.body).to include(I18n.t('common.button.view')).and(not_include(I18n.t('common.button.edit')))
+        end
+      end
     end
   end
 
@@ -41,6 +66,34 @@ RSpec.describe CollectionsController do
     it 'includes a link to the respective tasks' do
       get :show, params: {id: collection.to_param}
       expect(response.body).to include(task_path(collection.tasks.first))
+    end
+
+    it 'includes the correct visibility subinfo' do
+      get :show, params: {id: collection.to_param}
+      expect(response.body).to include(I18n.t('collections.show.visibility.private')).and(include(I18n.t('collections.show.no_other_user')))
+    end
+
+    it 'includes the correct other-user subinfo' do
+      get :show, params: {id: collection.to_param}
+      expect(response.body).to include(I18n.t('collections.show.no_other_user'))
+    end
+
+    context 'when collection is public' do
+      before { collection.update(visibility_level: :public) }
+
+      it 'includes the correct visibility subinfo' do
+        get :show, params: {id: collection.to_param}
+        expect(response.body).to include(I18n.t('collections.show.visibility.public'))
+      end
+    end
+
+    context 'when collection has other users' do
+      before { collection.users << create(:user) }
+
+      it 'includes the correct other-user subinfo' do
+        get :show, params: {id: collection.to_param}
+        expect(response.body).to include(I18n.t('collections.show.num_of_other_users', count: 1))
+      end
     end
   end
 
