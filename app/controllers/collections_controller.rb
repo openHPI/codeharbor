@@ -85,8 +85,7 @@ class CollectionsController < ApplicationController
   end
 
   def share
-    message = share_message
-    if @collection.users.exclude?(share_message.recipient) && message.save
+    if @collection.users.exclude?(share_message.recipient) && share_message.save
       redirect_to collection_path(@collection), notice: t('.success_notice')
     else
       redirect_to collection_path(@collection), alert: t('common.errors.something_went_wrong')
@@ -102,7 +101,9 @@ class CollectionsController < ApplicationController
     return redirect_to user_messages_path(user), alert: t('.errors.already_member') if @collection.users.include? user
 
     @collection.users << user
-    Message.received_by(user).find_by(param_type: 'collection', param_id: @collection.id).destroy
+    message = Message.received_by(user).find_by(param_type: 'collection', param_id: @collection.id)
+    message.mark_as_deleted(user)
+    message.save
 
     redirect_to @collection, notice: t('.success_notice')
   end
@@ -128,9 +129,13 @@ class CollectionsController < ApplicationController
   end
 
   def share_message
-    user = User.find_by(email: params[:user])
-    text = t('collections.share_message.text', user: current_user.name, collection: @collection.title)
-    Message.new(sender: current_user, recipient: user, param_type: 'collection', param_id: @collection.id, text:)
+    @share_message ||= Message.new(
+      sender: current_user,
+      recipient: User.find_by(email: params[:user]),
+      param_type: 'collection',
+      param_id: @collection.id,
+      text: t('collections.share_message.text', user: current_user.name, collection: @collection.title)
+    )
   end
 
   def push_exercises
