@@ -157,6 +157,7 @@ class CollectionsController < ApplicationController
   end
 
   def collection_params
-    params.require(:collection).permit(:title, :task_ids, :visibility_level, :description, collection_tasks_attributes: collection_tasks_params)
+    params.require(:collection).permit(:title, :task_ids, :visibility_level, :description,
+      collection_tasks_attributes: collection_tasks_params)
   end
 end
