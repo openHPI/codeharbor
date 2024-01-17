@@ -4,6 +4,17 @@ require 'rails_helper'
 require 'nokogiri'
 
 RSpec.describe Message do
+  describe 'validations' do
+    it { is_expected.to validate_presence_of(:text) }
+    it { is_expected.not_to validate_uniqueness_of(:param_id).scoped_to(%i[recipient_id param_type]) }
+
+    context 'with param_type: collection' do
+      subject { create(:message, param_type: 'collection', param_id: create(:collection).id) }
+
+      it { is_expected.to validate_uniqueness_of(:param_id).scoped_to(%i[recipient_id param_type]) }
+    end
+  end
+
   describe 'destroy_hook' do
     let!(:message) { create(:message) }
 
