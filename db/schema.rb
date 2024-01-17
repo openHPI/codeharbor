@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_08_202045) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_11_200306) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -63,6 +63,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_08_202045) do
   create_table "collection_tasks", force: :cascade do |t|
     t.bigint "task_id"
     t.bigint "collection_id"
+    t.integer "rank", default: 0, null: false
     t.index ["collection_id"], name: "index_collection_tasks_on_collection_id"
     t.index ["task_id"], name: "index_collection_tasks_on_task_id"
   end

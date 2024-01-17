@@ -11,6 +11,29 @@ RSpec.describe Collection do
     it { expect(build(:collection, title: 'some title', description: 'X' * 4001)).not_to be_valid }
   end
 
+  describe '#tasks' do
+    let(:collection) { create(:collection, tasks:) }
+    let(:tasks) { [create(:task, title: 'C'), create(:task, title: 'A'), create(:task, title: 'B')] }
+
+    context 'without explicit order' do
+      it 'orders tasks alphabetically' do
+        expect(collection.tasks.reload.map(&:title)).to eq(%w[A B C])
+      end
+    end
+
+    context 'with explicit order' do
+      before do
+        collection.collection_tasks.where(task: {title: 'C'}).update(rank: 3)
+        collection.collection_tasks.where(task: {title: 'B'}).update(rank: 2)
+        collection.collection_tasks.where(task: {title: 'A'}).update(rank: 1)
+      end
+
+      it 'returns the tasks in the correct order' do
+        expect(collection.tasks.reload.map(&:title)).to eq(%w[C B A])
+      end
+    end
+  end
+
   describe '#add_task' do
     subject(:add_task) { collection.add_task(task) }
 

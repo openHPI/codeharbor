@@ -133,7 +133,11 @@ class CollectionsController < ApplicationController
   end
 
   # Never trust parameters from the scary internet, only allow the following list through.
+  def collection_tasks_params
+    %i[id task_id collection_id rank _destroy]
+  end
+
   def collection_params
-    params.require(:collection).permit(:title, :description)
+    params.require(:collection).permit(:title, :description, collection_tasks_attributes: collection_tasks_params)
   end
 end

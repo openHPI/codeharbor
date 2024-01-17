@@ -27,3 +27,31 @@ $collection-color: #000080;
   vertical-align: middle;
   margin-right: 5px;
 }
+
+#collection-tasks-sortable {
+  .row {
+    border-bottom: 1px solid #ccc;
+    padding: 5px;
+
+    .vert-align-container {
+      position: relative;
+    }
+
+    .vert-align {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  // ui-sortable-helper is the class of the element being dragged in sortablejs
+  // we are removing the border, background and the red X from tasks that are being dragged
+  .ui-sortable-helper{
+    .row {
+      border-bottom: none;
+      background: rgba(0,0,0,0);
+    }
+    .fa-xmark{ display: none; }
+  }
+}
