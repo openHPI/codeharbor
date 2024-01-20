@@ -10,7 +10,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   before_action :set_search, only: [:index]
   prepend_before_action :set_user_for_api_request, only: %i[import_uuid_check import_external]
   skip_before_action :verify_authenticity_token, only: %i[import_uuid_check import_external]
-  skip_before_action :require_user!, only: %i[show]
+  skip_before_action :require_user!, only: %i[show download]
 
   def index
     page = params[:page]
