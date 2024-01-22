@@ -3,11 +3,13 @@
 require 'zip'
 
 class TasksController < ApplicationController # rubocop:disable Metrics/ClassLength
+  include TaskParameters
   before_action :load_and_authorize_task, except: %i[index new create import_start import_confirm import_uuid_check import_external]
   before_action :only_authorize_action, only: %i[import_start import_confirm import_uuid_check import_external]
 
   before_action :handle_search_params, only: :index
   before_action :set_search, only: [:index]
+  before_action :redirect_task_contribution, only: %i[create update edit show]
   prepend_before_action :set_user_for_api_request, only: %i[import_uuid_check import_external]
   skip_before_action :verify_authenticity_token, only: %i[import_uuid_check import_external]
   skip_before_action :require_user!, only: %i[show]
@@ -197,6 +199,12 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     authorize Task
   end
 
+  def redirect_task_contribution
+    return unless @task.contribution?
+
+    redirect_to action: action_name, controller: 'task_contributions', task_id: @task.parent, id: @task.task_contribution
+  end
+
   def set_search # rubocop:disable Metrics/AbcSize
     search = params[:q]
     @req_labels = []
@@ -226,34 +234,6 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   def handle_search_params
     restore_search_params
     save_search_params
-  end
-
-  def file_params
-    %i[id content attachment path name internal_description mime_type use_attached_file used_by_grader visible usage_by_lms xml_id _destroy
-       parent_id]
-  end
-
-  def test_params
-    [:id, :title, :testing_framework_id, :description, :internal_description, :test_type, :xml_id, :validity, :timeout, :_destroy,
-     :parent_id, {files_attributes: file_params}]
-  end
-
-  def model_solution_params
-    [:id, :description, :internal_description, :xml_id, :_destroy, :parent_id, {files_attributes: file_params}]
-  end
-
-  def task_params
-    params.require(:task).permit(:title, :description, :internal_description, :parent_uuid, :language, :license_id,
-      :programming_language_id, :access_level, files_attributes: file_params, tests_attributes: test_params,
-      model_solutions_attributes: model_solution_params, label_names: [])
-  end
-
-  def group_tasks_params
-    params.permit(group_tasks: {group_ids: []})[:group_tasks]
-  end
-
-  def import_confirm_params
-    params.permit(:import_id, :subfile_id, :import_type)
   end
 
   def set_user_for_api_request
