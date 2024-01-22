@@ -55,10 +55,10 @@
         .row-value
           = @task.internal_description
 
-      = render 'dachsfisch_json_as_xml', dachsfisch_attribute: @task.meta_data, name: 'meta_data'
-      = render 'dachsfisch_json_as_xml', dachsfisch_attribute: @task.submission_restrictions, name: 'submission_restrictions'
-      = render 'dachsfisch_json_as_xml', dachsfisch_attribute: @task.external_resources, name: 'external_resources'
-      = render 'dachsfisch_json_as_xml', dachsfisch_attribute: @task.grading_hints, name: 'grading_hints'
+      = render 'tasks/dachsfisch_json_as_xml', dachsfisch_attribute: @task.meta_data, name: 'meta_data'
+      = render 'tasks/dachsfisch_json_as_xml', dachsfisch_attribute: @task.submission_restrictions, name: 'submission_restrictions'
+      = render 'tasks/dachsfisch_json_as_xml', dachsfisch_attribute: @task.external_resources, name: 'external_resources'
+      = render 'tasks/dachsfisch_json_as_xml', dachsfisch_attribute: @task.grading_hints, name: 'grading_hints'
       .row
         .col-auto.row-label
           = t('common.created_at')
@@ -564,14 +564,14 @@
               =< t('common.button.duplicate')
       - else
         - if policy(@task.parent).edit?
-          = link_to approve_changes_task_contribution_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
+          = link_to approve_changes_task_task_contribution_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
             i.fa-solid.fa-check
             =< t('common.button.approve')
-          = link_to discard_changes_task_contribution_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
+          = link_to discard_changes_task_task_contribution_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
             i.fa-solid.fa-xmark
             =< t('common.button.reject')
         - else
-          = link_to discard_changes_task_contribution_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
+          = link_to discard_changes_task_task_contribution_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
             i.fa-solid.fa-link-slash
             =< t('task_contributions.buttons.decouple')
       - if policy(@task).generate_test?
