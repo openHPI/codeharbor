@@ -5,8 +5,6 @@ en:
       create: Confirm Account
       new: Confirm Account
       show: Confirm Account
-    contributions:
-      new: New
     home:
       about: About
       account_link_documentation: About Account Links
