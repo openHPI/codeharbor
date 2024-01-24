@@ -1,5 +1,7 @@
 .header
   .std-heading
+    - if current_user.favorite_collections.include?(@collection)
+      i.fa-solid.fa-star>
     i.fa-solid.fa-folder-open
     =<> @collection.title
     hr.mb-2
@@ -112,6 +114,13 @@
           - if @collection.users.include? current_user
             = link_to leave_collection_path(@collection), class: 'btn btn-important', method: :post, data: {confirm: @collection.users.size == 1 ? t('.leave.deletion_warning') : t('common.sure')} do
               = @collection.users.size == 1 ? t('.button.delete') : t('.button.leave')
+        = link_to toggle_favorite_collection_path(@collection), class: 'btn btn-important', method: :post do
+          - if current_user.favorite_collections.include?(@collection)
+            i.fa-regular.fa-star
+            =< t('.button.unfavorite')
+          - else
+            i.fa-solid.fa-star
+            =< t('.button.favorite')
         = link_to t('common.button.back'), collections_path, class: 'btn btn-important'
 
 = form_tag share_collection_path, id: 'share'
