@@ -7,6 +7,10 @@ class Collection < ApplicationRecord
   validates :users, presence: true
   validate :description_is_not_too_long
 
+  has_many :collection_user_favorites, dependent: :destroy
+  # has_many :users, through: :collection_users
+
+
   has_many :collection_users, dependent: :destroy
   has_many :users, through: :collection_users
 

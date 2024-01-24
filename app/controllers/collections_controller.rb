@@ -118,6 +118,17 @@ class CollectionsController < ApplicationController
     end
   end
 
+  def toggle_favorite
+    if current_user.favorite_collections.include? @collection
+      current_user.favorite_collections.delete @collection
+      flash_message = t('.favorite.removed')
+    else
+      current_user.favorite_collections << @collection
+      flash_message = t('.favorite.added')
+    end
+    redirect_to @collection, notice: flash_message
+  end
+
   private
 
   def create_collection_with_task

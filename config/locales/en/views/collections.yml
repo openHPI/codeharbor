@@ -21,8 +21,10 @@ en:
       button:
         collaborate: Collaborate
         delete: Delete Collection
+        favorite: Add to favorites
         leave: Leave
         share: Share Collection
+        unfavorite: Remove from favorites
       define_account_link: Please define an account link first
       download_no_exercises: Download not possible without exercises
       export_to: Export to
