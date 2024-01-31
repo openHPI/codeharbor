@@ -1,7 +1,7 @@
 .header.mb-5
   .std-heading
     i.fa-solid.fa-user style='color: #444444'
-    =< t('.header')
+    =< t('devise.registrations.new.sign_up')
 
 = form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
   = render('shared/form_errors', object: resource)
@@ -34,16 +34,16 @@
     = f.label :password, class: 'form-label'
     = f.password_field :password,
             required: true,
-            placeholder: t('.password'),
+            placeholder: User.human_attribute_name('password'),
             autocomplete: 'current-password',
             class: 'form-control'
     - if @minimum_password_length
-      small.form-text.text-body-secondary = t('users.shared.minimum_password_length', count: @minimum_password_length)
+      small.form-text.text-body-secondary = t('devise.shared.minimum_password_length', count: @minimum_password_length)
   .form-group.field-element
     = f.label :password_confirmation, class: 'form-label'
     = f.password_field :password_confirmation,
             required: true,
-            placeholder: t('.password'),
+            placeholder: User.human_attribute_name('password'),
             autocomplete: 'current-password',
             class: 'form-control'
 

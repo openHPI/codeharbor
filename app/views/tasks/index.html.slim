@@ -45,9 +45,9 @@
                   b = t('.search.order')
                 .btn-group.btn-group-vertical[role="group"]
                   div
-                    = sort_link(@search, :created_at)
+                    = sort_link(@search, :created_at, t('.search.creation_date'))
                   div
-                    = sort_link(@search, :average_rating)
+                    = sort_link(@search, :average_rating, t('.search.average_rating'))
               .stars.col-4
                 p
                   b = t('.search.min_stars')
@@ -61,7 +61,7 @@
             span.row.p-2
               .other.col-4
                 p
-                  b = t('.search.created')
+                  b = t('common.created')
                 span.form-group
                   = f.select 'created_before_days', options_for_select({t('.search.all_time') => 0, t('.search.today') => 1, t('.search.last_week') => 7, t('.search.last_month') => 30}, selected: @created_before_days), {}, class: 'form-control defaultSelect2 ransack-filter'
               .labels.col-4

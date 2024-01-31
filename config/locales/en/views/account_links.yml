@@ -5,6 +5,7 @@ en:
       header: Editing Account Link
     form:
       button:
+        generate: Generate
         save: Save Account Link
       info:
         check_uuid_url: The address on the auto-grader side that can be queried to determine if the exercise already exists.

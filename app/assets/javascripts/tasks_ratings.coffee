@@ -44,6 +44,6 @@ initializeRatings = ->
               $('.overall-rating[data-rating='+num+']').removeClass("fa-star").removeClass("fa-solid").addClass("fa-star-half-stroke")
             else
               $('.overall-rating[data-rating='+num+']').removeClass("fa-star-half-stroke").removeClass("fa-solid").addClass("fa-star").addClass("fa-regular")
-      error: (a, b, c) ->
-        alert("error:" + c);
+      error: (_xhr, _textStatus, message) ->
+        alert("#{I18n.t('common.javascripts.error')}: #{message}");
     })

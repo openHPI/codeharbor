@@ -4,24 +4,24 @@ de:
     attributes:
       account_link:
         api_key: API-Schlüssel
-        check_uuid_url: UUID-URL überprüfen
+        check_uuid_url: URL zum Überprüfen der UUID
         name: Name
         push_url: Push-URL
       account_link_user:
-        user: Benutzer
+        user: Benutzer:in
       collection:
         description: Beschreibung
         title: Titel
-        users: Benutzer
+        users: Benutzer:innen
       comment:
         text: Text
       group:
-        admins: Admins
+        admins: Administratorinnen und Administratoren
         description: Beschreibung
         name: Name
       group_membership:
         role: Rolle
-        user_id: Benutzer-ID
+        user_id: Benutzer:innen-ID
       group_task:
         task_id: Aufgaben-ID
       label:
@@ -30,7 +30,7 @@ de:
       license:
         name: Name
       message:
-        recipient: Empfänger
+        recipient: Empfänger:in
         text: Text
       model_solution:
         xml_id: XML-ID
@@ -52,6 +52,19 @@ de:
         tests: Tests
         title: Titel
         uuid: UUID
+      task/files:
+        attachment: Anhang einer Datei
+        name: Name einer Datei
+        xml_id: XML-ID einer Datei
+      task/model_solutions:
+        xml_id: XML-ID einer Musterlösung
+      task/model_solutions/files:
+        attachment: Anhang einer Datei in einer Musterlösung
+        name: Name einer Datei in einer Musterlösung
+        xml_id: XML_ID einer Datei in einer Musterlösung
+      task/tests:
+        title: Titel eines Tests
+        xml_id: XML-ID eines Tests
       task_file:
         attachment: Anhang
         content: Inhalt
@@ -59,7 +72,7 @@ de:
         name: Name
         path: Pfad
         usage_by_lms: Verwendung durch LMS
-        used_by_grader: Verwendet durch Grader
+        used_by_grader: Verwendung durch Autograder
         visible: Sichtbar
         xml_id: XML-ID
       test:
@@ -73,7 +86,6 @@ de:
         validity: Gültigkeit
         xml_id: XML-ID
       user:
-        email: E-Mail
         first_name: Vorname
         last_name: Nachname
         role: Rolle
@@ -89,7 +101,7 @@ de:
         group:
           attributes:
             base:
-              no_admin: Kein Administrator in der Gruppe
+              no_admin: Kein/e Administrator:in in der Gruppe
         task:
           attributes:
             language:
@@ -106,20 +118,20 @@ de:
               size_over_10_mb: Größe muss kleiner als 10MB sein
     models:
       account_link:
-        one: Konto-Link
-        other: Konto-Links
+        one: Account-Link
+        other: Account-Links
       account_link_user:
-        one: Konto-Link
-        other: Konto-Link-Benutzer
+        one: Account-Link-Benutzer:in
+        other: Account-Link-Benutzer:innen
       collection:
-        one: Sammlung
-        other: Sammlungen
+        one: Aufgabensammlung
+        other: Aufgabensammlungen
       collection_task:
         one: Sammlungsaufgabe
         other: Sammlungsaufgaben
       collection_user:
-        one: Sammlungsbenutzer
-        other: Sammlungsbenutzer
+        one: Sammlungsbenutzer:in
+        other: Sammlungsbenutzer:innen
       comment:
         one: Kommentar
         other: Kommentare
@@ -168,12 +180,13 @@ de:
       testing_framework:
         one: Test-Framework
         other: Test-Frameworks
-      user:
-        one: Benutzer
-        other: Benutzer
       user_identity:
-        one: Benutzeridentität
-        other: Benutzeridentitäten
+        one: Benutzer:innenidentität
+        other: Benutzer:innenidentitäten
   tasks:
     model:
       copy_of_task: Kopie der Aufgabe
+  users:
+    role:
+      admin: Administrator:in
+      user: Benutzer:in

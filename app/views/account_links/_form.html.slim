@@ -14,7 +14,7 @@
       = f.label :api_key, AccountLink.human_attribute_name('api_key'), class: 'form-label'
       .input-group
         = f.text_field :api_key, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('.info.token'), class: 'form-control'
-        = button_tag "Generate", type: 'button', class: 'generate-api-key-token btn btn-light'
+        = button_tag t('.button.generate'), type: 'button', class: 'generate-api-key-token btn btn-light'
     .form-group
       .actions.btn-group[role="group"]
         = f.submit t('.button.save'), class: 'btn btn-important'

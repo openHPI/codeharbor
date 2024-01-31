@@ -2,4 +2,4 @@
 de:
   ratings:
     handle_own_rating:
-      error: Du kannst deine eigene Aufgabe nicht bewerten
+      error: Sie können Ihre eigene Aufgabe nicht bewerten.

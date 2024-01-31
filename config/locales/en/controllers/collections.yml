@@ -16,4 +16,4 @@ en:
     share:
       success_notice: Your collection has been sent.
     share_message:
-      text: "%{user} sent you their Collection %{collection}."
+      text: '%{user} sent you their collection "%{collection}"'

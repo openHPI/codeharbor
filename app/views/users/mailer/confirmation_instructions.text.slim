@@ -1,5 +1,5 @@
-== I18n.t(:'devise.mailer.confirmation_instructions.greeting', name: @resource.name || @email)
+== t('devise.mailer.confirmation_instructions.greeting', recipient: @resource.name || @email)
 == "\n\n"
-== I18n.t(:'devise.mailer.confirmation_instructions.p1')
+== t('.p1')
 == "\n\n"
 == confirmation_url(@resource, confirmation_token: @token)

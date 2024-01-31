@@ -2,13 +2,13 @@
 de:
   breadcrumbs:
     confirmations:
-      create: Konto bestätigen
-      new: Konto bestätigen
-      show: Konto bestätigen
+      create: Account bestätigen
+      new: Account bestätigen
+      show: Account bestätigen
     home:
       about: Über
-      account_link_documentation: Über Kontoverknüpfungen
-      index: Titelseite
+      account_link_documentation: Über Account-Links
+      index: Startseite
     passwords:
       create: Passwort vergessen
       edit: Passwort ändern
@@ -23,9 +23,9 @@ de:
       create: Anmelden
       new: Anmelden
     unlocks:
-      create: Konto entsperren
-      new: Konto entsperren
-      show: Konto entsperren
+      create: Account entsperren
+      new: Account entsperren
+      show: Account entsperren
   shared:
     create: Erstellen
     delete: Löschen

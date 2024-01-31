@@ -2,7 +2,7 @@
 de:
   account_links:
     add_shared_user:
-      granted_push: Die Push-Berechtigungen für %{user} wurden gewährt.
-      share_duplicate: Dieses Kontoverbindung ist bereits mit %{user} geteilt.
+      granted_push: Die Push-Berechtigungen für %{user} wurden vergeben.
+      share_duplicate: Dieser Account-Link ist bereits mit %{user} geteilt.
     remove_shared_user:
       removed_push: Die Push-Berechtigungen für %{user} wurden entfernt.

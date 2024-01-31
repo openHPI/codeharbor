@@ -11,6 +11,9 @@ en:
       overwrite: Overwrite
     file_config:
       configuration: Configuration
+      delayed: delayed
+      display: display
+      download: download
     form:
       button:
         add_model_solution: Add Model Solution
@@ -46,7 +49,8 @@ en:
         advanced: Advanced
         all_access_levels: All Visibilities
         all_time: All Time
-        created: Created
+        average_rating: Average Rating
+        creation_date: Creation Date
         has_all_labels: Has All Labels
         label: Search
         last_month: Last Month
@@ -58,7 +62,7 @@ en:
         today: Today
     javascripts:
       all_languages: All Languages
-      checking_external_app: Checking if the task exists on the external app.
+      checking_external_app: Checking if the task exists on the autograder.
       select_groups: Select groups
     nested_file_form:
       add_file: Add file
@@ -68,12 +72,13 @@ en:
     shared:
       additional_info: Additional Information
       basic_information: Basic Information
+      new_comment: New Comment
     show:
       add_to_collection_hint: Save Tasks for later by adding them to a collection.
       button:
         add_collection: Add Collection
         add_to_collection: Add to collection
-        download_as_zip: Download this Task as a zip file.
+        download_as_zip: Download this Task as a ZIP file.
         export: Export
         export_tasks: Export Tasks
         rate: Rate
@@ -91,14 +96,13 @@ en:
       yourself: yourself
     tasks:
       button:
-        new_comment: New Comment
         related_exercises: Show Related Exercises
         show_comments: Show Comments
       no_description: No Description
       no_programming_language_selected: No programming language selected
       search:
         no_results: No results
-        no_results_description: Try different options by clicking on 'Advanced'.
+        no_results_description: Try different options by clicking on 'Advanced' and repeating the search.
         no_tasks: You do not have tasks yet
     visibility:
       label: Visibility

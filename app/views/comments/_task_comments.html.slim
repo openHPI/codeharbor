@@ -11,7 +11,7 @@
       .comment-user
         = comment.user.name
         .float-end.created-at
-          = t('common.created_at') + ': '
+          = t('common.created') + ': '
           = t('.time_ago', time: time_ago_in_words(comment.created_at))
       .comment-text.collapsable data-task=@task.id data-comment=comment.id
         = comment.text

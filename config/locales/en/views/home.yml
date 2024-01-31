@@ -16,7 +16,7 @@ en:
         <h3>You want to connect an auto-grader that already has OAuth2 and ProFormA-XML support:</h3>
         <p>
           If the auto-grader can import exercises sent via OAuth2 request in the ProFormA-XML format you will need the following things: <br/>
-          1. Push-url: The auto-grader needs to have an ULR CodeHarbor can post the exercise to. <br/>
+          1. Push-url: The auto-grader needs to have a URL CodeHarbor can post the exercise to. <br/>
           2. OAuth2-token: The auto-grader must be able to link a token to your account to authorize exercises that will be pushed there. <br/>
              If you do not need a specific token you can generate a token when creating an account link on CodeHarbor side or use whatever you want <br/>
              as long as it is the same token on CodeHarbor and the auto-graders side.<br>
