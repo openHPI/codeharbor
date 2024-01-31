@@ -2,21 +2,21 @@
   .header.mb-5
     .std-heading
       i.fa-solid.fa-right-to-bracket style='color: #444444'
-      =< t('users.sessions.new.header')
+      =< t('devise.sessions.new.sign_in')
   = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
     .form-group.field-element
       = f.label :email, class: 'form-label'
       = f.email_field :email,
               required: true,
               autofocus: true,
-              placeholder: t('users.sessions.new.email.placeholder'),
+              placeholder: User.human_attribute_name('email'),
               autocomplete: 'email',
               class: 'form-control'
     .form-group.field-element
       = f.label :password, class: 'form-label'
       = f.password_field :password,
               required: true,
-              placeholder: t('users.sessions.new.password.placeholder'),
+              placeholder: User.human_attribute_name('password'),
               autocomplete: 'current-password',
               class: 'form-control'
     - if devise_mapping.rememberable?

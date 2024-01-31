@@ -43,8 +43,8 @@ br
             = message.recipient ? message.recipient.name : t('.unknown')
         .message-body
           .message-text
-            => message.text
-            .btn-group
+            = message.text
+            .btn-group.ms-3
               -if message.param_type == 'exercise'
                 = link_to  t('.button.view'), exercise_path(message.param_id), class: 'btn btn-light btn-sm'
                 = link_to add_author_exercise_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do

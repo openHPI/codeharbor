@@ -1,7 +1,7 @@
 .header.mb-5
   .std-heading
     i.fa-solid.fa-user style='color: #444444'
-    =< t('.header')
+    =< t('devise.registrations.edit.title', resource: User.model_name.human)
 
 = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
   = render('shared/form_errors', object: resource, title: t('common.errors.changes_not_saved'))
@@ -30,21 +30,21 @@
             autocomplete: 'email',
             class: 'form-control'
     - if devise_mapping.confirmable? && resource.pending_reconfirmation?
-      p = t('.waiting_confirmation', email: resource.unconfirmed_email)
+      p = t('devise.registrations.edit.currently_waiting_confirmation_for_email', email: resource.unconfirmed_email)
 
   .form-group.field-element
-    = f.label :password, t('users.shared.password_new'), class: 'form-label'
+    = f.label :password, t('devise.passwords.edit.new_password'), class: 'form-label'
     = f.password_field :password,
             required: false,
-            placeholder: t('users.shared.password_new'),
+            placeholder: t('devise.passwords.edit.new_password'),
             autocomplete: 'new-password',
             class: 'form-control'
-    small.form-text.text-body-secondary = t('.leave_blank')
+    small.form-text.text-body-secondary = t('devise.registrations.edit.leave_blank_if_you_don_t_want_to_change_it')
   .form-group.field-element
     = f.label :password_confirmation, t('users.shared.password_new_confirmation'), class: 'form-label'
     = f.password_field :password_confirmation,
             required: false,
-            placeholder: t('users.shared.password_new'),
+            placeholder: t('devise.passwords.edit.new_password'),
             autocomplete: 'new-password',
             class: 'form-control'
 
@@ -54,16 +54,16 @@
     = f.label :current_password, class: 'form-label'
     = f.password_field :current_password,
             required: true,
-            placeholder: t('.password_current'),
+            placeholder: User.human_attribute_name('current_password'),
             autocomplete: 'current-password',
             class: 'form-control'
-    small.form-text.text-body-secondary = t('.confirm_w_pwd')
+    small.form-text.text-body-secondary = t('devise.registrations.edit.we_need_your_current_password_to_confirm_your_changes')
 
   .form-group.py-3
     .btn-group[role='group']
       = button_tag type: 'submit', class: 'btn btn-important' do
         i.fa-solid.fa-user
-        =< t('.update_user')
+        =< t('common.button.update')
       = link_to :back, class: 'btn btn-important' do
         i.fa-solid.fa-xmark style=('color: gray')
         =< t('common.button.back')

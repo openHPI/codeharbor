@@ -6,13 +6,24 @@ en:
         save: Save Group
     groups:
       admin_label: Admin
+      create_groups_tip: You can create groups to connect with other users and handle exercise access.
       member_label: Member
+      no_groups_yet: You do not have groups yet
       pending_label: Pending
+      wait_to_get_accepted: Wait to get accepted
+    index:
+      button:
+        all_groups: All Groups
+        my_groups: My Groups
+        new_group: New Group
     new:
       header: New Group
     share_account_link_button:
       share_tooltip: Share account link for %{account_link} with %{user}
       unshare_tooltip: Stop sharing account link for %{account_link} with %{user}
+    shared:
+      button:
+        request_membership: Request Membership
     show:
       button:
         delete_group: Delete group
@@ -22,7 +33,6 @@ en:
         grant_access: Grant Access
         leave: Leave Group
         make_admin: Make Admin
-        request_membership: Request Membership
       demote_admin:
         confirm: Are you sure you want to demote the admin?
       demote_yourself:

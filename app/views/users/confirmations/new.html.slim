@@ -1,10 +1,10 @@
 .header.mb-5
   .std-heading
     i.fa-solid.fa-envelope style='color: #444444'
-    =< t('.resend_confirmation')
+    =< t('devise.confirmations.new.resend_confirmation_instructions')
 
 = form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f|
-  = render('shared/form_errors', object: resource, title: t('.validation_error'))
+  = render('shared/form_errors', object: resource, title: t('users.shared.validation_error'))
 
   .form-group.field-element
     = f.label :email, class: 'form-label'
@@ -20,7 +20,7 @@
     .btn-group[role='group']
       = button_tag type: 'submit', class: 'btn btn-important' do
         i.fa-solid.fa-envelope
-        =< t('.resend_confirmation')
+        =< t('devise.confirmations.new.resend_confirmation_instructions')
       = link_to :back, class: 'btn btn-important' do
         i.fa-solid.fa-xmark style=('color: gray')
         =< t('common.button.back')

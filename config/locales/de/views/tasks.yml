@@ -4,26 +4,29 @@ de:
     editor:
       button:
         extract_text: Text extrahieren
-        toggle_file: Datei-Upload/Editor umschalten
+        toggle_file: Datei-Upload / Editor umschalten
         upload_a_new_file: Eine neue Datei hochladen
     export_actions:
       create_new: Neu erstellen
       overwrite: Überschreiben
     file_config:
       configuration: Konfiguration
+      delayed: Verzögert
+      display: Anzeigen
+      download: Herunterladen
     form:
       button:
-        add_model_solution: Modellösung hinzufügen
+        add_model_solution: Musterlösung hinzufügen
         add_test: Test hinzufügen
-        remove_model_solution: Modellösung entfernen
+        remove_model_solution: Musterlösung entfernen
         remove_test: Test entfernen
         save_task: Aufgabe speichern
       errors:
-        not_public_without_prog_lang: Kann nicht öffentlich sein, solange die Programmiersprache nicht festgelegt ist
-        prog_lang_not_empty_while_public: Darf nicht leer sein, wenn die Sichtbarkeit auf öffentlich eingestellt ist
+        not_public_without_prog_lang: kann nicht öffentlich sein, solange die Programmiersprache nicht festgelegt ist
+        prog_lang_not_empty_while_public: darf nicht leer sein, wenn die Sichtbarkeit auf öffentlich eingestellt ist
       no_license: Keine Lizenz
       unchangeable_groups: Nicht änderbare Gruppen
-      visibility_warning: Diese Aufgabe befindet sich derzeit in einer Sammlung. Andere Benutzer können Ihre Aufgabe nicht anzeigen oder bearbeiten. Der Titel bleibt jedoch für diese Benutzer sichtbar.
+      visibility_warning: Diese Aufgabe befindet sich derzeit in einer Sammlung. Andere Benutzer:innen können Ihre Aufgabe nicht anzeigen oder bearbeiten. Der Titel bleibt jedoch für diese Benutzer:innen sichtbar.
     import_actions:
       button:
         import_copy: Als Kopie importieren
@@ -39,15 +42,16 @@ de:
         import_zip: ZIP-Datei importieren
         new_task: Neue Aufgabe
       menu_button:
-        group: Gruppenaufgaben
+        group: Aufgaben aus Gruppen
         mine: Meine Aufgaben
         public: Öffentlich
       search:
         advanced: Erweitert
-        all_access_levels: Alle Sichtbarkeiten
-        all_time: Alle Zeiten
-        created: Erstellt
-        has_all_labels: Hat alle Labels
+        all_access_levels: egal
+        all_time: egal
+        average_rating: Bewertung
+        creation_date: Erstellungsdatum
+        has_all_labels: Hat Labels
         label: Suche
         last_month: Letzter Monat
         last_week: Letzte Woche
@@ -57,8 +61,8 @@ de:
         reset: Zurücksetzen
         today: Heute
     javascripts:
-      all_languages: Alle Sprachen
-      checking_external_app: Überprüfen, ob die Aufgabe in der externen App vorhanden ist.
+      all_languages: egal
+      checking_external_app: Überprüfen, ob die Aufgabe im Autograder vorhanden ist.
       select_groups: Gruppen auswählen
     nested_file_form:
       add_file: Datei hinzufügen
@@ -67,38 +71,38 @@ de:
       new_task: Neue Aufgabe
     shared:
       additional_info: Zusätzliche Informationen
-      basic_information: Grundinformationen
+      basic_information: Basisinformationen
+      new_comment: Neuer Kommentar
     show:
       add_to_collection_hint: Speichern Sie Aufgaben für später, indem Sie sie zu einer Sammlung hinzufügen.
       button:
-        add_collection: Sammlung hinzufügen
-        add_to_collection: Zur Sammlung hinzufügen
+        add_collection: Aufgabensammlung hinzufügen
+        add_to_collection: Zu Sammlung hinzufügen
         download_as_zip: Diese Aufgabe als ZIP-Datei herunterladen.
         export: Exportieren
         export_tasks: Aufgaben exportieren
         rate: Bewerten
         show_comments: Kommentare anzeigen
-      define_account_link: Bitte definieren Sie zuerst eine Kontoverknüpfung
+      define_account_link: Bitte definieren Sie zuerst einen Account-Link
       export_to: Exportieren nach
       guest:
         disabled:
-          tooltip: Sie müssen eingeloggt sein, um dies zu verwenden.
+          tooltip: Sie müssen eingeloggt sein, um diese Funktion zu verwenden.
       no_files: Keine Dateien enthalten
       no_license: Keine
-      no_model_solution_present: Keine Model Solutions vorhanden
+      no_model_solution_present: Keine Musterlösungen vorhanden
       no_tests: Keine Tests enthalten
-      undefined: Benutzer undefiniert
-      yourself: sich selbst
+      undefined: Benutzer:in undefiniert
+      yourself: Ihnen selbst
     tasks:
       button:
-        new_comment: Neuer Kommentar
-        related_exercises: Verwandte Übungen anzeigen
+        related_exercises: Verwandte Aufgaben anzeigen
         show_comments: Kommentare anzeigen
       no_description: Keine Beschreibung
       no_programming_language_selected: Keine Programmiersprache ausgewählt
       search:
         no_results: Keine Ergebnisse
-        no_results_description: Versuchen Sie verschiedene Optionen aus, indem Sie auf 'Erweitert' klicken.
+        no_results_description: Probieren Sie verschiedene Optionen aus, indem Sie auf 'Erweitert' klicken und die Suche wiederholen.
         no_tasks: Sie haben noch keine Aufgaben
     visibility:
       label: Sichtbarkeit

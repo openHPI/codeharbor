@@ -30,7 +30,7 @@ exportTaskStart = (taskID) ->
       $messageDiv.html(response.message)
       $actionsDiv.html(response.actions)
     error: (_xhr, _textStatus, message) ->
-      alert('error:' + message);
+      alert("#{I18n.t('common.javascripts.error')}: #{message}");
   })
 
 exportConfirm = (taskId, accountLinkId, pushType) ->
@@ -52,7 +52,7 @@ exportConfirm = (taskId, accountLinkId, pushType) ->
       else
         $taskDiv.addClass 'import-export-failure'
     error: (_xhr, _textStatus, message) ->
-      alert('error:' + message)
+      alert("#{I18n.t('common.javascripts.error')}: #{message}")
   })
 
 root = exports ? this;

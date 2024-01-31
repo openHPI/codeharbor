@@ -16,10 +16,12 @@ initializeDynamicHideShow = ->
 
 initializeSelect2 = ->
   $('.defaultSelect2').select2
+    language: I18n.locale
     minimumResultsForSearch: 10
     width: '100%'
 
   $('.language-box').select2
+    language: I18n.locale
     width: '100%'
     multiple: true
     closeOnSelect: false

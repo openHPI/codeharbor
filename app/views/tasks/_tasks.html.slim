@@ -88,8 +88,8 @@
       = form_for :comment, url: task_comments_path(task), remote: true do |f|
         .write-comment
           .input-group
-            = f.label 'new_comment_label', t('.button.new_comment'), class: 'input-group-text'
+            = f.label 'new_comment_label', t('tasks.shared.new_comment'), class: 'input-group-text'
             = f.text_field :text, class: 'form-control'
-            = f.submit class: 'btn btn-light'
+            = f.submit t('common.button.save_object', model: Comment.model_name.human), class: 'btn btn-light'
       .comment-body
 = render('shared/pagination', collection: @tasks)

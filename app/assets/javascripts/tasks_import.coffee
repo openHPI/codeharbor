@@ -39,8 +39,8 @@ importStart = () ->
     success: (response) ->
       if response.status == 'failure'
         alert(response.message)
-    error: (a, b, c) ->
-      alert('error: ' + c)
+    error: (_xhr, _textStatus, message) ->
+      alert("#{I18n.t('common.javascripts.error')}: #{message}")
   })
 
 importConfirm = (importId, subfileId, importType) ->
@@ -61,6 +61,6 @@ importConfirm = (importId, subfileId, importType) ->
         $taskDiv.addClass 'import-export-success'
       else
         $taskDiv.addClass 'import-export-failure'
-    error: (a, b, c) ->
-      alert('error: ' + c)
+    error: (_xhr, _textStatus, message) ->
+      alert("#{I18n.t('common.javascripts.error')}: #{message}")
   })

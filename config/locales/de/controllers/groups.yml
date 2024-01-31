@@ -2,23 +2,23 @@
 de:
   groups:
     delete_from_group:
-      success_notice: Benutzer aus Gruppe gelöscht.
+      success_notice: Benutzer:in aus Gruppe gelöscht.
     demote_admin:
-      success_notice: Admin zu Benutzer heruntergestuft.
+      success_notice: Administrator:in zu Benutzer:in heruntergestuft.
     deny_access:
-      success_notice: Benutzer abgelehnt.
+      success_notice: Benutzer:in abgelehnt.
     grant_access:
       success_notice: Zugriff gewährt.
     leave:
-      cannot_leave_alert: Du musst zuerst jemand anderen zum Admin ernennen
-      success_notice: Du hast erfolgreich die Gruppe verlassen
+      cannot_leave_alert: Sie müssen zuerst jemand anderen zur Administrator:in ernennen.
+      success_notice: Sie haben erfolgreich die Gruppe verlassen.
     make_admin:
-      success_notice: Benutzer zum Admin gemacht.
+      success_notice: Benutzer:in zur Administrator:in gemacht.
     request_access:
-      success_notice: Deine Zugriffsanfrage wurde gesendet.
+      success_notice: Ihre Zugriffsanfrage wurde gesendet.
     send_access_request_message:
-      message: "%{user} möchte auf deine Gruppe zugreifen: %{group}."
+      message: "%{user} möchte auf Ihre Gruppe zugreifen: %{group}"
     send_deny_access_message:
-      message: "%{user} hat dich nicht in ihre Gruppe aufgenommen: %{group}."
+      message: "%{user} hat Sie nicht in die Gruppe aufgenommen: %{group}"
     send_grant_access_messages:
-      message: "%{user} hat dich in ihre Gruppe aufgenommen: %{group}."
+      message: "%{user} hat Sie in die Gruppe aufgenommen: %{group}"

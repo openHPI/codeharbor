@@ -122,6 +122,7 @@ class GroupsController < ApplicationController
       recipient: user,
       text: t('groups.send_deny_access_message.message', user: current_user.name, group: group.name),
       param_type: 'group_declined',
+      param_id: group.id,
       sender_status: 'd')
   end
 

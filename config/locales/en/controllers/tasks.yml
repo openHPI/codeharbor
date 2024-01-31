@@ -20,7 +20,7 @@ en:
       choose_file_error: You need to choose a file.
     proforma_service:
       convert_zip_to_proforma_tasks:
-        nested_too_deep: Zip is nested too deep.
+        nested_too_deep: ZIP is nested too deep.
     task_service:
       check_external:
         no_task: No corresponding task found on external app. Pushing this task will create a new task on external app, which will be linked to this one on CodeHarbor. Any changes to either one can be pushed to the respective other platform.

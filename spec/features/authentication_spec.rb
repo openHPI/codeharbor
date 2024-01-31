@@ -16,8 +16,8 @@ RSpec.describe 'Authentication' do
     context 'with valid credentials' do
       it 'allows to sign in' do
         click_link(I18n.t('common.button.log_in'))
-        fill_in(I18n.t('users.sessions.new.email.label'), with: user.email)
-        fill_in(I18n.t('users.sessions.new.password.label'), with: password)
+        fill_in(:user_email, with: user.email)
+        fill_in(:user_password, with: password)
         click_button(I18n.t('common.button.log_in'))
         expect(page).to have_content(I18n.t('devise.sessions.signed_in'))
       end
@@ -47,8 +47,8 @@ RSpec.describe 'Authentication' do
       end
 
       it 'redirects to the desired page immediately after sign-in' do
-        fill_in(I18n.t('users.sessions.new.email.label'), with: user.email)
-        fill_in(I18n.t('users.sessions.new.password.label'), with: password)
+        fill_in(:user_email, with: user.email)
+        fill_in(:user_password, with: password)
         click_button(I18n.t('common.button.log_in'))
         expect(page).to have_content(task.title)
       end
@@ -57,8 +57,8 @@ RSpec.describe 'Authentication' do
         let(:task) { create(:task, access_level: :private) }
 
         it 'informs the user about missing permissions' do
-          fill_in(I18n.t('users.sessions.new.email.label'), with: user.email)
-          fill_in(I18n.t('users.sessions.new.password.label'), with: password)
+          fill_in(:user_email, with: user.email)
+          fill_in(:user_password, with: password)
           click_button(I18n.t('common.button.log_in'))
           expect(page).to have_content(I18n.t('common.errors.not_authorized'))
         end

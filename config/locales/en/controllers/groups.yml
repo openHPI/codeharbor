@@ -17,8 +17,8 @@ en:
     request_access:
       success_notice: Your Access request has been sent.
     send_access_request_message:
-      message: "%{user} wants to access your group: %{group}."
+      message: "%{user} wants to access your group: %{group}"
     send_deny_access_message:
-      message: "%{user} did not accept you to their group: %{group}."
+      message: "%{user} did not accept you to their group: %{group}"
     send_grant_access_messages:
-      message: "%{user} accepted you to their group: %{group}."
+      message: "%{user} accepted you to their group: %{group}"

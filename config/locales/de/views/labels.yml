@@ -3,13 +3,18 @@ de:
   labels:
     index:
       change_color_to: Farbe ändern in
+      filter_by_name: Nach Namen filtern
+      id: ID
       merge: Zusammenführen und umbenennen in
+      new_name: Neuer Name
+      used_by_tasks: Gehört zu Aufgaben
     javascripts:
-      can_only_create_5: Sie können nur 5 Labels hinzufügen
       cannot_be_empty: Der eingegebene Label-Name ist leer
-      change_color_confirmation: Dies wird die Farbe der ausgewählten %{selected_labels_count} Label(s) ändern.
-      delete_confirmation: Dies wird die ausgewählten %{selected_labels_count} Label(s) löschen.
-      merge_confirmation: Dies wird die ausgewählten %{selected_labels_count} Label(s) zusammenführen und in "%{new_merged_name}" umbenennen
+      change_color_confirmation: Die Farbe der ausgewählten %{selected_labels_count} Label(s) wird geändert.
+      delete_confirmation: Die ausgewählten %{selected_labels_count} Label(s) werden gelöscht.
+      max_limit_reached: Sie können nur %{limit} Labels hinzufügen
+      merge_confirmation: Die ausgewählten %{selected_labels_count} Label(s) werden zusammengeführt und in "%{new_merged_name}" umbenannt.
       new:
         selection_suffix: " (neu)"
+      ok: OK
       too_long: Der eingegebene Label-Name ist zu lang

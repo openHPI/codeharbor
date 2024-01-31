@@ -52,6 +52,19 @@ en:
         tests: Tests
         title: Title
         uuid: UUID
+      task/files:
+        attachment: File attachment
+        name: File name
+        xml_id: File XML ID
+      task/model_solutions:
+        xml_id: Model solution XML ID
+      task/model_solutions/files:
+        attachment: Attachment of a file in a model solution
+        name: Name of a file in a model solution
+        xml_id: XML ID of a file in a model solution
+      task/tests:
+        title: Test title
+        xml_id: Test XML ID
       task_file:
         attachment: Attachment
         content: Content
@@ -73,7 +86,6 @@ en:
         validity: Validity
         xml_id: XML ID
       user:
-        email: Email
         first_name: First name
         last_name: Last name
         role: Role
@@ -168,12 +180,13 @@ en:
       testing_framework:
         one: Testing framework
         other: Testing frameworks
-      user:
-        one: User
-        other: Users
       user_identity:
         one: User identity
         other: User identities
   tasks:
     model:
       copy_of_task: Copy of task
+  users:
+    role:
+      admin: Admin
+      user: User

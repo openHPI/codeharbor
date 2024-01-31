@@ -1,16 +1,16 @@
 .container[style="padding: 0px;"]
   .row
     div.col-md-7
-      input.form-control[id="label-name-filter-input" type="text" placeholder="Filter By Name"]
+      input.form-control[id="label-name-filter-input" type="text" placeholder=t('.filter_by_name')]
       br
       .div.labels-table-container
         table.table.table-bordered.table-striped.labels-table
           thead
             tr
-              th.sort-by-id.table-header-sort-down[style='width: 10%;'] ID
-              th.sort-by-name[style='width: 30%;'] Name
-              th.sort-by-created-at[style='width: 40%;'] Created At
-              th[style='width: 20%;'] Used By Tasks
+              th.sort-by-id.table-header-sort-down[style='width: 10%;'] = t('.id')
+              th.sort-by-name[style='width: 30%;'] = Label.human_attribute_name(:name)
+              th.sort-by-created-at[style='width: 40%;'] = t('common.created_at')
+              th[style='width: 20%;'] = t('.used_by_tasks')
           tbody
       br
 
@@ -18,7 +18,7 @@
       div
         .input-group
           = button_tag t('.merge'), type: 'button', id: 'merge-labels-button', disabled: true, class: 'btn btn-primary'
-          input.form-control[id="merge-labels-input" type="text" placeholder="New Name"]
+          input.form-control[id="merge-labels-input" type="text" placeholder=t('.new_name')]
 
       .div[style='margin-top: 10px;']
         .input-group

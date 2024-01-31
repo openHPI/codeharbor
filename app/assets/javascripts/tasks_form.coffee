@@ -7,11 +7,13 @@ $(document).on('turbolinks:load', ready)
 
 initializeLoadSelect2 = ->
   $('#task_programming_language_id').select2
+    language: I18n.locale
     tags: false
     width: '100%'
     multiple: false
 
   $('.my-group').select2
+    language: I18n.locale
     width: '100%'
     multiple: true
     closeOnSelect: false

@@ -24,7 +24,15 @@ const envConfig = module.exports = {
     },
     module: {
         rules: [
-            erb
+            erb,
+            {
+                // Exclude non-JS file from select2-i18n, otherwise breaking our dynamic language lookup.
+                test: /select2\/dist\/js\/i18n\/build\.txt$/,
+                type: 'asset/resource',
+                generator: {
+                    emit: false,
+                },
+            },
         ]
     },
     optimization: {

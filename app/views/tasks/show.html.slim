@@ -512,7 +512,7 @@
                   li
                     = link_to acc_link.name, export_external_start_task_path(account_link: acc_link), method: :post, remote: true, class: 'dropdown-item export-test'
               - else
-                li
+                li.p-2.px-3
                   = link_to t('.define_account_link'), new_user_account_link_path(current_user)
         - else
           div[data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150]
@@ -530,14 +530,14 @@
           .write-comment
             - if policy(Comment).new?
               .input-group
-                = f.label 'new_comment_label', 'New Comment', class: 'input-group-text'
+                = f.label 'new_comment_label', t('tasks.shared.new_comment'), class: 'input-group-text'
                 = f.text_field :text, class: 'form-control'
-                = f.submit class: 'btn btn-light'
+                = f.submit t('common.button.save_object', model: Comment.model_name.human), class: 'btn btn-light'
             - else
               .input-group[data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150]
-                = f.label 'new_comment_label', 'New Comment', class: 'input-group-text'
+                = f.label 'new_comment_label',  t('tasks.shared.new_comment'), class: 'input-group-text'
                 = f.text_field :text, class: 'form-control', disabled: true
-                = f.submit class: 'btn btn-outline-dark disabled'
+                = f.submit t('common.button.save_object', model: Comment.model_name.human), class: 'btn btn-outline-dark disabled'
         .comment-body
 
     .actions.btn-group[role="group"]

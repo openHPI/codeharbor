@@ -8,21 +8,26 @@ en:
       close: Close
       confirm: Confirm
       delete: Delete
-      destroy: Destroy
-      download_zip: Download Zip
+      download_zip: Download ZIP
       duplicate: Duplicate
       edit: Edit
       export: Export
       hide: Hide
       import: Import
       log_in: Log in
+      'no': 'no'
       remove: Remove
       retry: Retry
+      save: Save
+      save_object: Save %{model}
       show: Show
       show_less: Show less
       show_more: Show more
       sign_up: Sign up
+      update: Update
       view: View
+      'yes': 'yes'
+    created: Created
     created_at: Created at
     created_by: Created by
     edit_colon: 'Edit:'
@@ -34,6 +39,8 @@ en:
       not_found_error: You are not able to access this object or it doesn't exist
       not_signed_in: You must be signed in to continue.
       something_went_wrong: Something went wrong
+    javascripts:
+      error: Error
     locales:
       de: German
       en: English

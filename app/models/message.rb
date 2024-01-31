@@ -16,6 +16,21 @@ class Message < ApplicationRecord
     self.recipient_status = 'd' if recipient == user
   end
 
+  def text # rubocop:disable Metrics/AbcSize
+    case param_type
+      when 'group'
+        I18n.t('groups.send_access_request_message.message', user: sender.name, group: Group.find(param_id).name)
+      when 'group_accepted'
+        I18n.t('groups.send_grant_access_messages.message', user: sender.name, group: Group.find(param_id).name)
+      when 'group_declined'
+        I18n.t('groups.send_deny_access_message.message', user: sender.name, group: Group.find(param_id).name)
+      when 'collection'
+        I18n.t('collections.share_message.text', user: sender.name, collection: Collection.find(param_id).title)
+      else
+        super
+    end
+  end
+
   def self.parent_resource
     User
   end

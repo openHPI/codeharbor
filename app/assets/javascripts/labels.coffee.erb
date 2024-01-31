@@ -1,10 +1,11 @@
 max_label_length = <%= Label::MAX_LENGTH %>
+
 verify_label_name = (label_name) ->
   if label_name == ''
     return I18n.t('labels.javascripts.cannot_be_empty');
   if label_name.length > max_label_length
     return I18n.t('labels.javascripts.too_long');
-  return 'OK';
+  return I18n.t('labels.javascripts.ok');
 
 root = exports ? this;
 root.verify_label_name = verify_label_name;
@@ -14,6 +15,7 @@ ready = ->
   default_label_font_color = "000000"
 
   $('.labels-select2-tag').select2
+    language: I18n.locale
     width: '100%'
     tags: true
     multiple: true
@@ -74,7 +76,7 @@ ready = ->
       term = $.trim(params.term)
       selection = $('.labels-select2-tag').select2('data').map (element) -> element.id
 
-      if verify_label_name(term) != 'OK' || selection.includes(term)
+      if verify_label_name(term) != I18n.t('labels.javascripts.ok') || selection.includes(term)
         return null;
 
       return {
@@ -84,7 +86,7 @@ ready = ->
       }
 
     formatSelectionTooBig: (limit) ->
-      I18n.t('labels.javascripts.can_only_create_5')
+      I18n.t('labels.javascripts.max_limit_reached', {limit: limit})
 
     $('.labels-select2-tag').on 'select2:select', clear_input
   return
