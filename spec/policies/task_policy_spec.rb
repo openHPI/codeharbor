@@ -24,7 +24,7 @@ RSpec.describe TaskPolicy do
       let(:access_level) { :public }
 
       it { expect(task.lom_showable_by?(user)).to be true }
-      it { is_expected.to permit_only_actions(%i[show]) }
+      it { is_expected.to permit_only_actions(%i[show download]) }
     end
   end
 

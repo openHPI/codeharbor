@@ -14,7 +14,7 @@
             span.fa-regular.fa-star.overall-rating data-rating=i
         small
           .rating-dropdown
-            - if policy(Rating).new?
+            - if current_user && policy(Rating).new?
               .btn.btn-sm#rate
                 => t('.button.rate')
                 span.fa-solid.fa-caret-down
@@ -99,7 +99,7 @@
             = t('.yourself')
           - elsif @task.user.first_name.nil?
             = "User#{@task.user.id}"
-          - elsif policy(@task.user).show?
+          - elsif current_user && policy(@task.user).show?
             = link_to @task.user.name, user_path(@task.user)
           - else
             = @task.user.name
@@ -140,7 +140,7 @@
           - @task.groups.each_with_index do |group, index|
             - if index > 0
               = ', '
-            - if policy(group).show?
+            - if current_user && policy(group).show?
               = link_to group.name, group_path(group)
             - else
               = group.name

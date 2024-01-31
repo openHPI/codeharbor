@@ -7,7 +7,8 @@ RSpec.describe TasksController do
 
   let(:user) { create(:user) }
   let(:collection) { create(:collection, users: [user], tasks: []) }
-  let(:valid_attributes) { {user:, access_level: :private} }
+  let(:valid_attributes) { {user:, access_level:} }
+  let(:access_level) { :private }
 
   let(:invalid_attributes) { {title: ''} }
 
@@ -141,39 +142,61 @@ RSpec.describe TasksController do
   describe 'GET #show' do
     subject(:get_request) { get :show, params: {id: task.to_param} }
 
-    before { sign_in user }
-
     let!(:task) { create(:task, valid_attributes) }
 
-    it 'assigns the requested task to instance variable' do
-      get_request
-      expect(assigns(:task)).to eq(task)
-    end
+    context 'when not signed in' do
+      it 'redirects to sign in page' do
+        expect(get_request).to redirect_to(new_user_session_path)
+      end
 
-    context 'when task has an tasks_file' do
-      let!(:file) { create(:task_file, fileable: task) }
+      context 'when task is public' do
+        let(:access_level) { :public }
+        let(:groups) { create_list(:group, 2) }
+        let(:collections) { create_list(:collection, 2) }
+        let(:ratings) { create_list(:rating, 2) }
+        let(:comments) { create_list(:comment, 2) }
+        let(:task) { create(:task, valid_attributes.merge(groups:, collections:, ratings:, comments:)) }
 
-      it "assigns task's files to instance variable" do
-        get_request
-        expect(assigns(:files)).to include(file)
+        it 'renders the show view successfully' do
+          expect(get_request).to render_template(:show)
+          expect(response).to have_http_status :ok
+        end
       end
     end
 
-    context 'when task has a test' do
-      let!(:test) { create(:test, task:) }
+    context 'when signed in' do
+      before { sign_in user }
 
-      it "assigns task's tests to instance variable" do
+      it 'assigns the requested task to instance variable' do
         get_request
-        expect(assigns(:tests)).to include(test)
+        expect(assigns(:task)).to eq(task)
       end
 
-      context 'when test has a framework' do
-        let(:testing_framework) { create(:testing_framework) }
-        let(:test) { create(:test, task:, testing_framework:) }
+      context 'when task has an tasks_file' do
+        let!(:file) { create(:task_file, fileable: task) }
 
-        it "includes the frameworks's name and version in response" do
+        it "assigns task's files to instance variable" do
           get_request
-          expect(response.body).to include(testing_framework.name_with_version)
+          expect(assigns(:files)).to include(file)
+        end
+      end
+
+      context 'when task has a test' do
+        let!(:test) { create(:test, task:) }
+
+        it "assigns task's tests to instance variable" do
+          get_request
+          expect(assigns(:tests)).to include(test)
+        end
+
+        context 'when test has a framework' do
+          let(:testing_framework) { create(:testing_framework) }
+          let(:test) { create(:test, task:, testing_framework:) }
+
+          it "includes the frameworks's name and version in response" do
+            get_request
+            expect(response.body).to include(testing_framework.name_with_version)
+          end
         end
       end
     end
@@ -599,32 +622,48 @@ RSpec.describe TasksController do
   describe 'GET #download' do
     subject(:get_request) { get :download, params: {id: task.id} }
 
-    before do
-      sign_in user
-      allow(ProformaService::ExportTask).to receive(:call).with(task:).and_return(zip)
-    end
-
     let(:task) { create(:task, valid_attributes) }
     let(:zip) { instance_double(StringIO, string: 'dummy') }
 
-    it 'calls the ExportTask service' do
-      get_request
-      expect(ProformaService::ExportTask).to have_received(:call)
+    before { allow(ProformaService::ExportTask).to receive(:call).with(task:).and_return(zip) }
+
+    context 'when not signed in' do
+      it 'redirects to user sign in page' do
+        expect(get_request).to redirect_to(new_user_session_path)
+      end
+
+      context 'when task is public' do
+        let(:access_level) { :public }
+
+        it 'sends the correct data' do
+          get_request
+          expect(response.body).to eql 'dummy'
+        end
+      end
     end
 
-    it 'sends the correct data' do
-      get_request
-      expect(response.body).to eql 'dummy'
-    end
+    context 'when signed in' do
+      before { sign_in user }
 
-    it 'sets the correct Content-Type header' do
-      get_request
-      expect(response.header['Content-Type']).to eql 'application/zip'
-    end
+      it 'calls the ExportTask service' do
+        get_request
+        expect(ProformaService::ExportTask).to have_received(:call)
+      end
 
-    it 'sets the correct Content-Disposition header' do
-      get_request
-      expect(response.header['Content-Disposition']).to include "attachment; filename=\"task_#{task.id}.zip\""
+      it 'sends the correct data' do
+        get_request
+        expect(response.body).to eql 'dummy'
+      end
+
+      it 'sets the correct Content-Type header' do
+        get_request
+        expect(response.header['Content-Type']).to eql 'application/zip'
+      end
+
+      it 'sets the correct Content-Disposition header' do
+        get_request
+        expect(response.header['Content-Disposition']).to include "attachment; filename=\"task_#{task.id}.zip\""
+      end
     end
   end
 
