@@ -8,8 +8,7 @@ class Collection < ApplicationRecord
   validate :description_is_not_too_long
 
   has_many :collection_user_favorites, dependent: :destroy
-  # has_many :users, through: :collection_users
-
+  has_many :user_favorites, through: :collection_user_favorites, class_name: 'User', source: :user
 
   has_many :collection_users, dependent: :destroy
   has_many :users, through: :collection_users
@@ -25,7 +24,7 @@ class Collection < ApplicationRecord
   scope :member, lambda {|user|
                    includes(:collection_users).where(collection_users: {user:})
                  }
-
+  scope :favorites, ->(user) { joins(:collection_user_favorites).where('collection_user_favorites.user_id' => user.id) }
   enum visibility_level: {private: 0, public: 1}, _default: :private, _prefix: true
 
   def add_task(task)
