@@ -11,9 +11,9 @@ class Collection < ApplicationRecord
   has_many :users, through: :collection_users
 
   has_many :collection_tasks, lambda {
-                                includes(:task).order(rank: :desc).order('task.title ASC')
+                                order(rank: :desc).order('collection_tasks.created_at ASC')
                               }, dependent: :destroy, inverse_of: :collection
-  has_many :tasks, -> { order(rank: :desc, title: :asc) }, through: :collection_tasks
+  has_many :tasks, through: :collection_tasks
 
   accepts_nested_attributes_for :collection_tasks, allow_destroy: true
 

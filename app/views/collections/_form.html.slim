@@ -20,7 +20,7 @@
               = f.nested_fields_for :collection_tasks do |ct|
                 - task = ct.object.task
                 - if task.present?
-                  .row[data-id=ct.object.task_id]
+                  .row[data-id=ct.object.task.id]
                     = ct.hidden_field :rank
                     .col-auto.vert-align-container.sortable-handle
                       span.fas.fa-bars.vert-align

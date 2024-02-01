@@ -12,20 +12,26 @@ RSpec.describe Collection do
   end
 
   describe '#tasks' do
-    let(:collection) { create(:collection, tasks:) }
+    let(:collection) { create(:collection, tasks: []) }
     let(:tasks) { [create(:task, title: 'C'), create(:task, title: 'A'), create(:task, title: 'B')] }
 
+    before do
+      collection.add_task(tasks.second)
+      collection.add_task(tasks.third)
+      collection.add_task(tasks.first)
+    end
+
     context 'without explicit order' do
-      it 'orders tasks alphabetically' do
+      it 'orders tasks after the time they got added to the collection' do
         expect(collection.tasks.reload.map(&:title)).to eq(%w[A B C])
       end
     end
 
     context 'with explicit order' do
       before do
-        collection.collection_tasks.where(task: {title: 'C'}).update(rank: 3)
-        collection.collection_tasks.where(task: {title: 'B'}).update(rank: 2)
-        collection.collection_tasks.where(task: {title: 'A'}).update(rank: 1)
+        tasks.first.collection_tasks.where(collection:).update(rank: 3)
+        tasks.second.collection_tasks.where(collection:).update(rank: 1)
+        tasks.third.collection_tasks.where(collection:).update(rank: 2)
       end
 
       it 'returns the tasks in the correct order' do
