@@ -11,6 +11,10 @@ en:
         save: Save Collection
     index:
       new_collection: New Collection
+      options:
+        favorites: Favorite Collections
+        mine: My Collections
+        public: Public Collections
       view_shared: View Shared Collection
     new:
       header: New Collection
