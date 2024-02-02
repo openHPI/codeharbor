@@ -20,7 +20,7 @@
     "jquery": "^3.7.1",
     "jquery-ui": "^1.13.2",
     "jquery-ujs": "^1.2.3",
-    "mini-css-extract-plugin": "^2.7.7",
+    "mini-css-extract-plugin": "^2.8.0",
     "rails-erb-loader": "usabilityhub/rails-erb-loader#master",
     "sass": "^1.70.0",
     "sass-loader": "^14.1.0",
