@@ -4,9 +4,6 @@ en:
     create:
       error: The collection could not be created.
       success_notice: The collection has successfully been created. (The task has automatically been added)
-    favorite:
-      added: 'Added to favorites'
-      removed: 'Removed from favorites'
     leave:
       left_successfully: You successfully left the collection.
     push_collection:
@@ -25,3 +22,7 @@ en:
       success_notice: Your collection has been sent.
     share_message:
       text: '%{user} sent you their collection "%{collection}"'
+    toggle_favorite:
+      favorite:
+        added: Added to favorites
+        removed: Removed from favorites

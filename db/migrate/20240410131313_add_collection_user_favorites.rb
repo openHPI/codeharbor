@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddCollectionUserFavorites < ActiveRecord::Migration[7.1]
   def change
     create_table :collection_user_favorites, id: :uuid, force: :cascade do |t|
