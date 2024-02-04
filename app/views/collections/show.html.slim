@@ -27,6 +27,13 @@
           =< t('.no_invites')
         - else
           =< t('.num_of_invites', count: @num_of_invites)
+      span
+        - if @collection.user_favorites.length == 0
+          i.fa-regular.fa-star
+          =< t('.no_favorites')
+        - else
+          i.fa-solid.fa-star
+          =< t('.num_of_favorites', count: @collection.user_favorites.length)
 
     .collection-content.mt-2.pt-2
       .description.collapsable.w-100
