@@ -28,6 +28,9 @@
             =< t('.no_invites')
           - else
             =< t('.num_of_invites', count: @num_of_invites)
+        span
+          i.fa-star class=(@collection.user_favorites.empty? ? 'fa-regular' : 'fa-solid')
+          =< t('.num_of_favorites', count: @collection.user_favorites.length)
 
     .collection-content.mt-2.pt-2
       .description.collapsable.w-100

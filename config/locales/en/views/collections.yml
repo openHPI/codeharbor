@@ -38,6 +38,10 @@ en:
       noExercisesAdded: No Exercise Added
       no_invites: There are no pending invitations
       no_other_user: No other user has access to this collection
+      num_of_favorites:
+        one: This collection has been marked as favorite once
+        other: This collection has been marked as favorite %{count} times
+        zero: This collection has not been marked as favorite
       num_of_invites:
         one: There is one pending invitation
         other: There are %{count} pending invitations
