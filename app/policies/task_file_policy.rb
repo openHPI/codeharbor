@@ -11,7 +11,7 @@ class TaskFilePolicy < ApplicationPolicy
   end
 
   def download_attachment?
-    corresponding_task.showable_by?(@user)
+    Pundit.policy(@user, corresponding_task).show?
   end
 
   def extract_text_data?
