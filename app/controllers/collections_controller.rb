@@ -134,7 +134,7 @@ class CollectionsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the following list through.
   def collection_tasks_params
-    %i[id task_id collection_id rank _destroy]
+    %i[id rank _destroy]
   end
 
   def collection_params
