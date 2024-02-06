@@ -5,9 +5,9 @@ en:
       empty_state:
         heading: You do not have collections yet
         hint: You can create Collections and add exercises to it.
-      noTasksAdded: No Tasks Added
     form:
       button:
+        remove_all: Remove All
         save: Save Collection
     index:
       new_collection: New Collection
@@ -16,11 +16,11 @@ en:
       header: New Collection
     shared:
       no_description: No Description
+      no_tasks_added: No tasks added
     show:
       button:
         collaborate: Collaborate
         leave: Leave
-        remove_all: Remove All
         share: Share Collection
       define_account_link: Please define an account link first
       download_no_exercises: Download not possible without exercises

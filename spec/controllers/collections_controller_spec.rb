@@ -98,27 +98,55 @@ RSpec.describe CollectionsController do
   end
 
   describe 'PUT #update' do
+    subject(:put_update) { put :update, params: {id: collection.to_param, collection: collection_params} }
+
     let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
 
     context 'with valid params' do
-      let(:new_attributes) do
-        {title: 'new title'}
-      end
-
-      it 'updates the requested collection' do
-        expect do
-          put :update, params: {id: collection.to_param, collection: new_attributes}
-        end.to change { collection.reload.title }.to('new title')
-      end
+      let(:collection_params) { valid_attributes }
 
       it 'assigns the requested collection as @collection' do
-        put :update, params: {id: collection.to_param, collection: valid_attributes}
+        put_update
         expect(assigns(:collection)).to eq(collection)
       end
 
       it 'redirects to the collection' do
-        put :update, params: {id: collection.to_param, collection: valid_attributes}
+        put_update
         expect(response).to redirect_to(collections_path)
+      end
+
+      context 'with new title' do
+        let(:collection_params) { {title: 'new title'} }
+
+        it 'updates the requested collection' do
+          expect { put_update }.to change { collection.reload.title }.to('new title')
+        end
+      end
+
+      context 'with new task order' do
+        let(:collection_params) do
+          {collection_tasks_attributes: {
+            '0': collection.collection_tasks.first.attributes.merge(rank: 0),
+            '1': collection.collection_tasks.second.attributes.merge(rank: 1),
+          }}
+        end
+
+        it 'reorders the tasks in the new order' do
+          expect { put_update }.to change { collection.tasks.reload.map(&:id) }.from(collection.task_ids).to(collection.task_ids.reverse)
+        end
+      end
+
+      context 'when removing a task' do
+        let(:collection_params) do
+          {collection_tasks_attributes: {
+            '0': collection.collection_tasks.first.attributes.merge(rank: 0),
+            '1': collection.collection_tasks.second.attributes.merge(_destroy: 1),
+          }}
+        end
+
+        it 'removes the task' do
+          expect { put_update }.to change { collection.tasks.reload.count }.from(2).to(1)
+        end
       end
     end
 

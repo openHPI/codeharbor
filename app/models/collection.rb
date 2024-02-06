@@ -10,8 +10,12 @@ class Collection < ApplicationRecord
   has_many :collection_users, dependent: :destroy
   has_many :users, through: :collection_users
 
-  has_many :collection_tasks, dependent: :destroy
+  has_many :collection_tasks, lambda {
+                                order(rank: :desc).order('collection_tasks.created_at ASC')
+                              }, dependent: :destroy, inverse_of: :collection
   has_many :tasks, through: :collection_tasks
+
+  accepts_nested_attributes_for :collection_tasks, allow_destroy: true
 
   def add_task(task)
     tasks << task unless tasks.find_by(id: task.id)
