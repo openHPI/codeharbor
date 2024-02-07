@@ -66,7 +66,7 @@
         - if policy(task).edit?
           = link_to t('common.button.edit'), edit_task_path(task), class: 'btn btn-light'
           = link_to t('common.button.delete'), task_path(task), class: 'btn btn-light', method: :delete, data: { confirm: t('common.sure') }
-        / - if cannot? :edit, task
+        / - if !policy(task).edit?
           = link_to 'Contribute', contribute_task_path(task), method: :post, class: 'btn btn-light'
     .card-footer
       = button_tag type: 'button', class: 'btn no-border index-comment-button', data: {task: task.id} do

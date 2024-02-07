@@ -7,7 +7,7 @@ class TaskPolicy < ApplicationPolicy
 
   def show?
     if @user.present?
-      admin? || task.access_level_public? || task.in_same_group?(@user) || task.author?(@user)
+      admin? || task.access_level_public? || task.in_same_group?(@user) || task.author?(@user) || task_contribution?
     else
       task.access_level_public?
     end
@@ -25,12 +25,19 @@ class TaskPolicy < ApplicationPolicy
     record_owner? || admin?
   end
 
-  %i[download? add_to_collection? duplicate? export_external_start? export_external_check? export_external_confirm?].each do |action|
+  %i[duplicate? add_to_collection? export_external_start? export_external_check? export_external_confirm?].each do |action|
     define_method(action) do
       return false if @user.blank?
+      return false if task_contribution?
 
       record_owner? || task.access_level_public? || task.in_same_group?(@user) || admin?
     end
+  end
+
+  def download?
+    return false if @user.blank?
+
+    record_owner? || task.access_level_public? || task.in_same_group?(@user) || admin? || task_contribution?
   end
 
   def update?
@@ -53,5 +60,12 @@ class TaskPolicy < ApplicationPolicy
 
   def user_required?
     false
+  end
+
+  def task_contribution?
+    # If the current task is actually a contribution for another task,
+    # we delegate the permission check to the TaskContributionPolicy.
+    # This check is _not_ checking the parent task's permission.
+    task.task_contribution.present? && Pundit.policy(@user, task.task_contribution).show?
   end
 end
