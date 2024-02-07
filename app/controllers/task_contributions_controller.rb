@@ -63,6 +63,16 @@ class TaskContributionsController < ApplicationController
     end
   end
 
+  def update
+    @task_contribution.suggestion.assign_attributes(task_params.except(:parent_uuid))
+    if @task_contribution.save(context: :force_validations)
+      redirect_to [@task, @task_contribution], notice: t('.success')
+    else
+      @task = @task_contribution.suggestion
+      render 'tasks/edit'
+    end
+  end
+
   private
 
   def load_and_authorize_task

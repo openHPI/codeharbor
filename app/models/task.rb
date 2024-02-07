@@ -262,7 +262,9 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def unique_pending_contribution
     if contribution?
-      other_existing_contrib = parent&.contributions&.where(user:)&.any?
+      return unless parent
+
+      other_existing_contrib = parent.contributions.where(user:).where.not(id:).any?
       errors.add(:task_contribution, :duplicated) if other_existing_contrib
     end
   end
