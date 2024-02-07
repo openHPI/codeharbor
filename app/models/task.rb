@@ -34,7 +34,7 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_many :ratings, dependent: :destroy
 
   # TODO: Do we want to have a has_one AND a has_many association for contributions?
-  has_one :task_contribution, dependent: :destroy, inverse_of: :modifying_task
+  has_one :task_contribution, dependent: :destroy, inverse_of: :suggestion
   belongs_to :user
   belongs_to :programming_language, optional: true
   belongs_to :license, optional: true
