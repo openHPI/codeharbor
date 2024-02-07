@@ -2,6 +2,7 @@
 
 module TaskParameters
   private
+
   def file_params
     %i[id content attachment path name internal_description mime_type use_attached_file used_by_grader visible usage_by_lms xml_id _destroy
        parent_id]
@@ -18,8 +19,8 @@ module TaskParameters
 
   def task_params
     params.require(:task).permit(:title, :description, :internal_description, :parent_uuid, :language, :license_id,
-                                 :programming_language_id, :access_level, files_attributes: file_params, tests_attributes: test_params,
-                                 model_solutions_attributes: model_solution_params, label_names: [])
+      :programming_language_id, :access_level, files_attributes: file_params, tests_attributes: test_params,
+      model_solutions_attributes: model_solution_params, label_names: [])
   end
 
   def group_tasks_params
