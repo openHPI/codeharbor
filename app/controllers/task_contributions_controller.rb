@@ -2,7 +2,7 @@
 
 class TaskContributionsController < ApplicationController
   include TaskParameters
-  load_and_authorize_resource class: TaskContribution, except: %i[create new]
+  before_action :load_and_authorize_task_contribution, except: %i[create new]
   def approve_changes
     contrib = TaskContribution.find(params[:id])
     @task = Task.find(params[:task_id])
@@ -41,9 +41,10 @@ class TaskContributionsController < ApplicationController
     @task.parent_id = params[:task_id]
     task_contrib = TaskContribution.new
     @task.task_contribution = task_contrib
-    authorize! :new, task_contrib
+    authorize task_contrib
     render 'new'
   end
+
   # The function should render the edit form used by TaskController
   def edit
     contrib = TaskContribution.find(params[:id])
@@ -51,12 +52,11 @@ class TaskContributionsController < ApplicationController
     render 'tasks/edit'
   end
 
-
   def create
     @task = Task.new(contrib_task_params)
     contrib = TaskContribution.new(status: :pending)
     @task.task_contribution = contrib
-    authorize! :create, contrib
+    authorize contrib
     if @task.save(context: :force_validations)
       TaskContributionMailer.contribution_request(contrib).deliver_later
       redirect_to @task, notice: t('.success')
@@ -69,5 +69,10 @@ class TaskContributionsController < ApplicationController
     task_params
       .merge(user: current_user, parent_uuid: Task.find(params[:task_id]).uuid,
         access_level: :private, task_contribution: TaskContribution.new)
+  end
+
+  def load_and_authorize_task_contribution
+    contrib = TaskContribution.find(params[:id])
+    authorize contrib
   end
 end
