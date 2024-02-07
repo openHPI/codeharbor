@@ -16,7 +16,8 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     page = params[:page]
     @search = Task.visibility(@visibility, current_user).ransack(params[:q])
     @tasks = @search.result(distinct: true).paginate(page:, per_page: per_page_param).includes(:ratings, :programming_language,
-      :labels).load
+      :labels, :user, :groups).load
+
     authorize @tasks
   end
 

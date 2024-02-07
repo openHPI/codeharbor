@@ -6,11 +6,12 @@ class GroupsController < ApplicationController
   before_action :set_user, only: %i[grant_access delete_from_group deny_access make_admin demote_admin]
 
   def index
-    @groups = if @option == 'mine'
-                current_user.groups.paginate(page: params[:page], per_page: per_page_param)
-              else
-                Group.all.paginate(page: params[:page], per_page: per_page_param)
-              end
+    groups = @option == 'mine' ? current_user.groups : Group.all
+
+    @groups = groups
+      .paginate(page: params[:page], per_page: per_page_param)
+      .includes(group_memberships: [:user])
+      .load
     authorize @groups
   end
 

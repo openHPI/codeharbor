@@ -6,10 +6,11 @@ class CollectionsController < ApplicationController
   before_action :load_and_authorize_collection, except: %i[index new create]
 
   def index
-    @collections = Collection.includes(:collection_users)
+    @collections = Collection.includes(:users, tasks: %i[user groups])
       .where(collection_users: {user: current_user})
-      .distinct
+      .order(id: :asc)
       .paginate(page: params[:page], per_page: per_page_param)
+      .load
 
     authorize @collections
   end
