@@ -43,7 +43,7 @@ class TaskContributionsController < ApplicationController
     task_contrib = TaskContribution.new
     @task.task_contribution = task_contrib
     authorize task_contrib
-    render 'new'
+    render 'tasks/new'
   end
 
   # The function should render the edit form used by TaskController
