@@ -7,7 +7,6 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include ParentValidation
 
   acts_as_taggable_on :state
-  attribute :parent_id
   validates :title, presence: true
 
   validates :uuid, uniqueness: true
@@ -39,6 +38,7 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
   belongs_to :user
   belongs_to :programming_language, optional: true
   belongs_to :license, optional: true
+  belongs_to :parent, class_name: 'Task', foreign_key: :parent_uuid, primary_key: :uuid, optional: true, inverse_of: false
 
   accepts_nested_attributes_for :files, allow_destroy: true
   accepts_nested_attributes_for :tests, allow_destroy: true
@@ -185,10 +185,6 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
         task.title = "#{I18n.t('tasks.model.copy_of_task')}: #{task.title}"
       end
     end
-  end
-
-  def parent
-    parent_uuid.nil? ? nil : Task.find_by(uuid: parent_uuid).presence
   end
 
   def parent_of?(child)

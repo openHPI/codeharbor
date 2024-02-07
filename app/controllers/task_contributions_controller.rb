@@ -37,8 +37,9 @@ class TaskContributionsController < ApplicationController
   end
 
   def new
-    @task = Task.find(params[:task_id]).clean_duplicate(current_user, change_title: false)
-    @task.parent_id = params[:task_id]
+    original_task = Task.find(params[:task_id])
+    @task = original_task.clean_duplicate(current_user, change_title: false)
+    @task.parent = original_task
     task_contrib = TaskContribution.new
     @task.task_contribution = task_contrib
     authorize task_contrib
