@@ -83,8 +83,6 @@ RSpec.describe TaskContributionsController do
         post_request
         # check that :task was assigned id 1
         expect(assigns(:task).id).to eq(1)
-
-
       end
 
       it 'changes the contribution status' do
