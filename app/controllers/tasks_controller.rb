@@ -240,7 +240,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   end
 
   def redirect_task_contribution
-    return unless !@task.nil? && @task.contribution?
+    return unless @task.present? && @task.contribution?
 
     redirect_to action: action_name, controller: 'task_contributions', task_id: @task.parent, id: @task.task_contribution
   end
