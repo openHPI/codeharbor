@@ -8,7 +8,6 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include TransferValues
 
   acts_as_taggable_on :state
-  attribute :parent_id
 
   before_validation :lowercase_language
   after_commit :sync_metadata_with_nbp, if: -> { Nbp::PushConnector.enabled? }
@@ -39,10 +38,11 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_many :ratings, dependent: :destroy
 
   # TODO: Do we want to have a has_one AND a has_many association for contributions?
-  has_one :task_contribution, dependent: :destroy, inverse_of: :modifying_task
+  has_one :task_contribution, dependent: :destroy, inverse_of: :suggestion
   belongs_to :user
   belongs_to :programming_language, optional: true
   belongs_to :license, optional: true
+  belongs_to :parent, class_name: 'Task', foreign_key: :parent_uuid, primary_key: :uuid, optional: true, inverse_of: false
 
   accepts_nested_attributes_for :tests, allow_destroy: true
   accepts_nested_attributes_for :model_solutions, allow_destroy: true
@@ -161,10 +161,6 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def parent
-    parent_uuid.nil? ? nil : Task.find_by(uuid: parent_uuid).presence
-  end
-
   def parent_of?(child)
     child.parent_uuid.nil? ? false : uuid == child.parent_uuid
   end
@@ -253,7 +249,9 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def unique_pending_contribution
     if contribution?
-      other_existing_contrib = parent&.contributions&.where(user:)&.any?
+      return unless parent
+
+      other_existing_contrib = parent.contributions.where(user:).where.not(id:).any?
       errors.add(:task_contribution, :duplicated) if other_existing_contrib
     end
   end

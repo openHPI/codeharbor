@@ -117,6 +117,8 @@ en:
             language:
               not_de_or_us: 'is not in the correct format. Please use one of the following formats: de / en-US'
               not_iso639: is not a two letter ISO 639-1 or three letter ISO-639-2 language code
+            task_contribution:
+              duplicated: has been created already and is currently waiting for approval. Please edit your existing contribution instead of creating a new one
         task_file:
           attributes:
             xml_id:

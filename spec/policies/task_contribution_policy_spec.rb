@@ -23,12 +23,12 @@ RSpec.describe TaskContributionPolicy do
       context 'when the original task is private' do
         let(:access_level) { 'private' }
 
-        it { is_expected.to permit_only_actions %i[destroy discard_changes show update] } # TODO: This currently tests the case where a public task with a contrib becomes private. We should evaluate in the future what should happen in this case.
+        it { is_expected.to permit_only_actions %i[destroy discard_changes show update edit] } # TODO: This currently tests the case where a public task with a contrib becomes private. We should evaluate in the future what should happen in this case.
       end
 
       context 'when the original task is public' do
         context 'when the user has no contribution for task yet' do
-          it { is_expected.to permit_only_actions %i[create new destroy discard_changes show update] }
+          it { is_expected.to permit_only_actions %i[create new destroy discard_changes show update edit] }
         end
 
         context 'when the user has a contribution for the task' do
