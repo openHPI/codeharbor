@@ -244,7 +244,7 @@
               .col.row-value
                 = test.internal_description
 
-            = render 'dachsfisch_json_as_xml', dachsfisch_attribute: test.meta_data, name: 'meta_data'
+            = render 'tasks/dachsfisch_json_as_xml', dachsfisch_attribute: test.meta_data, name: 'meta_data'
             - if test.configuration.present?
               .row.vertical
                 .row-label
