@@ -29,7 +29,7 @@ class TaskContributionPolicy < ApplicationPolicy
     Pundit.policy(@user, base_task).edit? && task_contribution.pending?
   end
 
-  %i[update? destroy?].each do |action|
+  %i[edit? update? destroy?].each do |action|
     define_method(action) do
       record_owner?
     end
