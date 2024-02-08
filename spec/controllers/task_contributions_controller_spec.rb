@@ -24,6 +24,7 @@ RSpec.describe TaskContributionsController do
     subject(:post_request) { post :create, params: {task_id: task.id, task: task_params} }
 
     let(:task_params) { attributes_for(:task) }
+    let(:suggestion) { assigns(:task_contribution).suggestion }
 
     context 'with valid params' do
       it 'creates a new Task and TaskContribution' do
@@ -32,25 +33,25 @@ RSpec.describe TaskContributionsController do
           .and change(TaskContribution, :count).by(1)
       end
 
-      it 'assigns a newly created task as @task' do
+      it 'assigns a newly created suggestion as @task_contribution.suggestion' do
         post_request
-        expect(assigns(:task)).to be_a(Task)
-        expect(assigns(:task)).to be_persisted
+        expect(suggestion).to be_a(Task)
+        expect(suggestion).to be_persisted
       end
 
       it 'changes required parameters' do
         post_request
-        expect(assigns(:task).access_level).to eq('private')
-        expect(assigns(:task).user).to eq(user)
-        expect(assigns(:task).parent_uuid).to eq(task.uuid)
-        expect(assigns(:task).task_contribution).not_to be_nil
-        expect(assigns(:task).task_contribution.status).to eq('pending')
+        expect(suggestion.access_level).to eq('private')
+        expect(suggestion.user).to eq(user)
+        expect(suggestion.parent_uuid).to eq(task.uuid)
+        expect(suggestion.task_contribution).not_to be_nil
+        expect(suggestion.task_contribution.status).to eq('pending')
       end
 
       it 'redirects to the created task' do
         post_request
         expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(assigns(:task))
+        expect(response).to redirect_to([assigns(:task), assigns(:task_contribution)])
       end
     end
 
@@ -71,6 +72,8 @@ RSpec.describe TaskContributionsController do
   end
 
   describe 'POST #approve_changes' do
+    let(:user) { original_author }
+
     before do
       task.save!
       contribution.save!
@@ -81,8 +84,7 @@ RSpec.describe TaskContributionsController do
 
       it 'changes the original task, but retains certain fields' do
         post_request
-        # check that :task was assigned id 1
-        expect(assigns(:task).id).to eq(1)
+        expect(assigns(:task).id).to eq(task.id)
       end
 
       it 'changes the contribution status' do
@@ -113,7 +115,7 @@ RSpec.describe TaskContributionsController do
       it 'redirects to the modifying task' do
         post_request
         expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(contrib_task)
+        expect(response).to redirect_to([task, contribution])
       end
     end
   end
@@ -135,7 +137,7 @@ RSpec.describe TaskContributionsController do
       it 'redirects to the modified task' do
         post_request
         expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(contrib_task)
+        expect(response).to redirect_to([task, contribution])
       end
     end
 
@@ -155,7 +157,7 @@ RSpec.describe TaskContributionsController do
       it 'redirects to the modified task' do
         post_request
         expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(contrib_task)
+        expect(response).to redirect_to([task, contribution])
       end
     end
   end
@@ -169,10 +171,9 @@ RSpec.describe TaskContributionsController do
     end
 
     context 'when contribution exists' do
-      it 'redirects to the associated task' do
+      it 'shows the suggestions' do
         get_request
-        expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(contrib_task)
+        expect(assigns(:task)).to eq(contribution.suggestion)
       end
     end
   end
