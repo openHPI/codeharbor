@@ -478,10 +478,10 @@
             = button_tag class: 'btn btn-light dropdown-toggle', 'data-bs-toggle': 'dropdown' do
               = t('.button.add_to_collection')
             ul.scrollable.dropdown-menu[role="menu"]
-              - current_user.collections.reverse.each do |collection|
+              - current_user.collections.order(created_at: :desc).each do |collection|
                 li
                   - if collection.tasks.include?(@task)
-                    = link_to remove_task_collection_path(collection, task: @task), method: :patch, class: 'dropdown-item', data: { confirm: t('.remove_task_from_collection_warning') } do
+                    = link_to remove_task_collection_path(collection, task: @task, return_to_task: true), method: :patch, class: 'dropdown-item', data: { confirm: t('.remove_task_from_collection_warning') } do
                       span.collection-checkmark
                         = "✓ #{collection.title}"
                   - else
@@ -492,7 +492,7 @@
               li
                 hr.dropdown-divider
               li
-                = form_with model: Collection.new, url: create_ajax_collections_path do |f|
+                = form_with model: Collection.new, url: collections_path do |f|
                   .create-collection.input-group
                     = f.text_field :title, class: 'form-control', placeholder: t('.create_collection_placeholder')
                     = f.hidden_field :task_ids, value: @task.id
