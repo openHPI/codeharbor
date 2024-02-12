@@ -114,48 +114,11 @@ RSpec.describe CollectionsController do
   end
 
   describe 'POST #create' do
-    context 'with valid params' do
-      it 'creates a new Collection' do
-        expect do
-          post :create, params: {collection: valid_attributes}
-        end.to change(Collection, :count).by(1)
-      end
-
-      it 'assigns a newly created collection as @collection' do
-        post :create, params: {collection: valid_attributes}
-        expect(assigns(:collection)).to be_a(Collection)
-      end
-
-      it 'persists @collection' do
-        post :create, params: {collection: valid_attributes}
-        expect(assigns(:collection)).to be_persisted
-      end
-
-      it 'redirects to the created collection' do
-        post :create, params: {collection: valid_attributes}
-        expect(response).to redirect_to(collections_path)
-      end
-    end
-
-    context 'with invalid params' do
-      it 'assigns a newly created but unsaved collection as @collection' do
-        post :create, params: {collection: invalid_attributes}
-        expect(assigns(:collection)).to be_a_new(Collection)
-      end
-
-      it "re-renders the 'new' template" do
-        post :create, params: {collection: invalid_attributes}
-        expect(response).to render_template('new')
-      end
-    end
-  end
-
-  describe 'POST #create_ajax' do
-    let(:post_request) { post :create_ajax, params: {collection: collection_params} }
-    let(:collection_params) { valid_attributes.merge(task_ids: task.id) }
-    let(:task) { create(:task) }
+    let(:post_request) { post :create, params: {collection: collection_params} }
 
     context 'with valid params' do
+      let(:collection_params) { valid_attributes }
+
       it 'creates a new Collection' do
         expect do
           post_request
@@ -172,23 +135,64 @@ RSpec.describe CollectionsController do
         expect(assigns(:collection)).to be_persisted
       end
 
-      it 'redirects to the submitted task' do
+      it 'redirects to the created collection' do
         post_request
-        expect(response).to redirect_to(task_path(task))
+        expect(response).to redirect_to(collections_path)
+      end
+
+      context 'with task_id' do
+        let(:collection_params) { valid_attributes.merge(task_ids: task.id) }
+        let(:task) { create(:task) }
+
+        it 'creates a new Collection' do
+          expect do
+            post_request
+          end.to change(Collection, :count).by(1)
+        end
+
+        it 'assigns a newly created collection as @collection' do
+          post_request
+          expect(assigns(:collection)).to be_a(Collection)
+        end
+
+        it 'persists @collection' do
+          post_request
+          expect(assigns(:collection)).to be_persisted
+        end
+
+        it 'redirects to the submitted task' do
+          post_request
+          expect(response).to redirect_to(task_path(task))
+        end
       end
     end
 
     context 'with invalid params' do
       let(:collection_params) { invalid_attributes }
 
-      it 'does not create a new Collection' do
-        expect do
-          post_request
-        end.not_to change(Collection, :count)
+      it 'assigns a newly created but unsaved collection as @collection' do
+        post_request
+        expect(assigns(:collection)).to be_a_new(Collection)
       end
 
-      it 'flashes an error' do
-        expect { post_request }.to change { flash[:alert] }.to(I18n.t('collections.create_ajax.error'))
+      it "re-renders the 'new' template" do
+        post_request
+        expect(response).to render_template('new')
+      end
+
+      context 'with task_id' do
+        let(:collection_params) { invalid_attributes.merge(task_ids: task.id) }
+        let(:task) { create(:task) }
+
+        it 'does not create a new Collection' do
+          expect do
+            post_request
+          end.not_to change(Collection, :count)
+        end
+
+        it 'flashes an error' do
+          expect { post_request }.to change { flash[:alert] }.to(I18n.t('collections.create.error'))
+        end
       end
     end
   end
@@ -262,33 +266,31 @@ RSpec.describe CollectionsController do
   describe 'PATCH #remove_task' do
     let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
     let!(:task) { create(:task, collections: [collection]) }
-    let(:patch_request) { patch :remove_task, params: {id: collection.id, task: task.id} }
-
-    it 'removes task from collection' do
-      expect { patch_request }.to change(collection.reload.tasks, :count).by(-1)
-    end
-  end
-
-  describe 'PATCH #remove_task_ajax' do
-    let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
-    let!(:task) { create(:task, collections: [collection]) }
-    let(:patch_request) { patch :remove_task_ajax, params: remove_task_params }
+    let(:patch_request) { patch :remove_task, params: remove_task_params }
     let(:remove_task_params) { {id: collection.id, task: task.id} }
 
     it 'removes task from collection' do
       expect { patch_request }.to change(collection.reload.tasks, :count).by(-1)
     end
 
-    it 'redirects to the submitted task' do
-      patch_request
-      expect(response).to redirect_to(task_path(task))
-    end
+    context 'when return_to_task is true' do
+      let(:remove_task_params) { {id: collection.id, task: task.id, return_to_task: true} }
 
-    context 'with invalid params' do
-      let(:remove_task_params) { {id: collection.id, task: create(:task).id} }
+      it 'removes task from collection' do
+        expect { patch_request }.to change(collection.reload.tasks, :count).by(-1)
+      end
 
-      it 'does not remove task from collection' do
-        expect { patch_request }.not_to change(collection.reload.tasks, :count)
+      it 'redirects to the submitted task' do
+        patch_request
+        expect(response).to redirect_to(task_path(task))
+      end
+
+      context 'with invalid params' do
+        let(:remove_task_params) { {id: collection.id, task: create(:task).id} }
+
+        it 'does not remove task from collection' do
+          expect { patch_request }.not_to change(collection.reload.tasks, :count)
+        end
       end
     end
   end

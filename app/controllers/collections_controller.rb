@@ -3,7 +3,7 @@
 require 'zip'
 
 class CollectionsController < ApplicationController
-  before_action :load_and_authorize_collection, except: %i[index new create create_ajax]
+  before_action :load_and_authorize_collection, except: %i[index new create]
 
   def index
     @collections = Collection.member(current_user).or(Collection.public_access).includes(:users, tasks: %i[user groups])
@@ -24,27 +24,16 @@ class CollectionsController < ApplicationController
   def edit; end
 
   def create
-    @collection = Collection.new(collection_params)
-    @collection.users << current_user
+    @collection = Collection.new(collection_params.merge(users: [current_user]))
     authorize @collection
 
-    if @collection.save
+    if @collection.tasks.any?
+      # Redirect back to task#show as collections with tasks can only be created from that view
+      create_collection_with_task
+    elsif @collection.save
       redirect_to collections_path, notice: t('common.notices.object_created', model: Collection.model_name.human)
     else
       render :new
-    end
-  end
-
-  def create_ajax
-    @collection = Collection.new(collection_params)
-    @collection.users << current_user
-    authorize @collection
-
-    if @collection.save
-      redirect_to @collection.tasks.first, notice: t('.success_notice')
-    else
-      flash.now[:alert] = t('.error')
-      head :ok
     end
   end
 
@@ -57,16 +46,12 @@ class CollectionsController < ApplicationController
   end
 
   def remove_task
+    redirect_target = params[:return_to_task] ? Task.find(params[:task]) : @collection
     if @collection.remove_task(params[:task])
-      redirect_to @collection, notice: t('common.notices.object_removed', model: Task.model_name.human)
+      redirect_to redirect_target, notice: t('common.notices.object_removed', model: Task.model_name.human)
     else
-      redirect_to @collection, alert: t('.cannot_remove_alert')
+      redirect_to redirect_target, alert: t('.cannot_remove_alert')
     end
-  end
-
-  def remove_task_ajax
-    @collection.remove_task(params[:task])
-    redirect_to Task.find_by(id: params[:task]), notice: t('.success_notice')
   end
 
   def remove_all
@@ -131,6 +116,14 @@ class CollectionsController < ApplicationController
   end
 
   private
+
+  def create_collection_with_task
+    if @collection.save
+      redirect_to @collection.tasks.first, notice: t('collections.create.success_notice')
+    else
+      flash.now[:alert] = t('collections.create.error')
+    end
+  end
 
   def share_message
     user = User.find_by(email: params[:user])

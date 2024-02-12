@@ -9,7 +9,7 @@
         = f.label :description, Collection.human_attribute_name('description'), class: 'form-label'
         = f.text_area :description, class: 'form-control', rows: 10
       .field-element
-        = f.label :visibility_level,  Collection.human_attribute_name("visibility_level"), class: 'form-label collection-edit-visibility'
+        = f.label :visibility_level, Collection.human_attribute_name("visibility_level"), class: 'form-label collection-edit-visibility'
         .radio-switch
           = f.radio_button :visibility_level, :public, value: :public, checked: true
           = label_tag 'collection_visibility_level_public', t('collections.visibility.public'), class: 'radio-left'
