@@ -2743,7 +2743,7 @@ __metadata:
     compression-webpack-plugin: "npm:11.0.0"
     css-loader: "npm:^6.10.0"
     css-minimizer-webpack-plugin: "npm:^6.0.0"
-    i18n-js: "npm:^4.3.2"
+    i18n-js: "npm:^4.4.2"
     jquery: "npm:^3.7.1"
     jquery-ui: "npm:^1.13.2"
     jquery-ujs: "npm:^1.2.3"
@@ -3988,14 +3988,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18n-js@npm:^4.3.2":
-  version: 4.3.2
-  resolution: "i18n-js@npm:4.3.2"
+"i18n-js@npm:^4.4.2":
+  version: 4.4.2
+  resolution: "i18n-js@npm:4.4.2"
   dependencies:
     bignumber.js: "npm:*"
     lodash: "npm:*"
     make-plural: "npm:*"
-  checksum: ccdfa7417f29cf1bf1e68d2146a3b3a1366392a2a2a07df23336fbffb9a8918dcc9c3bdfed20decf311a69d58c85c0160149a27752280dae14b521ec8bc3ab92
+  checksum: bd6ec24cbccaa96d5853f727185a70318f9debec2655e56fdab8579431accb836ff6760125a1c73381eece92a6d7fbe4942f8d5eb37406447b1307460ab1e8dd
   languageName: node
   linkType: hard
 
