@@ -53,7 +53,7 @@ development:
   dev_server:
     https: false
     host: localhost
-    port: 3035
+    port: 3045
     # Hot Module Replacement updates modules while the application is running without a full reload
     # Used instead of the `hot` key in https://webpack.js.org/configuration/dev-server/#devserverhot
     hmr: false
