@@ -11,9 +11,6 @@
 // about supported directives.
 //
 //= require turbolinks
-//= require ace-rails-ap
-//= require ace/theme-monokai
-//= require ace/ext-options
 //= require nested_form_fields
 //
 // app/assets

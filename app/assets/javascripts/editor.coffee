@@ -3,7 +3,6 @@ ready = ->
   initializeEditors()
 
 initializeAce = ->
-  ace.config.set 'basePath', '/assets/ace/'
   $(document).on 'fields_added.nested_form_fields', ->
     $ initializeEditors()
 

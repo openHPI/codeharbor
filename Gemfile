@@ -2,7 +2,6 @@
 
 source 'https://rubygems.org'
 
-gem 'ace-rails-ap'
 gem 'acts-as-taggable-on'
 gem 'bcrypt'
 gem 'bootsnap', require: false
