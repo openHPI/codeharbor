@@ -85,7 +85,7 @@ This project uses [shakapacker](https://github.com/shakacode/shakapacker) to int
   yarn run webpack-dev-server
   ```
 
-This will launch a dedicated server on port 3035 (default setting) and allow incoming WebSocket connections from your browser.
+This will launch a dedicated server on port 3045 (default setting) and allow incoming WebSocket connections from your browser.
 
 2. Rails application:
 
