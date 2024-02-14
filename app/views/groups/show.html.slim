@@ -62,14 +62,12 @@
     .row-value
       - if @group.tasks.present?
         - @group.tasks.each do |task|
-          .table-list
+          .table-list.group-tasks
             .btn-group
+              = link_to task.title, task_path(task), class: 'btn btn-light'
               - if policy(@group).remove_task?
-                = link_to task.title, task_path(task), class: 'btn btn-light', style: "border-right: none"
-                = link_to remove_task_group_path(task: task), method: :patch, class: 'btn btn-light', style: "border-left: none; margin-right: 5px;"  do
+                = link_to remove_task_group_path(task: task), method: :patch, class: 'btn btn-light' do
                   i.fa-solid.fa-xmark style=("color:gray;")
-              - else
-                = link_to task.title, task_path(task), class: 'btn btn-light'
       - else
         = t('.has_no_tasks')
 
