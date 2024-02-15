@@ -16,14 +16,12 @@ RSpec.describe TaskPolicy do
     context 'when task is private' do
       let(:access_level) { :private }
 
-      it { expect(task.lom_showable_by?(user)).to be false }
       it { is_expected.to forbid_all_actions }
     end
 
     context 'when task is public' do
       let(:access_level) { :public }
 
-      it { expect(task.lom_showable_by?(user)).to be true }
       it { is_expected.to permit_only_actions(%i[show download]) }
     end
   end
@@ -33,20 +31,17 @@ RSpec.describe TaskPolicy do
     let(:generic_user_permissions) { %i[index new import_start import_confirm import_uuid_check import_external] }
 
     it { is_expected.to permit_only_actions(generic_user_permissions) }
-    it { expect(task.lom_showable_by?(user)).to be false }
 
     context 'when user is admin' do
       let(:user) { create(:admin) }
 
       it { is_expected.to permit_all_actions }
-      it { expect(task.lom_showable_by?(user)).to be true }
     end
 
     context 'when task is from user' do
       let(:task_user) { user }
 
       it { is_expected.to permit_all_actions }
-      it { expect(task.lom_showable_by?(user)).to be true }
     end
 
     context 'when task has access_level "public"' do
@@ -54,7 +49,6 @@ RSpec.describe TaskPolicy do
       let(:access_level) { :public }
 
       it { is_expected.to permit_only_actions(generic_user_permissions + %i[show export_external_start export_external_check export_external_confirm download add_to_collection duplicate]) }
-      it { expect(task.lom_showable_by?(user)).to be true }
     end
 
     context 'when task is "private" and in same group' do
@@ -68,12 +62,11 @@ RSpec.describe TaskPolicy do
       let(:group_member_permissions) { generic_user_permissions + %i[edit update duplicate show export_external_start export_external_check export_external_confirm download add_to_collection duplicate] }
 
       it { is_expected.to permit_only_actions(group_member_permissions) }
-      it { expect(task.lom_showable_by?(user)).to be true }
 
       context 'when user is group-admin' do
         let(:role) { :admin }
 
-        it { is_expected.to permit_only_actions(group_member_permissions + %i[destroy]) }
+        it { is_expected.to permit_only_actions(group_member_permissions + %i[destroy manage]) }
       end
     end
   end

@@ -178,31 +178,6 @@ RSpec.describe User do
     end
   end
 
-  describe 'exercise visible for user', pending: 'group sharing is currently broken' do
-    let!(:user) { create(:user) }
-    let!(:user2) { create(:user) }
-    let!(:group) { create(:group, users: [user]) }
-    let!(:exercise) { create(:only_meta_data, :with_primary_description, private: false, authors: [user]) }
-    let!(:exercise2) { create(:only_meta_data, :with_primary_description, private: true, authors: [user]) }
-    let!(:exercise3) { create(:only_meta_data, :with_primary_description, private: true, authors: [user2], groups: [group]) }
-
-    it 'allows access to a public exercise to all users' do
-      expect(exercise.can_access(user2)).to be true
-    end
-
-    it 'does not allow access for any user to a private exercise' do
-      expect(exercise2.can_access(user2)).to be false
-    end
-
-    it 'allows access to a private exercise to the the author of the exercise' do
-      expect(exercise2.can_access(user)).to be true
-    end
-
-    it 'allows access to a private exercise to the member of a group which was granted access' do
-      expect(exercise3.can_access(user)).to be true
-    end
-  end
-
   describe '#available_account_links' do
     subject(:available_account_links) { user.available_account_links }
 

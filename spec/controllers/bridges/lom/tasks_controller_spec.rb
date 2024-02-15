@@ -9,7 +9,8 @@ RSpec.describe Bridges::Lom::TasksController do
   let(:programming_language) { create(:programming_language, :ruby) }
   let(:license) { create(:license) }
   let(:parent_uuid) { create(:task).uuid }
-  let(:task) { create(:task, :with_content, :with_labels, user:, parent_uuid:, programming_language:, license:) }
+  let(:access_level) { :public }
+  let(:task) { create(:task, :with_content, :with_labels, user:, parent_uuid:, programming_language:, license:, access_level:) }
 
   describe 'GET #show' do
     subject(:get_request) { get :show, params: {id: task.to_param} }
@@ -29,13 +30,11 @@ RSpec.describe Bridges::Lom::TasksController do
     before { allow(Task).to receive(:find).with(task.id.to_s).and_return(task) }
 
     context 'when allowed to access the LOM' do
-      before { allow(task).to receive(:lom_showable_by?).and_return(true) }
-
       include_examples 'is a valid LOM response'
     end
 
     context 'when not allowed to access the LOM' do
-      before { allow(task).to receive(:lom_showable_by?).and_return(false) }
+      let(:access_level) { :private }
 
       it 'returns HTTP forbidden' do
         get_request
@@ -44,8 +43,6 @@ RSpec.describe Bridges::Lom::TasksController do
     end
 
     context 'with additional details' do
-      before { allow(task).to receive(:lom_showable_by?).and_return(true) }
-
       context 'when no license is specified' do
         let(:license) { nil }
 

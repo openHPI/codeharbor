@@ -20,7 +20,7 @@ module ProformaService
     def base_task
       task = Task.find_by(uuid: @proforma_task.uuid)
       if task
-        return task if task.can_access(@user)
+        return task if Pundit.policy(@user, task).manage?
 
         return Task.new(uuid: SecureRandom.uuid)
       end

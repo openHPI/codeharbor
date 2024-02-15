@@ -8,7 +8,7 @@ module Bridges
       def show
         task = Task.find(params[:id])
 
-        if task.lom_showable_by?(current_user)
+        if Pundit.policy(current_user, task).show?
           render xml: Nokogiri::XML::Builder.new(encoding: 'UTF-8') {|xml| LomService::ExportLom.call(task:, xml:) }
         else
           render xml: Nokogiri::XML::Builder.new(encoding: 'UTF-8') {|xml| xml.error 'Access Denied' }, status: :forbidden

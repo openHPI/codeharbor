@@ -102,43 +102,6 @@ class Task < ApplicationRecord
     %w[labels]
   end
 
-  def can_access(user)
-    showable_by?(user) && updateable_by?(user) && destroyable_by?(user)
-  end
-
-  def author?(user)
-    self.user == user
-  end
-
-  def showable_by?(user)
-    user.nil? ? false : Pundit.policy(user, self).show?
-  end
-
-  def updateable_by?(user)
-    user.nil? ? false : Pundit.policy(user, self).update?
-  end
-
-  def destroyable_by?(user)
-    user.nil? ? false : Pundit.policy(user, self).destroy?
-  end
-
-  def lom_showable_by?(user)
-    access_level_public? || showable_by?(user)
-  end
-
-  # TODO: Find a better name for the methods
-  def in_same_group?(user)
-    in_same_group_member?(user) || in_same_group_admin?(user)
-  end
-
-  def in_same_group_member?(user)
-    groups.any? {|group| group.confirmed_member?(user) }
-  end
-
-  def in_same_group_admin?(user)
-    groups.any? {|group| group.admin?(user) }
-  end
-
   # This method creates a duplicate while leaving permissions and ownership unchanged
   def duplicate
     dup.tap do |task|

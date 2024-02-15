@@ -41,3 +41,9 @@ $group-color: #660000;
 .dropdown-item:hover {
   background-color: #f0f0f0;
 }
+
+.table-list.group-tasks {
+  .btn-group.btn:not(:last-child) {
+    border-right: none;
+  }
+}

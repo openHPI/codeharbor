@@ -8,7 +8,7 @@ class TaskPolicy < ApplicationPolicy
   %i[show? download?].each do |action|
     define_method(action) do
       if @user.present?
-        admin? || task.access_level_public? || task.in_same_group?(@user) || task.author?(@user)
+        record_owner? || admin? || task.access_level_public? || task_in_group_with?(@user)
       else
         task.access_level_public?
       end
@@ -31,14 +31,14 @@ class TaskPolicy < ApplicationPolicy
     define_method(action) do
       return false if @user.blank?
 
-      record_owner? || task.access_level_public? || task.in_same_group?(@user) || admin?
+      record_owner? || task.access_level_public? || task_in_group_with?(@user) || admin?
     end
   end
 
   def update?
     return false if @user.blank?
 
-    record_owner? || task.in_same_group?(@user) || admin?
+    record_owner? || task_in_group_with?(@user) || admin?
   end
 
   def edit?
@@ -48,12 +48,29 @@ class TaskPolicy < ApplicationPolicy
   def destroy?
     return false if @user.blank?
 
-    record_owner? || task.in_same_group_admin?(@user) || admin?
+    record_owner? || task_in_group_with_admin?(@user) || admin?
+  end
+
+  def manage?
+    show? and update? and destroy?
   end
 
   private
 
   def user_required?
     false
+  end
+
+  # helper methods
+  def task_in_group_with?(user)
+    task_in_group_with_member?(user) || task_in_group_with_admin?(user)
+  end
+
+  def task_in_group_with_member?(user)
+    task.groups.any? {|group| group.confirmed_member?(user) }
+  end
+
+  def task_in_group_with_admin?(user)
+    task.groups.any? {|group| group.admin?(user) }
   end
 end

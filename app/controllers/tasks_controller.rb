@@ -123,7 +123,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   def import_uuid_check
     task = Task.find_by(uuid: params[:uuid])
     return render json: {uuid_found: false} if task.nil?
-    return render json: {uuid_found: true, update_right: false} unless task.can_access(current_user)
+    return render json: {uuid_found: true, update_right: false} unless Pundit.policy(current_user, task).manage?
 
     render json: {uuid_found: true, update_right: true}
   end
