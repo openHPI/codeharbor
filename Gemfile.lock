@@ -355,8 +355,8 @@ GEM
       rspec-mocks (~> 3.12)
       rspec-support (~> 3.12)
     racc (1.7.3)
-    rack (3.0.8)
-    rack-mini-profiler (3.3.0)
+    rack (3.0.9)
+    rack-mini-profiler (3.3.1)
       rack (>= 1.2.0)
     rack-protection (3.0.6)
       rack
