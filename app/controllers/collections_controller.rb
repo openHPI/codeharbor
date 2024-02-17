@@ -14,7 +14,9 @@ class CollectionsController < ApplicationController
     authorize @collections
   end
 
-  def show; end
+  def show
+    @num_of_invites = Message.where(param_type: 'collection', param_id: @collection.id).count
+  end
 
   def new
     @collection = Collection.new
@@ -83,7 +85,7 @@ class CollectionsController < ApplicationController
   end
 
   def share
-    if share_message.save
+    if @collection.users.exclude?(share_message.recipient) && share_message.save
       redirect_to collection_path(@collection), notice: t('.success_notice')
     else
       redirect_to collection_path(@collection), alert: t('common.errors.something_went_wrong')
@@ -95,14 +97,15 @@ class CollectionsController < ApplicationController
   end
 
   def save_shared
-    return redirect_to user_messages_path(current_user), alert: t('.errors.already_member') if @collection.users.include? current_user
+    user = current_user
+    return redirect_to user_messages_path(user), alert: t('.errors.already_member') if @collection.users.include? user
 
-    @collection.users << current_user
-    if @collection.save
-      redirect_to @collection, notice: t('.success_notice')
-    else
-      redirect_to users_messages_path, alert: t('common.errors.something_went_wrong')
-    end
+    @collection.users << user
+    message = Message.received_by(user).find_by(param_type: 'collection', param_id: @collection.id)
+    message.mark_as_deleted(user)
+    message.save
+
+    redirect_to @collection, notice: t('.success_notice')
   end
 
   def leave
@@ -126,9 +129,13 @@ class CollectionsController < ApplicationController
   end
 
   def share_message
-    user = User.find_by(email: params[:user])
-    text = t('collections.share_message.text', user: current_user.name, collection: @collection.title)
-    Message.new(sender: current_user, recipient: user, param_type: 'collection', param_id: @collection.id, text:)
+    @share_message ||= Message.new(
+      sender: current_user,
+      recipient: User.find_by(email: params[:user]),
+      param_type: 'collection',
+      param_id: @collection.id,
+      text: t('collections.share_message.text', user: current_user.name, collection: @collection.title)
+    )
   end
 
   def push_exercises

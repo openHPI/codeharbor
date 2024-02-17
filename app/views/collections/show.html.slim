@@ -19,6 +19,12 @@
           =< t('.no_other_user')
         - else
           =< t('.num_of_other_users', count: @collection.users.size - 1)
+      span
+        i.fa-regular.fa-envelope
+        - if @num_of_invites == 0
+          =< t('.no_invites')
+        - else
+          =< t('.num_of_invites', count: @num_of_invites)
 
     .collection-content.mt-2.pt-2
       .description.collapsable.w-100

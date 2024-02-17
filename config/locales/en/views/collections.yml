@@ -30,7 +30,11 @@ en:
         deletion_warning: You are the last user in this collection. If you leave, this collection will be permanently deleted! Are you sure?
       locked_exercise_hint: 'Hint: For exercises marked with a lock you have to request access first before you can view them.'
       noExercisesAdded: No Exercise Added
+      no_invites: There are no pending invitations
       no_other_user: No other user has access to this collection
+      num_of_invites:
+        one: There is one pending invitation
+        other: There are %{count} pending invitations
       num_of_other_users:
         one: One other user has access to this collection
         other: "%{count} other users have access to this collection"

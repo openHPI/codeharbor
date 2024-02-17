@@ -63,6 +63,11 @@ RSpec.describe CollectionsController do
       expect(assigns(:collection)).to eq(collection)
     end
 
+    it 'assigns the correct number to @num_of_invites' do
+      get :show, params: {id: collection.to_param}
+      expect(assigns(:num_of_invites)).to eq(0)
+    end
+
     it 'includes a link to the respective tasks' do
       get :show, params: {id: collection.to_param}
       expect(response.body).to include(task_path(collection.tasks.first))
@@ -76,6 +81,19 @@ RSpec.describe CollectionsController do
     it 'includes the correct other-user subinfo' do
       get :show, params: {id: collection.to_param}
       expect(response.body).to include(I18n.t('collections.show.no_other_user'))
+    end
+
+    context 'when there are pending invites' do
+      before do
+        2.times do
+          create(:message, sender: user, recipient: create(:user), param_type: 'collection', param_id: collection.id, text: 'Invitation')
+        end
+      end
+
+      it 'assigns the correct number to @num_of_invites' do
+        get :show, params: {id: collection.to_param}
+        expect(assigns(:num_of_invites)).to eq(2)
+      end
     end
 
     context 'when collection is public' do
@@ -337,9 +355,11 @@ RSpec.describe CollectionsController do
   end
 
   describe 'POST #share' do
-    let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
+    let(:collection) { create(:collection, valid_attributes.merge(users:)) }
+    let(:users) { [user] }
     let(:post_request) { post :share, params: }
-    let(:params) { {id: collection.id, user: create(:user).email} }
+    let(:params) { {id: collection.id, user: recipient.email} }
+    let(:recipient) { create(:user) }
 
     it 'creates a message' do
       expect { post_request }.to change(Message, :count).by(1)
@@ -364,6 +384,18 @@ RSpec.describe CollectionsController do
       it 'redirects to collection' do
         post_request
         expect(response).to redirect_to collection
+      end
+
+      it 'sets flash message' do
+        expect(post_request.request.flash[:alert]).to eql I18n.t('common.errors.something_went_wrong')
+      end
+    end
+
+    context 'when user already is in collection' do
+      let(:users) { [user, recipient] }
+
+      it 'does not create a message' do
+        expect { post_request }.not_to change(Message, :count)
       end
 
       it 'sets flash message' do
@@ -418,24 +450,26 @@ RSpec.describe CollectionsController do
     let(:params) { {id: collection.id} }
 
     context 'when user has been invited' do
-      let(:send_invitation) do
+      let!(:send_invitation) do
         create(:message, sender: collection.users.first, recipient: user, param_type: 'collection', param_id: collection.id,
           text: 'Invitation')
       end
 
       it 'increases usercount of collection' do
-        send_invitation
         expect { post_request }.to change(collection.reload.users, :count).from(1).to(2)
       end
 
+      it 'soft-deletes the invitation' do
+        post_request
+        expect(send_invitation.reload.recipient_status).to eql 'd'
+      end
+
       it 'adds user to collection' do
-        send_invitation
         post_request
         expect(collection.reload.users).to include user
       end
 
       it 'redirects to collection' do
-        send_invitation
         post_request
         expect(response).to redirect_to collection
       end
