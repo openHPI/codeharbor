@@ -4,12 +4,17 @@ require 'zip'
 
 class CollectionsController < ApplicationController
   before_action :load_and_authorize_collection, except: %i[index new create]
+  before_action :set_option, only: %i[index]
 
   def index
-    @collections = Collection.member(current_user).or(Collection.public_access).includes(:users, tasks: %i[user groups])
-      .order(id: :asc)
-      .paginate(page: params[:page], per_page: per_page_param)
-      .load
+    @collections = case @option
+                     when 'favorites'
+                       Collection.member(current_user).or(Collection.public_access).favorites(current_user)
+                     when 'public'
+                       Collection.public_access
+                     else
+                       Collection.member(current_user)
+                   end.includes(:users, tasks: %i[user groups]).order(id: :asc).paginate(page: params[:page], per_page: per_page_param)
 
     authorize @collections
   end
@@ -118,6 +123,17 @@ class CollectionsController < ApplicationController
     end
   end
 
+  def toggle_favorite
+    if current_user.favorite_collections.include? @collection
+      current_user.favorite_collections.delete @collection
+      flash_message = t('.favorite.removed')
+    else
+      current_user.favorite_collections << @collection
+      flash_message = t('.favorite.added')
+    end
+    redirect_to @collection, notice: flash_message
+  end
+
   private
 
   def create_collection_with_task
@@ -126,6 +142,10 @@ class CollectionsController < ApplicationController
     else
       flash.now[:alert] = t('collections.create.error')
     end
+  end
+
+  def set_option
+    @option = params[:option] || 'mine'
   end
 
   def share_message
