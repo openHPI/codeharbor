@@ -46,9 +46,7 @@ class TaskPolicy < ApplicationPolicy
   end
 
   def destroy?
-    return false if @user.blank?
-
-    record_owner? || task_in_group_with_admin?(@user) || admin?
+    record_owner? || admin?
   end
 
   def manage?
