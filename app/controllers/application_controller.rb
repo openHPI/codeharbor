@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
   def flash_to_headers
     return unless request.xhr?
 
-    response.headers['X-Message'] = flash_message
+    response.headers['X-Message'] = ERB::Util.url_encode(flash_message)
     response.headers['X-Message-Type'] = flash_type.to_s
 
     flash.discard # don't want the flash to appear when you reload page
