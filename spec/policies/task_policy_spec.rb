@@ -66,7 +66,7 @@ RSpec.describe TaskPolicy do
       context 'when user is group-admin' do
         let(:role) { :admin }
 
-        it { is_expected.to permit_only_actions(group_member_permissions + %i[destroy manage]) }
+        it { is_expected.to permit_only_actions(group_member_permissions) }
       end
     end
   end
