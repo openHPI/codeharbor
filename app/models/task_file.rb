@@ -4,7 +4,7 @@ class TaskFile < ApplicationRecord
   include ParentValidation
 
   belongs_to :fileable, polymorphic: true, autosave: true, inverse_of: :files
-
+  belongs_to :parent, class_name: 'TaskFile', optional: true
   has_one_attached :attachment
   validates :name, presence: true
   validates :attachment, presence: true, if: -> { use_attached_file == 'true' }, on: :force_validations

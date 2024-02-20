@@ -115,11 +115,11 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def apply_contribution(contrib) # rubocop:disable Metrics/AbcSize
-    contrib_attributes = contrib.modifying_task.attributes.except!('parent_uuid', 'access_level', 'user_id', 'uuid', 'id')
+    contrib_attributes = contrib.suggestion.attributes.except!('parent_uuid', 'access_level', 'user_id', 'uuid', 'id')
     assign_attributes(contrib_attributes)
-    transfer_linked_files(contrib.modifying_task)
-    self.model_solutions = transfer_multiple(model_solutions, contrib.modifying_task.model_solutions, {task_id: id})
-    self.tests = transfer_multiple(tests, contrib.modifying_task.tests, {task_id: id})
+    transfer_linked_files(contrib.suggestion)
+    self.model_solutions = transfer_multiple(model_solutions, contrib.suggestion.model_solutions, {task_id: id})
+    self.tests = transfer_multiple(tests, contrib.suggestion.tests, {task_id: id})
     contrib.status = :merged
     save && contrib.save
   end
