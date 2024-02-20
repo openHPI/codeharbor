@@ -12,3 +12,4 @@ en:
       success: The task was successfully decoupled.
     update:
       success: Updated the contribution successfully.
+      error: Failed to apply contribution.

@@ -5,28 +5,28 @@ class TaskContributionPolicy < ApplicationPolicy
     @record
   end
 
-  def modifying_task
-    @record.modifying_task
+  def suggestion
+    @record.suggestion
   end
 
-  def base_task
-    @record.base_task
+  def base
+    @record.base
   end
 
   %i[create? new?].each do |action|
     define_method(action) do
-      Pundit.policy(@user, base_task).show? && !Pundit.policy(@user, base_task).edit? && base_task.contributions.where(user: @user).none?
+      Pundit.policy(@user, base).show? && !Pundit.policy(@user, base).edit? && base.contributions.where(user: @user).none?
     end
   end
 
   %i[show? discard_changes?].each do |action|
     define_method(action) do
-      record_owner? || (Pundit.policy(@user, base_task).edit? && task_contribution.pending?)
+      record_owner? || (Pundit.policy(@user, base).edit? && task_contribution.pending?)
     end
   end
 
   def approve_changes?
-    Pundit.policy(@user, base_task).edit? && task_contribution.pending?
+    Pundit.policy(@user, base).edit? && task_contribution.pending?
   end
 
   %i[edit? update? destroy?].each do |action|
@@ -38,6 +38,6 @@ class TaskContributionPolicy < ApplicationPolicy
   private
 
   def record_owner?
-    @user.present? && @user == modifying_task.user
+    @user.present? && @user == suggestion.user
   end
 end
