@@ -6,11 +6,11 @@
 <body>
 <h3>Hello <%= @contrib_author.name %></h3>
 <p>
-  Your Contribution for the Task "<%= @task_contrib.base_task.title %>" was rejected.<br/>
+  Your Contribution for the Task "<%= @task_contrib.base.title %>" was rejected.<br/>
   The task linked to your contribution is now a full duplicate.<br/>
   You may decide to change the visibility to public to let others utilize your changes.<br/>
   <br/>
-  <%= link_to 'CodeHarbor', task_url(@task_contrib.modifying_task)%>
+  <%= link_to 'CodeHarbor', task_url(@task_contrib.suggestion)%>
 </p>
 
 </body>
