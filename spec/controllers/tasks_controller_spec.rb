@@ -210,6 +210,15 @@ RSpec.describe TasksController do
           expect(response.body).to include(description)
         end
       end
+
+      context 'when task is a contribution' do
+        let!(:contribution) { create(:task_contribution, suggestion: task) }
+
+        it 'redirects the user to the contribution' do
+          get_request
+          expect(response).to redirect_to([contribution.base, contribution])
+        end
+      end
     end
   end
 
@@ -230,6 +239,15 @@ RSpec.describe TasksController do
     it 'assigns the requested task as @task' do
       get :edit, params: {id: task.to_param}
       expect(assigns(:task)).to eq(task)
+    end
+
+    context 'when task is a contribution' do
+      let!(:contribution) { create(:task_contribution, suggestion: task) }
+
+      it 'redirects the user to the contribution' do
+        get :edit, params: {id: task.to_param}
+        expect(response).to redirect_to(action: 'edit', controller: 'task_contributions', id: contribution.id, task_id: contribution.base.id)
+      end
     end
   end
 
@@ -533,6 +551,15 @@ RSpec.describe TasksController do
           it 'does not remove the group from the Task' do
             expect { put_update }.not_to(change { task.reload.groups.map(&:id) })
           end
+        end
+      end
+
+      context 'when task is a contribution' do
+        let!(:contribution) { create(:task_contribution, suggestion: task) }
+
+        it 'redirects the user to the contribution' do
+          put_update
+          expect(response).to redirect_to([contribution.base, contribution])
         end
       end
     end

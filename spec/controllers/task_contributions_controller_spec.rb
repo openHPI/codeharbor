@@ -9,11 +9,15 @@ RSpec.describe TaskContributionsController do
   let(:original_author) { create(:user) }
   let!(:task) { create(:task, user: original_author, access_level: 'public') }
   let(:contrib_task) { build(:task, user:, title: 'Modified title', parent_uuid: task.uuid) }
-  let(:contribution) { build(:task_contribution, modifying_task: contrib_task, status: :pending) }
+  let(:contribution) { build(:task_contribution, suggestion: contrib_task, status: :pending) }
 
   before { sign_in user }
 
   describe 'GET #new' do
+    # let(:ot) {create(:task, user: original_author)}
+    # let(:ct) {create(:task, user: user, parent_uuid: ot.uuid)}
+    let(:tc) { create(:task_contribution, status: :pending) }
+
     it 'assigns a new task as @task' do
       get :new, params: {task_id: task.id}
       expect(assigns(:task)).to be_a_new(Task)
@@ -174,6 +178,52 @@ RSpec.describe TaskContributionsController do
       it 'shows the suggestions' do
         get_request
         expect(assigns(:task)).to eq(contribution.suggestion)
+      end
+    end
+  end
+
+  describe 'GET #edit' do
+    before do
+      task.save!
+      contribution.save!
+      sign_in user
+    end
+
+    it 'renders the edit form' do
+      get :edit, params: {task_id: task.id, id: contribution.id}
+      expect(response).to render_template('tasks/edit')
+    end
+  end
+
+  describe 'PUT #update' do
+    subject(:put_update) { put :update, params: {task_id: task.id, id: contribution.id, task: task_params} }
+
+    before do
+      sign_in user
+      task.save!
+      contribution.save!
+    end
+
+    context 'with valid params' do
+      let(:task_params) { {title: 'New modified title'} }
+
+      it 'updates the contribution' do
+        expect(put_update).to change { contribution.reload.suggestion.title }.to('New modified title')
+      end
+
+      it 'redirects to the contribution' do
+        put_update
+        expect(response).to have_http_status(:redirect)
+        expect(response).to redirect_to([task, contribution])
+      end
+    end
+
+    context 'with invalid params' do
+      let(:task_params) { {title: ''} }
+
+      it 'renders the edit form' do
+        put_update
+        expect(response).to render_template('tasks/edit')
       end
     end
   end
