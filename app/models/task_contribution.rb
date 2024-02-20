@@ -24,9 +24,4 @@ class TaskContribution < ApplicationRecord
   def base=(task)
     suggestion.parent = task
   end
-
-  # TODO: Remove these aliases after finishing the refactoring.
-  alias base_task base
-  alias modifying_task suggestion
-  alias modifying_task= suggestion=
 end

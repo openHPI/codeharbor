@@ -1,7 +1,7 @@
 Hello <%= @contrib_author.name %>
 
-Your Contribution for the Task "<%= @task_contrib.base_task.title %>" was rejected.
+Your Contribution for the Task "<%= @task_contrib.base.title %>" was rejected.
 The task linked to your contribution is now a full duplicate.
 You may decide to change the visibility to public to let others utilize your changes.
 
-<%= task_url(@task_contrib.modifying_task) %>
+<%= task_url(@task_contrib.suggestion) %>

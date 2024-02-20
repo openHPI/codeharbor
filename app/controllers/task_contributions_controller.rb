@@ -69,7 +69,7 @@ class TaskContributionsController < ApplicationController
       redirect_to [@task, @task_contribution], notice: t('.success')
     else
       @task = @task_contribution.suggestion
-      render 'tasks/edit'
+      render 'tasks/edit', danger: t('.error')
     end
   end
 
