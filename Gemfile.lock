@@ -194,6 +194,7 @@ GEM
       dry-schema (>= 1.12, < 2)
       zeitwerk (~> 2.6)
     erubi (1.12.0)
+    event_stream_parser (1.0.0)
     execjs (2.9.1)
     factory_bot (6.4.5)
       activesupport (>= 5.0.0)
@@ -202,6 +203,8 @@ GEM
       railties (>= 5.0.0)
     faraday (2.9.0)
       faraday-net_http (>= 2.0, < 3.2)
+    faraday-multipart (1.0.4)
+      multipart-post (~> 2)
     faraday-net_http (3.1.0)
       net-http
     ffi (1.16.3)
@@ -290,6 +293,7 @@ GEM
       activesupport (>= 4)
       bunny
     msgpack (1.7.2)
+    multipart-post (2.4.0)
     mutex_m (0.2.0)
     nested_form (0.3.2)
     nested_form_fields (0.8.4)
@@ -481,6 +485,10 @@ GEM
       rubocop (~> 1.40)
       rubocop-capybara (~> 2.17)
       rubocop-factory_bot (~> 2.22)
+    ruby-openai (6.3.1)
+      event_stream_parser (>= 0.3.0, < 2.0.0)
+      faraday (>= 1)
+      faraday-multipart (>= 1)
     ruby-progressbar (1.13.0)
     ruby-saml (1.16.0)
       nokogiri (>= 1.13.10)
@@ -650,6 +658,7 @@ DEPENDENCIES
   rubocop-performance
   rubocop-rails
   rubocop-rspec
+  ruby-openai
   rubyzip
   sassc-rails
   selenium-webdriver

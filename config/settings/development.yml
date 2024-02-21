@@ -2,7 +2,7 @@ codeocean:
   url: http://localhost:7000
 omniauth:
   samltestid:
-    enable: true
+    enable: false
     metadata_url: 'https://samltest.id/saml/idp'
     certificate: <%= Rails.root.join('config', 'certs', 'samltestid_certificate.pem') %>
     private_key: <%= Rails.root.join('config', 'certs', 'samltestid_key.pem') %>
@@ -12,3 +12,5 @@ omniauth:
     enable: false
 oai_pmh:
   admin_mail: admin@example.org
+open_ai:
+  access_token: ~ #ENTER ACCESS TOKEN HERE
