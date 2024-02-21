@@ -82,6 +82,7 @@ Rails.application.routes.draw do
       post :export_external_confirm
       post :add_to_collection
       post :duplicate
+      post :generate_test
     end
 
     collection do

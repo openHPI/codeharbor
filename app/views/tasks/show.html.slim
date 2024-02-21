@@ -518,6 +518,13 @@
           div[data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150]
             = button_tag class: 'btn btn-outline-dark dropdown-toggle disabled', 'data-bs-toggle': 'dropdown' do
               = t('.button.export')
+  - if policy(@task).generate_test?
+    .col-md-4.col-sm-6.mb-3.p-0
+      .button-box.border.p-3.h-100
+        .button-description
+          = t('.button.generate_unit_test_heading')
+        .wrapper
+          = link_to t('.button.generate_test'), generate_test_task_path(@task), method: :post, class: 'btn btn-light', 'data-turbolinks'=> false
 
   .col-md-12.pb-3.mt-3
     .expandable-panel
@@ -559,6 +566,11 @@
           = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important disabled' do
             i.fa-regular.fa-clone
             =< t('common.button.duplicate')
+
+      - if policy(@task).generate_test?
+        = link_to generate_test_task_path(@task), method: :post, class: 'btn btn-important' do
+          i.fa-solid.fa-wand-magic-sparkles
+          =< t('.button.generate_test')
 
       - if current_user.present?
         = link_to t('common.button.back'), tasks_path, class: 'btn btn-important'

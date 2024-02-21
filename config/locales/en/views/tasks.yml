@@ -76,6 +76,8 @@ en:
         download_as_zip: Download this Task as a zip file.
         export: Export
         export_tasks: Export Tasks
+        generate_test: Generate Unit Tests
+        generate_unit_test_heading: Generate unit tests for this Task.
         rate: Rate
         show_comments: Show Comments
       define_account_link: Please define an account link first
