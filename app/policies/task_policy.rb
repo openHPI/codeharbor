@@ -8,7 +8,7 @@ class TaskPolicy < ApplicationPolicy
   %i[show? download?].each do |action|
     define_method(action) do
       if @user.present?
-        record_owner? || admin? || task.access_level_public? || task_in_group_with?(@user)
+        record_owner? || admin? || task.access_level_public? || task_in_group_with?(@user) || task_contribution?
       else
         task.access_level_public?
       end
@@ -34,12 +34,6 @@ class TaskPolicy < ApplicationPolicy
 
       record_owner? || task.access_level_public? || task_in_group_with?(@user) || admin?
     end
-  end
-
-  def download?
-    return false if @user.blank?
-
-    record_owner? || task.access_level_public? || task.in_same_group?(@user) || admin? || task_contribution?
   end
 
   def update?
