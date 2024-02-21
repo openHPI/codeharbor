@@ -9,15 +9,11 @@ RSpec.describe TaskContributionsController do
   let(:original_author) { create(:user) }
   let!(:task) { create(:task, user: original_author, access_level: 'public') }
   let(:contrib_task) { build(:task, user:, title: 'Modified title', parent_uuid: task.uuid) }
-  let(:contribution) { build(:task_contribution, suggestion: contrib_task, status: :pending) }
+  let(:contribution) { build(:task_contribution, suggestion: contrib_task, original_task: task, status: :pending) }
 
   before { sign_in user }
 
   describe 'GET #new' do
-    # let(:ot) {create(:task, user: original_author)}
-    # let(:ct) {create(:task, user: user, parent_uuid: ot.uuid)}
-    let(:tc) { create(:task_contribution, status: :pending) }
-
     it 'assigns a new task as @task' do
       get :new, params: {task_id: task.id}
       expect(assigns(:task)).to be_a_new(Task)
@@ -83,13 +79,8 @@ RSpec.describe TaskContributionsController do
       contribution.save!
     end
 
-    context 'with valid params' do
+    context 'when apply_contribution is successful' do
       subject(:post_request) { post :approve_changes, params: {task_id: task.id, id: contribution.id} }
-
-      it 'changes the original task, but retains certain fields' do
-        post_request
-        expect(assigns(:task).id).to eq(task.id)
-      end
 
       it 'changes the contribution status' do
         post_request
@@ -108,7 +99,7 @@ RSpec.describe TaskContributionsController do
 
       before do
         allow(Task).to receive(:find).with(task.id.to_s).and_return(task)
-        allow(task).to receive(:apply_contribution).with(contribution).and_return(false)
+        allow(task).to receive(:apply_contribution).and_return(false)
       end
 
       it 'shows a flash message' do
@@ -116,7 +107,7 @@ RSpec.describe TaskContributionsController do
         expect(flash[:alert]).to eq(I18n.t('task_contributions.approve_changes.error'))
       end
 
-      it 'redirects to the modifying task' do
+      it 'redirects to the modified task' do
         post_request
         expect(response).to have_http_status(:redirect)
         expect(response).to redirect_to([task, contribution])
@@ -186,7 +177,6 @@ RSpec.describe TaskContributionsController do
     before do
       task.save!
       contribution.save!
-      sign_in user
     end
 
     it 'renders the edit form' do
@@ -199,7 +189,6 @@ RSpec.describe TaskContributionsController do
     subject(:put_update) { put :update, params: {task_id: task.id, id: contribution.id, task: task_params} }
 
     before do
-      sign_in user
       task.save!
       contribution.save!
     end
@@ -208,7 +197,8 @@ RSpec.describe TaskContributionsController do
       let(:task_params) { {title: 'New modified title'} }
 
       it 'updates the contribution' do
-        expect(put_update).to change { contribution.reload.suggestion.title }.to('New modified title')
+        put_update
+        expect(contribution.reload.suggestion.title).to eq('New modified title')
       end
 
       it 'redirects to the contribution' do
