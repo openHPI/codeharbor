@@ -24,7 +24,7 @@ module TransferValues
     transfer_linked_files(other)
   end
 
-  def transfer_multiple(targets, others, _parent)
+  def transfer_multiple(targets, others)
     # Remove deleted elements
     targets.each do |target|
       unless others.exists?(parent_id: target.id)

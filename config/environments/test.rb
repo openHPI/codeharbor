@@ -50,6 +50,9 @@ Rails.application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
 
+  # We want deliver_later to behave like deliver_now due too issues with the test setup being torn down before they are sent
+  config.active_job.queue_adapter = :test
+
   # Randomize the order test cases are executed.
   config.active_support.test_order = :random
 
