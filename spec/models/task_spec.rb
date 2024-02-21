@@ -425,58 +425,6 @@ RSpec.describe Task do
   end
 
   describe '#transfer_linked_files' do
-    subject(:transfer_linked_files) { task.transfer_linked_files(other_task) }
-
-    let(:task) { create(:task, files: []) }
-    let(:files) { build_list(:task_file, 3, :exportable) }
-    let(:other_task) { create(:task) }
-
-    context 'when file only exists in original task' do
-      before do
-        files[1].parent = files[0]
-        task.files = [files[0], files[2]]
-        other_task.files = [files[1]]
-      end
-
-      it 'only contains the first file' do
-        transfer_linked_files
-        expect(task.reload.files).to contain_exactly(files[0])
-      end
-    end
-
-    context 'when file only exists in other task' do
-      before do
-        files[1].parent = files[0]
-        task.files = [files[0]]
-        other_task.files = [files[1], files[2]]
-      end
-
-      it 'contains the correct files' do
-        transfer_linked_files
-        expect(task.files.count).to contain_exactly(files[0], files[2]) # TODO: files[2] gets duplicated, so the ID changes
-      end
-    end
-
-    context 'when file exists in both tasks' do
-      let(:files) { build_list(:task_file, 4, :exportable) }
-
-      before do
-        files[1].name = 'New name'
-        files[1].parent = files[0]
-        files[3].parent = files[2]
-        task.files = [files[0], files[2]]
-        other_task.files = [files[1], files[3]]
-      end
-
-      it 'contains the correct entries' do
-        transfer_linked_files
-        expect(task.files).to contain_exactly(files[0], files[2])
-      end
-
-      it 'changed the name' do
-        transfer_linked_files
-        expect(task.files[0].name).to eq('New name')
-      end
-    end
+    it_behaves_like 'transfer linked files', :task
   end
 end

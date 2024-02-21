@@ -118,8 +118,8 @@ class Task < ApplicationRecord
     contrib_attributes = contrib.suggestion.attributes.except!('parent_uuid', 'access_level', 'user_id', 'uuid', 'id')
     assign_attributes(contrib_attributes)
     transfer_linked_files(contrib.suggestion)
-    self.model_solutions = transfer_multiple(model_solutions, contrib.suggestion.model_solutions, {task_id: id})
-    self.tests = transfer_multiple(tests, contrib.suggestion.tests, {task_id: id})
+    self.model_solutions = transfer_multiple(model_solutions, contrib.suggestion.model_solutions)
+    self.tests = transfer_multiple(tests, contrib.suggestion.tests)
     contrib.status = :merged
     save && contrib.save
   end
