@@ -82,6 +82,7 @@ class TaskPolicy < ApplicationPolicy
   def task_in_group_with_admin?(user)
     task.groups.any? {|group| group.admin?(user) }
   end
+
   def task_contribution?
     # If the current task is actually a contribution for another task,
     # we delegate the permission check to the TaskContributionPolicy.
