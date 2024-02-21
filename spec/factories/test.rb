@@ -5,7 +5,7 @@ FactoryBot.define do
     task
     title { 'title' }
     sequence(:xml_id) {|n| "test_#{n}" }
-
+    task { association :task }
     trait(:with_meta_data) do
       meta_data do
         {
