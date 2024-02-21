@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :model_solution do
     sequence(:xml_id) {|n| "ms_#{n}" }
+    task { association(:task) }
   end
 
   trait :with_content do
