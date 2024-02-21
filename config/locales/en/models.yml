@@ -188,6 +188,9 @@ en:
   tasks:
     model:
       copy_of_task: Copy of task
+  tests:
+    model:
+      generated_test: AI-generated Unit Test
   users:
     role:
       admin: Admin

@@ -35,13 +35,41 @@ RSpec.describe TaskPolicy do
     context 'when user is admin' do
       let(:user) { create(:admin) }
 
-      it { is_expected.to permit_all_actions }
+      context 'without gpt access token' do
+        it { is_expected.to forbid_only_actions %i[generate_test] }
+      end
+
+      context 'with gpt access token' do
+        before do
+          Settings.open_ai.access_token = 'access_token'
+        end
+
+        after do
+          Settings.open_ai.access_token = nil
+        end
+
+        it { is_expected.to permit_all_actions }
+      end
     end
 
     context 'when task is from user' do
       let(:task_user) { user }
 
-      it { is_expected.to permit_all_actions }
+      context 'without gpt access token' do
+        it { is_expected.to forbid_only_actions %i[generate_test] }
+      end
+
+      context 'with gpt access token' do
+        before do
+          Settings.open_ai.access_token = 'access_token'
+        end
+
+        after do
+          Settings.open_ai.access_token = nil
+        end
+
+        it { is_expected.to permit_all_actions }
+      end
     end
 
     context 'when task has access_level "public"' do
@@ -61,12 +89,26 @@ RSpec.describe TaskPolicy do
 
       let(:group_member_permissions) { generic_user_permissions + %i[edit update duplicate show export_external_start export_external_check export_external_confirm download add_to_collection duplicate] }
 
-      it { is_expected.to permit_only_actions(group_member_permissions) }
-
       context 'when user is group-admin' do
         let(:role) { :admin }
 
-        it { is_expected.to permit_only_actions(group_member_permissions) }
+        context 'without gpt access token' do
+          it { is_expected.to permit_only_actions(group_member_permissions) }
+        end
+
+        context 'with gpt access token' do
+          let(:group_member_permissions) { generic_user_permissions + %i[edit update duplicate show export_external_start export_external_check export_external_confirm download add_to_collection duplicate generate_test] }
+
+          before do
+            Settings.open_ai.access_token = 'access_token'
+          end
+
+          after do
+            Settings.open_ai.access_token = nil
+          end
+
+          it { is_expected.to permit_only_actions(group_member_permissions) }
+        end
       end
     end
   end

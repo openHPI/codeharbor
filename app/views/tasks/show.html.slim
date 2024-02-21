@@ -573,6 +573,11 @@
             i.fa-regular.fa-clone
             =< t('common.button.duplicate')
 
+      - if policy(@task).generate_test?
+        = link_to generate_test_task_path(@task), method: :post, class: 'btn btn-important' do
+          i.fa-solid.fa-wand-magic-sparkles
+          =< t('.button.generate_test')
+
       - if current_user.present?
         = link_to t('common.button.back'), tasks_path, class: 'btn btn-important'
 

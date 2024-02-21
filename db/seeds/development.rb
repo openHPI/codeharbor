@@ -66,8 +66,8 @@ Label.create!(name: 'Loops', color: '006600')
 Label.create!(name: 'Conditions', color: 'DF0101')
 Label.create!(name: 'Data Structures', color: '3333CC')
 
-pl_java = ProgrammingLanguage.create!(language: 'Java', version: '17')
-pl_python = ProgrammingLanguage.create!(language: 'Python', version: '3.8')
+pl_java = ProgrammingLanguage.create!(language: 'Java', version: '17', file_extension: '.java')
+pl_python = ProgrammingLanguage.create!(language: 'Python', version: '3.8', file_extension: '.py')
 
 tf_junit = TestingFramework.create!(name: 'JUnit', version: '5')
 TestingFramework.create!(name: 'Pytest', version: '6')
