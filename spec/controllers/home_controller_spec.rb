@@ -56,41 +56,96 @@ RSpec.describe HomeController do
   end
 
   describe '#switch_locale' do
-    let(:locale) { :en }
+    subject(:get_request) { get :index, params: {locale:} }
 
-    context 'when specifying a locale' do
-      before { allow(session).to receive(:[]=).at_least(:once) }
+    let(:locale) { nil }
+    let(:user) { nil }
 
-      context "when using the 'custom_locale' parameter" do
-        it 'overwrites the session' do
-          expect(session).to receive(:[]=).with(:locale, locale)
-          get :index, params: {custom_locale: locale}
-        end
+    shared_examples 'locale assignment' do |expected_locale|
+      before { get_request }
+
+      it "sets session locale to #{expected_locale}" do
+        expect(session[:locale]&.to_sym).to be(expected_locale)
       end
 
-      context "when using the 'locale' parameter" do
-        it 'overwrites the session' do
-          expect(session).to receive(:[]=).with(:locale, locale)
-          get :index, params: {locale:}
+      it "sets users preferred locale to #{expected_locale}" do
+        if user.present?
+          expect(user.reload.preferred_locale.to_sym).to eq(expected_locale)
         end
       end
     end
 
-    context "with a 'locale' value in the session" do
-      it 'sets this locale' do
-        session[:locale] = locale
-        # The around block first sets the default language and then the language requested
-        expect(I18n).to receive(:locale=).with(I18n.default_locale)
-        expect(I18n).to receive(:locale=).with(locale)
-        get :index
+    context 'when not signed in' do
+      context 'when specifying a locale' do
+        let(:locale) { :de }
+
+        it_behaves_like 'locale assignment', :de
+      end
+
+      context "with a 'locale' value in the session" do
+        before { session[:locale] = :de }
+
+        it_behaves_like 'locale assignment', :de
+      end
+
+      context "without a 'locale' value in the session" do
+        it_behaves_like 'locale assignment', I18n.default_locale
+      end
+
+      context 'when specifying an invalid locale' do
+        let(:locale) { :invalid }
+
+        it_behaves_like 'locale assignment', I18n.default_locale
+
+        context 'when session locale is valid' do
+          before { session[:locale] = :de }
+
+          it_behaves_like 'locale assignment', :de
+        end
       end
     end
 
-    context "without a 'locale' value in the session" do
-      it 'sets the default locale' do
-        expect(session[:locale]).to be_blank
-        expect(I18n).to receive(:locale=).with(I18n.default_locale).at_least(:once)
-        get :index
+    context 'when signed in' do
+      before { sign_in user }
+
+      let!(:user) { create(:user, preferred_locale: :en) }
+
+      context 'when specifying a locale' do
+        let(:locale) { :de }
+
+        it_behaves_like 'locale assignment', :de
+      end
+
+      context "with a 'locale' value in the session" do
+        before { session[:locale] = :de }
+
+        it_behaves_like 'locale assignment', :de
+      end
+
+      context "without a 'locale' value in the session" do
+        context 'when user has preferred locale' do
+          before { user.update(preferred_locale: :de) }
+
+          it_behaves_like 'locale assignment', :de
+        end
+      end
+
+      context 'when specifying an invalid locale' do
+        let(:locale) { :invalid }
+
+        it_behaves_like 'locale assignment', I18n.default_locale
+
+        context 'when session locale is valid' do
+          before { session[:locale] = :de }
+
+          it_behaves_like 'locale assignment', :de
+        end
+
+        context 'when user has preferred locale' do
+          before { user.update(preferred_locale: :de) }
+
+          it_behaves_like 'locale assignment', :de
+        end
       end
     end
   end
