@@ -28,8 +28,8 @@ module CSP
   def self.apply_omniauth_settings_for(policy)
     Devise.omniauth_configs.each_value do |config|
       options = config.strategy_class.default_options
-      settings = options.slice(:idp_sso_service_url, :idp_slo_service_url).map do |_key, value|
-        get_host_source(value)
+      settings = options.slice(:idp_sso_service_url, :idp_slo_service_url).filter_map do |_key, value|
+        get_host_source(value) unless value.nil?
       end
       add_policy(policy, :form_action, settings)
     end

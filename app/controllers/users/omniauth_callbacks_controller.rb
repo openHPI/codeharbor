@@ -5,7 +5,7 @@ module Users
     skip_before_action :require_user!
     skip_after_action :verify_authorized
     # SAML doesn't support the CSRF protection
-    protect_from_forgery except: %i[samltestid bird nbp]
+    protect_from_forgery except: %i[mocksaml bird nbp]
 
     def sso_callback # rubocop:disable Metrics/AbcSize
       # The instance variable `@user` is used by Devise internally and should be set here
@@ -33,7 +33,7 @@ module Users
 
     alias bird sso_callback
     alias nbp sso_callback
-    alias samltestid sso_callback
+    alias mocksaml sso_callback
 
     def provider
       request.env['omniauth.auth'].provider

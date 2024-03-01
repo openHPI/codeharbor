@@ -1,11 +1,9 @@
 codeocean:
   url: http://localhost:7000
 omniauth:
-  samltestid:
+  mocksaml:
     enable: true
-    metadata_url: 'https://samltest.id/saml/idp'
-    certificate: <%= Rails.root.join('config', 'certs', 'samltestid_certificate.pem') %>
-    private_key: <%= Rails.root.join('config', 'certs', 'samltestid_key.pem') %>
+    metadata_url: 'https://mocksaml.com/api/saml/metadata'
   bird:
     enable: false
   nbp:
