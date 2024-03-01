@@ -187,6 +187,12 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   end
   # rubocop:enable Metrics/AbcSize
 
+  def generate_test
+    # Call our GptGenerateTests Service and add a newly-created test
+    TaskService::GptGenerateTests.call(task: @task)
+    redirect_to @task
+  end
+
   private
 
   def load_and_authorize_task

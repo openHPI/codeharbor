@@ -53,6 +53,10 @@ class TaskPolicy < ApplicationPolicy
     show? and update? and destroy?
   end
 
+  def generate_test?
+    Settings.open_ai.access_token.present? and update?
+  end
+
   private
 
   def user_required?

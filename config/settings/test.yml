@@ -9,3 +9,5 @@ omniauth:
     enable: false
 oai_pmh:
   admin_mail: admin@example.org
+open_ai:
+  access_token: ~ #ENTER ACCESS TOKEN HERE

@@ -35,7 +35,17 @@ RSpec.describe TaskPolicy do
     context 'when user is admin' do
       let(:user) { create(:admin) }
 
-      it { is_expected.to permit_all_actions }
+      context 'without access token' do
+        it { is_expected.to forbid_only_actions %i[generate_test] }
+      end
+
+      context 'with access token' do
+        before do
+          Settings.open_ai.access_token = 'access_token'
+        end
+
+        it { is_expected.to permit_all_actions }
+      end
     end
 
     context 'when task is from user' do
