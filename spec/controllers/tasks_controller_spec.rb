@@ -199,6 +199,17 @@ RSpec.describe TasksController do
           end
         end
       end
+
+      context 'when description contains quotes' do
+        # the quotes should render as normal quotes instead of ldquo and rdquo (see app/helpers/application_helper.rb:53)
+        let(:task) { create(:task, valid_attributes.merge(description:)) }
+        let(:description) { 'foo "bar" bla' }
+
+        it 'renders the quotes correctly' do
+          get_request
+          expect(response.body).to include(description)
+        end
+      end
     end
   end
 
