@@ -3,7 +3,7 @@
 require 'omni_auth/strategies/abstract_saml'
 require 'omni_auth/strategies/bird' if Settings.omniauth.bird.enable
 require 'omni_auth/strategies/nbp' if Settings.omniauth.nbp.enable
-require 'omni_auth/strategies/saml_test_id' if Settings.omniauth.samltestid.enable
+require 'omni_auth/strategies/mock_saml' if Settings.omniauth.mocksaml.enable
 
 # Assuming you have not yet modified this file, each configuration option below
 # is set to its default value. Note that some are commented out while others
@@ -280,7 +280,7 @@ Devise.setup do |config|
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   config.omniauth :bird, strategy_class: OmniAuth::Strategies::Bird if Settings.omniauth.bird.enable
   config.omniauth :nbp, strategy_class: OmniAuth::Strategies::Nbp if Settings.omniauth.nbp.enable
-  config.omniauth :samltestid, strategy_class: OmniAuth::Strategies::SamlTestId if Settings.omniauth.samltestid.enable
+  config.omniauth :mocksaml, strategy_class: OmniAuth::Strategies::MockSaml if Settings.omniauth.mocksaml.enable
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

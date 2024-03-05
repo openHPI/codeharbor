@@ -3,7 +3,7 @@
 codeocean:
   url: https://codeocean.openhpi.de
 omniauth:
-  samltestid:
+  mocksaml:
     enable: false
   bird:
     enable: false

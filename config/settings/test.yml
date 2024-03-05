@@ -1,7 +1,7 @@
 codeocean:
   url: http://localhost
 omniauth:
-  samltestid:
+  mocksaml:
     enable: false
   bird:
     enable: false
