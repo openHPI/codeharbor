@@ -6,9 +6,9 @@ $group-color: #660000;
 
 .nav-container {
   a {
-    padding: 10px 70px 10px 70px;
+    padding: 10px 60px;
     background-color: #f5f5f5;
-    border: 2px #dddddd solid;
+    border: 1px #dddddd solid;
     display: inline-block;
   }
   a:hover,
@@ -16,12 +16,10 @@ $group-color: #660000;
     background-color: #f0f0f0;
     color: black;
     text-decoration: none;
-    border-width: 2px;
   }
 
   .nav-btn-group {
-    padding: 9px 15px;
-    border-color: $group-color;
+    padding: 10px 15px;
   }
 }
 
