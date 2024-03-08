@@ -45,17 +45,14 @@ $exercise-color: #006600;
 
 .nav-container {
   button {
-    padding: 10px 70px 10px 70px;
+    padding: 10px 60px;
     background-color: #f5f5f5;
-    border: 2px #dddddd solid;
   }
   button:hover {
     background-color: #eeeeee;
-    border-width: 2px;
   }
   .nav-btn-exercise {
-    padding: 9px 15px;
-    border-color: $exercise-color;
+    padding: 10px 15px;
   }
 }
 

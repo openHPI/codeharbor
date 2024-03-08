@@ -18,7 +18,8 @@
 }
 
 .navbar-brand {
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background-color: #f8f9fa;
   }
 }
@@ -28,7 +29,7 @@
   color: #444444;
   background-color: #f5f5f5;
   border: 1px #dddddd solid;
-  border-radius: 0px;
+  border-radius: 2px;
 }
 .btn-main:hover {
   color: #444444;
