@@ -2,6 +2,7 @@
 
 class TaskFile < ApplicationRecord
   include ParentValidation
+  include TransferValues
 
   belongs_to :fileable, polymorphic: true, autosave: true, inverse_of: :files
   belongs_to :parent, class_name: 'TaskFile', optional: true

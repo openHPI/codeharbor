@@ -64,7 +64,7 @@ RSpec.describe Test do
     end
   end
 
-  describe '#transfer_linked_files' do
-    it_behaves_like 'transfer linked files', :test
+  describe '#transfer_multiple_entities' do
+    it_behaves_like 'transfer multiple entities', :test
   end
 end

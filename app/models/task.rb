@@ -114,12 +114,10 @@ class Task < ApplicationRecord
     %w[labels]
   end
 
-  def apply_contribution(contrib) # rubocop:disable Metrics/AbcSize
-    contrib_attributes = contrib.suggestion.attributes.except!('parent_uuid', 'access_level', 'user_id', 'uuid', 'id')
-    assign_attributes(contrib_attributes)
-    transfer_linked_files(contrib.suggestion)
-    self.model_solutions = transfer_multiple(model_solutions, contrib.suggestion.model_solutions)
-    self.tests = transfer_multiple(tests, contrib.suggestion.tests)
+  def apply_contribution(contrib)
+    transfer_attributes(contrib.suggestion, %w[id parent_uuid access_level user_id uuid created_at], has_files: true)
+    transfer_multiple_entities(model_solutions, contrib.suggestion.model_solutions, 'model_solution')
+    transfer_multiple_entities(tests, contrib.suggestion.tests, 'test')
     contrib.status = :merged
     save && contrib.save
   end

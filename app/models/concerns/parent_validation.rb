@@ -2,6 +2,7 @@
 
 module ParentValidation
   def parent_validation_check
+    return
     if parent_id.nil?
       return
     end

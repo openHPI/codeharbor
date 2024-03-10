@@ -7,6 +7,7 @@ class Test < ApplicationRecord
 
   belongs_to :task, autosave: true, inverse_of: :tests
   belongs_to :testing_framework, optional: true
+  belongs_to :parent, class_name: 'Test', optional: true
   validates :title, presence: true
   validates :xml_id, presence: true
   validates :parent_id, uniqueness: {scope: :task}, if: -> { parent_id.present? }
