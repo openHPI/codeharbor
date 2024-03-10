@@ -5,6 +5,7 @@ class ModelSolution < ApplicationRecord
   include ParentValidation
 
   belongs_to :task
+  belongs_to :parent, class_name: 'ModelSolution', optional: true
   has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy
   accepts_nested_attributes_for :files, allow_destroy: true
   validates :xml_id, presence: true
