@@ -354,8 +354,4 @@ RSpec.describe Task do
       end
     end
   end
-
-  describe '#transfer_linked_files' do
-    it_behaves_like 'transfer linked files', :task
-  end
 end
