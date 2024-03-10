@@ -112,17 +112,13 @@ class Task < ApplicationRecord
     task_contribution.present? && task_contribution.status == 'pending'
   end
 
-  # rubocop:disable Metrics/AbcSize
   def apply_contribution(contrib)
-    contrib_attributes = contrib.suggestion.attributes.except!('parent_uuid', 'access_level', 'user_id', 'uuid', 'id')
-    assign_attributes(contrib_attributes)
-    transfer_linked_files(contrib.suggestion)
-    self.model_solutions = transfer_multiple(model_solutions, contrib.suggestion.model_solutions)
-    self.tests = transfer_multiple(tests, contrib.suggestion.tests)
+    transfer_attributes(contrib.suggestion, %w[id parent_uuid access_level user_id uuid created_at], has_files: true)
+    transfer_multiple_entities(model_solutions, contrib.suggestion.model_solutions, 'model_solution')
+    transfer_multiple_entities(tests, contrib.suggestion.tests, 'test')
     contrib.status = :merged
     save && contrib.save
   end
-  # rubocop:enable Metrics/AbcSize
 
   # This method creates a duplicate while leaving permissions and ownership unchanged
   def duplicate(set_parent_identifiers: true)
