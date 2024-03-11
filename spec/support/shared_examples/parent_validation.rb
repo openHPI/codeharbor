@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # frozen_string_literals: true
 
 RSpec.shared_examples 'parent validation with parent_id' do |model|

@@ -8,6 +8,7 @@ RSpec.describe Test do
     it { is_expected.to validate_presence_of(:title) }
     it { is_expected.to validate_presence_of(:xml_id) }
     it { is_expected.to validate_uniqueness_of(:xml_id).scoped_to(:task_id) }
+
     it_behaves_like 'parent validation with parent_id', :test
   end
 
@@ -37,5 +38,6 @@ RSpec.describe Test do
 
   describe '#transfer_multiple_entities' do
     it_behaves_like 'transfer multiple entities', :test
+    it_behaves_like 'transfer files', :test
   end
 end
