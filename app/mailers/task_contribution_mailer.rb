@@ -12,13 +12,13 @@ class TaskContributionMailer < ApplicationMailer
     @task_contrib = task_contrib
     @contrib_author = task_contrib.suggestion.user
     mail(to: @contrib_author.email,
-      subject: "#{@contrib_author.name} your contribution for '#{task_contrib.base.title}' was approved.")
+      subject: "Your contribution for '#{task_contrib.base.title}' was approved.")
   end
 
   def rejection_info(task_contrib)
     @task_contrib = task_contrib
     @contrib_author = task_contrib.suggestion.user
     mail(to: @contrib_author.email,
-      subject: "#{@contrib_author.name} your contribution for '#{task_contrib.base.title}' was rejected.")
+      subject: "Your contribution for '#{task_contrib.base.title}' was rejected.")
   end
 end
