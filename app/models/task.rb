@@ -18,6 +18,7 @@ class Task < ApplicationRecord
   validates :language, format: {with: /\A[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*\z/, message: :not_de_or_us}
   validate :primary_language_tag_in_iso639?
   validate :unique_pending_contribution
+  validate :no_license_change_on_duplicate, on: :update
 
   has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy
 
@@ -241,10 +242,19 @@ class Task < ApplicationRecord
 
   def unique_pending_contribution
     if contribution?
-      return unless parent
+      unless parent
+        errors.add(:task_contribution, :no_parent)
+        return
+      end
 
       other_existing_contrib = parent.contributions.where(user:).where.not(id:).any?
       errors.add(:task_contribution, :duplicated) if other_existing_contrib
+    end
+  end
+
+  def no_license_change_on_duplicate
+    if parent && license_id_changed? && parent.license != license
+      errors.add(:license, :cannot_change_on_duplicate)
     end
   end
 end
