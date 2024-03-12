@@ -1,6 +1,7 @@
-Hello <%= @author.name %>
+<%= t('tasks.access_request_mailer.greeting', user: @author.name) %>
 
-<%= @user.name %> asked to contribute to your Exercise "<%= @exercise.title %>".
-If you want to make him a co-author or suggest Membership to a group click the link below.
-Otherwise ignore this Email.
+<%= t('tasks.access_request_mailer.message_line1', user: @user.name, task: @exercise.title) %>
+<%= t('tasks.access_request_mailer.message_line2') %>
+<%= t('tasks.access_request_mailer.message_line3') %>
+
 <%= user_messages_url(@author) %>

@@ -5,7 +5,11 @@ require 'rails_helper'
 RSpec.describe GroupsController do
   render_views
 
-  let(:user) { create(:user) }
+  let(:user) { create(:user, preferred_locale: user_locale) }
+  let(:group_admin) { create(:user, preferred_locale: admin_locale) }
+
+  let(:user_locale) { :en }
+  let(:admin_locale) { :de }
 
   let(:valid_post_attributes) do
     attributes_for(:group, users: [user])
@@ -14,7 +18,7 @@ RSpec.describe GroupsController do
   let(:invalid_attributes) do
     {name: ''}
   end
-  let(:group_memberships) { [build(:group_membership, :with_admin), build(:group_membership, user:)] }
+  let(:group_memberships) { [build(:group_membership, :with_admin, user: group_admin), build(:group_membership, user:)] }
   let!(:group) { create(:group, group_memberships:) }
 
   before { sign_in user }
@@ -154,6 +158,64 @@ RSpec.describe GroupsController do
         post :create, params: {group: invalid_attributes}
         expect(response).to render_template('new')
       end
+    end
+  end
+
+  describe 'POST #request_access' do
+    subject(:post_request) { post :request_access, params: {id: group.to_param} }
+
+    let(:group_memberships) { [build(:group_membership, :with_admin, user: group_admin)] }
+
+    it 'translates access request message into correct language for recipient' do
+      post_request
+      expect(I18n.with_locale(admin_locale) { group_admin.received_messages.find_by(param_type: 'group_requested').text }).to eq(I18n.t('groups.send_access_request_message.message', user: user.name, group: group.name, locale: admin_locale))
+    end
+
+    it 'sends mail in correct language for recipient' do
+      post_request
+      expect(ActionMailer::Base.deliveries.last.body.parts.first.body).to include(I18n.t('groups.access_request_mailer.message_line2', locale: admin_locale))
+    end
+  end
+
+  describe 'POST #grant_access' do
+    subject(:post_request) { post :grant_access, params: {id: group.to_param, user:} }
+
+    let(:group_memberships) { [build(:group_membership, :with_admin, user: group_admin)] }
+
+    before do
+      post :request_access, params: {id: group.to_param}
+      sign_in group_admin
+    end
+
+    it 'adds user to group' do
+      post_request
+      expect(group.users).to include(user)
+    end
+
+    it 'translates access granted message into correct language for recipient' do
+      post_request
+      expect(I18n.with_locale(user_locale) { user.received_messages.find_by(param_type: 'group_accepted').text }).to eq(I18n.t('groups.send_grant_access_messages.message', user: group_admin.name, group: group.name, locale: user_locale))
+    end
+  end
+
+  describe 'POST #deny_access' do
+    subject(:post_request) { post :deny_access, params: {id: group.to_param, user:} }
+
+    let(:group_memberships) { [build(:group_membership, :with_admin, user: group_admin)] }
+
+    before do
+      post :request_access, params: {id: group.to_param}
+      sign_in group_admin
+    end
+
+    it 'does not add user to group' do
+      post_request
+      expect(group.users).not_to include(user)
+    end
+
+    it 'translates access denied message into correct language for recipient' do
+      post_request
+      expect(I18n.with_locale(user_locale) { user.received_messages.find_by(param_type: 'group_declined').text }).to eq(I18n.t('groups.send_deny_access_message.message', user: group_admin.name, group: group.name, locale: user_locale))
     end
   end
 end

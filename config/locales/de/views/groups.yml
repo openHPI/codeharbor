@@ -1,6 +1,13 @@
 ---
 de:
   groups:
+    access_request_mailer:
+      confirm_request: Anfrage annehmen
+      greeting: Hallo %{user}
+      message_line1: '%{user} möchte Ihrer Gruppe "%{group}" beitreten.'
+      message_line2: Sie können sie/ihn beitreten lassen, indem Sie auf den Link unten klicken.
+      message_line3: Ansonsten können Sie diese E-Mail ignorieren.
+      subject: '%{user} möchte Ihrer Grupper "%{group}" beitreten'
     form:
       button:
         save: Gruppe speichern

@@ -61,7 +61,7 @@ class GroupsController < ApplicationController
   def request_access
     flash[:notice] = t('.success_notice')
     @group.admins.each do |admin|
-      send_access_request_message(admin, @group)
+      send_message(admin, :group_requested)
 
       AccessRequestMailer.send_access_request(current_user, admin, @group).deliver_now
     end
@@ -77,9 +77,9 @@ class GroupsController < ApplicationController
 
   def grant_access
     @group.grant_access(@user)
-    send_grant_access_messages(@user, @group)
+    send_message(@user, :group_accepted)
 
-    Message.where(sender: @user, recipient: current_user, param_type: 'group', param_id: @group.id).destroy_all
+    Message.where(sender: @user, recipient: current_user, param_type: :group_requested, param_id: @group.id).destroy_all
     redirect_to @group, notice: t('.success_notice')
   end
 
@@ -90,9 +90,9 @@ class GroupsController < ApplicationController
 
   def deny_access
     @group.users.delete(@user)
-    send_deny_access_message(@user, @group)
+    send_message(@user, :group_declined)
 
-    Message.where(sender: @user, recipient: current_user, param_type: 'group', param_id: @group.id).destroy_all
+    Message.where(sender: @user, recipient: current_user, param_type: :group_requested, param_id: @group.id).destroy_all
     redirect_to @group, notice: t('.success_notice')
   end
 
@@ -108,30 +108,12 @@ class GroupsController < ApplicationController
 
   private
 
-  def send_access_request_message(admin, group)
+  # type is one of [:group_requested, :group_accepted, :group_declined]
+  def send_message(recipient, type)
     Message.create(sender: current_user,
-      recipient: admin,
-      text: t('groups.send_access_request_message.message', user: current_user.name, group: group.name),
-      param_type: 'group',
-      param_id: group.id,
-      sender_status: 'd')
-  end
-
-  def send_deny_access_message(user, group)
-    Message.create(sender: current_user,
-      recipient: user,
-      text: t('groups.send_deny_access_message.message', user: current_user.name, group: group.name),
-      param_type: 'group_declined',
-      param_id: group.id,
-      sender_status: 'd')
-  end
-
-  def send_grant_access_messages(user, group)
-    Message.create(sender: current_user,
-      recipient: user,
-      text: t('groups.send_grant_access_messages.message', user: current_user.name, group: group.name),
-      param_type: 'group_accepted',
-      param_id: group.id,
+      recipient:,
+      param_type: type,
+      param_id: @group.id,
       sender_status: 'd')
   end
 

@@ -1,6 +1,7 @@
 ---
 en:
   common:
+    app_name: CodeHarbor
     button:
       abort: Abort
       back: Back

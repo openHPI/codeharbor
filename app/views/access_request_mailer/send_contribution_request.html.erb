@@ -4,13 +4,13 @@
   <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
 </head>
 <body>
-<h3>Hello <%= @author.name %></h3>
+<h3><%= t('tasks.access_request_mailer.greeting', user: @author.name) %></h3>
 <p>
-  <%= @user.name %> asked to contribute to your Exercise "<%= @exercise.title %>".
-  If you want to make him a co-author or suggest Membership to a group click the link below.
-  Otherwise ignore this Email. <br/>
+  <%= t('tasks.access_request_mailer.message_line1', user: @user.name, task: @exercise.title) %> <br/>
+  <%= t('tasks.access_request_mailer.message_line2') %> <br/>
+  <%= t('tasks.access_request_mailer.message_line3') %> <br/>
   <br/>
-  <%= link_to 'CodeHarbor', user_messages_url(@author)%>
+  <%= link_to t('common.app_name'), user_messages_url(@author)%>
 </p>
 </body>
 </html>
