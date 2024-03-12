@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Message < ApplicationRecord
-  validates :text, presence: true
+  validates :text, presence: true, unless: -> { %w[group_requested group_accepted group_declined collection].include?(param_type) }
 
   belongs_to :sender, class_name: 'User', inverse_of: :sent_messages
   belongs_to :recipient, class_name: 'User', inverse_of: :received_messages
@@ -18,7 +18,7 @@ class Message < ApplicationRecord
 
   def text # rubocop:disable Metrics/AbcSize
     case param_type
-      when 'group'
+      when 'group_requested'
         I18n.t('groups.send_access_request_message.message', user: sender.name, group: Group.find(param_id).name)
       when 'group_accepted'
         I18n.t('groups.send_grant_access_messages.message', user: sender.name, group: Group.find(param_id).name)

@@ -119,9 +119,9 @@ RSpec.describe User do
 
       context 'when message has type exercise', pending: 'messages and sharing permissions need to be reworked' do
         before do
-          create(:message, sender: user, param_type: 'exercise')
-          create(:message, sender: user, param_type: 'group')
-          create(:message, sender: user, param_type: 'collection')
+          create(:message, sender: user, param_type: 'exercise', param_id: create(:task).id)
+          create(:message, sender: user, param_type: 'group_requested', param_id: create(:group).id)
+          create(:message, sender: user, param_type: 'collection', param_id: create(:collection).id)
         end
 
         it 'deletes message' do

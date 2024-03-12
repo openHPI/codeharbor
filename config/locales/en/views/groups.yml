@@ -1,6 +1,13 @@
 ---
 en:
   groups:
+    access_request_mailer:
+      confirm_request: Confirm Request
+      greeting: Hello %{user}
+      message_line1: '%{user} asked to join your group "%{group}".'
+      message_line2: If you want to give your permission click on the link below.
+      message_line3: Otherwise ignore this Email.
+      subject: '%{user} wants to access your Group "%{group}"'
     form:
       button:
         save: Save Group

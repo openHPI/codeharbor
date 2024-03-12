@@ -1,6 +1,6 @@
-Hello <%= @admin.name %>
+<%= t('groups.access_request_mailer.greeting', user: @admin.name) %>
 
-<%= @user.name %> asked to join your group "<%= @group.name %>"
-If you want to give your permission click on the link below.
-Otherwise ignore this Email.
+<%= t('groups.access_request_mailer.message_line1', user: @user.name, group: @group.name) %>
+<%= t('groups.access_request_mailer.message_line2') %>
+<%= t('groups.access_request_mailer.message_line3') %>
 <%= group_url(@group)%>
