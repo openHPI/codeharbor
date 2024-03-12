@@ -247,10 +247,19 @@ class Task < ApplicationRecord
 
   def unique_pending_contribution
     if contribution?
-      return unless parent
+      unless parent
+        errors.add(:task_contribution, :no_parent)
+        return
+      end
 
       other_existing_contrib = parent.contributions.where(user:).where.not(id:).any?
       errors.add(:task_contribution, :duplicated) if other_existing_contrib
+    end
+  end
+
+  def no_license_change_on_duplicate
+    if parent && license_id_changed? && parent.license != license
+      errors.add(:license, :cannot_change_on_duplicate)
     end
   end
 end
