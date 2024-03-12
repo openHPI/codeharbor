@@ -14,6 +14,37 @@ RSpec.describe Task do
     it { is_expected.to allow_value('en').for(:language) }
     it { is_expected.not_to allow_value('verylonglanguagename').for(:language) }
     it { is_expected.not_to allow_value('$pecial').for(:language) }
+
+    describe '#no_license_change_on_duplicate' do
+      subject(:original_license) { create(:license) }
+      subject(:other_license) { create(:license) }
+      subject(:task_license) { original_license}
+      subject(:p_uuid) { nil }
+      subject(:task) { create(:task, license: task_license, parent_uuid: p_uuid) }
+      subject(:parent_task) { create(:task, license: original_license) }
+
+      context 'when a task is no duplicate' do
+        before do
+          task.license = other_license
+        end
+        it { expect(task).to be_valid }
+      end
+
+      context 'when a task is a duplicate' do
+        let(:p_uuid) { parent_task.uuid }
+
+        context 'when the license is changed' do
+          before do
+            task.license = other_license
+          end
+          it { expect(task).not_to be_valid }
+        end
+
+        context 'when the license is not changed' do
+          it { expect(task).to be_valid }
+        end
+      end
+    end
   end
 
   describe '.visibility' do
