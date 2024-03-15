@@ -47,7 +47,12 @@ import 'jquery-ui/themes/base/sortable.css'
 // I18n locales
 import { I18n } from "i18n-js";
 import locales from "../../tmp/locales.json";
-Object.keys(locales).forEach(locale => import(`select2/dist/js/i18n/${locale}`));
+
+Promise.all(
+    Object.keys(locales).map(locale => import(`select2/dist/js/i18n/${locale}`))
+).then(() =>
+    document.dispatchEvent(new Event("select2:locales:loaded"))
+);
 
 // Fetch user locale from html#lang.
 // This value is being set on `app/views/layouts/application.html.slim` and

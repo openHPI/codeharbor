@@ -95,4 +95,4 @@ clear_input = ->
   $('.labels-select2-tag').siblings(".select2").find("textarea").val("");
   return
 
-$(document).on 'turbolinks:load', ready
+$(document).on('select2:locales:loaded', ready)

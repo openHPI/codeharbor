@@ -1,9 +1,6 @@
-ready =->
-  initializeLoadSelect2()
+ready = ->
   initializeFileTypeSelection()
   initializeVisibilityWarning()
-
-$(document).on('turbolinks:load', ready)
 
 initializeLoadSelect2 = ->
   $('#task_programming_language_id').select2
@@ -32,3 +29,7 @@ initializeVisibilityWarning = ->
       warning_message.removeClass('d-none')
   $('#task_access_level_public').on 'change', ->
       warning_message.addClass('d-none')
+
+
+$(document).on('turbolinks:load', ready)
+$(document).on('select2:locales:loaded', initializeLoadSelect2)

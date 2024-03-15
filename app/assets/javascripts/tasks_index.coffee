@@ -1,5 +1,4 @@
 ready = ->
-  initializeSelect2()
   initCollapsable($('.description'), '95px')
   window.addEventListener 'resize', -> initCollapsable($('.description'), '95px')
   initializeDynamicHideShow()
@@ -7,7 +6,6 @@ ready = ->
   initializeIndexComments()
   initializeInputFieldEnterCallback()
 
-$(document).on('turbolinks:load', ready)
 
 initializeDynamicHideShow = ->
   $('body').on 'click', '.more-btn-wrapper', (event) ->
@@ -103,13 +101,7 @@ intializeAdvancedFilter = ->
       $drop.removeClass('fa-caret-down').addClass('fa-caret-up')
 
   if $('#order_param')
-#    $('#' + order.value).addClass('active')
     $('#order_created').addClass('active')
-
-  #  $('#order_rating').click ->
-  #    $('#order_rating').addClass('active')
-  #    $('#order_created').removeClass('active')
-  #    document.getElementById('order_param').value = 'order_rating'
 
   $('#order_created').click ->
     $('#order_created').addClass('active')
@@ -144,3 +136,7 @@ initializeInputFieldEnterCallback = ->
       return
     $('.search-submit-button-tag').click();
     event.preventDefault();
+
+
+$(document).on('turbolinks:load', ready)
+$(document).on('select2:locales:loaded', initializeSelect2)
