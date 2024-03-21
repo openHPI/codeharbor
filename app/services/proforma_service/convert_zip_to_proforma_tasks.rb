@@ -11,7 +11,7 @@ module ProformaService
         @zip_file = Tempfile.new
         @zip_file.write zip_file.blob.download.force_encoding('UTF-8')
         @zip_file.rewind
-        @path = path || zip_file.filename
+        @path = path || "#{zip_file.filename.base}.#{zip_file.filename.extension}"
       else
         @zip_file = zip_file
         @path = path || zip_file.original_filename

@@ -66,5 +66,13 @@ RSpec.describe ProformaService::ProformaTaskFromCachedFile do
         )
       end
     end
+
+    context 'when filename contains symbols' do
+      let(:zip_file) { fixture_file_upload('proforma_import/testfile!@#$%^&*()_+<>?:"\';][{}|.zip', 'application/zip') }
+
+      it 'returns a task' do
+        expect(task_from_cached_file).to be_a ProformaXML::Task
+      end
+    end
   end
 end
