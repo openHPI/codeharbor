@@ -1,16 +1,12 @@
-ready =->
+ready = ->
   initializeExportActions()
 
-$(document).on('turbolinks:load', ready)
-
-
-initializeExportActions =->
+initializeExportActions = ->
   $('body').on 'click', '.export-action', (event) ->
     exportType = $(this).attr('data-export-type')
     taskId = $(this).parents('.import-export-task').attr('data-task-id')
     accountLinkId = $(this).parents('.import-export-task').attr('data-account-link')
     exportConfirm(taskId, accountLinkId, exportType)
-
 
 exportTaskStart = (taskID) ->
   $taskDiv = $('#export-task-' + taskID)
@@ -55,5 +51,8 @@ exportConfirm = (taskId, accountLinkId, pushType) ->
       alert("#{I18n.t('common.javascripts.error')}: #{message}")
   })
 
+
 root = exports ? this;
 root.exportTaskStart = exportTaskStart
+
+$(document).on('turbolinks:load', ready)

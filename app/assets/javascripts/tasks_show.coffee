@@ -2,8 +2,6 @@ ready = ->
   setAceEditorMode()
   initializeShowComments()
 
-$(document).on('turbolinks:load', ready)
-
 setAceEditorMode = ->
   $('.editor.readonly').each ->
     changeEditorMode(this, getModeByFileExtension($(this).data('file-name')))
@@ -22,3 +20,6 @@ initializeShowComments = ->
     else
       $caret.removeClass('fa-caret-up').addClass('fa-caret-down')
       $comment_box.hide()
+
+
+$(document).on('turbolinks:load', ready)

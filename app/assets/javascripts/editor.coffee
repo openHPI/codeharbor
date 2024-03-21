@@ -1,4 +1,4 @@
-ready =->
+ready = ->
   initializeAce()
   initializeEditors()
 
@@ -7,7 +7,7 @@ initializeAce = ->
   $(document).on 'fields_added.nested_form_fields', ->
     $ initializeEditors()
 
-initializeEditors =->
+initializeEditors = ->
   $('.editor').each ->
     editor = ace.edit(this)
     hiddenContent = $(this).parent().find('.d-none')
@@ -29,9 +29,10 @@ changeEditorMode = (editor, editor_mode) ->
 getModeByFileExtension = (path) ->
   ace.require('ace/ext/modelist').getModeForPath(path).mode
 
-$(document).on 'turbolinks:load', ready
 
 root = exports ? this;
 root.getModeByFileExtension = getModeByFileExtension
 root.changeEditorMode = changeEditorMode
 root.setAceEditorValue = setAceEditorValue
+
+$(document).on('turbolinks:load', ready)

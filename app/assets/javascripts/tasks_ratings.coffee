@@ -1,7 +1,5 @@
-ready =->
+ready = ->
   initializeRatings()
-
-$(document).on('turbolinks:load', ready)
 
 initializeRatings = ->
   $('.rating span').hover (->
@@ -28,7 +26,7 @@ initializeRatings = ->
       dataType: 'json',
       success: (response) ->
         rating = response.user_rating.rating
-#        USERRATING = rating
+        # USERRATING = rating
         stars = $('.rating span').filter (->
           $(this).attr("data-rating") <= rating
         )
@@ -36,14 +34,17 @@ initializeRatings = ->
 
         overallrating = response.overall_rating
         $('.starrating span.fa-solid.fa-star[data-rating=1]').attr("color", "red")
-        for num in [1,2,3,4,5]
+        for num in [1, 2, 3, 4, 5]
           do (num) ->
             if overallrating >= num
-              $('.overall-rating[data-rating='+num+']').removeClass("fa-star").removeClass("fa-star-half-stroke").removeClass("fa-regular").addClass("fa-star").addClass("fa-solid")
+              $('.overall-rating[data-rating=' + num + ']').removeClass("fa-star").removeClass("fa-star-half-stroke").removeClass("fa-regular").addClass("fa-star").addClass("fa-solid")
             else if (overallrating + 0.5) >= num
-              $('.overall-rating[data-rating='+num+']').removeClass("fa-star").removeClass("fa-solid").addClass("fa-star-half-stroke")
+              $('.overall-rating[data-rating=' + num + ']').removeClass("fa-star").removeClass("fa-solid").addClass("fa-star-half-stroke")
             else
-              $('.overall-rating[data-rating='+num+']').removeClass("fa-star-half-stroke").removeClass("fa-solid").addClass("fa-star").addClass("fa-regular")
+              $('.overall-rating[data-rating=' + num + ']').removeClass("fa-star-half-stroke").removeClass("fa-solid").addClass("fa-star").addClass("fa-regular")
       error: (_xhr, _textStatus, message) ->
         alert("#{I18n.t('common.javascripts.error')}: #{message}");
     })
+
+
+$(document).on('turbolinks:load', ready)

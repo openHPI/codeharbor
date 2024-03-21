@@ -9,7 +9,8 @@ $(document).ajaxComplete (event, request) ->
   type = request.getResponseHeader("X-Message-Type")
   show_ajax_message msg, type unless type == 'empty' #use whatever popup, notification or whatever plugin you want
 
-ready =->
+ready = ->
   $('#flash-message').children().first().delay(5000).slideUp 'medium'
+
 
 $(document).on('turbolinks:load', ready)

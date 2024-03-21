@@ -132,7 +132,7 @@ initializeIndexComments = ->
 
 initializeInputFieldEnterCallback = ->
   $('.input-field-tag').keypress (event) ->
-    if(event.key != "Enter")
+    if (event.key != "Enter")
       return
     $('.search-submit-button-tag').click();
     event.preventDefault();

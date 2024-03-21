@@ -1,9 +1,7 @@
-ready =->
+ready = ->
   initializeImport()
 
-$(document).on('turbolinks:load', ready)
-
-initializeImport =->
+initializeImport = ->
   $('#xml-import').on 'click', (e) ->
     e.stopPropagation()
 
@@ -64,3 +62,6 @@ importConfirm = (importId, subfileId, importType) ->
     error: (_xhr, _textStatus, message) ->
       alert("#{I18n.t('common.javascripts.error')}: #{message}")
   })
+
+
+$(document).on('turbolinks:load', ready)

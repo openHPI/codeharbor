@@ -37,7 +37,12 @@ ready = ->
       processResults: (data) ->
         return {
           pagination: data.pagination
-          results: data.results.map (l) -> {id: l.name, text: l.name, label_color: l.color, label_font_color: l.font_color}
+          results: data.results.map (l) -> {
+            id: l.name,
+            text: l.name,
+            label_color: l.color,
+            label_font_color: l.font_color
+          }
         };
 
     }
@@ -50,11 +55,11 @@ ready = ->
       if data.newTag == true
         text += I18n.t('labels.javascripts.new.selection_suffix');
 
-      $(container).css({"background-color" : bg_color, "color" : color});
+      $(container).css({"background-color": bg_color, "color": color});
       $(container).children("span").css("color", color);
 
       $template = $('<span></span>').text(text);
-      $template.css({"font-size" : "80%", "font-weight" : "bold"});
+      $template.css({"font-size": "80%", "font-weight": "bold"});
       return $template;
 
     templateResult: (data) ->
@@ -69,7 +74,7 @@ ready = ->
         text += I18n.t('labels.javascripts.new.selection_suffix');
 
       $template = $('<div></div>').text(text).addClass("task_label");
-      $template.css({"background-color" : bg_color, "color" : color});
+      $template.css({"background-color": bg_color, "color": color});
       return $template;
 
     createTag: (params) ->
@@ -94,5 +99,9 @@ ready = ->
 clear_input = ->
   $('.labels-select2-tag').siblings(".select2").find("textarea").val("");
   return
+
+
+root = exports ? this;
+root.verify_label_name = verify_label_name;
 
 $(document).on('select2:locales:loaded', ready)

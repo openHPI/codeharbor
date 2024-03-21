@@ -1,24 +1,22 @@
-ready =->
+ready = ->
   initializeUploadedFileReupload()
   initializeUploadedFileChange()
   initializeToggleEditorAttachment()
   initializeOnUpload()
   initializeExtractText()
 
-$(document).on('turbolinks:load', ready)
-
-initializeUploadedFileChange =->
+initializeUploadedFileChange = ->
   $('form').on 'change', '.alternative-input', (event) ->
     $(this).parents('.attachment').find('.alternative').show()
     $(this).parents('.attachment').find('.attachment_present').hide()
 
 
-initializeUploadedFileReupload =->
+initializeUploadedFileReupload = ->
   $('form').on 'click', '.reupload-attachment', (event) ->
     event.preventDefault()
     $(this).parents('.attachment').find('.alternative-input').click()
 
-initializeExtractText =->
+initializeExtractText = ->
   $('form').on 'click', '.extract-text', (event) ->
     $button = $(this)
     id = $button.data('file-id')
@@ -30,8 +28,8 @@ initializeExtractText =->
         hideFileUploadShowTextEditor $content, response.text_data
     })
 
-initializeToggleEditorAttachment =->
-  $('form').on 'click','.toggle-input', (event) ->
+initializeToggleEditorAttachment = ->
+  $('form').on 'click', '.toggle-input', (event) ->
     event.preventDefault()
     $content = $(this).next()
     $attachment = $content.find('.attachment')
@@ -42,7 +40,7 @@ initializeToggleEditorAttachment =->
       hideFileUploadShowTextEditor $content
     return
 
-showFileUploadHideTextEditor =($content)->
+showFileUploadHideTextEditor = ($content)->
   $editor = $content.find('.edit')
   $attachment = $content.find('.attachment')
   $editor.find('.d-none').attr('disabled', true)
@@ -52,7 +50,7 @@ showFileUploadHideTextEditor =($content)->
   $attachment.show()
 
 
-hideFileUploadShowTextEditor =($content, text)->
+hideFileUploadShowTextEditor = ($content, text)->
   $editor = $content.find('.edit')
   $ace_editor = $content.find('.editor')
   $attachment = $content.find('.attachment')
@@ -64,7 +62,7 @@ hideFileUploadShowTextEditor =($content, text)->
   if text
     setAceEditorValue($ace_editor[0], text)
 
-initializeOnUpload =->
+initializeOnUpload = ->
   $('form').on 'change', '.alternative-input', (event) ->
     $(this).parents('.attachment').find('.use-attached-file').val(true)
     event.preventDefault()
@@ -72,3 +70,6 @@ initializeOnUpload =->
     fullName = get_filename_from_full_path(fullPath)
     if fullPath
       $(this).parents('.file-container').find('.file-name').val(fullName)
+
+
+$(document).on('turbolinks:load', ready)

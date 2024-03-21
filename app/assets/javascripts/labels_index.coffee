@@ -10,12 +10,12 @@ class LabelsTable
     @loaded_labels = {};
 
     @table_body = @table_container.find('tbody');
-    @delete_labels_button  = $('#delete-labels-button');
-    @merge_labels_button   = $('#merge-labels-button');
-    @merge_labels_input    = $('#merge-labels-input');
+    @delete_labels_button = $('#delete-labels-button');
+    @merge_labels_button = $('#merge-labels-button');
+    @merge_labels_input = $('#merge-labels-input');
     @recolor_labels_button = $('#change-label-color-button');
-    @recolor_labels_input  = $('#color-labels-input');
-    @name_filter_input     = $('#label-name-filter-input');
+    @recolor_labels_input = $('#color-labels-input');
+    @name_filter_input = $('#label-name-filter-input');
 
     @table_container.find('.sort-by-id').on 'click', => @sort_button_clicked('id');
     @table_container.find('.sort-by-name').on 'click', => @sort_button_clicked('name');
@@ -57,10 +57,10 @@ class LabelsTable
       .text(name);
 
     new_row = $('<tr></tr>')
-      .append( $('<td></td>').text(id) )
-      .append( $('<td></td>').append(label) )
-      .append( $('<td></td>').text(created_at) )
-      .append( $('<td></td>').text(used_by_tasks) )
+      .append($('<td></td>').text(id))
+      .append($('<td></td>').append(label))
+      .append($('<td></td>').text(created_at))
+      .append($('<td></td>').text(used_by_tasks))
       .attr('label_id', id);
 
     new_row.on 'click', (event) => @on_row_clicked(event);
@@ -73,7 +73,7 @@ class LabelsTable
   send_data_request: () =>
     $.ajax({
       url: "/labels/search",
-      type: "get",
+      type: "GET",
       data: {
         page: @last_loaded_page + 1
         q: {s: @sort_by_column + " " + @sort_by_order, name_i_cont: @name_filter}
@@ -133,7 +133,7 @@ class LabelsTable
       requests = []
       for id in @selected_label_ids
         requests.push($.ajax({url: "/labels/#{id}", type: "delete"}));
-      $.when.apply($, requests).then( () => @reload_table() );
+      $.when.apply($, requests).then(() => @reload_table());
 
   merge_selected_labels: () =>
     new_label_name = @merge_labels_input.val();
@@ -143,12 +143,15 @@ class LabelsTable
       return;
 
     selected_labels_count = @selected_label_ids.length;
-    confirm_msg = I18n.t('labels.javascripts.merge_confirmation', {selected_labels_count: @selected_label_ids.length, new_merged_name: new_label_name})
+    confirm_msg = I18n.t('labels.javascripts.merge_confirmation', {
+      selected_labels_count: @selected_label_ids.length,
+      new_merged_name: new_label_name
+    })
 
     if (confirm(confirm_msg))
       $.ajax({
         url: "/labels/merge",
-        type: "post",
+        type: "POST",
         data: {
           label_ids: @selected_label_ids,
           new_label_name: new_label_name
@@ -170,13 +173,16 @@ class LabelsTable
         requests.push(
           $.ajax({
             url: "/labels/#{id}",
-            type: "patch",
-            data: { color: new_color }
+            type: "PATCH",
+            data: {color: new_color}
           })
         );
       $.when.apply($, requests).then(@reload_table);
 
-$(document).on 'turbolinks:load', () ->
+ready = ->
   table_container = $('.labels-table-container');
   if table_container.length
     table = new LabelsTable(table_container);
+
+
+$(document).on('turbolinks:load', ready)

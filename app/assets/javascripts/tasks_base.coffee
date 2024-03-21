@@ -1,9 +1,7 @@
-ready =->
+ready = ->
   initializeDropdowns()
 
-$(document).on('turbolinks:load', ready)
-
-initializeDropdowns =->
+initializeDropdowns = ->
   $('.toggle-next').on 'click', ->
     $next = $(this).next()
     $next.toggle()
@@ -30,5 +28,8 @@ loadComments = (url, $wait_icon, $comment_box, onSucess)->
       $wait_icon.hide()
   })
 
+
 root = exports ? this;
 root.loadComments = loadComments
+
+$(document).on('turbolinks:load', ready)

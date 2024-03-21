@@ -28,7 +28,7 @@ initializeVisibilityWarning = ->
     if warning_message.data("external-collection-membership")
       warning_message.removeClass('d-none')
   $('#task_access_level_public').on 'change', ->
-      warning_message.addClass('d-none')
+    warning_message.addClass('d-none')
 
 
 $(document).on('turbolinks:load', ready)
