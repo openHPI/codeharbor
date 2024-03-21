@@ -5,7 +5,14 @@
 
 .row
   .col-md-12.my-4
-    = simple_form_for @task, html: { class: 'project exercise-validation', multipart: true } do |f|
+    - if @task.contribution?
+      - if action_name == 'show' || action_name == 'new'
+        - url = task_task_contributions_path(@task.parent)
+      - else
+        - url = task_task_contribution_path(@task.parent, @task.task_contribution)
+    - else
+      - url = nil
+    = simple_form_for @task, url:, html: { class: 'project exercise-validation', multipart: true } do |f|
       = render('shared/form_errors', object: @task)
       fieldset.form-group
         legend.toggle-next
@@ -21,8 +28,6 @@
             .div.d-none.execution-environment-error
               = t('.errors.prog_lang_not_empty_while_public')
             = f.collection_select :programming_language_id, ProgrammingLanguage.all, :id, :language_with_version, {include_blank: t('common.none')}, {class: 'form-control'}
-
-
           .field-element
             = f.label :description, Task.human_attribute_name('description'), class: 'form-label'
             = f.text_area :description, class: 'form-control'
@@ -46,18 +51,19 @@
             = f.label :language,  Task.human_attribute_name("language"), class: 'form-label'
             = f.text_field :language, class: 'form-control'
 
-          .field-element
-            = f.label :access_level,  Task.human_attribute_name("access_level"), class: 'form-label'
-            .div.d-none.execution-environment-error
-              = t('.errors.not_public_without_prog_lang')
-            .radio-switch
-              = f.radio_button :access_level, :public, value: :public, checked: true
-              = label_tag 'task_access_level_public', t('tasks.visibility.public'), class: 'radio-left'
-              = f.radio_button :access_level, :private, value: :private
-              = label_tag 'task_access_level_private', t('tasks.visibility.private'), class: 'radio-right'
-            .visibility_warning
-              span.d-none#task_visibility_warning data-external-collection-membership=@task.collections.any?{|collection| collection.users.exclude?(current_user)}.to_s
-                = t('.visibility_warning')
+          - if !@task.contribution?
+            .field-element
+              = f.label :access_level,  Task.human_attribute_name("access_level"), class: 'form-label'
+              .div.d-none.execution-environment-error
+                = t('.errors.not_public_without_prog_lang')
+              .radio-switch
+                = f.radio_button :access_level, :public, value: :public, checked: true
+                = label_tag 'task_access_level_public', t('tasks.visibility.public'), class: 'radio-left'
+                = f.radio_button :access_level, :private, value: :private
+                = label_tag 'task_access_level_private', t('tasks.visibility.private'), class: 'radio-right'
+              .visibility_warning
+                span.d-none#task_visibility_warning data-external-collection-membership=@task.collections.any?{|collection| collection.users.exclude?(current_user)}.to_s
+                  = t('.visibility_warning')
           = fields_for :group_tasks do |ff|
             .field-element
               = ff.label :group_ids, Group.model_name.human(count: :many), class: 'form-label'
@@ -87,7 +93,7 @@
           => Task.human_attribute_name("files")
           span.fa-solid.fa-caret-up
         .form-content
-          = render 'nested_file_form', f: f, nested_form_placeholder: 'f-__nested_field_for_replace_with_index__'
+          = render 'tasks/nested_file_form', f: f, nested_form_placeholder: 'f-__nested_field_for_replace_with_index__'
       fieldset.form-group
         legend.toggle-next
           span.number = '4'
@@ -112,7 +118,7 @@
                       i.fa-solid.fa-xmark style=("color: #800000")
                       =< t('.button.remove_test')
                 .test-container style="margin-left: 10px; #{display_container}"
-                  = render 'test_form', f: f, test: test
+                  = render 'tasks/test_form', f: f, test: test
             / .field-element
             = f.add_nested_fields_link :tests, ' ', class: 'btn btn-main', id: 'addTestButton' do
               i.fa-solid.fa-plus style=("color: #008000")
@@ -142,7 +148,7 @@
                       i.fa-solid.fa-xmark style=("color: #800000")
                       =< t('.button.remove_model_solution')
                 .model-solution-container style="margin-left: 10px; #{display_container}"
-                  = render 'model_solution_form', f: f, model_solution: model_solution
+                  = render 'tasks/model_solution_form', f: f, model_solution: model_solution
             / .field-element
             = f.add_nested_fields_link :model_solutions, ' ', class: 'btn btn-main', id: 'addTestButton' do
               i.fa-solid.fa-plus style=("color: #008000")

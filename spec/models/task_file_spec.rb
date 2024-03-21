@@ -21,6 +21,73 @@ RSpec.describe TaskFile do
       end
     end
 
+    context 'with file that has a parent' do
+      let(:task) { create(:task, parent_uuid: p_uuid) }
+      let(:parent_task) { create(:task) }
+      let(:p_uuid) { nil }
+      let!(:parent_file) { create(:task_file, fileable: parent_fileable_object) }
+      let(:file) { build(:task_file, fileable: fileable_object, parent_id: parent_file.id) }
+      let(:parent_fileable_object) { parent_task }
+      let(:fileable_object) { task }
+
+      context 'when fileable is task' do
+        context 'when task has no parent' do
+          it 'is not valid' do
+            expect(file).not_to be_valid
+          end
+        end
+
+        context 'when task has different parent' do
+          let(:p_uuid) { create(:task).uuid }
+
+          it 'is not valid' do
+            expect(file).not_to be_valid
+          end
+        end
+
+        context 'when task has a matching parent' do
+          let(:p_uuid) { parent_task.uuid }
+
+          it 'is valid' do
+            expect(file).to be_valid
+          end
+        end
+      end
+
+      # This case should also cover the case when fileable is test as it uses the same code as is tested separately
+      context 'when fileable is model solution' do
+        let(:parent_model_solution) { create(:model_solution, task: parent_task) }
+        let(:model_solution) { build(:model_solution, task:, parent_id: model_solution_parent_id) }
+        let(:model_solution_parent_id) { nil }
+        let(:parent_fileable_object) { parent_model_solution }
+        let(:fileable_object) { model_solution }
+
+        context 'when model solution has no parent' do
+          it 'is not valid' do
+            expect(file).not_to be_valid
+          end
+        end
+
+        context 'when model solution has a parent, but task does not match' do
+          let(:model_solution_parent_id) { parent_model_solution.id }
+          let(:p_uuid) { create(:task).uuid }
+
+          it 'is not valid' do
+            expect(file).not_to be_valid
+          end
+        end
+
+        context 'when model solution has a parent and task matches' do
+          let(:model_solution_parent_id) { parent_model_solution.id }
+          let(:p_uuid) { parent_task.uuid }
+
+          it 'is valid' do
+            expect(file).to be_valid
+          end
+        end
+      end
+    end
+
     context 'with task which has a test with another file with the same xml_id' do
       subject(:file) { task.files.first }
 
@@ -77,7 +144,7 @@ RSpec.describe TaskFile do
     end
 
     it 'has the same attributes' do
-      expect(duplicate).to have_attributes(file.attributes.except('created_at', 'updated_at', 'id'))
+      expect(duplicate).to have_attributes(file.attributes.except('created_at', 'updated_at', 'id', 'parent_id'))
     end
   end
 
@@ -115,5 +182,42 @@ RSpec.describe TaskFile do
 
       it { is_expected.to be true }
     end
+  end
+
+  describe '#task' do
+    subject(:task_result) { task_file.task }
+
+    let(:task) { create(:task) }
+    let(:fileable_object) { nil }
+    let(:fileable) { fileable_object }
+    let(:task_file) { create(:task_file, fileable:) }
+
+    context 'when fileable is Task' do
+      let(:fileable_object) { task }
+
+      it 'returns task' do
+        expect(task_result).to eq(task)
+      end
+    end
+
+    context 'when fileable is ModelSolution' do
+      let(:fileable_object) { create(:model_solution, task:) }
+
+      it 'returns task' do
+        expect(task_result).to eq(task)
+      end
+    end
+
+    context 'when fileable is Test' do
+      let(:fileable_object) { create(:test, task:) }
+
+      it 'returns task' do
+        expect(task_result).to eq(task)
+      end
+    end
+  end
+
+  describe '#transfer_multiple_entities' do
+    it_behaves_like 'transfer multiple entities', :task_file
   end
 end

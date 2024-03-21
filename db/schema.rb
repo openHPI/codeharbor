@@ -161,6 +161,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_11_200306) do
     t.bigint "task_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "parent_id", limit: 2
     t.index ["task_id"], name: "index_model_solutions_on_task_id"
   end
 
@@ -216,6 +217,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_11_200306) do
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
+  create_table "task_contributions", id: :serial, force: :cascade do |t|
+    t.bigint "task_id", null: false
+    t.integer "status", limit: 2, default: 0, null: false, comment: "Used as enum in Rails"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["task_id"], name: "index_task_contributions_on_task_id"
+  end
+
   create_table "task_files", force: :cascade do |t|
     t.text "content"
     t.string "path"
@@ -230,6 +239,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_11_200306) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "xml_id"
+    t.integer "parent_id", limit: 2
     t.index ["fileable_type", "fileable_id"], name: "index_task_files_on_fileable_type_and_fileable_id"
   end
 
@@ -283,6 +293,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_11_200306) do
     t.jsonb "meta_data"
     t.bigint "testing_framework_id"
     t.jsonb "configuration"
+    t.integer "parent_id", limit: 2
     t.index ["testing_framework_id"], name: "index_tests_on_testing_framework_id"
   end
 
@@ -337,6 +348,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_11_200306) do
   add_foreign_key "ratings", "users"
   add_foreign_key "reports", "tasks"
   add_foreign_key "reports", "users"
+  add_foreign_key "task_contributions", "tasks"
   add_foreign_key "task_labels", "tasks"
   add_foreign_key "tasks", "licenses"
   add_foreign_key "tests", "tasks"

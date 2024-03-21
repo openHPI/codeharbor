@@ -78,10 +78,10 @@
         .row-value
           = @task.internal_description
 
-      = render 'dachsfisch_json_as_xml', dachsfisch_attribute: @task.meta_data, name: 'meta_data'
-      = render 'dachsfisch_json_as_xml', dachsfisch_attribute: @task.submission_restrictions, name: 'submission_restrictions'
-      = render 'dachsfisch_json_as_xml', dachsfisch_attribute: @task.external_resources, name: 'external_resources'
-      = render 'dachsfisch_json_as_xml', dachsfisch_attribute: @task.grading_hints, name: 'grading_hints'
+      = render 'tasks/dachsfisch_json_as_xml', dachsfisch_attribute: @task.meta_data, name: 'meta_data'
+      = render 'tasks/dachsfisch_json_as_xml', dachsfisch_attribute: @task.submission_restrictions, name: 'submission_restrictions'
+      = render 'tasks/dachsfisch_json_as_xml', dachsfisch_attribute: @task.external_resources, name: 'external_resources'
+      = render 'tasks/dachsfisch_json_as_xml', dachsfisch_attribute: @task.grading_hints, name: 'grading_hints'
       .row
         .col-auto.row-label
           = t('common.created_at')
@@ -267,7 +267,7 @@
               .col.row-value
                 = test.internal_description
 
-            = render 'dachsfisch_json_as_xml', dachsfisch_attribute: test.meta_data, name: 'meta_data'
+            = render 'tasks/dachsfisch_json_as_xml', dachsfisch_attribute: test.meta_data, name: 'meta_data'
             - if test.configuration.present?
               .row.vertical
                 .row-label
@@ -468,27 +468,28 @@
                       .col.row-value
                         = file.usage_by_lms
 .row
-  .col-md-4.col-sm-6.mb-3.p-0
-    .button-box.border.p-3.h-100
-      .button-description
-        = t('.add_to_collection_hint')
-      .wrapper
-        - if policy(@task).add_to_collection?
-          .dropdown.btn-group
-            = button_tag class: 'btn btn-light dropdown-toggle', 'data-bs-toggle': 'dropdown' do
-              = t('.button.add_to_collection')
-            ul.scrollable.dropdown-menu[role="menu"]
-              - if !current_user.collections.empty?
-                - current_user.collections.reverse.each do |collection|
+  - if !@task.contribution?
+    .col-md-4.col-sm-6.mb-3.p-0
+      .button-box.border.p-3.h-100
+        .button-description
+          = t('.add_to_collection_hint')
+        .wrapper
+          - if policy(@task).add_to_collection?
+            .dropdown.btn-group
+              = button_tag class: 'btn btn-light dropdown-toggle', 'data-bs-toggle': 'dropdown' do
+                = t('.button.add_to_collection')
+              ul.scrollable.dropdown-menu[role="menu"]
+                - if !current_user.collections.empty?
+                  - current_user.collections.reverse.each do |collection|
+                    li
+                      = link_to collection.title, add_to_collection_task_path(collection: collection), method: 'post', class: 'dropdown-item'
+                - else
                   li
-                    = link_to collection.title, add_to_collection_task_path(collection: collection), method: 'post', class: 'dropdown-item'
-              - else
-                li
-                  = link_to t('.button.add_collection'), new_collection_path(current_user)
-        - else
-          div[data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150]
-            = button_tag class: 'btn btn-outline-dark dropdown-toggle disabled', 'data-bs-toggle': 'dropdown' do
-              = t('.button.add_to_collection')
+                    = link_to t('.button.add_collection'), new_collection_path(current_user), class: 'dropdown-item'
+          - else
+            div[data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150]
+              = button_tag class: 'btn btn-outline-dark dropdown-toggle disabled', 'data-bs-toggle': 'dropdown' do
+                = t('.button.add_to_collection')
 
   .col-md-4.col-sm-6.mb-3.p-0
     .button-box.border.p-3.h-100
@@ -550,16 +551,32 @@
           i.fa-solid.fa-trash-can
           =< t('common.button.delete')
 
-      - if policy(@task).duplicate?
-        = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important' do
-          i.fa-regular.fa-clone
-          =< t('common.button.duplicate')
-      - else
-        div[data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150]
-          = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important disabled' do
+      - if !@task.contribution?
+        - if !policy(@task).edit?
+          = link_to new_task_task_contribution_path(@task), method: :get, class: 'btn btn-important' do
+            i.fa-regular.fa-edit
+            =< t('task_contributions.buttons.contribute')
+        - if policy(@task).duplicate?
+          = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important' do
             i.fa-regular.fa-clone
             =< t('common.button.duplicate')
-
+        - else
+          div[data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150]
+            = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important disabled' do
+              i.fa-regular.fa-clone
+              =< t('common.button.duplicate')
+      - else
+        - if policy(@task.parent).edit?
+          = link_to approve_changes_task_task_contribution_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
+            i.fa-solid.fa-check
+            =< t('common.button.approve')
+          = link_to discard_changes_task_task_contribution_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
+            i.fa-solid.fa-xmark
+            =< t('common.button.reject')
+        - else
+          = link_to discard_changes_task_task_contribution_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
+            i.fa-solid.fa-link-slash
+            =< t('task_contributions.buttons.decouple')
       - if current_user.present?
         = link_to t('common.button.back'), tasks_path, class: 'btn btn-important'
 
@@ -568,4 +585,4 @@
     #page_end style="margin-top: 20px"
 
 
-    = render 'import_export_dialog', title: t('.button.export_tasks')
+    = render 'tasks/import_export_dialog', title: t('.button.export_tasks')
