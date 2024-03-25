@@ -59,6 +59,19 @@
             class: 'form-control'
     small.form-text.text-body-secondary = t('devise.registrations.edit.we_need_your_current_password_to_confirm_your_changes')
 
+
+  .form-group.field-element
+    .form-label
+      = t('.manage_omniauth')
+    .form-content.manage_omniauth
+      - if devise_mapping.omniauthable?
+        - resource_class.omniauth_providers.each do |provider|
+          - provider_name = OmniAuth::Utils.camelize(provider)
+          - if current_user.identities.pluck(:omniauth_provider).include?(provider.to_s)
+            = link_to t('.remove_identity', kind: provider_name), omniauth_deauthorize_path(provider), class: 'btn btn-light btn-sm mb-2 me-2', method: :delete
+          - else
+            = link_to t('.add_identity', kind: provider_name), omniauth_authorize_path(resource_name, provider), class: 'btn btn-light btn-sm mb-2 me-2', method: :post
+
   .form-group.py-3
     .btn-group[role='group']
       = button_tag type: 'submit', class: 'btn btn-important' do

@@ -1,0 +1,6 @@
+---
+de:
+  users:
+    omni_auth:
+      failure_deauthorize: 'Das Trennen von Ihrem %{kind}-Account war aufgrund des folgenden Grundes nicht möglich: "%{reason}".'
+      success_deauthorize: Sie haben sich erfolgreich von Ihrem %{kind}-Account getrennt.
