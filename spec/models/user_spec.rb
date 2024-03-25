@@ -208,4 +208,43 @@ RSpec.describe User do
       end
     end
   end
+
+  describe '.from_omniauth' do
+    let(:auth) { OmniAuth::AuthHash.new(provider: 'provider', uid: 'uid', info: {email: 'test@example.com', first_name: 'Test', last_name: 'User'}) }
+    let(:user) { create(:user) }
+
+    context 'when user is new' do
+      it 'creates a new user' do
+        expect { described_class.from_omniauth(auth) }.to change(described_class, :count).by(1)
+      end
+
+      it 'creates a new identity' do
+        expect { described_class.from_omniauth(auth) }.to change(UserIdentity, :count).by(1)
+      end
+    end
+
+    context 'when user exists' do
+      before { create(:user_identity, user:, omniauth_provider: auth.provider, provider_uid: auth.uid) }
+
+      it 'does not create a new user' do
+        expect { described_class.from_omniauth(auth) }.not_to change(described_class, :count)
+      end
+
+      it 'does not create a new identity' do
+        expect { described_class.from_omniauth(auth) }.not_to change(UserIdentity, :count)
+      end
+    end
+
+    context 'when user exists but identity does not' do
+      let!(:user) { create(:user, email: auth.info.email) }
+
+      it 'does not create a new user' do
+        expect { described_class.from_omniauth(auth, user) }.not_to change(described_class, :count)
+      end
+
+      it 'creates a new identity' do
+        expect { described_class.from_omniauth(auth, user) }.to change(UserIdentity, :count).by(1)
+      end
+    end
+  end
 end
