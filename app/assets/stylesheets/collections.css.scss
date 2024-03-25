@@ -11,8 +11,7 @@ $collection-color: #000080;
   margin-bottom: 40px;
 }
 .nav-container .nav-btn-collection {
-  padding: 9px 15px;
-  border-color: $collection-color;
+  padding: 10px 15px;
 }
 
 #share-menu {
@@ -47,11 +46,13 @@ $collection-color: #000080;
 
   // ui-sortable-helper is the class of the element being dragged in sortablejs
   // we are removing the border, background and the red X from tasks that are being dragged
-  .ui-sortable-helper{
+  .ui-sortable-helper {
     .row {
       border-bottom: none;
-      background: rgba(0,0,0,0);
+      background: rgba(0, 0, 0, 0);
     }
-    .fa-xmark{ display: none; }
+    .fa-xmark {
+      display: none;
+    }
   }
 }

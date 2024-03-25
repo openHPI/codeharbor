@@ -185,19 +185,12 @@ table.vertical-table {
   width: 100%;
 
   .selected {
-    border-color: #7c7c7c;
-    z-index: 5;
-  }
-
-  .selected:hover {
-    border-color: #7c7c7c;
     background-color: #eeeeee;
   }
 
   a {
-    padding: 10px 70px 10px 70px;
+    padding: 10px 60px;
     background-color: #f5f5f5;
-    border: 2px #dddddd solid;
     display: inline-block;
   }
   a:hover,
@@ -208,7 +201,7 @@ table.vertical-table {
   }
 
   .nav-btn {
-    padding: 9px 15px;
+    padding: 10px 15px;
     border-color: #888888;
   }
   .nav-btn:hover,
