@@ -7,6 +7,10 @@ de:
     registrations:
       avatar_form:
         remove_avatar: Profilbild entfernen
+      edit:
+        add_identity: Account mit %{kind} verknüpfen
+        manage_omniauth: Verknüpfte Accounts verwalten
+        remove_identity: Account-Verknüpfung zu %{kind} entfernen
     shared:
       notification_modal:
         delete_modal:

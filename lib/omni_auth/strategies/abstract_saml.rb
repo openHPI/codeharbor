@@ -24,13 +24,12 @@ module OmniAuth
         want_assertions_encrypted: true, # Invalidate SAML messages without an EncryptedAssertion
       }
 
-      # Our auto-login mechanism passes a desired redirect path (signed with a
-      # secret to prevent tampering) to the request phase.
+      # Our auto-login mechanism passes a desired application state to the request phase.
+      # So far, this is used to store a temporary token for the current user in the RelayState.
       # If we forward this via SAML's standard "RelayState" parameter, we will
       # get it back in the callback phase.
-      # TODO: This parameter is not yet used in the app
-      option :idp_sso_target_url_runtime_params, {
-        redirect_path: 'RelayState',
+      option :idp_sso_service_url_runtime_params, {
+        relay_state: 'RelayState',
       }
 
       # This Lambda is responsible for terminating the session and will
@@ -72,13 +71,20 @@ module OmniAuth
 
       uid { @name_id || @attributes['urn:oid:0.9.2342.19200300.100.1.1'] }
 
-      def with_settings
+      def with_settings # rubocop:disable Metrics/AbcSize
         # Get persistent IDs to recognize returning users
         options[:name_identifier_format] = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'
 
         options[:sp_entity_id] ||= sso_path
         options[:single_logout_service_url] ||= slo_path
         options[:slo_default_relay_state] ||= full_host
+
+        if on_request_path? && current_user
+          # We want to store the current user in the SAML RelayState,
+          # so that we can auto-login the user in the callback phase.
+          # This allows a registered user to add further OmniAuth providers.
+          request.params['relay_state'] = NonceStore.add current_user.id
+        end
         super
       end
 
@@ -91,15 +97,11 @@ module OmniAuth
         "#{full_host}#{script_name}#{request_path}/slo"
       end
 
+      def current_user
+        env['warden'].user
+      end
+
       class << self
-        def sign(url)
-          Rails.application.message_verifier('saml').generate(url)
-        end
-
-        def try_verify(url)
-          Rails.application.message_verifier('saml').verified(url)
-        end
-
         def desired_bindings
           {
             sso_binding: 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',

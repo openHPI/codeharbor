@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'omni_auth/nonce_store'
+
 module Users
   class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     skip_before_action :require_user!
@@ -8,8 +10,16 @@ module Users
     protect_from_forgery except: %i[mocksaml bird nbp]
 
     def sso_callback # rubocop:disable Metrics/AbcSize
+      # Check if an existing user is already signed in (passed through the RelayState)
+      # and trying to add a new identity to their account. If so, we load the user information
+      # and set it as the current user. This is necessary to avoid creating a new user.
+      current_user = User.find_by(id: OmniAuth::NonceStore.pop(params[:RelayState]))
+
+      # For existing users, we want to redirect to their profile page after adding a new identity
+      store_location_for(:user, edit_user_registration_path) if current_user.present?
+
       # The instance variable `@user` is used by Devise internally and should be set here
-      @user = User.from_omniauth(request.env['omniauth.auth'])
+      @user = User.from_omniauth(request.env['omniauth.auth'], current_user)
 
       if @user.persisted?
         # The `sign_in_and_redirect` will only proceed with the login if the account has been confirmed
@@ -36,7 +46,40 @@ module Users
     alias mocksaml sso_callback
 
     def provider
-      request.env['omniauth.auth'].provider
+      request.env['omniauth.auth']&.provider || params[:provider]
+    end
+
+    def deauthorize # rubocop:disable Metrics/AbcSize
+      identity = current_user.identities.find_by(omniauth_provider: provider)
+      if is_navigational_format? && identity&.destroy
+      if is_navigational_format? && identity.nil?
+        # i18n-tasks-use t('users.omni_auth.failure_deauthorize_not_linked')
+        set_flash_message(:alert, :failure_deauthorize_not_linked, kind: OmniAuth::Utils.camelize(provider),
+          scope: 'users.omni_auth')
+      elsif is_navigational_format? && identity.destroy
+        remove_provider_from_session(provider)
+        # i18n-tasks-use t('users.omni_auth.success_deauthorize')
+        set_flash_message(:notice, :success_deauthorize, kind: OmniAuth::Utils.camelize(provider),
+          scope: 'users.omni_auth')
+      elsif is_navigational_format? && identity.errors.any?
+        # i18n-tasks-use t('users.omni_auth.failure_deauthorize')
+        set_flash_message(:alert, :failure_deauthorize, kind: OmniAuth::Utils.camelize(provider), scope: 'users.omni_auth',
+          reason: identity.errors.full_messages.join(', '))
+      end
+      redirect_to edit_user_registration_path
+    end
+
+    private
+
+    def remove_provider_from_session(provider)
+      # Prevent any further interaction with the given provider, as the user has deauthorized it.
+      # This is necessary to avoid the user being redirected to the IdP after signing out.
+      # In short: Once deauthorized, SLO is not enabled any longer for the provider..
+      return unless session['omniauth_provider'] == provider
+
+      session.delete('saml_uid')
+      session.delete('saml_session_index')
+      session.delete('omniauth_provider')
     end
 
     # More info at:
