@@ -208,4 +208,84 @@ RSpec.describe User do
       end
     end
   end
+
+  describe '.from_omniauth' do
+    let(:auth) { OmniAuth::AuthHash.new(provider: 'provider', uid: 'uid', info: {email: 'test@example.com', first_name: 'Test', last_name: 'User'}) }
+    let(:user) { create(:user) }
+
+    context 'when user is new' do
+      it 'creates a new user' do
+        expect { described_class.from_omniauth(auth) }.to change(described_class, :count).by(1)
+      end
+
+      it 'creates a new identity' do
+        expect { described_class.from_omniauth(auth) }.to change(UserIdentity, :count).by(1)
+      end
+
+      it 'returns a User instance' do
+        expect(described_class.from_omniauth(auth)).to be_a(described_class)
+      end
+
+      it 'returns a user with the correct attributes' do
+        user = described_class.from_omniauth(auth)
+        expect(user&.email).to eq(auth.info.email)
+        expect(user&.first_name).to eq(auth.info.first_name)
+        expect(user&.last_name).to eq(auth.info.last_name)
+      end
+    end
+
+    context 'when user exists' do
+      before { create(:user_identity, user:, omniauth_provider: auth.provider, provider_uid: auth.uid) }
+
+      it 'does not create a new user' do
+        expect { described_class.from_omniauth(auth) }.not_to change(described_class, :count)
+      end
+
+      it 'does not create a new identity' do
+        expect { described_class.from_omniauth(auth) }.not_to change(UserIdentity, :count)
+      end
+
+      it 'returns a User instance' do
+        expect(described_class.from_omniauth(auth)).to be_a(described_class)
+      end
+
+      it 'returns the existing user' do
+        expect(described_class.from_omniauth(auth)).to eq(user)
+      end
+
+      it 'updates the user attributes' do
+        user = described_class.from_omniauth(auth)
+        expect(user&.email).to eq(auth.info.email)
+        expect(user&.first_name).to eq(auth.info.first_name)
+        expect(user&.last_name).to eq(auth.info.last_name)
+      end
+    end
+
+    context 'when user exists but identity does not' do
+      let!(:user) { create(:user, email: auth.info.email) }
+
+      it 'does not create a new user' do
+        expect { described_class.from_omniauth(auth, user) }.not_to change(described_class, :count)
+      end
+
+      it 'creates a new identity' do
+        expect { described_class.from_omniauth(auth, user) }.to change(UserIdentity, :count).by(1)
+      end
+
+      it 'returns a User instance' do
+        expect(described_class.from_omniauth(auth, user)).to be_a(described_class)
+      end
+
+      it 'returns the existing user' do
+        expect(described_class.from_omniauth(auth, user)).to eq(user)
+      end
+
+      it 'updates the user attributes' do
+        returned_user = described_class.from_omniauth(auth, user)
+        expect(returned_user&.email).to eq(auth.info.email)
+        expect(returned_user&.first_name).to eq(user.first_name)
+        expect(returned_user&.last_name).to eq(user.last_name)
+      end
+    end
+  end
 end
