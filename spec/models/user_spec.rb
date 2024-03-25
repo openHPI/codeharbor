@@ -5,9 +5,51 @@ require 'nokogiri'
 
 RSpec.describe User do
   describe '#valid?' do
+    let(:user) { create(:user) }
+
     it { is_expected.to validate_presence_of(:email) }
     it { is_expected.to validate_presence_of(:first_name) }
     it { is_expected.to validate_presence_of(:last_name) }
+
+    context 'when avatar is not an image' do
+      before do
+        user.avatar.attach(io: Rails.root.join('spec/fixtures/files/avatar/profile.pdf').open, filename: 'profile.pdf', content_type: 'application/pdf')
+      end
+
+      it 'is not valid' do
+        expect(user).not_to be_valid
+      end
+
+      it 'adds an error for avatar' do
+        user.valid?
+        expect(user.errors[:avatar]).to include(I18n.t('activerecord.errors.models.user.attributes.avatar.not_an_image'))
+      end
+    end
+
+    context 'when avatar is an image' do
+      before do
+        user.avatar.attach(io: Rails.root.join('spec/fixtures/files/avatar/profile.png').open, filename: 'test.png', content_type: 'image/png')
+      end
+
+      it 'is valid' do
+        expect(user).to be_valid
+      end
+    end
+
+    context 'when avatar is larger than 10MB' do
+      before do
+        user.avatar.attach(io: Rails.root.join('spec/fixtures/files/avatar/large.png').open, filename: 'large.png', content_type: 'image/png')
+      end
+
+      it 'is not valid' do
+        expect(user).not_to be_valid
+      end
+
+      it 'adds an error for avatar' do
+        user.valid?
+        expect(user.errors[:avatar]).to include(I18n.t('activerecord.errors.models.user.attributes.avatar.size_over_10_mb'))
+      end
+    end
   end
 
   describe '#destroy' do
