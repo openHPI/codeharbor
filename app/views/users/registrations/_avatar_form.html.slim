@@ -1,7 +1,7 @@
 .form-group.field-element
   = f.label :avatar, class: 'form-label'
   = f.hidden_field :avatar_present, value: f.object.avatar.attached?, class: 'hidden-avatar-present'
-  - if f.object.avatar.attached?
+  - if f.object.avatar.attached? && f.object.avatar.persisted?
     .file-show
       = image_tag f.object.avatar.variant(resize_to_limit: [200, 200])
       br
