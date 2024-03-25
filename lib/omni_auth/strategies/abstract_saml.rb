@@ -9,8 +9,9 @@ module OmniAuth
     class AbstractSaml < OmniAuth::Strategies::SAML
       option :attribute_service_name, 'CodeHarbor'
 
-      # We don't request any specific attributes to get all automatically.
+      # We don't request any specific attributes (statements) to get all automatically.
       option :request_attributes, {}
+      option :attribute_statements, {}
 
       # We want to specify some security options ourselves
       option :security, {
