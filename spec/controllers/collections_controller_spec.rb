@@ -21,11 +21,36 @@ RSpec.describe CollectionsController do
   end
 
   describe 'GET #index' do
-    let!(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
+    let(:users) { [user] }
+    let(:visibility_level) { :private }
+    let!(:collection) { create(:collection, valid_attributes.merge(users:, visibility_level:)) }
 
     it 'assigns all collections as @collections' do
       get :index, params: {}
       expect(assigns(:collections)).to include collection
+    end
+
+    it 'renders correct actions-buttons' do
+      get :index, params: {}
+      expect(response.body).to include(I18n.t('common.button.view')).and(include(I18n.t('common.button.edit')))
+    end
+
+    context 'when user is not in collection' do
+      let(:users) { [create(:user)] }
+
+      it 'does add collection to @collections' do
+        get :index, params: {}
+        expect(assigns(:collections)).not_to include collection
+      end
+
+      context 'when collection is public' do
+        let(:visibility_level) { :public }
+
+        it 'renders correct actions-buttons' do
+          get :index, params: {}
+          expect(response.body).to include(I18n.t('common.button.view')).and(not_include(I18n.t('common.button.edit')))
+        end
+      end
     end
   end
 
@@ -41,6 +66,34 @@ RSpec.describe CollectionsController do
     it 'includes a link to the respective tasks' do
       get :show, params: {id: collection.to_param}
       expect(response.body).to include(task_path(collection.tasks.first))
+    end
+
+    it 'includes the correct visibility subinfo' do
+      get :show, params: {id: collection.to_param}
+      expect(response.body).to include(I18n.t('collections.show.visibility.private')).and(include(I18n.t('collections.show.no_other_user')))
+    end
+
+    it 'includes the correct other-user subinfo' do
+      get :show, params: {id: collection.to_param}
+      expect(response.body).to include(I18n.t('collections.show.no_other_user'))
+    end
+
+    context 'when collection is public' do
+      before { collection.update(visibility_level: :public) }
+
+      it 'includes the correct visibility subinfo' do
+        get :show, params: {id: collection.to_param}
+        expect(response.body).to include(I18n.t('collections.show.visibility.public'))
+      end
+    end
+
+    context 'when collection has other users' do
+      before { collection.users << create(:user) }
+
+      it 'includes the correct other-user subinfo' do
+        get :show, params: {id: collection.to_param}
+        expect(response.body).to include(I18n.t('collections.show.num_of_other_users', count: 1))
+      end
     end
   end
 
@@ -61,38 +114,85 @@ RSpec.describe CollectionsController do
   end
 
   describe 'POST #create' do
+    let(:post_request) { post :create, params: {collection: collection_params} }
+
     context 'with valid params' do
+      let(:collection_params) { valid_attributes }
+
       it 'creates a new Collection' do
         expect do
-          post :create, params: {collection: valid_attributes}
+          post_request
         end.to change(Collection, :count).by(1)
       end
 
       it 'assigns a newly created collection as @collection' do
-        post :create, params: {collection: valid_attributes}
+        post_request
         expect(assigns(:collection)).to be_a(Collection)
       end
 
       it 'persists @collection' do
-        post :create, params: {collection: valid_attributes}
+        post_request
         expect(assigns(:collection)).to be_persisted
       end
 
       it 'redirects to the created collection' do
-        post :create, params: {collection: valid_attributes}
+        post_request
         expect(response).to redirect_to(collections_path)
+      end
+
+      context 'with task_id' do
+        let(:collection_params) { valid_attributes.merge(task_ids: task.id) }
+        let(:task) { create(:task) }
+
+        it 'creates a new Collection' do
+          expect do
+            post_request
+          end.to change(Collection, :count).by(1)
+        end
+
+        it 'assigns a newly created collection as @collection' do
+          post_request
+          expect(assigns(:collection)).to be_a(Collection)
+        end
+
+        it 'persists @collection' do
+          post_request
+          expect(assigns(:collection)).to be_persisted
+        end
+
+        it 'redirects to the submitted task' do
+          post_request
+          expect(response).to redirect_to(task_path(task))
+        end
       end
     end
 
     context 'with invalid params' do
+      let(:collection_params) { invalid_attributes }
+
       it 'assigns a newly created but unsaved collection as @collection' do
-        post :create, params: {collection: invalid_attributes}
+        post_request
         expect(assigns(:collection)).to be_a_new(Collection)
       end
 
       it "re-renders the 'new' template" do
-        post :create, params: {collection: invalid_attributes}
+        post_request
         expect(response).to render_template('new')
+      end
+
+      context 'with task_id' do
+        let(:collection_params) { invalid_attributes.merge(task_ids: task.id) }
+        let(:task) { create(:task) }
+
+        it 'does not create a new Collection' do
+          expect do
+            post_request
+          end.not_to change(Collection, :count)
+        end
+
+        it 'flashes an error' do
+          expect { post_request }.to change { flash[:alert] }.to(I18n.t('collections.create.error'))
+        end
       end
     end
   end
@@ -166,10 +266,32 @@ RSpec.describe CollectionsController do
   describe 'PATCH #remove_task' do
     let(:collection) { create(:collection, valid_attributes.merge(users: [user])) }
     let!(:task) { create(:task, collections: [collection]) }
-    let(:patch_request) { patch :remove_task, params: {id: collection.id, task: task.id} }
+    let(:patch_request) { patch :remove_task, params: remove_task_params }
+    let(:remove_task_params) { {id: collection.id, task: task.id} }
 
     it 'removes task from collection' do
       expect { patch_request }.to change(collection.reload.tasks, :count).by(-1)
+    end
+
+    context 'when return_to_task is true' do
+      let(:remove_task_params) { {id: collection.id, task: task.id, return_to_task: true} }
+
+      it 'removes task from collection' do
+        expect { patch_request }.to change(collection.reload.tasks, :count).by(-1)
+      end
+
+      it 'redirects to the submitted task' do
+        patch_request
+        expect(response).to redirect_to(task_path(task))
+      end
+
+      context 'with invalid params' do
+        let(:remove_task_params) { {id: collection.id, task: create(:task).id} }
+
+        it 'does not remove task from collection' do
+          expect { patch_request }.not_to change(collection.reload.tasks, :count)
+        end
+      end
     end
   end
 
@@ -252,11 +374,13 @@ RSpec.describe CollectionsController do
 
   describe 'POST #view_shared' do
     let(:collection_owner) { create(:user) }
-    let(:collection) { create(:collection, valid_attributes.merge(users: [collection_owner, user])) }
+    let(:collection) { create(:collection, valid_attributes.merge(users: [collection_owner])) }
     let(:get_request) { get :view_shared, params: }
     let(:params) { {id: collection.id, user: collection_owner.id} }
 
     context 'when user has been invited' do
+      before { create(:message, sender: collection.users.first, recipient: user, param_type: 'collection', param_id: collection.id, text: 'Invitation') }
+
       it 'assigns collection' do
         get_request
         expect(assigns(:collection)).to eq(collection)

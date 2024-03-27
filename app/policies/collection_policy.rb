@@ -13,12 +13,16 @@ class CollectionPolicy < ApplicationPolicy
     everyone
   end
 
-  %i[create? show? update? edit? destroy? leave? add_task? remove_task? remove_all? push_collection? download_all?
-     share? view_shared?].each do |action|
+  def show?
+    admin? || collection.users.include?(@user) || collection.visibility_level_public?
+  end
+
+  %i[create? update? edit? destroy? leave? add_task? remove_task? remove_all? push_collection?
+     download_all? share?].each do |action|
     define_method(action) { admin? || collection.users.include?(@user) }
   end
 
-  def save_shared?
-    Message.received_by(@user).exists?(param_type: 'collection', param_id: collection.id) || admin?
+  %i[save_shared? view_shared?].each do |action|
+    define_method(action) { Message.received_by(@user).exists?(param_type: 'collection', param_id: collection.id) || admin? }
   end
 end

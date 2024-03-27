@@ -17,6 +17,13 @@ class Collection < ApplicationRecord
 
   accepts_nested_attributes_for :collection_tasks, allow_destroy: true
 
+  scope :public_access, -> { where(visibility_level: :public) }
+  scope :member, lambda {|user|
+                   includes(:collection_users).where(collection_users: {user:})
+                 }
+
+  enum visibility_level: {private: 0, public: 1}, _default: :private, _prefix: true
+
   def add_task(task)
     tasks << task unless tasks.find_by(id: task.id)
   end

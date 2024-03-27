@@ -27,7 +27,13 @@ RSpec.describe CollectionPolicy do
     context 'when collection is from user' do
       let(:collection_user) { user }
 
-      it { is_expected.to forbid_only_actions(%i[save_shared]) }
+      it { is_expected.to forbid_only_actions(%i[save_shared view_shared]) }
+    end
+
+    context 'when user has an invitation' do
+      before { create(:message, sender: collection_user, recipient: user, param_type: 'collection', param_id: collection.id, text: 'Invitation') }
+
+      it { is_expected.to permit_only_actions(%i[index new save_shared view_shared]) }
     end
   end
 end

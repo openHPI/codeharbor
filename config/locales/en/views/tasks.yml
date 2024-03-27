@@ -82,13 +82,14 @@ en:
     show:
       add_to_collection_hint: Save Tasks for later by adding them to a collection.
       button:
-        add_collection: Add Collection
-        add_to_collection: Add to collection
+        add_to_collection: Add to Collection
+        create_collection: Create new Collection
         download_as_zip: Download this Task as a ZIP file.
         export: Export
         export_tasks: Export Tasks
         rate: Rate
         show_comments: Show Comments
+      create_collection_placeholder: Collection name
       define_account_link: Please define an account link first
       export_to: Export to
       guest:
@@ -98,6 +99,7 @@ en:
       no_license: None
       no_model_solution_present: No Model Solutions present
       no_tests: No tests included
+      remove_task_from_collection_warning: Are you sure you want to remove this Task from the Collection?
       undefined: User undefined
       yourself: yourself
     tasks:
