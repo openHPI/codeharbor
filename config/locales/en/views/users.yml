@@ -7,6 +7,10 @@ en:
     registrations:
       avatar_form:
         remove_avatar: Remove Avatar
+      edit:
+        add_identity: Link %{kind} account
+        manage_omniauth: Manage linked accounts
+        remove_identity: Remove account link to %{kind}
     shared:
       notification_modal:
         delete_modal:
