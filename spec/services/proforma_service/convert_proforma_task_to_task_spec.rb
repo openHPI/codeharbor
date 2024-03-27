@@ -90,6 +90,27 @@ RSpec.describe ProformaService::ConvertProformaTaskToTask do
           )
         end
       end
+
+      context 'with a p containing quotes' do
+        let(:description) { '<p>foo "bar" bla</p>' }
+
+        # quotes should not be escaped to easy copyability (see config/initializers/monkey_patches.rb:27)
+        it 'creates a task with a correct description' do
+          expect(convert_to_task_service).to have_attributes(
+            description: 'foo "bar" bla'
+          )
+        end
+      end
+
+      context 'with a long description' do
+        let(:description) { 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut' }
+
+        it 'creates a task with a correct description' do
+          expect(convert_to_task_service).to have_attributes(
+            description:
+          )
+        end
+      end
     end
 
     context 'with meta_data' do

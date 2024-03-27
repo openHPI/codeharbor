@@ -43,7 +43,7 @@ module ProformaService
     end
 
     def description
-      Kramdown::Document.new(@proforma_task.description || '', html_to_native: true).to_kramdown.strip
+      Kramdown::Document.new(@proforma_task.description || '', html_to_native: true, line_width: -1).to_kramdown.strip
     end
 
     def files
