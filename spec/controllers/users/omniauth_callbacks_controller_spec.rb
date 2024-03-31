@@ -5,7 +5,8 @@ require 'rails_helper'
 RSpec.describe Users::OmniauthCallbacksController do
   render_views
 
-  let(:omniauth_provider) { 'provider' }
+  let(:omniauth_provider) { User.omniauth_providers.first.to_s }
+  let(:provider_uid) { 'uid' }
 
   before do
     OmniAuth.config.test_mode = true
@@ -24,7 +25,7 @@ RSpec.describe Users::OmniauthCallbacksController do
 
   describe '#sso_callback' do
     let(:info) { attributes_for(:user) }
-    let(:auth) { OmniAuth::AuthHash.new(provider: omniauth_provider, uid: 'uid', info:) }
+    let(:auth) { OmniAuth::AuthHash.new(provider: omniauth_provider, uid: provider_uid, info:) }
 
     before do
       request.env['omniauth.auth'] = auth
@@ -42,6 +43,15 @@ RSpec.describe Users::OmniauthCallbacksController do
       it 'redirects to the root page' do
         post :sso_callback
         expect(response).to redirect_to root_path
+      end
+
+      context 'when omniauth_provider is nbp' do
+        let(:omniauth_provider) { 'nbp' }
+
+        it 'redirects to nbp wallet connect page' do
+          post :sso_callback
+          expect(response).to redirect_to nbp_wallet_connect_users_path
+        end
       end
 
       context 'when no user can be created' do
@@ -66,7 +76,8 @@ RSpec.describe Users::OmniauthCallbacksController do
     end
 
     context 'when user exists' do
-      let(:user) { create(:user) }
+      let(:previous_first_name) { 'Previous Name' }
+      let!(:user) { create(:user, first_name: previous_first_name) }
 
       context 'when signing in' do
         before do
@@ -85,24 +96,63 @@ RSpec.describe Users::OmniauthCallbacksController do
           post :sso_callback
           expect(response).to redirect_to root_path
         end
+
+        it 'updates the user attributes' do
+          expect { post :sso_callback }.to change { user.reload.first_name }.from(previous_first_name).to(info[:first_name])
+        end
+
+        context 'when updating fails' do
+          let(:info) { attributes_for(:user, first_name: '') }
+
+          it 'does not update the user attributes' do
+            expect { post :sso_callback }.not_to change { user.reload.first_name }
+          end
+
+          it 'shows a flash message' do
+            post :sso_callback
+            reason = "#{UserIdentity.human_attribute_name('first_name')} can't be blank"
+            expect(flash[:alert]).to eq I18n.t('users.omniauth_callbacks.failure_update', reason:, kind: OmniAuth::Utils.camelize(omniauth_provider))
+          end
+        end
       end
 
       context 'when adding a new identity' do
-        before do
-          allow(OmniAuth::NonceStore).to receive(:pop).and_return(user.id)
-        end
+        subject(:post_request) { post :sso_callback, params: }
+
+        let(:params) { {RelayState: OmniAuth::NonceStore.add(user.id)} }
 
         it 'does not create a new user' do
-          expect { post :sso_callback }.not_to change(User, :count)
+          expect { post_request }.not_to change(User, :count)
         end
 
         it 'creates a new identity' do
-          expect { post :sso_callback }.to change(UserIdentity, :count).by(1)
+          expect { post_request }.to change(UserIdentity, :count).by(1)
         end
 
         it 'redirects to the edit_user_registration_path' do
-          post :sso_callback
+          post_request
           expect(response).to redirect_to edit_user_registration_path
+        end
+
+        context 'when identity is already linked to another account' do
+          let(:existing_user_identity) { create(:user_identity, user: create(:user), omniauth_provider:, provider_uid:) }
+
+          it 'does not re-assign the existing identity' do
+            expect { post_request }.not_to change { existing_user_identity.reload.user_id }
+          end
+        end
+
+        context 'when identity is invalid' do
+          let(:provider_uid) { '' }
+
+          it 'does not create new identity' do
+            expect { post_request }.not_to change(UserIdentity, :count)
+          end
+
+          it 'displays a flash error' do
+            post_request
+            expect(flash[:error]).to be_present
+          end
         end
       end
     end
@@ -198,7 +248,7 @@ RSpec.describe Users::OmniauthCallbacksController do
 
       it 'sets a flash message' do
         delete :deauthorize, params: {provider: omniauth_provider}
-        expect(flash[:notice]).to eq I18n.t('users.omni_auth.success_deauthorize', kind: OmniAuth::Utils.camelize(omniauth_provider))
+        expect(flash[:notice]).to eq I18n.t('users.omniauth_callbacks.success_deauthorize', kind: OmniAuth::Utils.camelize(omniauth_provider))
       end
 
       context 'when session contains the provider' do
@@ -244,7 +294,7 @@ RSpec.describe Users::OmniauthCallbacksController do
 
       it 'sets a flash message' do
         delete :deauthorize, params: {provider: omniauth_provider}
-        expect(flash[:alert]).to eq I18n.t('users.omni_auth.failure_deauthorize_not_linked', kind: OmniAuth::Utils.camelize(omniauth_provider))
+        expect(flash[:alert]).to eq I18n.t('users.omniauth_callbacks.failure_deauthorize_not_linked', kind: OmniAuth::Utils.camelize(omniauth_provider))
       end
 
       it_behaves_like 'no removal of affected provider in the session'
@@ -270,7 +320,7 @@ RSpec.describe Users::OmniauthCallbacksController do
       it 'sets a flash message' do
         delete :deauthorize, params: {provider: omniauth_provider}
         reason = "#{UserIdentity.human_attribute_name('provider_uid')} can't be blank"
-        expect(flash[:alert]).to eq I18n.t('users.omni_auth.failure_deauthorize', kind: OmniAuth::Utils.camelize(omniauth_provider), reason:)
+        expect(flash[:alert]).to eq I18n.t('users.omniauth_callbacks.failure_deauthorize', kind: OmniAuth::Utils.camelize(omniauth_provider), reason:)
       end
 
       it_behaves_like 'no removal of affected provider in the session'
@@ -297,7 +347,7 @@ RSpec.describe Users::OmniauthCallbacksController do
 
       it 'sets a flash message' do
         delete :deauthorize, params: {provider: omniauth_provider}
-        expect(flash[:alert]).to eq I18n.t('users.omni_auth.failure_deauthorize_last_identity', kind: OmniAuth::Utils.camelize(omniauth_provider))
+        expect(flash[:alert]).to eq I18n.t('users.omniauth_callbacks.failure_deauthorize_last_identity', kind: OmniAuth::Utils.camelize(omniauth_provider))
       end
 
       it_behaves_like 'no removal of affected provider in the session'

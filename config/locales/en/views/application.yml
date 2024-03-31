@@ -7,10 +7,12 @@ en:
         paragraph: CodeHarbor allows to share, rate, and discuss auto-gradable programming exercises with colleagues. Re-use existing exercises, clone exercises and adjust them to your needs. Translate them to another human language or port them to another programming language. Always keep full control with whom you share.
       hasso_plattner_institute: Hasso Plattner Institute
       imprint: Imprint
+      imprint_link: https://open.hpi.de/pages/imprint?locale=en
       more:
         header: More Information
         link: About CodeHarbor
       privacy_policy: Privacy Policy
+      privacy_policy_link: https://open.hpi.de/pages/data-protection?locale=en
     markdown_editor:
       collapse: Collapse editor
       expand: Expand editor

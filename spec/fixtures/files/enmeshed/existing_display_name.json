@@ -1,0 +1,16 @@
+{
+  "result": [
+    {
+      "id": "ATT_id_of_existing_display_name",
+      "content": {
+        "@type": "IdentityAttribute",
+        "owner": "id1GyHw8CefvC62VGQ5oTZjT3PvbveyDsrW2",
+        "value": {
+          "@type": "DisplayName",
+          "value": "CodeHarbor"
+        }
+      },
+      "createdAt": "2024-05-26T14:57:57.750Z"
+    }
+  ]
+}
