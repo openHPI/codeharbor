@@ -50,14 +50,15 @@
 
   = render 'avatar_form', f: f
 
-  .form-group.field-element
-    = f.label :current_password, class: 'form-label'
-    = f.password_field :current_password,
-            required: true,
-            placeholder: User.human_attribute_name('current_password'),
-            autocomplete: 'current-password',
-            class: 'form-control'
-    small.form-text.text-body-secondary = t('devise.registrations.edit.we_need_your_current_password_to_confirm_your_changes')
+  - if resource.password_set?
+    .form-group.field-element
+      = f.label :current_password, class: 'form-label'
+      = f.password_field :current_password,
+              required: true,
+              placeholder: User.human_attribute_name('current_password'),
+              autocomplete: 'current-password',
+              class: 'form-control'
+      small.form-text.text-body-secondary = t('devise.registrations.edit.we_need_your_current_password_to_confirm_your_changes')
 
 
   .form-group.field-element

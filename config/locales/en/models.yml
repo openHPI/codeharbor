@@ -88,6 +88,7 @@ en:
       user:
         first_name: First name
         last_name: Last name
+        password_set: Passwort set
         role: Role
       user_identity:
         omniauth_provider: OmniAuth provider

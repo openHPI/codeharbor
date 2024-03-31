@@ -16,6 +16,7 @@ class User < ApplicationRecord
 
   validates :email, presence: true, uniqueness: {case_sensitive: false}
   validates :first_name, :last_name, presence: true
+  validates :password_set, inclusion: [true, false]
 
   has_many :tasks, dependent: :nullify
 
@@ -66,6 +67,7 @@ class User < ApplicationRecord
       user = joins(:identities).where(identities: identity_params).first_or_initialize do |new_user|
         # Set these values initially
         new_user.password = Devise.friendly_token[0, 20]
+        new_user.password_set = false
         new_user.identities << identity
         # If you are using confirmable and the provider(s) you use validate emails,
         # uncomment the line below to skip the confirmation emails.
