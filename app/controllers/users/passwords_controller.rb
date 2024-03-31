@@ -20,9 +20,13 @@ module Users
     # end
 
     # PUT /resource/password
-    # def update
-    #   super
-    # end
+    def update
+      super do |resource|
+        # When the user was updated successfully, a custom password was set.
+        # The `resource.errors.empty?` is also used by Devise internally.
+        resource.update(password_set: true) if resource.errors.empty?
+      end
+    end
 
     # protected
 
