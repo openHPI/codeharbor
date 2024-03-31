@@ -9,6 +9,7 @@ en:
         remove_avatar: Remove Avatar
       edit:
         add_identity: Link %{kind} account
+        cannot_remove_last_identity: Cannot remove account link to %{kind} because neither a password is set nor another identity is linked
         manage_omniauth: Manage linked accounts
         remove_identity: Remove account link to %{kind}
     shared:
