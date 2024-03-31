@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# More info at:
+# https://github.com/heartcombo/devise#omniauth
+
 require 'omni_auth/nonce_store'
 
 module Users
@@ -9,35 +12,16 @@ module Users
     # SAML doesn't support the CSRF protection
     protect_from_forgery except: %i[mocksaml bird nbp]
 
-    def sso_callback # rubocop:disable Metrics/AbcSize
-      # Check if an existing user is already signed in (passed through the RelayState)
-      # and trying to add a new identity to their account. If so, we load the user information
-      # and set it as the current user. This is necessary to avoid creating a new user.
-      current_user = User.find_by(id: OmniAuth::NonceStore.pop(params[:RelayState]))
-
-      # For existing users, we want to redirect to their profile page after adding a new identity
-      store_location_for(:user, edit_user_registration_path) if current_user.present?
-
-      # The instance variable `@user` is used by Devise internally and should be set here
-      @user = User.from_omniauth(request.env['omniauth.auth'], current_user)
-
-      if @user.persisted?
-        # The `sign_in_and_redirect` will only proceed with the login if the account has been confirmed
-        # either through trust by the IdP or with a confirmation mail. Until then, a flash message
-        # notifies users about the missing email confirmation
-        sign_in_and_redirect @user, event: :authentication
-        # We use the configured OmniAuth camilization to include the user-facing name of the provider in the flash message
-        set_flash_message(:notice, :success, kind: OmniAuth::Utils.camelize(provider)) if is_navigational_format?
-        session[:omniauth_provider] = provider
+    def sso_callback
+      session[:omniauth_provider] = omniauth_provider
+      # `current_user` refers to an existing user signed in before starting the SAML workflow.
+      # Thus, this value is only present when adding a new identity to an authenticated account.
+      if current_user.present?
+        add_idp_to_existing_user
+      elsif user_identity.persisted?
+        sign_in_with_identity
       else
-        if is_navigational_format? && @user.errors.any?
-          # We show validation errors to the user, for example because required data from the IdP was missing
-          set_flash_message(:alert, :failure, kind: OmniAuth::Utils.camelize(provider),
-            reason: @user.errors.full_messages.join(', '))
-        end
-        # Removing extra as it can overflow some session stores
-        session["devise.#{provider}_data"] = request.env['omniauth.auth'].except('extra')
-        redirect_to new_user_registration_url
+        register_new_user
       end
     end
 
@@ -45,34 +29,89 @@ module Users
     alias nbp sso_callback
     alias mocksaml sso_callback
 
-    def provider
-      request.env['omniauth.auth']&.provider || params[:provider]
-    end
+    def deauthorize # rubocop:disable Metrics/AbcSize
+      identity = current_user.identities.find_by(omniauth_provider:)
 
-    def deauthorize # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-      identity = current_user.identities.find_by(omniauth_provider: provider)
-      if is_navigational_format? && identity.nil?
-        # i18n-tasks-use t('users.omni_auth.failure_deauthorize_not_linked')
-        set_flash_message(:alert, :failure_deauthorize_not_linked, kind: OmniAuth::Utils.camelize(provider),
-          scope: 'users.omni_auth')
-      elsif is_navigational_format? && current_user.identities.count == 1 && !current_user.password_set?
-        # i18n-tasks-use t('users.omni_auth.failure_deauthorize_last_identity')
-        set_flash_message(:alert, :failure_deauthorize_last_identity, kind: OmniAuth::Utils.camelize(provider),
-          scope: 'users.omni_auth')
-      elsif is_navigational_format? && identity.destroy
-        remove_provider_from_session(provider)
-        # i18n-tasks-use t('users.omni_auth.success_deauthorize')
-        set_flash_message(:notice, :success_deauthorize, kind: OmniAuth::Utils.camelize(provider),
-          scope: 'users.omni_auth')
-      elsif is_navigational_format? && identity.errors.any?
-        # i18n-tasks-use t('users.omni_auth.failure_deauthorize')
-        set_flash_message(:alert, :failure_deauthorize, kind: OmniAuth::Utils.camelize(provider), scope: 'users.omni_auth',
-          reason: identity.errors.full_messages.join(', '))
+      if identity.nil?
+        # i18n-tasks-use t('users.omniauth_callbacks.failure_deauthorize_not_linked')
+        set_flash(:alert, '.failure_deauthorize_not_linked')
+
+      elsif current_user.omniauth_identities.one? && !current_user.password_set?
+        # i18n-tasks-use t('users.omniauth_callbacks.failure_deauthorize_last_identity')
+        set_flash(:alert, '.failure_deauthorize_last_identity')
+
+      elsif identity.destroy
+        remove_provider_from_session(omniauth_provider)
+        # i18n-tasks-use t('users.omniauth_callbacks.success_deauthorize')
+        set_flash(:notice, '.success_deauthorize')
+
+      elsif identity.errors.any?
+        # i18n-tasks-use t('users.omniauth_callbacks.failure_deauthorize')
+        set_flash(:alert, '.failure_deauthorize', reason: identity.errors.full_messages.join(', '))
       end
       redirect_to edit_user_registration_path
     end
 
     private
+
+    def add_idp_to_existing_user # rubocop:disable Metrics/AbcSize
+      store_location_for(:user, edit_user_registration_path)
+
+      if user_identity.persisted?
+        # i18n-tasks-use t('users.omniauth_callbacks.idp_linked_to_other_account')
+        set_flash(:alert, '.idp_linked_to_other_account')
+        sign_in_and_redirect current_user, event: :authentication and return
+      end
+
+      current_user.identities << user_identity
+      if current_user.valid?
+        set_flash(:notice, 'devise.omniauth_callbacks.success')
+      else
+        set_flash(:error, 'devise.omniauth_callbacks.failure', reason: current_user.errors.full_messages.join(', '))
+      end
+      sign_in_and_redirect current_user, event: :authentication
+    end
+
+    def sign_in_with_identity
+      user = user_identity.user
+
+      # Update some profile information on every login if present
+      update_user_attributes(user)
+      if user.errors.any?
+        # i18n-tasks-use t('users.omniauth_callbacks.failure_update')
+        set_flash(:alert, '.failure_update', reason: user.errors.full_messages.join(', '))
+      end
+
+      sign_in_and_redirect user
+    end
+
+    def register_new_user # rubocop:disable Metrics/AbcSize
+      if omniauth_provider == 'nbp'
+        # go through NBP wallet connection process to create new account
+        redirect_to nbp_wallet_connect_users_path
+      else
+        user = User.new_from_omniauth(omniauth_user_info, omniauth_provider, provider_uid)
+        user.skip_confirmation!
+
+        if user.save
+          set_flash(:notice, 'devise.omniauth_callbacks.success')
+          sign_in_and_redirect user, event: :authentication
+        else
+          set_flash(:alert, 'devise.omniauth_callbacks.failure', reason: user.errors.full_messages.join(', '))
+          redirect_to new_user_registration_url
+        end
+      end
+    end
+
+    def update_user_attributes(user)
+      user.assign_attributes(omniauth_user_info.slice(:email, :first_name, :last_name).to_h.compact)
+      if user.changed?
+        # We don't want to send a confirmation email for any of the changes
+        user.skip_confirmation_notification!
+        user.skip_reconfirmation!
+        user.save
+      end
+    end
 
     def remove_provider_from_session(provider)
       # Prevent any further interaction with the given provider, as the user has deauthorized it.
@@ -85,24 +124,36 @@ module Users
       session.delete(:omniauth_provider)
     end
 
-    # More info at:
-    # https://github.com/heartcombo/devise#omniauth
+    # We use the configured OmniAuth camelization to include the user-facing name of the provider in the flash message
+    def set_flash(type, key, kind: OmniAuth::Utils.camelize(omniauth_provider), reason: '')
+      flash[type] = t(key, kind:, reason:) if is_flashing_format?
+    end
 
-    # GET|POST /resource/auth/twitter
-    # def passthru
-    #   super
-    # end
+    def current_user
+      # Check if an existing user is already signed in (passed through the RelayState)
+      # and trying to add a new identity to their account. If so, we load the user information
+      # and set it as the current user. This is necessary to avoid creating a new user.
+      @current_user ||= if params[:RelayState]
+                          User.find_by(id: OmniAuth::NonceStore.pop(params[:RelayState])) || super
+                        else
+                          super
+                        end
+    end
 
-    # GET|POST /users/auth/twitter/callback
-    # def failure
-    #   super
-    # end
+    def user_identity
+      @user_identity ||= UserIdentity.includes(:user).find_or_initialize_by(omniauth_provider:, provider_uid:)
+    end
 
-    # protected
+    def omniauth_provider
+      request.env['omniauth.auth']&.provider || params[:provider]
+    end
 
-    # The path used when OmniAuth fails
-    # def after_omniauth_failure_path_for(scope)
-    #   super(scope)
-    # end
+    def provider_uid
+      request.env['omniauth.auth'].uid
+    end
+
+    def omniauth_user_info
+      request.env['omniauth.auth'].info
+    end
   end
 end

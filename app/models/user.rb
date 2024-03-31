@@ -64,35 +64,20 @@ class User < ApplicationRecord
     save!(validate: false)
   end
 
-  def self.from_omniauth(auth, user = nil) # rubocop:disable Metrics/AbcSize
-    identity_params = {omniauth_provider: auth.provider, provider_uid: auth.uid}
-    identity = UserIdentity.new(identity_params)
+  def self.new_from_omniauth(info, omniauth_provider, provider_uid)
+    User.new(
+      password: Devise.friendly_token[0, 20],
+      password_set: false,
+      first_name: info[:first_name],
+      last_name: info[:last_name],
+      email: info[:email],
+      status_group: info[:status_group] || :unknown,
+      identities: [UserIdentity.new(omniauth_provider:, provider_uid:)]
+    )
+  end
 
-    if user.nil?
-      # A new user signs up with an external account
-      user = joins(:identities).where(identities: identity_params).first_or_initialize do |new_user|
-        # Set these values initially
-        new_user.password = Devise.friendly_token[0, 20]
-        new_user.password_set = false
-        new_user.identities << identity
-        # If you are using confirmable and the provider(s) you use validate emails,
-        # uncomment the line below to skip the confirmation emails.
-        new_user.skip_confirmation!
-      end
-    else
-      # An existing user connects an external account
-      user.identities << identity
-    end
-
-    # Update some profile information on every login if present
-    user.assign_attributes(auth.info.slice(:email, :first_name, :last_name).to_h.compact)
-    if user.changed?
-      # We don't want to send a confirmation email for any of the changes
-      user.skip_confirmation_notification!
-      user.skip_reconfirmation!
-      user.save
-    end
-    user
+  def omniauth_identities
+    identities.where(omniauth_provider: User.omniauth_providers) # filter out enmeshed UserIdentity
   end
 
   def member_groups
@@ -107,6 +92,7 @@ class User < ApplicationRecord
     handle_group_memberships
     handle_collection_membership
     handle_messages
+    handle_user_identities
     true
   end
 
@@ -134,6 +120,10 @@ class User < ApplicationRecord
 
   def handle_messages
     Message.where(sender: self, param_type: %w[group collection]).destroy_all
+  end
+
+  def handle_user_identities
+    identities.destroy_all
   end
 
   def unread_messages_count

@@ -33,6 +33,13 @@ Rails.application.routes.draw do
     resources :messages, only: %i[index new create destroy] do
       get :reply, on: :collection
     end
+
+    collection do
+      get '/nbp_wallet/connect', to: 'users/nbp_wallet#connect'
+      get '/nbp_wallet/qr_code', to: 'users/nbp_wallet#qr_code'
+      get '/nbp_wallet/relationship_status', to: 'users/nbp_wallet#relationship_status'
+      get '/nbp_wallet/finalize', to: 'users/nbp_wallet#finalize'
+    end
   end
 
   resources :collections do
