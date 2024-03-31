@@ -176,7 +176,7 @@ RSpec.describe Users::OmniauthCallbacksController do
     let(:user) { create(:user) }
     let(:identity) { create(:user_identity, user:, omniauth_provider:) }
 
-    context 'when identity exists' do
+    context 'when password is set and identity exists' do
       before do
         allow(controller).to receive(:current_user).and_return(user)
         allow(user.identities).to receive(:find_by).with(omniauth_provider:).and_return(identity)
@@ -226,7 +226,7 @@ RSpec.describe Users::OmniauthCallbacksController do
       it_behaves_like 'no addition of the provider to the session'
     end
 
-    context 'when identity does not exist' do
+    context 'when password is set but identity does not exist' do
       before do
         allow(controller).to receive(:current_user).and_return(user)
         allow(user.identities).to receive(:find_by).with(omniauth_provider:).and_return(nil)
@@ -252,7 +252,7 @@ RSpec.describe Users::OmniauthCallbacksController do
       it_behaves_like 'no addition of the provider to the session'
     end
 
-    context 'when identity cannot be deleted' do
+    context 'when password exists but identity cannot be deleted' do
       let(:user_identity) { build(:user_identity, user:, omniauth_provider:, provider_uid: nil) }
 
       before do
@@ -271,6 +271,33 @@ RSpec.describe Users::OmniauthCallbacksController do
         delete :deauthorize, params: {provider: omniauth_provider}
         reason = "#{UserIdentity.human_attribute_name('provider_uid')} can't be blank"
         expect(flash[:alert]).to eq I18n.t('users.omni_auth.failure_deauthorize', kind: OmniAuth::Utils.camelize(omniauth_provider), reason:)
+      end
+
+      it_behaves_like 'no removal of affected provider in the session'
+      it_behaves_like 'no change to to other providers in the session'
+      it_behaves_like 'no addition of the provider to the session'
+    end
+
+    context 'when password is not set and last identity is deleted' do
+      before do
+        user.update(password_set: false)
+        allow(controller).to receive(:current_user).and_return(user)
+        allow(user.identities).to receive(:find_by).with(omniauth_provider:).and_return(identity)
+      end
+
+      it 'does not destroy the identity' do
+        expect(identity).not_to receive(:destroy)
+        delete :deauthorize, params: {provider: omniauth_provider}
+      end
+
+      it 'redirects to edit user registration path' do
+        delete :deauthorize, params: {provider: omniauth_provider}
+        expect(response).to redirect_to edit_user_registration_path
+      end
+
+      it 'sets a flash message' do
+        delete :deauthorize, params: {provider: omniauth_provider}
+        expect(flash[:alert]).to eq I18n.t('users.omni_auth.failure_deauthorize_last_identity', kind: OmniAuth::Utils.camelize(omniauth_provider))
       end
 
       it_behaves_like 'no removal of affected provider in the session'

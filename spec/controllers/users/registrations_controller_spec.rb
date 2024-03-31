@@ -13,6 +13,99 @@ RSpec.describe Users::RegistrationsController do
     request.env['devise.mapping'] = Devise.mappings[:user]
   end
 
+  describe '#edit' do
+    before { sign_in user }
+
+    it 'renders the edit template' do
+      get :edit
+      expect(response).to render_template(:edit)
+    end
+
+    it 'does not offer to manage OmniAuth accounts' do
+      get :edit
+      expect(response.body).not_to include(I18n.t('users.registrations.edit.manage_omniauth'))
+    end
+
+    context 'with an available identity provider' do
+      let(:provider) { :provider }
+
+      before do
+        # Add a new provider to the omniauth config, reload routes, and make the URL helpers available
+        Devise.omniauth provider
+        Rails.application.reload_routes!
+        Devise.include_helpers(Devise::OmniAuth)
+      end
+
+      after do
+        # Remove the provider from the omniauth config, reload routes
+        Devise.class_variable_set(:@@omniauth_configs, {}) # rubocop:disable Style/ClassVars
+        Rails.application.reload_routes!
+        # The URL helpers cannot be removed, but this only affects methods from Devise::OmniAuth::UrlHelpers.
+        # Those methods won't be called successfully without the provider in the omniauth config, so that this is fine.
+      end
+
+      it 'offers to manage OmniAuth accounts' do
+        get :edit
+        expect(response.body).to include(I18n.t('users.registrations.edit.manage_omniauth', kind: OmniAuth::Utils.camelize(provider)))
+      end
+
+      context 'when no identity is linked' do
+        it 'does not offer to unlink the identity' do
+          get :edit
+          expect(response.body).not_to include(I18n.t('users.registrations.edit.remove_identity', kind: OmniAuth::Utils.camelize(provider)))
+        end
+
+        it 'offers to add the identity' do
+          get :edit
+          expect(response.body).to include(I18n.t('users.registrations.edit.add_identity', kind: OmniAuth::Utils.camelize(provider)))
+        end
+
+        it 'does not explain that the last identity cannot be removed' do
+          get :edit
+          expect(response.body).not_to include(I18n.t('users.registrations.edit.cannot_remove_last_identity', kind: OmniAuth::Utils.camelize(provider)))
+        end
+      end
+
+      context 'when an existing identity is linked' do
+        before { create(:user_identity, user:, omniauth_provider: provider) }
+
+        it 'offers to unlink the identity' do
+          get :edit
+          expect(response.body).to include(I18n.t('users.registrations.edit.remove_identity', kind: OmniAuth::Utils.camelize(provider)))
+        end
+
+        it 'does not offer to add the identity' do
+          get :edit
+          expect(response.body).not_to include(I18n.t('users.registrations.edit.add_identity', kind: OmniAuth::Utils.camelize(provider)))
+        end
+
+        it 'does not explain that the last identity cannot be removed' do
+          get :edit
+          expect(response.body).not_to include(I18n.t('users.registrations.edit.cannot_remove_last_identity', kind: OmniAuth::Utils.camelize(provider)))
+        end
+
+        context 'when no password is set' do
+          before { user.update(password_set: false) }
+
+          it 'does not offer to unlink the identity' do
+            get :edit
+            expect(response.body).not_to include(I18n.t('users.registrations.edit.remove_identity', kind: OmniAuth::Utils.camelize(provider)))
+          end
+
+          it 'does not offer to add the identity' do
+            get :edit
+            expect(response.body).not_to include(I18n.t('users.registrations.edit.add_identity', kind: OmniAuth::Utils.camelize(provider)))
+          end
+
+          it 'explains that the last identity cannot be removed' do
+            get :edit
+            expect(response.body).to include(I18n.t('users.registrations.edit.cannot_remove_last_identity', kind: OmniAuth::Utils.camelize(provider)))
+          end
+        end
+      end
+    end
+  end
+
   describe '#update' do
     context 'when avatar was removed' do
       before { user.avatar.attach(io: Rails.root.join('spec/fixtures/files/avatar/profile.png').open, filename: 'profile.png') }

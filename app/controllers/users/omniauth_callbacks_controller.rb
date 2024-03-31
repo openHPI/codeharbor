@@ -49,12 +49,15 @@ module Users
       request.env['omniauth.auth']&.provider || params[:provider]
     end
 
-    def deauthorize # rubocop:disable Metrics/AbcSize
+    def deauthorize # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       identity = current_user.identities.find_by(omniauth_provider: provider)
-      if is_navigational_format? && identity&.destroy
       if is_navigational_format? && identity.nil?
         # i18n-tasks-use t('users.omni_auth.failure_deauthorize_not_linked')
         set_flash_message(:alert, :failure_deauthorize_not_linked, kind: OmniAuth::Utils.camelize(provider),
+          scope: 'users.omni_auth')
+      elsif is_navigational_format? && current_user.identities.count == 1 && !current_user.password_set?
+        # i18n-tasks-use t('users.omni_auth.failure_deauthorize_last_identity')
+        set_flash_message(:alert, :failure_deauthorize_last_identity, kind: OmniAuth::Utils.camelize(provider),
           scope: 'users.omni_auth')
       elsif is_navigational_format? && identity.destroy
         remove_provider_from_session(provider)
