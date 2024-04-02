@@ -1,6 +1,9 @@
 ---
 de:
   collections:
+    create:
+      error: Die Aufgabensammlung konnte nicht angelegt werden.
+      success_notice: Die Aufgabensammlung wurde erfolgreich angelegt. (Die Aufgabe wurde automatisch hinzugefügt)
     leave:
       left_successfully: Sie haben die Aufgabensammlung erfolgreich verlassen.
     push_collection:
@@ -12,6 +15,8 @@ de:
     remove_task:
       cannot_remove_alert: Sie können diese Aufgabe nicht entfernen.
     save_shared:
+      errors:
+        already_member: Sie sind bereits ein Mitglied dieser Aufgabensammlung.
       success_notice: Sie können jetzt an dieser Aufgabensammlung zusammenarbeiten.
     share:
       success_notice: Ihre Aufgabensammlung wurde gesendet.

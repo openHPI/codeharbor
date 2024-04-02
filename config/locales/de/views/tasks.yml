@@ -82,13 +82,14 @@ de:
     show:
       add_to_collection_hint: Speichern Sie Aufgaben für später, indem Sie sie zu einer Sammlung hinzufügen.
       button:
-        add_collection: Aufgabensammlung hinzufügen
         add_to_collection: Zu Sammlung hinzufügen
+        create_collection: Neue Sammlung anlegen
         download_as_zip: Diese Aufgabe als ZIP-Datei herunterladen.
         export: Exportieren
         export_tasks: Aufgaben exportieren
         rate: Bewerten
         show_comments: Kommentare anzeigen
+      create_collection_placeholder: Name der Sammlung
       define_account_link: Bitte definieren Sie zuerst einen Account-Link
       export_to: Exportieren nach
       guest:
@@ -98,6 +99,7 @@ de:
       no_license: Keine
       no_model_solution_present: Keine Musterlösungen vorhanden
       no_tests: Keine Tests enthalten
+      remove_task_from_collection_warning: Sind Sie sicher, dass Sie diese Aufgabe aus der Sammlung entfernen wollen?
       undefined: Benutzer:in undefiniert
       yourself: Ihnen selbst
     tasks:
