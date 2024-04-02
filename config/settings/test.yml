@@ -5,7 +5,11 @@ omniauth:
     enable: false
   bird:
     enable: false
+    certificate: ~
+    private_key: ~
   nbp:
     enable: false
+    certificate: ~
+    private_key: ~
 oai_pmh:
   admin_mail: admin@example.org
