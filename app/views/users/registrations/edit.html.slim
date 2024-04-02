@@ -50,14 +50,32 @@
 
   = render 'avatar_form', f: f
 
-  .form-group.field-element
-    = f.label :current_password, class: 'form-label'
-    = f.password_field :current_password,
-            required: true,
-            placeholder: User.human_attribute_name('current_password'),
-            autocomplete: 'current-password',
-            class: 'form-control'
-    small.form-text.text-body-secondary = t('devise.registrations.edit.we_need_your_current_password_to_confirm_your_changes')
+  - if resource.password_set?
+    .form-group.field-element
+      = f.label :current_password, class: 'form-label'
+      = f.password_field :current_password,
+              required: true,
+              placeholder: User.human_attribute_name('current_password'),
+              autocomplete: 'current-password',
+              class: 'form-control'
+      small.form-text.text-body-secondary = t('devise.registrations.edit.we_need_your_current_password_to_confirm_your_changes')
+
+
+  - if devise_mapping.omniauthable? && resource_class.omniauth_providers.any?
+    .form-group.field-element
+      .form-label
+        = t('.manage_omniauth')
+      .form-content.manage_omniauth
+        - resource_class.omniauth_providers.each do |provider|
+          - provider_name = OmniAuth::Utils.camelize(provider)
+          - configured_providers = current_user.identities.pluck(:omniauth_provider)
+          - if configured_providers.include?(provider.to_s) && (configured_providers.size > 1 || resource.password_set?)
+            = link_to t('.remove_identity', kind: provider_name), omniauth_deauthorize_path(provider), class: 'btn btn-light btn-sm mb-2 me-2', method: :delete
+          - elsif configured_providers.include?(provider.to_s)
+            a.btn.btn-light.btn-sm.mb-2.me-2.disabled href='#'
+              = t('.cannot_remove_last_identity', kind: provider_name)
+          - else
+            = link_to t('.add_identity', kind: provider_name), omniauth_authorize_path(resource_name, provider), class: 'btn btn-light btn-sm mb-2 me-2', method: :post
 
   .form-group.py-3
     .btn-group[role='group']

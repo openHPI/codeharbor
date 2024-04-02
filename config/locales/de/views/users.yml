@@ -7,6 +7,11 @@ de:
     registrations:
       avatar_form:
         remove_avatar: Profilbild entfernen
+      edit:
+        add_identity: Account mit %{kind} verknüpfen
+        cannot_remove_last_identity: Account-Verknüpfung zu %{kind} kann nicht entfernt werden, da weder ein Passwort gesetzt noch eine andere Identität verknüpft ist
+        manage_omniauth: Verknüpfte Accounts verwalten
+        remove_identity: Account-Verknüpfung zu %{kind} entfernen
     shared:
       notification_modal:
         delete_modal:

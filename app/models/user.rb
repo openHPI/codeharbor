@@ -16,6 +16,7 @@ class User < ApplicationRecord
 
   validates :email, presence: true, uniqueness: {case_sensitive: false}
   validates :first_name, :last_name, presence: true
+  validates :password_set, inclusion: [true, false]
 
   has_many :tasks, dependent: :nullify
 
@@ -57,23 +58,34 @@ class User < ApplicationRecord
     save!(validate: false)
   end
 
-  def self.from_omniauth(auth) # rubocop:disable Metrics/AbcSize
-    identity = {omniauth_provider: auth.provider, provider_uid: auth.uid}
+  def self.from_omniauth(auth, user = nil) # rubocop:disable Metrics/AbcSize
+    identity_params = {omniauth_provider: auth.provider, provider_uid: auth.uid}
+    identity = UserIdentity.new(identity_params)
 
-    user = joins(:identities).where(identities: identity).first_or_initialize do |new_user|
-      # Set these values initially
-      new_user.password = Devise.friendly_token[0, 20]
-      new_user.identities << UserIdentity.new(identity)
-      # If you are using confirmable and the provider(s) you use validate emails,
-      # uncomment the line below to skip the confirmation emails.
-      new_user.skip_confirmation!
+    if user.nil?
+      # A new user signs up with an external account
+      user = joins(:identities).where(identities: identity_params).first_or_initialize do |new_user|
+        # Set these values initially
+        new_user.password = Devise.friendly_token[0, 20]
+        new_user.password_set = false
+        new_user.identities << identity
+        # If you are using confirmable and the provider(s) you use validate emails,
+        # uncomment the line below to skip the confirmation emails.
+        new_user.skip_confirmation!
+      end
+    else
+      # An existing user connects an external account
+      user.identities << identity
     end
 
-    # Update some profile information on every login
-    user.email = auth.info.email
-    user.first_name = auth.info.first_name
-    user.last_name = auth.info.last_name
-    user.save
+    # Update some profile information on every login if present
+    user.assign_attributes(auth.info.slice(:email, :first_name, :last_name).to_h.compact)
+    if user.changed?
+      # We don't want to send a confirmation email for any of the changes
+      user.skip_confirmation_notification!
+      user.skip_reconfirmation!
+      user.save
+    end
     user
   end
 

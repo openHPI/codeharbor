@@ -1,0 +1,8 @@
+---
+de:
+  users:
+    omni_auth:
+      failure_deauthorize: 'Das Trennen von Ihrem %{kind}-Account war aufgrund des folgenden Grundes nicht möglich: "%{reason}".'
+      failure_deauthorize_last_identity: Sie können sich nicht von Ihrem %{kind}-Account trennen, da dies Ihr letzter verbleibender Account ist. Bitte erstellen Sie ein Passwort, um sich in Zukunft anmelden zu können.
+      failure_deauthorize_not_linked: Sie sind nicht mit einem %{kind}-Account verbunden.
+      success_deauthorize: Sie haben sich erfolgreich von Ihrem %{kind}-Account getrennt.

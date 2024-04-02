@@ -20,6 +20,10 @@ Rails.application.routes.draw do
     unlocks: 'users/unlocks',
   }
 
+  devise_scope :user do
+    delete '/users/deauth/:provider' => 'users/omniauth_callbacks#deauthorize', as: :omniauth_deauthorize
+  end
+
   resources :users, only: %i[show] do
     resources :account_links, only: %i[new show create edit update destroy] do
       post :remove_shared_user, on: :member
