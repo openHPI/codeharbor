@@ -20,6 +20,7 @@ de:
     show:
       button:
         collaborate: Zusammenarbeiten
+        delete: Aufgabensammlung löschen
         leave: Verlassen
         share: Aufgabensammlung teilen
       define_account_link: Bitte erstellen Sie zuerst einen Account-Link
@@ -29,6 +30,16 @@ de:
         deletion_warning: Sie sind der/die letzte Benutzer:in in dieser Aufgabensammlung. Wenn Sie gehen, wird diese Aufgabensammlung dauerhaft gelöscht! Sind Sie sicher?
       locked_exercise_hint: 'Hinweis: Für Aufgaben mit einem Schloss-Symbol müssen Sie zuerst Zugriff beantragen, um sie anzeigen zu können.'
       noExercisesAdded: Keine Aufgabe hinzugefügt
+      no_other_user: Kein/Keine anderer/andere Benutzer:in hat Zugriff auf diese Aufgabensammlung
+      num_of_other_users:
+        one: Ein/Eine anderer/andere Benutzer:in hat Zugriff auf diese Aufgabensammlung
+        other: "%{count} andere Benutzer:innen haben Zugriff auf diese Aufgabensammlung"
       shared_by: Geteilt von
       temporarily_disabled: Vorübergehend deaktiviert
       type_hint: Geben Sie die E-Mail-Adresse des/der Benutzer:in ein
+      visibility:
+        private: Diese Aufgabensammlung ist privat
+        public: Diese Aufgabensammlung ist öffentlich
+    visibility:
+      private: Privat
+      public: Öffentlich

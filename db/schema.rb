@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_29_215957) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_02_140747) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -82,6 +82,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_29_215957) do
     t.datetime "updated_at", null: false
     t.string "title"
     t.string "description", default: "", null: false
+    t.integer "visibility_level", limit: 2, default: 0, null: false, comment: "Used as enum in Rails"
   end
 
   create_table "comments", id: :serial, force: :cascade do |t|

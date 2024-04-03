@@ -20,6 +20,7 @@ en:
     show:
       button:
         collaborate: Collaborate
+        delete: Delete Collection
         leave: Leave
         share: Share Collection
       define_account_link: Please define an account link first
@@ -29,6 +30,16 @@ en:
         deletion_warning: You are the last user in this collection. If you leave, this collection will be permanently deleted! Are you sure?
       locked_exercise_hint: 'Hint: For exercises marked with a lock you have to request access first before you can view them.'
       noExercisesAdded: No Exercise Added
+      no_other_user: No other user has access to this collection
+      num_of_other_users:
+        one: One other user has access to this collection
+        other: "%{count} other users have access to this collection"
       shared_by: Shared by
       temporarily_disabled: Temporarily disabled
       type_hint: Type in the users email address
+      visibility:
+        private: This collection is private
+        public: This collection is public
+    visibility:
+      private: Private
+      public: Public

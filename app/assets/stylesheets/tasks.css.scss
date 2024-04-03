@@ -104,3 +104,15 @@
 .task_label:first-child {
   margin-left: 0;
 }
+
+.dropdown-menu {
+  width: 100%;
+}
+
+.create-collection.input-group {
+  width: calc(100% - 20px);
+  .btn.submit {
+    width: unset;
+    margin-bottom: 0 !important;
+  }
+}
