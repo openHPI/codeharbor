@@ -30,7 +30,11 @@ de:
         deletion_warning: Sie sind der/die letzte Benutzer:in in dieser Aufgabensammlung. Wenn Sie gehen, wird diese Aufgabensammlung dauerhaft gelöscht! Sind Sie sicher?
       locked_exercise_hint: 'Hinweis: Für Aufgaben mit einem Schloss-Symbol müssen Sie zuerst Zugriff beantragen, um sie anzeigen zu können.'
       noExercisesAdded: Keine Aufgabe hinzugefügt
+      no_invites: Es stehen keine Einladungen aus
       no_other_user: Kein/Keine anderer/andere Benutzer:in hat Zugriff auf diese Aufgabensammlung
+      num_of_invites:
+        one: Eine Einladung steht aus
+        other: Es stehen %{count} Einladungen aus
       num_of_other_users:
         one: Ein/Eine anderer/andere Benutzer:in hat Zugriff auf diese Aufgabensammlung
         other: "%{count} andere Benutzer:innen haben Zugriff auf diese Aufgabensammlung"
