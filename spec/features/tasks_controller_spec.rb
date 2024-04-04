@@ -18,11 +18,16 @@ RSpec.describe 'TasksController', :js do
 
       it 'displays labels after invalid submission attempt' do
         input = find('select', id: 'task_label_names').sibling('span', class: 'select2').find('textarea')
-        input.send_keys(not_existing_label_name)
-        wait_for_ajax
-        input.send_keys(:enter)
+        input.click # Open select2 dropdown, set focus
+        input.send_keys(not_existing_label_name) # Enter label name
+        # Assert the label is showing up as a search result. This will implicitly wait for the search (and AJAX calls) to complete.
+        expect(page).to have_css('div.task_label', text: not_existing_label_name, visible: :all)
+        input.send_keys(:enter) # Select the first option.
+        input.click # Close select2 dropdown
+        # Assert the label is showing up as a selected label. This will implicitly wait, too.
+        expect(page).to have_css("ul li[title=\"#{not_existing_label_name}\"", visible: :all)
         click_button(I18n.t('tasks.form.button.save_task'))
-        expect(page).to have_selector("option[value=\"#{not_existing_label_name}\"][selected=\"selected\"]", visible: :all)
+        expect(page).to have_css("option[value=\"#{not_existing_label_name}\"][selected=\"selected\"]", visible: :all)
       end
     end
   end
