@@ -21,4 +21,4 @@ module OmniAuth
   end
 end
 
-OmniAuth.config.add_camelization 'nbp', 'NBP'
+OmniAuth.config.add_camelization 'nbp', 'Mein Bildungsraum'
