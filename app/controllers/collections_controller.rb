@@ -96,16 +96,16 @@ class CollectionsController < ApplicationController
     render :show
   end
 
-  def save_shared
-    user = current_user
-    return redirect_to user_messages_path(user), alert: t('.errors.already_member') if @collection.users.include? user
+  def save_shared # rubocop:disable Metrics/AbcSize
+    return redirect_to user_messages_path(current_user), alert: t('.errors.already_member') if @collection.users.include? current_user
 
-    @collection.users << user
-    message = Message.received_by(user).find_by(param_type: 'collection', param_id: @collection.id)
-    message.mark_as_deleted(user)
-    message.save
-
-    redirect_to @collection, notice: t('.success_notice')
+    ActiveRecord::Base.transaction(requires_new: true) do
+      @collection.users << current_user
+      message = Message.received_by(current_user).find_by(param_type: 'collection', param_id: @collection.id)
+      message.mark_as_deleted(current_user)
+      message.save!
+      redirect_to @collection, notice: t('.success_notice')
+    end
   end
 
   def leave

@@ -22,7 +22,7 @@
             =< t('.num_of_other_users', count: @collection.users.size - 1)
         span
           i.fa-regular.fa-envelope
-          - if @num_of_invites == 0
+          - if @num_of_invites.zero?
             =< t('.no_invites')
           - else
             =< t('.num_of_invites', count: @num_of_invites)

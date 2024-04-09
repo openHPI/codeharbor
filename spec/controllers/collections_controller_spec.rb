@@ -473,6 +473,25 @@ RSpec.describe CollectionsController do
         post_request
         expect(response).to redirect_to collection
       end
+
+      context 'when marking the message as deleted fails' do
+        let(:search_results) { double }
+
+        before do
+          allow(Message).to receive(:received_by).and_return(search_results)
+          allow(search_results).to receive_messages(find_by: send_invitation, exists?: true)
+          allow(send_invitation).to receive(:mark_as_deleted).and_raise(ActiveRecord::ActiveRecordError)
+        end
+
+        it 'does not increase usercount of collection' do
+          expect { post_request }.to raise_error(ActiveRecord::ActiveRecordError).and avoid_change(collection.reload.users, :count)
+        end
+
+        it 'does not add the user to the collection' do
+          expect { post_request }.to raise_error(ActiveRecord::ActiveRecordError)
+          expect(collection.reload.users).not_to include user
+        end
+      end
     end
 
     context 'when user has not been invited' do
