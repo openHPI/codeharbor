@@ -57,6 +57,11 @@ class TaskPolicy < ApplicationPolicy
   def generate_test?
     user&.openai_api_key.present? and update?
   end
+  def contribute?(check_other_contrib: true)
+    return false if @user.blank?
+
+    (show? && !edit?) && (!check_other_contrib || task.contributions(user: @user).none?)
+  end
 
   private
 

@@ -215,9 +215,13 @@ class Task < ApplicationRecord
     title
   end
 
-  def contributions
+  def contributions(user: nil, status: nil)
+    task_filter_set = {parent_uuid: uuid}
+    unless user.nil?
+      task_filter_set[:user] = user
+    end
     Task.joins(:task_contribution)
-      .where(parent_uuid: uuid, task_contribution: {status: :pending})
+      .where(task_filter_set.merge(task_contribution: {status: (status.nil? ? :pending : status)}))
   end
 
   private
@@ -247,11 +251,6 @@ class Task < ApplicationRecord
 
   def unique_pending_contribution
     if contribution?
-      unless parent
-        errors.add(:task_contribution, :no_parent)
-        return
-      end
-
       other_existing_contrib = parent.contributions.where(user:).where.not(id:).any?
       errors.add(:task_contribution, :duplicated) if other_existing_contrib
     end
