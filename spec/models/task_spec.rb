@@ -16,17 +16,18 @@ RSpec.describe Task do
     it { is_expected.not_to allow_value('$pecial').for(:language) }
 
     describe '#no_license_change_on_duplicate' do
-      subject(:original_license) { create(:license) }
-      subject(:other_license) { create(:license) }
-      subject(:task_license) { original_license}
-      subject(:p_uuid) { nil }
-      subject(:task) { create(:task, license: task_license, parent_uuid: p_uuid) }
-      subject(:parent_task) { create(:task, license: original_license) }
+      let(:original_license) { create(:license) }
+      let(:other_license) { create(:license) }
+      let(:task_license) { original_license }
+      let(:p_uuid) { nil }
+      let(:task) { create(:task, license: task_license, parent_uuid: p_uuid) }
+      let(:parent_task) { create(:task, license: original_license) }
 
       context 'when a task is no duplicate' do
         before do
           task.license = other_license
         end
+
         it { expect(task).to be_valid }
       end
 
@@ -37,11 +38,32 @@ RSpec.describe Task do
           before do
             task.license = other_license
           end
+
           it { expect(task).not_to be_valid }
         end
 
         context 'when the license is not changed' do
           it { expect(task).to be_valid }
+        end
+      end
+    end
+
+    describe '#unique_pending_contribution' do
+      let(:user) { create(:user) }
+      let(:task) { create(:task, user:) }
+      let(:original_task) { create(:task) }
+
+      before do
+        build(:task_contribution, suggestion: task, base: original_task)
+      end
+
+      context 'when original task has another contribution' do
+        context 'when contrib is by user' do
+          before do
+            create(:task_contribution, base: original_task, user:)
+          end
+
+          it { expect(task).not_to be_valid }
         end
       end
     end

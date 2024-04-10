@@ -548,10 +548,13 @@
           =< t('common.button.delete')
 
       - if !@task.contribution?
-        - if !policy(@task).edit?
+        - if policy(@task).contribute?(check_other_contrib: false)
           = link_to new_task_task_contribution_path(@task), method: :get, class: 'btn btn-important' do
             i.fa-regular.fa-edit
-            =< t('task_contributions.buttons.contribute')
+            - if @task.contributions(user: @current_user).any?
+              =< t('task_contributions.buttons.edit_contribution')
+            - else
+              =< t('task_contributions.buttons.contribute')
         - if policy(@task).duplicate?
           = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important' do
 
