@@ -10,7 +10,7 @@ RSpec.describe TaskContributionPolicy do
   let(:new_user) { create(:user) }
   let(:access_level) { 'public' }
   let(:org_task) { create(:task, user: org_user, access_level:) }
-  let(:contribution) { build(:task_contribution, user: new_user, original_task: org_task) }
+  let(:contribution) { build(:task_contribution, user: new_user, base: org_task) }
 
   context 'when the user is not logged in' do
     it { expect { described_class.new(nil, contribution) }.to raise_error(Pundit::NotAuthorizedError) }
@@ -32,7 +32,7 @@ RSpec.describe TaskContributionPolicy do
         end
 
         context 'when the user has a contribution for the task' do
-          let(:contribution) { create(:task_contribution, user: new_user, original_task: org_task) }
+          let(:contribution) { create(:task_contribution, user: new_user, base: org_task) }
 
           it { is_expected.to forbid_actions %i[new create approve_changes] }
           it { is_expected.to permit_actions %i[destroy discard_changes show update] }
@@ -43,7 +43,7 @@ RSpec.describe TaskContributionPolicy do
     context 'when the user own the original task' do
       let(:user) { org_user }
       let(:contribution_approval_status) { 'pending' }
-      let(:contribution) { create(:task_contribution, user: new_user, original_task: org_task, status: contribution_approval_status) }
+      let(:contribution) { create(:task_contribution, user: new_user, base: org_task, status: contribution_approval_status) }
 
       it { is_expected.to forbid_actions %i[create new update destroy] }
 
