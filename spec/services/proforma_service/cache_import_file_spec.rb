@@ -44,6 +44,17 @@ RSpec.describe ProformaService::CacheImportFile do
         'path' => 'testfile.zip', 'updatable' => false))
     end
 
+    context 'when the filename has spaces' do
+      let(:zip_file) { fixture_file_upload('proforma_import/testfile with spaces.zip', 'application/zip') }
+
+      it 'saves the data-hash in ImportFileCache' do
+        cache_import_file
+        expect(ImportFileCache.last.data.values).to include(include('task_uuid' => 'e9c562d8-43fc-4714-9848-6a21e38ef468',
+          'exists' => false, 'import_id' => ImportFileCache.last.id,
+          'path' => 'testfile with spaces.zip', 'updatable' => false))
+      end
+    end
+
     context 'when an task with the uuid exists' do
       before { create(:task, uuid: 'e9c562d8-43fc-4714-9848-6a21e38ef468', user: task_user) }
 

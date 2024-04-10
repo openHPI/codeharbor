@@ -25,7 +25,7 @@ module ProformaService
     private
 
     def file_data_hash(task, import_file, proforma_task)
-      {path: proforma_task[:path].tr(' ', '_'),
+      {path: proforma_task[:path],
        exists: task.present?,
        updatable: task.present? && Pundit.policy(@user, task).manage?,
        import_id: import_file.id,
