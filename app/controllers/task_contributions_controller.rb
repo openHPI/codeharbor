@@ -38,6 +38,12 @@ class TaskContributionsController < ApplicationController
 
   def new
     @task_contribution = TaskContribution.new_for(@task, current_user)
+    # TODO: Consider throwing an error if user nil
+    existing = @task.contributions(user: current_user)
+    if existing.any?
+      redirect_to existing.first
+      return
+    end
     authorize @task_contribution
 
     @task = @task_contribution.suggestion
