@@ -15,7 +15,7 @@ class TaskContributionPolicy < ApplicationPolicy
 
   %i[create? new?].each do |action|
     define_method(action) do
-      Pundit.policy(@user, base).show? && !Pundit.policy(@user, base).edit? && base.contributions.where(user: @user).none?
+      Pundit.policy(@user, base).contribute?
     end
   end
 

@@ -9,6 +9,7 @@ RSpec.describe TaskPolicy do
   let(:groups) { [] }
   let(:access_level) { :private }
   let(:task) { create(:task, user: task_user, access_level:, groups:) }
+  let(:all_actions) { %i[show download import_uuid_check import_external index new import_start import_confirm create add_to_collection duplicate export_external_start export_external_check export_external_confirm update edit destroy manage contribute] }
   let(:openai_api_key) { nil }
 
   context 'without a user' do
@@ -39,8 +40,20 @@ RSpec.describe TaskPolicy do
       context 'without gpt access token' do
         let(:openai_api_key) { nil }
 
-        it { is_expected.to forbid_actions(%i[generate_test]) }
+        it { is_expected.to forbid_only_actions %i[generate_test contribute] }
         it { is_expected.to permit_actions(generic_user_permissions) }
+      end
+
+      context 'with gpt access token' do
+        before do
+          Settings.open_ai.access_token = 'access_token'
+        end
+
+        after do
+          Settings.open_ai.access_token = nil
+        end
+
+        it { is_expected.to forbid_only_actions %i[generate_test contribute] }
       end
     end
 
@@ -50,8 +63,20 @@ RSpec.describe TaskPolicy do
       context 'without gpt access token' do
         let(:openai_api_key) { nil }
 
-        it { is_expected.to forbid_actions(%i[generate_test]) }
+        it { is_expected.to forbid_only_actions %i[generate_test contribute] }
         it { is_expected.to permit_actions(generic_user_permissions + %i[edit update show export_external_start export_external_check export_external_confirm download add_to_collection duplicate]) }
+      end
+
+      context 'with gpt access token' do
+        before do
+          Settings.open_ai.access_token = 'access_token'
+        end
+
+        after do
+          Settings.open_ai.access_token = nil
+        end
+
+        it { is_expected.to forbid_only_actions %i[generate_test contribute] }
       end
     end
 
@@ -59,7 +84,7 @@ RSpec.describe TaskPolicy do
       let(:task_user) { create(:user) }
       let(:access_level) { :public }
 
-      it { is_expected.to permit_only_actions(generic_user_permissions + %i[show export_external_start export_external_check export_external_confirm download add_to_collection duplicate]) }
+      it { is_expected.to permit_only_actions(generic_user_permissions + %i[show export_external_start export_external_check export_external_confirm download add_to_collection duplicate contribute]) }
     end
 
     context 'when task is "private" and in same group' do
