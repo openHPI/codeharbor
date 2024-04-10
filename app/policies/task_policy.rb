@@ -54,6 +54,12 @@ class TaskPolicy < ApplicationPolicy
     show? and update? and destroy?
   end
 
+  def contribute?(check_other_contrib: true)
+    return false if @user.blank?
+
+    (show? && !edit?) && (!check_other_contrib || task.contributions(user: @user).none?)
+  end
+
   private
 
   def user_required?
