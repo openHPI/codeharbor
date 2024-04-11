@@ -14,7 +14,9 @@ class CollectionsController < ApplicationController
     authorize @collections
   end
 
-  def show; end
+  def show
+    @num_of_invites = Message.where(param_type: 'collection', param_id: @collection.id).count
+  end
 
   def new
     @collection = Collection.new
@@ -83,7 +85,7 @@ class CollectionsController < ApplicationController
   end
 
   def share
-    if share_message.save
+    if @collection.users.exclude?(share_message.recipient) && share_message.save
       redirect_to collection_path(@collection), notice: t('.success_notice')
     else
       redirect_to collection_path(@collection), alert: t('common.errors.something_went_wrong')
@@ -94,14 +96,15 @@ class CollectionsController < ApplicationController
     render :show
   end
 
-  def save_shared
+  def save_shared # rubocop:disable Metrics/AbcSize
     return redirect_to user_messages_path(current_user), alert: t('.errors.already_member') if @collection.users.include? current_user
 
-    @collection.users << current_user
-    if @collection.save
+    ActiveRecord::Base.transaction(requires_new: true) do
+      @collection.users << current_user
+      message = Message.received_by(current_user).find_by(param_type: 'collection', param_id: @collection.id)
+      message.mark_as_deleted(current_user)
+      message.save!
       redirect_to @collection, notice: t('.success_notice')
-    else
-      redirect_to users_messages_path, alert: t('common.errors.something_went_wrong')
     end
   end
 
@@ -126,8 +129,12 @@ class CollectionsController < ApplicationController
   end
 
   def share_message
-    user = User.find_by(email: params[:user])
-    Message.new(sender: current_user, recipient: user, param_type: 'collection', param_id: @collection.id)
+    @share_message ||= Message.new(
+      sender: current_user,
+      recipient: User.find_by(email: params[:user]),
+      param_type: 'collection',
+      param_id: @collection.id
+    )
   end
 
   def push_exercises
