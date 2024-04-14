@@ -69,6 +69,7 @@ group :development do
   gem 'rubocop-performance'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
+  gem 'slim_lint', require: false
   gem 'web-console'
 end
 
