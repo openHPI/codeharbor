@@ -9,7 +9,7 @@
         = f.label :description, Collection.human_attribute_name('description'), class: 'form-label'
         = f.text_area :description, class: 'form-control', rows: 10
       .field-element
-        = f.label :visibility_level, Collection.human_attribute_name("visibility_level"), class: 'form-label collection-edit-visibility'
+        = f.label :visibility_level, Collection.human_attribute_name('visibility_level'), class: 'form-label collection-edit-visibility'
         .radio-switch
           = f.radio_button :visibility_level, :public, value: :public, checked: true
           = label_tag 'collection_visibility_level_public', t('collections.visibility.public'), class: 'radio-left'
@@ -28,7 +28,7 @@
               = f.nested_fields_for :collection_tasks do |ct|
                 - task = ct.object.task
                 - if task.present?
-                  .row[data-id=task.id]
+                  .row data-id=task.id
                     = ct.hidden_field :rank
                     .col-auto.vert-align-container.sortable-handle
                       span.fas.fa-bars.vert-align
@@ -39,17 +39,17 @@
                         = link_to task.title, task_path(task), class: 'btn btn-light disabled'
                     .col-auto.vert-align-container
                       = ct.remove_nested_fields_link class: 'float-end' do
-                        i.fa-solid.fa-xmark.vert-align style=("color: #800000; font-size: 20px;")
+                        i.fa-solid.fa-xmark.vert-align style=('color: #800000; font-size: 20px;')
 
         br
     .form-group
-      .actions.btn-group[role="group"]
+      .actions.btn-group role='group'
         = button_tag type: 'submit', class: 'btn btn-important' do
           i.fa-solid.fa-folder-open
           =< t('.button.save')
         - if @collection.tasks.present?
-          = link_to remove_all_collection_path(@collection), method: :patch, data: { confirm: t('common.sure') }, class: 'btn btn-important' do
-            i.fa-solid.fa-xmark style=("color: #800000")
+          = link_to remove_all_collection_path(@collection), method: :patch, data: {confirm: t('common.sure')}, class: 'btn btn-important' do
+            i.fa-solid.fa-xmark style=('color: #800000')
             =< t('.button.remove_all')
         = link_to :back, class: 'btn btn-important' do
           i.fa-solid.fa-xmark

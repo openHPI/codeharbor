@@ -1,9 +1,9 @@
 - if user_signed_in?
   ul.navbar-nav.mb-2.mb-lg-0
-    = render('navigation_collection_link', model: Task) do
-    = render('navigation_collection_link', model: Collection) do
-    = render('navigation_collection_link', model: Group) do
-    - if current_user.role === 'admin'
+    = render('navigation_collection_link', model: Task, cached: true)
+    = render('navigation_collection_link', model: Collection, cached: true)
+    = render('navigation_collection_link', model: Group, cached: true)
+    - if current_user.role == 'admin'
       li.nav-item
         = link_to rails_admin.dashboard_path, 'data-turbolinks': false, class: 'nav-link px-3' do
           i.fa-solid.fa-lock

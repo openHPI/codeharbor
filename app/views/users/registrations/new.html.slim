@@ -47,10 +47,10 @@
             autocomplete: 'current-password',
             class: 'form-control'
 
-  = render 'avatar_form', f: f
+  = render 'avatar_form', f:
 
   .form-group.py-3
-    .btn-group[role='group']
+    .btn-group role='group'
       = button_tag type: 'submit', class: 'btn btn-important' do
         i.fa-solid.fa-user
         =< t('common.button.sign_up')

@@ -2,11 +2,11 @@
   .row
     .col-md-12
       .std-heading
-        i.fa-solid.fa-folder-open style=("color: #444444")
+        i.fa-solid.fa-folder-open style='color: #444444'
         =< Collection.model_name.human(count: :many)
       - if policy(Group).new?
         = link_to new_collection_path, class: 'btn btn-main float-end nav-btn-collection' do
-          i.fa-solid.fa-plus style=("color: #000066")
+          i.fa-solid.fa-plus style='color: #000066'
           =< t('.new_collection')
 br
 = render 'collections'

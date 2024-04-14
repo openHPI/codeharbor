@@ -1,6 +1,7 @@
-- if defined?(model) && policy(model).index? || defined?(target) && defined?(text)
-  - path = defined?(target) ? target : "#{model.model_name.collection}_path".to_sym
+- if (defined?(model) && policy(model).index?) || (defined?(target) && defined?(text))
+  - path = defined?(target) ? target : :"#{model.model_name.collection}_path"
   li.nav-item
     = link_to(send(path), class: "nav-link px-3 #{active_class(send(path))}") do
-      = yield
+      - if local_assigns[:icon].present?
+        i.fa-solid class=local_assigns[:icon]
       =< defined?(text) ? text : model.model_name.human(count: :many).capitalize

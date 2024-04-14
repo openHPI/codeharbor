@@ -1,12 +1,12 @@
 - if @groups.empty?
-  .card style=("margin-top: 40px")
+  .card style='margin-top: 40px'
     .card-body
       .row
         .col-md-12
-          h3 style=("color: #777777")
+          h3 style='color: #777777'
             = t('.no_groups_yet')
           br
-          p style=("color: #777777")
+          p style='color: #777777'
             = t('.create_groups_tip')
           br
           br
@@ -14,7 +14,7 @@
   .card.my-4
     .card-header
       h6
-        span= group.name
+        span = group.name
         span.float-end
           - unless @option == 'all'
             - if group.admin?(current_user)
@@ -23,10 +23,9 @@
               = group.confirmed_member?(current_user) ? t('.member_label') : t('.pending_label')
     .card-body
       .row.px-2
-        .col-md-12 style=("overflow-wrap: break-word;")
-          - if group.description
-            = group.description
-          .btn-group.float-end aria-label="..." role="group"
+        .col-md-12 style='overflow-wrap: break-word;'
+          = group.description
+          .btn-group.float-end aria-label='...' role='group'
             - if policy(group).show?
               = link_to t('common.button.show'), group, class: 'btn btn-light'
               - if policy(group).edit?

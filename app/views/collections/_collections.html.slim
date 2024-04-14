@@ -1,11 +1,11 @@
 - if @collections.empty?
-  .card style=("margin-top: 40px")
+  .card style='margin-top: 40px'
     .card-body
       .col-md-10
-        h3 style=("color: #777777")
+        h3 style='color: #777777'
           = t('.empty_state.heading')
         br
-        p style=("color: #777777")
+        p style='color: #777777'
           = t('.empty_state.hint')
         br
         br
@@ -13,18 +13,18 @@
   .card.my-4
     .card-header
       h6
-        span= collection.title
+        span = collection.title
         - if collection.visibility_level_public?
-          i.fa-solid.fa-lock-open.float-end title=(t('collections.visibility.public'))
+          i.fa-solid.fa-lock-open.float-end title=t('collections.visibility.public')
         - else
-          i.fa-solid.fa-lock.float-end title=(t('collections.visibility.private'))
+          i.fa-solid.fa-lock.float-end title=t('collections.visibility.private')
 
     .card-body
       .row.px-3
         .col
           .description.collapsable.w-100
             - if collection.description.blank?
-              span style=("color: gray")
+              span style='color: gray'
                 = t('collections.shared.no_description')
             - else
               = render_markdown(collection.description)
@@ -48,7 +48,7 @@
                   - else
                     = link_to task.title, task_path(task), class: 'btn btn-light disabled'
         .col-auto
-          .btn-group.float-end aria-label="..." role="group"
+          .btn-group.float-end aria-label='...' role='group'
             - if policy(collection).show?
               = link_to t('common.button.view'), collection_path(collection), class: 'btn btn-light'
             - if policy(collection).edit?

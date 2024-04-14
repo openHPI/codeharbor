@@ -14,8 +14,8 @@
         .table-list
           => admin.email
           - if policy(@group).demote_admin? && @group.admins.length > 1
-            = link_to demote_admin_group_path(group: @group, user: admin), method: :post, class: 'btn btn-light btn-sm', data: { confirm: admin == current_user ? t('.demote_yourself.confirm') : t('.demote_admin.confirm') } do
-              i.fa-solid.fa-arrow-down style=("color:#000080")
+            = link_to demote_admin_group_path(group: @group, user: admin), method: :post, class: 'btn btn-light btn-sm', data: {confirm: admin == current_user ? t('.demote_yourself.confirm') : t('.demote_admin.confirm')} do
+              i.fa-solid.fa-arrow-down style=('color:#000080')
               =< (admin == current_user ? t('.button.demote_yourself') : t('.button.demote_admin'))
 
   .row.vertical
@@ -23,18 +23,17 @@
 
     .row-value
       - if @group.confirmed_members.present?
-        - (@group.confirmed_members).each do |member|
+        - @group.confirmed_members.each do |member|
           .table-list
             => member.email
-            - if policy(@group).show?
-              - if policy(@group).edit?
-                - if @group.group_membership_for(member).role_confirmed_member?
-                  = link_to make_admin_group_path(group: @group, user: member), method: :post, class: 'btn btn-light btn-sm' do
-                    i.fa-solid.fa-plus style=("color:#008000")
-                    =< t('.button.make_admin')
-                = link_to delete_from_group_group_path(group: @group, user: member), method: :patch, class: 'btn btn-light btn-sm' do
-                  i.fa-solid.fa-xmark style=("color:#800000")
-                  =< t('common.button.remove')
+            - if policy(@group).edit?
+              - if @group.group_membership_for(member).role_confirmed_member?
+                = link_to make_admin_group_path(group: @group, user: member), method: :post, class: 'btn btn-light btn-sm' do
+                  i.fa-solid.fa-plus style='color:#008000'
+                  =< t('.button.make_admin')
+              = link_to delete_from_group_group_path(group: @group, user: member), method: :patch, class: 'btn btn-light btn-sm' do
+                i.fa-solid.fa-xmark style='color:#800000'
+                =< t('common.button.remove')
       - else
         = t('.has_no_users')
 
@@ -49,11 +48,11 @@
             .table-list
               => user.email
               .btn-group.float-end
-                = link_to grant_access_group_path(group: @group, user: user), method: :post, class: 'btn btn-light btn-sm' do
-                  i.fa-solid.fa-plus style=("color:#008000")
+                = link_to grant_access_group_path(group: @group, user:), method: :post, class: 'btn btn-light btn-sm' do
+                  i.fa-solid.fa-plus style=('color:#008000')
                   =< t('.button.grant_access')
-                = link_to deny_access_group_path(group: @group, user: user), method: :post, class: 'btn btn-light btn-sm' do
-                  i.fa-solid.fa-xmark style=("color:#800000")
+                = link_to deny_access_group_path(group: @group, user:), method: :post, class: 'btn btn-light btn-sm' do
+                  i.fa-solid.fa-xmark style=('color:#800000')
                   =< t('.button.deny_access')
         - else
           = t('.no_pending_users')
@@ -66,13 +65,13 @@
             .btn-group
               = link_to task.title, task_path(task), class: 'btn btn-light'
               - if policy(@group).remove_task?
-                = link_to remove_task_group_path(task: task), method: :patch, class: 'btn btn-light' do
-                  i.fa-solid.fa-xmark style=("color:gray;")
+                = link_to remove_task_group_path(task:), method: :patch, class: 'btn btn-light' do
+                  i.fa-solid.fa-xmark style=('color:gray;')
       - else
         = t('.has_no_tasks')
 
 br
-.actions.btn-group[role="group"]
+.actions.btn-group role='group'
   - if policy(@group).request_access?
     = link_to t('groups.shared.button.request_membership'), request_access_group_path(@group), method: :post, class: 'btn btn-important'
   - if policy(@group).edit?
@@ -80,7 +79,7 @@ br
       i.fa-solid.fa-pen-to-square
       =< t('common.button.edit')
     = link_to group_path(@group), class: 'btn btn-important', method: :delete, data: {confirm: t('common.sure')} do
-      i.fa-solid.fa-trash-can style=("color:#800000")
+      i.fa-solid.fa-trash-can style=('color:#800000')
       =< t('.button.delete_group')
   - if policy(@group).leave?
     = link_to t('.button.leave'), leave_group_path(@group), method: :post, class: "leave-btn btn btn-important #{@group.last_admin?(current_user) ? 'disabled' : ''}", data: {confirm: t('common.sure')}
