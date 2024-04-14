@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :report do
-    exercise { nil }
-    user { nil }
+    task
+    user
     text { 'MyText' }
   end
 end

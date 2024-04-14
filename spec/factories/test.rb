@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :test, class: 'Test' do
+    task
     title { 'title' }
     sequence(:xml_id) {|n| "test_#{n}" }
 

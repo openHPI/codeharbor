@@ -12,7 +12,7 @@ RSpec.describe TaskFilesController do
   describe 'GET #download_attachment' do
     subject(:get_request) { get :download_attachment, params: }
 
-    let!(:task_file) { create(:task_file, :with_task, :with_attachment, fileable: build(:task, user: task_user)) }
+    let!(:task_file) { create(:task_file, :with_attachment, fileable: build(:task, user: task_user)) }
     let(:params) { {id: task_file.id} }
     let(:task_user) { user }
 
@@ -34,7 +34,7 @@ RSpec.describe TaskFilesController do
   describe 'GET #extract_text_data' do
     subject(:get_request) { get :extract_text_data, params: }
 
-    let(:task_file) { create(:task_file, :with_task, :with_text_attachment, fileable: build(:task, user: task_user)) }
+    let(:task_file) { create(:task_file, :with_text_attachment, fileable: build(:task, user: task_user)) }
     let(:params) { {id: task_file.id} }
     let(:task_user) { user }
 
@@ -44,7 +44,7 @@ RSpec.describe TaskFilesController do
     end
 
     context 'when attachment does not contain text' do
-      let(:task_file) { create(:task_file, :with_task, :with_attachment, fileable: build(:task, user: task_user)) }
+      let(:task_file) { create(:task_file, :with_attachment, fileable: build(:task, user: task_user)) }
 
       it 'returns content of the file' do
         get_request
