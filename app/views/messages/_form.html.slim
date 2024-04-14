@@ -12,7 +12,7 @@
       = f.label :text, Message.human_attribute_name('text'), class: 'form-label'
       = f.text_area :text, class: 'form-control'
     br
-    .actions.btn-group role="group"
+    .actions.btn-group role='group'
       = button_tag type: 'submit', class: 'btn btn-important' do
         i.fa-solid.fa-envelope
         =< t('messages.shared.send_message')

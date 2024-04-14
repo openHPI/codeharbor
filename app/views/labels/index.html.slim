@@ -1,16 +1,16 @@
-.container[style="padding: 0px;"]
+.container style="padding: 0px;"
   .row
-    div.col-md-7
-      input.form-control[id="label-name-filter-input" type="text" placeholder=t('.filter_by_name')]
+    .col-md-7
+      input.form-control#label-name-filter-input type='text' placeholder=t('.filter_by_name')
       br
       .div.labels-table-container
         table.table.table-bordered.table-striped.labels-table
           thead
             tr
-              th.sort-by-id.table-header-sort-down[style='width: 10%;'] = t('.id')
-              th.sort-by-name[style='width: 30%;'] = Label.human_attribute_name(:name)
-              th.sort-by-created-at[style='width: 40%;'] = t('common.created_at')
-              th[style='width: 20%;'] = t('.used_by_tasks')
+              th.sort-by-id.table-header-sort-down style='width: 10%;' = t('.id')
+              th.sort-by-name style='width: 30%;' = Label.human_attribute_name(:name)
+              th.sort-by-created-at style='width: 40%;' = t('common.created_at')
+              th style='width: 20%;' = t('.used_by_tasks')
           tbody
       br
 
@@ -18,12 +18,12 @@
       div
         .input-group
           = button_tag t('.merge'), type: 'button', id: 'merge-labels-button', disabled: true, class: 'btn btn-primary'
-          input.form-control[id="merge-labels-input" type="text" placeholder=t('.new_name')]
+          input.form-control#merge-labels-input type='text' placeholder=t('.new_name')
 
-      .div[style='margin-top: 10px;']
+      .div style='margin-top: 10px;'
         .input-group
           = button_tag t('.change_color_to'), id: 'change-label-color-button', disabled: true, class: 'btn btn-primary'
-          input.form-control[id="color-labels-input" type="color" value="#000000"]
+          input.form-control#color-labels-input type='color' value='#000000'
 
-      .div[style='margin-top: 10px;']
+      .div style='margin-top: 10px;'
         = button_tag t('common.button.delete'), id: 'delete-labels-button', disabled: true, class: 'btn btn-danger'

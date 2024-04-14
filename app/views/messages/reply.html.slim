@@ -2,5 +2,5 @@
   .std-heading
     i.fa-solid.fa-envelope
     =< t('.message_to')
-    = ': ' + @recipient.name
+    = ": #{@recipient.name}"
 = render 'form'

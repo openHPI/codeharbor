@@ -11,11 +11,11 @@
       .comment-user
         = comment.user.name
         .float-end.created-at
-          = t('common.created') + ': '
+          = "#{t('common.created')}: "
           = t('.time_ago', time: time_ago_in_words(comment.created_at))
       .comment-text.collapsable data-task=@task.id data-comment=comment.id
         = comment.text
-        .btn-group.float-end role="group"
+        .btn-group.float-end role='group'
           - if policy(comment).edit?
             = link_to edit_task_comment_path(@task, comment), class: 'btn btn-light btn-sm', remote: true do
               i.fa-solid.fa-pen-to-square
@@ -25,9 +25,9 @@
               =< t('common.button.delete')
       .more-btn-wrapper
         = link_to task, class: 'more-btn' do
-          span class=("more-tag")
+          span.more-tag
             = t('common.button.show_more')
-          span class=("less-tag d-none")
+          span.less-tag.d-none
             = t('common.button.show_less')
 
 

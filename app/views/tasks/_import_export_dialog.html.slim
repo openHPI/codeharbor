@@ -1,11 +1,11 @@
-.bootstrap-modal.modal.fade style='display:none;' id="import-export-dialog"
+.bootstrap-modal.modal.fade#import-export-dialog style='display:none;'
   .modal-dialog.modal-lg
     .modal-content
       .modal-header
         h4.modal-title
           = title
-        = button_tag class: 'btn-close', 'data-bs-dismiss': 'modal' do
-      .modal-body id='import-export-modal-body'
+        = button_tag class: 'btn-close', 'data-bs-dismiss': 'modal'
+      .modal-body#import-export-modal-body
       .modal-footer
         = button_tag class: 'btn btn-important', 'data-bs-dismiss': 'modal' do
           = t('common.button.close')
