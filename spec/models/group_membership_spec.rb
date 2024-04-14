@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe GroupMembership do
   describe 'validations' do
-    subject { build(:group_membership, :with_group) }
+    subject { build(:group_membership) }
 
     it { is_expected.to belong_to(:group) }
     it { is_expected.to belong_to(:user) }

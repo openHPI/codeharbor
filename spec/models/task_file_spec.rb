@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe TaskFile do
   describe '#valid?' do
-    subject { build(:task_file, :with_task) }
+    subject { build(:task_file) }
 
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to belong_to(:fileable) }
@@ -70,7 +70,7 @@ RSpec.describe TaskFile do
   describe '#duplicate' do
     subject(:duplicate) { file.duplicate }
 
-    let(:file) { create(:task_file, :with_task) }
+    let(:file) { create(:task_file) }
 
     it 'creates a new file' do
       expect(duplicate).not_to be file
@@ -82,7 +82,7 @@ RSpec.describe TaskFile do
   end
 
   describe '#remove_attachment hook' do
-    let!(:file) { create(:task_file, :with_task, :with_attachment) }
+    let!(:file) { create(:task_file, :with_attachment) }
     let(:use_attached_file) { 'true' }
 
     before do
@@ -106,12 +106,12 @@ RSpec.describe TaskFile do
   describe '#text_data?' do
     subject { file.text_data? }
 
-    let(:file) { create(:task_file, :with_task, :with_attachment) }
+    let(:file) { create(:task_file, :with_attachment) }
 
     it { is_expected.to be false }
 
     context 'when file has text content' do
-      let(:file) { create(:task_file, :with_task, :with_text_attachment) }
+      let(:file) { create(:task_file, :with_text_attachment) }
 
       it { is_expected.to be true }
     end
