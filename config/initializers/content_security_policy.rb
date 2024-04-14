@@ -60,22 +60,40 @@ Rails.application.configure do
     policy.default_src          :none
     policy.base_uri             :self
     policy.font_src             :self
-    # ACE uses :data URIs for images
-    policy.img_src              :self, :data
+    policy.img_src              :self
     policy.object_src           :none
     policy.media_src            :self
+    policy.script_src_elem      :self, :report_sample
     # Unfortunately, we still have many click handlers and inline JavaScript that require :unsafe_inline
+    policy.script_src_attr      :self, :unsafe_inline, :report_sample
+    # The `script_src` directive is only a fallback for browsers not supporting `script_src_elem` and `script_src_attr`.
     policy.script_src           :self, :unsafe_inline, :report_sample
-    # Our ACE editor unfortunately requires :unsafe_inline for the code highlighting
+    # Some dependencies add new styles to the DOM dynamically, requiring :unsafe-inline.
+    # Currently, these include turbolinks, and vis.js.
+    policy.style_src_elem       :self, :unsafe_inline, :report_sample
+    # We still use some inline styles within the application, and indirectly through d3.js.
+    policy.style_src_attr       :unsafe_inline, :report_sample
+    # The `style_src` directive is only a fallback for browsers not supporting `style_src_elem` and `style_src_attr`.
     policy.style_src            :self, :unsafe_inline, :report_sample
     policy.connect_src          :self
-    # Our ACE editor uses web workers to highlight code, preferably via URL or otherwise with a blob.
-    policy.child_src            :self, :blob
+    # Web workers are used by the ACE editor (for syntax highlighting), further code via blobs.
+    policy.worker_src           :self, :blob
     policy.form_action          :self
     policy.frame_ancestors      :none
+    policy.frame_src            :none
+    policy.manifest_src         :none
+
+    # Trusted Types are not yet added to the application, thus we cannot enforce them.
+    # policy.require_trusted_types_for :script
+    # policy.trusted_types       'example'
 
     # Specify URI for violation reports
     policy.report_uri           SentryCsp.report_url if SentryCsp.active?
+
+    # We want to apply a default sandbox to our page, just allowing a few features.
+    # Despite restricting the sandbox as much as possible, Chrome warns:
+    # "An iframe which has both allow-scripts and allow-same-origin for its sandbox attribute can escape its sandboxing."
+    policy.sandbox              'allow-downloads', 'allow-forms', 'allow-modals', 'allow-popups', 'allow-same-origin', 'allow-scripts'
 
     CSP.apply_yml_settings_for      policy
     CSP.apply_sentry_settings_for   policy if SentryJavascript.active?
