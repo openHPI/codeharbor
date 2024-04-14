@@ -21,7 +21,7 @@ RSpec.describe 'LabelsController', :js do
         find('input', id: 'label-name-filter-input').send_keys(:enter)
         wait_for_ajax
         matching_labels.each {|label| expect(page).to have_css('.labels-table .task_label', text: label.name) }
-        not_matching_labels.each {|label| expect(page).not_to have_css('.labels-table .task_label', text: label.name) }
+        not_matching_labels.each {|label| expect(page).to have_no_css('.labels-table .task_label', text: label.name) }
       end
     end
 
@@ -37,7 +37,7 @@ RSpec.describe 'LabelsController', :js do
           find('.labels-table .task_label', text: selected_label.name).click
           fill_in('merge-labels-input', with: new_name)
           accept_prompt do
-            click_button('merge-labels-button')
+            click_on('merge-labels-button')
           end
           wait_for_ajax
         end
@@ -59,7 +59,7 @@ RSpec.describe 'LabelsController', :js do
           find('.labels-table .task_label', text: merged_labels.second.name).click
           fill_in('merge-labels-input', with: new_name)
           accept_prompt do
-            click_button('merge-labels-button')
+            click_on('merge-labels-button')
           end
           wait_for_ajax
         end
@@ -90,7 +90,7 @@ RSpec.describe 'LabelsController', :js do
         wait_for_ajax
         find('.labels-table .task_label', text: selected_label.name).click
         accept_prompt do
-          click_button('delete-labels-button')
+          click_on('delete-labels-button')
         end
         wait_for_ajax
       end
@@ -118,7 +118,7 @@ RSpec.describe 'LabelsController', :js do
         find('.labels-table .task_label', text: selected_labels.second.name).click
         fill_in id: 'color-labels-input', with: '#000000'
         accept_prompt do
-          click_button('change-label-color-button')
+          click_on('change-label-color-button')
         end
         wait_for_ajax
       end
