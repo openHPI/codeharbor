@@ -1,6 +1,8 @@
 .header
-  .std-heading
-    i.fa-solid.fa-envelope
-    =< t('.message_to')
-    = ': ' + @recipient.name
+  .row
+    .col-md-12.pb-2.border-bottom
+      .std-heading
+        i.fa-solid.fa-envelope
+        =< t('.message_to')
+        = ': ' + @recipient.name
 = render 'form'

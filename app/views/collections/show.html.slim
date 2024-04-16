@@ -1,10 +1,11 @@
 .header
-  .std-heading
-    i.fa-solid.fa-folder-open
-    =<> @collection.title
-    hr.mb-2
+  .row
+    .col-md-12.pb-2.border-bottom
+      .std-heading
+        i.fa-solid.fa-folder-open
+        =<> @collection.title
 .row
-  .col-md-12
+  .col-md-12.pt-2
     .collection-subinfo
       span
         - if @collection.visibility_level_public?

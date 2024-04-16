@@ -1,37 +1,40 @@
-.header.mb-5
-  .std-heading
-    i.fa-solid.fa-key style='color: #444444'
-    =< t('devise.passwords.edit.change_your_password')
+.header
+  .row
+    .col-md-12.pb-2.border-bottom
+      .std-heading
+        i.fa-solid.fa-key.text-secondary
+        =< t('devise.passwords.edit.change_your_password')
 
-= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f|
-  = render('shared/form_errors', object: resource, title: t('common.errors.changes_not_saved'))
-  = f.hidden_field :reset_password_token
+.row.my-4
+  = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f|
+    = render('shared/form_errors', object: resource, title: t('common.errors.changes_not_saved'))
+    = f.hidden_field :reset_password_token
 
-  .form-group.field-element
-    = f.label :password, t('devise.passwords.edit.new_password'), class: 'form-label'
-    = f.password_field :password,
-            required: true,
-            autofocus: true,
-            placeholder: t('devise.passwords.edit.new_password'),
-            autocomplete: 'new-password',
-            class: 'form-control'
-    - if @minimum_password_length
-      small.form-text.text-body-secondary = t('devise.shared.minimum_password_length', count: @minimum_password_length)
-  .form-group.field-element
-    = f.label :password_confirmation, t('users.shared.password_new_confirmation'), class: 'form-label'
-    = f.password_field :password_confirmation,
-            required: true,
-            placeholder: t('devise.passwords.edit.new_password'),
-            autocomplete: 'new-password',
-            class: 'form-control'
+    .form-group.field-element
+      = f.label :password, t('devise.passwords.edit.new_password'), class: 'form-label'
+      = f.password_field :password,
+              required: true,
+              autofocus: true,
+              placeholder: t('devise.passwords.edit.new_password'),
+              autocomplete: 'new-password',
+              class: 'form-control'
+      - if @minimum_password_length
+        small.form-text.text-body-secondary = t('devise.shared.minimum_password_length', count: @minimum_password_length)
+    .form-group.field-element
+      = f.label :password_confirmation, t('users.shared.password_new_confirmation'), class: 'form-label'
+      = f.password_field :password_confirmation,
+              required: true,
+              placeholder: t('devise.passwords.edit.new_password'),
+              autocomplete: 'new-password',
+              class: 'form-control'
 
-  .form-group.py-3
-    .btn-group[role='group']
-      = button_tag type: 'submit', class: 'btn btn-important' do
-        i.fa-solid.fa-key
-        =< t('devise.passwords.edit.change_my_password')
-      = link_to :back, class: 'btn btn-important' do
-        i.fa-solid.fa-xmark style=('color: gray')
-        =< t('common.button.back')
+    .form-group.py-3
+      .btn-group[role='group']
+        = button_tag type: 'submit', class: 'btn btn-important' do
+          i.fa-solid.fa-key
+          =< t('devise.passwords.edit.change_my_password')
+        = link_to :back, class: 'btn btn-important' do
+          i.fa-solid.fa-xmark.text-secondary
+          =< t('common.button.back')
 
-= render 'users/shared/links'
+  = render 'users/shared/links'
