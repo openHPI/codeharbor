@@ -101,7 +101,7 @@
                   - display_container = "display: block"
                   .table-header
                     = test.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
-                      i.fa-solid.fa-xmark
+                      i.fa-solid.fa-xmark.text-danger
                       =< t('.button.remove_test')
                 - else
                   - display_container = "display: none"
@@ -109,13 +109,13 @@
                     => test.object.title
                     span.fa-solid.fa-caret-down
                     = test.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
-                      i.fa-solid.fa-xmark
+                      i.fa-solid.fa-xmark.text-danger
                       =< t('.button.remove_test')
                 .test-container style="margin-left: 10px; #{display_container}"
                   = render 'test_form', f: f, test: test
             / .field-element
             = f.add_nested_fields_link :tests, ' ', class: 'btn btn-main', id: 'addTestButton' do
-              i.fa-solid.fa-plus
+              i.fa-solid.fa-plus.text-success
               =< t('.button.add_test')
       fieldset.form-group
         legend.toggle-next
@@ -130,7 +130,7 @@
                   - display_container = "display: block"
                   .table-header
                     = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
-                      i.fa-solid.fa-xmark
+                      i.fa-solid.fa-xmark.text-danger
                       =< t('.button.remove_model_solution')
                 - else
                   - display_container = "display: none"
@@ -139,13 +139,13 @@
                     => (model_solution.object.task.model_solutions.find_index(model_solution.object) + 1).to_s
                     span.fa-solid.fa-caret-down
                     = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
-                      i.fa-solid.fa-xmark
+                      i.fa-solid.fa-xmark.text-danger
                       =< t('.button.remove_model_solution')
                 .model-solution-container style="margin-left: 10px; #{display_container}"
                   = render 'model_solution_form', f: f, model_solution: model_solution
             / .field-element
             = f.add_nested_fields_link :model_solutions, ' ', class: 'btn btn-main', id: 'addTestButton' do
-              i.fa-solid.fa-plus
+              i.fa-solid.fa-plus.text-success
               =< t('.button.add_model_solution')
       .form-group
         .actions.btn-group[role="group"]
@@ -153,5 +153,5 @@
             i.fa-regular.fa-file-lines
             =< t('.button.save_task')
           = link_to :back, class: 'btn btn-important' do
-            i.fa-solid.fa-xmark
+            i.fa-solid.fa-xmark.text-secondary
             =< t('common.button.cancel')
