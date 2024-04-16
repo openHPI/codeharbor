@@ -1,7 +1,9 @@
 .header
-  .std-heading
-    i.fa-solid.fa-users
-    =< t('common.edit_colon')
-    =< @group.name
+  .row.pb-2.border-bottom
+    .col-md-12.d-flex.justify-content-between.align-items-center
+      .std-heading
+        i.fa-solid.fa-users
+        =< t('common.edit_colon')
+        =< @group.name
 
 = render 'form'

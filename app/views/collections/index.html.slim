@@ -1,12 +1,12 @@
 .nav-container
-  .row
-    .col-md-12
+  .row.pb-2
+    .col-md-12.d-flex.justify-content-between.align-items-center
       .std-heading
-        i.fa-solid.fa-folder-open style=("color: #444444")
+        i.fa-solid.fa-folder-open
         =< Collection.model_name.human(count: :many)
       - if policy(Group).new?
         = link_to new_collection_path, class: 'btn btn-main float-end nav-btn-collection' do
-          i.fa-solid.fa-plus style=("color: #000066")
+          i.fa-solid.fa-plus
           =< t('.new_collection')
 br
 = render 'collections'

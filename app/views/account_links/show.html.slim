@@ -1,32 +1,35 @@
 .header
-  .std-heading
-    i.fa-solid.fa-user
-    = " #{AccountLink.model_name.human}: #{@account_link.name}"
-.show-table
   .row
-    .col-auto.row-label = AccountLink.human_attribute_name('name')
-    .col.row-value = @account_link.name
-  .row
-    .col-auto.row-label = AccountLink.human_attribute_name('push_url')
-    .col.row-value = @account_link.push_url
-  - if current_user == @account_link.user
-    .row
-      .col-auto.row-label = AccountLink.human_attribute_name('check_uuid_url')
-      .col.row-value = @account_link.check_uuid_url
-    .row
-      .col-auto.row-label = AccountLink.human_attribute_name('api_key')
-      .col.row-value = @account_link.api_key
-    - if @account_link.shared_users.any?
-      .row.vertical
-        .col.row-label = t('account_links.show.shared_users')
-        .row-value
-          - @account_link.shared_users.each do |shared_user|
-            .table-list
-              = shared_user.email
-              .btn-group.float-end
-                = button_to remove_shared_user_user_account_link_path, method: :post, params: {shared_user: shared_user.id}, data: { confirm: t('common.sure') }, class: 'btn btn-light btn-sm', remote: true, form_class: 'remove-account-link-form' do
-                  i.fa-solid.fa-trash-can
-                  =< t('common.button.remove')
+    .col-md-12.pb-2.border-bottom
+      .std-heading
+        i.fa-solid.fa-user
+        = " #{AccountLink.model_name.human}: #{@account_link.name}"
+    .col-md-12.pt-4
+      .show-table
+        .row
+          .col-auto.row-label = AccountLink.human_attribute_name('name')
+          .col.row-value = @account_link.name
+        .row
+          .col-auto.row-label = AccountLink.human_attribute_name('push_url')
+          .col.row-value = @account_link.push_url
+        - if current_user == @account_link.user
+          .row
+            .col-auto.row-label = AccountLink.human_attribute_name('check_uuid_url')
+            .col.row-value = @account_link.check_uuid_url
+          .row
+            .col-auto.row-label = AccountLink.human_attribute_name('api_key')
+            .col.row-value = @account_link.api_key
+          - if @account_link.shared_users.any?
+            .row.vertical
+              .col.row-label = t('account_links.show.shared_users')
+              .row-value
+                - @account_link.shared_users.each do |shared_user|
+                  .table-list
+                    = shared_user.email
+                    .btn-group.float-end
+                      = button_to remove_shared_user_user_account_link_path, method: :post, params: {shared_user: shared_user.id}, data: { confirm: t('common.sure') }, class: 'btn btn-light btn-sm', remote: true, form_class: 'remove-account-link-form' do
+                        i.fa-solid.fa-trash-can
+                        =< t('common.button.remove')
 
 .actions.btn-group
   - if policy(@account_link).edit?
