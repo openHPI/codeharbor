@@ -2,7 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-$exercise-color: #006600;
+$exercise-color: #6c757d;
 
 .editor {
   position: relative;
@@ -138,7 +138,7 @@ $exercise-color: #006600;
 .fa-solid.fa-star,
 .fa-regular.fa-star,
 .fa-regular.fa-star-half-stroke {
-  color: #b79a00;
+  color: $exercise-color;
 }
 
 .number-rating {
@@ -151,17 +151,12 @@ $exercise-color: #006600;
 }
 
 .popup-rating {
-  width: 150px;
-  height: 40px;
+  height: 30px;
   display: none;
-  background-color: white;
   position: absolute;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 2;
-  padding: 2px 2px 2px 5px;
+  padding: 5px 2px;
   margin-left: -45px;
-  border: 2px grey solid;
-  border-radius: 4px;
+  border: 1px $exercise-color solid;
 
   .rating {
     z-index: 1;
@@ -170,8 +165,7 @@ $exercise-color: #006600;
 }
 
 #rate {
-  margin-left: 10px;
-  font-size: 0.85em;
+  color: $exercise-color;
 }
 
 .rating-dropdown {
@@ -244,25 +238,6 @@ $exercise-color: #006600;
   }
 }
 
-.select2-search_field {
-  height: 15px !important;
-  font-size: 0.5em !important;
-}
-
-.select2-selection {
-  border-radius: 2px;
-}
-
-.select2-container {
-  .select2-selection--single {
-    height: 32px !important;
-  }
-
-  [class^='select2-selection'] {
-    border-radius: 2px;
-  }
-}
-
 .toggle-next {
   cursor: pointer;
 }
@@ -274,17 +249,10 @@ legend {
 }
 
 .number {
-  background-color: $exercise-color;
-  color: #fff;
-  height: 30px;
-  width: 30px;
-  display: inline-block;
-  font-size: 0.8em;
-  margin-right: 4px;
-  line-height: 30px;
-  text-align: center;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
-  border-radius: 100%;
+  color: $exercise-color;
+  font-size: 1.3em;
+  font-weight: 700;
+  margin-right: 10px;
 }
 
 .input-group {
@@ -333,8 +301,8 @@ legend {
 
 .button-box {
   margin: 12px;
-  border-radius: 4px;
-  background-color: #fafafa;
+  border-radius: 2px;
+  background-color: #f8f9fa;
 
   .button-description {
     display: block;
@@ -477,7 +445,6 @@ legend {
 
 .with-borders {
   border: 1px #dddddd solid;
-  border-radius: 4px;
 }
 
 .write-comment {
@@ -643,4 +610,8 @@ legend {
 
 .errors {
   color: darkred;
+}
+
+.exercise-star-rating {
+  font-size: 1.2em;
 }

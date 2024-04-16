@@ -1,10 +1,10 @@
 .header
-  .row
-    .col-md-12
+  .row.pb-2.border-bottom
+    .col-md-12.d-flex.justify-content-between.align-items-center
       .std-heading data-bs-toggle="tooltip" data-bs-placement="bottom" title="#{@task.title}"
-        i.i.fa-regular.fa-file-lines style=("color: #008000")
+        i.i.fa-regular.fa-file-lines
         =< truncate(@task.title, length: 100)
-      span.star-rating.float-end style=("font-size: 2.0em")
+      span.star-rating.exercise-star-rating
         - [*1..5].each do |i|
           - if @task.average_rating >= i
             span.fa-solid.fa-star.overall-rating data-rating=i
@@ -12,14 +12,14 @@
             span.fa-regular.fa-star-half-stroke.overall-rating data-rating=i
           - else
             span.fa-regular.fa-star.overall-rating data-rating=i
-        small
+        span
           .rating-dropdown
             - if current_user && policy(Rating).new?
-              .btn.btn-sm#rate
+              .btn#rate
                 => t('.button.rate')
                 span.fa-solid.fa-caret-down
 
-              .popup-rating
+              .popup-rating.shadow-sm.bg-light
                 .rating data-task-id=@task.id
                   - if @user_rating
                     - [*1..5].each do |i|
@@ -33,7 +33,7 @@
 
             - else
               div[data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150]
-                .btn.btn-sm#rate
+                .btn#rate
                   => t('.button.rate')
                   span.fa-solid.fa-caret-down
 
@@ -494,7 +494,7 @@
               li
                 = form_with model: Collection.new, url: collections_path do |f|
                   .create-collection.input-group
-                    = f.text_field :title, class: 'form-control', placeholder: t('.create_collection_placeholder')
+                    = f.text_field :title, class: 'form-control custom-input', placeholder: t('.create_collection_placeholder')
                     = f.hidden_field :task_ids, value: @task.id
                     = f.submit class: 'btn btn-light submit', value: t('.button.create_collection')
         - else
@@ -537,7 +537,7 @@
         => t('.button.show_comments')
         span.fa-solid.fa-circle-notch.fa-spin.wait style="display:none;margin-right:5px;"
         span.fa-solid.fa-caret-down.my-caret
-      .comment-box.with-borders data-task=@task.id
+      .comment-box.with-borders.border-top-0 data-task=@task.id
         = form_for :comment, url: task_comments_path(@task), remote: true do |f|
           .write-comment
             - if policy(Comment).new?
@@ -554,26 +554,26 @@
 
     .actions.btn-group[role="group"]
       - if policy(@task).edit?
-        = link_to edit_task_path(@task),  class: 'btn btn-important' do
+        = link_to edit_task_path(@task),  class: 'btn btn-main' do
           i.fa-solid.fa-pen-to-square
           =< t('common.button.edit')
       - if policy(@task).destroy?
-        = link_to task_path(@task), class: 'btn btn-important', method: :delete, data: { confirm: t('common.sure') } do
+        = link_to task_path(@task), class: 'btn btn-main', method: :delete, data: { confirm: t('common.sure') } do
           i.fa-solid.fa-trash-can
           =< t('common.button.delete')
 
       - if policy(@task).duplicate?
-        = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important' do
+        = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-main' do
           i.fa-regular.fa-clone
           =< t('common.button.duplicate')
       - else
         div[data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150]
-          = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important disabled' do
+          = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-main disabled' do
             i.fa-regular.fa-clone
             =< t('common.button.duplicate')
 
       - if current_user.present?
-        = link_to t('common.button.back'), tasks_path, class: 'btn btn-important'
+        = link_to t('common.button.back'), tasks_path, class: 'btn btn-main'
 
     /= form_tag report_exercise_path(@task), id: 'report'
 

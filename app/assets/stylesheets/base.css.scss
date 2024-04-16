@@ -40,7 +40,7 @@ a.classic-link {
 
 .info-box {
   display: none;
-  background: #f5f5f5;
+  background: #f8f9fa;
   border: 1px solid #e5e5e5;
   padding: 8px 28px;
   margin-bottom: 10px;
@@ -64,7 +64,7 @@ a.classic-link {
   .table-header {
     height: 50px;
     text-align: left;
-    background-color: #f5f5f5;
+    background-color: #f8f9fa;
     margin: -8px -8px;
     margin-bottom: 16px;
     padding: 10px 8px;
@@ -87,7 +87,7 @@ a.classic-link {
     .row-label,
     .inner-section .row-label {
       text-align: left;
-      background-color: #f5f5f5;
+      background-color: #f8f9fa;
       font-weight: 700;
       line-height: 18px;
       color: #333;
@@ -171,13 +171,9 @@ table.vertical-table {
   color: #800000;
 }
 .std-heading {
-  font-size: 30px;
-  height: 40px;
-  width: 100%;
-  color: #444444;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  display: inline;
+  font-size: 1.6em;
+  font-weight: 600;
+  color: #333;
 }
 
 .nav-container {
