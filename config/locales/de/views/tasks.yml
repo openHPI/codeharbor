@@ -127,6 +127,7 @@ de:
         no_results_description: Probieren Sie verschiedene Optionen aus, indem Sie auf 'Erweitert' klicken und die Suche wiederholen.
         no_tasks: Sie haben noch keine Aufgaben
     visibility:
+      contribution: Änderungsvorschlag
       label: Sichtbarkeit
       private: Privat
       public: Öffentlich

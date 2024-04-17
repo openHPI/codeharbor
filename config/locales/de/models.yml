@@ -117,6 +117,8 @@ de:
             language:
               not_de_or_us: 'ist nicht im richtigen Format. Bitte verwenden Sie eines der folgenden Formate: de / en-US'
               not_iso639: ist kein zweistelliger ISO-639-1- oder dreistelliger ISO-639-2-Sprachcode
+            task_contribution:
+              duplicated: wurde bereits erzeugt und wartet auf Genehmigung. Bitte bearbeiten Sie Ihren vorhandenen Änderungsvorschlag, anstatt einen neuen zu erzeugen.
         task_file:
           attributes:
             xml_id:
@@ -178,6 +180,9 @@ de:
       task:
         one: Aufgabe
         other: Aufgaben
+      task_contribution:
+        one: Änderungsvorschlag
+        other: Änderungsvorschläge
       task_file:
         one: Aufgabendatei
         other: Aufgabendateien
