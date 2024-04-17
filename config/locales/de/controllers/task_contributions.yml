@@ -1,0 +1,15 @@
+---
+de:
+  task_contributions:
+    approve_changes:
+      error: Die Änderungen konnten nicht übernommen werden.
+      success: Die Änderungen wurden erfolgreich übernommen.
+    create:
+      error: Der Änderungsvorschlag konnte nicht erstellt werden.
+      success: Der Änderungsvorschlag wurde erfolgreich erstellt.
+    discard_changes:
+      error: Die Verknüpfung konnte nicht getrennt werden.
+      success: Die Verknüpfung wurde erfolgreich getrennt.
+    update:
+      error: Der Änderungsvorschlag konnte nicht gespeichert werden.
+      success: Der Änderungsvorschlag wurde erfolgreich geändert.

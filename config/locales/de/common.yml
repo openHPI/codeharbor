@@ -4,6 +4,7 @@ de:
     app_name: CodeHarbor
     button:
       abort: Abbrechen
+      approve: Annehmen
       available_versions: Verfügbare ProFormA Versionen
       back: Zurück
       cancel: Abbrechen
@@ -18,6 +19,7 @@ de:
       import: Importieren
       log_in: Anmelden
       'no': Nein
+      reject: Ablehnen
       remove: Entfernen
       retry: Erneut versuchen
       save: Speichern
