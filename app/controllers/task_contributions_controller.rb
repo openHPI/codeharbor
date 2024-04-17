@@ -37,8 +37,9 @@ class TaskContributionsController < ApplicationController
   end
 
   def new
+    raise Pundit::NotAuthorizedError if current_user.nil?
+
     @task_contribution = TaskContribution.new_for(@task, current_user)
-    # TODO: Consider throwing an error if user nil
     existing = @task.contributions(user: current_user)
     if existing.any?
       redirect_to existing.first
