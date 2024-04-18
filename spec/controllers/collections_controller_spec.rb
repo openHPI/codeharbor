@@ -115,12 +115,12 @@ RSpec.describe CollectionsController do
 
     it 'includes the correct visibility subinfo' do
       get :show, params: {id: collection.to_param}
-      expect(response.body).to include(I18n.t('collections.show.visibility.private')).and(include(I18n.t('collections.show.no_other_user')))
+      expect(response.body).to include(I18n.t('collections.show.visibility.private')).and(include(I18n.t('collections.show.num_of_other_users', count: 0)))
     end
 
     it 'includes the correct other-user subinfo' do
       get :show, params: {id: collection.to_param}
-      expect(response.body).to include(I18n.t('collections.show.no_other_user'))
+      expect(response.body).to include(I18n.t('collections.show.num_of_other_users', count: 0))
     end
 
     context 'when there are pending invites' do

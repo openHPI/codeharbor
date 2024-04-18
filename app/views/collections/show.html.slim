@@ -18,16 +18,10 @@
       - if action_name != 'view_shared'
         span
           i.fa-solid.fa-users
-          - if @collection.users.size == 1
-            =< t('.no_other_user')
-          - else
-            =< t('.num_of_other_users', count: @collection.users.size - 1)
+          =< t('.num_of_other_users', count: @collection.users.size - 1)
         span
           i.fa-regular.fa-envelope
-          - if @num_of_invites.zero?
-            =< t('.no_invites')
-          - else
-            =< t('.num_of_invites', count: @num_of_invites)
+          =< t('.num_of_invites', count: @num_of_invites)
         span
           i.fa-star class=(@collection.user_favorites.empty? ? 'fa-regular' : 'fa-solid')
           =< t('.num_of_favorites', count: @collection.user_favorites.length)

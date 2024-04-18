@@ -36,8 +36,6 @@ en:
         deletion_warning: You are the last user in this collection. If you leave, this collection will be permanently deleted! Are you sure?
       locked_exercise_hint: 'Hint: For exercises marked with a lock you have to request access first before you can view them.'
       noExercisesAdded: No Exercise Added
-      no_invites: There are no pending invitations
-      no_other_user: No other user has access to this collection
       num_of_favorites:
         one: This collection has been marked as favorite once
         other: This collection has been marked as favorite %{count} times
@@ -45,9 +43,11 @@ en:
       num_of_invites:
         one: There is one pending invitation
         other: There are %{count} pending invitations
+        zero: There are no pending invitations
       num_of_other_users:
         one: One other user has access to this collection
         other: "%{count} other users have access to this collection"
+        zero: No other user has access to this collection
       shared_by: Shared by
       temporarily_disabled: Temporarily disabled
       type_hint: Type in the users email address
