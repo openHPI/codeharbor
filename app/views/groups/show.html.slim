@@ -25,18 +25,17 @@
 
     .row-value
       - if @group.confirmed_members.present?
-        - (@group.confirmed_members).each do |member|
+        - @group.confirmed_members.each do |member|
           .table-list
             => member.email
-            - if policy(@group).show?
-              - if policy(@group).edit?
-                - if @group.group_membership_for(member).role_confirmed_member?
-                  = link_to make_admin_group_path(group: @group, user: member), method: :post, class: 'btn btn-light btn-sm' do
-                    i.fa-solid.fa-plus
-                    =< t('.button.make_admin')
-                = link_to delete_from_group_group_path(group: @group, user: member), method: :patch, class: 'btn btn-light btn-sm' do
-                  i.fa-solid.fa-xmark
-                  =< t('common.button.remove')
+            - if policy(@group).edit?
+              - if @group.group_membership_for(member).role_confirmed_member?
+                = link_to make_admin_group_path(group: @group, user: member), method: :post, class: 'btn btn-light btn-sm' do
+                  i.fa-solid.fa-plus style='color:#008000'
+                  =< t('.button.make_admin')
+              = link_to delete_from_group_group_path(group: @group, user: member), method: :patch, class: 'btn btn-light btn-sm' do
+                i.fa-solid.fa-xmark style='color:#800000'
+                =< t('common.button.remove')
       - else
         = t('.has_no_users')
 

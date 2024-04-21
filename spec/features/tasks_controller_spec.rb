@@ -26,7 +26,7 @@ RSpec.describe 'TasksController', :js do
         input.click # Close select2 dropdown
         # Assert the label is showing up as a selected label. This will implicitly wait, too.
         expect(page).to have_css("ul li[title=\"#{not_existing_label_name}\"", visible: :all)
-        click_button(I18n.t('tasks.form.button.save_task'))
+        click_on(I18n.t('tasks.form.button.save_task'))
         expect(page).to have_css("option[value=\"#{not_existing_label_name}\"][selected=\"selected\"]", visible: :all)
       end
     end
