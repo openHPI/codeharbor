@@ -6,7 +6,7 @@
         =< t('devise.registrations.edit.title', resource: User.model_name.human)
 
 .row.my-4
-  = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
+  = form_for(resource, as: resource_name, url: registration_path(resource_name), html: {method: :put}) do |f|
     = render('shared/form_errors', object: resource, title: t('common.errors.changes_not_saved'))
 
     .form-group.field-element
@@ -51,7 +51,7 @@
               autocomplete: 'new-password',
               class: 'form-control'
 
-  = render 'avatar_form', f:
+    = render 'avatar_form', f:
 
     - if resource.password_set?
       .form-group.field-element
@@ -81,7 +81,7 @@
               = link_to t('.add_identity', kind: provider_name), omniauth_authorize_path(resource_name, provider), class: 'btn btn-light btn-sm mb-2 me-2', method: :post
 
     .form-group.py-3
-      .btn-group[role='group']
+      .btn-group role='group'
         = button_tag type: 'submit', class: 'btn btn-important' do
           i.fa-solid.fa-user
           =< t('common.button.update')

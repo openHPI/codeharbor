@@ -6,7 +6,7 @@
         =< t('devise.passwords.edit.change_your_password')
 
 .row.my-4
-  = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f|
+  = form_for(resource, as: resource_name, url: password_path(resource_name), html: {method: :put}) do |f|
     = render('shared/form_errors', object: resource, title: t('common.errors.changes_not_saved'))
     = f.hidden_field :reset_password_token
 

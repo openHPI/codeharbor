@@ -5,7 +5,7 @@
         i.fa-solid.fa-envelope.text-secondary
         =< t('devise.confirmations.new.resend_confirmation_instructions')
 .row.my-4
-  = form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f|
+  = form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: {method: :post}) do |f|
     = render('shared/form_errors', object: resource, title: t('users.shared.validation_error'))
 
     .form-group.field-element
@@ -19,7 +19,7 @@
               class: 'form-control'
 
     .form-group.py-3
-      .btn-group[role='group']
+      .btn-group role='group'
         = button_tag type: 'submit', class: 'btn btn-important' do
           i.fa-solid.fa-envelope
           =< t('devise.confirmations.new.resend_confirmation_instructions')

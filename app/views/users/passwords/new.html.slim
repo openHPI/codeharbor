@@ -6,7 +6,7 @@
         =< t('devise.passwords.new.forgot_your_password')
 
 .row.my-4
-  = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f|
+  = form_for(resource, as: resource_name, url: password_path(resource_name), html: {method: :post}) do |f|
     = render('shared/form_errors', object: resource, title: t('users.shared.validation_error'))
 
     .form-group.field-element
@@ -19,7 +19,7 @@
               class: 'form-control'
 
     .form-group.py-3
-      .btn-group[role='group']
+      .btn-group role='group'
         = button_tag type: 'submit', class: 'btn btn-important' do
           i.fa-solid.fa-key
           =< t('devise.passwords.new.send_me_reset_password_instructions')
