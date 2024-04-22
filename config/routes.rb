@@ -47,6 +47,8 @@ Rails.application.routes.draw do
       post :save_shared # ???
       post :share
       post :leave
+
+      post :toggle_favorite
     end
   end
 

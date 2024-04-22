@@ -2,8 +2,10 @@
   .row
     .col-md-12.pb-2.border-bottom
       .std-heading
+        - if current_user.favorite_collections.include?(@collection)
+          i.fa-solid.fa-star>
         i.fa-solid.fa-folder-open
-        =<> @collection.title
+          =<> @collection.title
 .row
   .col-md-12.pt-2
     .collection-subinfo
@@ -17,16 +19,13 @@
       - if action_name != 'view_shared'
         span
           i.fa-solid.fa-users
-          - if @collection.users.size == 1
-            =< t('.no_other_user')
-          - else
-            =< t('.num_of_other_users', count: @collection.users.size - 1)
+          =< t('.num_of_other_users', count: @collection.users.size - 1)
         span
           i.fa-regular.fa-envelope
-          - if @num_of_invites.zero?
-            =< t('.no_invites')
-          - else
-            =< t('.num_of_invites', count: @num_of_invites)
+          =< t('.num_of_invites', count: @num_of_invites)
+        span
+          i.fa-star class=(@collection.user_favorites.empty? ? 'fa-regular' : 'fa-solid')
+          =< t('.num_of_favorites', count: @collection.user_favorites.length)
 
     .collection-content.mt-2.pt-2
       .description.collapsable.w-100
@@ -113,6 +112,13 @@
           - if @collection.users.include? current_user
             = link_to leave_collection_path(@collection), class: 'btn btn-important', method: :post, data: {confirm: @collection.users.size == 1 ? t('.leave.deletion_warning') : t('common.sure')} do
               = @collection.users.size == 1 ? t('.button.delete') : t('.button.leave')
+        = link_to toggle_favorite_collection_path(@collection), class: 'btn btn-important', method: :post do
+          - if current_user.favorite_collections.include?(@collection)
+            i.fa-regular.fa-star
+            =< t('.button.unfavorite')
+          - else
+            i.fa-solid.fa-star
+            =< t('.button.favorite')
         = link_to t('common.button.back'), collections_path, class: 'btn btn-important'
 
 = form_tag share_collection_path, id: 'share'

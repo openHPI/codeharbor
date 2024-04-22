@@ -22,3 +22,7 @@ en:
       success_notice: Your collection has been sent.
     share_message:
       text: '%{user} sent you their collection "%{collection}"'
+    toggle_favorite:
+      favorite:
+        added: Added to favorites
+        removed: Removed from favorites

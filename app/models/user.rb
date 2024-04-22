@@ -23,6 +23,9 @@ class User < ApplicationRecord
   has_many :collection_users, dependent: :destroy
   has_many :collections, through: :collection_users
 
+  has_many :collection_user_favorites, dependent: :destroy
+  has_many :favorite_collections, through: :collection_user_favorites, source: :collection
+
   has_many :group_memberships, dependent: :destroy
   has_many :groups, through: :group_memberships
 

@@ -22,3 +22,7 @@ de:
       success_notice: Ihre Aufgabensammlung wurde gesendet.
     share_message:
       text: '%{user} hat Ihnen die Aufgabensammlung "%{collection}" gesendet.'
+    toggle_favorite:
+      favorite:
+        added: Zu Favoriten hinzugefügt
+        removed: Von Favoriten entfernt

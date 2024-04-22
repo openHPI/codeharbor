@@ -13,8 +13,8 @@ class CollectionPolicy < ApplicationPolicy
     everyone
   end
 
-  def show?
-    admin? || collection.users.include?(@user) || collection.visibility_level_public?
+  %i[show? toggle_favorite?].each do |action|
+    define_method(action) { admin? || collection.users.include?(@user) || collection.visibility_level_public? }
   end
 
   %i[create? update? edit? destroy? leave? add_task? remove_task? remove_all? push_collection?
