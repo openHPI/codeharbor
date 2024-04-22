@@ -1,0 +1,11 @@
+h3 Hello #{@contrib_author.name}
+p
+  | Your Contribution for the Task "#{@task_contrib.base.title}" was rejected.
+  br
+  | The task linked to your contribution is now a full duplicate.
+  br
+  | You may decide to change the visibility to public to let others utilize your changes.
+  br
+  br
+  = link_to 'CodeHarbor', task_url(@task_contrib.suggestion)
+
