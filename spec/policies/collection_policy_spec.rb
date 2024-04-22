@@ -6,8 +6,9 @@ RSpec.describe CollectionPolicy do
   subject { described_class.new(user, collection) }
 
   let(:collection_user) { create(:user) }
-  let(:collection) { create(:collection, users:) }
+  let(:collection) { create(:collection, users:, visibility_level:) }
   let(:users) { [collection_user] }
+  let(:visibility_level) { :private }
 
   context 'without a user' do
     it { expect { described_class.new(nil, collection) }.to raise_error(Pundit::NotAuthorizedError) }
@@ -34,6 +35,16 @@ RSpec.describe CollectionPolicy do
       before { create(:message, sender: collection_user, recipient: user, param_type: 'collection', param_id: collection.id, text: 'Invitation') }
 
       it { is_expected.to permit_only_actions(%i[index new save_shared view_shared]) }
+    end
+  end
+
+  context 'with visibility_level public' do
+    let(:visibility_level) { :public }
+
+    context 'with a user' do
+      let(:user) { create(:user) }
+
+      it { is_expected.to permit_only_actions(%i[index new show toggle_favorite]) }
     end
   end
 end

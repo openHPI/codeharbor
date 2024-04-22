@@ -11,6 +11,10 @@ en:
         save: Save Collection
     index:
       new_collection: New Collection
+      options:
+        favorites: Favorite Collections
+        mine: My Collections
+        public: Public Collections
       view_shared: View Shared Collection
     new:
       header: New Collection
@@ -21,8 +25,10 @@ en:
       button:
         collaborate: Collaborate
         delete: Delete Collection
+        favorite: Add to favorites
         leave: Leave
         share: Share Collection
+        unfavorite: Remove from favorites
       define_account_link: Please define an account link first
       download_no_exercises: Download not possible without exercises
       export_to: Export to
@@ -30,14 +36,18 @@ en:
         deletion_warning: You are the last user in this collection. If you leave, this collection will be permanently deleted! Are you sure?
       locked_exercise_hint: 'Hint: For exercises marked with a lock you have to request access first before you can view them.'
       noExercisesAdded: No Exercise Added
-      no_invites: There are no pending invitations
-      no_other_user: No other user has access to this collection
+      num_of_favorites:
+        one: This collection has been marked as favorite once
+        other: This collection has been marked as favorite %{count} times
+        zero: This collection has not been marked as favorite
       num_of_invites:
         one: There is one pending invitation
         other: There are %{count} pending invitations
+        zero: There are no pending invitations
       num_of_other_users:
         one: One other user has access to this collection
         other: "%{count} other users have access to this collection"
+        zero: No other user has access to this collection
       shared_by: Shared by
       temporarily_disabled: Temporarily disabled
       type_hint: Type in the users email address

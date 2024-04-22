@@ -13,6 +13,8 @@
   .card.my-4
     .card-header
       h6
+        - if current_user.favorite_collections.include?(collection)
+          i.fa-solid.fa-star>
         span = collection.title
         - if collection.visibility_level_public?
           i.fa-solid.fa-lock-open.float-end title=t('collections.visibility.public')

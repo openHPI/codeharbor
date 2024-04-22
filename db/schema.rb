@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_02_140747) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_10_131313) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -68,6 +68,13 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_02_140747) do
     t.datetime "updated_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.index ["collection_id"], name: "index_collection_tasks_on_collection_id"
     t.index ["task_id"], name: "index_collection_tasks_on_task_id"
+  end
+
+  create_table "collection_user_favorites", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.bigint "collection_id", null: false
+    t.bigint "user_id", null: false
+    t.index ["collection_id"], name: "index_collection_user_favorites_on_collection_id"
+    t.index ["user_id"], name: "index_collection_user_favorites_on_user_id"
   end
 
   create_table "collection_users", id: :serial, force: :cascade do |t|
@@ -329,6 +336,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_02_140747) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "collection_tasks", "collections"
   add_foreign_key "collection_tasks", "tasks"
+  add_foreign_key "collection_user_favorites", "collections"
+  add_foreign_key "collection_user_favorites", "users"
   add_foreign_key "comments", "tasks"
   add_foreign_key "comments", "users"
   add_foreign_key "group_memberships", "groups"

@@ -21,17 +21,25 @@ RSpec.describe CollectionsController do
   end
 
   describe 'GET #index' do
-    let(:users) { [user] }
-    let(:visibility_level) { :private }
-    let!(:collection) { create(:collection, valid_attributes.merge(users:, visibility_level:)) }
+    subject(:get_request) { get :index, params: {option:} }
 
-    it 'assigns all collections as @collections' do
-      get :index, params: {}
-      expect(assigns(:collections)).to include collection
+    let(:users) { [user] }
+    let(:favorite_users) { [create(:user)] }
+    let(:option) { 'mine' }
+    let(:favorite_visibility_level) { :public }
+    let!(:own_collection) { create(:collection, valid_attributes.merge(users:, visibility_level: :public)) }
+    let!(:favorite_collection) { create(:collection, valid_attributes.merge(users: favorite_users, user_favorites: users, visibility_level: favorite_visibility_level)) }
+    let!(:public_collection) { create(:collection, valid_attributes.merge(visibility_level: :public)) }
+
+    before { create(:collection, valid_attributes.merge(visibility_level: :private)) }
+
+    it 'assigns correct collection to @collections' do
+      get_request
+      expect(assigns(:collections)).to contain_exactly(own_collection)
     end
 
     it 'renders correct actions-buttons' do
-      get :index, params: {}
+      get_request
       expect(response.body).to include(I18n.t('common.button.view')).and(include(I18n.t('common.button.edit')))
     end
 
@@ -39,17 +47,49 @@ RSpec.describe CollectionsController do
       let(:users) { [create(:user)] }
 
       it 'does add collection to @collections' do
-        get :index, params: {}
-        expect(assigns(:collections)).not_to include collection
+        get_request
+        expect(assigns(:collections)).not_to include own_collection
+      end
+    end
+
+    context 'when option is favorite' do
+      let(:option) { 'favorites' }
+
+      it 'assigns favorite_collection as @collections' do
+        get_request
+        expect(assigns(:collections)).to contain_exactly(favorite_collection)
       end
 
-      context 'when collection is public' do
-        let(:visibility_level) { :public }
+      it 'renders correct actions-buttons' do
+        get_request
+        expect(response.body).to include(I18n.t('common.button.view')).and(not_include(I18n.t('common.button.edit')))
+      end
 
-        it 'renders correct actions-buttons' do
-          get :index, params: {}
-          expect(response.body).to include(I18n.t('common.button.view')).and(not_include(I18n.t('common.button.edit')))
+      context 'when favorite_collection is private' do
+        let(:favorite_visibility_level) { :private }
+
+        it 'does not add favorite_collection to @collections' do
+          get_request
+          expect(assigns(:collections)).not_to include favorite_collection
         end
+
+        context 'when user is in favorite_collection' do
+          let(:favorite_users) { users }
+
+          it 'assigns favorite_collection as @collections' do
+            get_request
+            expect(assigns(:collections)).to contain_exactly(favorite_collection)
+          end
+        end
+      end
+    end
+
+    context 'when option is public' do
+      let(:option) { 'public' }
+
+      it 'assigns all collections as @collections' do
+        get_request
+        expect(assigns(:collections)).to contain_exactly(own_collection, favorite_collection, public_collection)
       end
     end
   end
@@ -75,12 +115,12 @@ RSpec.describe CollectionsController do
 
     it 'includes the correct visibility subinfo' do
       get :show, params: {id: collection.to_param}
-      expect(response.body).to include(I18n.t('collections.show.visibility.private')).and(include(I18n.t('collections.show.no_other_user')))
+      expect(response.body).to include(I18n.t('collections.show.visibility.private')).and(include(I18n.t('collections.show.num_of_other_users', count: 0)))
     end
 
     it 'includes the correct other-user subinfo' do
       get :show, params: {id: collection.to_param}
-      expect(response.body).to include(I18n.t('collections.show.no_other_user'))
+      expect(response.body).to include(I18n.t('collections.show.num_of_other_users', count: 0))
     end
 
     context 'when there are pending invites' do
@@ -541,6 +581,46 @@ RSpec.describe CollectionsController do
       it 'redirects to the collections list' do
         post_request
         expect(response).to redirect_to(collections_url)
+      end
+    end
+  end
+
+  describe 'POST #toggle_favorite' do
+    let!(:collection) { create(:collection, valid_attributes.merge(users:, visibility_level:)) }
+    let(:users) { [create(:user), user] }
+    let(:visibility_level) { :private }
+    let(:post_request) { post :toggle_favorite, params: }
+    let(:params) { {id: collection.id} }
+
+    it 'adds collection to users favorites' do
+      post_request
+      expect(user.favorite_collections).to include collection
+    end
+
+    context 'when collection is already a favorite' do
+      before { user.favorite_collections << collection }
+
+      it 'removes collection from users favorites' do
+        post_request
+        expect(user.favorite_collections).not_to include collection
+      end
+    end
+
+    context 'when user is not in collection' do
+      let(:users) { [create(:user)] }
+
+      it 'does not add collection to users favorites' do
+        post_request
+        expect(user.favorite_collections).not_to include collection
+      end
+
+      context 'when collection is public' do
+        let(:visibility_level) { :public }
+
+        it 'adds collection to users favorites' do
+          post_request
+          expect(user.favorite_collections).to include collection
+        end
       end
     end
   end
