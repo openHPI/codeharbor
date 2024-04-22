@@ -1,7 +1,7 @@
 ---
 en:
   users:
-    mailer:
+    devise_mailer:
       confirmation_instructions:
         p1: 'Thanks for registering to CodeHarbor! You can confirm your account email through the link below:'
     registrations:
