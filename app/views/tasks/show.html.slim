@@ -4,7 +4,7 @@
       .std-heading data-bs-toggle='tooltip' data-bs-placement='bottom' title=@task.title
         i.i.fa-regular.fa-file-lines
         =< truncate(@task.title, length: 100)
-      span.star-rating.exercise-star-rating
+      span.task-star-rating
         - [*1..5].each do |i|
           - if @task.average_rating >= i
             span.fa-solid.fa-star.overall-rating data-rating=i

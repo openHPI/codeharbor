@@ -69,19 +69,6 @@ $exercise-color: #6c757d;
   color: $exercise-color;
 }
 
-.exercise-content {
-  display: inline-block;
-  width: 80%;
-  max-height: 110px;
-  float: left;
-}
-
-.exercise-buttons {
-  display: inline-block;
-  width: 20%;
-  float: right;
-}
-
 .crossed-out:after {
   content: '|';
   color: black;
@@ -141,13 +128,49 @@ $exercise-color: #6c757d;
   color: $exercise-color;
 }
 
-.number-rating {
-  border: 2px #b79a00 solid;
-  border-radius: 4px;
-  padding: 1px 2px 1px 2px;
-  margin-right: 5px;
-  line-height: 20px;
-  color: #b79a00;
+/* CARD */
+
+.card {
+  .card-task-title {
+    text-decoration: none;
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+  }
+
+  .card-body {
+    .more-btn-wrapper {
+      width: 90%;
+    }
+  }
+}
+
+/* RATING */
+
+.task-rating {
+  font-size: 0.8em;
+  border: 1px $exercise-color solid;
+  border-radius: 2px;
+  padding: 2px 0px;
+  .task-star-rating {
+    padding: 2px 3px;
+  }
+  .number-rating {
+    background-color: $exercise-color;
+    padding: 2px 3px;
+    border-right: 1px $exercise-color solid;
+    color: white;
+  }
+}
+
+.task-star-rating {
+  font-size: 1.2em;
+}
+
+.task-rating-count {
+  font-size: 0.8em;
+  color: $exercise-color;
 }
 
 .popup-rating {
@@ -184,13 +207,24 @@ $exercise-color: #6c757d;
   overflow-x: hidden;
 }
 
-.programming-language,
-.visibility {
-  margin-right: 16px;
+.programming-language {
+  font-size: 0.8em;
   padding: 2px 4px;
-  color: #7c7c7c;
-  border: 1px #7c7c7c solid;
-  border-radius: 4px;
+  color: white;
+  background-color: $exercise-color;
+  border: 1px $exercise-color solid;
+  border-radius: 2px;
+}
+
+.visibility {
+  margin-left: 5px;
+  padding: 2px 4px;
+  font-size: 0.7em;
+  font-weight: 500;
+  color: $exercise-color;
+  .fas {
+    margin-bottom: 5px;
+  }
 }
 
 .state-tag-dropdown {
@@ -412,26 +446,6 @@ legend {
       display: inline-block;
       width: 31%;
       margin: 1%;
-
-      .small-exercise-content {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        width: 100%;
-        max-height: 219px;
-
-        .small-description {
-          width: 100%;
-          padding-bottom: 5px;
-          word-wrap: break-word;
-          overflow: hidden;
-          margin-bottom: 3px;
-        }
-
-        .small-exercise-footer {
-          border-top: 1px lightgrey solid;
-        }
-      }
     }
     .card.not-displayed {
       display: none;
@@ -508,11 +522,6 @@ legend {
   line-height: 32px;
   vertical-align: middle;
 }
-.exercise-content {
-  .more-btn-wrapper {
-    width: 90%;
-  }
-}
 
 .more-btn-wrapper {
   text-align: right;
@@ -542,10 +551,6 @@ legend {
 
 .labels {
   overflow-wrap: break-word;
-}
-
-.exercise-card {
-  min-height: 155px;
 }
 
 .import-export-button {
@@ -610,8 +615,4 @@ legend {
 
 .errors {
   color: darkred;
-}
-
-.exercise-star-rating {
-  font-size: 1.2em;
 }

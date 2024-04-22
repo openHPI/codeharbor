@@ -1,58 +1,63 @@
 - if @collections.empty?
-  .card style='margin-top: 40px'
+  .card.my-4
     .card-body
       .col-md-10
-        h3 style='color: #777777'
+        h4.text-body-secondary
           = t('.empty_state.heading')
-        br
-        p style='color: #777777'
+        p.text-secondary.mb-2
           = t('.empty_state.hint')
-        br
-        br
+
 - @collections.each do |collection|
-  .card.my-4
+  .card.my-5
     .card-header
       h6
-        - if current_user.favorite_collections.include?(collection)
-          i.fa-solid.fa-star>
-        span = collection.title
-        - if collection.visibility_level_public?
-          i.fa-solid.fa-lock-open.float-end title=t('collections.visibility.public')
-        - else
-          i.fa-solid.fa-lock.float-end title=t('collections.visibility.private')
+        span.d-flex.justify-content-between.align-items-center.mt-2
+          = link_to collection_path(collection), class: 'card-task-title fw-bold' do
+            - if current_user.favorite_collections.include?(collection)
+              i.fa-solid.fa-star>
+            = truncate(collection.title, length: 100)
+            span.visibility.align-middle
+              - if collection.visibility_level_public?
+                i.fas.fa-lock-open title=t('collections.visibility.public')
+              - else
+                i.fas.fa-lock title=t('collections.visibility.private')
 
     .card-body
       .row.px-3
-        .col
-          .description.collapsable.w-100
-            - if collection.description.blank?
-              span style='color: gray'
-                = t('collections.shared.no_description')
+        .col-8.col-md-10.px-0
+          .collections-content
+            .description.collapsable
+              - if collection.description.blank?
+                span.text-secondary
+                  = t('collections.shared.no_description')
+              - else
+                = render_markdown(collection.description)
+            .more-btn-wrapper
+              = button_to collection, class: 'more-btn' do
+                .more-tag
+                  = t('common.button.show_more')
+                  span.fa-solid.fa-caret-down.ms-1
+                .less-tag.d-none
+                  = t('common.button.show_less')
+                  span.fa-solid.fa-caret-up.ms-1
+            br
+            - if collection.tasks.empty?
+              = t('collections.shared.no_tasks_added')
             - else
-              = render_markdown(collection.description)
-          .more-btn-wrapper
-            = button_to collection, class: 'more-btn' do
-              .more-tag
-                = t('common.button.show_more')
-                span.fa-solid.fa-caret-down.ms-1
-              .less-tag.d-none
-                = t('common.button.show_less')
-                span.fa-solid.fa-caret-up.ms-1
-          br
-          - if collection.tasks.empty?
-            = t('collections.shared.no_tasks_added')
-          - else
-            - collection.tasks.each do |task|
-              - if task
-                .btn-group.m-1
-                  - if policy(task).show?
-                    = link_to task.title, task_path(task), class: 'btn btn-light'
-                  - else
-                    = link_to task.title, task_path(task), class: 'btn btn-light disabled'
-        .col-auto
+              - collection.tasks.each do |task|
+                - if task
+                  .btn-group.m-1
+                    - if policy(task).show?
+                      = link_to task.title, task_path(task), class: 'btn btn-light'
+                    - else
+                      = link_to task.title, task_path(task), class: 'btn btn-light disabled'
+
+        .col-4.col-md-2.px-0
           .btn-group.float-end aria-label='...' role='group'
             - if policy(collection).show?
-              = link_to t('common.button.view'), collection_path(collection), class: 'btn btn-light'
+              = link_to collection_path(collection), class: 'btn btn-light', data: {bs_toggle: 'tooltip', bs_placement: 'top', bs_title: t('common.button.view')} do
+                i.fas.fa-eye aria-hidden="true"
             - if policy(collection).edit?
-              = link_to t('common.button.edit'), edit_collection_path(collection), class: 'btn btn-light'
+              = link_to edit_collection_path(collection), class: 'btn btn-light', data: {bs_toggle: 'tooltip', bs_placement: 'top', bs_title: t('common.button.edit')} do
+                i.fas.fa-edit aria-hidden="true"
 = render('shared/pagination', collection: @collections)

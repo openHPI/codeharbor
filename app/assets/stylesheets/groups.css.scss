@@ -1,4 +1,5 @@
 $group-color: #660000;
+$exercise-color: #6c757d;
 
 .fa-solid.fa-users {
   color: $group-color;
@@ -43,5 +44,19 @@ $group-color: #660000;
 .table-list.group-tasks {
   .btn-group.btn:not(:last-child) {
     border-right: none;
+  }
+}
+
+.group-label {
+  font-size: 0.8em;
+  font-weight: normal;
+  padding: 2px 4px;
+  color: white;
+  background-color: $exercise-color;
+  border: 1px $exercise-color solid;
+  border-radius: 2px;
+  // If it does not contains any text, hide it
+  &:empty {
+    display: none;
   }
 }
