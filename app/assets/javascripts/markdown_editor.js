@@ -31,6 +31,7 @@ const initializeMarkdownEditors = () => {
       toolbarItems: [
         ["heading", "bold", "italic"],
         ["link", "quote", "code", "codeblock"],
+        ["image"],
         ["ul", "ol"],
       ],
       initialEditType: "markdown",
@@ -53,6 +54,21 @@ const initializeMarkdownEditors = () => {
   });
 };
 
+const disableImageUpload = () => {
+  const target = document.querySelector(".toastui-editor-popup");
+  if (!target) {
+    return;
+  }
+  // Reference:https://github.com/nhn/tui.editor/issues/1204#issuecomment-1068364431
+  const observer = new MutationObserver(() => {
+    target.querySelector('[aria-label="URL"]').click();
+    target.querySelector(".toastui-editor-tabs").style.display = "none";
+  });
+
+  observer.observe(target, {attributes: true, attributeFilter: ["style"]});
+};
+
 $(document).on("turbolinks:load", function () {
   initializeMarkdownEditors();
+  disableImageUpload();
 });
