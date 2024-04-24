@@ -72,7 +72,7 @@ Rails.application.configure do
     # Some dependencies add new styles to the DOM dynamically, requiring :unsafe-inline.
     # Currently, these include turbolinks, and vis.js.
     policy.style_src_elem       :self, :unsafe_inline, :report_sample
-    # We still use some inline styles within the application, and indirectly through d3.js.
+    # We still use some inline styles within the application, and through the ToastUi markdown editor.
     policy.style_src_attr       :unsafe_inline, :report_sample
     # The `style_src` directive is only a fallback for browsers not supporting `style_src_elem` and `style_src_attr`.
     policy.style_src            :self, :unsafe_inline, :report_sample
