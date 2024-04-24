@@ -11,6 +11,9 @@ en:
         header: More Information
         link: About CodeHarbor
       privacy_policy: Privacy Policy
+    markdown_editor:
+      collapse: Collapse editor
+      expand: Expand editor
     navigation:
       rails_admin: Rails admin
     session:
