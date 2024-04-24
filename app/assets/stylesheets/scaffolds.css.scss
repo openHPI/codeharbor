@@ -21,6 +21,13 @@ pre {
   font-size: 12px;
 }
 
+blockquote {
+  border-left: 4px solid var(--bs-secondary-bg);
+  color: var(--bs-secondary-text-emphasis);
+  margin: 14px 0;
+  padding: 0 16px;
+}
+
 a {
   color: #000000;
 
