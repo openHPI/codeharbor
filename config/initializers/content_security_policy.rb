@@ -63,7 +63,8 @@ Rails.application.configure do
     policy.img_src              :self
     policy.object_src           :none
     policy.media_src            :self
-    policy.script_src_elem      :self, :report_sample
+    # Needed for actions that return javascript
+    policy.script_src_elem      :self, :unsafe_inline, :report_sample
     # Unfortunately, we still have many click handlers and inline JavaScript that require :unsafe_inline
     policy.script_src_attr      :self, :unsafe_inline, :report_sample
     # The `script_src` directive is only a fallback for browsers not supporting `script_src_elem` and `script_src_attr`.
