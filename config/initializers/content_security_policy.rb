@@ -79,6 +79,8 @@ Rails.application.configure do
     policy.connect_src          :self
     # Web workers are used by the ACE editor (for syntax highlighting), further code via blobs.
     policy.worker_src           :self, :blob
+    # The `child_src` directive is only a fallback for browsers not supporting `worker_src`.
+    policy.child_src            :self, :blob
     policy.form_action          :self
     policy.frame_ancestors      :none
     policy.frame_src            :none
