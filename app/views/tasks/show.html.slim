@@ -549,12 +549,15 @@
 
       - if !@task.contribution?
         - if policy(@task).contribute?(check_other_contrib: false)
-          = link_to new_task_task_contribution_path(@task), method: :get, class: 'btn btn-important' do
-            i.fa-regular.fa-edit
-            - if @task.contributions(user: @current_user).any?
+          - if @task.contributions(user: @current_user).any?
+            = link_to edit_task_task_contribution_path(@task, @task.contributions(user: @current_user).first), method: :get, class: 'btn btn-important' do
+              i.fa-regular.fa-edit
               =< t('task_contributions.buttons.edit_contribution')
-            - else
+          - else
+            = link_to new_task_task_contribution_path(@task), method: :get, class: 'btn btn-important' do
+              i.fa-regular.fa-edit
               =< t('task_contributions.buttons.contribute')
+
         - if policy(@task).duplicate?
           = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important' do
 

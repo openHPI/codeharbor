@@ -219,8 +219,8 @@ class Task < ApplicationRecord
     unless user.nil?
       task_filter_set[:user] = user
     end
-    Task.joins(:task_contribution)
-      .where(task_filter_set.merge(task_contribution: {status: (status.nil? ? :pending : status)}))
+    TaskContribution.joins(:suggestion)
+      .where(suggestion: task_filter_set, status: (status.nil? ? :pending : status))
   end
 
   private
