@@ -40,11 +40,6 @@ class TaskContributionsController < ApplicationController
     raise Pundit::NotAuthorizedError if current_user.nil?
 
     @task_contribution = TaskContribution.new_for(@task, current_user)
-    existing = @task.contributions(user: current_user)
-    if existing.any?
-      redirect_to existing.first
-      return
-    end
     authorize @task_contribution
 
     @task = @task_contribution.suggestion
