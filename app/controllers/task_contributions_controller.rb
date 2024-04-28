@@ -89,6 +89,9 @@ class TaskContributionsController < ApplicationController
 
   def load_and_authorize_task_contribution
     @task_contribution = TaskContribution.find(params[:id])
+    @task = Task.find(params[:task_id])
+    raise Pundit::NotAuthorizedError unless @task_contribution.base == @task
+
     authorize @task_contribution
   end
 end
