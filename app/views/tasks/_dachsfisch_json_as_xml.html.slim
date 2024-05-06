@@ -1,0 +1,8 @@
+- if dachsfisch_attribute.present?
+  .row.vertical
+    .col.row-label
+      = Task.human_attribute_name(name)
+      | :
+    .row-value
+      pre
+        = Dachsfisch::JSON2XMLConverter.perform json: dachsfisch_attribute.to_json

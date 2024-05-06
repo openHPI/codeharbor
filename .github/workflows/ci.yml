@@ -1,0 +1,142 @@
+name: CI
+on:
+  - push
+  - pull_request
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3
+          bundler-cache: true
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+      - name: Manage yarn, webpack and assets cache
+        uses: actions/cache@v4
+        # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        id: yarn-cache
+        with:
+          path: |
+            ${{ steps.yarn-cache-dir-path.outputs.dir }}
+            public/assets
+            public/packs-test
+            tmp/cache
+            tmp/shakapacker
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install yarn packages
+        run: yarn install --immutable
+
+      - name: Prepare config files
+        run: |
+          cp config/action_mailer.yml.ci config/action_mailer.yml
+          cp config/content_security_policy.yml.ci config/content_security_policy.yml
+          cp config/database.yml.ci config/database.yml
+          cp config/secrets.yml.ci config/secrets.yml
+          cp config/mnemosyne.yml.ci config/mnemosyne.yml
+
+      - name: Create database
+        env:
+          RAILS_ENV: test
+        run: bundler exec rake db:schema:load
+      - name: Precompile assets
+        env:
+          RAILS_ENV: test
+        run: bundler exec rake assets:precompile
+      - name: Run tests
+        env:
+          RAILS_ENV: test
+          CC_TEST_REPORTER_ID: true
+        run: bundle exec rspec --color --format RSpec::Github::Formatter --format progress --require spec_helper --require rails_helper
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4
+        if: ${{ success() || failure() }}
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3
+          bundler-cache: true
+
+      - name: Run rubocop
+        uses: reviewdog/action-rubocop@v2
+        with:
+          filter_mode: nofilter
+          rubocop_version: gemfile
+          rubocop_extensions: rubocop-rails:gemfile rubocop-rspec:gemfile rubocop-performance:gemfile
+          rubocop_flags: --parallel
+          reporter: github-check
+          skip_install: true
+          use_bundler: true
+          fail_on_error: true
+
+  slim-lint:
+    permissions:
+      # Required: Allow read access to the content for analysis.
+      contents: read
+      # Required: Allow write access to checks to allow the action to annotate code in the PR.
+      checks: write
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3
+          bundler-cache: true
+
+      - name: Run slim-lint
+        run: bundle exec slim-lint app/views --reporter checkstyle > checkstyle-result.xml
+
+      - name: Upload slim-lint results as GitHub annotations
+        uses: lcollins/checkstyle-github-action@v2.0.0
+        if: ${{ success() || failure() }}
+        with:
+          name: Slim-Lint Report
+          title: Analyze Slim templates for linting issues
+          path: checkstyle-result.xml
+          token: ${{ secrets.OPENHPI_BOT_TOKEN }}

@@ -1,0 +1,32 @@
+require:
+  - rubocop-capybara
+  - rubocop-factory_bot
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-rspec
+  - rubocop-rspec_rails
+
+inherit_from:
+  - .rubocop/layout.yml
+  - .rubocop/lint.yml
+  - .rubocop/metrics.yml
+  - .rubocop/performance.yml
+  - .rubocop/rails.yml
+  - .rubocop/rspec.yml
+  - .rubocop/style.yml
+  - .rubocop_todo.yml
+
+AllCops:
+  TargetRubyVersion: 3.3
+  TargetRailsVersion: 7.1
+  UseCache: True
+  NewCops: enable
+  Exclude:
+    - 'bin/*'
+    - 'db/schema.rb'
+    - 'vendor/**/*'
+    # Ignore local files for faster processing
+    - 'tmp/**/*'
+    - 'out/**/*'
+    - 'node_modules/**/*'
+    - 'coverage/**/*'

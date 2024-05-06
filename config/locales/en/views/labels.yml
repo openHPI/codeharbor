@@ -1,0 +1,20 @@
+---
+en:
+  labels:
+    index:
+      change_color_to: Change Color to
+      filter_by_name: Filter By Name
+      id: ID
+      merge: Merge and Rename to
+      new_name: New Name
+      used_by_tasks: Used By Tasks
+    javascripts:
+      cannot_be_empty: The label name entered is empty
+      change_color_confirmation: This will change the color of the %{selected_labels_count} label(s) selected.
+      delete_confirmation: This will delete the %{selected_labels_count} label(s) selected.
+      max_limit_reached: You can only add %{limit} labels
+      merge_confirmation: This will merge the %{selected_labels_count} label(s) selected and rename them to "%{new_merged_name}"
+      new:
+        selection_suffix: " (new)"
+      ok: OK
+      too_long: The label name entered is too long

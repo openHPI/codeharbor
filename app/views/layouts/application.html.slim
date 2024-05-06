@@ -1,0 +1,48 @@
+doctype html
+html lang=I18n.locale data-default-locale=I18n.default_locale
+  head
+    meta charset='utf8'
+    meta name='viewport' content='width=device-width, initial-scale=1'
+    = render('breadcrumbs_and_title')
+    title
+      = yield(:title)
+    = favicon_link_tag('/favicon.png', type: 'image/png')
+    = favicon_link_tag('/favicon.png', rel: 'apple-touch-icon', type: 'image/png')
+    = stylesheet_pack_tag('stylesheets', media: 'all', 'data-turbolinks-track': 'reload', integrity: true, crossorigin: 'anonymous')
+    = stylesheet_link_tag('application', media: 'all', 'data-turbolinks-track': 'reload', integrity: true, crossorigin: 'anonymous')
+    = javascript_pack_tag('application', 'data-turbolinks-track': 'reload', defer: false, integrity: true, crossorigin: 'anonymous')
+    = javascript_include_tag('application', 'data-turbolinks-track': 'reload', integrity: true, crossorigin: 'anonymous')
+    = yield(:head)
+    = csrf_meta_tags
+    meta name='sentry' data-enabled=SentryJavascript.active?.to_s data-release=SentryJavascript.release data-dsn=SentryJavascript.dsn data-environment=SentryJavascript.environment
+    meta name='current-user' content=current_user&.to_page_context&.to_json
+  body.d-flex.flex-column
+    #content
+      header.sticky-top
+        nav.navbar.bg-light.navbar-expand-lg.text-bg-light role='navigation'
+          .container
+            = link_to home_index_path, class: 'navbar-brand'
+              i.fa-solid.fa-anchor.me-2.text-secondary
+              = application_name
+            button.navbar-toggler.rounded-0.m-2 data-bs-target='#navbar-collapse' data-bs-toggle='collapse' type='button' aria-expanded='false' aria-label='Toggle navigation' aria-controls='navbar-collapse'
+              span.navbar-toggler-icon
+            #navbar-collapse.collapse.navbar-collapse
+              = render('navigation', cached: true)
+              ul.navbar-nav.ms-auto
+                = render('locale_selector', cached: true)
+                = render('session')
+      main
+        div data-controller=controller_name
+          = render('flash')
+          span.d-none = yield(:breadcrumbs)
+        .row
+          .col-md-12
+            - if controller_name == 'home' && action_name == 'index'
+              = yield
+            - else
+              .container
+                .pt-5
+                  = yield
+
+    #footer.footer.py-5.mt-auto
+      = render('footer')

@@ -1,0 +1,50 @@
+---
+de:
+  groups:
+    access_request_mailer:
+      confirm_request: Anfrage annehmen
+      greeting: Hallo %{user}
+      message_line1: '%{user} möchte Ihrer Gruppe "%{group}" beitreten.'
+      message_line2: Sie können sie/ihn beitreten lassen, indem Sie auf den Link unten klicken.
+      message_line3: Ansonsten können Sie diese E-Mail ignorieren.
+      subject: '%{user} möchte Ihrer Grupper "%{group}" beitreten'
+    form:
+      button:
+        save: Gruppe speichern
+    groups:
+      admin_label: Administrator:in
+      create_groups_tip: Sie können Gruppen erstellen, um mit anderen zusammenzuarbeiten und Zugriffsrechte für Aufgaben zu verwalten.
+      member_label: Mitglied
+      no_groups_yet: Sie haben noch keine Gruppen
+      pending_label: Ausstehend
+      wait_to_get_accepted: Warten Sie darauf, angenommen zu werden
+    index:
+      button:
+        all_groups: Alle Gruppen
+        my_groups: Meine Gruppen
+        new_group: Neue Gruppe
+    new:
+      header: Neue Gruppe
+    share_account_link_button:
+      share_tooltip: Teilen Sie den Account-Link für %{account_link} mit %{user}
+      unshare_tooltip: Teilen des Account-Links für %{account_link} mit %{user} beenden
+    shared:
+      button:
+        request_membership: Mitgliedschaft beantragen
+    show:
+      button:
+        delete_group: Gruppe löschen
+        demote_admin: Administrator:in degradieren
+        demote_yourself: Selbst degradieren
+        deny_access: Zugriff verweigern
+        grant_access: Zugriff gewähren
+        leave: Gruppe verlassen
+        make_admin: Zum/Zur Administrator:in befördern
+      demote_admin:
+        confirm: Sind Sie sicher, dass Sie den/die Administrator:in degradieren möchten?
+      demote_yourself:
+        confirm: Sind Sie sicher, dass Sie sich selbst degradieren möchten?
+      has_no_tasks: Die Gruppe hat noch keine Aufgaben
+      has_no_users: Die Gruppe hat keine Benutzer:innen
+      no_pending_users: Die Gruppe hat keine ausstehenden Benutzer:innen
+      pending_users: Ausstehende Benutzer:innen

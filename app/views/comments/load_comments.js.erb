@@ -1,0 +1,18 @@
+id = <%= @task.id %>
+commentBox =  $(".comment-box[data-task=" + id +"] > .comment-body")
+$(commentBox).html("<%= escape_javascript(render :partial => 'comments/task_comments', :locals => {:comment => @comment, :task => @task}) %>");
+
+setTimeout(function(){
+  $('.comment-text').each(function() {
+    if ($(this).prop('scrollHeight') > $(this).prop('clientHeight')) {
+      $(this).css('height', 'unset');
+      $(this).css('max-height', '58px');
+    } else {
+      $(this).siblings('.more-btn-wrapper').hide();
+    }
+
+  });
+}, 10)
+setTimeout(function() {
+  $('.collapsable').addClass('animated-sliding');
+}, 100);

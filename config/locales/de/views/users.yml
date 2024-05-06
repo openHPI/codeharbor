@@ -1,0 +1,39 @@
+---
+de:
+  users:
+    mailer:
+      confirmation_instructions:
+        p1: 'Vielen Dank für Ihre Registrierung bei CodeHarbor! Klicken Sie auf den folgenden Link, um Ihren Account zu bestätigen:'
+    registrations:
+      avatar_form:
+        remove_avatar: Profilbild entfernen
+      edit:
+        add_identity: Account mit %{kind} verknüpfen
+        cannot_remove_last_identity: Account-Verknüpfung zu %{kind} kann nicht entfernt werden, da weder ein Passwort gesetzt noch eine andere Identität verknüpft ist
+        manage_omniauth: Verknüpfte Accounts verwalten
+        remove_identity: Account-Verknüpfung zu %{kind} entfernen
+    shared:
+      notification_modal:
+        delete_modal:
+          content:
+            groups_1: Gruppen, in denen Sie der/die einzige Benutzer:in sind, werden gelöscht
+            groups_2: 'Gruppen, in denen Sie der/die Administrator:in und andere Benutzer:innen sind: Ein/e andere/r Benutzer:in wird zufällig zum/zur Administrator:in erklärt'
+            groups_3: 'Gruppen mit anderen Administratorinnen oder Administratoren: keine Änderungen'
+            groups_header: 'Gruppen:'
+            intro: 'Die Löschung Ihres Accounts hat folgende Auswirkungen:'
+            tasks_content: Ihre Aufgaben bleiben bestehen, aber Ihr Name wird anonymisiert
+            tasks_header: 'Aufgaben:'
+      password_new_confirmation: Bestätigen Sie Ihr neues Passwort
+      validation_error: 'Aufgrund von Fehlern konnte die Anleitung nicht gesendet werden:'
+    show:
+      account_links:
+        add: Account-Link hinzufügen
+        created: Erstellte Account-Links
+        more_information: Mehr dazu...
+        other: Andere Account-Links
+      delete_modal:
+        title: Warnung
+      full_name: Vollständiger Name
+      private_information: Private Informationen
+      public_information: Öffentliche Informationen
+      send_message: Nachricht senden

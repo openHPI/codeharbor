@@ -1,0 +1,6 @@
+== t('devise.mailer.email_changed.greeting', recipient: @resource.name || @email)
+== "\n\n"
+- if @resource.try(:unconfirmed_email?)
+  == t('devise.mailer.email_changed.message_unconfirmed', email: @resource.unconfirmed_email)
+- else
+  == t('devise.mailer.email_changed.message', email: @resource.email)

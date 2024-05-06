@@ -1,0 +1,12 @@
+codeocean:
+  url: http://localhost:7000
+omniauth:
+  mocksaml:
+    enable: true
+    metadata_url: 'https://mocksaml.com/api/saml/metadata'
+  bird:
+    enable: false
+  nbp:
+    enable: false
+oai_pmh:
+  admin_mail: admin@example.org

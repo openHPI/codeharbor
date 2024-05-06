@@ -1,0 +1,19 @@
+= form_for :message, url: user_messages_path(@user) do |f|
+  .mt-5
+    = render('shared/form_errors', object: @message)
+
+    - if @recipient
+      = f.hidden_field :recipient_hidden, value: @recipient.id
+    - else
+      .field-element
+        = f.label :recipient, Message.human_attribute_name('recipient'), class: 'form-label'
+        = f.text_field :recipient, class: 'form-control'
+    .field-element
+      = f.label :text, Message.human_attribute_name('text'), class: 'form-label'
+      = f.text_area :text, class: 'form-control'
+    br
+    .actions.btn-group role='group'
+      = button_tag type: 'submit', class: 'btn btn-important' do
+        i.fa-solid.fa-envelope
+        =< t('messages.shared.send_message')
+      = link_to t('common.button.cancel'), :back, class: 'btn btn-important'

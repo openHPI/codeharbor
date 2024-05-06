@@ -1,0 +1,9 @@
+---
+de:
+  comments:
+    task_comments:
+      button:
+        refresh_comments: Kommentare aktualisieren
+      info:
+        no_comments: Diese Aufgabe hat noch keine Kommentare
+      time_ago: Vor %{time}

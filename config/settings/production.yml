@@ -1,0 +1,13 @@
+# This file is overwritten during deployment
+
+codeocean:
+  url: https://codeocean.openhpi.de
+omniauth:
+  mocksaml:
+    enable: false
+  bird:
+    enable: false
+  nbp:
+    enable: false
+oai_pmh:
+  admin_mail: admin@example.org

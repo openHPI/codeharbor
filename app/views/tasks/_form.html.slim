@@ -1,0 +1,159 @@
+- content_for :head do
+  // Force a full page reload, see https://github.com/turbolinks/turbolinks/issues/326.
+     Otherwise, code might not be highlighted correctly (race condition)
+  meta name='turbolinks-visit-control' content='reload'
+  - append_javascript_pack_tag('toast-ui')
+  - append_stylesheet_pack_tag('toast-ui')
+
+.row
+  .col-md-12.my-4
+    = simple_form_for @task, html: {class: 'project exercise-validation', multipart: true}, builder: MarkdownFormBuilder do |f|
+      = render('shared/form_errors', object: @task)
+      fieldset.form-group
+        legend.toggle-next
+          span.number = '1'
+          => t('tasks.shared.basic_information')
+          span.fa-solid.fa-caret-up
+        .form-content
+          .field-element
+            = f.label :title, Task.human_attribute_name('title'), class: 'form-label'
+            = f.text_field :title, class: 'form-control'
+          .field-element
+            = f.label :programming_language, Task.human_attribute_name('programming_language'), class: 'form-label'
+            .div.d-none.execution-environment-error
+              = t('.errors.prog_lang_not_empty_while_public')
+            = f.collection_select :programming_language_id, ProgrammingLanguage.all, :id, :language_with_version, {include_blank: t('common.none')}, {class: 'form-control'}
+
+
+          .field-element
+            = f.label :description, Task.human_attribute_name('description'), class: 'form-label'
+            = f.markdown :description
+
+      fieldset.form-group
+        legend.toggle-next
+          span.number = '2'
+          => t('tasks.shared.additional_info')
+          span.fa-solid.fa-caret-up
+        .form-content
+          .field-element
+            = f.label :internal_description, Task.human_attribute_name('internal_description'), class: 'form-label'
+            = f.text_area :internal_description, class: 'form-control'
+          .field-element
+            = f.label :uuid, Task.human_attribute_name('uuid'), class: 'form-label'
+            = f.text_field :uuid, class: 'form-control'
+          .field-element
+            = f.label :parent_uuid, Task.human_attribute_name('parent_uuid'), class: 'form-label'
+            = f.text_field :parent_uuid, class: 'form-control'
+          .field-element
+            = f.label :language, Task.human_attribute_name('language'), class: 'form-label'
+            = f.text_field :language, class: 'form-control'
+
+          .field-element
+            = f.label :access_level, Task.human_attribute_name('access_level'), class: 'form-label'
+            .div.d-none.execution-environment-error
+              = t('.errors.not_public_without_prog_lang')
+            .radio-switch
+              = f.radio_button :access_level, :public, value: :public, checked: true
+              = label_tag 'task_access_level_public', t('tasks.visibility.public'), class: 'radio-left'
+              = f.radio_button :access_level, :private, value: :private
+              = label_tag 'task_access_level_private', t('tasks.visibility.private'), class: 'radio-right'
+            .visibility_warning
+              span.d-none#task_visibility_warning data-external-collection-membership=@task.collections.any? {|collection| collection.users.exclude?(current_user) }.to_s
+                = t('.visibility_warning')
+          = fields_for :group_tasks do |ff|
+            .field-element
+              = ff.label :group_ids, Group.model_name.human(count: :many), class: 'form-label'
+              = ff.collection_select :group_ids, current_user.member_groups.uniq, :id, :name, {selected: @task.groups.map(&:id)}, {class: 'my-group form-control', multiple: true, style: 'width: 300px;'}
+              - if (@task.groups - current_user.member_groups).length.positive?
+                .unchangeable-groups
+                  span.title style='margin-right: 5px;'
+                    = "#{t('.unchangeable_groups')}:"
+                  - (@task.groups - current_user.member_groups).each_with_index do |group, index|
+                    - if index.positive?
+                      = ', '
+                    = group.name
+
+          .field-element
+            = f.label :labels, Label.model_name.human(count: :many), class: 'form-label'
+            = f.select :label_names, options_for_select(@task.labels.map {|l| [l.name, l.name, {label_color: l.color, label_font_color: l.font_color}] }, @task.labels.map(&:name)), {}, {class: 'labels-select2-tag form-control', multiple: 'multiple', style: 'width: 300px;'}
+
+          .field-element
+            = f.label :license, Task.human_attribute_name('license'), class: 'form-label'
+            .license
+              .select
+                = f.select :license_id, options_for_select(License.all.collect {|l| [l.name, l.id, {'data-link' => l.link}] }, @task.license_id), {include_blank: t('.no_license')}, {class: 'form-select'}
+              .link
+      fieldset.form-group
+        legend.toggle-next
+          span.number = '3'
+          => Task.human_attribute_name('files')
+          span.fa-solid.fa-caret-up
+        .form-content
+          = render 'nested_file_form', f:, nested_form_placeholder: 'f-__nested_field_for_replace_with_index__'
+      fieldset.form-group
+        legend.toggle-next
+          span.number = '4'
+          => Task.human_attribute_name('tests')
+          span.fa-solid.fa-caret-up
+        .form-content
+          .field-element
+            = f.nested_fields_for :tests, style: 'margin-left: 10px' do |test|
+              .show-table.exercise-show
+                - if test.object.new_record?
+                  - display_container = 'display: block'
+                  .table-header
+                    = test.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
+                      i.fa-solid.fa-xmark style=('color: #800000')
+                      =< t('.button.remove_test')
+                - else
+                  - display_container = 'display: none'
+                  .table-header.closed.toggle-next
+                    => test.object.title
+                    span.fa-solid.fa-caret-down
+                    = test.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
+                      i.fa-solid.fa-xmark style=('color: #800000')
+                      =< t('.button.remove_test')
+                .test-container style="margin-left: 10px; #{display_container}"
+                  = render 'test_form', f:, test:
+            / .field-element
+            = f.add_nested_fields_link :tests, ' ', class: 'btn btn-main', id: 'addTestButton' do
+              i.fa-solid.fa-plus style=('color: #008000')
+              =< t('.button.add_test')
+      fieldset.form-group
+        legend.toggle-next
+          span.number = '5'
+          => ModelSolution.model_name.human(count: :many)
+          span.fa-solid.fa-caret-up
+        .form-content
+          .field-element
+            = f.nested_fields_for :model_solutions, style: 'margin-left: 10px' do |model_solution|
+              .show-table.exercise-show
+                - if model_solution.object.new_record?
+                  - display_container = 'display: block'
+                  .table-header
+                    = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
+                      i.fa-solid.fa-xmark style=('color: #800000')
+                      =< t('.button.remove_model_solution')
+                - else
+                  - display_container = 'display: none'
+                  .table-header.closed.toggle-next
+                    => ModelSolution.model_name.human
+                    => (model_solution.object.task.model_solutions.find_index(model_solution.object) + 1).to_s
+                    span.fa-solid.fa-caret-down
+                    = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
+                      i.fa-solid.fa-xmark style=('color: #800000')
+                      =< t('.button.remove_model_solution')
+                .model-solution-container style="margin-left: 10px; #{display_container}"
+                  = render 'model_solution_form', f:, model_solution:
+            / .field-element
+            = f.add_nested_fields_link :model_solutions, ' ', class: 'btn btn-main', id: 'addTestButton' do
+              i.fa-solid.fa-plus style=('color: #008000')
+              =< t('.button.add_model_solution')
+      .form-group
+        .actions.btn-group role='group'
+          = button_tag type: 'submit', class: 'btn btn-important' do
+            i.fa-regular.fa-file-lines
+            =< t('.button.save_task')
+          = link_to :back, class: 'btn btn-important' do
+            i.fa-solid.fa-xmark style=('color: gray')
+            =< t('common.button.cancel')

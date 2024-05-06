@@ -1,0 +1,12 @@
+- if object.errors.any?
+  .alert.alert-danger.alert-dismissible
+    - if object.errors.size == 1
+      = object.errors.full_messages.first
+    - else
+      - model_class = defined?(model) ? model : object.class
+      - title_translation = defined?(title) ? title : t('common.errors.model_not_saved', model: model_class.model_name.human)
+      h4 = title_translation
+      ul
+        - object.errors.full_messages.each do |message|
+          li = message
+    button.btn-close type='button' data-bs-dismiss='alert' aria-label=t('common.button.close')

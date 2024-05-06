@@ -1,0 +1,5 @@
+---
+de:
+  task_files:
+    extract_text_data:
+      no_text: Die Datei enthält keinen Text.

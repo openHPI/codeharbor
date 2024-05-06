@@ -1,0 +1,107 @@
+<schema targetNamespace="http://www.openarchives.org/OAI/2.0/"
+        xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:oai="http://www.openarchives.org/OAI/2.0/"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified">
+
+  <annotation>
+    <documentation>
+      Custom XSD for testing of OAI-PMH responses.
+    </documentation>
+  </annotation>
+
+  <element name="OAI-PMH" type="oai:OAI-PMHtype"/>
+
+  <complexType name="OAI-PMHtype">
+    <sequence>
+      <element name="responseDate" type="dateTime"/>
+      <element name="request" type="oai:requestType"/>
+      <element name="error" type="oai:OAI-PMHerrorType" maxOccurs="unbounded"/>
+    </sequence>
+  </complexType>
+
+  <complexType name="requestType">
+    <annotation>
+      <documentation>Define requestType, indicating the protocol request that
+        led to the response. Element content is BASE-URL, attributes are arguments
+        of protocol request, attribute-values are values of arguments of protocol
+        request</documentation>
+    </annotation>
+    <simpleContent>
+      <extension base="anyURI">
+        <attribute name="verb" type="oai:verbType" use="optional"/>
+        <attribute name="identifier" type="oai:identifierType" use="optional"/>
+        <attribute name="metadataPrefix" type="oai:metadataPrefixType" use="optional"/>
+        <attribute name="from" type="oai:UTCdatetimeType" use="optional"/>
+        <attribute name="until" type="oai:UTCdatetimeType" use="optional"/>
+        <attribute name="set" type="oai:setSpecType" use="optional"/>
+        <attribute name="resumptionToken" type="string" use="optional"/>
+      </extension>
+    </simpleContent>
+  </complexType>
+
+  <simpleType name="verbType">
+    <restriction base="string">
+      <enumeration value="Identify"/>
+      <enumeration value="ListMetadataFormats"/>
+      <enumeration value="ListSets"/>
+      <enumeration value="GetRecord"/>
+      <enumeration value="ListIdentifiers"/>
+      <enumeration value="ListRecords"/>
+    </restriction>
+  </simpleType>
+
+  <!-- define OAI-PMH error conditions -->
+  <!-- =============================== -->
+
+  <complexType name="OAI-PMHerrorType">
+    <simpleContent>
+      <extension base="string">
+        <attribute name="code" type="oai:OAI-PMHerrorcodeType" use="required"/>
+      </extension>
+    </simpleContent>
+  </complexType>
+
+  <simpleType name="OAI-PMHerrorcodeType">
+    <restriction base="string">
+      <enumeration value="cannotDisseminateFormat"/>
+      <enumeration value="idDoesNotExist"/>
+      <enumeration value="badArgument"/>
+      <enumeration value="badVerb"/>
+      <enumeration value="noMetadataFormats"/>
+      <enumeration value="noRecordsMatch"/>
+      <enumeration value="badResumptionToken"/>
+      <enumeration value="noSetHierarchy"/>
+    </restriction>
+  </simpleType>
+
+  <simpleType name="identifierType">
+    <restriction base="anyURI"/>
+  </simpleType>
+
+  <simpleType name="UTCdatetimeType">
+    <annotation>
+      <documentation>Datestamps are to either day (type date)
+        or to seconds granularity (type oai:UTCdateTimeZType)</documentation>
+    </annotation>
+    <union memberTypes="date oai:UTCdateTimeZType"/>
+  </simpleType>
+
+  <simpleType name="UTCdateTimeZType">
+    <restriction base="dateTime">
+      <pattern value=".*Z"/>
+    </restriction>
+  </simpleType>
+
+  <simpleType name="metadataPrefixType">
+    <restriction base="string">
+      <pattern value="[A-Za-z0-9\-_\.!~\*'\(\)]+"/>
+    </restriction>
+  </simpleType>
+
+  <simpleType name="setSpecType">
+    <restriction base="string">
+      <pattern value="([A-Za-z0-9\-_\.!~\*'\(\)])+(:[A-Za-z0-9\-_\.!~\*'\(\)]+)*"/>
+    </restriction>
+  </simpleType>
+</schema>

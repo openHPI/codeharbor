@@ -1,0 +1,74 @@
+# style cop settings
+
+#
+# Nein. Period. Try to keep it English, but there *will* references using
+# unicode characters.
+#
+Style/AsciiComments:
+  Enabled: false
+
+#
+# Both styles or mixtures are reasonable
+#
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+  Enabled: false
+
+#
+# Maybe a bit uncommon for new devs and often results in heavily indented code
+# blocks.
+#
+Style/ConditionalAssignment:
+  Enabled: false
+
+#
+# Would be better but unlikely...
+#
+Style/Documentation:
+  Enabled: false
+
+#
+# Okay for conditions, but false positive in return statements (e.g. APIs)
+#
+Style/DoubleNegation:
+  Enabled: false
+
+#
+# Our default string token has the '%{value}' format
+#
+Style/FormatStringToken:
+  EnforcedStyle: template
+
+#
+# Far to often easy to read without.
+#
+Style/GuardClause:
+  Enabled: false
+
+#
+# IfUnlessModifier has no own line length but we do not want it to force 120
+# chars long modifiers just because we allow a few long lines.
+#
+Style/IfUnlessModifier:
+  Enabled: false
+
+#
+# Well, we do this. To often to disable them. Studid.
+#
+Style/MultilineBlockChain:
+  Enabled: false
+
+#Style/NumericPredicate:
+#  Enabled: false
+
+Style/RaiseArgs:
+  EnforcedStyle: compact
+
+Style/SignalException:
+  EnforcedStyle: only_raise
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma

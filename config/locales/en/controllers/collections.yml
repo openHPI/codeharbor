@@ -1,0 +1,28 @@
+---
+en:
+  collections:
+    create:
+      error: The collection could not be created.
+      success_notice: The collection has successfully been created. (The task has automatically been added)
+    leave:
+      left_successfully: You successfully left the collection.
+    push_collection:
+      not_working: Your account link %{account_link} does not seem to be working.
+      push_external_notice: Exercise pushed to %{account_link}
+    remove_all:
+      cannot_remove_alert: You cannot remove all tasks
+      success_notice: All Tasks were successfully removed
+    remove_task:
+      cannot_remove_alert: You cannot remove this task.
+    save_shared:
+      errors:
+        already_member: You are already a member of this collection.
+      success_notice: You can now collaborate to this collection.
+    share:
+      success_notice: Your collection has been sent.
+    share_message:
+      text: '%{user} sent you their collection "%{collection}"'
+    toggle_favorite:
+      favorite:
+        added: Added to favorites
+        removed: Removed from favorites

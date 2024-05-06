@@ -1,0 +1,95 @@
+- if @tasks.empty?
+  - if Task.visibility(:owner, current_user).empty? && (@option == :owner)
+    .card.my-4
+      .card-body
+        .col-md-10
+          h3.text-body-secondary
+            = t('.search.no_tasks')
+          p style='color: #777777'
+  - else
+    .card.my-4
+      .card-body
+        .col-md-10
+          h3.text-body-secondary
+            = t('.search.no_results')
+          p style='color: #777777'
+            = t('.search.no_results_description')
+- @tasks.each do |task|
+  .card.my-4
+    .card-header
+      h6
+        - if @visibility == :owner
+          span.align-middle.visibility data-bs-toggle='tooltip' data-bs-placement='bottom' title=t('tasks.visibility.label')
+            = t("tasks.visibility.#{task.access_level}")
+        span.align-middle data-bs-toggle='tooltip' data-bs-placement='bottom' title=task.title
+          = truncate(task.title, length: 100)
+        small.star-rating.float-end
+          span.programming-language.align-middle
+            = task.programming_language&.language || t('.no_programming_language_selected')
+          span.number-rating.align-middle
+            = task.average_rating.round(1)
+          - [*1..5].each do |i|
+            span.fs-5.align-middle
+              - if task.rating_star >= i
+                .fa-solid.fa-star data-rating=i
+              - elsif (task.rating_star + 0.5) >= i
+                .fa-regular.fa-star-half-stroke data-rating=i
+              - else
+                .fa-regular.fa-star data-rating=i
+          small.text-body-secondary.align-bottom
+            =< task.ratings.size
+            =< Rating.model_name.human(count: :many)
+        / = render 'remove_state_tag', exercise: exercise
+    .card-body.exercise-card
+      .exercise-content
+        .description.collapsable
+          - if task.description == ''
+            span style='color: gray'
+              = t('.no_description')
+          - else
+            = render_markdown(task.description)
+        .more-btn-wrapper
+          = button_to task, class: 'more-btn' do
+            .more-tag
+              = t('common.button.show_more')
+              span.fa-solid.fa-caret-down.ms-1
+            .less-tag.d-none
+              = t('common.button.show_less')
+              span.fa-solid.fa-caret-up.ms-1
+
+      .exercise-buttons.btn-group-vertical.float-end aria-label='...' role='group'
+        - if policy(task).show?
+          = link_to t('common.button.view'), task_path(task), class: 'btn btn-light'
+        - if policy(task).edit?
+          = link_to t('common.button.edit'), edit_task_path(task), class: 'btn btn-light'
+        - if policy(task).destroy?
+          = link_to t('common.button.delete'), task_path(task), class: 'btn btn-light', method: :delete, data: {confirm: t('common.sure')}
+    .card-footer
+      = button_tag type: 'button', class: 'btn no-border index-comment-button', data: {task: task.id} do
+        => t('.button.show_comments')
+        span.fa-solid.fa-circle-notch.fa-spin.wait style="display:none;margin-right:5px;"
+        span.fa-solid.fa-caret-down.my-caret
+      =< button_tag type: 'button', class: 'btn no-border related-button', data: {task: task.id} do
+        => t('.button.related_exercises')
+        span.fa-solid.fa-circle-notch.fa-spin.wait style="display:none;margin-right:5px;"
+        span.fa-solid.fa-caret-down.my-caret
+
+    /.related-box data-exercise=exercise.id
+
+      .slide-left.inactive
+        = button_tag do
+          i.fa-solid.fa-caret-left
+      .content
+      .slide-right.inactive
+        = button_tag do
+          i.fa-solid.fa-caret-right
+
+    .comment-box data-task=task.id
+      = form_for :comment, url: task_comments_path(task), remote: true do |f|
+        .write-comment
+          .input-group
+            = f.label 'new_comment_label', t('tasks.shared.new_comment'), class: 'input-group-text'
+            = f.text_field :text, class: 'form-control'
+            = f.submit t('common.button.save_object', model: Comment.model_name.human), class: 'btn btn-light'
+      .comment-body
+= render('shared/pagination', collection: @tasks)

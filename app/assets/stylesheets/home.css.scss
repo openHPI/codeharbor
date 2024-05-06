@@ -1,0 +1,32 @@
+// Place all the styles related to the Home controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+// Reusable item to define a boxed component
+.boxed-item {
+  padding: 40px;
+  background-color: #fff;
+  height: 100%;
+  transition: 0.3s;
+}
+
+.services {
+  &.sections-bg {
+    background-color: #f6f6f6;
+  }
+
+  .service-item {
+    @extend .boxed-item;
+    border: 1px #ddd solid;
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+}
+
+.features,
+.call-to-action {
+  p {
+    font-size: large;
+  }
+}

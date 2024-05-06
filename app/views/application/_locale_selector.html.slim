@@ -1,0 +1,7 @@
+li.nav-item.dropdown
+  a.nav-link.px-3.dropdown-toggle data-bs-toggle='dropdown' href='#'
+    = t("common.locales.#{I18n.locale}")
+    span.caret
+  ul.dropdown-menu.rounded-0 role='menu'
+    - I18n.available_locales.sort_by {|locale| t("common.locales.#{locale}") }.each do |locale|
+      li = link_to(t("common.locales.#{locale}"), AuthenticatedUrlHelper.add_query_parameters(request.url, locale:), 'data-turbolinks' => 'false', class: 'dropdown-item')

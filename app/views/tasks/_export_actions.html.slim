@@ -1,0 +1,21 @@
+- if error
+  = button_tag type: 'button', class: 'btn btn-light btn-sm float-end import-export-button', onclick: "exportTaskStart(#{task.id})" do
+    i.fa-solid.fa-arrows-rotate.confirm-icon.export-button-icon
+    = t('common.button.retry')
+- else
+  - unless exported
+    - if task_found
+      - if update_right
+        = button_tag type: 'button', class: 'btn btn-light btn-sm float-end export-action import-export-button', data: {'export-type' => 'export'} do
+          i.fa-solid.fa-check.confirm-icon.export-button-icon
+          = t('.overwrite')
+      = button_tag type: 'button', class: 'btn btn-light btn-sm float-end export-action import-export-button', data: {'export-type' => 'create_new'} do
+        i.fa-solid.fa-check.confirm-icon-alt.export-button-icon
+        = t('.create_new')
+    - else
+      = button_tag type: 'button', class: 'btn btn-light btn-sm float-end export-action import-export-button', data: {'export-type' => 'export'} do
+        i.fa-solid.fa-check.confirm-icon.export-button-icon
+        = t('common.button.export')
+= button_tag type: 'submit', class: 'btn btn-light btn-sm float-end import-export-button', data: {'bs-dismiss': 'modal'} do
+  i.fa-solid.fa-xmark.abort-icon.export-button-icon
+  = exported ? t('common.button.hide') : t('common.button.abort')

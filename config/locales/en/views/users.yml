@@ -1,0 +1,39 @@
+---
+en:
+  users:
+    mailer:
+      confirmation_instructions:
+        p1: 'Thanks for registering to CodeHarbor! You can confirm your account email through the link below:'
+    registrations:
+      avatar_form:
+        remove_avatar: Remove Avatar
+      edit:
+        add_identity: Link %{kind} account
+        cannot_remove_last_identity: Cannot remove account link to %{kind} because neither a password is set nor another identity is linked
+        manage_omniauth: Manage linked accounts
+        remove_identity: Remove account link to %{kind}
+    shared:
+      notification_modal:
+        delete_modal:
+          content:
+            groups_1: Groups with only you as user will be deleted
+            groups_2: 'Groups with only you as admin and other users: Another user will be randomly declared as admin'
+            groups_3: 'Groups with other admins: no changes'
+            groups_header: 'Groups:'
+            intro: 'Deletion of your account will have the following effects:'
+            tasks_content: Your tasks will remain, but your name will be anonymized
+            tasks_header: 'Tasks:'
+      password_new_confirmation: Confirm your new password
+      validation_error: 'Could not send instructions due to errors:'
+    show:
+      account_links:
+        add: Add Account Link
+        created: Created Account Links
+        more_information: More Information...
+        other: Other Account Links
+      delete_modal:
+        title: Warning
+      full_name: Full name
+      private_information: Private Information
+      public_information: Public Information
+      send_message: Send Message

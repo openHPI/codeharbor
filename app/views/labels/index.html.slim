@@ -1,0 +1,29 @@
+.container style="padding: 0px;"
+  .row
+    .col-md-7
+      input.form-control#label-name-filter-input type='text' placeholder=t('.filter_by_name')
+      br
+      .div.labels-table-container
+        table.table.table-bordered.table-striped.labels-table
+          thead
+            tr
+              th.sort-by-id.table-header-sort-down style='width: 10%;' = t('.id')
+              th.sort-by-name style='width: 30%;' = Label.human_attribute_name(:name)
+              th.sort-by-created-at style='width: 40%;' = t('common.created_at')
+              th style='width: 20%;' = t('.used_by_tasks')
+          tbody
+      br
+
+    .col-md-5
+      div
+        .input-group
+          = button_tag t('.merge'), type: 'button', id: 'merge-labels-button', disabled: true, class: 'btn btn-primary'
+          input.form-control#merge-labels-input type='text' placeholder=t('.new_name')
+
+      .div style='margin-top: 10px;'
+        .input-group
+          = button_tag t('.change_color_to'), id: 'change-label-color-button', disabled: true, class: 'btn btn-primary'
+          input.form-control#color-labels-input type='color' value='#000000'
+
+      .div style='margin-top: 10px;'
+        = button_tag t('common.button.delete'), id: 'delete-labels-button', disabled: true, class: 'btn btn-danger'

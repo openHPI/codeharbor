@@ -1,0 +1,3 @@
+- renderer = defined?(js) && js.present? ? WillPaginateHelper::WillPaginateJSLinkRenderer : WillPaginate::ActionView::Bootstrap4LinkRenderer
+- if (pagination = will_paginate(collection, container: false, renderer:)).present?
+  ul.pagination.justify-content-center = pagination

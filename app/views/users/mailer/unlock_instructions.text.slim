@@ -1,0 +1,7 @@
+== t('devise.mailer.unlock_instructions.greeting', recipient: @resource.name || @resource.email)
+== "\n\n"
+== t('devise.mailer.unlock_instructions.message')
+== "\n\n"
+== t('devise.mailer.unlock_instructions.instruction')
+== "\n\n"
+== unlock_url(@resource, unlock_token: @token)

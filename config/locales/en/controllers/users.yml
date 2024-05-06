@@ -1,0 +1,8 @@
+---
+en:
+  users:
+    omni_auth:
+      failure_deauthorize: Could not remove authorization from %{kind} because "%{reason}".
+      failure_deauthorize_last_identity: You cannot deauthorize your %{kind} account because it is your last remaining account. Please create a password to log in in the future.
+      failure_deauthorize_not_linked: You are not linked to any %{kind} account.
+      success_deauthorize: Successfully removed authorization from %{kind} account.

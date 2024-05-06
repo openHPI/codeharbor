@@ -1,0 +1,20 @@
+.container
+  .row
+    .col-md-6
+      h5.py-2
+        = t('.more.header')
+      p
+        = link_to t('.more.link'), about_home_index_path
+      p
+        | &copy;
+        = ' '
+        = link_to t('.hasso_plattner_institute'), 'https://hpi.de/'
+        = ' - '
+        = link_to t('.imprint'), 'https://open.hpi.de/pages/imprint'
+        = ' - '
+        = link_to t('.privacy_policy'), 'https://open.hpi.de/pages/privacy_policy'
+    .col-md-6
+      h5.py-2
+        = t('.about.header')
+      p
+        = t('.about.paragraph')

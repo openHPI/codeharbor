@@ -1,0 +1,7 @@
+---
+en:
+  messages:
+    create:
+      sent_successfully: Message was successfully sent.
+    destroy:
+      error: An error occurred while deleting the message.

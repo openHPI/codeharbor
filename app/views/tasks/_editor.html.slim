@@ -1,0 +1,33 @@
+- file_attached = file.object.attachment.attached?
+- show_attachment = file_attached || file.object.use_attached_file
+- if show_attachment
+  - editor_display = 'display: none'
+  - attachment_display = 'display: block'
+- else
+  - editor_display = 'display: block'
+  - attachment_display = 'display: none'
+- fileupload_display = file_attached ? 'display: none' : 'display: block'
+
+= f.label :content, TaskFile.human_attribute_name('content'), class: 'form-label', style: 'margin-bottom: 15px'
+a.btn.btn-main.btn-sm.toggle-input href='#'
+  = t('.button.toggle_file')
+.toggle-divs
+  .edit style=editor_display
+    = file.text_area :content, disabled: show_attachment, class: 'd-none form-control'
+    .editor
+      = file.text_area :content
+  .attachment style=attachment_display
+    = file.hidden_field :use_attached_file, value: show_attachment, class: 'use-attached-file'
+    - if file_attached
+      .btn-group.attachment_present
+        - if file.object.attachment.image?
+          = image_tag file.object.attachment.variant(resize_to_limit: [600, 600])
+        - else
+          = link_to file.object.attachment.filename, download_attachment_task_file_path(file.object), class: 'btn btn-light', style: 'border-right: none', 'data-turbolinks' => false
+        = link_to '#', class: 'btn btn-light reupload-attachment', style: 'border-left: none; margin-right: 5px;', title: t('.button.upload_a_new_file') do
+          i.fa-solid.fa-upload style=('color: gray')
+        - if file.object.text_data?
+          .extract-text.btn.btn-main data-file-id=file.object.id
+            = t('.button.extract_text')
+    .alternative style=fileupload_display
+      = file.file_field :attachment, class: 'alternative-input form-control'

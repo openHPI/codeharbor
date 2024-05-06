@@ -1,0 +1,38 @@
+// Place all the styles related to the Labels controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.ui-helper-hidden-accessible { position: absolute; left: -9999px; }
+
+
+.labels-table-container {
+  overflow-y: scroll;
+  height: 60vh;
+}
+
+.labels-table tbody tr.selected td {
+  background: #0086b3;
+}
+
+.table-header-sort-down:after,
+.table-header-sort-up:after {
+  content: ' ';
+  position: relative;
+  left: 2px;
+  border: 8px solid transparent;
+}
+
+.table-header-sort-down:after {
+  top: 10px;
+  border-top-color: silver;
+}
+
+.table-header-sort-up:after {
+  bottom: 15px;
+  border-bottom-color: silver;
+}
+
+#color-labels-input {
+  padding: 3px;
+  margin: 1px;
+}

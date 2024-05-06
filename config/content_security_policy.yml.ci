@@ -1,0 +1,20 @@
+default: &default
+  #
+  # No additional directives, remove this line to add other directives.
+  { }
+
+
+development:
+  <<: *default
+  # Allow the webpack-dev-server in development
+  connect_src:
+    - http://localhost:3045
+    - ws://localhost:3045
+
+
+production:
+  <<: *default
+
+
+test:
+  <<: *default

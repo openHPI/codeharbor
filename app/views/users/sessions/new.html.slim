@@ -1,0 +1,37 @@
+.login_form
+  .header.mb-5
+    .std-heading
+      i.fa-solid.fa-right-to-bracket style='color: #444444'
+      =< t('devise.sessions.new.sign_in')
+  = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+    .form-group.field-element
+      = f.label :email, class: 'form-label'
+      = f.email_field :email,
+              required: true,
+              autofocus: true,
+              placeholder: User.human_attribute_name('email'),
+              autocomplete: 'email',
+              class: 'form-control'
+    .form-group.field-element
+      = f.label :password, class: 'form-label'
+      = f.password_field :password,
+              required: true,
+              placeholder: User.human_attribute_name('password'),
+              autocomplete: 'current-password',
+              class: 'form-control'
+    - if devise_mapping.rememberable?
+      .form-group.form-check
+        = f.check_box :remember_me, class: 'form-check-input'
+        = f.label :remember_me, class: 'form-check-label' do
+          = resource.class.human_attribute_name('remember_me')
+
+    .form-group.py-3
+      .btn-group role='group'
+        = button_tag type: 'submit', class: 'btn btn-important' do
+          i.fa-solid.fa-right-to-bracket
+          =< t('common.button.log_in')
+        = link_to :back, class: 'btn btn-important' do
+          i.fa-solid.fa-xmark style=('color: gray')
+          =< t('common.button.back')
+
+  = render 'users/shared/links'

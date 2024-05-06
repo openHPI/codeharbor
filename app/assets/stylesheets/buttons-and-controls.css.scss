@@ -1,0 +1,94 @@
+// Place all the styles related to the Exercises controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.radio-switch {
+  display: inline-block;
+}
+
+.radio-half {
+  width: 50%;
+}
+
+.radio-third {
+  width: 33%;
+}
+
+.radio-base {
+  border: #cccccc 1px solid;
+  padding: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: normal;
+  text-align: center;
+  box-sizing: border-box;
+  border-radius: 4px;
+}
+
+.radio-left {
+  @extend .radio-base;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.radio-right {
+  @extend .radio-base;
+  margin-left: -1px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
+.radio-left.small-radio,
+.radio-right.small-radio {
+  font-size: 10px;
+  padding: 3px;
+}
+
+input[type='radio'] {
+  display: none;
+}
+
+input[type='radio']:checked + label {
+  background-color: #eeeeee;
+}
+
+.primary-checkbox:checked + label {
+  background-color: #060;
+  color: white;
+}
+
+.primary-checkbox + label {
+  border-color: #aaa;
+  background-color: #fff;
+  display: inline;
+  padding: 5px 15px;
+}
+
+.pagination .page-item {
+  background-color: #ffffff;
+  border-color: #cccccc;
+}
+
+// Temporary style the pagination buttons
+
+.pagination .page-item:hover .page-link,
+.pagination .page-item .page-link:focus {
+  background-color: #d3d3d3;
+  color: #000;
+  box-shadow: initial;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #f5f5f5;
+  border-color: #cccccc;
+  color: #000;
+}
+
+.page-link {
+  color: #000;
+}
+
+.pagination .page-item.disabled .page-link {
+  background-color: #ffffff;
+  color: #999999;
+}

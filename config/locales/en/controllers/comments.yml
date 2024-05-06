@@ -1,0 +1,7 @@
+---
+en:
+  comments:
+    create:
+      error: An error occurred while creating your comment.
+    update:
+      error: An error occurred while updating your comment.

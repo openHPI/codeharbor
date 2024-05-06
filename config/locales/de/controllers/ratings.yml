@@ -1,0 +1,5 @@
+---
+de:
+  ratings:
+    handle_own_rating:
+      error: Sie können Ihre eigene Aufgabe nicht bewerten.

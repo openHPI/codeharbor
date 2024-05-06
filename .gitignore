@@ -1,0 +1,59 @@
+# Ignore application configuration
+/config/action_mailer.yml
+/config/content_security_policy.yml
+/config/database.yml
+/config/mnemosyne.yml
+/config/secrets.yml
+/config/settings.local.yml
+/config/settings/*.local.yml
+/config/environments/*.local.yml
+
+# Ignore temporary files
+/coverage
+/log
+/rubocop.html
+/tmp
+*.DS_Store
+
+## Ignore editor-specific artifacts
+# Vagrant
+/.vagrant
+/vagrant
+# Sublime
+*.sublime-*
+# IntelliJ
+/.idea
+*.iml
+
+## Environment normalisation:
+/.bundle
+/vendor/bundle
+
+# Ignore Byebug command history file.
+.byebug_history
+
+# Ignore node_modules
+node_modules/
+
+# Ignore precompiled javascript packs
+/public/packs
+/public/packs-test
+/public/assets
+
+# Ignore yarn files
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity
+# Ignore more Yarn files per documentation:
+# https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Ignore uploaded files in development
+/storage
+/public/uploads

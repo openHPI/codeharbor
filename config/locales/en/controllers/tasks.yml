@@ -1,0 +1,28 @@
+---
+en:
+  tasks:
+    add_to_collection:
+      error: Task already is in collection.
+      success_notice: Task was successfully added to collection.
+    duplicate:
+      error_alert: Task could not be duplicated
+    export_external_confirm:
+      error: 'Export of task (%{title}) failed. <br> Error: %{error}'
+      success: Task (%{title}) successfully exported.
+    import_confirm:
+      error: 'Import of task (%{title}) failed. <br> Error: %{error}'
+      success: Task (%{title}) successfully imported.
+    import_external:
+      internal_error: An internal error occurred on CodeHarbor while importing the exercise.
+      invalid: Invalid exercise
+      success: success
+    import_start:
+      choose_file_error: You need to choose a file.
+    proforma_service:
+      convert_zip_to_proforma_tasks:
+        nested_too_deep: ZIP is nested too deep.
+    task_service:
+      check_external:
+        no_task: No corresponding task found on external app. Pushing this task will create a new task on external app, which will be linked to this one on CodeHarbor. Any changes to either one can be pushed to the respective other platform.
+        task_found: 'A corresponding task has been found on the external app. You can: <ul><li><b>Overwrite</b> the task on the external app. This will transfer all changes made on CodeHarbor to the external app.<br>Careful: This will overwrite all potential changes made on the external app. This will change (and might break) the task, even if it is currently in use by a course.</li><li><b>Create a new</b> task which copies the current state of this task. This will create a copy of this task on CodeHarbor, which will then be exported as a completely new exercise to the external app.</li></ul>'
+        task_found_no_right: 'A corresponding task has been found on external app, but you don''t have the rights to edit it. You can: <ul><li><b>Create a new</b> task which copies the current state of this task. This will create a copy of this task on CodeHarbor, which will then be exported as a completely new task to the external app.</li></ul>'

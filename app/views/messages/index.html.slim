@@ -1,0 +1,83 @@
+= hidden_field_tag 'option', @option
+.nav-container.mb-5
+  .col-md-12
+    .btn-group role='group'
+      = link_to t('.button.inbox'), user_messages_path(option: 'inbox'), class: 'btn btn-main btn-tab-message', id: 'inbox'
+      = link_to t('messages.index.sent'), user_messages_path(option: 'sent'), class: 'btn btn-main btn-tab-message', id: 'sent'
+
+    - if policy(Message).new?
+      = link_to new_user_message_path, class: 'btn btn-main nav-btn float-end' do
+        i.fa-solid.fa-envelope
+        =< t('messages.shared.new')
+br
+- if @messages.empty?
+  .card.mb-5
+    .card-body
+      .col-md-10
+        h5 style='color: #777777'
+          = t('messages.index.no_messages')
+
+- else
+  - @messages.each do |message|
+    .message-block
+      .message-left
+        - case message.param_type
+        - when 'exercise', 'exercise_accepted', 'exercise_declined' # rubocop:disable Layout/CaseIndentation
+          span.fa-regular.fa-file-lines
+        - when 'collection' # rubocop:disable Layout/CaseIndentation
+          span.fa-solid.fa-folder-open
+        - when 'group_requested', 'group_accepted', 'group_declined' # rubocop:disable Layout/CaseIndentation
+          span.fa-solid.fa-users
+        - when 'report' # rubocop:disable Layout/CaseIndentation
+          span.fa-solid.fa-gear
+        - else
+          span.fa-solid.fa-envelope
+      .message-right
+        .message-user
+          - if @option == 'inbox'
+            =  t('.from')
+            = ': '
+            = message.sender ? message.sender.name : 'Admin'
+          - else
+            = t('.to')
+            = ': '
+            = message.recipient ? message.recipient.name : t('.unknown')
+        .message-body
+          .message-text
+            = message.text
+            .btn-group.ms-3
+              -if message.param_type == 'exercise'
+                = link_to t('.button.view'), exercise_path(message.param_id), class: 'btn btn-light btn-sm'
+                = link_to add_author_exercise_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
+                  i.fa-solid.fa-plus style=('color:#008000')
+                  =< t('.button.make_co_author')
+                = link_to decline_author_exercise_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
+                  i.fa-solid.fa-xmark style=('color:#800000')
+                  =< t('.button.deny_access')
+              - if message.param_type == 'collection'
+                = link_to t('.button.view'), view_shared_collection_path(message.param_id, user: message.sender), class: 'btn btn-light btn-sm'
+                = link_to t('.button.save_collection'), save_shared_collection_path(message.param_id), method: 'post', class: 'btn btn-light btn-sm'
+              - if message.param_type == 'group_requested'
+                = link_to t('.button.view'), group_path(message.param_id), class: 'btn btn-light btn-sm'
+                = link_to grant_access_group_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
+                  i.fa-solid.fa-plus style=('color:#008000')
+                  =< t('.button.grant_access')
+                = link_to deny_access_group_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
+                  i.fa-solid.fa-xmark style=('color:#800000')
+                  =< t('.button.deny_access')
+              - if message.param_type == 'exercise_accepted' || message.param_type == 'report'
+                = link_to t('.button.view'), exercise_path(message.param_id), class: 'btn btn-light btn-sm'
+              - if message.param_type == 'group_accepted'
+                = link_to t('.button.view'), group_path(message.param_id), class: 'btn btn-light btn-sm'
+
+          .message-actions
+            .btn-group
+              - unless @option == 'sent'
+                = link_to reply_user_messages_path(recipient: message.sender), class: 'btn btn-light btn-sm' do
+                  i.fa-solid.fa-reply
+                  =< t('.button.reply')
+              = link_to user_message_path(current_user, message, option: @option), method: :delete, class: 'btn btn-light btn-sm', data: {confirm: t('common.sure')} do
+                i.fa-solid.fa-trash-can
+                =< t('common.button.delete')
+  = render('shared/pagination', collection: @messages)
+  br

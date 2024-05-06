@@ -1,0 +1,38 @@
+version: 2
+
+updates:
+  - package-ecosystem: bundler
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "03:00"
+      timezone: UTC
+    labels:
+      - dependencies
+      - ruby
+    ignore:
+      - dependency-name: rubocop*
+
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "03:00"
+      timezone: UTC
+    labels:
+      - dependencies
+      - javascript
+    groups:
+      sentry-javascript:
+        patterns:
+          - "@sentry*"
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "03:00"
+      timezone: UTC
+    labels:
+      - dependencies
+      - github-actions

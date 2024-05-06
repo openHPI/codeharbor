@@ -1,0 +1,47 @@
+$group-color: #660000;
+
+.fa-solid.fa-users {
+  color: $group-color;
+}
+
+.nav-container {
+  a {
+    padding: 10px 60px;
+    background-color: #f5f5f5;
+    border: 1px #dddddd solid;
+    display: inline-block;
+  }
+  a:hover,
+  a:focus {
+    background-color: #f0f0f0;
+    color: black;
+    text-decoration: none;
+  }
+
+  .nav-btn-group {
+    padding: 10px 15px;
+  }
+}
+
+.dropdown-item {
+  text-align: left;
+  width: 100%;
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.42857143;
+  color: #333333;
+  white-space: nowrap;
+  background: none;
+  border: none;
+}
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+.table-list.group-tasks {
+  .btn-group.btn:not(:last-child) {
+    border-right: none;
+  }
+}

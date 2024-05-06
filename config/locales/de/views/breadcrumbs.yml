@@ -1,0 +1,36 @@
+---
+de:
+  breadcrumbs:
+    confirmations:
+      create: Account bestätigen
+      new: Account bestätigen
+      show: Account bestätigen
+    home:
+      about: Über
+      account_link_documentation: Über Account-Links
+      index: Startseite
+    passwords:
+      create: Passwort vergessen
+      edit: Passwort ändern
+      new: Passwort vergessen
+      update: Passwort ändern
+    registrations:
+      create: Registrieren
+      edit: Profil aktualisieren
+      new: Registrieren
+      update: Profil aktualisieren
+    sessions:
+      create: Anmelden
+      new: Anmelden
+    unlocks:
+      create: Account entsperren
+      new: Account entsperren
+      show: Account entsperren
+  shared:
+    create: Erstellen
+    delete: Löschen
+    edit: Bearbeiten
+    index: Index
+    new: Neu
+    show: Anzeigen
+    update: Aktualisieren

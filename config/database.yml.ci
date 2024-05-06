@@ -1,0 +1,8 @@
+test:
+  adapter: postgresql
+  database: postgres
+  pool: 32
+  host: localhost
+  username: postgres
+  password: postgres
+  reaping_frequency: 0

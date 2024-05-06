@@ -1,0 +1,28 @@
+# TODOs
+
+# Lots of line are too long too.
+#
+Layout/LineLength:
+  Max: 140
+
+# We don't want to change previous migrations...
+#
+Rails/CreateTableWithTimestamps:
+  Enabled: false
+
+Rails/BulkChangeTable:
+  Enabled: false
+
+Rails/ThreeStateBooleanColumn:
+  Enabled: false
+
+# The models need to be fixed anyway
+#
+Rails/UniqueValidationWithoutIndex:
+  Enabled:
+    false
+
+# We have too many specs with too many lets
+#
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false

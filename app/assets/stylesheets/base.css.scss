@@ -1,0 +1,295 @@
+/* Put all the customization of base styling that affect the whole platform here */
+
+html,
+body {
+  height: 100%;
+}
+
+.menu-number {
+  background-color: #aa0000;
+  color: #fff;
+  height: 15px;
+  width: 15px;
+  display: inline-block;
+  font-size: 0.8em;
+  margin-right: 4px;
+  line-height: 16px;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-radius: 100%;
+}
+
+#footer {
+  margin-top: 20px;
+  padding-top: 10px;
+  background-color: #f8f9fa;
+}
+
+a.classic-link {
+  color: blue;
+}
+
+.rounded-circle {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 50%;
+  width: 128px;
+  height: 128px;
+}
+
+.info-box {
+  display: none;
+  background: #f5f5f5;
+  border: 1px solid #e5e5e5;
+  padding: 8px 28px;
+  margin-bottom: 10px;
+  border-radius: 2px;
+
+  span {
+    font-size: 16px;
+    margin-left: -20px;
+    margin-right: 6px;
+  }
+}
+
+.show-table {
+  margin-bottom: 30px;
+  width: 100%;
+  border: 1px #dddddd solid;
+  border-left: 8px #dddddd solid;
+  border-radius: 2px;
+  padding: 8px 8px;
+
+  .table-header {
+    height: 50px;
+    text-align: left;
+    background-color: #f5f5f5;
+    margin: -8px -8px;
+    margin-bottom: 16px;
+    padding: 10px 8px;
+    font-weight: 700;
+    line-height: 26px;
+    border-bottom: 1px #dddddd solid;
+    color: #333;
+  }
+  .table-header.closed {
+    margin-bottom: -8px;
+    border-bottom: none;
+  }
+
+  .row {
+    margin: 8px 2%;
+    border-radius: 2px;
+    border: 1px #dddddd solid;
+    width: 96%;
+
+    .row-label,
+    .inner-section .row-label {
+      text-align: left;
+      background-color: #f5f5f5;
+      font-weight: 700;
+      line-height: 18px;
+      color: #333;
+      padding: 6px 8px;
+      min-width: 80px;
+      border-right: 1px #dddddd solid;
+    }
+    .row-value,
+    .inner-section .row-value {
+      text-align: left;
+      padding: 6px 8px;
+    }
+
+    .inner-section {
+      float: left;
+      display: inline-block;
+    }
+  }
+
+  .row.vertical,
+  .inner-section .row-vertical {
+    .row-label {
+      width: 100%;
+      display: block;
+      margin-bottom: 5px;
+      border-bottom: 1px #dddddd solid;
+      border-right: none;
+    }
+    .row-value {
+      width: 100%;
+      display: block;
+      .text {
+        word-wrap: break-word;
+        overflow: auto;
+      }
+    }
+  }
+}
+
+table.vertical-table {
+  border-collapse: separate;
+  margin-bottom: 30px;
+  width: 100%;
+
+  th {
+    width: 20%;
+    text-align: center;
+    vertical-align: text-top;
+    background-color: #f5f5f5;
+    padding: 4px;
+    margin-bottom: 4px;
+    border: 1px #dddddd solid;
+    border-bottom: none;
+    border-right: none;
+  }
+  td {
+    text-align: left;
+    padding: 4px;
+    width: 80%;
+    border: 1px #dddddd solid;
+    border-bottom: none;
+  }
+
+  tr:first-child th {
+    border-top-left-radius: 4px;
+  }
+  tr:first-child td {
+    border-top-right-radius: 4px;
+  }
+  tr:last-child th {
+    border-bottom-left-radius: 4px;
+    border-bottom: 1px #dddddd solid;
+  }
+  tr:last-child td {
+    border-bottom-right-radius: 4px;
+    border-bottom: 1px #dddddd solid;
+  }
+}
+
+.fa-solid.fa-trash-can {
+  color: #800000;
+}
+.std-heading {
+  font-size: 30px;
+  height: 40px;
+  width: 100%;
+  color: #444444;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  display: inline;
+}
+
+.nav-container {
+  height: 40px;
+  width: 100%;
+
+  .selected {
+    background-color: #eeeeee;
+  }
+
+  a {
+    padding: 10px 60px;
+    background-color: #f5f5f5;
+    display: inline-block;
+  }
+  a:hover,
+  a:focus {
+    background-color: #f0f0f0;
+    color: black;
+    text-decoration: none;
+  }
+
+  .nav-btn {
+    padding: 10px 15px;
+    border-color: #888888;
+  }
+  .nav-btn:hover,
+  .nav-btn:focus {
+    border-color: #888888;
+  }
+}
+
+.form-content {
+  margin-bottom: 40px;
+}
+
+.form-label {
+  color: #555555;
+  font-size: 14px;
+  font-weight: bold;
+  width: 28%;
+  text-align: left;
+}
+
+.field-row {
+  display: block;
+  margin-bottom: 15px;
+  padding-left: 10px;
+  width: 100%;
+
+  div {
+    display: inline-block;
+    padding-left: 5px;
+  }
+  div:first-child {
+    padding-left: 0px;
+  }
+  .field-element-10 {
+    width: 83.3%;
+  }
+  .field-element-9 {
+    width: 75%;
+  }
+  .field-element-8 {
+    width: 66.6%;
+  }
+  .field-element-6 {
+    width: 50%;
+  }
+  .field-element-5 {
+    width: 41.6%;
+  }
+  .field-element-4 {
+    width: 33.3%;
+  }
+  .field-element-3 {
+    width: 25%;
+  }
+  .field-element-2 {
+    width: 16.6%;
+  }
+  .field-element-1 {
+    width: 8.3%;
+  }
+}
+.field-element {
+  margin-bottom: 15px;
+  padding-left: 10px;
+}
+
+fieldset.form-group {
+  margin-bottom: 0px;
+  border: none;
+}
+
+.table-list {
+  display: block;
+  margin-bottom: 15px;
+}
+
+.btn.green-border {
+  border-color: #006600;
+}
+
+.btn.red-border {
+  border-color: #660000;
+}
+
+#logo {
+  color: #406e8e;
+}
+
+.dropdown-title {
+  padding-left: 2px;
+}

@@ -1,0 +1,57 @@
+{
+  "name": "codeharbor",
+  "private": true,
+  "dependencies": {
+    "@babel/core": "7.24.5",
+    "@babel/plugin-transform-runtime": "7.24.3",
+    "@babel/preset-env": "7.24.5",
+    "@babel/runtime": "7.24.5",
+    "@fortawesome/fontawesome-free": "^6.5.2",
+    "@popperjs/core": "^2.11.8",
+    "@sentry/browser": "^7.113.0",
+    "@sentry/integrations": "^7.113.0",
+    "@toast-ui/editor": "^3.2.2",
+    "@webpack-cli/serve": "^2.0.5",
+    "ace-builds": "^1.33.1",
+    "babel-loader": "9.1.3",
+    "bootstrap": "^5.3.3",
+    "compression-webpack-plugin": "11.1.0",
+    "css-loader": "^7.1.1",
+    "css-minimizer-webpack-plugin": "^6.0.0",
+    "file-loader": "^6.2.0",
+    "i18n-js": "^4.4.3",
+    "jquery": "^3.7.1",
+    "jquery-ui": "^1.13.3",
+    "jquery-ujs": "^1.2.3",
+    "mini-css-extract-plugin": "^2.9.0",
+    "rails-erb-loader": "usabilityhub/rails-erb-loader#master",
+    "sass": "^1.76.0",
+    "sass-loader": "^14.2.1",
+    "select2": "^4.1.0-rc.0",
+    "shakapacker": "7.2.3",
+    "style-loader": "^4.0.0",
+    "terser-webpack-plugin": "5.3.10",
+    "webpack": "5.91.0",
+    "webpack-assets-manifest": "5.2.1",
+    "webpack-cli": "5.1.4",
+    "webpack-dev-server": "^5.0.4",
+    "webpack-merge": "5.10.0",
+    "webpack-subresource-integrity": "^5.2.0-rc.1"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^5.0.4"
+  },
+  "babel": {
+    "presets": [
+      "./node_modules/shakapacker/package/babel/preset.js"
+    ]
+  },
+  "browserslist": [
+    "defaults"
+  ],
+  "scripts": {
+    "webpack": "./bin/shakapacker",
+    "webpack-dev-server": "./bin/shakapacker-dev-server"
+  },
+  "packageManager": "yarn@4.1.1"
+}

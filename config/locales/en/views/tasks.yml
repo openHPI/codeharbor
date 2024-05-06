@@ -1,0 +1,118 @@
+---
+en:
+  tasks:
+    access_request_mailer:
+      greeting: Hello %{user}
+      message_line1: '%{user} asked to contribute to your task "%{task}".'
+      message_line2: If you want to make them a co-author or suggest Membership to a group click the link below.
+      message_line3: Otherwise ignore this Email.
+      subject: '%{user} wants to contribute to your task "%{task}"'
+    editor:
+      button:
+        extract_text: Extract text
+        toggle_file: Toggle file upload/editor
+        upload_a_new_file: Upload a new file
+    export_actions:
+      create_new: Create new
+      overwrite: Overwrite
+    file_config:
+      configuration: Configuration
+      delayed: delayed
+      display: display
+      download: download
+    form:
+      button:
+        add_model_solution: Add Model Solution
+        add_test: Add Test
+        remove_model_solution: Remove Model Solution
+        remove_test: Remove Test
+        save_task: Save Task
+      errors:
+        not_public_without_prog_lang: Can't be public while programming language is not set
+        prog_lang_not_empty_while_public: Can't be empty while visibility is set to public
+      no_license: No License
+      unchangeable_groups: Unchangeable groups
+      visibility_warning: This task is currently in a collection. Other users will not be able to view or modify your task. However, the title will remain visible to these users.
+    import_actions:
+      button:
+        import_copy: Import as copy
+        overwrite: Overwrite
+        show_task: Show Task
+    import_dialog_content:
+      path: 'Path: %{path}'
+      task_with_uuid: 'Task-UUID: %{task_uuid}'
+    index:
+      button:
+        choose_file: Choose file
+        import_tasks: Import Tasks
+        import_zip: Import ZIP file
+        new_task: New Task
+      menu_button:
+        group: Group Tasks
+        mine: My Tasks
+        public: Public
+      search:
+        advanced: Advanced
+        all_access_levels: All Visibilities
+        all_time: All Time
+        average_rating: Average Rating
+        creation_date: Creation Date
+        has_all_labels: Has All Labels
+        label: Search
+        last_month: Last Month
+        last_week: Last Week
+        min_stars: Minimum number of stars
+        order: Order By
+        placeholder: Search for task or label
+        reset: Reset
+        today: Today
+    javascripts:
+      all_languages: All Languages
+      checking_external_app: Checking if the task exists on the autograder.
+      select_groups: Select groups
+    nested_file_form:
+      add_file: Add file
+      remove_file: Remove file
+    new:
+      new_task: New Task
+    shared:
+      additional_info: Additional Information
+      basic_information: Basic Information
+      new_comment: New Comment
+    show:
+      add_to_collection_hint: Save Tasks for later by adding them to a collection.
+      button:
+        add_to_collection: Add to Collection
+        create_collection: Create new Collection
+        download_as_zip: Download this Task as a ZIP file.
+        export: Export
+        export_tasks: Export Tasks
+        rate: Rate
+        show_comments: Show Comments
+      create_collection_placeholder: Collection name
+      define_account_link: Please define an account link first
+      export_to: Export to
+      guest:
+        disabled:
+          tooltip: You need to be logged in to use this.
+      no_files: No files included
+      no_license: None
+      no_model_solution_present: No Model Solutions present
+      no_tests: No tests included
+      remove_task_from_collection_warning: Are you sure you want to remove this Task from the Collection?
+      undefined: User undefined
+      yourself: yourself
+    tasks:
+      button:
+        related_exercises: Show Related Exercises
+        show_comments: Show Comments
+      no_description: No Description
+      no_programming_language_selected: No programming language selected
+      search:
+        no_results: No results
+        no_results_description: Try different options by clicking on 'Advanced' and repeating the search.
+        no_tasks: You do not have tasks yet
+    visibility:
+      label: Visibility
+      private: Private
+      public: Public

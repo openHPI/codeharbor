@@ -1,0 +1,27 @@
+.header.mb-5
+  .std-heading
+    i.fa-solid.fa-unlock style='color: #444444'
+    =< t('devise.unlocks.new.resend_unlock_instructions')
+
+= form_for(resource, as: resource_name, url: unlock_path(resource_name), html: {method: :post}) do |f|
+  = render('shared/form_errors', object: resource, title: t('users.shared.validation_error'))
+
+  .form-group.field-element
+    = f.label :email, class: 'form-label'
+    = f.email_field :email,
+            required: true,
+            autofocus: true,
+            placeholder: User.human_attribute_name('email'),
+            autocomplete: 'email',
+            class: 'form-control'
+
+  .form-group.py-3
+    .btn-group role='group'
+      = button_tag type: 'submit', class: 'btn btn-important' do
+        i.fa-solid.fa-unlock
+        =< t('devise.unlocks.new.resend_unlock_instructions')
+      = link_to :back, class: 'btn btn-important' do
+        i.fa-solid.fa-xmark style=('color: gray')
+        =< t('common.button.back')
+
+= render 'users/shared/links'
