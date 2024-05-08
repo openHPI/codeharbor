@@ -17,7 +17,7 @@
     "bootstrap": "^5.3.3",
     "compression-webpack-plugin": "11.1.0",
     "css-loader": "^7.1.1",
-    "css-minimizer-webpack-plugin": "^6.0.0",
+    "css-minimizer-webpack-plugin": "^7.0.0",
     "file-loader": "^6.2.0",
     "i18n-js": "^4.4.3",
     "jquery": "^3.7.1",
