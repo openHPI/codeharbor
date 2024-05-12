@@ -250,7 +250,7 @@ class Task < ApplicationRecord
 
   def unique_pending_contribution
     if contribution?
-      other_existing_contrib = parent.contributions.where(user:).where.not(id:).any?
+      other_existing_contrib = parent.contributions(user:).where.not(id: task_contribution.id).any?
       errors.add(:task_contribution, :duplicated) if other_existing_contrib
     end
   end
