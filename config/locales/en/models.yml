@@ -198,6 +198,9 @@ en:
       user_identity:
         one: User Identity
         other: User Identities
+  task_contribution:
+    model:
+      title_string: Contribution for %{task_title}
   tasks:
     model:
       copy_of_task: Copy of Task
