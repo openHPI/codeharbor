@@ -14,7 +14,7 @@
         - url = task_task_contribution_path(@task.parent, @task.task_contribution)
     - else
       - url = nil
-    = simple_form_for @task, url:, html: { class: 'project exercise-validation', multipart: true }, builder: MarkdownFormBuilder do |f|
+    = simple_form_for @task, url:, html: {class: 'project exercise-validation', multipart: true}, builder: MarkdownFormBuilder do |f|
       = render('shared/form_errors', object: @task)
       fieldset.form-group
         legend.toggle-next
@@ -53,9 +53,9 @@
             = f.label :language, Task.human_attribute_name('language'), class: 'form-label'
             = f.text_field :language, class: 'form-control'
 
-          - if !@task.contribution?
+          - unless @task.contribution?
             .field-element
-              = f.label :access_level,  Task.human_attribute_name("access_level"), class: 'form-label'
+              = f.label :access_level, Task.human_attribute_name('access_level'), class: 'form-label'
               .div.d-none.execution-environment-error
                 = t('.errors.not_public_without_prog_lang')
               .radio-switch
@@ -95,7 +95,7 @@
           => Task.human_attribute_name('files')
           span.fa-solid.fa-caret-up
         .form-content
-          = render 'tasks/nested_file_form', f: f, nested_form_placeholder: 'f-__nested_field_for_replace_with_index__'
+          = render 'tasks/nested_file_form', f:, nested_form_placeholder: 'f-__nested_field_for_replace_with_index__'
       fieldset.form-group
         legend.toggle-next
           span.number = '4'
@@ -120,7 +120,7 @@
                       i.fa-solid.fa-xmark.text-danger
                       =< t('.button.remove_test')
                 .test-container style="margin-left: 10px; #{display_container}"
-                  = render 'tasks/test_form', f: f, test: test
+                  = render 'tasks/test_form', f:, test:
             / .field-element
             = f.add_nested_fields_link :tests, ' ', class: 'btn btn-main', id: 'addTestButton' do
               i.fa-solid.fa-plus.text-success
@@ -150,7 +150,7 @@
                       i.fa-solid.fa-xmark.text-danger
                       =< t('.button.remove_model_solution')
                 .model-solution-container style="margin-left: 10px; #{display_container}"
-                  = render 'tasks/model_solution_form', f: f, model_solution: model_solution
+                  = render 'tasks/model_solution_form', f:, model_solution:
             / .field-element
             = f.add_nested_fields_link :model_solutions, ' ', class: 'btn btn-main', id: 'addTestButton' do
               i.fa-solid.fa-plus.text-success

@@ -13,6 +13,6 @@
   = file.text_field :xml_id, class: 'form-control', value: file.object.xml_id.presence || nested_form_placeholder
 
 .field-element
-  = render 'tasks/file_config', file: file
+  = render 'tasks/file_config', file:
 .field-element
-  = render 'tasks/editor', f: f, file: file
+  = render 'tasks/editor', f:, file:
