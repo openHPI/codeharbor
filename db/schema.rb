@@ -356,15 +356,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_31_160738) do
   add_foreign_key "group_memberships", "users"
   add_foreign_key "group_tasks", "groups"
   add_foreign_key "group_tasks", "tasks"
+  add_foreign_key "model_solutions", "model_solutions", column: "parent_id", on_delete: :nullify
   add_foreign_key "model_solutions", "tasks"
   add_foreign_key "ratings", "tasks"
   add_foreign_key "ratings", "users"
   add_foreign_key "reports", "tasks"
   add_foreign_key "reports", "users"
   add_foreign_key "task_contributions", "tasks"
+  add_foreign_key "task_files", "task_files", column: "parent_id", on_delete: :nullify
   add_foreign_key "task_labels", "tasks"
   add_foreign_key "tasks", "licenses"
   add_foreign_key "tests", "tasks"
   add_foreign_key "tests", "testing_frameworks"
+  add_foreign_key "tests", "tests", column: "parent_id", on_delete: :nullify
   add_foreign_key "user_identities", "users"
 end
