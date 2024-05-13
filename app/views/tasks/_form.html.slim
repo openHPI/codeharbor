@@ -14,7 +14,7 @@
         - url = task_task_contribution_path(@task.parent, @task.task_contribution)
     - else
       - url = nil
-    = simple_form_for @task, url:, html: {  multipart: true }, builder: MarkdownFormBuilder do |f|
+    = simple_form_for @task, url:, html: { multipart: true}, builder: MarkdownFormBuilder do |f|
       = render('shared/form_errors', object: @task)
       fieldset.form-group
         legend.toggle-next
@@ -53,9 +53,9 @@
             = f.label :language, Task.human_attribute_name('language'), class: 'form-label'
             = f.text_field :language, class: 'form-control'
 
-          - if !@task.contribution?
+          - unless @task.contribution?
             .field-element
-              = f.label :access_level,  Task.human_attribute_name("access_level"), class: 'form-label'
+              = f.label :access_level, Task.human_attribute_name('access_level'), class: 'form-label'
               .div.d-none.execution-environment-error
                 = t('.errors.not_public_without_prog_lang')
               .radio-switch
@@ -95,7 +95,7 @@
           => Task.human_attribute_name('files')
           span.fa-solid.fa-caret-up
         .form-content
-          = render 'tasks/nested_file_form', f: f, nested_form_placeholder: 'f-__nested_field_for_replace_with_index__'
+          = render 'tasks/nested_file_form', f:, nested_form_placeholder: 'f-__nested_field_for_replace_with_index__'
       fieldset.form-group
         legend.toggle-next
           span.number = '4'
