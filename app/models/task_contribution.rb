@@ -24,4 +24,8 @@ class TaskContribution < ApplicationRecord
   def base=(task)
     suggestion.parent = task
   end
+
+  def to_s
+    I18n.t('task_contribution.model.title_string', task_title: base.title)
+  end
 end
