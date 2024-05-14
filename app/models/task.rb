@@ -214,13 +214,17 @@ class Task < ApplicationRecord
     title
   end
 
-  def contributions(user: nil, status: nil)
+  def contributions(user: nil, status: nil, all_states: false)
     task_filter_set = {parent_uuid: uuid}
     unless user.nil?
       task_filter_set[:user] = user
     end
-    TaskContribution.joins(:suggestion)
-      .where(suggestion: task_filter_set, status: (status.nil? ? :pending : status))
+    query = TaskContribution.joins(:suggestion)
+      .where(suggestion: task_filter_set)
+    return query if all_states
+    return query.where(status:) unless status.nil?
+
+    query.where(status: :pending)
   end
 
   private

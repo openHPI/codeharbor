@@ -5,3 +5,5 @@ de:
       contribute: Änderung vorschlagen
       decouple: Verknüpfung trennen
       edit_contribution: Änderungsvorschlag bearbeiten
+    task_contributions:
+      no_contributions_yet: "Für Ihre Aufgaben liegen noch keine Änderungsvorschläge vor."

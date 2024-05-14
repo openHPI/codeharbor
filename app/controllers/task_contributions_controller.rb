@@ -3,8 +3,8 @@
 class TaskContributionsController < ApplicationController
   include TaskParameters
 
-  before_action :load_and_authorize_task, except: %i[show edit]
-  before_action :load_and_authorize_task_contribution, except: %i[create new]
+  before_action :load_and_authorize_task, except: %i[index show edit]
+  before_action :load_and_authorize_task_contribution, except: %i[index create new]
 
   def approve_changes
     if @task.apply_contribution(@task_contribution)
@@ -23,6 +23,12 @@ class TaskContributionsController < ApplicationController
     else
       redirect_to [@task, @task_contribution], alert: t('.error')
     end
+  end
+
+  def index
+    @task = Task.find(params[:task_id])
+    @task_contributions = @task.contributions(all_states: true)
+    authorize @task
   end
 
   def show
