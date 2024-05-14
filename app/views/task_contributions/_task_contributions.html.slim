@@ -1,0 +1,22 @@
+- if @task_contributions.empty?
+  .card style='margin-top: 40px'
+    .card-body
+    .row
+      .col-md-12
+      h3 style='color: #777777'
+        = t('.no_contributions_yet')
+      br
+      br
+- @task_contributions.each do |contrib|
+  .card.my-4
+    .card-header
+      h6
+        span = "#{t('common.created_at')} #{l(contrib.suggestion.created_at, format: :long)}"
+        span.float-end
+          = t("task_contributions.status.#{contrib.status}")
+    .card-body
+      .row.px-2
+        .col-md-12 style='overflow-wrap: break-word;'
+          = t('common.created_by') + ' ' + contrib.suggestion.user.name
+          .btn-group.float-end aria-label='...' role='group'
+            = link_to t('common.button.show'), [contrib.base, contrib], class: 'btn btn-light'
