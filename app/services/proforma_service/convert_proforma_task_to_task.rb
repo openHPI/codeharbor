@@ -34,7 +34,7 @@ module ProformaService
 
         tests:,
         model_solutions:,
-        files: files.values # this line has to be last, because tests and model_solutions have to remove their respective files first
+        files:
       )
     end
 
@@ -47,9 +47,7 @@ module ProformaService
     end
 
     def files
-      @files ||= @proforma_task.all_files.reject {|file| file.id == 'ms-placeholder-file' }.to_h do |task_file|
-        [task_file.id, file_from_proforma_file(task_file)]
-      end
+      @proforma_task.files.map {|task_file| file_from_proforma_file(task_file) }
     end
 
     def file_from_proforma_file(proforma_task_file)
@@ -86,7 +84,7 @@ module ProformaService
           test_type: test.test_type,
           meta_data: test.meta_data,
           configuration: test.configuration,
-          files: object_files(test)
+          files: test.files.map {|task_file| file_from_proforma_file(task_file) }
         )
       end
     end
@@ -112,7 +110,7 @@ module ProformaService
           xml_id: model_solution.id,
           description: model_solution.description,
           internal_description: model_solution.internal_description,
-          files: object_files(model_solution)
+          files: model_solution.files.map {|task_file| file_from_proforma_file(task_file) }
         )
       end
     end

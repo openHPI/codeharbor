@@ -30,6 +30,7 @@ require 'pundit/matchers'
 RSpec::Matchers.define_negated_matcher :avoid_change, :change
 RSpec::Matchers.define_negated_matcher :not_include, :include
 RSpec::Matchers.define_negated_matcher :not_have_attributes, :have_attributes
+RSpec::Matchers.define_negated_matcher :not_eql, :eql
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

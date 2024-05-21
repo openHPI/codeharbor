@@ -213,11 +213,25 @@ RSpec.describe ProformaService::ConvertProformaTaskToTask do
         end
       end
 
-      context 'when file is a model-solution-placeholder (needed by proforma until issue #5 is resolved)' do
-        let(:file) { ProformaXML::TaskFile.new(id: 'ms-placeholder-file') }
+      context 'when file is used by multiple tests' do
+        let(:file) do
+          ProformaXML::TaskFile.new(
+            id: 'id',
+            content: 'very generic content',
+            filename: 'multi_referenced_file.txt',
+            used_by_grader: false,
+            visible:,
+            usage_by_lms:,
+            binary:,
+            internal_description: 'internal_description',
+            mimetype:
+          )
+        end
 
-        it 'leaves files empty' do
-          expect(convert_to_task_service.files).to be_empty
+        let(:tests) { [ProformaXML::Test.new(files: [file]), ProformaXML::Test.new(files: [file])] }
+
+        it 'creates separate copies of referenced file with correct attributes' do
+          expect(convert_to_task_service.tests[0].files[0]).to have_attributes(convert_to_task_service.tests[1].files[0].attributes).and not_eql convert_to_task_service.tests[1].files[0]
         end
       end
     end
