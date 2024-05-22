@@ -4,7 +4,8 @@
       .modal-header
         h4.modal-title
           = title
-        = button_tag class: 'btn-close', 'data-bs-dismiss': 'modal'
+        = button_tag class: 'btn-close', 'data-bs-dismiss': 'modal' do
+          span.visually-hidden = t('common.button.close')
       .modal-body#import-export-modal-body
       .modal-footer
         = button_tag class: 'btn btn-important', 'data-bs-dismiss': 'modal' do

@@ -1,4 +1,5 @@
 <% require './lib/i18n_tasks/coffee_erb_locale_matcher.rb' %>
+<% require './lib/i18n_tasks/slim_row_locale_matcher.rb' %>
 
 # i18n_tasks finds and manages missing and unused translations: https://github.com/glebm/i18n-tasks
 

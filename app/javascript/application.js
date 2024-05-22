@@ -13,17 +13,17 @@ import 'jquery-ujs'
 import 'select2';
 import * as bootstrap from 'bootstrap/dist/js/bootstrap.bundle';
 import * as Sentry from '@sentry/browser';
-import * as SentryIntegration from '@sentry/integrations';
 window.bootstrap = bootstrap; // Publish bootstrap in global namespace
 window.Sentry = Sentry; // Publish sentry in global namespace
 window.SentryIntegrations = function() { // Publish sentry integration in global namespace
   return [
-    new SentryIntegration.ReportingObserver(),
-    new SentryIntegration.ExtraErrorData(),
-    new SentryIntegration.HttpClient(),
-    new Sentry.BrowserProfilingIntegration(),
-    new Sentry.BrowserTracing(),
-    new Sentry.Replay(),
+    Sentry.browserProfilingIntegration(),
+    Sentry.browserTracingIntegration(),
+    Sentry.extraErrorDataIntegration(),
+    Sentry.httpClientIntegration(),
+    Sentry.replayIntegration(),
+    Sentry.reportingObserverIntegration(),
+    Sentry.sessionTimingIntegration(),
   ]
 };
 
@@ -72,7 +72,9 @@ window.Routes = Routes;
 
 // ACE editor
 import ace from 'ace-builds';
-import "ace-builds/esm-resolver";
-import "ace-builds/src-noconflict/ext-language_tools";
-import "ace-builds/src-noconflict/ext-modelist";
+import "ace-builds/webpack-resolver"; // Enable webpack resolver, requires `file-loader` to be installed
+// Enable ACE editor extensions. See https://github.com/ajaxorg/ace/wiki/Extensions
+import "ace-builds/src-noconflict/ext-language_tools"; // Enable autocompletion
+import "ace-builds/src-noconflict/ext-modelist"; // Enable language mode detection
+ace.config.set("useStrictCSP", true); // Enable strict CSP mode
 window.ace = ace; // Publish ace in global namespace

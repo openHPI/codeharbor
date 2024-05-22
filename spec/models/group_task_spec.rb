@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe GroupTask do
   describe 'validations' do
-    subject { build(:group_task, :with_group) }
+    subject { build(:group_task) }
 
     it { is_expected.to belong_to(:group) }
     it { is_expected.to belong_to(:task) }

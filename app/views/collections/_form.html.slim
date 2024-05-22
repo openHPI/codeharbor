@@ -1,4 +1,11 @@
-= form_for @collection do |f|
+- content_for :head do
+  // Force a full page reload, see https://github.com/turbolinks/turbolinks/issues/326.
+     Otherwise, code might not be highlighted correctly (race condition)
+  meta name='turbolinks-visit-control' content='reload'
+  - append_javascript_pack_tag('toast-ui')
+  - append_stylesheet_pack_tag('toast-ui')
+
+= form_for @collection, builder: MarkdownFormBuilder do |f|
   .my-4
     = render('shared/form_errors', object: @collection)
     .form-group
@@ -7,7 +14,7 @@
         = f.text_field :title, class: 'form-control'
       .field-element
         = f.label :description, Collection.human_attribute_name('description'), class: 'form-label'
-        = f.text_area :description, class: 'form-control', rows: 10
+        = f.markdown :description
       .field-element
         = f.label :visibility_level, Collection.human_attribute_name('visibility_level'), class: 'form-label collection-edit-visibility'
         .radio-switch
