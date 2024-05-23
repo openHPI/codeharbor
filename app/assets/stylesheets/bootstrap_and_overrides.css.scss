@@ -64,6 +64,12 @@
 .btn-group {
   .btn-important {
     padding: 10px 20px;
+
+    &.disabled {
+      background-color: #e0e0e0;
+      border: 1px #d3d3d3 solid;
+      color: #aaaaaa;
+    }
   }
 }
 

@@ -301,8 +301,9 @@
               .col.row-value
                 = test.timeout
 
-            .files-header
-              = label nil, "#{Task.human_attribute_name('files')}:"
+            .files-header.my-1
+              strong
+                = label nil, "#{Task.human_attribute_name('files')}:"
             .files
               - test.files.each do |file|
                 .show-table.exercise-show
