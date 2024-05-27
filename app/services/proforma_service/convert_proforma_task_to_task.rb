@@ -7,6 +7,7 @@ module ProformaService
       @proforma_task = proforma_task
       @user = user
       @task = task || Task.new
+      @file_xml_ids = []
     end
 
     def execute
@@ -62,7 +63,17 @@ module ProformaService
       task_file
     end
 
+    def xml_file_id(xml_id)
+      return xml_id unless @file_xml_ids.include?(xml_id)
+
+      offset = 2
+      offset += 1 while @file_xml_ids.include?("#{xml_id}-#{offset}")
+      "#{xml_id}-#{offset}"
+    end
+
     def file_attributes(proforma_task_file)
+      xml_id = xml_file_id proforma_task_file.id
+      @file_xml_ids << xml_id
       {
         full_file_name: proforma_task_file.filename,
         internal_description: proforma_task_file.internal_description,
@@ -70,7 +81,7 @@ module ProformaService
         visible: proforma_task_file.visible,
         usage_by_lms: proforma_task_file.usage_by_lms,
         mime_type: proforma_task_file.mimetype,
-        xml_id: proforma_task_file.id,
+        xml_id:,
       }
     end
 
