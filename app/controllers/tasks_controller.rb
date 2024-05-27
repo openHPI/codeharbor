@@ -105,17 +105,16 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   def import_confirm
     proforma_task = ProformaService::ProformaTaskFromCachedFile.call(**import_confirm_params.to_hash.symbolize_keys)
 
-    proforma_task = ProformaService::ImportTask.call(proforma_task:, user: current_user)
-    task_title = proforma_task.title
+    task = ProformaService::ImportTask.call(proforma_task:, user: current_user)
     render json: {
       status: 'success',
-      message: t('.success', title: task_title),
-      actions: render_to_string(partial: 'import_actions', locals: {task: proforma_task, imported: true}),
+      message: t('.success', title: proforma_task.title),
+      actions: render_to_string(partial: 'import_actions', locals: {task:, imported: true}),
     }
   rescue ProformaXML::ProformaError, ActiveRecord::RecordInvalid => e
     render json: {
       status: 'failure',
-      message: t('.error', title: task_title, error: e.message),
+      message: t('.error', title: proforma_task.title, error: e.message),
       actions: '',
     }
   end
