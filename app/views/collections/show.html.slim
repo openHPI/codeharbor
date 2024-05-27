@@ -16,12 +16,13 @@
           i.fa-solid.fa-lock.lock-icon
           =< t('.visibility.private')
       - if action_name != 'view_shared'
-        span
-          i.fa-solid.fa-users
-          =< t('.num_of_other_users', count: @collection.users.size - 1)
-        span
-          i.fa-regular.fa-envelope
-          =< t('.num_of_invites', count: @num_of_invites)
+        - if @collection.users.include? current_user
+          span
+            i.fa-solid.fa-users
+            =< t('.num_of_other_users', count: @collection.users.size - 1)
+          span
+            i.fa-regular.fa-envelope
+            =< t('.num_of_invites', count: @num_of_invites)
         span
           i.fa-star class=(@collection.user_favorites.empty? ? 'fa-regular' : 'fa-solid')
           =< t('.num_of_favorites', count: @collection.user_favorites.length)
