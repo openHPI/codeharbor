@@ -2,10 +2,10 @@
 de:
   collections:
     create:
-      error: Die Aufgabensammlung konnte nicht angelegt werden.
-      success_notice: Die Aufgabensammlung wurde erfolgreich angelegt. (Die Aufgabe wurde automatisch hinzugefügt)
+      error: Die Sammlung konnte nicht angelegt werden.
+      success_notice: Die Sammlung wurde erfolgreich angelegt. (Die Aufgabe wurde automatisch hinzugefügt)
     leave:
-      left_successfully: Sie haben die Aufgabensammlung erfolgreich verlassen.
+      left_successfully: Sie haben die Sammlung erfolgreich verlassen.
     push_collection:
       not_working: Ihr Account-Link %{account_link} scheint nicht zu funktionieren.
       push_external_notice: Aufgabe wurde zu %{account_link} verschoben.
@@ -16,12 +16,12 @@ de:
       cannot_remove_alert: Sie können diese Aufgabe nicht entfernen.
     save_shared:
       errors:
-        already_member: Sie sind bereits ein Mitglied dieser Aufgabensammlung.
-      success_notice: Sie können jetzt an dieser Aufgabensammlung zusammenarbeiten.
+        already_member: Sie sind bereits ein Mitglied dieser Sammlung.
+      success_notice: Sie können jetzt an dieser Sammlung zusammenarbeiten.
     share:
-      success_notice: Ihre Aufgabensammlung wurde gesendet.
+      success_notice: Ihre Sammlung wurde gesendet.
     share_message:
-      text: '%{user} hat Ihnen die Aufgabensammlung "%{collection}" gesendet.'
+      text: '%{user} hat Ihnen die Sammlung "%{collection}" gesendet.'
     toggle_favorite:
       favorite:
         added: Zu Favoriten hinzugefügt

@@ -3,10 +3,11 @@
     .card-body
       .col-md-10
         h3 style='color: #777777'
-          = t('.empty_state.heading')
+          = t(".empty_state.heading_#{@option}")
         br
-        p style='color: #777777'
-          = t('.empty_state.hint')
+        - if @option == 'mine'
+          p style='color: #777777'
+            = t('.empty_state.hint')
         br
         br
 - @collections.each do |collection|

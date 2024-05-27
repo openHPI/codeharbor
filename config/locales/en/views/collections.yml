@@ -3,7 +3,9 @@ en:
   collections:
     collections:
       empty_state:
-        heading: You do not have collections yet
+        heading_favorites: You have not marked a collection as favorite yet
+        heading_mine: You do not have collections yet
+        heading_public: Currently there is no public collection
         hint: You can create Collections and add exercises to it.
     form:
       button:
