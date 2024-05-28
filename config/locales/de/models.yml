@@ -125,8 +125,8 @@ de:
         one: Account-Link-Benutzer:in
         other: Account-Link-Benutzer:innen
       collection:
-        one: Aufgabensammlung
-        other: Aufgabensammlungen
+        one: Sammlung
+        other: Sammlungen
       collection_task:
         one: Sammlungsaufgabe
         other: Sammlungsaufgaben

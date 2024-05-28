@@ -20,7 +20,7 @@ class CollectionsController < ApplicationController
   end
 
   def show
-    @num_of_invites = Message.where(param_type: 'collection', param_id: @collection.id).count
+    @num_of_invites = Message.where(param_type: 'collection', param_id: @collection.id).where.not(recipient_status: 'd').count
   end
 
   def new

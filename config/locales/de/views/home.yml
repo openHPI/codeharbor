@@ -37,7 +37,7 @@ de:
       feature:
         collections:
           alt_text: Bild eines geöffneten Dokumentenordners auf einem Laptop
-          header: Erstellen Sie Aufgabensammlungen
+          header: Erstellen Sie Sammlungen
           paragraph: Legen Sie Sammlungen Ihrer Lieblingsaufgaben an, um sie später wiederzuverwenden. Teilen Sie Sammlungen mit Kolleginnen und Kollegen, exportieren Sie sie zu Ihrem bevorzugten Autograder oder laden Sie sie als XML herunter.
         exercises:
           alt_text: Bild eines Computers mit einer Lupe, der nach einem Text sucht
