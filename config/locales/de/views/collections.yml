@@ -3,7 +3,7 @@ de:
   collections:
     collections:
       empty_state:
-        heading_favorites: Sie haben noch keine Sammlung als Favoriten markiert
+        heading_favorites: Sie haben noch keine Sammlung als Favorit markiert
         heading_mine: Sie haben noch keine Sammlungen
         heading_public: Es existiert zu diesem Zeitpunkt noch keine öffentliche Sammlung
         hint: Sie können Sammlungen erstellen und Aufgaben hinzufügen.
