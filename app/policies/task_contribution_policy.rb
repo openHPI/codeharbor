@@ -19,20 +19,26 @@ class TaskContributionPolicy < ApplicationPolicy
     end
   end
 
-  %i[show? discard_changes?].each do |action|
-    define_method(action) do
-      record_owner? || (Pundit.policy(@user, base).edit? && task_contribution.pending?)
-    end
+  def discard_changes?
+    task_contribution.pending? && (record_owner? || Pundit.policy(@user, base).edit?)
+  end
+
+  def show?
+    (task_contribution.pending? && record_owner?) || Pundit.policy(@user, base).edit?
   end
 
   def approve_changes?
     Pundit.policy(@user, base).edit? && task_contribution.pending?
   end
 
-  %i[edit? update? destroy?].each do |action|
+  %i[edit? update?].each do |action|
     define_method(action) do
-      record_owner?
+      record_owner? && task_contribution.pending?
     end
+  end
+
+  def destroy?
+    false
   end
 
   private
