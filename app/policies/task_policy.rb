@@ -47,7 +47,7 @@ class TaskPolicy < ApplicationPolicy
   end
 
   def destroy?
-    record_owner? || admin?
+    (record_owner? || admin?) && task.task_contribution.blank?
   end
 
   def manage?
