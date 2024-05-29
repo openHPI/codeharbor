@@ -60,10 +60,10 @@ de:
         import_zip: ZIP-Datei importieren
         new_task: Neue Aufgabe
       menu_button:
+        contribution: Meine Änderungsvorschläge
         group: Aufgaben aus Gruppen
         mine: Meine Aufgaben
         public: Öffentlich
-        contribution: Meine Änderungsvorschläge
       search:
         advanced: Erweitert
         all_access_levels: egal
