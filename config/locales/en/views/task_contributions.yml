@@ -5,9 +5,9 @@ en:
       contribute: Contribute
       decouple: Decouple
       edit_contribution: Edit Contribution
-    task_contributions:
-      no_contributions_yet: "There are no contributions for your task(s) yet."
     status:
-      pending: Pending
       closed: Closed
       merged: Merged
+      pending: Pending
+    task_contributions:
+      no_contributions_yet: There are no contributions for your task(s) yet.
