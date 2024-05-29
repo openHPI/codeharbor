@@ -3,37 +3,39 @@ de:
   collections:
     collections:
       empty_state:
-        heading: Sie haben noch keine Aufgabensammlungen
-        hint: Sie können Aufgabensammlungen erstellen und Aufgaben hinzufügen.
+        heading_favorites: Sie haben noch keine Sammlung als Favorit markiert
+        heading_mine: Sie haben noch keine Sammlungen
+        heading_public: Es existiert zu diesem Zeitpunkt noch keine öffentliche Sammlung
+        hint: Sie können Sammlungen erstellen und Aufgaben hinzufügen.
     form:
       button:
         remove_all: Alle entfernen
-        save: Aufgabensammlung speichern
+        save: Sammlung speichern
     index:
-      new_collection: Neue Aufgabensammlung
+      new_collection: Neue Sammlung
       options:
-        favorites: Als Favoriten markierte Aufgabensammlungen
-        mine: Meine Aufgabensammlungen
-        public: Öffentliche Aufgabensammlungen
-      view_shared: Geteilte Aufgabensammlung anzeigen
+        favorites: Als Favoriten markierte Sammlungen
+        mine: Meine Sammlungen
+        public: Öffentliche Sammlungen
+      view_shared: Geteilte Sammlung anzeigen
     new:
-      header: Neue Aufgabensammlung
+      header: Neue Sammlung
     shared:
       no_description: Keine Beschreibung
       no_tasks_added: Keine Aufgaben hinzugefügt
     show:
       button:
         collaborate: Zusammenarbeiten
-        delete: Aufgabensammlung löschen
+        delete: Sammlung löschen
         favorite: Zu Favoriten hinzufügen
         leave: Verlassen
-        share: Aufgabensammlung teilen
+        share: Sammlung teilen
         unfavorite: Von Favoriten entfernen
       define_account_link: Bitte erstellen Sie zuerst einen Account-Link
       download_no_exercises: Download nicht möglich ohne Aufgaben
       export_to: Exportieren nach
       leave:
-        deletion_warning: Sie sind der/die letzte Benutzer:in in dieser Aufgabensammlung. Wenn Sie gehen, wird diese Aufgabensammlung dauerhaft gelöscht! Sind Sie sicher?
+        deletion_warning: Sie sind der/die letzte Benutzer:in in dieser Sammlung. Wenn Sie gehen, wird diese Sammlung dauerhaft gelöscht! Sind Sie sicher?
       locked_exercise_hint: 'Hinweis: Für Aufgaben mit einem Schloss-Symbol müssen Sie zuerst Zugriff beantragen, um sie anzeigen zu können.'
       noExercisesAdded: Keine Aufgabe hinzugefügt
       num_of_favorites:
@@ -45,15 +47,15 @@ de:
         other: Es stehen %{count} Einladungen aus
         zero: Es stehen keine Einladungen aus
       num_of_other_users:
-        one: Ein/Eine anderer/andere Benutzer:in hat Zugriff auf diese Aufgabensammlung
-        other: "%{count} andere Benutzer:innen haben Zugriff auf diese Aufgabensammlung"
-        zero: Kein/Keine anderer/andere Benutzer:in hat Zugriff auf diese Aufgabensammlung
+        one: Ein/Eine anderer/andere Benutzer:in hat Zugriff auf diese Sammlung
+        other: "%{count} andere Benutzer:innen haben Zugriff auf diese Sammlung"
+        zero: Kein/Keine anderer/andere Benutzer:in hat Zugriff auf diese Sammlung
       shared_by: Geteilt von
       temporarily_disabled: Vorübergehend deaktiviert
       type_hint: Geben Sie die E-Mail-Adresse des/der Benutzer:in ein
       visibility:
-        private: Diese Aufgabensammlung ist privat
-        public: Diese Aufgabensammlung ist öffentlich
+        private: Diese Sammlung ist privat
+        public: Diese Sammlung ist öffentlich
     visibility:
       private: Privat
       public: Öffentlich

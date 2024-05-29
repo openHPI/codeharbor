@@ -228,10 +228,26 @@ RSpec.describe ProformaService::ConvertProformaTaskToTask do
           )
         end
 
-        let(:tests) { [ProformaXML::Test.new(files: [file]), ProformaXML::Test.new(files: [file])] }
+        let(:tests) do
+          [
+            ProformaXML::Test.new(title: 'Test 1', id: 1, files: [file]),
+            ProformaXML::Test.new(title: 'Test 2', id: 2, files: [file]),
+            ProformaXML::Test.new(title: 'Test 3', id: 3, files: [file]),
+          ]
+        end
 
-        it 'creates separate copies of referenced file with correct attributes' do
-          expect(convert_to_task_service.tests[0].files[0]).to have_attributes(convert_to_task_service.tests[1].files[0].attributes).and not_eql convert_to_task_service.tests[1].files[0]
+        it 'creates files with correct attributes' do
+          expect(convert_to_task_service.tests[1].files[0]).to have_attributes(convert_to_task_service.tests[0].files[0].attributes.merge('xml_id' => 'id-2'))
+          expect(convert_to_task_service.tests[2].files[0]).to have_attributes(convert_to_task_service.tests[0].files[0].attributes.merge('xml_id' => 'id-3'))
+        end
+
+        it 'creates separate copies of referenced file' do
+          expect(convert_to_task_service.tests[1].files[0]).to not_eql convert_to_task_service.tests[0].files[0]
+          expect(convert_to_task_service.tests[2].files[0]).to not_eql convert_to_task_service.tests[0].files[0]
+        end
+
+        it 'is valid' do
+          expect(convert_to_task_service.valid?).to be true
         end
       end
     end

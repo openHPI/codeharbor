@@ -125,14 +125,26 @@ RSpec.describe CollectionsController do
 
     context 'when there are pending invites' do
       before do
-        2.times do
-          create(:message, sender: user, recipient: create(:user), param_type: 'collection', param_id: collection.id, text: 'Invitation')
-        end
+        create(:message, sender: user, recipient: create(:user), param_type: 'collection', param_id: collection.id, text: 'Invitation')
       end
+
+      let!(:message) { create(:message, sender: user, recipient: create(:user), param_type: 'collection', param_id: collection.id, text: 'Invitation') }
 
       it 'assigns the correct number to @num_of_invites' do
         get :show, params: {id: collection.to_param}
         expect(assigns(:num_of_invites)).to eq(2)
+      end
+
+      context 'when one of the invitations is deleted' do
+        before do
+          message.mark_as_deleted(message.recipient)
+          message.save
+        end
+
+        it 'assigns the correct number to @num_of_invites' do
+          get :show, params: {id: collection.to_param}
+          expect(assigns(:num_of_invites)).to eq(1)
+        end
       end
     end
 
