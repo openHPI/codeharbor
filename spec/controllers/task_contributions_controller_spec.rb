@@ -129,10 +129,9 @@ RSpec.describe TaskContributionsController do
         expect(TaskContribution.find(contribution.id).status).to eq('closed')
       end
 
-      it 'redirects to the modified task' do
-        post_request
+      it 'duplicates the task' do # The duplication is tested in the Task model
+        expect { post_request }.to change(Task, :count).by(1)
         expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to([task, contribution])
       end
     end
 

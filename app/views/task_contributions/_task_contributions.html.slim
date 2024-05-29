@@ -17,6 +17,6 @@
     .card-body
       .row.px-2
         .col-md-12 style='overflow-wrap: break-word;'
-          = t('common.created_by') + ' ' + contrib.suggestion.user.name
+          = "#{t('common.created_by')} #{contrib.suggestion.user.name}"
           .btn-group.float-end aria-label='...' role='group'
             = link_to t('common.button.show'), [contrib.base, contrib], class: 'btn btn-light'
