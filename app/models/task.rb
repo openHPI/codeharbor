@@ -2,7 +2,7 @@
 
 require 'nokogiri'
 require 'zip'
-class Task < ApplicationRecord
+class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
   include FileConcern
   include ParentValidation
   include TransferValues

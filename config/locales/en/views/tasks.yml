@@ -60,10 +60,10 @@ en:
         import_zip: Import ZIP file
         new_task: New Task
       menu_button:
+        contribution: My Contributions
         group: Group Tasks
         mine: My Tasks
         public: Public
-        contribution: My Contributions
       search:
         advanced: Advanced
         all_access_levels: All Visibilities
