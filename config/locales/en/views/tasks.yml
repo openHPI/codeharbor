@@ -63,6 +63,7 @@ en:
         group: Group Tasks
         mine: My Tasks
         public: Public
+        contribution: My Contributions
       search:
         advanced: Advanced
         all_access_levels: All Visibilities
