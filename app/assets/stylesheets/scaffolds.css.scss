@@ -1,4 +1,4 @@
-$exercise-color: #6c757d;
+$task-color: #6c757d;
 
 body {
   background-color: #fff;
@@ -34,7 +34,7 @@ a {
   color: #333;
 
   &:hover {
-    color: $exercise-color;
+    color: $task-color;
   }
 }
 

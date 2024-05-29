@@ -25,7 +25,7 @@
             = truncate(task.title, length: 100)
             - if @visibility == :owner
               span.visibility.align-middle
-                - if task.access_level == 'public'
+                - if task.access_level_public?
                   i.fas.fa-lock-open
                 - else
                   i.fas.fa-lock

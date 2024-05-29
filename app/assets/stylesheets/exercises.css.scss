@@ -2,7 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-$exercise-color: #6c757d;
+$task-color: #6c757d;
 
 .editor {
   position: relative;
@@ -10,7 +10,7 @@ $exercise-color: #6c757d;
 }
 
 .exercise-show {
-  border-left-color: rgba($exercise-color, 0.5);
+  border-left-color: rgba($task-color, 0.5);
 }
 
 .small_label {
@@ -66,7 +66,7 @@ $exercise-color: #6c757d;
 }
 
 .fa-regular.fa-file-lines {
-  color: $exercise-color;
+  color: $task-color;
 }
 
 .crossed-out:after {
@@ -125,7 +125,7 @@ $exercise-color: #6c757d;
 .fa-solid.fa-star,
 .fa-regular.fa-star,
 .fa-regular.fa-star-half-stroke {
-  color: $exercise-color;
+  color: $task-color;
 }
 
 /* CARD */
@@ -150,7 +150,7 @@ $exercise-color: #6c757d;
 
 .task-rating {
   font-size: 0.8em;
-  border: 1px $exercise-color solid;
+  border: 1px $task-color solid;
   border-radius: 2px;
   padding: 2px 0px;
   .task-star-rating {
@@ -158,9 +158,9 @@ $exercise-color: #6c757d;
     padding: 2px 3px;
   }
   .number-rating {
-    background-color: $exercise-color;
+    background-color: $task-color;
     padding: 2px 3px;
-    border-right: 1px $exercise-color solid;
+    border-right: 1px $task-color solid;
     color: white;
   }
 }
@@ -171,7 +171,7 @@ $exercise-color: #6c757d;
 
 .task-rating-count {
   font-size: 0.8em;
-  color: $exercise-color;
+  color: $task-color;
 }
 
 .popup-rating {
@@ -180,7 +180,7 @@ $exercise-color: #6c757d;
   position: absolute;
   padding: 5px 2px;
   margin-left: -45px;
-  border: 1px $exercise-color solid;
+  border: 1px $task-color solid;
 
   .rating {
     z-index: 1;
@@ -189,7 +189,7 @@ $exercise-color: #6c757d;
 }
 
 #rate {
-  color: $exercise-color;
+  color: $task-color;
 }
 
 .rating-dropdown {
@@ -212,8 +212,8 @@ $exercise-color: #6c757d;
   font-size: 0.8em;
   padding: 2px 4px;
   color: white;
-  background-color: $exercise-color;
-  border: 1px $exercise-color solid;
+  background-color: $task-color;
+  border: 1px $task-color solid;
   border-radius: 2px;
 }
 
@@ -222,7 +222,7 @@ $exercise-color: #6c757d;
   padding: 2px 4px;
   font-size: 0.7em;
   font-weight: 500;
-  color: $exercise-color;
+  color: $task-color;
   .fas {
     margin-bottom: 5px;
   }
@@ -284,7 +284,7 @@ legend {
 }
 
 .number {
-  color: $exercise-color;
+  color: $task-color;
   font-size: 1.3em;
   font-weight: 700;
   margin-right: 10px;

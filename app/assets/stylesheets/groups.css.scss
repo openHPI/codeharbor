@@ -1,5 +1,5 @@
 $group-color: #660000;
-$exercise-color: #6c757d;
+$task-color: #6c757d;
 
 .fa-solid.fa-users {
   color: $group-color;
@@ -52,8 +52,8 @@ $exercise-color: #6c757d;
   font-weight: normal;
   padding: 2px 4px;
   color: white;
-  background-color: $exercise-color;
-  border: 1px $exercise-color solid;
+  background-color: $task-color;
+  border: 1px $task-color solid;
   border-radius: 2px;
   // If it does not contains any text, hide it
   &:empty {
