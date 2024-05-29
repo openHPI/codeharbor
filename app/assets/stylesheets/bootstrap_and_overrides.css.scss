@@ -63,8 +63,13 @@
 
 .btn-group {
   .btn-important {
+    white-space: normal;
     padding: 10px 20px;
-
+    display: inline-flex !important;
+    align-items: center;
+    i {
+      margin-right: 5px;
+    }
     &.disabled {
       background-color: #e0e0e0;
       border: 1px #d3d3d3 solid;
