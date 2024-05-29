@@ -3,7 +3,7 @@
     .card-body
       .col-md-10
         h4.text-body-secondary
-          = t(''.empty_state.heading_#{@option}')
+          = t(".empty_state.heading_#{@option}")
         - if @option == 'mine'
           p.text-secondary.mb-2
             = t('.empty_state.hint')
