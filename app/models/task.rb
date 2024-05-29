@@ -56,11 +56,16 @@ class Task < ApplicationRecord
   }
   scope :visibility, lambda {|visibility, user = nil|
                        {
-                         owner: owner(user),
-                         group: group_access(user),
-                         public: public_access,
-                       }.fetch(visibility, public_access)
+                         owner: owner(user).not_task_contributions,
+                         group: group_access(user).not_task_contributions,
+                         public: public_access.not_task_contributions,
+                         contribution: pending_contribution(user),
+                       }.fetch(visibility, public_access.not_task_contributions)
                      }
+  scope :not_task_contributions, lambda {
+    where.missing(:task_contribution)
+  }
+  scope :pending_contribution, ->(user) { joins(:task_contribution).where(user:, access_level: :pending) }
   scope :created_before_days, ->(days) { where(created_at: days.to_i.days.ago.beginning_of_day..) if days.present? }
   scope :min_stars, ->(stars) { with_overall_rating.where('COALESCE(overall_rating, 0) >= ?', stars) }
   scope :with_overall_rating, lambda {

@@ -9,6 +9,7 @@
           = button_tag t('.menu_button.mine'), type: 'button', class: 'btn btn-main change-hidden-field', id: :owner
           = button_tag t('.menu_button.group'), type: 'button', class: 'btn btn-main change-hidden-field', id: :group
           = button_tag t('.menu_button.public'), type: 'button', class: 'btn btn-main change-hidden-field', id: :public
+          = button_tag t('.menu_button.contribution'), type: 'button', class: 'btn btn-main change-hidden-field', id: :contribution
         - if policy(Task).new?
           .btn-group.float-end
             = link_to new_task_path, class: 'btn btn-main nav-btn-exercise' do
