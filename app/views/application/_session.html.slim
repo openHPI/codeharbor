@@ -1,6 +1,7 @@
 - if user_signed_in?
   li.nav-item.dropdown
     a.nav-link.px-3.dropdown-toggle#navbarDropdown href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false'
+      = render('shared/status_group_icon', user: current_user)
       => current_user.email
       - if current_user.unread_messages_count != '0'
         span.menu-number

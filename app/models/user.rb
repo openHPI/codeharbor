@@ -15,7 +15,7 @@ class User < ApplicationRecord
     :validatable
 
   validates :email, presence: true, uniqueness: {case_sensitive: false}
-  validates :first_name, :last_name, presence: true
+  validates :first_name, :last_name, :status_group, presence: true
   validates :password_set, inclusion: [true, false]
 
   has_many :tasks, dependent: :nullify
@@ -44,6 +44,9 @@ class User < ApplicationRecord
   validate :avatar_format, if: -> { avatar.attached? }
 
   default_scope { where(deleted: [nil, false]) }
+
+  # `Other` is a catch-all for any status that doesn't fit into the other categories and should be *last*.
+  enum status_group: {unknown: 0, learner: 2, educator: 3, other: 1}, _default: :unknown, _prefix: true
 
   # Called by Devise and overwritten for soft-deletion
   def destroy

@@ -28,6 +28,13 @@
           | :
         .col.row-value
           = t("users.role.#{@user.role}")
+      .row
+        .col-auto.row-label
+          = User.human_attribute_name('status_group')
+          | :
+        .col.row-value
+          = render('/shared/status_group_icon', user: @user)
+          = t("users.status_group.#{@user.status_group}")
 
 - if policy(@user).manage_accountlinks?
   .show-table

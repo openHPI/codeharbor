@@ -90,6 +90,7 @@ en:
         last_name: Last name
         password_set: Passwort set
         role: Role
+        status_group: Status group
       user_identity:
         omniauth_provider: OmniAuth provider
         provider_uid: Provider UID
@@ -191,3 +192,8 @@ en:
     role:
       admin: Admin
       user: User
+    status_group:
+      educator: Educator
+      learner: Learner
+      other: Other
+      unknown: Not specified
