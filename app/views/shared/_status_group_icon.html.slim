@@ -1,0 +1,8 @@
+- if user.status_group_educator?
+  i.fa-solid.fa-chalkboard-teacher
+- elsif user.status_group_learner?
+  i.fa-solid.fa-user-graduate
+- elsif user.status_group_other?
+  i.fa-solid.fa-user-tie
+- else
+  i.fa-solid.fa-user
