@@ -34,9 +34,6 @@ importStart = () ->
     data: formData,
     processData: false,
     contentType: false,
-    success: (response) ->
-      if response.status == 'failure'
-        alert(response.message)
     error: (_xhr, _textStatus, message) ->
       alert("#{I18n.t('common.javascripts.error')}: #{message}")
   })
