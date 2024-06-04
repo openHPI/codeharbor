@@ -89,7 +89,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     send_data(zip_file.string, type: 'application/zip', filename: "task_#{@task.id}.zip", disposition: 'attachment')
   end
 
-  def import_start
+  def import_start # rubocop:disable Metric/AbcSize, Metrics/MethodLength
     zip_file = params[:zip_file]
     unless zip_file.is_a?(ActionDispatch::Http::UploadedFile)
       return render json: {status: 'failure', message: t('.choose_file_error')}
@@ -100,9 +100,24 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     respond_to do |format|
       format.js { render layout: false }
     end
+  rescue ProformaXML::ProformaError => e
+    messages = JSON.parse(e.message).map {|message| t("proforma_errors.#{message}") }.join(', ')
+    flash[:alert] = messages
+    render json: {
+      status: 'failure',
+      message: t('.error', error: messages),
+      actions: '',
+    }
+  rescue StandardError => e
+    Sentry.capture_exception(e)
+    render json: {
+      status: 'failure',
+      message: t('tasks.import.internal_error'),
+      actions: '',
+    }
   end
 
-  def import_confirm
+  def import_confirm # rubocop:disable Metric/AbcSize
     proforma_task = ProformaService::ProformaTaskFromCachedFile.call(**import_confirm_params.to_hash.symbolize_keys)
 
     task = ProformaService::ImportTask.call(proforma_task:, user: current_user)
@@ -115,6 +130,13 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     render json: {
       status: 'failure',
       message: t('.error', title: proforma_task.title, error: e.message),
+      actions: '',
+    }
+  rescue StandardError => e
+    Sentry.capture_exception(e)
+    render json: {
+      status: 'failure',
+      message: t('tasks.import.internal_error'),
       actions: '',
     }
   end
@@ -137,7 +159,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     render json: t('.invalid'), status: :bad_request
   rescue StandardError => e
     Sentry.capture_exception(e)
-    render json: t('.internal_error'), status: :internal_server_error
+    render json: t('tasks.import.internal_error'), status: :internal_server_error
   end
 
   def export_external_start

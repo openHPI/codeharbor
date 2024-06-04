@@ -736,6 +736,28 @@ RSpec.describe TasksController do
         expect(JSON.parse(response.body, symbolize_names: true)).to eql({status: 'failure', message: 'You need to choose a file.'})
       end
     end
+
+    context 'when service throws version not supported error' do
+      before do
+        allow(ProformaService::CacheImportFile).to receive(:call).and_raise(ProformaXML::ProformaError.new(['version not supported']))
+      end
+
+      it 'renders correct json' do
+        post_request
+        expect(JSON.parse(response.body, symbolize_names: true)).to eql({status: 'failure', message: 'Import of task could not be started. <br> Error: The version of this ProformaXML document is not supported', actions: ''})
+      end
+    end
+
+    context 'when service throws an unexpected error' do
+      before do
+        allow(ProformaService::CacheImportFile).to receive(:call).and_raise(StandardError)
+      end
+
+      it 'renders correct json' do
+        post_request
+        expect(JSON.parse(response.body, symbolize_names: true)).to eql({status: 'failure', message: 'An internal error occurred on CodeHarbor while importing the exercise.', actions: ''})
+      end
+    end
   end
 
   describe 'POST #import_confirm' do
@@ -768,6 +790,17 @@ RSpec.describe TasksController do
         it 'renders correct json' do
           post_request
           expect(response.body).to include('failed').and(include('Record invalid').and(include('"actions":""')))
+        end
+      end
+
+      context 'when service throws an unexpected error' do
+        before do
+          allow(ProformaService::ImportTask).to receive(:call).and_raise(StandardError)
+        end
+
+        it 'renders correct json' do
+          post_request
+          expect(JSON.parse(response.body, symbolize_names: true)).to eql({status: 'failure', message: 'An internal error occurred on CodeHarbor while importing the exercise.', actions: ''})
         end
       end
     end

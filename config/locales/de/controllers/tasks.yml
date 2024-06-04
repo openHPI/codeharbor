@@ -9,15 +9,17 @@ de:
     export_external_confirm:
       error: 'Der Export der Aufgabe (%{title}) ist fehlgeschlagen. <br> Fehler: %{error}'
       success: Aufgabe (%{title}) erfolgreich exportiert.
+    import:
+      internal_error: Bei der Importierung der Aufgabe ist ein interner Fehler aufgetreten.
     import_confirm:
       error: 'Der Import der Aufgabe (%{title}) ist fehlgeschlagen. <br> Fehler: %{error}'
       success: Aufgabe (%{title}) erfolgreich importiert.
     import_external:
-      internal_error: Bei der Importierung der Aufgabe ist ein interner Fehler aufgetreten.
       invalid: Ungültige Aufgabe
       success: Erfolg
     import_start:
       choose_file_error: Sie müssen eine Datei auswählen.
+      error: 'Der Import konnte nicht gestartet werden. <br> Fehler: %{error}'
     proforma_service:
       convert_zip_to_proforma_tasks:
         nested_too_deep: Die ZIP-Datei ist zu tief verschachtelt.
