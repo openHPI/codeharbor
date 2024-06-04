@@ -1,8 +1,10 @@
 .header
-  .std-heading
-    i.fa-solid.fa-user
-    =< @user.name
-.show-table.mt-5
+  .row
+    .col-md-12.pb-2.border-bottom
+      .std-heading
+        i.fa-solid.fa-user
+        =< @user.name
+.show-table.mt-4
   - if policy(@user).edit?
     .table-header
       = t('.public_information')
@@ -79,7 +81,7 @@
                 = button_to remove_shared_user_user_account_link_path(account_link.user.id, account_link.id), method: :post, params: {shared_user: current_user.id}, data: {confirm: t('common.sure')}, class: 'btn btn-light btn-sm', remote: true, form_class: 'remove-account-link-form' do
                   i.fa-solid.fa-xmark
                   =< t('common.button.remove')
-.actions.btn-group role='group'
+.actions.mb-4.btn-group role='group'
   - if policy(@user).message?
     = link_to reply_user_messages_path(current_user, recipient: @user), class: 'btn btn-important' do
       i.fa-solid.fa-envelope

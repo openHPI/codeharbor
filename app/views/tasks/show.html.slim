@@ -1,10 +1,10 @@
 .header
-  .row
-    .col-md-12
+  .row.pb-2.border-bottom
+    .col-md-12.d-flex.justify-content-between.align-items-center
       .std-heading data-bs-toggle='tooltip' data-bs-placement='bottom' title=@task.title
-        i.i.fa-regular.fa-file-lines style='color: #008000'
+        i.i.fa-regular.fa-file-lines
         =< truncate(@task.title, length: 100)
-      span.star-rating.float-end style='font-size: 2.0em'
+      span.task-star-rating
         - [*1..5].each do |i|
           - if @task.average_rating >= i
             span.fa-solid.fa-star.overall-rating data-rating=i
@@ -12,14 +12,14 @@
             span.fa-regular.fa-star-half-stroke.overall-rating data-rating=i
           - else
             span.fa-regular.fa-star.overall-rating data-rating=i
-        small
+        span
           .rating-dropdown
             - if current_user && policy(Rating).new?
-              .btn.btn-sm#rate
+              .btn#rate
                 => t('.button.rate')
                 span.fa-solid.fa-caret-down
 
-              .popup-rating
+              .popup-rating.shadow-sm.bg-light
                 .rating data-task-id=@task.id
                   - if @user_rating
                     - [*1..5].each do |i|
@@ -32,8 +32,8 @@
                       span.fa-regular.fa-star data-rating=i
 
             - else
-              div data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150
-                .btn.btn-sm#rate
+              div[data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150]
+                .btn#rate
                   => t('.button.rate')
                   span.fa-solid.fa-caret-down
 
@@ -301,8 +301,9 @@
               .col.row-value
                 = test.timeout
 
-            .files-header
-              = label nil, "#{Task.human_attribute_name('files')}:"
+            .files-header.my-1
+              strong
+                = label nil, "#{Task.human_attribute_name('files')}:"
             .files
               - test.files.each do |file|
                 .show-table.exercise-show
@@ -494,7 +495,7 @@
               li
                 = form_with model: Collection.new, url: collections_path do |f|
                   .create-collection.input-group
-                    = f.text_field :title, class: 'form-control', placeholder: t('.create_collection_placeholder')
+                    = f.text_field :title, class: 'form-control custom-input', placeholder: t('.create_collection_placeholder')
                     = f.hidden_field :task_ids, value: @task.id
                     = f.submit class: 'btn btn-light submit', value: t('.button.create_collection')
         - else
@@ -537,7 +538,7 @@
         => t('.button.show_comments')
         span.fa-solid.fa-circle-notch.fa-spin.wait style="display:none;margin-right:5px;"
         span.fa-solid.fa-caret-down.my-caret
-      .comment-box.with-borders data-task=@task.id
+      .comment-box.with-borders.border-top-0 data-task=@task.id
         = form_for :comment, url: task_comments_path(@task), remote: true do |f|
           .write-comment
             - if policy(Comment).new?

@@ -34,7 +34,8 @@
   }
 }
 
-.btn-main {
+.btn-main,
+.btn-important {
   color: #444444;
   background-color: #f5f5f5;
   border: 1px #dddddd solid;
@@ -49,18 +50,8 @@
 }
 
 .btn-important {
-  font-weight: 500;
+  font-weight: 600;
   padding: 10px 14px;
-  color: #444444;
-  background-color: #f5f5f5;
-  border: 2px #888888 solid;
-}
-
-.btn-important:hover {
-  padding: 10px 14px;
-  color: #444444;
-  background-color: #e5e5e5;
-  border: 2px #888888 solid;
 }
 
 .btn-group .btn + .btn,
@@ -68,6 +59,23 @@
 .btn-group .btn-group + .btn,
 .btn-group .btn-group + .btn-group {
   margin-left: -2px;
+}
+
+.btn-group {
+  .btn-important {
+    white-space: normal;
+    padding: 10px 20px;
+    display: inline-flex !important;
+    align-items: center;
+    i {
+      margin-right: 5px;
+    }
+    &.disabled {
+      background-color: #e0e0e0;
+      border: 1px #d3d3d3 solid;
+      color: #aaaaaa;
+    }
+  }
 }
 
 .no-border {
@@ -102,6 +110,37 @@ a.no-border:visited {
   margin-right: 5px;
 }
 
+/* FORMS and FORM ELEMENTS */
+
+.field-element {
+  .form-control,
+  .form-select {
+    border-radius: 2px;
+    border: 1px #ccc solid;
+  }
+}
+
+.select2-search_field {
+  height: 15px !important;
+  font-size: 0.5em !important;
+}
+
+.select2-selection {
+  border-radius: 2px;
+}
+
+.select2-container {
+  .select2-selection--single,
+  .select2-selection--multiple {
+    height: 32px !important;
+    border: 1px #cccccc solid !important;
+  }
+
+  [class^='select2-selection'] {
+    border-radius: 2px;
+  }
+}
+
 .input-group {
   .custom-input {
     border-radius: 2px;
@@ -112,4 +151,23 @@ a.no-border:visited {
       color: #d3d3d3;
     }
   }
+
+  .input-group-text {
+    border-radius: 2px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+.radio-switch {
+  .radio-left,
+  .radio-right {
+    border-radius: 0px;
+  }
+}
+
+/* CARDS */
+.card {
+  border-radius: 0px;
+  border: 1px #cccccc solid;
 }

@@ -1,3 +1,5 @@
+$task-color: #6c757d;
+
 body {
   background-color: #fff;
   color: #333;
@@ -29,11 +31,10 @@ blockquote {
 }
 
 a {
-  color: #000000;
+  color: #333;
 
   &:hover {
-    color: #fff;
-    background-color: #e5e5e5;
+    color: $task-color;
   }
 }
 

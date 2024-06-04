@@ -1,87 +1,90 @@
-.header.mb-5
-  .std-heading
-    i.fa-solid.fa-user style='color: #444444'
-    =< t('devise.registrations.edit.title', resource: User.model_name.human)
+.header
+  .row
+    .col-md-12.pb-2.border-bottom
+      .std-heading
+        i.fa-solid.fa-user.text-secondary
+        =< t('devise.registrations.edit.title', resource: User.model_name.human)
 
-= form_for(resource, as: resource_name, url: registration_path(resource_name), html: {method: :put}) do |f|
-  = render('shared/form_errors', object: resource, title: t('common.errors.changes_not_saved'))
+.row.my-4
+  = form_for(resource, as: resource_name, url: registration_path(resource_name), html: {method: :put}) do |f|
+    = render('shared/form_errors', object: resource, title: t('common.errors.changes_not_saved'))
 
-  .form-group.field-element
-    = f.label :first_name, class: 'form-label'
-    = f.text_field :first_name,
-            required: true,
-            autofocus: true,
-            placeholder: User.human_attribute_name('first_name'),
-            autocomplete: 'given-name',
-            class: 'form-control'
-  .form-group.field-element
-    = f.label :last_name, class: 'form-label'
-    = f.text_field :last_name,
-            required: true,
-            placeholder: User.human_attribute_name('last_name'),
-            autocomplete: 'family-name',
-            class: 'form-control'
-
-  .form-group.field-element
-    = f.label :email, class: 'form-label'
-    = f.email_field :email,
-            required: true,
-            placeholder: User.human_attribute_name('email'),
-            autocomplete: 'email',
-            class: 'form-control'
-    - if devise_mapping.confirmable? && resource.pending_reconfirmation?
-      p = t('devise.registrations.edit.currently_waiting_confirmation_for_email', email: resource.unconfirmed_email)
-
-  .form-group.field-element
-    = f.label :password, t('devise.passwords.edit.new_password'), class: 'form-label'
-    = f.password_field :password,
-            required: false,
-            placeholder: t('devise.passwords.edit.new_password'),
-            autocomplete: 'new-password',
-            class: 'form-control'
-    small.form-text.text-body-secondary = t('devise.registrations.edit.leave_blank_if_you_don_t_want_to_change_it')
-  .form-group.field-element
-    = f.label :password_confirmation, t('users.shared.password_new_confirmation'), class: 'form-label'
-    = f.password_field :password_confirmation,
-            required: false,
-            placeholder: t('devise.passwords.edit.new_password'),
-            autocomplete: 'new-password',
-            class: 'form-control'
-
-  = render 'avatar_form', f:
-
-  - if resource.password_set?
     .form-group.field-element
-      = f.label :current_password, class: 'form-label'
-      = f.password_field :current_password,
+      = f.label :first_name, class: 'form-label'
+      = f.text_field :first_name,
               required: true,
-              placeholder: User.human_attribute_name('current_password'),
-              autocomplete: 'current-password',
+              autofocus: true,
+              placeholder: User.human_attribute_name('first_name'),
+              autocomplete: 'given-name',
               class: 'form-control'
-      small.form-text.text-body-secondary = t('devise.registrations.edit.we_need_your_current_password_to_confirm_your_changes')
-
-
-  - if devise_mapping.omniauthable? && resource_class.omniauth_providers.any?
     .form-group.field-element
-      .form-label
-        = t('.manage_omniauth')
-      .form-content.manage_omniauth
-        - resource_class.omniauth_providers.each do |provider|
-          - provider_name = OmniAuth::Utils.camelize(provider)
-          - configured_providers = current_user.identities.pluck(:omniauth_provider)
-          - if configured_providers.include?(provider.to_s) && (configured_providers.size > 1 || resource.password_set?)
-            = link_to t('.remove_identity', kind: provider_name), omniauth_deauthorize_path(provider), class: 'btn btn-light btn-sm mb-2 me-2', method: :delete
-          - elsif configured_providers.include?(provider.to_s)
-            a.btn.btn-light.btn-sm.mb-2.me-2.disabled href='#'
-              = t('.cannot_remove_last_identity', kind: provider_name)
-          - else
-            = link_to t('.add_identity', kind: provider_name), omniauth_authorize_path(resource_name, provider), class: 'btn btn-light btn-sm mb-2 me-2', method: :post
+      = f.label :last_name, class: 'form-label'
+      = f.text_field :last_name,
+              required: true,
+              placeholder: User.human_attribute_name('last_name'),
+              autocomplete: 'family-name',
+              class: 'form-control'
 
-  .form-group.py-3
-    .btn-group role='group'
-      = button_tag type: 'submit', class: 'btn btn-important' do
-        i.fa-solid.fa-user
-        =< t('common.button.update')
-      = link_to :back, class: 'btn btn-important' do
-        i.fa-solid.fa-xmark style=('color: gray')
-        =< t('common.button.back')
+    .form-group.field-element
+      = f.label :email, class: 'form-label'
+      = f.email_field :email,
+              required: true,
+              placeholder: User.human_attribute_name('email'),
+              autocomplete: 'email',
+              class: 'form-control'
+      - if devise_mapping.confirmable? && resource.pending_reconfirmation?
+        p = t('devise.registrations.edit.currently_waiting_confirmation_for_email', email: resource.unconfirmed_email)
+
+    .form-group.field-element
+      = f.label :password, t('devise.passwords.edit.new_password'), class: 'form-label'
+      = f.password_field :password,
+              required: false,
+              placeholder: t('devise.passwords.edit.new_password'),
+              autocomplete: 'new-password',
+              class: 'form-control'
+      small.form-text.text-body-secondary = t('devise.registrations.edit.leave_blank_if_you_don_t_want_to_change_it')
+    .form-group.field-element
+      = f.label :password_confirmation, t('users.shared.password_new_confirmation'), class: 'form-label'
+      = f.password_field :password_confirmation,
+              required: false,
+              placeholder: t('devise.passwords.edit.new_password'),
+              autocomplete: 'new-password',
+              class: 'form-control'
+
+    = render 'avatar_form', f:
+
+    - if resource.password_set?
+      .form-group.field-element
+        = f.label :current_password, class: 'form-label'
+        = f.password_field :current_password,
+                required: true,
+                placeholder: User.human_attribute_name('current_password'),
+                autocomplete: 'current-password',
+                class: 'form-control'
+        small.form-text.text-body-secondary = t('devise.registrations.edit.we_need_your_current_password_to_confirm_your_changes')
+
+
+    - if devise_mapping.omniauthable? && resource_class.omniauth_providers.any?
+      .form-group.field-element
+        .form-label
+          = t('.manage_omniauth')
+        .form-content.manage_omniauth
+          - resource_class.omniauth_providers.each do |provider|
+            - provider_name = OmniAuth::Utils.camelize(provider)
+            - configured_providers = current_user.identities.pluck(:omniauth_provider)
+            - if configured_providers.include?(provider.to_s) && (configured_providers.size > 1 || resource.password_set?)
+              = link_to t('.remove_identity', kind: provider_name), omniauth_deauthorize_path(provider), class: 'btn btn-light btn-sm mb-2 me-2', method: :delete
+            - elsif configured_providers.include?(provider.to_s)
+              a.btn.btn-light.btn-sm.mb-2.me-2.disabled href='#'
+                = t('.cannot_remove_last_identity', kind: provider_name)
+            - else
+              = link_to t('.add_identity', kind: provider_name), omniauth_authorize_path(resource_name, provider), class: 'btn btn-light btn-sm mb-2 me-2', method: :post
+
+    .form-group.py-3
+      .btn-group role='group'
+        = button_tag type: 'submit', class: 'btn btn-important' do
+          i.fa-solid.fa-user
+          =< t('common.button.update')
+        = link_to :back, class: 'btn btn-important' do
+          i.fa-solid.fa-xmark.text-secondary
+          =< t('common.button.back')

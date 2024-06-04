@@ -1,27 +1,30 @@
-.header.mb-5
-  .std-heading
-    i.fa-solid.fa-key style='color: #444444'
-    =< t('devise.passwords.new.forgot_your_password')
+.header
+  .row
+    .col-md-12.pb-2.border-bottom
+      .std-heading
+        i.fa-solid.fa-key.text-secondary
+        =< t('devise.passwords.new.forgot_your_password')
 
-= form_for(resource, as: resource_name, url: password_path(resource_name), html: {method: :post}) do |f|
-  = render('shared/form_errors', object: resource, title: t('users.shared.validation_error'))
+.row.my-4
+  = form_for(resource, as: resource_name, url: password_path(resource_name), html: {method: :post}) do |f|
+    = render('shared/form_errors', object: resource, title: t('users.shared.validation_error'))
 
-  .form-group.field-element
-    = f.label :email, class: 'form-label'
-    = f.email_field :email,
-            required: true,
-            autofocus: true,
-            placeholder: User.human_attribute_name('email'),
-            autocomplete: 'email',
-            class: 'form-control'
+    .form-group.field-element
+      = f.label :email, class: 'form-label'
+      = f.email_field :email,
+              required: true,
+              autofocus: true,
+              placeholder: User.human_attribute_name('email'),
+              autocomplete: 'email',
+              class: 'form-control'
 
-  .form-group.py-3
-    .btn-group role='group'
-      = button_tag type: 'submit', class: 'btn btn-important' do
-        i.fa-solid.fa-key
-        =< t('devise.passwords.new.send_me_reset_password_instructions')
-      = link_to :back, class: 'btn btn-important' do
-        i.fa-solid.fa-xmark style=('color: gray')
-        =< t('common.button.back')
+    .form-group.py-3
+      .btn-group role='group'
+        = button_tag type: 'submit', class: 'btn btn-important' do
+          i.fa-solid.fa-key
+          =< t('devise.passwords.new.send_me_reset_password_instructions')
+        = link_to :back, class: 'btn btn-important' do
+          i.fa-solid.fa-xmark.text-secondary
+          =< t('common.button.back')
 
-= render 'users/shared/links'
+  = render 'users/shared/links'

@@ -1,17 +1,11 @@
 // Place all the styles related to the Collections controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-$collection-color: #000080;
-
-.fa-solid.fa-folder-open {
-  color: $collection-color;
-}
 
 .collection-content {
   width: 60%;
   margin-bottom: 40px;
   border-top: 1px solid lightgrey;
-
 }
 
 .nav-container .nav-btn-collection {

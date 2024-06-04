@@ -1,5 +1,5 @@
 = form_for :message, url: user_messages_path(@user) do |f|
-  .mt-5
+  .my-4
     = render('shared/form_errors', object: @message)
 
     - if @recipient
@@ -16,4 +16,6 @@
       = button_tag type: 'submit', class: 'btn btn-important' do
         i.fa-solid.fa-envelope
         =< t('messages.shared.send_message')
-      = link_to t('common.button.cancel'), :back, class: 'btn btn-important'
+      = link_to :back, class: 'btn btn-important' do
+            i.fa-solid.fa-xmark.text-secondary
+            =< t('common.button.cancel')

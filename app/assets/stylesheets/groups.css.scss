@@ -1,8 +1,4 @@
-$group-color: #660000;
-
-.fa-solid.fa-users {
-  color: $group-color;
-}
+$task-color: #6c757d;
 
 .nav-container {
   a {
@@ -43,5 +39,19 @@ $group-color: #660000;
 .table-list.group-tasks {
   .btn-group.btn:not(:last-child) {
     border-right: none;
+  }
+}
+
+.group-label {
+  font-size: 0.8em;
+  font-weight: normal;
+  padding: 2px 4px;
+  color: white;
+  background-color: $task-color;
+  border: 1px $task-color solid;
+  border-radius: 2px;
+  // If it does not contains any text, hide it
+  &:empty {
+    display: none;
   }
 }

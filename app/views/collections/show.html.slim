@@ -1,12 +1,13 @@
 .header
-  .std-heading
-    - if current_user.favorite_collections.include?(@collection)
-      i.fa-solid.fa-star>
-    i.fa-solid.fa-folder-open
-    =<> @collection.title
-    hr.mb-2
+  .row
+    .col-md-12.pb-2.border-bottom
+      .std-heading
+        - if current_user.favorite_collections.include?(@collection)
+          i.fa-solid.fa-star>
+        i.fa-solid.fa-folder-open
+        =<> @collection.title
 .row
-  .col-md-12
+  .col-md-12.pt-2
     .collection-subinfo
       span
         - if @collection.visibility_level_public?
@@ -70,7 +71,7 @@
                   - else
                     = link_to task.title, task_path(task), class: 'btn btn-light disabled'
 .row
-  .col-md-12
+  .col-md-12.mb-4
     .actions.btn-group role='group'
       - if action_name == 'view_shared'
         = link_to t('.button.collaborate'), save_shared_collection_path(@collection), method: 'post', class: 'btn btn-important'
