@@ -82,3 +82,6 @@ end
 # - Phased Restarts are only supported in cluster mode with multiple workers (i.e., not in development).
 # - The Puma binary won't be upgraded on phased restarts, but since we have the unattended-upgrades, this is not a major issue.
 # - See https://github.com/casperisfine/puma/blob/master/docs/restart.md.
+
+# Run Solid Queue's supervisor
+plugin :solid_queue
