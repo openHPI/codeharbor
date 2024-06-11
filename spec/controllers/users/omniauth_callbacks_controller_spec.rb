@@ -113,22 +113,22 @@ RSpec.describe Users::OmniauthCallbacksController do
       let(:provider) { omniauth_provider }
 
       before do
-        session['omniauth_provider'] = provider
-        session['saml_uid'] = 'saml_uid'
-        session['saml_session_index'] = 'saml_session_index'
+        session[:omniauth_provider] = provider
+        session[:saml_uid] = 'saml_uid'
+        session[:saml_session_index] = 'saml_session_index'
         delete :deauthorize, params: {provider: omniauth_provider}
       end
 
       it 'does not remove the provider from the session' do
-        expect(session['omniauth_provider']).to eq provider
+        expect(session[:omniauth_provider]).to eq provider
       end
 
       it 'does not remove the saml_uid from the session' do
-        expect(session['saml_uid']).to eq 'saml_uid'
+        expect(session[:saml_uid]).to eq 'saml_uid'
       end
 
       it 'does not remove the saml_session_index from the session' do
-        expect(session['saml_session_index']).to eq 'saml_session_index'
+        expect(session[:saml_session_index]).to eq 'saml_session_index'
       end
     end
 
@@ -136,22 +136,22 @@ RSpec.describe Users::OmniauthCallbacksController do
       let(:provider) { 'another_provider' }
 
       before do
-        session['omniauth_provider'] = provider
-        session['saml_uid'] = 'saml_uid'
-        session['saml_session_index'] = 'saml_session_index'
+        session[:omniauth_provider] = provider
+        session[:saml_uid] = 'saml_uid'
+        session[:saml_session_index] = 'saml_session_index'
         delete :deauthorize, params: {provider: omniauth_provider}
       end
 
       it 'removes the provider from the session' do
-        expect(session['omniauth_provider']).to eq provider
+        expect(session[:omniauth_provider]).to eq provider
       end
 
       it 'removes the saml_uid from the session' do
-        expect(session['saml_uid']).to eq 'saml_uid'
+        expect(session[:saml_uid]).to eq 'saml_uid'
       end
 
       it 'removes the saml_session_index from the session' do
-        expect(session['saml_session_index']).to eq 'saml_session_index'
+        expect(session[:saml_session_index]).to eq 'saml_session_index'
       end
     end
 
@@ -161,15 +161,15 @@ RSpec.describe Users::OmniauthCallbacksController do
       end
 
       it 'does not add the provider to the session' do
-        expect(session['omniauth_provider']).to be_nil
+        expect(session[:omniauth_provider]).to be_nil
       end
 
       it 'does not add the saml_uid to the session' do
-        expect(session['saml_uid']).to be_nil
+        expect(session[:saml_uid]).to be_nil
       end
 
       it 'does not add the saml_session_index to the session' do
-        expect(session['saml_session_index']).to be_nil
+        expect(session[:saml_session_index]).to be_nil
       end
     end
 
@@ -203,22 +203,22 @@ RSpec.describe Users::OmniauthCallbacksController do
 
       context 'when session contains the provider' do
         before do
-          session['omniauth_provider'] = omniauth_provider
-          session['saml_uid'] = 'saml_uid'
-          session['saml_session_index'] = 'saml_session_index'
+          session[:omniauth_provider] = omniauth_provider
+          session[:saml_uid] = 'saml_uid'
+          session[:saml_session_index] = 'saml_session_index'
           delete :deauthorize, params: {provider: omniauth_provider}
         end
 
         it 'removes the provider from the session' do
-          expect(session['omniauth_provider']).to be_nil
+          expect(session[:omniauth_provider]).to be_nil
         end
 
         it 'removes the saml_uid from the session' do
-          expect(session['saml_uid']).to be_nil
+          expect(session[:saml_uid]).to be_nil
         end
 
         it 'removes the saml_session_index from the session' do
-          expect(session['saml_session_index']).to be_nil
+          expect(session[:saml_session_index]).to be_nil
         end
       end
 
