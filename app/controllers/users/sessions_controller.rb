@@ -52,7 +52,10 @@ module Users
         return spslo_path_for(provider) if strategy_class.default_options.idp_slo_service_url
       end
 
-      # If SLO is not supported, we delegate the call to the parent
+      # If SLO is not supported, we first delete all information from the current session
+      # This is mainly done to remove the SAML information we stored before
+      session.clear
+      # Then, we delegate the call to the parent
       super
     end
 
