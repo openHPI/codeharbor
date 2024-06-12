@@ -5,6 +5,8 @@ de:
       contribute: Änderung vorschlagen
       decouple: Verknüpfung trennen
       edit_contribution: Änderungsvorschlag bearbeiten
+    new:
+      new_contribution: Neuer Änderungsvorschlag
     status:
       closed: Geschlossen
       merged: Akzeptiert
