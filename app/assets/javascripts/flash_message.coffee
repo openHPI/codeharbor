@@ -7,7 +7,7 @@ show_ajax_message = (msg, type) ->
 $(document).ajaxComplete (event, request) ->
   msg = decodeURI(request.getResponseHeader("X-Message"))
   type = request.getResponseHeader("X-Message-Type")
-  show_ajax_message msg, type unless type == 'empty' #use whatever popup, notification or whatever plugin you want
+  show_ajax_message msg, type unless msg == "null" || type == 'empty' #use whatever popup, notification or whatever plugin you want
 
 ready = ->
   $('#flash-message').children().first().delay(5000).slideUp 'medium'
