@@ -34,7 +34,7 @@
           | :
         .col.row-value
           = render('/shared/status_group_icon', user: @user)
-          = t("users.status_group.#{@user.status_group}")
+          =< t("users.status_group.#{@user.status_group}")
 
 - if policy(@user).manage_accountlinks?
   .show-table
