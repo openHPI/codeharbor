@@ -1,20 +1,25 @@
 .header
   .row.pb-2.border-bottom
     .col-md-12.d-flex.justify-content-between.align-items-center
+      - if @task.contribution?
+        - unavailable_tooltip = t('.task_contribution.disabled.tooltip')
+      - else
+        - unavailable_tooltip = t('.guest.disabled.tooltip')
       .std-heading data-bs-toggle='tooltip' data-bs-placement='bottom' title=@task.title
         i.i.fa-regular.fa-file-lines
         =< truncate(@task.title, length: 100)
 
-      .d-flex.align-items-center
-        span.task-star-rating.rating-subcategories-trigger.averaged-task-ratings
-          = render('task_star_rating', rating: @task.overall_rating, category: :overall_rating)
-          .rating-subcategories-overlay
-            = render('rating_subcategories', task: @task)
-        span.mx-2
-          - if current_user && policy(Rating).new_for_task?(@task)
-            .btn.btn-light.btn-sm#ratingModalOpenButton data-bs-toggle="modal" data-bs-target="#ratingModal"
-              = t('.button.rate')
-            = render 'rating_modal'
+      - unless @task.contribution?
+        .d-flex.align-items-center
+          span.task-star-rating.rating-subcategories-trigger.averaged-task-ratings
+            = render('task_star_rating', rating: @task.overall_rating, category: :overall_rating)
+            .rating-subcategories-overlay
+              = render('rating_subcategories', task: @task)
+          span.mx-2
+            - if current_user && policy(Rating).new_for_task?(@task)
+              .btn.btn-light.btn-sm#ratingModalOpenButton data-bs-toggle="modal" data-bs-target="#ratingModal"
+                = t('.button.rate')
+              = render 'rating_modal'
 .row
   .col-md-12.my-3
     legend.toggle-next
@@ -476,7 +481,7 @@
                     = f.hidden_field :task_ids, value: @task.id
                     = f.submit class: 'btn btn-light submit', value: t('.button.create_collection')
         - else
-          div data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150
+          div data-bs-toggle='tooltip' title=unavailable_tooltip data-bs-delay=150
             = button_tag class: 'btn btn-outline-dark dropdown-toggle disabled', 'data-bs-toggle': 'dropdown' do
               = t('.button.add_to_collection')
   .col-md-4.col-sm-6.mb-3.p-0
@@ -495,7 +500,7 @@
                   = link_to proforma_version, download_task_path(@task, version: proforma_version), class: 'btn btn-light dropdown-item', target: '_blank', rel: 'noopener noreferrer'
 
         - else
-          div data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150
+          div data-bs-toggle='tooltip' title=unavailable_tooltip data-bs-delay=150
             = link_to t('common.button.download_zip'), download_task_path(@task), class: 'btn btn-outline-dark disabled', 'data-turbolinks' => false
 
         - if policy(@task).export_external_start?
@@ -512,7 +517,7 @@
                   li
                     = link_to acc_link.name, export_external_start_task_path(account_link: acc_link), method: :post, remote: true, class: 'dropdown-item export-test'
         - else
-          div data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150
+          div data-bs-toggle='tooltip' title=unavailable_tooltip data-bs-delay=150
             = button_tag class: 'btn btn-outline-dark dropdown-toggle disabled', 'data-bs-toggle': 'dropdown' do
               = t('.button.export')
 
@@ -531,7 +536,7 @@
                 = f.text_field :text, class: 'form-control'
                 = f.submit t('common.button.save_object', model: Comment.model_name.human), class: 'btn btn-light'
             - else
-              .input-group data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150
+              .input-group data-bs-toggle='tooltip' title=unavailable_tooltip data-bs-delay=150
                 = f.label 'new_comment_label', t('tasks.shared.new_comment'), class: 'input-group-text'
                 = f.text_field :text, class: 'form-control', disabled: true
                 = f.submit t('common.button.save_object', model: Comment.model_name.human), class: 'btn btn-outline-dark disabled'
@@ -575,7 +580,7 @@
             i.fa-regular.fa-clone
             =< t('common.button.duplicate')
         - else
-          div[data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150]
+          div[data-bs-toggle='tooltip' title=unavailable_tooltip data-bs-delay=150]
             = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important disabled' do
               i.fa-regular.fa-clone
               =< t('common.button.duplicate')
