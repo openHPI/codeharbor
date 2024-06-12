@@ -51,7 +51,7 @@ activate_control_app 'unix://tmp/sockets/pumactl.sock'
 bind_to_activated_sockets 'only'
 
 # Refresh Gemfile during phased-restarts.
-prune_bundler
+# prune_bundler
 
 # Fork all workers from worker 0 to reduce memory footprint and allow phased restarts.
 # For successful phased restarts, we need at least 3 workers (see doc).
@@ -62,7 +62,7 @@ fork_worker 0
 
 # Disable explicit preloading of our app.
 # With `fork_worker`, we will have an implicit preloading.
-preload_app! false
+# preload_app! false
 
 # Disable automatic tagging of the service.
 tag ''
