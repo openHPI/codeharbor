@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CommentsController < ApplicationController
-  before_action :load_and_authorize_base_task
+  before_action :load_and_authorize_task
   before_action :load_and_authorize_comment, only: %i[edit update destroy]
   skip_before_action :require_user!, only: %i[index]
 
