@@ -115,6 +115,9 @@ en:
       no_model_solution_present: No Model Solutions present
       no_tests: No tests included
       remove_task_from_collection_warning: Are you sure you want to remove this Task from the Collection?
+      task_contribution:
+        disabled:
+          tooltip: This feature is unavailable for task contributions.
       undefined: User undefined
       yourself: yourself
     tasks:

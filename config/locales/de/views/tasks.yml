@@ -115,6 +115,9 @@ de:
       no_model_solution_present: Keine Musterlösungen vorhanden
       no_tests: Keine Tests enthalten
       remove_task_from_collection_warning: Sind Sie sicher, dass Sie diese Aufgabe aus der Sammlung entfernen wollen?
+      task_contribution:
+        disabled:
+          tooltip: Diese Operation ist für Änderungsvorschläge nicht verfügbar.
       undefined: Benutzer:in undefiniert
       yourself: Ihnen selbst
     tasks:
