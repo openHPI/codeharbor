@@ -5,6 +5,8 @@ en:
       contribute: Contribute
       decouple: Decouple
       edit_contribution: Edit Contribution
+    new:
+      new_contribution: New Contribution
     status:
       closed: Closed
       merged: Merged
