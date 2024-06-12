@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class RatingsController < ApplicationController
-  before_action :load_and_authorize_task
+  before_action :load_and_authorize_base_task
 
   def create # rubocop:disable Metrics/AbcSize
     return handle_own_rating if @task.user == current_user

@@ -198,9 +198,9 @@ de:
       user_identity:
         one: Benutzer:innenidentität
         other: Benutzer:innenidentitäten
-  task_contribution:
+  task_contributions:
     model:
-      title_string: Änderungsvorschlag für %{task_title}
+      contribution_title: Änderungsvorschlag für %{task_title}
   tasks:
     model:
       copy_of_task: Kopie der Aufgabe
