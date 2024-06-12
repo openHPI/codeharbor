@@ -3,7 +3,7 @@
 class TaskContributionsController < ApplicationController
   include TaskParameters
 
-  before_action :load_and_authorize_task, except: %i[index show edit]
+  before_action :load_and_authorize_base_task
   before_action :load_and_authorize_task_contribution, except: %i[index create new]
 
   def approve_changes
@@ -27,9 +27,8 @@ class TaskContributionsController < ApplicationController
   end
 
   def index
-    @task = Task.find(params[:task_id])
+    authorize @task, :edit?
     @task_contributions = @task.contributions(all_states: true)
-    authorize @task
   end
 
   def show
@@ -84,14 +83,13 @@ class TaskContributionsController < ApplicationController
 
   private
 
-  def load_and_authorize_task
+  def load_and_authorize_base_task
     @task = Task.find(params[:task_id])
     authorize @task, :show?
   end
 
   def load_and_authorize_task_contribution
     @task_contribution = TaskContribution.find(params[:id])
-    @task = Task.find(params[:task_id])
     raise Pundit::NotAuthorizedError unless @task_contribution.base == @task
 
     authorize @task_contribution

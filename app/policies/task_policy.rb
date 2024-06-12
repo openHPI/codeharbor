@@ -5,6 +5,10 @@ class TaskPolicy < ApplicationPolicy
     @record
   end
 
+  def suggestion?
+    task.task_contribution.present?
+  end
+
   %i[show? download?].each do |action|
     define_method(action) do
       if @user.present?
@@ -47,7 +51,7 @@ class TaskPolicy < ApplicationPolicy
   end
 
   def destroy?
-    (record_owner? || admin?) && task.task_contribution.blank?
+    (record_owner? || admin?) && !suggestion?
   end
 
   def manage?
