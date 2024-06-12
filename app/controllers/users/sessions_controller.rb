@@ -25,13 +25,13 @@ module Users
       #
       # Preserve the saml_uid, saml_session_index and omniauth_provider in the session
       # This is done by copying those and setting these after destroying the session (through `super`)
-      saml_uid = session['saml_uid']
-      saml_session_index = session['saml_session_index']
-      omniauth_provider = session['omniauth_provider']
+      saml_uid = session[:saml_uid]
+      saml_session_index = session[:saml_session_index]
+      omniauth_provider = session[:omniauth_provider]
       super do
-        session['saml_uid'] = saml_uid
-        session['saml_session_index'] = saml_session_index
-        session['omniauth_provider'] = omniauth_provider
+        session[:saml_uid] = saml_uid
+        session[:saml_session_index] = saml_session_index
+        session[:omniauth_provider] = omniauth_provider
       end
     end
 
@@ -43,8 +43,8 @@ module Users
     # end
 
     def after_sign_out_path_for(_)
-      provider = session['omniauth_provider']
-      if session['saml_uid'] && session['saml_session_index'] && provider
+      provider = session[:omniauth_provider]
+      if session[:saml_uid] && session[:saml_session_index] && provider
         provider_config = Devise.omniauth_configs[provider.to_sym]
         return super unless provider_config
 
@@ -52,7 +52,10 @@ module Users
         return spslo_path_for(provider) if strategy_class.default_options.idp_slo_service_url
       end
 
-      # If SLO is not supported, we delegate the call to the parent
+      # If SLO is not supported, we first delete all information from the current session
+      # This is mainly done to remove the SAML information we stored before
+      session.clear
+      # Then, we delegate the call to the parent
       super
     end
 

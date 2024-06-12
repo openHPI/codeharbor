@@ -119,11 +119,11 @@ module Users
       # Prevent any further interaction with the given provider, as the user has deauthorized it.
       # This is necessary to avoid the user being redirected to the IdP after signing out.
       # In short: Once deauthorized, SLO is not enabled any longer for the provider..
-      return unless session['omniauth_provider'] == provider
+      return unless session[:omniauth_provider] == provider
 
-      session.delete('saml_uid')
-      session.delete('saml_session_index')
-      session.delete('omniauth_provider')
+      session.delete(:saml_uid)
+      session.delete(:saml_session_index)
+      session.delete(:omniauth_provider)
     end
 
     # We use the configured OmniAuth camelization to include the user-facing name of the provider in the flash message
