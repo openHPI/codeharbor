@@ -71,7 +71,7 @@ module Nbp
     end
 
     def api_conn
-      @api_conn ||= Faraday.new(url: settings.api_host, headers:)
+      @api_conn = Faraday.new(url: settings.api_host, headers:)
     end
 
     def settings
