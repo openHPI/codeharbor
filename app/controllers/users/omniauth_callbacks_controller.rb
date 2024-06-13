@@ -13,6 +13,7 @@ module Users
     protect_from_forgery except: %i[mocksaml bird nbp]
 
     def sso_callback
+      session[:omniauth_provider] = omniauth_provider
       # `current_user` refers to an existing user signed in before starting the SAML workflow.
       # Thus, this value is only present when adding a new identity to an authenticated account.
       if current_user.present?
@@ -65,7 +66,6 @@ module Users
       current_user.identities << user_identity
       if current_user.valid?
         set_flash(:notice, 'devise.omniauth_callbacks.success')
-        session[:omniauth_provider] = omniauth_provider
       else
         set_flash(:error, 'devise.omniauth_callbacks.failure', reason: current_user.errors.full_messages.join(', '))
       end
@@ -86,8 +86,6 @@ module Users
     end
 
     def register_new_user # rubocop:disable Metrics/AbcSize
-      session[:omniauth_provider] = omniauth_provider
-
       if omniauth_provider == 'nbp'
         # go through NBP wallet connection process to create new account
         redirect_to nbp_wallet_connect_users_path
