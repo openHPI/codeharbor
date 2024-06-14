@@ -10,7 +10,7 @@ module AuthenticatedUrlHelper
       query_params.merge!(parameters)
 
       # Add the query string back to the URL
-      parsed_url.query = URI.encode_www_form(query_params)
+      parsed_url.query = URI.encode_www_form(query_params).presence
 
       # Return the full URL
       parsed_url.to_s
