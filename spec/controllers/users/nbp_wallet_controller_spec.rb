@@ -300,12 +300,49 @@ RSpec.describe Users::NbpWalletController do
       it 'does not send a confirmation mail' do
         expect { get_request }.not_to change(ActionMailer::Base, :deliveries)
       end
+
+      context 'when the RelationshipChange cannot be rejected either' do
+        before { reject_request_stub.to_timeout }
+
+        it 'does not create a user' do
+          expect { get_request }.not_to change(User, :count)
+        end
+
+        it 'creates no UserIdentities' do
+          expect { get_request }.not_to change(UserIdentity, :count)
+        end
+
+        it 'redirects to the connect page' do
+          get_request
+          expect(response).to redirect_to nbp_wallet_connect_users_path
+        end
+
+        it 'does not send a confirmation mail' do
+          expect { get_request }.not_to change(ActionMailer::Base, :deliveries)
+        end
+      end
     end
 
     context 'when an invalid role is provided' do
       before do
         stub_request(:get, "#{connector_api_url}/Relationships?status=Pending")
           .to_return(body: file_fixture('enmeshed/invalid_role_relationship.json'))
+      end
+
+      it 'does not create a user' do
+        expect { get_request }.not_to change(User, :count)
+      end
+
+      it 'redirects to the connect page' do
+        get_request
+        expect(response).to redirect_to nbp_wallet_connect_users_path
+      end
+    end
+
+    context 'when an attribute is missing' do
+      before do
+        stub_request(:get, "#{connector_api_url}/Relationships?status=Pending")
+          .to_return(body: file_fixture('enmeshed/missing_attribute_relationship.json'))
       end
 
       it 'does not create a user' do
