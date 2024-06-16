@@ -8,15 +8,13 @@ RSpec.describe Users::NbpWalletController do
   let(:connector_api_url) { "#{Settings.omniauth.nbp.enmeshed.connector_url}/api/v2" }
 
   before do
-    WebMock.disable_net_connect!
-
     stub_request(:get, "#{connector_api_url}/Account/IdentityInfo")
       .to_return(body: file_fixture('enmeshed/get_enmeshed_address.json'))
 
-    stub_request(:get, /Attributes/)
+    stub_request(:get, "#{connector_api_url}/Attributes?content.@type=IdentityAttribute&content.owner=example_enmeshed_address&content.value.@type=DisplayName")
       .to_return(body: file_fixture('enmeshed/no_existing_display_name.json'))
 
-    stub_request(:post, /Attributes/)
+    stub_request(:post, "#{connector_api_url}/Attributes")
       .to_return(body: file_fixture('enmeshed/display_name_created.json'))
 
     stub_request(:post, "#{connector_api_url}/RelationshipTemplates/Own")
@@ -84,7 +82,7 @@ RSpec.describe Users::NbpWalletController do
 
       context 'when a display name exists' do
         before do
-          stub_request(:get, /Attributes/)
+          stub_request(:get, "#{connector_api_url}/Attributes?content.@type=IdentityAttribute&content.owner=example_enmeshed_address&content.value.@type=DisplayName")
             .to_return(body: file_fixture('enmeshed/existing_display_name.json'))
         end
 
@@ -96,7 +94,7 @@ RSpec.describe Users::NbpWalletController do
 
       context 'when no display name exists' do
         before do
-          stub_request(:get, /Attributes/)
+          stub_request(:get, "#{connector_api_url}/Attributes?content.@type=IdentityAttribute&content.owner=example_enmeshed_address&content.value.@type=DisplayName")
             .to_return(body: file_fixture('enmeshed/no_existing_display_name.json'))
         end
 

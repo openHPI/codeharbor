@@ -30,6 +30,8 @@ module Users
     alias mocksaml sso_callback
 
     def deauthorize # rubocop:disable Metrics/AbcSize
+      # In case of the `nbp` provider, we remove the SAML identity only and not the `enmeshed` identity.
+      # The relationship is still established and currently non-removable by enmeshed.
       identity = current_user.identities.find_by(omniauth_provider:)
 
       if identity.nil?
@@ -80,6 +82,8 @@ module Users
       if user.errors.any?
         # i18n-tasks-use t('users.omniauth_callbacks.failure_update')
         set_flash(:alert, '.failure_update', reason: user.errors.full_messages.join(', '))
+      else
+        set_flash(:notice, 'devise.omniauth_callbacks.success')
       end
 
       sign_in_and_redirect user

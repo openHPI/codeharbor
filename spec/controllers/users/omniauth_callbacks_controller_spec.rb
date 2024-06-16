@@ -97,6 +97,11 @@ RSpec.describe Users::OmniauthCallbacksController do
           expect(response).to redirect_to root_path
         end
 
+        it 'shows a flash message' do
+          post :sso_callback
+          expect(flash[:notice]).to eq I18n.t('devise.omniauth_callbacks.success', kind: OmniAuth::Utils.camelize(omniauth_provider))
+        end
+
         it 'updates the user attributes' do
           expect { post :sso_callback }.to change { user.reload.first_name }.from(previous_first_name).to(info[:first_name])
         end

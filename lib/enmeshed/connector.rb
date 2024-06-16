@@ -8,10 +8,6 @@ module Enmeshed
     CONNECTOR_URL = Settings.omniauth&.nbp&.enmeshed&.connector_url
     DISPLAY_NAME = Settings.omniauth&.nbp&.enmeshed&.display_name
 
-    @conn = nil
-    @enmeshed_address = nil
-    @display_name_id = nil
-
     def self.create_relationship_template(nbp_uid)
       new_template = parse_result(conn.post('/api/v2/RelationshipTemplates/Own') do |req|
         req.body = RelationshipTemplate.json(nbp_uid, display_name_attribute, display_name_id)
@@ -24,10 +20,10 @@ module Enmeshed
     def self.pending_relationship_for_nbp_uid(nbp_uid)
       relationships = parse_relationships(conn.get('/api/v2/Relationships') do |req|
         req.params['status'] = 'Pending'
-      end).select(&:valid?)
-      # We want to call valid? for all relationships because it internally rejects invalid relationships
+      end)
 
-      relationships.find {|rel| rel.nbp_uid == nbp_uid }
+      # We want to call valid? for all relationships because it internally rejects invalid relationships
+      relationships.select(&:valid?).find {|rel| rel.nbp_uid == nbp_uid }
     end
 
     def self.respond_to_rel_change(relationship_id, change_id, action = 'Accept')

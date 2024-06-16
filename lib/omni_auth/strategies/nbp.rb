@@ -14,8 +14,8 @@ module OmniAuth
         configure idp_metadata
 
         # Our Service Provider has some configuration options
-        # option :certificate, File.read(Settings.omniauth.nbp.certificate)
-        # option :private_key, File.read(Settings.omniauth.nbp.private_key)
+        option :certificate, File.read(Settings.omniauth.nbp.certificate)
+        option :private_key, File.read(Settings.omniauth.nbp.private_key)
       end
     end
   end
