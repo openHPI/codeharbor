@@ -6,9 +6,10 @@ module Enmeshed
 
     attr_reader :owner, :type, :value
 
-    def initialize(type:, value:, owner: enmeshed_address)
+    def initialize(type:, value:, owner: enmeshed_address, singleton: true)
       # Only subclasses of `Enmeshed::Attribute` should be instantiated
       @owner = owner
+      @singleton = singleton
       @type = type
       @value = value
     end
@@ -18,7 +19,15 @@ module Enmeshed
     end
 
     def id
-      @id ||= fetch_existing || create!
+      @id ||= persistent_id
+    end
+
+    def persistent_id
+      return create! unless @singleton
+
+      # We need to synchronize the creation of the attribute.
+      # Otherwise, we could end up with multiple attributes with the same value.
+      self.class.synchronize { fetch_existing || create! }
     end
 
     def klass
@@ -48,6 +57,16 @@ module Enmeshed
 
     def create!
       Connector.create_attribute self
+    end
+
+    class << self
+      def mutex
+        @mutex ||= Mutex.new
+      end
+
+      def synchronize(&)
+        mutex.synchronize(&)
+      end
     end
   end
 end
