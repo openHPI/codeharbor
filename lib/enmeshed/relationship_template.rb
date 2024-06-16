@@ -91,6 +91,8 @@ module Enmeshed
       }.to_json(*)
     end
 
+    private
+
     def shared_attributes
       display_name_attribute = self.class.display_name_attribute
       [
@@ -115,8 +117,6 @@ module Enmeshed
         }
       end
     end
-
-    private
 
     def fetch_existing
       template = Connector.fetch_existing_relationship_template truncated_reference
