@@ -67,9 +67,11 @@ group :development do
   gem 'rack-mini-profiler'
   gem 'rubocop'
   gem 'rubocop-capybara'
+  gem 'rubocop-factory_bot'
   gem 'rubocop-performance'
   gem 'rubocop-rails'
   gem 'rubocop-rspec'
+  gem 'rubocop-rspec_rails'
   gem 'slim_lint', require: false
   gem 'web-console'
 end
