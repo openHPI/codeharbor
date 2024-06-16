@@ -7,6 +7,27 @@ module Enmeshed
     API_KEY = Settings.omniauth&.nbp&.enmeshed&.connector_api_key
     CONNECTOR_URL = Settings.omniauth&.nbp&.enmeshed&.connector_url
 
+    def self.enmeshed_address
+      return @enmeshed_address if @enmeshed_address.present?
+
+      identity = parse_result conn.get('/api/v2/Account/IdentityInfo')
+      @enmeshed_address = identity[:address]
+    end
+
+    def self.create_attribute(attribute)
+      parse_result(conn.post('/api/v2/Attributes') do |req|
+        req.body = {content: attribute.to_h}.to_json
+      end)[:id]
+    end
+
+    def self.fetch_existing_attribute(attribute) # rubocop:disable Metrics/AbcSize
+      parse_result(conn.get('/api/v2/Attributes') do |req|
+        req.params['content.@type'] = attribute.klass
+        req.params['content.owner'] = attribute.owner
+        req.params['content.value.@type'] = attribute.type
+      end).find {|attr| attr.dig(:content, :value, :value) == attribute.value }&.dig(:id)
+    end
+
     def self.create_relationship_template(nbp_uid)
       new_template = parse_result(conn.post('/api/v2/RelationshipTemplates/Own') do |req|
         req.body = RelationshipTemplate.json(nbp_uid)
@@ -69,27 +90,6 @@ module Enmeshed
       Faraday.new(CONNECTOR_URL, headers:)
     end
     private_class_method :init_conn
-
-    def self.enmeshed_address
-      return @enmeshed_address if @enmeshed_address.present?
-
-      identity = parse_result conn.get('/api/v2/Account/IdentityInfo')
-      @enmeshed_address = identity[:address]
-    end
-
-    def self.create_attribute(attribute)
-      parse_result(conn.post('/api/v2/Attributes') do |req|
-        req.body = {content: attribute.to_h}.to_json
-      end)[:id]
-    end
-
-    def self.fetch_existing_attribute(attribute) # rubocop:disable Metrics/AbcSize
-      parse_result(conn.get('/api/v2/Attributes') do |req|
-        req.params['content.@type'] = attribute.klass
-        req.params['content.owner'] = attribute.owner
-        req.params['content.value.@type'] = attribute.type
-      end).find {|attr| attr.dig(:content, :value, :value) == attribute.value }&.dig(:id)
-    end
 
     def self.headers
       {'X-API-KEY': API_KEY, 'content-type': 'application/json', accept: 'application/json'}
