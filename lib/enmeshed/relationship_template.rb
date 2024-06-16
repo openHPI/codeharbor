@@ -76,6 +76,11 @@ module Enmeshed
       @display_name_attribute ||= Attribute::Identity.new(type: 'DisplayName', value: DISPLAY_NAME)
     end
 
+    def self.allow_certificate_request
+      # i18n-tasks-use t('users.nbp_wallet.enmeshed.AllowCertificateRequest')
+      @allow_certificate_request ||= Attribute::Relationship.new(type: 'ProprietaryBoolean', key: 'AllowCertificateRequest', value: true)
+    end
+
     def to_json(*)
       {
         maxNumberOfAllocations: 1,
@@ -85,7 +90,7 @@ module Enmeshed
           '@type': 'RelationshipTemplateContent',
           onNewRelationship: {
             '@type': 'Request',
-            items: shared_attributes + required_attribute_queries,
+            items: shared_attributes + relationship_attributes + required_attribute_queries,
           },
         },
       }.to_json(*)
@@ -103,6 +108,20 @@ module Enmeshed
           sourceAttributeId: display_name_attribute.id,
         },
       ]
+    end
+
+    def relationship_attributes
+      if Settings.omniauth&.nbp&.enmeshed&.allow_certificate_request
+        [
+          {
+            '@type': 'CreateAttributeRequestItem',
+            mustBeAccepted: true,
+            attribute: self.class.allow_certificate_request.to_h,
+          },
+        ]
+      else
+        []
+      end
     end
 
     def required_attribute_queries

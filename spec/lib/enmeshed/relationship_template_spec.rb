@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Enmeshed::RelationshipTemplate do
   let(:connector_api_url) { "#{Settings.omniauth.nbp.enmeshed.connector_url}/api/v2" }
+  let(:get_relationship_templates_stub) { stub_request(:get, "#{connector_api_url}/RelationshipTemplates?isOwn=true") }
 
   before do
     allow(User).to receive(:omniauth_providers).and_return([:nbp])
@@ -30,7 +31,6 @@ RSpec.describe Enmeshed::RelationshipTemplate do
 
       context 'when fetching details is enabled' do
         let(:skip_fetch) { false }
-        let(:get_relationship_templates_stub) { stub_request(:get, "#{connector_api_url}/RelationshipTemplates?isOwn=true") }
 
         before do
           stub_request(:get, "#{connector_api_url}/RelationshipTemplates?isOwn=true")
@@ -70,6 +70,29 @@ RSpec.describe Enmeshed::RelationshipTemplate do
             expect { new_template }.to raise_error(Faraday::ConnectionFailed)
           end
         end
+      end
+    end
+  end
+
+  describe '#to_json' do
+    context 'when certificate requests are enabled' do
+      subject(:template) { described_class.new(truncated_reference: 'example_truncated_reference') }
+
+      before do
+        stub_request(:get, "#{connector_api_url}/Account/IdentityInfo")
+          .to_return(body: file_fixture('enmeshed/get_enmeshed_address.json'))
+
+        stub_request(:get, "#{connector_api_url}/Attributes?content.@type=IdentityAttribute&content.owner=example_enmeshed_address&content.value.@type=DisplayName")
+          .to_return(body: file_fixture('enmeshed/existing_display_name.json'))
+
+        get_relationship_templates_stub.to_return(body: file_fixture('enmeshed/no_relationship_templates_yet.json'))
+
+        allow(Settings.omniauth.nbp.enmeshed).to receive(:allow_certificate_request).and_return(true)
+      end
+
+      it 'returns the expected JSON' do
+        expect(described_class).to receive(:allow_certificate_request).and_call_original
+        expect(template.to_json).to include('CreateAttributeRequestItem')
       end
     end
   end

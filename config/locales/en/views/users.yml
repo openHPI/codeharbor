@@ -19,6 +19,8 @@ en:
           title: Privacy Policy
         qr_code_alt_text: 'QR Code to be scanned with the ''Mein Bildungsraum: Wallet'' app'
         regenerate_code: Refresh Code
+      enmeshed:
+        AllowCertificateRequest: Allow certificate request
     registrations:
       avatar_form:
         remove_avatar: Remove Avatar

@@ -19,6 +19,8 @@ de:
           title: Datenschutz
         qr_code_alt_text: 'QR Code, der mit der ''Mein Bildungsraum: Wallet'' App gescannt werden kann'
         regenerate_code: Code erneuern
+      enmeshed:
+        AllowCertificateRequest: Zertifikatsanfragen erlauben
     registrations:
       avatar_form:
         remove_avatar: Profilbild entfernen

@@ -14,6 +14,7 @@ omniauth:
       connector_url: 'https://enmeshed-connector.example.com:80'
       connector_api_key: myapikey
       display_name: CodeHarbor
+      allow_certificate_request: false
     enable: false
     certificate: ~
     private_key: ~
