@@ -11,7 +11,7 @@ class LabelsController < ApplicationController
       render json: @label.to_h
     else
       flash.now[:alert] = @label.errors.full_messages
-      render json: @label.errors.full_messages, status: :unprocessable_entity
+      render json: @label.errors.full_messages, status: :unprocessable_content
     end
   end
 
@@ -28,11 +28,11 @@ class LabelsController < ApplicationController
       Label.find(label_ids.first).update!(name: params[:new_label_name], tasks:)
     rescue ActiveRecord::RecordNotFound => e
       flash.now[:alert] = e.message
-      render json: e.message, status: :unprocessable_entity
+      render json: e.message, status: :unprocessable_content
       raise ActiveRecord::Rollback
     rescue ActiveRecord::RecordNotSaved, ActiveRecord::RecordNotDestroyed, ActiveRecord::RecordInvalid => e
       flash.now[:alert] = e.record.errors.full_messages
-      render json: e.record.errors.full_messages, status: :unprocessable_entity
+      render json: e.record.errors.full_messages, status: :unprocessable_content
       raise ActiveRecord::Rollback
     end
   end

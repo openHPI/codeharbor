@@ -111,7 +111,7 @@ RSpec.describe LabelsController do
       shared_examples 'error and flash message' do
         it 'returns error' do
           merge_request
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it 'sets flash message' do

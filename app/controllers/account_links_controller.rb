@@ -28,7 +28,7 @@ class AccountLinksController < ApplicationController
         format.json { render :show, status: :created, location: @account_link }
       else
         format.html { render :new }
-        format.json { render json: @account_link.errors, status: :unprocessable_entity }
+        format.json { render json: @account_link.errors, status: :unprocessable_content }
       end
     end
   end
@@ -40,7 +40,7 @@ class AccountLinksController < ApplicationController
         format.json { render :show, status: :ok, location: @account_link }
       else
         format.html { render :edit }
-        format.json { render json: @account_link.errors, status: :unprocessable_entity }
+        format.json { render json: @account_link.errors, status: :unprocessable_content }
       end
     end
   end
