@@ -43,13 +43,10 @@ module Enmeshed
       end).find {|template| template[:truncatedReference] == truncated_reference }
     end
 
-    def self.pending_relationship_for_nbp_uid(nbp_uid)
-      relationships = parse_relationships(conn.get('/api/v2/Relationships') do |req|
+    def self.pending_relationships
+      parse_result(conn.get('/api/v2/Relationships') do |req|
         req.params['status'] = 'Pending'
       end)
-
-      # We want to call valid? for all relationships because it internally rejects invalid relationships
-      relationships.select(&:valid?).find {|rel| rel.nbp_uid == nbp_uid }
     end
 
     def self.respond_to_rel_change(relationship_id, change_id, action = 'Accept')
@@ -77,11 +74,6 @@ module Enmeshed
       raise ConnectorError.new("Enmeshed connector response could not be parsed. Received: #{response.body}")
     end
     private_class_method :parse_result
-
-    def self.parse_relationships(response)
-      parse_result(response).map {|relationship_json| Relationship.new(relationship_json) }
-    end
-    private_class_method :parse_relationships
 
     def self.conn
       @conn ||= init_conn

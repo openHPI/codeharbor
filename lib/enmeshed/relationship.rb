@@ -12,6 +12,13 @@ module Enmeshed
       @relationship_changes = relationship_json[:changes] || []
     end
 
+    def self.pending_for_nbp_uid(nbp_uid)
+      relationships = Connector.pending_relationships.map {|relationship_json| Relationship.new(relationship_json) }
+
+      # We want to call valid? for all relationships because it internally rejects invalid relationships
+      relationships.select(&:valid?).find {|rel| rel.nbp_uid == nbp_uid }
+    end
+
     def peer
       @json[:peer]
     end
