@@ -28,13 +28,19 @@ module Enmeshed
       end).find {|attr| attr.dig(:content, :value, :value) == attribute.value }&.dig(:id)
     end
 
-    def self.create_relationship_template(nbp_uid)
+    def self.create_relationship_template(relationship_template)
       new_template = parse_result(conn.post('/api/v2/RelationshipTemplates/Own') do |req|
-        req.body = RelationshipTemplate.json(nbp_uid)
+        req.body = relationship_template.to_json
       end)
 
       Rails.logger.debug { "Enmeshed::ConnectorApi RelationshipTemplate created: #{new_template[:truncatedReference]}" }
-      RelationshipTemplate.new(new_template[:truncatedReference])
+      new_template[:truncatedReference]
+    end
+
+    def self.fetch_existing_relationship_template(truncated_reference)
+      parse_result(conn.get('/api/v2/RelationshipTemplates') do |req|
+        req.params['isOwn'] = true
+      end).find {|template| template[:truncatedReference] == truncated_reference }
     end
 
     def self.pending_relationship_for_nbp_uid(nbp_uid)

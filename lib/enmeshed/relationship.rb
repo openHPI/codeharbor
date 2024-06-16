@@ -4,8 +4,11 @@ module Enmeshed
   class Relationship
     STATUS_GROUP_SYNONYMS = YAML.safe_load_file(Rails.root.join('lib/enmeshed/status_group_synonyms.yml'))
 
+    delegate :expires_at, :nbp_uid, :truncated_reference, to: :@template
+
     def initialize(relationship_json)
       @json = relationship_json
+      @template = RelationshipTemplate.new(content: relationship_json[:template])
       @relationship_changes = relationship_json[:changes] || []
     end
 
@@ -19,16 +22,12 @@ module Enmeshed
 
     def valid?
       # templates can only be scanned in their validity period but can theoretically be submitted infinitely late so we sanitize here
-      if DateTime.parse(@json[:template][:expiresAt]) < (RelationshipTemplate::VALIDITY_PERIOD * 2).ago
+      if expires_at < (RelationshipTemplate::VALIDITY_PERIOD * 2).ago
         reject!
         false
       else
         true
       end
-    end
-
-    def nbp_uid
-      @nbp_uid ||= @json.dig(:template, :content, :metadata, :nbp_uid)
     end
 
     def id
@@ -39,7 +38,7 @@ module Enmeshed
       raise ConnectorError('Relationship should exactly one RelationshipChange') if @relationship_changes.size != 1
 
       Rails.logger.debug do
-        "Enmeshed::ConnectorApi accepting Relationship for template #{@json[:template][:truncatedReference]}"
+        "Enmeshed::ConnectorApi accepting Relationship for template #{truncated_reference}"
       end
 
       Connector.respond_to_rel_change(id, @relationship_changes.first[:id], 'Accept')
@@ -47,7 +46,7 @@ module Enmeshed
 
     def reject!
       Rails.logger.debug do
-        "Enmeshed::ConnectorApi rejecting Relationship for template #{@json[:template][:truncatedReference]}"
+        "Enmeshed::ConnectorApi rejecting Relationship for template #{truncated_reference}"
       end
 
       @json[:changes].each do |change|

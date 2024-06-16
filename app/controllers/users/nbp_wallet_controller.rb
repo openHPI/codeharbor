@@ -11,7 +11,7 @@ module Users
         redirect_to nbp_wallet_finalize_users_path and return
       end
 
-      @template = Enmeshed::Connector.create_relationship_template(@provider_uid)
+      @template = Enmeshed::RelationshipTemplate.new(nbp_uid: @provider_uid).create!
     rescue Enmeshed::ConnectorError, Faraday::Error => e
       Sentry.capture_exception(e)
       Rails.logger.debug { e }
@@ -19,7 +19,8 @@ module Users
     end
 
     def qr_code
-      send_data Enmeshed::RelationshipTemplate.new(params[:truncated_reference]).qr_code, type: 'image/png'
+      truncated_reference = params[:truncated_reference]
+      send_data Enmeshed::RelationshipTemplate.new(truncated_reference:, skip_fetch: true).qr_code, type: 'image/png'
     end
 
     def relationship_status
