@@ -177,6 +177,28 @@ RSpec.describe Users::NbpWalletController do
     end
   end
 
+  describe 'GET #qr_code' do
+    subject(:get_request) { get :qr_code, params: {truncated_reference:} }
+
+    let(:truncated_reference) { 'example_truncated_reference' }
+    let(:qr_code) { RQRCode::QRCode.new("nmshd://tr##{truncated_reference}").as_png(border_modules: 0) }
+
+    it 'returns a png image' do
+      get_request
+      expect(response.content_type).to eq 'image/png'
+    end
+
+    it 'initializes a RelationshipTemplate' do
+      expect(Enmeshed::RelationshipTemplate).to receive(:new).with(truncated_reference:, skip_fetch: true).and_call_original
+      get_request
+    end
+
+    it 'sends the qr code' do
+      get_request
+      expect(response.body).to eq qr_code.to_s
+    end
+  end
+
   describe 'GET #finalize' do
     subject(:get_request) { get :finalize }
 
