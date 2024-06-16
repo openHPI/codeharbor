@@ -68,6 +68,10 @@ module Enmeshed
       expires_at - Time.zone.now
     end
 
+    def self.create!(nbp_uid:)
+      new(nbp_uid:).create!
+    end
+
     def self.display_name_attribute
       @display_name_attribute ||= Attribute::Identity.new(type: 'DisplayName', value: DISPLAY_NAME)
     end
