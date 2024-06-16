@@ -114,7 +114,7 @@ RSpec.describe Users::NbpWalletController do
     before { session[:relationship_template_id] = 'example_relationship_template_id' }
 
     context 'when the connector is down' do
-      before { stub_request(:get, "#{connector_api_url}/Relationships?status=Pending") }
+      before { stub_request(:get, "#{connector_api_url}/Relationships?status=Pending").to_timeout }
 
       it 'redirects to the connect page' do
         get_request
@@ -177,7 +177,7 @@ RSpec.describe Users::NbpWalletController do
     end
   end
 
-  describe '#finalize' do
+  describe 'GET #finalize' do
     subject(:get_request) { get :finalize }
 
     let(:reject_request_stub) { stub_request(:put, "#{connector_api_url}/Relationships/RELoi9IL4adMbj92K8dn/Changes/RCHNFJ9JD2LayPxn79nO/Reject") }
@@ -260,7 +260,7 @@ RSpec.describe Users::NbpWalletController do
     end
 
     context 'when the RelationshipChange cannot be accepted' do
-      before { accept_request_stub.to_timeout }
+      before { accept_request_stub.to_return(status: 500) }
 
       it 'does not create a user' do
         expect { get_request }.not_to change(User, :count)
