@@ -5,6 +5,7 @@ module Enmeshed
     STATUS_GROUP_SYNONYMS = YAML.safe_load_file(Rails.root.join('lib/enmeshed/status_group_synonyms.yml'))
 
     delegate :expires_at, :nbp_uid, :truncated_reference, to: :@template
+    attr_reader :relationship_changes
 
     def initialize(relationship_json)
       @json = relationship_json
@@ -42,13 +43,13 @@ module Enmeshed
     end
 
     def accept!
-      raise ConnectorError('Relationship should exactly one RelationshipChange') if @relationship_changes.size != 1
+      raise ConnectorError('Relationship should exactly one RelationshipChange') if relationship_changes.size != 1
 
       Rails.logger.debug do
         "Enmeshed::ConnectorApi accepting Relationship for template #{truncated_reference}"
       end
 
-      Connector.respond_to_rel_change(id, @relationship_changes.first[:id], 'Accept')
+      Connector.respond_to_rel_change(id, relationship_changes.first[:id], 'Accept')
     end
 
     def reject!
@@ -67,9 +68,9 @@ module Enmeshed
       # Since the RelationshipTemplate has a `maxNumberOfAllocations` attribute set to 1,
       # you cannot request multiple Relationships with the same template.
       # Further, RelationshipChanges should not be possible before accepting the Relationship.
-      raise ConnectorError('Relationship should have exactly one RelationshipChange') if @relationship_changes.size != 1
+      raise ConnectorError('Relationship should have exactly one RelationshipChange') if relationship_changes.size != 1
 
-      change_response_items = @relationship_changes.first.dig(:request, :content, :response, :items)
+      change_response_items = relationship_changes.first.dig(:request, :content, :response, :items)
 
       user_provided_attributes = change_response_items.select {|item| item[:@type] == 'ReadAttributeAcceptResponseItem' }
 
@@ -89,7 +90,7 @@ module Enmeshed
         status_group: parse_status_group(enmeshed_user_attributes['AffiliationRole'].downcase),
       }
     rescue NoMethodError
-      raise ConnectorError.new("Could not parse userdata in relationship change: #{@relationship_changes.first}")
+      raise ConnectorError.new("Could not parse userdata in relationship change: #{relationship_changes.first}")
     end
 
     def parse_status_group(affiliation_role)
