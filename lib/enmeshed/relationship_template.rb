@@ -7,6 +7,8 @@ module Enmeshed
     # resulting in the app silently doing nothing. CodeHarbor would still accept Relationships for expired templates if sent by the app.
     # To minimize the risk of a template expiring before submission, we set the validity to 12 hours.
     VALIDITY_PERIOD = 12.hours
+    # The display name of the service as shown in the enmeshed app.
+    DISPLAY_NAME = Settings.omniauth&.nbp&.enmeshed&.display_name
     # These attributes are mandatory in the app and must be provided.
     # See https://enmeshed.eu/integrate/attribute-values for more attributes.
     REQUIRED_ATTRIBUTES = %w[GivenName Surname EMailAddress AffiliationRole].freeze
@@ -37,7 +39,11 @@ module Enmeshed
       Rails.application.routes.url_helpers.nbp_wallet_qr_code_users_path(truncated_reference:)
     end
 
-    def self.json(nbp_uid, display_name_attribute, display_name_id)
+    def self.display_name_attribute
+      @display_name_attribute ||= Attribute::Identity.new(type: 'DisplayName', value: DISPLAY_NAME)
+    end
+
+    def self.json(nbp_uid)
       {
         maxNumberOfAllocations: 1,
         expiresAt: VALIDITY_PERIOD.from_now,
@@ -50,16 +56,16 @@ module Enmeshed
               {
                 '@type': 'ShareAttributeRequestItem',
                 mustBeAccepted: true,
-                attribute: display_name_attribute,
-                sourceAttributeId: display_name_id,
+                attribute: display_name_attribute.to_h,
+                sourceAttributeId: display_name_attribute.id,
               },
-            ] + required_attributes_template,
+            ] + required_attribute_queries,
           },
         },
       }.to_json
     end
 
-    def self.required_attributes_template
+    def self.required_attribute_queries
       REQUIRED_ATTRIBUTES.map do |attr|
         {
           '@type': 'ReadAttributeRequestItem',

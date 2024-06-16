@@ -6,11 +6,10 @@ module Enmeshed
   class Connector
     API_KEY = Settings.omniauth&.nbp&.enmeshed&.connector_api_key
     CONNECTOR_URL = Settings.omniauth&.nbp&.enmeshed&.connector_url
-    DISPLAY_NAME = Settings.omniauth&.nbp&.enmeshed&.display_name
 
     def self.create_relationship_template(nbp_uid)
       new_template = parse_result(conn.post('/api/v2/RelationshipTemplates/Own') do |req|
-        req.body = RelationshipTemplate.json(nbp_uid, display_name_attribute, display_name_id)
+        req.body = RelationshipTemplate.json(nbp_uid)
       end)
 
       Rails.logger.debug { "Enmeshed::ConnectorApi RelationshipTemplate created: #{new_template[:truncatedReference]}" }
@@ -57,25 +56,13 @@ module Enmeshed
     end
     private_class_method :parse_relationships
 
-    def self.display_name_attribute
-      {
-        '@type': 'IdentityAttribute',
-        owner: enmeshed_address,
-        value: {
-          '@type': 'DisplayName',
-          value: DISPLAY_NAME,
-        },
-      }
-    end
-    private_class_method :display_name_attribute
-
     def self.conn
       @conn ||= init_conn
     end
     private_class_method :conn
 
     def self.init_conn
-      if User.omniauth_providers.exclude?(:nbp) || CONNECTOR_URL.nil? || API_KEY.nil? || DISPLAY_NAME.nil?
+      if User.omniauth_providers.exclude?(:nbp) || CONNECTOR_URL.nil? || API_KEY.nil? || RelationshipTemplate::DISPLAY_NAME.nil?
         raise ConnectorError.new('NBP provider or enmeshed connector not configured as expected')
       end
 
@@ -89,28 +76,20 @@ module Enmeshed
       identity = parse_result conn.get('/api/v2/Account/IdentityInfo')
       @enmeshed_address = identity[:address]
     end
-    private_class_method :enmeshed_address
 
-    def self.display_name_id
-      @display_name_id ||= existing_display_name_attr || create_display_name_attr
-    end
-    private_class_method :display_name_id
-
-    def self.create_display_name_attr
+    def self.create_attribute(attribute)
       parse_result(conn.post('/api/v2/Attributes') do |req|
-        req.body = {content: display_name_attribute}.to_json
+        req.body = {content: attribute.to_h}.to_json
       end)[:id]
     end
-    private_class_method :create_display_name_attr
 
-    def self.existing_display_name_attr
+    def self.fetch_existing_attribute(attribute) # rubocop:disable Metrics/AbcSize
       parse_result(conn.get('/api/v2/Attributes') do |req|
-        req.params['content.@type'] = 'IdentityAttribute'
-        req.params['content.owner'] = enmeshed_address
-        req.params['content.value.@type'] = 'DisplayName'
-      end).find {|attr| attr.dig(:content, :value, :value) == DISPLAY_NAME }&.dig(:id)
+        req.params['content.@type'] = attribute.klass
+        req.params['content.owner'] = attribute.owner
+        req.params['content.value.@type'] = attribute.type
+      end).find {|attr| attr.dig(:content, :value, :value) == attribute.value }&.dig(:id)
     end
-    private_class_method :existing_display_name_attr
 
     def self.headers
       {'X-API-KEY': API_KEY, 'content-type': 'application/json', accept: 'application/json'}

@@ -60,7 +60,9 @@ RSpec.describe Users::NbpWalletController do
 
     context 'when the display name is cached' do
       before do
-        Enmeshed::Connector.instance_variable_set(:@display_name_id, 'cached_id')
+        display_name_attribute = Enmeshed::Attribute::Identity.new(type: 'DisplayName', value: 'cached_display_name')
+        display_name_attribute.instance_variable_set(:@id, 'cached_id')
+        Enmeshed::RelationshipTemplate.instance_variable_set(:@display_name_attribute, display_name_attribute)
 
         stub_request(:get, "#{connector_api_url}/Relationships?status=Pending")
           .to_return(body: file_fixture('enmeshed/no_relationships_yet.json'))
@@ -68,13 +70,13 @@ RSpec.describe Users::NbpWalletController do
 
       it 'does not set a new display name id' do
         get_request
-        expect(Enmeshed::Connector.instance_variable_get(:@display_name_id)).to eq('cached_id')
+        expect(Enmeshed::RelationshipTemplate.display_name_attribute.id).to eq('cached_id')
       end
     end
 
     context 'when no display name is cached' do
       before do
-        Enmeshed::Connector.instance_variable_set(:@display_name_id, nil)
+        Enmeshed::RelationshipTemplate.instance_variable_set(:@display_name_attribute, nil)
 
         stub_request(:get, "#{connector_api_url}/Relationships?status=Pending")
           .to_return(body: file_fixture('enmeshed/no_relationships_yet.json'))
@@ -88,7 +90,7 @@ RSpec.describe Users::NbpWalletController do
 
         it 'sets the display name id to the existing one' do
           get_request
-          expect(Enmeshed::Connector.instance_variable_get(:@display_name_id)).to eq('ATT_id_of_existing_display_name')
+          expect(Enmeshed::RelationshipTemplate.display_name_attribute.id).to eq('ATT_id_of_existing_display_name')
         end
       end
 
@@ -100,7 +102,7 @@ RSpec.describe Users::NbpWalletController do
 
         it 'creates a new display name' do
           get_request
-          expect(Enmeshed::Connector.instance_variable_get(:@display_name_id)).to eq('ATT_id_of_new_display_name')
+          expect(Enmeshed::RelationshipTemplate.display_name_attribute.id).to eq('ATT_id_of_new_display_name')
         end
       end
     end
