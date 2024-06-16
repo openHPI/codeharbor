@@ -36,48 +36,51 @@ module Users
     end
 
     def finalize
-      @relationship = Enmeshed::Relationship.pending_for_nbp_uid(@provider_uid)
-      abort_and_refresh and return if @relationship.blank?
+      relationship = Enmeshed::Relationship.pending_for_nbp_uid(@provider_uid)
+      abort_and_refresh(relationship) and return if relationship.blank?
 
-      accept_and_create_user
+      accept_and_create_user(relationship)
     rescue Enmeshed::ConnectorError, Faraday::Error => e
       Sentry.capture_exception(e)
       Rails.logger.debug { e }
-      abort_and_refresh
+      abort_and_refresh(relationship)
     end
 
     private
 
-    def accept_and_create_user # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      if @relationship.userdata[:status_group].blank?
-        abort_and_refresh(t('common.errors.model_not_created', model: User.model_name.human,
-          errors: t('users.nbp_wallet.unrecognized_role'))) and return
+    def accept_and_create_user(relationship) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      if relationship.userdata[:status_group].blank?
+        abort_and_refresh(
+          relationship,
+          t('common.errors.model_not_created', model: User.model_name.human, errors: t('users.nbp_wallet.unrecognized_role'))
+        ) and return
       end
 
-      @user = User.new_from_omniauth(@relationship.userdata, 'nbp', @provider_uid)
-      @user.identities << UserIdentity.new(omniauth_provider: 'enmeshed', provider_uid: @relationship.peer)
-      @user.skip_confirmation_notification!
+      user = User.new_from_omniauth(relationship.userdata, 'nbp', @provider_uid)
+      user.identities << UserIdentity.new(omniauth_provider: 'enmeshed', provider_uid: relationship.peer)
+      user.skip_confirmation_notification!
 
       ApplicationRecord.transaction do
-        unless @user.save
-          abort_and_refresh(t('common.errors.model_not_created', model: User.model_name.human,
-            errors: @user.errors.full_messages.join(', ')))
-          raise ActiveRecord::Rollback
+        unless user.save
+          abort_and_refresh(
+            relationship,
+            t('common.errors.model_not_created', model: User.model_name.human, errors: user.errors.full_messages.join(', '))
+          ) and raise ActiveRecord::Rollback
         end
 
-        if @relationship.accept!
-          @user.send_confirmation_instructions
+        if relationship.accept!
+          user.send_confirmation_instructions
           redirect_to home_index_path, notice: t('devise.registrations.signed_up_but_unconfirmed')
         else
-          abort_and_refresh
+          abort_and_refresh(relationship)
           raise ActiveRecord::Rollback
         end
       end
     end
 
-    def abort_and_refresh(reason = t('common.errors.generic'))
+    def abort_and_refresh(relationship, reason = t('common.errors.generic'))
       Rails.logger.debug { "NbpWalletController calling abort_and_refresh() due to: #{reason}" }
-      @relationship&.reject!
+      relationship&.reject!
     rescue Enmeshed::ConnectorError, Faraday::Error => e
       # We still need to capture and handle an HTTP error caused by rejecting the template.
       Sentry.capture_exception(e)
