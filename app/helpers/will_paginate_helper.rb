@@ -5,7 +5,7 @@ module WillPaginateHelper
     def prepare(collection, options, template)
       options[:params] ||= {}
       options[:params]['_'] = nil
-      super(collection, options, template)
+      super
     end
 
     protected
