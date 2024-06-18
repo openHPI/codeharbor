@@ -10,7 +10,7 @@ de:
       error: 'Der Export der Aufgabe (%{title}) ist fehlgeschlagen. <br> Fehler: %{error}'
       success: Aufgabe (%{title}) erfolgreich exportiert.
     import:
-      internal_error: Bei der Importierung der Aufgabe ist ein interner Fehler aufgetreten.
+      internal_error: Beim Import dieser Aufgabe ist auf CodeHarbor ein interner Fehler aufgetreten.
     import_confirm:
       error: 'Der Import der Aufgabe (%{title}) ist fehlgeschlagen. <br> Fehler: %{error}'
       success: Aufgabe (%{title}) erfolgreich importiert.
