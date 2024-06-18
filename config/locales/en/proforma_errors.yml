@@ -1,4 +1,7 @@
 ---
 en:
   proforma_errors:
-    version not supported: The version of this ProformaXML document is not supported
+    import: An error occurred while importing your ProformaXML ZIP file.
+    import_default: "%{error}"
+    no task_xml found: No task.xml could be found in the supplied ZIP file.
+    version not supported: The version of this ProformaXML document is not supported.

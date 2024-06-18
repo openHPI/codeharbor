@@ -101,7 +101,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
       format.js { render layout: false }
     end
   rescue ProformaXML::ProformaError => e
-    messages = JSON.parse(e.message).map {|message| t("proforma_errors.#{message}") }.join(', ')
+    messages = prettify_import_errors(e)
     flash[:alert] = messages
     render json: {
       status: 'failure',
@@ -220,6 +220,13 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   end
 
   private
+
+  def prettify_import_errors(error)
+    message = "#{t('proforma_errors.import')}<br>"
+    message + JSON.parse(error.message).map do |msg|
+                t("proforma_errors.#{msg}", default: t('proforma_errors.import_default', error: msg))
+              end.join('<br>')
+  end
 
   def load_and_authorize_task
     @task = Task.find(params[:id])
