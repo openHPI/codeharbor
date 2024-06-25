@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Task do
+  include ActiveJob::TestHelper
+
   describe '#valid?' do
     it { is_expected.to validate_presence_of(:title) }
     it { is_expected.to validate_uniqueness_of(:uuid).case_insensitive }
@@ -107,7 +109,7 @@ RSpec.describe Task do
     end
 
     it 'has the correct parent_uuid' do
-      expect(duplicate.parent_uuid).to be task.uuid
+      expect(duplicate.parent_uuid).to eq task.uuid
     end
 
     it 'has the same attributes' do
@@ -185,6 +187,87 @@ RSpec.describe Task do
       expect(collection.tasks).not_to be_empty
       destroy
       expect(collection.reload.tasks).to be_empty
+    end
+
+    it 'enqueues an NbpSyncJob' do
+      expect { destroy }.to have_enqueued_job(NbpSyncJob).with(task.uuid)
+    end
+  end
+
+  describe '#update' do
+    subject(:update) { task.update(new_attributes) }
+
+    let!(:task) { create(:task, access_level:) }
+
+    context 'when updating a public task' do
+      let(:access_level) { :public }
+      let(:new_attributes) { {title: 'some new title'} }
+
+      it 'enqueues an NbpSyncJob' do
+        expect { update }.to have_enqueued_job(NbpSyncJob).with(task.uuid)
+      end
+
+      context 'when updating the uuid' do
+        let(:new_attributes) { {uuid: Random.uuid} }
+        let!(:old_uuid) { task.uuid }
+
+        it 'enqueues an NbpSyncJob for the old uuid' do
+          expect { update }.to have_enqueued_job(NbpSyncJob).with(old_uuid)
+        end
+      end
+    end
+
+    context 'when updating a private task' do
+      let(:access_level) { :private }
+      let(:new_attributes) { {title: 'some new title'} }
+
+      it 'does not enqueue an NbpSyncJob' do
+        expect { update }.not_to have_enqueued_job(NbpSyncJob)
+      end
+
+      context 'when updating the uuid' do
+        let(:new_attributes) { {uuid: Random.uuid} }
+
+        it 'does not enqueue an NbpSyncJob' do
+          expect { update }.not_to have_enqueued_job(NbpSyncJob)
+        end
+      end
+    end
+
+    context 'when changing the access level from private to public' do
+      let(:access_level) { :private }
+      let(:new_attributes) { {access_level: :public} }
+
+      it 'enqueues an NbpSyncJob' do
+        expect { update }.to have_enqueued_job(NbpSyncJob).with(task.uuid)
+      end
+
+      context 'when also updating the uuid' do
+        let(:new_attributes) { {access_level: :public, uuid: Random.uuid} }
+        let!(:old_uuid) { task.uuid }
+
+        it 'does not enqueue an NbpSyncJob for the old uuid' do
+          expect { update }.not_to have_enqueued_job(NbpSyncJob).with(old_uuid)
+        end
+      end
+    end
+
+    context 'when changing the access level from public to private' do
+      let(:access_level) { :public }
+      let(:new_attributes) { {access_level: :private} }
+
+      it 'enqueues an NbpSyncJob' do
+        expect { update }.to have_enqueued_job(NbpSyncJob).with(task.uuid)
+      end
+
+      context 'when also updating the uuid' do
+        let(:new_attributes) { {access_level: :private, uuid: Random.uuid} }
+        let!(:old_uuid) { task.uuid }
+
+        it 'enqueues an NbpSyncJob for the old uuid' do
+          expect { update }.to have_enqueued_job(NbpSyncJob).with(old_uuid)
+        end
+      end
     end
   end
 end
