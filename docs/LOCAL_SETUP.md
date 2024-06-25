@@ -181,7 +181,9 @@ rake db:setup
 
 ### Start CodeHarbor
 
-For the development environment, two server processes are required: the Rails server for the main application and a Webpack server providing JavaScript and CSS assets.
+For the development environment, three server processes are required: 
+the Rails server for the main application, a Webpack server providing JavaScript and CSS assets
+and the Solid Queue supervisor to process background jobs.
 
 1. Webpack dev server:
 
@@ -200,6 +202,12 @@ This will launch a dedicated server on port 3045 (default setting) and allow inc
   ```
 
 This will launch the CodeHarbor web application server on port 7500 (default setting) and allow incoming connections from your browser.
+
+3. Solid Queue supervisor:
+
+  ```shell
+  bundle exec rake solid_queue:start
+  ```
 
 **Check with:**  
 Open your web browser at <http://localhost:7500>

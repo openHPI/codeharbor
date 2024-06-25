@@ -1,0 +1,12 @@
+{
+  "total":0,
+  "offset":3,
+  "limit":100,
+  "_embedded":{
+    "nodes":[]
+  },
+  "_links":{
+    "self":null,
+    "next":null
+  }
+}
