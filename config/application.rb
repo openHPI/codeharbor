@@ -50,5 +50,8 @@ module CodeHarbor
 
     # Fix invalid Content-Type header for incoming requests made by edu-sharing.
     config.middleware.insert_before 0, Middleware::EduSharingContentType
+
+    # Configure some defaults for the Solid Queue Supervisor
+    require_relative 'solid_queue_defaults'
   end
 end
