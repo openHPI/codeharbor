@@ -19,9 +19,9 @@ class TaskContributionPolicy < ApplicationPolicy
     end
   end
 
-  # While discard_changes? and show? look similar, the difference in paraphrases position is relevant
+  # While discard_changes? and show? look similar, the difference in the position of parentheses is relevant
   # discard_changes? can only be executed while the task_contribution is pending by either the owner of the base task or the contrib author
-  # show? the author of the contrib can view it, while it is pending while the owner
+  # show? allows the owner of the base task to view it anytime. Simultaneously, the contributor can view it only while the contrib is still pending
   def discard_changes?
     task_contribution.pending? && (record_owner? || Pundit.policy(@user, base).edit?)
   end
@@ -41,7 +41,7 @@ class TaskContributionPolicy < ApplicationPolicy
   end
 
   def destroy?
-    false
+    no_one
   end
 
   private
