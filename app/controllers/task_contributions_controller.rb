@@ -49,7 +49,6 @@ class TaskContributionsController < ApplicationController
     authorize @task_contribution
 
     @task = @task_contribution.suggestion
-    render 'task_contributions/new'
   end
 
   # The function should render the edit form used by TaskController
