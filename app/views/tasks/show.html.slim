@@ -90,11 +90,12 @@
           = Task.human_attribute_name('uuid')
         .col.row-value
           = @task.uuid
-      .row
-        .col-auto.row-label
-          = Task.human_attribute_name('parent_uuid')
-        .col.row-value
-          = @task.parent_uuid
+      - unless @task.contribution?
+        .row
+          .col-auto.row-label
+            = Task.human_attribute_name('parent_uuid')
+          .col.row-value
+            = @task.parent_uuid
       .row
         .col-auto.row-label
           = Task.human_attribute_name('language')
@@ -544,7 +545,11 @@
 
     .actions.btn-group role='group'
       - if policy(@task).edit?
-        = link_to edit_task_path(@task), class: 'btn btn-important' do
+        - if @task.contribution?
+          - edit_url = edit_task_task_contribution_path(@task.parent, @task.task_contribution)
+        - else
+          - edit_url = edit_task_path(@task)
+        = link_to edit_url, class: 'btn btn-important' do
           i.fa-solid.fa-pen-to-square
           =< t('common.button.edit')
       - if policy(@task).destroy?
