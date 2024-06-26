@@ -161,7 +161,7 @@
       => Task.human_attribute_name('files')
       span.fa-solid.fa-caret-up
     - if @files.empty?
-      p style="margin-left: 10px; margin-bottom: 30px"
+      p.ms-2.mb-4
         = t('tasks.show.no_files')
     .files
       - @files.each do |file|
@@ -233,7 +233,7 @@
       => Task.human_attribute_name('tests')
       span.fa-solid.fa-caret-up
     - if @tests.empty?
-      p style="margin-left: 10px; margin-bottom: 30px"
+      p.ms-2.mb-4
         = t('tasks.show.no_tests')
     .tests
       - @tests.each do |test|
@@ -373,7 +373,7 @@
       => ModelSolution.model_name.human(count: :many)
       span.fa-solid.fa-caret-up
     - if @model_solutions.empty?
-      p style="margin-left: 10px; margin-bottom: 30px"
+      p.ms-2.mb-4
         = t('.no_model_solution_present')
     .model_solutions
       - @model_solutions.each do |model_solution|
@@ -536,7 +536,7 @@
     .expandable-panel
       = button_tag type: 'button', class: 'full-window-button show-comment-button', data: {task_id: @task.id} do
         => t('.button.show_comments')
-        span.fa-solid.fa-circle-notch.fa-spin.wait style="display:none;margin-right:5px;"
+        span.fa-solid.fa-circle-notch.fa-spin.wait.me-1 style="display:none;"
         span.fa-solid.fa-caret-down.my-caret
       .comment-box.with-borders.border-top-0 data-task=@task.id
         = form_for :comment, url: task_comments_path(@task), remote: true do |f|
@@ -578,7 +578,7 @@
 
     /= form_tag report_exercise_path(@task), id: 'report'
 
-    #page_end style="margin-top: 20px"
+    #page_end.mt-5
 
 
     = render 'import_export_dialog', title: t('.button.export_tasks')
