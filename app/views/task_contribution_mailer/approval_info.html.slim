@@ -1,5 +1,3 @@
-h3 Hello #{@contrib_author.name}
-p
-  | Your Contribution for the Task "#{@task_contrib.base.title}" was approved and merged.
-  br
-  | The task linked to your contribution is now a full duplicate and can be deleted.
+h3
+  = t('task_contributions.mailer.greeting', user: @contrib_author.name)
+p = t('task_contributions.mailer.approval_info.status_message', task: @task_contrib.base.title)
