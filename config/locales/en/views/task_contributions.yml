@@ -5,6 +5,21 @@ en:
       contribute: Contribute
       decouple: Decouple
       edit_contribution: Edit Contribution
+    mailer:
+      approval_info:
+        status_message: Your Contribution for the Task %{task} was approved and merged.
+        subject_message: Your contribution for %{task} was approved
+      contribution_request:
+        else_message: Otherwise this message can be ignored.
+        request_message: "%{contrib_author} has suggested changes for your Task %{task}."
+        review_message: If you want to review the changes or merge them, please click the link below.
+        subject_message: "%{contrib_author} wants to contribute to your Task %{task}"
+      greeting: Hello %{user}
+      rejection_info:
+        duplicate_message: The task linked to your contribution is now a full duplicate.
+        status_message: Your Contribution for the Task %{task} was rejected.
+        subject_message: Your contribution for %{task} was rejected
+        visibility_message: You may decide to change the visibility to public to let others utilize your changes.
     new:
       new_contribution: New Contribution
     status:
