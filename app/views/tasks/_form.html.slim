@@ -100,13 +100,11 @@
             = f.nested_fields_for :tests, style: 'margin-left: 10px' do |test|
               .show-table.exercise-show
                 - if test.object.new_record?
-                  - display_container = 'display: block'
                   .table-header
                     = test.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
                       i.fa-solid.fa-xmark.text-danger
                       =< t('.button.remove_test')
                 - else
-                  - display_container = 'display: none'
                   .table-header.closed.toggle-next
                     => test.object.title
                     span.fa-solid.fa-caret-down
@@ -129,13 +127,11 @@
             = f.nested_fields_for :model_solutions, style: 'margin-left: 10px' do |model_solution|
               .show-table.exercise-show
                 - if model_solution.object.new_record?
-                  - display_container = 'display: block'
                   .table-header
                     = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
                       i.fa-solid.fa-xmark.text-danger
                       =< t('.button.remove_model_solution')
                 - else
-                  - display_container = 'display: none'
                   .table-header.closed.toggle-next
                     => ModelSolution.model_name.human
                     => (model_solution.object.task.model_solutions.find_index(model_solution.object) + 1).to_s
