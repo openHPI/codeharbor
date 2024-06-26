@@ -48,6 +48,7 @@ en:
         import_zip: Import ZIP file
         new_task: New Task
       menu_button:
+        contribution: My Contributions
         group: Group Tasks
         mine: My Tasks
         public: Public
@@ -100,6 +101,9 @@ en:
       no_model_solution_present: No Model Solutions present
       no_tests: No tests included
       remove_task_from_collection_warning: Are you sure you want to remove this Task from the Collection?
+      task_contribution:
+        disabled:
+          tooltip: This feature is unavailable for task contributions.
       undefined: User undefined
       yourself: yourself
     tasks:
@@ -113,6 +117,7 @@ en:
         no_results_description: Try different options by clicking on 'Advanced' and repeating the search.
         no_tasks: You do not have tasks yet
     visibility:
+      contribution: Contribution
       label: Visibility
       private: Private
       public: Public

@@ -1,0 +1,6 @@
+h3
+  = t('task_contributions.mailer.greeting', user: @contrib_author.name)
+p = t('task_contributions.mailer.rejection_info.status_message', task: @task_contrib.base.title)
+p = t('task_contributions.mailer.rejection_info.duplicate_message')
+p = t('task_contributions.mailer.rejection_info.visibility_message')
+p = link_to 'CodeHarbor', task_url(@duplicate)

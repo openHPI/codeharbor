@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_31_160738) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_10_061157) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -169,6 +169,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_31_160738) do
     t.bigint "task_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "parent_id"
     t.index ["task_id"], name: "index_model_solutions_on_task_id"
   end
 
@@ -224,6 +225,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_31_160738) do
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
+  create_table "task_contributions", id: :serial, force: :cascade do |t|
+    t.bigint "task_id", null: false
+    t.integer "status", limit: 2, default: 0, null: false, comment: "Used as enum in Rails"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["task_id"], name: "index_task_contributions_on_task_id"
+  end
+
   create_table "task_files", force: :cascade do |t|
     t.text "content"
     t.string "path"
@@ -238,6 +247,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_31_160738) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "xml_id"
+    t.bigint "parent_id"
     t.index ["fileable_type", "fileable_id"], name: "index_task_files_on_fileable_type_and_fileable_id"
   end
 
@@ -291,6 +301,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_31_160738) do
     t.jsonb "meta_data"
     t.bigint "testing_framework_id"
     t.jsonb "configuration"
+    t.bigint "parent_id"
     t.index ["testing_framework_id"], name: "index_tests_on_testing_framework_id"
   end
 
@@ -325,7 +336,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_31_160738) do
     t.datetime "locked_at"
     t.string "preferred_locale"
     t.boolean "password_set", default: true, null: false
-    t.integer "status_group", limit: 1, default: 0, null: false, comment: "Used as enum in Rails"
+    t.integer "status_group", limit: 2, default: 0, null: false, comment: "Used as enum in Rails"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -345,14 +356,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_31_160738) do
   add_foreign_key "group_memberships", "users"
   add_foreign_key "group_tasks", "groups"
   add_foreign_key "group_tasks", "tasks"
+  add_foreign_key "model_solutions", "model_solutions", column: "parent_id", on_delete: :nullify
   add_foreign_key "model_solutions", "tasks"
   add_foreign_key "ratings", "tasks"
   add_foreign_key "ratings", "users"
   add_foreign_key "reports", "tasks"
   add_foreign_key "reports", "users"
+  add_foreign_key "task_contributions", "tasks"
+  add_foreign_key "task_files", "task_files", column: "parent_id", on_delete: :nullify
   add_foreign_key "task_labels", "tasks"
   add_foreign_key "tasks", "licenses"
   add_foreign_key "tests", "tasks"
   add_foreign_key "tests", "testing_frameworks"
+  add_foreign_key "tests", "tests", column: "parent_id", on_delete: :nullify
   add_foreign_key "user_identities", "users"
 end

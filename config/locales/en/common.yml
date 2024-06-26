@@ -4,6 +4,7 @@ en:
     app_name: CodeHarbor
     button:
       abort: Abort
+      approve: Approve
       back: Back
       cancel: Cancel
       close: Close
@@ -17,6 +18,7 @@ en:
       import: Import
       log_in: Log in
       'no': 'no'
+      reject: Reject
       remove: Remove
       retry: Retry
       save: Save

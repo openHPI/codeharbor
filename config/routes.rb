@@ -96,6 +96,13 @@ Rails.application.routes.draw do
     end
     resources :comments, only: %i[index edit create update destroy]
     resources :ratings, only: :create
+
+    resources :task_contributions, only: %i[index show new create edit update] do
+      member do
+        post :approve_changes
+        post :discard_changes
+      end
+    end
   end
 
   controller :tasks do # import-api endpoints

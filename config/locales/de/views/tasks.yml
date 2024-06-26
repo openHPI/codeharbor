@@ -48,6 +48,7 @@ de:
         import_zip: ZIP-Datei importieren
         new_task: Neue Aufgabe
       menu_button:
+        contribution: Meine Änderungsvorschläge
         group: Aufgaben aus Gruppen
         mine: Meine Aufgaben
         public: Öffentlich
@@ -100,6 +101,9 @@ de:
       no_model_solution_present: Keine Musterlösungen vorhanden
       no_tests: Keine Tests enthalten
       remove_task_from_collection_warning: Sind Sie sicher, dass Sie diese Aufgabe aus der Sammlung entfernen wollen?
+      task_contribution:
+        disabled:
+          tooltip: Diese Operation ist für Änderungsvorschläge nicht verfügbar.
       undefined: Benutzer:in undefiniert
       yourself: Ihnen selbst
     tasks:
@@ -113,6 +117,7 @@ de:
         no_results_description: Probieren Sie verschiedene Optionen aus, indem Sie auf 'Erweitert' klicken und die Suche wiederholen.
         no_tasks: Sie haben noch keine Aufgaben
     visibility:
+      contribution: Änderungsvorschlag
       label: Sichtbarkeit
       private: Privat
       public: Öffentlich
