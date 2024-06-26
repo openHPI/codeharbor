@@ -66,7 +66,7 @@
               = ff.collection_select :group_ids, current_user.member_groups.uniq, :id, :name, {selected: @task.groups.map(&:id)}, {class: 'my-group form-control', multiple: true, style: 'width: 300px;'}
               - if (@task.groups - current_user.member_groups).length.positive?
                 .unchangeable-groups
-                  span.title style='margin-right: 5px;'
+                  span.title.mr-1
                     = "#{t('.unchangeable_groups')}:"
                   - (@task.groups - current_user.member_groups).each_with_index do |group, index|
                     - if index.positive?
@@ -113,7 +113,7 @@
                     = test.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
                       i.fa-solid.fa-xmark.text-danger
                       =< t('.button.remove_test')
-                .test-container style="margin-left: 10px; #{display_container}"
+                .test-container.ms-2.mt-4
                   = render 'test_form', f:, test:
             / .field-element
             = f.add_nested_fields_link :tests, ' ', class: 'btn btn-main', id: 'addTestButton' do
@@ -143,7 +143,7 @@
                     = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
                       i.fa-solid.fa-xmark.text-danger
                       =< t('.button.remove_model_solution')
-                .model-solution-container style="margin-left: 10px; #{display_container}"
+                .model-solution-container.ms-2.mt-4
                   = render 'model_solution_form', f:, model_solution:
             / .field-element
             = f.add_nested_fields_link :model_solutions, ' ', class: 'btn btn-main', id: 'addTestButton' do
