@@ -18,7 +18,7 @@ class TaskContributionsController < ApplicationController
   def discard_changes
     duplicate = @task_contribution.suggestion.duplicate(set_parent_identifiers: false)
     if duplicate.save && @task_contribution.close
-      TaskContributionMailer.rejection_info(@task_contribution).deliver_later
+      TaskContributionMailer.rejection_info(@task_contribution, duplicate).deliver_later
       self_closed = @task_contribution.user == current_user
       redirect_to (self_closed ? duplicate : @task), notice: t('.success')
     else
