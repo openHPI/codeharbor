@@ -18,7 +18,7 @@ RSpec.describe TaskContributionMailer do
     it 'contains the correct contents' do
       expect(contribution_request.body.encoded).to include(task_contrib.suggestion.user.name)
       expect(contribution_request.body.encoded).to include(task_contrib.base.title)
-      expect(contribution_request.body.encoded).to include('asked to contribute to your Task')
+      expect(contribution_request.body.encoded).to include('suggested changes')
     end
   end
 
@@ -37,7 +37,9 @@ RSpec.describe TaskContributionMailer do
   end
 
   describe '#rejection_info' do
-    subject(:rejection_info) { described_class.rejection_info(task_contrib) }
+    subject(:rejection_info) { described_class.rejection_info(task_contrib, duplicate_task) }
+
+    let(:duplicate_task) { create(:task) }
 
     it 'sends an email' do
       expect(rejection_info.to).to include(task_contrib.suggestion.user.email)

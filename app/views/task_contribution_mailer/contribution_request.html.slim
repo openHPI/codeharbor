@@ -1,8 +1,6 @@
-h3 Hello #{@task_author.name}
-p
-  | #{@contrib_author.name} asked to contribute to your Task "#{@task_contrib.base.title}".
-  | If you want to review or merge the changes click the link below.
-  | Otherwise ignore this Email.
-  br
-  br
-  = link_to 'CodeHarbor', task_task_contribution_url(@task_contrib.base, @task_contrib)
+h3
+  = t('task_contributions.mailer.greeting', user: @task_author.name)
+p = t('task_contributions.mailer.contribution_request.request_message', contrib_author: @contrib_author.name, task: @task_contrib.base.title)
+p = t('task_contributions.mailer.contribution_request.review_message')
+p = t('task_contributions.mailer.contribution_request.else_message')
+p = link_to 'CodeHarbor', task_task_contribution_url(@task_contrib.base, @task_contrib)

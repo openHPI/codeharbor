@@ -9,12 +9,4 @@ class AccessRequestMailerPreview < ActionMailer::Preview
     user = FactoryBot.build(:user)
     AccessRequestMailer.send_access_request(user, admin, group)
   end
-
-  def send_contribution_request
-    task = FactoryBot.build(:task)
-    author = task.user
-    author.id = 1
-    user = FactoryBot.build(:user)
-    AccessRequestMailer.send_contribution_request(author, task, user)
-  end
 end

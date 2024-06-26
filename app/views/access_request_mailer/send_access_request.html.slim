@@ -1,0 +1,6 @@
+h3
+ = t('groups.access_request_mailer.greeting', user: @admin.name)
+p = t('groups.access_request_mailer.message_line1', user: @user.name, group: @group.name)
+p = t('groups.access_request_mailer.message_line2')
+p = t('groups.access_request_mailer.message_line3')
+p = link_to t('groups.access_request_mailer.respond_to_request'), group_url(@group)
