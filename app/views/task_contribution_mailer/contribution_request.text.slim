@@ -1,7 +1,9 @@
-| Hello #{@task_author.name}
-br
-= "#{@contrib_author.name} asked to contribute to your Task \"#{@task_contrib.base.title}\"."
-| If you want to review or merge the changes click the link below.
-| Otherwise ignore this Email.
-br
-= task_task_contribution_url(@task_contrib.base, @task_contrib)
+== t('task_contributions.mailer.greeting', user: @task_author.name)
+== "\n\n"
+== t('task_contributions.mailer.contribution_request.request_message', contrib_author: @contrib_author.name, task: @task_contrib.base.title)
+== "\n\n"
+== t('task_contributions.mailer.contribution_request.review_message')
+== "\n\n"
+== t('task_contributions.mailer.contribution_request.else_message')
+== "\n\n"
+== task_task_contribution_url(@task_contrib.base, @task_contrib)
