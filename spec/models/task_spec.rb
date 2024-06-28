@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Task do
+  include ActiveJob::TestHelper
+
   describe '#valid?' do
     it { is_expected.to validate_presence_of(:title) }
     it { is_expected.to validate_uniqueness_of(:uuid).case_insensitive }
@@ -185,6 +187,52 @@ RSpec.describe Task do
       expect(collection.tasks).not_to be_empty
       destroy
       expect(collection.reload.tasks).to be_empty
+    end
+
+    it 'enqueues an NbpDeleteJob' do
+      expect { destroy }.to have_enqueued_job(NbpDeleteJob).with(task.uuid)
+    end
+  end
+
+  describe '#update' do
+    subject(:update) { task.update(new_attributes) }
+
+    let(:task) { create(:task, access_level:) }
+
+    context 'when updating a public task' do
+      let(:access_level) { :public }
+      let(:new_attributes) { {title: 'some new title'} }
+
+      it 'enqueues an NbpPushJob' do
+        expect { update }.to have_enqueued_job(NbpPushJob).with(task)
+      end
+    end
+
+    context 'when updating a private task' do
+      let(:access_level) { :private }
+      let(:new_attributes) { {title: 'some new title'} }
+
+      it 'does not enqueue an NbpPushJob' do
+        expect { update }.not_to have_enqueued_job(NbpPushJob)
+      end
+    end
+
+    context 'when changing the access level from private to public' do
+      let(:access_level) { :private }
+      let(:new_attributes) { {access_level: :public} }
+
+      it 'enqueues an NbpPushJob' do
+        expect { update }.to have_enqueued_job(NbpPushJob).with(task)
+      end
+    end
+
+    context 'when changing the access level from public to private' do
+      let(:access_level) { :public }
+      let(:new_attributes) { {access_level: :private} }
+
+      it 'enqueues an NbpDeleteJob' do
+        expect { update }.to have_enqueued_job(NbpDeleteJob).with(task.uuid)
+      end
     end
   end
 end
