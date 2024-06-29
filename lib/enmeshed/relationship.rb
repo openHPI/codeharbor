@@ -1,23 +1,30 @@
 # frozen_string_literal: true
 
 module Enmeshed
-  class Relationship
+  class Relationship < Object
     STATUS_GROUP_SYNONYMS = YAML.safe_load_file(Rails.root.join('lib/enmeshed/status_group_synonyms.yml'))
-    SCHEMA = Connector::API_SCHEMA.schema('Relationship')
 
     delegate :expires_at, :nbp_uid, :truncated_reference, to: :@template
     attr_reader :relationship_changes
 
-    def initialize(relationship_json)
-      raise ConnectorError.new('Invalid Relationship schema') unless SCHEMA.valid?(relationship_json)
+    def initialize(json:, template:, changes: [])
+      @json = json
+      @template = template
+      @relationship_changes = changes
+    end
 
-      @json = relationship_json
-      @template = RelationshipTemplate.new(content: relationship_json[:template])
-      @relationship_changes = relationship_json[:changes] || []
+    def self.parse(content)
+      super
+      attributes = {
+        json: content,
+        template: RelationshipTemplate.parse(content[:template]),
+        changes: content[:changes],
+      }
+      new(**attributes)
     end
 
     def self.pending_for_nbp_uid(nbp_uid)
-      relationships = Connector.pending_relationships.map {|relationship_json| Relationship.new(relationship_json) }
+      relationships = Connector.pending_relationships.map {|relationship_json| Relationship.parse(relationship_json) }
 
       # We want to call valid? for all relationships because it internally rejects invalid relationships
       relationships.select(&:valid?).find {|rel| rel.nbp_uid == nbp_uid }

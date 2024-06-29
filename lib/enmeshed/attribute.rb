@@ -1,17 +1,35 @@
 # frozen_string_literal: true
 
 module Enmeshed
-  class Attribute
+  class Attribute < Object
     delegate :enmeshed_address, to: Enmeshed::Connector
 
     attr_reader :owner, :type, :value
 
-    def initialize(type:, value:, owner: enmeshed_address, singleton: true)
+    def initialize(type:, value:, owner: enmeshed_address, singleton: true, id: nil)
       # Only subclasses of `Enmeshed::Attribute` should be instantiated
       @owner = owner
       @singleton = singleton
       @type = type
       @value = value
+      @id = id
+    end
+
+    def self.parse(content)
+      super
+
+      attribute_type = content.dig(:content, :@type)
+      desired_klass = descendants&.find {|descendant| descendant.klass == attribute_type }
+      raise ConnectorError.new("Unknown attribute type: #{attribute_type}") unless desired_klass
+
+      attributes = {
+        id: content[:id],
+        owner: content.dig(:content, :owner),
+        key: content.dig(:content, :key), # only for RelationshipAttributes
+        type: content.dig(:content, :value, :@type),
+        value: content.dig(:content, :value, :value),
+      }
+      desired_klass.new(**attributes.compact)
     end
 
     def to_h
@@ -30,8 +48,16 @@ module Enmeshed
       self.class.synchronize { fetch_existing || create! }
     end
 
-    def klass
-      "#{self.class.name&.demodulize}Attribute"
+    def self.klass
+      if subclasses.empty?
+        # The `klass` method is called for a *subclass* of `Enmeshed::Attribute`.
+        # Return values are `IdentityAttribute` and `RelationshipAttribute`.
+        "#{super}#{superclass&.klass}"
+      else
+        # The `klass` method is called for `Enmeshed::Attribute` itself.
+        # This is only used for parsing JSON responses received.
+        super
+      end
     end
 
     private

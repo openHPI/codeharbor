@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Enmeshed
-  class RelationshipTemplate
+  class RelationshipTemplate < Object
     # The app does not allow users to scan expired templates.
     # However, previously scanned and then expired templates can still be submitted,
     # resulting in the app silently doing nothing. CodeHarbor would still accept Relationships for expired templates if sent by the app.
@@ -12,29 +12,31 @@ module Enmeshed
     # These attributes are mandatory in the app and must be provided.
     # See https://enmeshed.eu/integrate/attribute-values for more attributes.
     REQUIRED_ATTRIBUTES = %w[GivenName Surname EMailAddress AffiliationRole].freeze
-    SCHEMA = Connector::API_SCHEMA.schema('RelationshipTemplate')
 
     attr_reader :expires_at, :nbp_uid
 
-    def initialize(options = {})
-      skip_fetch = options.delete(:skip_fetch)
-      case options.keys
-        when [:content]
-          template = options[:content]
-          raise ConnectorError.new('Invalid RelationshipTemplate schema') unless SCHEMA.valid?(template)
-
-          @truncated_reference = template[:truncatedReference]
-          populate_from_existing template
-        when [:truncated_reference]
-          @truncated_reference = options[:truncated_reference]
-          fetch_existing unless skip_fetch
-        when [:nbp_uid]
-          @nbp_uid = options[:nbp_uid]
-          @expires_at = VALIDITY_PERIOD.from_now
-        else
-          raise ArgumentError.new('RelationshipTemplate must be initialized with either a `content`, `truncated_reference`, or `nbp_uid`')
+    def initialize(truncated_reference: nil, nbp_uid: nil, expires_at: VALIDITY_PERIOD.from_now, skip_fetch: false)
+      if truncated_reference.nil? && nbp_uid.nil?
+        raise ArgumentError.new('RelationshipTemplate must be initialized with either a `truncated_reference` or `nbp_uid`')
       end
+
+      @truncated_reference = truncated_reference
+      @nbp_uid = nbp_uid
+      @expires_at = expires_at
+
+      fetch_existing unless skip_fetch
     end
+
+    def self.parse(content)
+      super
+      attributes = {
+        truncated_reference: content[:truncatedReference],
+        expires_at: DateTime.parse(content[:expiresAt]),
+        nbp_uid: content.dig(:content, :metadata, :nbp_uid),
+      }
+      new(**attributes)
+    end
+
 
     def create!
       @truncated_reference = Connector.create_relationship_template self
