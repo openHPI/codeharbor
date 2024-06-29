@@ -20,7 +20,7 @@ module Users
 
     def qr_code
       truncated_reference = params[:truncated_reference]
-      send_data Enmeshed::RelationshipTemplate.new(truncated_reference:, skip_fetch: true).qr_code, type: 'image/png'
+      send_data Enmeshed::RelationshipTemplate.new(truncated_reference:).qr_code, type: 'image/png'
     end
 
     def relationship_status

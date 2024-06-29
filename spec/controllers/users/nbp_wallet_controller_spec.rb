@@ -189,7 +189,7 @@ RSpec.describe Users::NbpWalletController do
     end
 
     it 'initializes a RelationshipTemplate' do
-      expect(Enmeshed::RelationshipTemplate).to receive(:new).with(truncated_reference:, skip_fetch: true).and_call_original
+      expect(Enmeshed::RelationshipTemplate).to receive(:new).with(truncated_reference:).and_call_original
       get_request
     end
 

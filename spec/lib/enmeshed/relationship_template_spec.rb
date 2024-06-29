@@ -16,10 +16,9 @@ RSpec.describe Enmeshed::RelationshipTemplate do
     end
 
     context 'when a truncated reference is given' do
-      subject(:new_template) { described_class.new(truncated_reference:, skip_fetch:) }
+      subject(:new_template) { described_class.new(truncated_reference:) }
 
       let(:truncated_reference) { 'relationship_template_example_truncated_reference' }
-      let(:skip_fetch) { true }
 
       it 'populates the object with the given attribute' do
         expect(new_template.truncated_reference).to eq truncated_reference
@@ -30,7 +29,7 @@ RSpec.describe Enmeshed::RelationshipTemplate do
       end
 
       context 'when fetching details is enabled' do
-        let(:skip_fetch) { false }
+        subject(:new_template) { described_class.fetch(truncated_reference) }
 
         before do
           stub_request(:get, "#{connector_api_url}/RelationshipTemplates?isOwn=true")

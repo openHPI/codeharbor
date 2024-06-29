@@ -15,7 +15,7 @@ module Enmeshed
 
     attr_reader :expires_at, :nbp_uid
 
-    def initialize(truncated_reference: nil, nbp_uid: nil, expires_at: VALIDITY_PERIOD.from_now, skip_fetch: false)
+    def initialize(truncated_reference: nil, nbp_uid: nil, expires_at: VALIDITY_PERIOD.from_now)
       if truncated_reference.nil? && nbp_uid.nil?
         raise ArgumentError.new('RelationshipTemplate must be initialized with either a `truncated_reference` or `nbp_uid`')
       end
@@ -23,8 +23,6 @@ module Enmeshed
       @truncated_reference = truncated_reference
       @nbp_uid = nbp_uid
       @expires_at = expires_at
-
-      fetch_existing unless skip_fetch
     end
 
     def self.parse(content)
@@ -37,6 +35,9 @@ module Enmeshed
       new(**attributes)
     end
 
+    def self.fetch(truncated_reference)
+      Connector.fetch_existing_relationship_template(truncated_reference) || new(truncated_reference:)
+    end
 
     def create!
       @truncated_reference = Connector.create_relationship_template self
@@ -140,18 +141,6 @@ module Enmeshed
           },
         }
       end
-    end
-
-    def fetch_existing
-      template = Connector.fetch_existing_relationship_template truncated_reference
-      return unless template
-
-      populate_from_existing(template)
-    end
-
-    def populate_from_existing(template)
-      @nbp_uid = template.dig(:content, :metadata, :nbp_uid)
-      @expires_at = DateTime.parse(template[:expiresAt])
     end
   end
 end
