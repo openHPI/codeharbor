@@ -24,7 +24,7 @@ module Enmeshed
     end
 
     def self.pending_for_nbp_uid(nbp_uid)
-      relationships = Connector.pending_relationships.map {|relationship_json| Relationship.parse(relationship_json) }
+      relationships = Connector.pending_relationships
 
       # We want to call valid? for all relationships because it internally rejects invalid relationships
       relationships.select(&:valid?).find {|rel| rel.nbp_uid == nbp_uid }

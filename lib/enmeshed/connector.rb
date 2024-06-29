@@ -11,43 +11,48 @@ module Enmeshed
     def self.enmeshed_address
       return @enmeshed_address if @enmeshed_address.present?
 
-      identity = parse_result conn.get('/api/v2/Account/IdentityInfo')
-      @enmeshed_address = identity[:address]
+      identity = parse_result(conn.get('/api/v2/Account/IdentityInfo'), IdentityInfo)
+      @enmeshed_address = identity.address
     end
 
     def self.create_attribute(attribute)
-      parse_result(conn.post('/api/v2/Attributes') do |req|
+      response = conn.post('/api/v2/Attributes') do |req|
         req.body = {content: attribute.to_h}.to_json
-      end)[:id]
+      end
+      parse_result(response, Attribute).id
     end
 
     def self.fetch_existing_attribute(attribute) # rubocop:disable Metrics/AbcSize
-      parse_result(conn.get('/api/v2/Attributes') do |req|
+      response = conn.get('/api/v2/Attributes') do |req|
         req.params['content.@type'] = attribute.klass
         req.params['content.owner'] = attribute.owner
         req.params['content.value.@type'] = attribute.type
-      end).find {|attr| attr.dig(:content, :value, :value) == attribute.value }&.dig(:id)
+      end
+      parse_result(response, Attribute).find {|attr| attr.value == attribute.value }&.id
     end
 
     def self.create_relationship_template(relationship_template)
-      new_template = parse_result(conn.post('/api/v2/RelationshipTemplates/Own') do |req|
+      response = conn.post('/api/v2/RelationshipTemplates/Own') do |req|
         req.body = relationship_template.to_json
-      end)
+      end
+      new_template = parse_result(response, RelationshipTemplate)
 
-      Rails.logger.debug { "Enmeshed::ConnectorApi RelationshipTemplate created: #{new_template[:truncatedReference]}" }
-      new_template[:truncatedReference]
+      Rails.logger.debug { "Enmeshed::ConnectorApi RelationshipTemplate created: #{new_template.truncated_reference}" }
+      new_template.truncated_reference
     end
 
     def self.fetch_existing_relationship_template(truncated_reference)
-      parse_result(conn.get('/api/v2/RelationshipTemplates') do |req|
+      response = conn.get('/api/v2/RelationshipTemplates') do |req|
         req.params['isOwn'] = true
-      end).find {|template| template[:truncatedReference] == truncated_reference }
+      end
+      parse_result(response, RelationshipTemplate).find {|template| template.truncated_reference == truncated_reference }
     end
 
     def self.pending_relationships
-      parse_result(conn.get('/api/v2/Relationships') do |req|
+      response = conn.get('/api/v2/Relationships') do |req|
         req.params['status'] = 'Pending'
-      end)
+      end
+      parse_result(response, Relationship)
     end
 
     def self.respond_to_rel_change(relationship_id, change_id, action = 'Accept')
@@ -61,7 +66,7 @@ module Enmeshed
       response.status == 200
     end
 
-    def self.parse_result(response)
+    def self.parse_result(response, klass)
       json = JSON.parse(response.body).deep_symbolize_keys
 
       if json.include?(:error)
@@ -70,11 +75,20 @@ module Enmeshed
         )
       end
 
-      json[:result]
+      parse_enmeshed_object(json[:result], klass)
     rescue JSON::ParserError
       raise ConnectorError.new("Enmeshed connector response could not be parsed. Received: #{response.body}")
     end
     private_class_method :parse_result
+
+    def self.parse_enmeshed_object(content, klass)
+      if content.is_a?(Array)
+        content.map {|object| klass.parse(object) }
+      else
+        klass.parse(content)
+      end
+    end
+    private_class_method :parse_enmeshed_object
 
     def self.conn
       @conn ||= init_conn

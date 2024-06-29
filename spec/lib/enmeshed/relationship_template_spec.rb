@@ -18,7 +18,7 @@ RSpec.describe Enmeshed::RelationshipTemplate do
     context 'when a truncated reference is given' do
       subject(:new_template) { described_class.new(truncated_reference:) }
 
-      let(:truncated_reference) { 'relationship_template_example_truncated_reference' }
+      let(:truncated_reference) { 'RelationshipTemplateExampleTruncatedReferenceA==' }
 
       it 'populates the object with the given attribute' do
         expect(new_template.truncated_reference).to eq truncated_reference
@@ -81,7 +81,7 @@ RSpec.describe Enmeshed::RelationshipTemplate do
         stub_request(:get, "#{connector_api_url}/Account/IdentityInfo")
           .to_return(body: file_fixture('enmeshed/get_enmeshed_address.json'))
 
-        stub_request(:get, "#{connector_api_url}/Attributes?content.@type=IdentityAttribute&content.owner=example_enmeshed_address&content.value.@type=DisplayName")
+        stub_request(:get, "#{connector_api_url}/Attributes?content.@type=IdentityAttribute&content.owner=id_of_an_example_enmeshed_address_AB&content.value.@type=DisplayName")
           .to_return(body: file_fixture('enmeshed/existing_display_name.json'))
 
         get_relationship_templates_stub.to_return(body: file_fixture('enmeshed/no_relationship_templates_yet.json'))

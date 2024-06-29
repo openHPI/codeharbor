@@ -62,7 +62,7 @@
       "expiresAt": "2024-04-29T12:49:04.543Z",
       "maxNumberOfAllocations": 1,
       "secretKey": "eyJrZXkiOiJHc184a0N5cm5LdFAtSTduczB1UmZxVVBOWnB2ME1XU2lfOGU0NmtkNU5vIiwiYWxnIjozfQ",
-      "truncatedReference": "relationship_template_example_truncated_reference"
+      "truncatedReference": "RelationshipTemplateExampleTruncatedReferenceA=="
     }
   ]
 }

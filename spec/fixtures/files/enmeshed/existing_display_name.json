@@ -1,7 +1,7 @@
 {
   "result": [
     {
-      "id": "ATT_id_of_other_display_name",
+      "id": "ATT_id_of_other_name",
       "content": {
         "@type": "IdentityAttribute",
         "owner": "id1GyHw8CefvC62VGQ5oTZjT3PvbveyDsrW2",
@@ -13,7 +13,7 @@
       "createdAt": "2024-06-14T14:33:04.294Z"
     },
     {
-      "id": "ATT_id_of_existing_display_name",
+      "id": "ATT_id_of_exist_name",
       "content": {
         "@type": "IdentityAttribute",
         "owner": "id1GyHw8CefvC62VGQ5oTZjT3PvbveyDsrW2",

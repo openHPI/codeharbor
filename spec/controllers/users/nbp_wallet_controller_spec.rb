@@ -11,7 +11,7 @@ RSpec.describe Users::NbpWalletController do
     stub_request(:get, "#{connector_api_url}/Account/IdentityInfo")
       .to_return(body: file_fixture('enmeshed/get_enmeshed_address.json'))
 
-    stub_request(:get, "#{connector_api_url}/Attributes?content.@type=IdentityAttribute&content.owner=example_enmeshed_address&content.value.@type=DisplayName")
+    stub_request(:get, "#{connector_api_url}/Attributes?content.@type=IdentityAttribute&content.owner=id_of_an_example_enmeshed_address_AB&content.value.@type=DisplayName")
       .to_return(body: file_fixture('enmeshed/no_existing_display_name.json'))
 
     stub_request(:post, "#{connector_api_url}/Attributes")
@@ -53,7 +53,7 @@ RSpec.describe Users::NbpWalletController do
 
         it 'sets the correct template' do
           get_request
-          expect(assigns(:template).truncated_reference).to eq('relationship_template_example_truncated_reference')
+          expect(assigns(:template).truncated_reference).to eq('RelationshipTemplateExampleTruncatedReferenceA==')
         end
       end
     end
@@ -84,25 +84,25 @@ RSpec.describe Users::NbpWalletController do
 
       context 'when a display name exists' do
         before do
-          stub_request(:get, "#{connector_api_url}/Attributes?content.@type=IdentityAttribute&content.owner=example_enmeshed_address&content.value.@type=DisplayName")
+          stub_request(:get, "#{connector_api_url}/Attributes?content.@type=IdentityAttribute&content.owner=id_of_an_example_enmeshed_address_AB&content.value.@type=DisplayName")
             .to_return(body: file_fixture('enmeshed/existing_display_name.json'))
         end
 
         it 'sets the display name id to the existing one' do
           get_request
-          expect(Enmeshed::RelationshipTemplate.display_name_attribute.id).to eq('ATT_id_of_existing_display_name')
+          expect(Enmeshed::RelationshipTemplate.display_name_attribute.id).to eq('ATT_id_of_exist_name')
         end
       end
 
       context 'when no display name exists' do
         before do
-          stub_request(:get, "#{connector_api_url}/Attributes?content.@type=IdentityAttribute&content.owner=example_enmeshed_address&content.value.@type=DisplayName")
+          stub_request(:get, "#{connector_api_url}/Attributes?content.@type=IdentityAttribute&content.owner=id_of_an_example_enmeshed_address_AB&content.value.@type=DisplayName")
             .to_return(body: file_fixture('enmeshed/no_existing_display_name.json'))
         end
 
         it 'creates a new display name' do
           get_request
-          expect(Enmeshed::RelationshipTemplate.display_name_attribute.id).to eq('ATT_id_of_new_display_name')
+          expect(Enmeshed::RelationshipTemplate.display_name_attribute.id).to eq('ATT_id_of_a_new_name')
         end
       end
     end

@@ -9,15 +9,34 @@ RSpec.describe Enmeshed::Connector do
     let(:response) { Faraday::Response.new(body:) }
     let(:body) { '{"result": {"foo": "bar"}}' }
 
+    before do
+      # Stub the parse_enmeshed_object method and just return the JSON.
+      allow(connector).to receive(:parse_enmeshed_object) {|json, _klass| json }
+    end
+
     it 'returns the parsed JSON' do
-      expect(connector.send(:parse_result, response)).to eq(foo: 'bar')
+      expect(connector.send(:parse_result, response, Enmeshed::Object)).to eq(foo: 'bar')
+    end
+
+    it 'calls parse_enmeshed_object' do
+      expect(connector).to receive(:parse_enmeshed_object).with({foo: 'bar'}, Enmeshed::Object)
+      connector.send(:parse_result, response, Enmeshed::Object)
     end
 
     context 'when the response is not successful' do
       let(:body) { '{"error": {"message": "foobar"}}' }
 
       it 'raises an error' do
-        expect { connector.send(:parse_result, response) }.to raise_error(Enmeshed::ConnectorError)
+        expect { connector.send(:parse_result, response, Enmeshed::Object) }.to raise_error(Enmeshed::ConnectorError)
+      end
+
+      it 'does not call parse_enmeshed_object' do
+        expect(connector).not_to receive(:parse_enmeshed_object)
+        begin
+          connector.send(:parse_result, response, Enmeshed::Object)
+        rescue Enmeshed::ConnectorError
+          # Ignored
+        end
       end
     end
 
@@ -25,7 +44,16 @@ RSpec.describe Enmeshed::Connector do
       let(:body) { '"invalid{' }
 
       it 'raises an error' do
-        expect { connector.send(:parse_result, response) }.to raise_error(Enmeshed::ConnectorError)
+        expect { connector.send(:parse_result, response, Enmeshed::Object) }.to raise_error(Enmeshed::ConnectorError)
+      end
+
+      it 'does not call parse_enmeshed_object' do
+        expect(connector).not_to receive(:parse_enmeshed_object)
+        begin
+          connector.send(:parse_result, response, Enmeshed::Object)
+        rescue Enmeshed::ConnectorError
+          # Ignored
+        end
       end
     end
   end
