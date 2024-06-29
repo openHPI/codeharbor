@@ -2,11 +2,11 @@
 de:
   groups:
     access_request_mailer:
-      confirm_request: Anfrage annehmen
       greeting: Hallo %{user}
       message_line1: '%{user} möchte Ihrer Gruppe "%{group}" beitreten.'
-      message_line2: Sie können sie/ihn beitreten lassen, indem Sie auf den Link unten klicken.
-      message_line3: Ansonsten können Sie diese E-Mail ignorieren.
+      message_line2: Sie können die Beitrittsanfrage über CodeHarbor annehmen oder ablehnen.
+      message_line3: Bitte klicken Sie dazu auf den unten stehenden Link.
+      respond_to_request: Anfrage beantworten
       subject: '%{user} möchte Ihrer Grupper "%{group}" beitreten'
     form:
       button:
