@@ -15,7 +15,7 @@ en:
           <br><br>
           Within the app, please enter either "Teacher" or "Student" as your role.
         privacy_disclaimer:
-          html: CodeHarbor provides educators with a dedicated tool for sharing auto-gradable programming tasks, organizing them in collections or working on them collaboratively via groups.  The platform is fundamentally based on the principle of data minimization when collecting and processing personal data. Only a small amount of data is therefore mandatory for the use of our platform (e.g., name and email address), while other data can be added voluntarily by you (e.g., a profile picture). This data is stored permanently on servers in Germany in accordance with our <a href='%{privacy_policy_link}' target='_blank' rel='noopener'>privacy policy</a> to provide you with access to CodeHarbor.
+          html: CodeHarbor provides educators with a dedicated tool for sharing auto-gradable programming tasks, organizing them in collections or working on them collaboratively via groups. The platform is fundamentally based on the principle of data minimization when collecting and processing personal data. Only a small amount of data is therefore mandatory for the use of our platform (e.g., name and email address), while other data can be added voluntarily (e.g., a profile picture). This data is stored permanently on servers in Germany in accordance with our <a href='%{privacy_policy_link}' target='_blank' rel='noopener'>privacy policy</a> to provide you with access to CodeHarbor.
           title: Privacy Policy
         qr_code_alt_text: 'QR Code to be scanned with the ''Mein Bildungsraum: Wallet'' app'
         regenerate_code: Refresh Code
