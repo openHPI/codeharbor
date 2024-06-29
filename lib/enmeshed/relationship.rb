@@ -3,11 +3,14 @@
 module Enmeshed
   class Relationship
     STATUS_GROUP_SYNONYMS = YAML.safe_load_file(Rails.root.join('lib/enmeshed/status_group_synonyms.yml'))
+    SCHEMA = Connector::API_SCHEMA.schema('Relationship')
 
     delegate :expires_at, :nbp_uid, :truncated_reference, to: :@template
     attr_reader :relationship_changes
 
     def initialize(relationship_json)
+      raise ConnectorError.new('Invalid Relationship schema') unless SCHEMA.valid?(relationship_json)
+
       @json = relationship_json
       @template = RelationshipTemplate.new(content: relationship_json[:template])
       @relationship_changes = relationship_json[:changes] || []

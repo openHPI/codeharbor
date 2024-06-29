@@ -111,7 +111,7 @@ RSpec.describe Users::NbpWalletController do
   describe 'GET #relationship_status' do
     subject(:get_request) { get :relationship_status }
 
-    before { session[:relationship_template_id] = 'example_relationship_template_id' }
+    before { session[:relationship_template_id] = 'RLT_example_id_ABCXY' }
 
     context 'when the connector is down' do
       before { stub_request(:get, "#{connector_api_url}/Relationships?status=Pending").to_timeout }
@@ -206,7 +206,7 @@ RSpec.describe Users::NbpWalletController do
     let(:accept_request_stub) { stub_request(:put, "#{connector_api_url}/Relationships/RELoi9IL4adMbj92K8dn/Changes/RCHNFJ9JD2LayPxn79nO/Accept") }
 
     before do
-      session[:relationship_template_id] = 'example_relationship_template_id'
+      session[:relationship_template_id] = 'RLT_example_id_ABCXY'
 
       stub_request(:get, "#{connector_api_url}/Relationships?status=Pending")
         .to_return(body: file_fixture('enmeshed/valid_relationship_created.json'))

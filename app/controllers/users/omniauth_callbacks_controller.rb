@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-# More info at:
-# https://github.com/heartcombo/devise#omniauth
-
 require 'omni_auth/nonce_store'
 
 module Users
@@ -137,11 +134,7 @@ module Users
       # Check if an existing user is already signed in (passed through the RelayState)
       # and trying to add a new identity to their account. If so, we load the user information
       # and set it as the current user. This is necessary to avoid creating a new user.
-      @current_user ||= if params[:RelayState]
-                          User.find_by(id: OmniAuth::NonceStore.pop(params[:RelayState])) || super
-                        else
-                          super
-                        end
+      @current_user ||= User.find_by(id: OmniAuth::NonceStore.pop(params[:RelayState])) || super
     end
 
     def user_identity

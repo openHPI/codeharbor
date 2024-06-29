@@ -6,6 +6,7 @@ module Enmeshed
   class Connector
     API_KEY = Settings.omniauth&.nbp&.enmeshed&.connector_api_key
     CONNECTOR_URL = Settings.omniauth&.nbp&.enmeshed&.connector_url
+    API_SCHEMA = JSONSchemer.openapi(YAML.safe_load_file(Rails.root.join('lib/enmeshed/api_schema.yml'), permitted_classes: [Time, Date]))
 
     def self.enmeshed_address
       return @enmeshed_address if @enmeshed_address.present?

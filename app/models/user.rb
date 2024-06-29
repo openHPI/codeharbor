@@ -77,7 +77,9 @@ class User < ApplicationRecord
   end
 
   def omniauth_identities
-    identities.where(omniauth_provider: User.omniauth_providers) # filter out enmeshed UserIdentity
+    # Only return UserIdentities that can be used for SSO.
+    # We create enmeshed UserIdentities to store additional information; they don't have a corresponding omniauth provider.
+    identities.where(omniauth_provider: User.omniauth_providers)
   end
 
   def member_groups

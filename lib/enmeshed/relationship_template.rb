@@ -12,6 +12,7 @@ module Enmeshed
     # These attributes are mandatory in the app and must be provided.
     # See https://enmeshed.eu/integrate/attribute-values for more attributes.
     REQUIRED_ATTRIBUTES = %w[GivenName Surname EMailAddress AffiliationRole].freeze
+    SCHEMA = Connector::API_SCHEMA.schema('RelationshipTemplate')
 
     attr_reader :expires_at, :nbp_uid
 
@@ -20,6 +21,8 @@ module Enmeshed
       case options.keys
         when [:content]
           template = options[:content]
+          raise ConnectorError.new('Invalid RelationshipTemplate schema') unless SCHEMA.valid?(template)
+
           @truncated_reference = template[:truncatedReference]
           populate_from_existing template
         when [:truncated_reference]
@@ -65,7 +68,7 @@ module Enmeshed
     end
 
     def remaining_validity
-      expires_at - Time.zone.now
+      [expires_at - Time.zone.now, 0].max
     end
 
     def self.create!(nbp_uid:)
