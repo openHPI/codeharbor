@@ -38,7 +38,7 @@ module LomService
         end
         xml.language @task.iso639_lang
         xml.description do
-          xml.string @task.description, language: @task.iso639_lang
+          xml.string ApplicationController.helpers.render_markdown(@task.description), language: @task.iso639_lang
         end
         if @task.programming_language&.language.present?
           xml.keyword do
