@@ -50,7 +50,8 @@ module ApplicationHelper
       markdown,
       input: 'GFM',
       hard_wrap: false,
-      smart_quotes: 'apos,apos,quot,quot'
+      smart_quotes: 'apos,apos,quot,quot',
+      footnote_backlink: nil
     ).to_html.strip
   end
 
