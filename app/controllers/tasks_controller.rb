@@ -186,6 +186,17 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   end
   # rubocop:enable Metrics/AbcSize
 
+  def generate_test
+    TaskService::GptGenerateTests.call(task: @task)
+    flash[:notice] = I18n.t('tasks.task_service.gpt_generate_tests.successful_generation')
+  rescue Gpt::MissingLanguageError
+    flash[:alert] = I18n.t('tasks.task_service.gpt_generate_tests.no_language')
+  rescue Gpt::InvalidTaskDescription
+    flash[:alert] = I18n.t('tasks.task_service.gpt_generate_tests.invalid_description')
+  ensure
+    redirect_to @task
+  end
+
   private
 
   def load_and_authorize_task

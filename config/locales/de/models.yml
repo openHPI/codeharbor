@@ -188,6 +188,9 @@ de:
   tasks:
     model:
       copy_of_task: Kopie der Aufgabe
+  tests:
+    model:
+      generated_test: KI-generierter Unit-Test
   users:
     role:
       admin: Administrator:in

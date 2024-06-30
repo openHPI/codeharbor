@@ -87,6 +87,7 @@ en:
         download_as_zip: Download this Task as a ZIP file.
         export: Export
         export_tasks: Export Tasks
+        generate_test: Generate Unit Tests
         rate: Rate
         show_comments: Show Comments
       create_collection_placeholder: Collection name

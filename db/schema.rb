@@ -177,6 +177,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_31_160738) do
     t.string "version"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "file_extension"
   end
 
   create_table "ratings", id: :serial, force: :cascade do |t|

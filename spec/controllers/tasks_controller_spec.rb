@@ -61,7 +61,7 @@ RSpec.describe TasksController do
       before { create(:task, user:, title: 'filter me out key1', description: 'key1 key2', labels: [labels[0]], programming_language: python_lang) }
 
       let(:labels) { [create(:label, name: 'l1'), create(:label, name: 'l2'), create(:label, name: 'l3')] }
-      let(:python_lang) { create(:programming_language, language: 'Python') }
+      let(:python_lang) { create(:programming_language, :python) }
       let(:ruby_lang) { create(:programming_language, :ruby) }
 
       let!(:task1) { create(:task, user:, title: 'find me key3 (key1)', description: 'key2 key4', labels:, programming_language: ruby_lang) }
@@ -1039,6 +1039,70 @@ RSpec.describe TasksController do
       expect do
         post :add_to_collection, params: {id: task.to_param, collection: collection.id}, session: valid_session
       end.to change(collection.tasks, :count).by(+1)
+    end
+  end
+
+  describe 'POST #generate_test' do
+    let(:task_user) { create(:user) }
+    let(:access_level) { :public }
+    let(:task) { create(:task, user: task_user, access_level:) }
+
+    before do
+      sign_in task_user
+      Settings.open_ai.access_token = 'access_token'
+    end
+
+    after do
+      Settings.open_ai.access_token = nil
+    end
+
+    context 'when GptGenerateTests is successful' do
+      before do
+        allow(TaskService::GptGenerateTests).to receive(:call)
+        post :generate_test, params: {id: task.id}
+      end
+
+      it 'calls the GptGenerateTests service with the correct task' do
+        expect(TaskService::GptGenerateTests).to have_received(:call).with(task:)
+      end
+
+      it 'redirects to the task show page' do
+        expect(response).to redirect_to(task_path(task))
+      end
+
+      it 'sets flash to the appropriate message' do
+        expect(flash[:notice]).to eq(I18n.t('tasks.task_service.gpt_generate_tests.successful_generation'))
+      end
+    end
+
+    context 'when GptGenerateTests raises MissingLanguageError' do
+      before do
+        allow(TaskService::GptGenerateTests).to receive(:call).and_raise(Gpt::MissingLanguageError)
+        post :generate_test, params: {id: task.id}
+      end
+
+      it 'redirects to the task show page' do
+        expect(response).to redirect_to(task_path(task))
+      end
+
+      it 'sets flash to the appropriate message' do
+        expect(flash[:alert]).to eq(I18n.t('tasks.task_service.gpt_generate_tests.no_language'))
+      end
+    end
+
+    context 'when GptGenerateTests raises InvalidTaskDescription' do
+      before do
+        allow(TaskService::GptGenerateTests).to receive(:call).and_raise(Gpt::InvalidTaskDescription)
+        post :generate_test, params: {id: task.id}
+      end
+
+      it 'redirects to the task show page' do
+        expect(response).to redirect_to(task_path(task))
+      end
+
+      it 'sets flash to the appropriate message' do
+        expect(flash[:alert]).to eq(I18n.t('tasks.task_service.gpt_generate_tests.invalid_description'))
+      end
     end
   end
 end
