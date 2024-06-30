@@ -42,6 +42,18 @@ RSpec.describe Bridges::Lom::TasksController do
       end
     end
 
+    context 'with a description in Markdown' do
+      let(:description_markdown) { '# Description' }
+      let(:description_html) { CGI.escapeHTML '<h1>Description</h1>' }
+
+      before { task.update(description: description_markdown) }
+
+      it 'returns the description in HTML' do
+        get_request
+        expect(response.body).to include description_html
+      end
+    end
+
     context 'with additional details' do
       context 'when no license is specified' do
         let(:license) { nil }
