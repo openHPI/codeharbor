@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class RenameGroupParamType < ActiveRecord::Migration[7.1]
+  class Message < ApplicationRecord
+  end
+
   def change
     reversible do |dir|
       dir.up do
