@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 class RefactorGroupMembership < ActiveRecord::Migration[6.1]
+  class GroupMembershipOld < ApplicationRecord
+    self.table_name = 'group_memberships_old'
+  end
+
+  class GroupMembership < ApplicationRecord
+  end
+
   def up
     rename_table :group_memberships, :group_memberships_old
 
@@ -22,8 +29,4 @@ class RefactorGroupMembership < ActiveRecord::Migration[6.1]
 
     drop_table :group_memberships_old
   end
-end
-
-class GroupMembershipOld < ApplicationRecord
-  self.table_name = 'group_memberships_old'
 end

@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class MigrateTaskDescriptionsFixKramdownQuotes < ActiveRecord::Migration[7.1]
+  class Task < ApplicationRecord
+  end
+
   def up
     Task.find_each do |task|
       task.description = fix_kramdown_descriptions(task.description)
@@ -12,7 +15,4 @@ class MigrateTaskDescriptionsFixKramdownQuotes < ActiveRecord::Migration[7.1]
     # removes double escapes of symbols and unnecessary newlines
     Kramdown::Document.new(string, line_width: -1).to_kramdown.gsub(/\\([\\*_`\[\]\{"'|])/, '\1').strip
   end
-end
-
-class Task < ApplicationRecord
 end
