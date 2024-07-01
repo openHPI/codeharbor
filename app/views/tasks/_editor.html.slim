@@ -25,7 +25,7 @@ a.btn.btn-main.btn-sm.toggle-input href='#'
         - else
           = link_to file.object.attachment.filename, download_attachment_task_file_path(file.object), class: 'btn btn-light', style: 'border-right: none', 'data-turbolinks' => false
         = link_to '#', class: 'btn btn-light reupload-attachment', style: 'border-left: none; margin-right: 5px;', title: t('.button.upload_a_new_file') do
-          i.fa-solid.fa-upload style=('color: gray')
+          i.fa-solid.fa-upload.text-secondary
         - if file.object.text_data?
           .extract-text.btn.btn-main data-file-id=file.object.id
             = t('.button.extract_text')

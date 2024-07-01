@@ -2,7 +2,6 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .comment-block {
-
   padding: 10px;
   margin-bottom: 10px;
   border: 1px #e6e6e6 solid;
@@ -14,7 +13,7 @@
 
     .created-at {
       font-weight: normal;
-      color: #7C7C7C;
+      color: #7c7c7c;
     }
   }
   .comment-text {
@@ -22,10 +21,21 @@
     margin-bottom: 4px;
     max-height: 80px;
     overflow: hidden;
+    .comment-text-input {
+      width: 60%;
+      display: inline-block;
+      input {
+        border-radius: 2px;
+      }
+    }
   }
 }
 
-.refresh, .refresh:active, .refresh:hover, .refresh:link, .refresh:visited  {
+.refresh,
+.refresh:active,
+.refresh:hover,
+.refresh:link,
+.refresh:visited {
   text-decoration: none;
   color: #444444;
   margin-bottom: 10px;

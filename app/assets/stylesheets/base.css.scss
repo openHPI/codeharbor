@@ -86,7 +86,7 @@ a.classic-link {
     width: 96%;
 
     .row-label,
-    .inner-section .row-label {
+    .row-label {
       text-align: left;
       background-color: $gray-bg-color;
       font-weight: 700;
@@ -97,19 +97,14 @@ a.classic-link {
       border-right: 1px #dddddd solid;
     }
     .row-value,
-    .inner-section .row-value {
+    .row-value {
       text-align: left;
       padding: 6px 8px;
-    }
-
-    .inner-section {
-      float: left;
-      display: inline-block;
     }
   }
 
   .row.vertical,
-  .inner-section .row-vertical {
+  .row-vertical {
     .row-label {
       width: 100%;
       display: block;

@@ -46,7 +46,7 @@
                         = link_to task.title, task_path(task), class: 'btn btn-light disabled'
                     .col-auto.vert-align-container
                       = ct.remove_nested_fields_link class: 'float-end' do
-                        i.fa-solid.fa-xmark.vert-align style=('color: #800000; font-size: 20px;')
+                        i.fa-solid.fa-xmark.vert-align.text-danger.lead
 
         br
     .form-group

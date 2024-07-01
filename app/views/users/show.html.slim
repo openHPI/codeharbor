@@ -9,13 +9,13 @@
     .table-header
       = t('.public_information')
   .row
-    .inner-section style="width: 15%"
+    .col-2
       .avatar
         - if @user.avatar.attached?
           = image_tag(@user.avatar.variant(resize_to_limit: [150, 150]))
         - else
           = image_tag('/images/thumb/missing.png')
-    .inner-section style="width: 80%"
+    .col-10
       .row
         .col-auto.row-label
           = t('.full_name')
