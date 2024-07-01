@@ -9,6 +9,8 @@ de:
       about: Über
       account_link_documentation: Über Account-Links
       index: Startseite
+    nbp_wallet:
+      connect: Wallet verbinden
     passwords:
       create: Passwort vergessen
       edit: Passwort ändern

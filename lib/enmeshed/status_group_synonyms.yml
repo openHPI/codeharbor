@@ -1,0 +1,182 @@
+---
+learner:
+  - Schüler
+  - Schülerin
+  - Schüler:in
+  - Schüler*in
+  - Schüler_in
+  - Schülerinnen und Schüler
+  - Schüler:innen
+  - Schüler*innen
+  - Schüler_innen
+  - Student
+  - Studentin
+  - Student:in
+  - Student*in
+  - Student_in
+  - Studierender
+  - Studierende
+  - Studierende:r
+  - Studierende*r
+  - Studierende_r
+  - Studenten
+  - Studentinnen
+  - Student:innen
+  - Student*innen
+  - Student_innen
+  - Lerner
+  - Lernerin
+  - Lerner:in
+  - Lerner*in
+  - Lerner_in
+  - Lernende
+  - Schulkind
+  - Schulkinder
+  - pupil
+  - pupils
+  - student
+  - students
+  - learner
+  - learners
+  - schoolchild
+  - schoolchildren
+  - undergrad
+  - undergrads
+  - grad
+  - grads
+  - novice
+  - novices
+  - rookie
+  - rookies
+  - freshman
+  - freshmen
+  - sophomore
+  - sophomores
+  - junior
+  - juniors
+  - senior
+  - seniors
+educator:
+  - Lehrer
+  - Lehrerin
+  - Lehrer:in
+  - Lehrer*in
+  - Lehrer_in
+  - Lehrerinnen und Lehrer
+  - Lehrer:innen
+  - Lehrer*innen
+  - Lehrer_innen
+  - Lehrkraft
+  - Lehrkräfte
+  - Dozent
+  - Dozentin
+  - Dozent:in
+  - Dozent:in
+  - Dozent_in
+  - Dozent*in
+  - Dozent
+  - Dozentinnen und Dozenten
+  - Dozent:innen
+  - Dozent*innen
+  - Dozent_innen
+  - Dozierende
+  - Professor
+  - Professorin
+  - Professor:in
+  - Professor_in
+  - Professor*in
+  - Professorinnen und Professoren
+  - Professor:innen
+  - Professor*innen
+  - Professor_innen
+  - Lehrkörper
+  - Lehrerschaft
+  - Lehrbeauftragter
+  - Lehrbeauftragte
+  - Lehrbeauftragte
+  - Akademiker
+  - Akademikerin
+  - Akademiker:in
+  - Akademiker*in
+  - Akademiker_in
+  - Akademikerinnen und Akademiker
+  - Akademiker:innen
+  - Akademiker*innen
+  - Akademiker_innen
+  - Lektor
+  - Lektorin
+  - Lektor:in
+  - Lektorinnen und Lektoren
+  - Lektor:innen
+  - Lektor*innen
+  - Lektor_innen
+  - Forscher
+  - Forscherin
+  - Forscher:in
+  - Forscher*in
+  - Forscher_in
+  - Forscherinnen und Forscher
+  - Forscher:innen
+  - Forscher*innen
+  - Forscher_innen
+  - Wissenschaftlicher Mitarbeiter
+  - Wissenschaftliche Mitarbeiterin
+  - Wissenschaftliche:r Mitarbeiter:in
+  - Wissenschaftliche*r Mitarbeiter*in
+  - Wissenschaftliche_r Mitarbeiter_in
+  - Wissenschaftliche Mitarbeiterinnen und wissenschaftliche Mitarbeiter
+  - Wissenschaftliche Mitarbeiter:innen
+  - Wissenschaftliche Mitarbeiter*innen
+  - Wissenschaftliche Mitarbeiter_innen
+  - Pädagoge
+  - Pädagogin
+  - Pädagogen
+  - Pädagoginnen und Pädagogen
+  - Pädagog:innen
+  - Pädagog*innen
+  - Pädagog_innen
+  - Mentor
+  - Mentorin
+  - Mentor:in
+  - Mentor*in
+  - Mentor_in
+  - Mentorinnen und Mentoren
+  - Mentor:innen
+  - Mentor*innen
+  - Mentor_innen
+  - teacher
+  - teachers
+  - educator
+  - educators
+  - faculty
+  - faculty member
+  - faculty members
+  - lecturer
+  - lecturers
+  - professor
+  - professors
+  - scholar
+  - scholars
+  - schoolteacher
+  - schoolteachers
+  - supervisor
+  - supervisors
+  - tutor
+  - tutors
+  - teaching assistant
+  - teaching assistants
+  - researcher
+  - researchers
+  - research assistant
+  - research assistants
+  - research associate
+  - research associates
+  - trainer
+  - trainers
+  - pedagogue
+  - adviser
+  - advisers
+  - preceptor
+  - preceptors
+  - mentor
+  - mentors

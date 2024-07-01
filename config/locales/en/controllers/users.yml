@@ -1,8 +1,12 @@
 ---
 en:
   users:
-    omni_auth:
+    nbp_wallet:
+      unrecognized_role: Unknown role. Please select either "Teacher" or "Student" as your role.
+    omniauth_callbacks:
       failure_deauthorize: Could not remove authorization from %{kind} because "%{reason}".
       failure_deauthorize_last_identity: You cannot deauthorize your %{kind} account because it is your last remaining account. Please create a password to log in in the future.
       failure_deauthorize_not_linked: You are not linked to any %{kind} account.
+      failure_update: 'Your profile could not be updated with data from your %{kind} account: "%{reason}".'
+      idp_linked_to_other_account: Your %{kind} account could not be linked because it is already linked to another CodeHarbor account. Try to login instead.
       success_deauthorize: Successfully removed authorization from %{kind} account.
