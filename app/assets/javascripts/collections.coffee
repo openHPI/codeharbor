@@ -1,5 +1,5 @@
 ready = ->
-  $('#share-menu').on 'click', (e) ->
+  $('#share-collection-menu').on 'click', (e) ->
     e.stopPropagation()
     return
   $('#collection-tasks-sortable').sortable({
