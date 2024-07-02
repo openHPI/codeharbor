@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'webmock/rspec'
 
 RSpec.describe TasksController do
   render_views
@@ -9,7 +10,6 @@ RSpec.describe TasksController do
   let(:collection) { create(:collection, users: [user], tasks: []) }
   let(:valid_attributes) { {user:, access_level:} }
   let(:access_level) { :private }
-
   let(:invalid_attributes) { {title: ''} }
 
   describe 'GET #index' do
@@ -1043,17 +1043,12 @@ RSpec.describe TasksController do
   end
 
   describe 'POST #generate_test' do
-    let(:task_user) { create(:user) }
+    let(:task_user) { create(:user, openai_api_key: 'valid_api_key') }
     let(:access_level) { :public }
     let(:task) { create(:task, user: task_user, access_level:) }
 
     before do
       sign_in task_user
-      Settings.open_ai.access_token = 'access_token'
-    end
-
-    after do
-      Settings.open_ai.access_token = nil
     end
 
     context 'when GptGenerateTests is successful' do
@@ -1062,8 +1057,8 @@ RSpec.describe TasksController do
         post :generate_test, params: {id: task.id}
       end
 
-      it 'calls the GptGenerateTests service with the correct task' do
-        expect(TaskService::GptGenerateTests).to have_received(:call).with(task:)
+      it 'calls the GptGenerateTests service with the correct parameters' do
+        expect(TaskService::GptGenerateTests).to have_received(:call).with(task:, openai_api_key: 'valid_api_key')
       end
 
       it 'redirects to the task show page' do
@@ -1102,6 +1097,21 @@ RSpec.describe TasksController do
 
       it 'sets flash to the appropriate message' do
         expect(flash[:alert]).to eq(I18n.t('tasks.task_service.gpt_generate_tests.invalid_description'))
+      end
+    end
+
+    context 'when GptGenerateTests raises InvalidApiKeyError' do
+      before do
+        allow(TaskService::GptGenerateTests).to receive(:call).and_raise(Gpt::InvalidApiKeyError)
+        post :generate_test, params: {id: task.id}
+      end
+
+      it 'redirects to the task show page' do
+        expect(response).to redirect_to(task_path(task))
+      end
+
+      it 'sets flash to the appropriate message' do
+        expect(flash[:alert]).to eq(I18n.t('tasks.task_service.gpt_generate_tests.invalid_api_key'))
       end
     end
   end

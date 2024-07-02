@@ -2,16 +2,27 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'webmock/rspec'
 
 RSpec.describe TaskService::GptGenerateTests do
   describe '.new' do
-    subject(:gpt_generate_tests_service) { described_class.new(task:) }
+    subject(:gpt_generate_tests_service) { described_class.new(task:, openai_api_key:) }
 
     let(:programming_language) { build(:programming_language, :ruby) }
     let(:task) { build(:task, description: 'Sample Task', programming_language:) }
+    let(:openai_api_key) { 'valid_api_key' }
+    let(:mock_models) { instance_double(OpenAI::Models, list: {'data' => [{'id' => 'model-id'}]}) }
+
+    before do
+      allow(OpenAI::Client).to receive(:new).and_return(instance_double(OpenAI::Client, models: mock_models))
+    end
 
     it 'assigns task' do
       expect(gpt_generate_tests_service.instance_variable_get(:@task)).to be task
+    end
+
+    it 'assigns openai_api_key' do
+      expect(gpt_generate_tests_service.instance_variable_get(:@openai_api_key)).to eq openai_api_key
     end
 
     context 'when language is missing' do
@@ -21,17 +32,42 @@ RSpec.describe TaskService::GptGenerateTests do
         expect { gpt_generate_tests_service }.to raise_error(Gpt::MissingLanguageError)
       end
     end
+
+    context 'when API key is missing' do
+      let(:openai_api_key) { nil }
+
+      it 'raises InvalidApiKeyError' do
+        expect { gpt_generate_tests_service }.to raise_error(Gpt::InvalidApiKeyError)
+      end
+    end
+
+    context 'when API key is invalid' do
+      let(:openai_api_key) { 'invalid_api_key' }
+      let(:mock_models_invalid) { instance_double(OpenAI::Models) }
+
+      before do
+        allow(mock_models_invalid).to receive(:list).and_raise(Faraday::UnauthorizedError)
+        allow(OpenAI::Client).to receive(:new).and_return(instance_double(OpenAI::Client, models: mock_models_invalid))
+      end
+
+      it 'raises InvalidApiKeyError' do
+        expect { gpt_generate_tests_service }.to raise_error(Gpt::InvalidApiKeyError)
+      end
+    end
   end
 
   describe '#call' do
-    subject(:gpt_generate_tests) { described_class.call(task:) }
+    subject(:gpt_generate_tests) { described_class.call(task:, openai_api_key:) }
 
     let(:programming_language) { create(:programming_language, :python) }
     let(:task) { create(:task, description: 'Create a Python script.', programming_language:) }
+    let(:openai_api_key) { 'valid_api_key' }
     let(:mock_client) { instance_double(OpenAI::Client) }
+    let(:mock_models) { instance_double(OpenAI::Models, list: {'data' => [{'id' => 'text-davinci-002'}]}) }
 
     before do
       allow(OpenAI::Client).to receive(:new).and_return(mock_client)
+      allow(mock_client).to receive(:models).and_return(mock_models)
     end
 
     context 'when the response includes valid code blocks' do
@@ -59,7 +95,7 @@ RSpec.describe TaskService::GptGenerateTests do
         allow(mock_client).to receive(:chat).and_return({'choices' => [{'message' => {'content' => 'Python script should assert true without any code block.'}}]})
       end
 
-      it 'raises InvalidTaskDescription when response does not contain backticks' do
+      it 'raises InvalidTaskDescription' do
         expect { gpt_generate_tests }.to raise_error(Gpt::InvalidTaskDescription)
       end
     end

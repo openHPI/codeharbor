@@ -14,5 +14,4 @@ omniauth:
 oai_pmh:
   admin_mail: admin@example.org
 open_ai:
-  access_token: ~ # Add a valid API key from https://platform.openai.com/api-keys
   model: gpt-3.5-turbo

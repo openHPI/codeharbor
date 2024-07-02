@@ -46,6 +46,15 @@
         | :
       .col.row-value
         = @user.email
+    .row
+      .col-auto.row-label
+        = t('.openai_api_key')
+        | :
+      .col.row-value
+        - if @user.openai_api_key.present?
+          = t('.provided_openai_key')
+        - else
+          = t('.not_provided_openai_key')
     .row.vertical
       .col.row-label
         = t('.account_links.created')

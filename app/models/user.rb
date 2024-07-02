@@ -17,6 +17,7 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: {case_sensitive: false}
   validates :first_name, :last_name, :status_group, presence: true
   validates :password_set, inclusion: [true, false]
+  validates :openai_api_key, allow_blank: true, length: {maximum: 255}
 
   has_many :tasks, dependent: :nullify
 

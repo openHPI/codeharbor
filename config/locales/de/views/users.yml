@@ -51,6 +51,9 @@ de:
       delete_modal:
         title: Warnung
       full_name: Vollständiger Name
+      not_provided_openai_key: Nicht eingegeben
+      openai_api_key: OpenAI API-Schlüssel
       private_information: Private Informationen
+      provided_openai_key: Eingegeben
       public_information: Öffentliche Informationen
       send_message: Nachricht senden

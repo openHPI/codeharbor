@@ -83,6 +83,7 @@ de:
       add_to_collection_hint: Speichern Sie Aufgaben für später, indem Sie sie zu einer Sammlung hinzufügen.
       button:
         add_to_collection: Zu Sammlung hinzufügen
+        api_key_required: OpenAI API-Schlüssel ist erforderlich, um einen Test zu erstellen
         create_collection: Neue Sammlung anlegen
         download_as_zip: Diese Aufgabe als ZIP-Datei herunterladen.
         export: Exportieren

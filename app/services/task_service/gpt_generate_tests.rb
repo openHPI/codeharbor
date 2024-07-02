@@ -2,11 +2,13 @@
 
 module TaskService
   class GptGenerateTests < ServiceBase
-    def initialize(task:)
+    def initialize(task:, openai_api_key:)
       super()
       raise Gpt::MissingLanguageError if task.programming_language&.language.blank?
 
       @task = task
+      @openai_api_key = openai_api_key.presence
+      validate_api_key!
     end
 
     def execute
@@ -21,7 +23,7 @@ module TaskService
     private
 
     def client
-      @client ||= OpenAI::Client.new
+      @client ||= OpenAI::Client.new(access_token: @openai_api_key)
     end
 
     def gpt_response
@@ -63,6 +65,19 @@ module TaskService
           the test file and no additional text.
         PROMPT
       ]
+    end
+
+    def validate_api_key!
+      if @openai_api_key.blank?
+        raise Gpt::InvalidApiKeyError
+      else
+        begin
+          response = client.models.list
+          raise Gpt::InvalidApiKeyError unless response['data']
+        rescue Faraday::UnauthorizedError, OpenAI::Error
+          raise Gpt::InvalidApiKeyError
+        end
+      end
     end
   end
 end

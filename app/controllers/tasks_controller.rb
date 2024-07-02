@@ -187,8 +187,10 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   # rubocop:enable Metrics/AbcSize
 
   def generate_test
-    TaskService::GptGenerateTests.call(task: @task)
+    TaskService::GptGenerateTests.call(task: @task, openai_api_key: current_user.openai_api_key)
     flash[:notice] = I18n.t('tasks.task_service.gpt_generate_tests.successful_generation')
+  rescue Gpt::InvalidApiKeyError
+    flash[:alert] = I18n.t('tasks.task_service.gpt_generate_tests.invalid_api_key')
   rescue Gpt::MissingLanguageError
     flash[:alert] = I18n.t('tasks.task_service.gpt_generate_tests.no_language')
   rescue Gpt::InvalidTaskDescription
