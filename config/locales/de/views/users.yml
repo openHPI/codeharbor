@@ -34,6 +34,7 @@ de:
       delete_modal:
         title: Warnung
       full_name: Vollständiger Name
+      personal_api_key: Persönlicher API-Schlüssel
       private_information: Private Informationen
       public_information: Öffentliche Informationen
       send_message: Nachricht senden
