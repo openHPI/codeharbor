@@ -46,6 +46,12 @@
         | :
       .col.row-value
         = @user.email
+    .row
+      .col-auto.row-label
+        = t('.personal_api_key')
+        | :
+      .col.row-value
+        = @user.personal_api_key
     .row.vertical
       .col.row-label
         = t('.account_links.created')
