@@ -1,7 +1,7 @@
-= label_tag t('.configuration'), nil, class: 'form-label', style: 'font-size: 16px;'
+= label_tag t('.configuration'), nil, class: 'form-label lead-label'
 .file-configuration
   .form-control.placeholder
-    = file.label :used_by_grader, TaskFile.human_attribute_name('used_by_grader'), class: 'form-label', style: 'width: unset; margin-right: 10px;'
+    = file.label :used_by_grader, TaskFile.human_attribute_name('used_by_grader'), class: 'form-label w-auto me-2'
     .radio-switch
       = file.radio_button :used_by_grader, true, value: true
       = file.label :used_by_grader_true, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('common.button.yes'), class: 'radio-left small-radio radio-half' do
@@ -13,7 +13,7 @@
           i.fa-solid.fa-xmark.fa-stack-1x.fa-2x
 
   .form-control.placeholder
-    = file.label :used_by_grader, TaskFile.human_attribute_name('visible'), class: 'form-label', style: 'width: unset; margin-right: 10px;'
+    = file.label :used_by_grader, TaskFile.human_attribute_name('visible'), class: 'form-label w-auto me-2'
     .radio-switch
       = file.radio_button :visible, 'yes', value: 'yes', checked: true
       = file.label :visible_yes, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('common.button.yes'), class: 'radio-left small-radio radio-third' do
@@ -29,7 +29,7 @@
           i.fa-regular.fa-clock.fa-stack-1x.fa-2x
 
   .form-control.placeholder
-    = file.label :usage_by_lms, TaskFile.human_attribute_name('usage_by_lms'), class: 'form-label', style: 'width: unset; margin-right: 10px;'
+    = file.label :usage_by_lms, TaskFile.human_attribute_name('usage_by_lms'), class: 'form-label w-auto me-2'
     .radio-switch
       = file.radio_button :usage_by_lms, 'edit', value: 'edit'
       = file.label :usage_by_lms_edit, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('common.button.edit'), class: 'radio-left small-radio radio-third' do
