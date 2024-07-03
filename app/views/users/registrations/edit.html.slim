@@ -71,7 +71,7 @@
         .form-content.manage_omniauth
           - resource_class.omniauth_providers.each do |provider|
             - provider_name = OmniAuth::Utils.camelize(provider)
-            - configured_providers = current_user.identities.pluck(:omniauth_provider)
+            - configured_providers = current_user.omniauth_identities.pluck(:omniauth_provider)
             - if configured_providers.include?(provider.to_s) && (configured_providers.size > 1 || resource.password_set?)
               = link_to t('.remove_identity', kind: provider_name), omniauth_deauthorize_path(provider), class: 'btn btn-light btn-sm mb-2 me-2', method: :delete
             - elsif configured_providers.include?(provider.to_s)

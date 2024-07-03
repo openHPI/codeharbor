@@ -9,6 +9,8 @@ en:
       about: About
       account_link_documentation: About Account Links
       index: Cover Page
+    nbp_wallet:
+      connect: Connect Wallet
     passwords:
       create: Forgot Password
       edit: Change Password

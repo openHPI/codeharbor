@@ -8,6 +8,13 @@ omniauth:
     certificate: ~
     private_key: ~
   nbp:
+    enmeshed:
+      app_store_link: 'https://apps.apple.com/de/app/mein-bildungsraum-wallet/id6467007352'
+      play_store_link: 'https://play.google.com/store/apps/details?id=de.bildungsraum.wallet.beta'
+      connector_url: 'https://enmeshed-connector.example.com:80'
+      connector_api_key: myapikey
+      display_name: CodeHarbor
+      allow_certificate_request: false
     enable: false
     certificate: ~
     private_key: ~

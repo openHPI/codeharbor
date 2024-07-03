@@ -1,0 +1,66 @@
+{
+  "result": {
+    "id": "RLT_example_id_ABCXY",
+    "isOwn": true,
+    "createdBy": "id1JttmYYvjT6wojkJ9rpaFkMUKHAWKr9RDf",
+    "createdByDevice": "DVCiZvbvF6dg7cr1nwLw",
+    "createdAt": "2024-04-29T12:47:04.436Z",
+    "content": {
+      "metadata": {"nbp_uid": "example_uid"},
+      "@type": "RelationshipTemplateContent",
+      "onNewRelationship": {
+        "items": [
+          {
+            "@type": "ShareAttributeRequestItem",
+            "attribute": {
+              "@type": "IdentityAttribute",
+              "owner": "id1JttmYYvjT6wojkJ9rpaFkMUKHAWKr9RDf",
+              "value": {
+                "@type": "DisplayName",
+                "value": "CodeHarbor"
+              }
+            },
+            "mustBeAccepted": true,
+            "sourceAttributeId": "ATTN3cgBCRnAk5DBgAIa"
+          },
+          {
+            "@type": "ReadAttributeRequestItem",
+            "mustBeAccepted": true,
+            "query": {
+              "@type": "IdentityAttributeQuery",
+              "valueType": "GivenName"
+            }
+          },
+          {
+            "@type": "ReadAttributeRequestItem",
+            "mustBeAccepted": true,
+            "query": {
+              "@type": "IdentityAttributeQuery",
+              "valueType": "Surname"
+            }
+          },
+          {
+            "@type": "ReadAttributeRequestItem",
+            "mustBeAccepted": true,
+            "query": {
+              "@type": "IdentityAttributeQuery",
+              "valueType": "EMailAddress"
+            }
+          },
+          {
+            "@type": "ReadAttributeRequestItem",
+            "mustBeAccepted": true,
+            "query": {
+              "@type": "IdentityAttributeQuery",
+              "valueType": "AffiliationRole"
+            }
+          }
+        ]
+      }
+    },
+    "expiresAt": "2024-04-29T12:49:04.543Z",
+    "maxNumberOfAllocations": 1,
+    "secretKey": "eyJrZXkiOiJHc184a0N5cm5LdFAtSTduczB1UmZxVVBOWnB2ME1XU2lfOGU0NmtkNU5vIiwiYWxnIjozfQ",
+    "truncatedReference": "RelationshipTemplateExampleTruncatedReferenceA=="
+  }
+}

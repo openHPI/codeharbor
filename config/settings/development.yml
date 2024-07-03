@@ -8,6 +8,9 @@ omniauth:
     enable: false
   nbp:
     enable: false
+    enmeshed:
+      app_store_link: 'https://apps.apple.com/de/app/mein-bildungsraum-wallet/id6467007352'
+      play_store_link: 'https://play.google.com/store/apps/details?id=de.bildungsraum.wallet.beta'
 oai_pmh:
   admin_mail: admin@example.org
 open_ai:
