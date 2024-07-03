@@ -89,7 +89,6 @@ a.classic-link {
     border: 1px #dddddd solid;
     width: 96%;
 
-    .row-label,
     .row-label {
       text-align: left;
       background-color: $gray-bg-color;
@@ -100,15 +99,13 @@ a.classic-link {
       min-width: 80px;
       border-right: 1px #dddddd solid;
     }
-    .row-value,
     .row-value {
       text-align: left;
       padding: 6px 8px;
     }
   }
 
-  .row.vertical,
-  .row-vertical {
+  .row.vertical {
     .row-label {
       width: 100%;
       display: block;
