@@ -79,6 +79,10 @@ a.classic-link {
     border-bottom: none;
   }
 
+  .lead-label {
+    font-size: 1.15em;
+  }
+
   .row {
     margin: 8px 2%;
     border-radius: 2px;
@@ -284,4 +288,9 @@ fieldset.form-group {
 
 .dropdown-title {
   padding-left: 2px;
+}
+
+// Hide the element (useful for hiding element, but does not want to use bootstrap d-none class that persist display: none !important)
+.hide {
+  display: none;
 }

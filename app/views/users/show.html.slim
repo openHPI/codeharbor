@@ -51,11 +51,12 @@
         = t('.account_links.created')
         |:
       .row-value
-        = link_to new_user_account_link_path(@user), class: 'btn btn-light btn-sm', style: 'margin-bottom: 10px' do
-          i.fa-solid.fa-plus
-          =< t('.account_links.add')
-        =< button_tag type: 'button', class: 'btn btn-light btn-sm show-description', style: 'margin-bottom: 10px' do
-          i.fa-solid.fa-question
+        .mb-2
+          = link_to new_user_account_link_path(@user), class: 'btn btn-light btn-sm' do
+            i.fa-solid.fa-plus
+            =< t('.account_links.add')
+          =< button_tag type: 'button', class: 'btn btn-light btn-sm show-description' do
+            i.fa-solid.fa-question
         .account-link-description.info-box
           span.fa-solid.fa-circle-info
           = t('account_links.show.description_html')
