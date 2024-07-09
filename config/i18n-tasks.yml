@@ -139,6 +139,7 @@ ignore_unused:
   # ignore devise errors
   - 'errors.messages.{already_confirmed,confirmation_period_expired,expired,not_found,not_locked}'
   - 'errors.messages.not_saved.*'
+  - 'common.app_name'
 
 ## Exclude these keys from the `i18n_tasks eq-base' report:
 # ignore_eq_base:

@@ -1,12 +1,6 @@
 ---
 en:
   tasks:
-    access_request_mailer:
-      greeting: Hello %{user}
-      message_line1: '%{user} asked to contribute to your task "%{task}".'
-      message_line2: If you want to make them a co-author or suggest Membership to a group click the link below.
-      message_line3: Otherwise ignore this Email.
-      subject: '%{user} wants to contribute to your task "%{task}"'
     completeness_checklist:
       checklist: Completeness Checklist
       description: Description written

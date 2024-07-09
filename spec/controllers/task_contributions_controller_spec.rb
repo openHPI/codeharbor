@@ -60,7 +60,7 @@ RSpec.describe TaskContributionsController do
 
       it 'shows a flash message' do
         post_request
-        expect(flash[:alert]).to eq(I18n.t('task_contributions.create.error'))
+        expect(flash[:alert]).to eq(I18n.t('common.errors.model_not_saved'))
       end
 
       it 'redirects to the original task' do
