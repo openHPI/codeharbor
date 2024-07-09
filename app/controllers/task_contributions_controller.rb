@@ -64,19 +64,19 @@ class TaskContributionsController < ApplicationController
 
     if @task_contribution.save(context: :force_validations)
       TaskContributionMailer.contribution_request(@task_contribution).deliver_later
-      redirect_to [@task, @task_contribution], notice: t('.success')
+      redirect_to [@task, @task_contribution], notice: t('common.notices.object_created', model: TaskContribution.model_name.human)
     else
-      redirect_to @task, alert: t('.error')
+      redirect_to @task, alert: t('common.errors.model_not_saved', model: TaskContribution.model_name.human)
     end
   end
 
   def update
     @task_contribution.suggestion.assign_attributes(task_params.except(:parent_uuid))
     if @task_contribution.save(context: :force_validations)
-      redirect_to [@task, @task_contribution], notice: t('.success')
+      redirect_to [@task, @task_contribution], notice: t('common.notices.object_updated', model: TaskContribution.model_name.human)
     else
       @task = @task_contribution.suggestion
-      render 'tasks/edit', danger: t('.error')
+      render 'tasks/edit', danger: t('common.errors.changes_not_saved', model: TaskContribution.model_name.human)
     end
   end
 

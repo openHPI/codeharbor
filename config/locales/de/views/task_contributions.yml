@@ -7,19 +7,20 @@ de:
       edit_contribution: Änderungsvorschlag bearbeiten
     mailer:
       approval_info:
-        status_message: Ihre Änderungsvorschläge für den Task %{task} wurden genehmigt und übernommen.
+        status_message: Ihre Änderungsvorschläge für die Aufgabe %{task} wurden genehmigt und übernommen.
         subject_message: Ihre Änderungsvorschläge für %{task} wurden übernommen
       contribution_request:
-        else_message: Andernfalls können Sie diese Nachricht ignorieren.
-        request_message: "%{contrib_author} hat eine Änderung für den Task %{task} vorgeschlagen."
-        review_message: Falls Sie die Änderungen einsehen oder übernehmen wollen, klicken Sie auf den unten stehenden Link.
+        request_message: "%{contrib_author} hat eine Änderung für die Aufgabe %{task} vorgeschlagen."
+        review_message: Klicken Sie auf den unten stehenden Link, um die Änderungen einzusehen oder zu übernehmen.
         subject_message: "%{contrib_author} hat eine Änderun für %{task} vorgeschlagen"
+      contribution_url_message: Änderungsvorschlag ansehen
       greeting: Hallo %{user}
       rejection_info:
-        duplicate_message: Ihre Änderungsvorschläge sind nun ein vollwertiger Task.
-        status_message: Ihre Änderungsvorschläge für den Task %{task} wurden abgelehnt.
+        duplicate_message: Ihre Änderungsvorschläge sind nun ein vollwertige Aufgabe.
+        status_message: Ihre Änderungsvorschläge für die Aufgabe %{task} wurden abgelehnt.
         subject_message: Ihre Änderungsvorschläge für %{task} wurden abgelehnt
         visibility_message: Sie können die Sichtbarkeit auf öffentlich ändern, damit andere Ihre Änderungen nutzen können.
+      task_url_message: Aufgabe ansehen
     new:
       new_contribution: Neuer Änderungsvorschlag
     status:
