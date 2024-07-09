@@ -69,7 +69,7 @@ RSpec.describe TaskPolicy do
           Settings.open_ai.access_token = nil
         end
 
-        it { is_expected.to pforbid_only_actions %i[contribute] }
+        it { is_expected.to forbid_only_actions %i[contribute] }
       end
     end
 
