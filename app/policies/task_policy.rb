@@ -5,10 +5,6 @@ class TaskPolicy < ApplicationPolicy
     @record
   end
 
-  def suggestion?
-    task.task_contribution.present?
-  end
-
   %i[show? download?].each do |action|
     define_method(action) do
       if @user.present?
@@ -61,6 +57,7 @@ class TaskPolicy < ApplicationPolicy
   def generate_test?
     user&.openai_api_key.present? and update?
   end
+
   def contribute?(check_other_contrib: true)
     return false if @user.blank?
 
@@ -68,6 +65,10 @@ class TaskPolicy < ApplicationPolicy
   end
 
   private
+
+  def suggestion?
+    task.task_contribution.present?
+  end
 
   def user_required?
     false
