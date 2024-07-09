@@ -57,7 +57,7 @@ class TaskContributionsController < ApplicationController
     render 'tasks/edit'
   end
 
-  def create
+  def create # rubocop:disable Metrics/AbcSize
     @task_contribution = TaskContribution.new(suggestion_attributes: task_params, base: @task)
     @task_contribution.suggestion.assign_attributes(user: current_user, access_level: :private)
     authorize @task_contribution
