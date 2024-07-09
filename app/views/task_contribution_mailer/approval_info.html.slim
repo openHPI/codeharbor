@@ -1,3 +1,4 @@
 h3
   = t('task_contributions.mailer.greeting', user: @contrib_author.name)
 p = t('task_contributions.mailer.approval_info.status_message', task: @task_contrib.base.title)
+p = link_to t('task_contributions.mailer.task_url_message'), task_url(@task_contrib.base)
