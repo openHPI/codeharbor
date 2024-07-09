@@ -2,5 +2,4 @@ h3
   = t('task_contributions.mailer.greeting', user: @task_author.name)
 p = t('task_contributions.mailer.contribution_request.request_message', contrib_author: @contrib_author.name, task: @task_contrib.base.title)
 p = t('task_contributions.mailer.contribution_request.review_message')
-p = t('task_contributions.mailer.contribution_request.else_message')
-p = link_to 'CodeHarbor', task_task_contribution_url(@task_contrib.base, @task_contrib)
+p = link_to t('task_contributions.mailer.contribution_url_message'), task_task_contribution_url(@task_contrib.base, @task_contrib)
