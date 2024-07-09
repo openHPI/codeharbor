@@ -574,12 +574,16 @@
             =< t('common.button.duplicate')
 
       - if policy(@task).generate_test?
-        = link_to generate_test_task_path(@task), method: :post, class: 'btn btn-important' do
+        = link_to generate_test_task_path(@task),
+                method: :post,
+                class: 'btn btn-important' do
           i.fa-solid.fa-wand-magic-sparkles
           = t('.button.generate_test')
-      - else
-        div data-bs-toggle='tooltip' title=t('.button.api_key_required') data-bs-delay='150'
-          = link_to '#', method: :post, class: 'btn btn-important disabled' do
+      - elsif policy(@task).update?
+        div data-bs-toggle='tooltip' title=t('.button.api_key_required') data-bs-delay=150
+          = link_to generate_test_task_path(@task),
+                  method: :post,
+                  class: 'btn btn-important disabled' do
             i.fa-solid.fa-wand-magic-sparkles
             = t('.button.generate_test')
 

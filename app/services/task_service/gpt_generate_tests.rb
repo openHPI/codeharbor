@@ -7,7 +7,7 @@ module TaskService
       raise Gpt::MissingLanguageError if task.programming_language&.language.blank?
 
       @task = task
-      @openai_api_key = openai_api_key.presence
+      @openai_api_key = openai_api_key
       validate_api_key!
     end
 

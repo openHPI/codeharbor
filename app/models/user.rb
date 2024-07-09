@@ -17,7 +17,7 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: {case_sensitive: false}
   validates :first_name, :last_name, :status_group, presence: true
   validates :password_set, inclusion: [true, false]
-  validates :openai_api_key, allow_blank: true, length: {maximum: 255}
+  validate :validate_openai_api_key, if: -> { openai_api_key.present? }
 
   has_many :tasks, dependent: :nullify
 
@@ -145,6 +145,19 @@ class User < ApplicationRecord
 
   def to_s
     name
+  end
+
+  def validate_openai_api_key
+    return unless openai_api_key_changed?
+
+    client = OpenAI::Client.new(access_token: openai_api_key)
+
+    begin
+      response = client.models.list
+      errors.add(:base, :invalid_api_key) unless response['data']
+    rescue Faraday::UnauthorizedError, OpenAI::Error
+      errors.add(:base, :invalid_api_key)
+    end
   end
 
   private

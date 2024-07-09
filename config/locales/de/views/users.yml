@@ -28,6 +28,7 @@ de:
         add_identity: Account mit %{kind} verknüpfen
         cannot_remove_last_identity: Account-Verknüpfung zu %{kind} kann nicht entfernt werden, da weder ein Passwort gesetzt noch eine andere Identität verknüpft ist
         manage_omniauth: Verknüpfte Accounts verwalten
+        openai_api_key_usage_html: Geben Sie hier Ihren OpenAI-API-Schlüssel ein, um verschiedene KI-Funktionen innerhalb der Plattform zu nutzen. Sie können einen API-Schlüssel auf der <a href='%{openai_api_link}' target='_blank' rel='noopener noreferrer'>OpenAI-Website</a> erstellen.
         remove_identity: Account-Verknüpfung zu %{kind} entfernen
     shared:
       notification_modal:
@@ -51,9 +52,9 @@ de:
       delete_modal:
         title: Warnung
       full_name: Vollständiger Name
-      not_provided_openai_key: Nicht eingegeben
       openai_api_key: OpenAI API-Schlüssel
+      openai_api_key_not_provided: Nicht eingegeben
+      openai_api_key_provided: Eingegeben
       private_information: Private Informationen
-      provided_openai_key: Eingegeben
       public_information: Öffentliche Informationen
       send_message: Nachricht senden

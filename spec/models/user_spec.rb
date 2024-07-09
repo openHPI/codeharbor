@@ -50,6 +50,53 @@ RSpec.describe User do
         expect(user.errors[:avatar]).to include(I18n.t('activerecord.errors.models.user.attributes.avatar.size_over_10_mb'))
       end
     end
+
+    context 'when openai_api_key is present and valid' do
+      before do
+        allow(OpenAI::Client).to receive(:new).and_return(instance_double(OpenAI::Client, models: mock_models))
+        user.openai_api_key = 'valid_key'
+      end
+
+      let(:mock_models) { instance_double(OpenAI::Models, list: {'data' => [{'id' => 'model-id'}]}) }
+
+      it 'is valid' do
+        expect(user).to be_valid
+      end
+    end
+
+    context 'when openai_api_key is present and invalid' do
+      before do
+        allow(OpenAI::Client).to receive(:new).and_return(instance_double(OpenAI::Client, models: mock_models))
+        allow(mock_models).to receive(:list).and_raise(OpenAI::Error)
+        user.openai_api_key = 'invalid_key'
+        user.valid?
+      end
+
+      let(:mock_models) { instance_double(OpenAI::Models) }
+
+      it 'is not valid' do
+        expect(user).not_to be_valid
+      end
+
+      it 'adds an error for invalid api key' do
+        expect(user.errors[:base]).to include(I18n.t('activerecord.errors.models.user.invalid_api_key'))
+      end
+    end
+
+    context 'when openai_api_key remains the same' do
+      before do
+        allow(OpenAI::Client).to receive(:new).and_return(instance_double(OpenAI::Client, models: mock_models))
+        user.openai_api_key = 'same_key'
+        user.save!
+        user.valid?
+      end
+
+      let(:mock_models) { instance_double(OpenAI::Models, list: {'data' => [{'id' => 'model-id'}]}) }
+
+      it 'does not trigger API validation' do
+        expect(user.errors[:base]).not_to include(I18n.t('activerecord.errors.models.user.invalid_api_key'))
+      end
+    end
   end
 
   describe '#destroy' do

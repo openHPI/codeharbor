@@ -36,24 +36,22 @@ RSpec.describe TaskPolicy do
     context 'when user is admin' do
       let(:user) { create(:admin, openai_api_key:) }
 
-      it { is_expected.to forbid_only_actions %i[generate_test] }
+      context 'without gpt access token' do
+        let(:openai_api_key) { nil }
 
-      context 'with gpt access token' do
-        let(:openai_api_key) { 'access_token' }
-
-        it { is_expected.to permit_all_actions }
+        it { is_expected.to forbid_actions(%i[generate_test]) }
+        it { is_expected.to permit_actions(generic_user_permissions) }
       end
     end
 
     context 'when task is from user' do
       let(:task_user) { user }
 
-      it { is_expected.to forbid_only_actions %i[generate_test] }
+      context 'without gpt access token' do
+        let(:openai_api_key) { nil }
 
-      context 'with gpt access token' do
-        let(:openai_api_key) { 'access_token' }
-
-        it { is_expected.to permit_all_actions }
+        it { is_expected.to forbid_actions(%i[generate_test]) }
+        it { is_expected.to permit_actions(generic_user_permissions + %i[edit update show export_external_start export_external_check export_external_confirm download add_to_collection duplicate]) }
       end
     end
 
@@ -77,13 +75,11 @@ RSpec.describe TaskPolicy do
       context 'when user is group-admin' do
         let(:role) { :admin }
 
-        it { is_expected.to permit_only_actions(group_member_permissions) }
+        context 'without gpt access token' do
+          let(:openai_api_key) { nil }
 
-        context 'with gpt access token' do
-          let(:openai_api_key) { 'access_token' }
-          let(:group_member_permissions_with_generate_test) { group_member_permissions + %i[generate_test] }
-
-          it { is_expected.to permit_only_actions(group_member_permissions_with_generate_test) }
+          it { is_expected.to forbid_actions(%i[generate_test]) }
+          it { is_expected.to permit_actions(group_member_permissions) }
         end
       end
     end

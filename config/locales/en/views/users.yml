@@ -28,6 +28,7 @@ en:
         add_identity: Link %{kind} account
         cannot_remove_last_identity: Cannot remove account link to %{kind} because neither a password is set nor another identity is linked
         manage_omniauth: Manage linked accounts
+        openai_api_key_usage_html: Enter your OpenAI API key here to use various AI features within the platform. You can create an API key on the <a href='%{openai_api_link}' target='_blank' rel='noopener noreferrer'>OpenAI website</a>.
         remove_identity: Remove account link to %{kind}
     shared:
       notification_modal:
@@ -51,9 +52,9 @@ en:
       delete_modal:
         title: Warning
       full_name: Full name
-      not_provided_openai_key: Not entered
       openai_api_key: OpenAI API Key
+      openai_api_key_not_provided: Not entered
+      openai_api_key_provided: Entered
       private_information: Private Information
-      provided_openai_key: Entered
       public_information: Public Information
       send_message: Send Message
