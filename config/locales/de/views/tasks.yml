@@ -84,11 +84,14 @@ de:
       new_task: Neue Aufgabe
     shared:
       additional_info: Zusätzliche Informationen
+      contribution_info: Informationen zum Änderungsvorschlag
       basic_information: Basisinformationen
       new_comment: Neuer Kommentar
     show:
       add_to_collection_hint: Speichern Sie Aufgaben für später, indem Sie sie zu einer Sammlung hinzufügen.
+      contribution_list_hint: Betrachten Sie Änderungsvorschläg mit Bezug zu dieser Aufgabe.
       button:
+        contribution_list: Verwandte Änderungsvorschläge ansehen
         add_to_collection: Zu Sammlung hinzufügen
         api_key_required: OpenAI API-Schlüssel ist erforderlich, um einen Test zu erstellen
         create_collection: Neue Sammlung anlegen
@@ -101,6 +104,7 @@ de:
       create_collection_placeholder: Name der Sammlung
       define_account_link: Bitte definieren Sie zuerst einen Account-Link
       export_to: Exportieren nach
+      owner_required_tooltip: Sie müssen der Autor der Aufgabe sein, um die Funktion zu verwenden.
       guest:
         disabled:
           tooltip: Sie müssen eingeloggt sein, um diese Funktion zu verwenden.
