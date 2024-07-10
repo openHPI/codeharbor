@@ -43,12 +43,13 @@
           .field-element
             = f.label :internal_description, Task.human_attribute_name('internal_description'), class: 'form-label'
             = f.text_area :internal_description, class: 'form-control'
-          .field-element
-            = f.label :uuid, Task.human_attribute_name('uuid'), class: 'form-label'
-            = f.text_field :uuid, type: :uuid, class: 'form-control not-allowed', disabled: true, title: t('.unchangeable_uuid'), 'data-bs-toggle': 'tooltip', pattern: uuid_pattern
-          .field-element
-            = f.label :parent_uuid, Task.human_attribute_name('parent_uuid'), class: 'form-label'
-            = f.text_field :parent_uuid, type: :uuid, class: 'form-control', pattern: uuid_pattern
+          - unless @task.contribution?
+            .field-element
+              = f.label :uuid, Task.human_attribute_name('uuid'), class: 'form-label'
+              = f.text_field :uuid, type: :uuid, class: 'form-control not-allowed', disabled: true, title: t('.unchangeable_uuid'), 'data-bs-toggle': 'tooltip', pattern: uuid_pattern
+            .field-element
+              = f.label :parent_uuid, Task.human_attribute_name('parent_uuid'), class: 'form-label'
+              = f.text_field :parent_uuid, type: :uuid, class: 'form-control', pattern: uuid_pattern
           .field-element
             = f.label :language, Task.human_attribute_name('language'), class: 'form-label'
             = f.text_field :language, class: 'form-control'

@@ -84,11 +84,14 @@ en:
       new_task: New Task
     shared:
       additional_info: Additional Information
+      contribution_info: Contribution Information
       basic_information: Basic Information
       new_comment: New Comment
     show:
       add_to_collection_hint: Save Tasks for later by adding them to a collection.
+      contribution_list_hint: View contributions linked to this task.
       button:
+        contribution_list: View related Contributions
         add_to_collection: Add to Collection
         api_key_required: OpenAI API key is required to generate a test
         create_collection: Create new Collection
@@ -109,6 +112,7 @@ en:
       no_model_solution_present: No Model Solutions present
       no_tests: No tests included
       remove_task_from_collection_warning: Are you sure you want to remove this Task from the Collection?
+      owner_required_tooltip: This feature can only be used by the owner of the task.
       task_contribution:
         disabled:
           tooltip: This feature is unavailable for task contributions.
