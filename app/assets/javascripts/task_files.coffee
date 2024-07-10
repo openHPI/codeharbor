@@ -7,9 +7,8 @@ ready = ->
 
 initializeUploadedFileChange = ->
   $('form').on 'change', '.alternative-input', (event) ->
-    $(this).parents('.attachment').find('.alternative').show()
-    $(this).parents('.attachment').find('.attachment_present').hide()
-
+    $(this).parents('.attachment').find('.alternative').removeClass('hide')
+    $(this).parents('.attachment').find('.attachment_present').addClass('hide')
 
 initializeUploadedFileReupload = ->
   $('form').on 'click', '.reupload-attachment', (event) ->
@@ -20,13 +19,12 @@ initializeExtractText = ->
   $('form').on 'click', '.extract-text', (event) ->
     $button = $(this)
     id = $button.data('file-id')
-    $.ajax({
-      type: 'GET',
-      url: Routes.extract_text_data_task_file_path(id),
+    $.ajax
+      type: 'GET'
+      url: Routes.extract_text_data_task_file_path(id)
       success: (response) ->
         $content = $button.parents('.toggle-divs')
         hideFileUploadShowTextEditor $content, response.text_data
-    })
 
 initializeToggleEditorAttachment = ->
   $('form').on 'click', '.toggle-input', (event) ->
@@ -34,33 +32,32 @@ initializeToggleEditorAttachment = ->
     $content = $(this).next()
     $attachment = $content.find('.attachment')
 
-    if ($attachment.css('display') == 'none')
+    if $attachment.hasClass('hide')
       showFileUploadHideTextEditor $content
     else
       hideFileUploadShowTextEditor $content
     return
 
-showFileUploadHideTextEditor = ($content)->
+showFileUploadHideTextEditor = ($content) ->
   $editor = $content.find('.edit')
   $attachment = $content.find('.attachment')
   $editor.find('.d-none').attr('disabled', true)
-  $editor.hide()
+  $editor.addClass('hide')
   $attachment.find('.use-attached-file').val(true)
   $attachment.find('.alternative-input').attr('disabled', false)
-  $attachment.show()
+  $attachment.removeClass('hide')
 
-
-hideFileUploadShowTextEditor = ($content, text)->
+hideFileUploadShowTextEditor = ($content, text) ->
   $editor = $content.find('.edit')
   $ace_editor = $content.find('.editor')
   $attachment = $content.find('.attachment')
   $attachment.find('.alternative-input').attr('disabled', true)
   $attachment.find('.use-attached-file').val(false)
-  $attachment.hide()
+  $attachment.addClass('hide')
   $editor.find('.d-none').attr('disabled', false)
-  $editor.show()
+  $editor.removeClass('hide')
   if text
-    setAceEditorValue($ace_editor[0], text)
+    setAceEditorValue $ace_editor[0], text
 
 initializeOnUpload = ->
   $('form').on 'change', '.alternative-input', (event) ->
@@ -71,5 +68,4 @@ initializeOnUpload = ->
     if fullPath
       $(this).parents('.file-container').find('.file-name').val(fullName)
 
-
-$(document).on('turbolinks:load', ready)
+$(document).on 'turbolinks:load', ready
