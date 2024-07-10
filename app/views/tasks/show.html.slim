@@ -138,9 +138,26 @@
             = link_to @task.license.link, @task.license.link
           - else
             = t('.no_license')
-
+    - if @task.contribution?
+      legend.toggle-next.closed
+        span.number = '3'
+        => t('tasks.shared.contribution_info')
+        span.fa-solid.fa-caret-down
+      .show-table.exercise-show.hide
+        .row
+          .col-auto.row-label
+            = TaskContribution.human_attribute_name('status')
+            | :
+          .col.row-value
+            = t("task_contributions.status.#{@task.task_contribution.status}")
+        .row
+          .col-auto.row-label
+            = Task.human_attribute_name('parent')
+            | :
+          .col.row-value
+            = link_to @task.parent.title, task_path(@task.parent)
     legend.toggle-next
-      span.number = '3'
+      span.number = '4'
       => Task.human_attribute_name('files')
       span.fa-solid.fa-caret-up
     - if @files.empty?
@@ -212,7 +229,7 @@
                 = file.usage_by_lms
 
     legend.toggle-next
-      span.number = '4'
+      span.number = '5'
       => Task.human_attribute_name('tests')
       span.fa-solid.fa-caret-up
     - if @tests.empty?
@@ -352,7 +369,7 @@
                         = file.usage_by_lms
 
     legend.toggle-next
-      span.number = '5'
+      span.number = '6'
       => ModelSolution.model_name.human(count: :many)
       span.fa-solid.fa-caret-up
     - if @model_solutions.empty?
@@ -521,6 +538,21 @@
           div data-bs-toggle='tooltip' title=unavailable_tooltip data-bs-delay=150
             = button_tag class: 'btn btn-outline-dark dropdown-toggle disabled', 'data-bs-toggle': 'dropdown' do
               = t('.button.export')
+  .col-md-4.col-sm-6.mb-3.p-0
+    .button-box.border.p-3.h-100
+      .button-description
+        = t('.contribution_list_hint')
+      .wrapper
+        - if !@task.contribution? && policy(@task).edit?
+          = link_to t('.button.contribution_list'), task_task_contributions_path(@task), class: 'btn btn-light', 'data-turbolinks' => false
+        - else
+          - if @task.contribution? || @current_user.nil?
+            - contrib_list_unavailable_tooltip = unavailable_tooltip
+          - else
+            - contrib_list_unavailable_tooltip = t('.owner_required_tooltip')
+          div data-bs-toggle='tooltip' title=contrib_list_unavailable_tooltip data-bs-delay=150
+            = link_to t('.button.contribution_list'), task_task_contributions_path(@task), class: 'btn btn-outline-dark disabled', 'data-turbolinks' => false
+
 
   .col-md-12.pb-3.mt-3
     .expandable-panel
