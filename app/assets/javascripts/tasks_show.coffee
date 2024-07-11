@@ -19,7 +19,7 @@ initializeShowComments = ->
         document.getElementById('page_end').scrollIntoView(false))
     else
       $caret.removeClass('fa-caret-up').addClass('fa-caret-down')
-      $comment_box.hide()
+      $comment_box.addClass('hide')
 
 
 $(document).on('turbolinks:load', ready)

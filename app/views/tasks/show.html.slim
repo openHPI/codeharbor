@@ -70,7 +70,7 @@
       span.number = '2'
       => t('tasks.shared.additional_info')
       span.fa-solid.fa-caret-down
-    .show-table.exercise-show style="display:none;"
+    .show-table.exercise-show class='hide'
       .row.vertical
         .col.row-label
           = Task.human_attribute_name('internal_description')
@@ -536,7 +536,7 @@
     .expandable-panel
       = button_tag type: 'button', class: 'full-window-button show-comment-button', data: {task_id: @task.id} do
         => t('.button.show_comments')
-        span.fa-solid.fa-circle-notch.fa-spin.wait.me-1 style="display:none;"
+        span.fa-solid.fa-circle-notch.fa-spin.wait.me-1 class='hide'
         span.fa-solid.fa-caret-down.my-caret
       .comment-box.with-borders.border-top-0 data-task=@task.id
         = form_for :comment, url: task_comments_path(@task), remote: true do |f|
