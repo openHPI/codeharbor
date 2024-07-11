@@ -19,13 +19,13 @@ loadComments = (url, $wait_icon, $comment_box, onSucess)->
     url: url
     dataType: 'script'
     beforeSend: ->
-      $wait_icon.show()
+      $wait_icon.removeClass('hide')
     success: ->
-      $comment_box.show()
+      $comment_box.removeClass('hide')
       if typeof onSucess == 'function'
         onSucess()
     complete: ->
-      $wait_icon.hide()
+      $wait_icon.addClass('hide')
   })
 
 
