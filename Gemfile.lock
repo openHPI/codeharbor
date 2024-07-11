@@ -327,7 +327,7 @@ GEM
       rspec-mocks (~> 3.12)
       rspec-support (~> 3.12)
     racc (1.8.0)
-    rack (3.1.6)
+    rack (3.1.7)
     rack-mini-profiler (3.3.1)
       rack (>= 1.2.0)
     rack-protection (4.0.0)
@@ -493,7 +493,7 @@ GEM
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
     set (1.1.0)
-    shakapacker (8.0.0)
+    shakapacker (8.0.1)
       activesupport (>= 5.2)
       package_json
       rack-proxy (>= 0.6.1)
@@ -647,7 +647,7 @@ DEPENDENCIES
   selenium-webdriver
   sentry-rails
   sentry-ruby
-  shakapacker (= 8.0.0)
+  shakapacker (= 8.0.1)
   shoulda-matchers
   simple_form
   simplecov
