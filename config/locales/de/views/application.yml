@@ -7,10 +7,12 @@ de:
         paragraph: CodeHarbor ermöglicht das Teilen, Bewerten und Diskutieren von automatisch-bewertbaren Programmieraufgaben mit Kollegen und Kolleginnen. Verwenden Sie vorhandene Aufgaben wieder, klonen Sie Aufgaben und passen Sie sie an Ihre Bedürfnisse an. Übersetzen Sie sie in eine andere Sprache oder portieren Sie sie in eine andere Programmiersprache. Behalten Sie immer die volle Kontrolle darüber, mit wem Sie Aufgaben teilen.
       hasso_plattner_institute: Hasso-Plattner-Institut
       imprint: Impressum
+      imprint_link: https://open.hpi.de/pages/imprint?locale=de
       more:
         header: Weitere Informationen
         link: Über CodeHarbor
       privacy_policy: Datenschutzerklärung
+      privacy_policy_link: https://open.hpi.de/pages/data-protection?locale=de
     markdown_editor:
       collapse: Editor zuklappen
       expand: Editor aufklappen

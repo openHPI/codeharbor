@@ -2,11 +2,11 @@
 en:
   groups:
     access_request_mailer:
-      confirm_request: Confirm Request
       greeting: Hello %{user}
       message_line1: '%{user} asked to join your group "%{group}".'
-      message_line2: If you want to give your permission click on the link below.
-      message_line3: Otherwise ignore this Email.
+      message_line2: You can accept or reject the membership request via CodeHarbor.
+      message_line3: Please click on the link below to do so.
+      respond_to_request: Respond to Request
       subject: '%{user} wants to access your Group "%{group}"'
     form:
       button:

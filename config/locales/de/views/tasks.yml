@@ -87,6 +87,7 @@ de:
         download_as_zip: Diese Aufgabe als ZIP-Datei herunterladen.
         export: Exportieren
         export_tasks: Aufgaben exportieren
+        generate_test: Unit-Tests generieren
         rate: Bewerten
         show_comments: Kommentare anzeigen
       create_collection_placeholder: Name der Sammlung

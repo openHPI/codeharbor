@@ -1,0 +1,28 @@
+{
+  "result": [
+    {
+      "id": "ATT_id_of_other_name",
+      "content": {
+        "@type": "IdentityAttribute",
+        "owner": "id1GyHw8CefvC62VGQ5oTZjT3PvbveyDsrW2",
+        "value": {
+          "@type": "DisplayName",
+          "value": "Some other display name"
+        }
+      },
+      "createdAt": "2024-06-14T14:33:04.294Z"
+    },
+    {
+      "id": "ATT_id_of_exist_name",
+      "content": {
+        "@type": "IdentityAttribute",
+        "owner": "id1GyHw8CefvC62VGQ5oTZjT3PvbveyDsrW2",
+        "value": {
+          "@type": "DisplayName",
+          "value": "CodeHarbor"
+        }
+      },
+      "createdAt": "2024-05-26T14:57:57.750Z"
+    }
+  ]
+}

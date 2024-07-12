@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 class MigrateMetaDataToDachsfisch < ActiveRecord::Migration[7.0]
+  class Task < ApplicationRecord
+  end
+
+  class Test < ApplicationRecord
+  end
+
   def change
     Task.where.not(meta_data: nil).in_batches&.each {|tasks| update_meta_data tasks }
     Test.where.not(meta_data: nil).in_batches&.each {|tests| update_meta_data tests }
@@ -43,10 +49,4 @@ class MigrateMetaDataToDachsfisch < ActiveRecord::Migration[7.0]
       end
     end
   end
-end
-
-class Task < ApplicationRecord
-end
-
-class Test < ApplicationRecord
 end

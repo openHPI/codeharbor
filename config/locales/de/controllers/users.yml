@@ -1,8 +1,12 @@
 ---
 de:
   users:
-    omni_auth:
+    nbp_wallet:
+      unrecognized_role: Unbekannte Rolle. Bitte wählen Sie entweder "Lehrer:in" oder "Schüler:in" als Ihre Rolle.
+    omniauth_callbacks:
       failure_deauthorize: 'Das Trennen von Ihrem %{kind}-Account war aufgrund des folgenden Grundes nicht möglich: "%{reason}".'
       failure_deauthorize_last_identity: Sie können sich nicht von Ihrem %{kind}-Account trennen, da dies Ihr letzter verbleibender Account ist. Bitte erstellen Sie ein Passwort, um sich in Zukunft anmelden zu können.
       failure_deauthorize_not_linked: Sie sind nicht mit einem %{kind}-Account verbunden.
+      failure_update: 'Ihr Profil konnte nicht mit den Daten Ihres %{kind}-Accounts aktualisiert werden: "%{reason}".'
+      idp_linked_to_other_account: Ihr %{kind}-Account konnte nicht verbunden werden, da er bereits mit einem anderen CodeHarbor-Account verbunden ist. Versuchen Sie stattdessen, sich anzumelden.
       success_deauthorize: Sie haben sich erfolgreich von Ihrem %{kind}-Account getrennt.

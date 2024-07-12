@@ -162,6 +162,7 @@
       span.fa-solid.fa-caret-up
     - if @files.empty?
       p.ms-2.mb-4
+      p.ms-2.mb-4
         = t('tasks.show.no_files')
     .files
       - @files.each do |file|
@@ -233,6 +234,7 @@
       => Task.human_attribute_name('tests')
       span.fa-solid.fa-caret-up
     - if @tests.empty?
+      p.ms-2.mb-4
       p.ms-2.mb-4
         = t('tasks.show.no_tests')
     .tests
@@ -373,6 +375,7 @@
       => ModelSolution.model_name.human(count: :many)
       span.fa-solid.fa-caret-up
     - if @model_solutions.empty?
+      p.ms-2.mb-4
       p.ms-2.mb-4
         = t('.no_model_solution_present')
     .model_solutions
@@ -573,11 +576,17 @@
             i.fa-regular.fa-clone
             =< t('common.button.duplicate')
 
+      - if policy(@task).generate_test?
+        = link_to generate_test_task_path(@task), method: :post, class: 'btn btn-important' do
+          i.fa-solid.fa-wand-magic-sparkles
+          =< t('.button.generate_test')
+
       - if current_user.present?
         = link_to t('common.button.back'), tasks_path, class: 'btn btn-important'
 
     /= form_tag report_exercise_path(@task), id: 'report'
 
+    #page_end.mt-5
     #page_end.mt-5
 
 
