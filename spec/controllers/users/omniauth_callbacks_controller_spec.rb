@@ -115,7 +115,7 @@ RSpec.describe Users::OmniauthCallbacksController do
 
           it 'shows a flash message' do
             post :sso_callback
-            reason = "#{UserIdentity.human_attribute_name('first_name')} can't be blank"
+            reason = "#{User.human_attribute_name('first_name')} can't be blank"
             expect(flash[:alert]).to eq I18n.t('users.omniauth_callbacks.failure_update', reason:, kind: OmniAuth::Utils.camelize(omniauth_provider))
           end
         end
