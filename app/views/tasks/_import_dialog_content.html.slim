@@ -1,7 +1,7 @@
 - data.each do |subfile_id, task|
   .import-export-task data-task-uuid=task[:task_uuid] data-import-subfile-id=subfile_id data-import-id=task[:import_id] data-task-path=task[:path]
     .import-export-message
-      = link_to_if(task[:exists], t('.task_with_uuid', task_uuid: task[:task_uuid]), Task.find_by(uuid: task[:task_uuid]), {target: '_blank', rel: 'noopener'})
+      = link_to_if(task[:exists], t('.task_with_uuid', task_uuid: task[:task_uuid]), Task.find_by(uuid: task[:task_uuid]), {target: '_blank', rel: 'noopener noreferrer'})
       br
       = t('.path', path: task[:path])
     .import-export-task-actions
