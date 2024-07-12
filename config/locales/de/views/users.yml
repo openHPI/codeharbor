@@ -9,13 +9,13 @@ de:
         cancel_registration: Registrierung abbrechen
         header: Wallet verbinden
         info_html: |
-          Um Ihre Registrierung abzuschließen, scannen Sie bitte den QR Code mit Ihrer 'Mein Bildungsraum: Wallet' App. Die 'Mein Bildungsraum: Wallet' App gibt es im <a href='%{app_store_link}' target='_blank' rel='noopener'>App Store</a> und <a href='%{play_store_link}' target='_blank' rel='noopener'>Play Store</a>.
+          Um Ihre Registrierung abzuschließen, scannen Sie bitte den QR Code mit Ihrer 'Mein Bildungsraum: Wallet' App. Die 'Mein Bildungsraum: Wallet' App gibt es im <a href='%{app_store_link}' target='_blank' rel='noopener noreferrer'>App Store</a> und <a href='%{play_store_link}' target='_blank' rel='noopener noreferrer'>Play Store</a>.
           <br>
           Wenn Sie die App auf dem Gerät installiert haben, mit dem Sie diese Seite ansehen, können Sie stattdessen auch <a href='%{alternative_link}'>hier klicken</a>.
           <br><br>
           Bitte geben Sie in der App entweder "Lehrer:in" oder "Schüler:in" als Ihre Rolle ein.
         privacy_disclaimer:
-          html: CodeHarbor bietet Lehrenden eine dedizierte Möglichkeit, sich gemeinsam über automatisch-bewertbare Programmieraufgaben auszutauschen, diese in Sammlungen zu organisieren oder über Gruppen in einem Team kollaborativ zu bearbeiten. Die Plattform basiert dabei grundsätzlich auf dem Prinzip der Datensparsamkeit bei der Erhebung und Verarbeitung personenbezogener Daten. Für die Nutzung unserer Plattform sind daher nur wenige Daten zwingend erforderlich (z.B. Name und E-Mail-Adresse), während andere Daten freiwillig von Ihnen ergänzt werden können (z.B. ein Profilbild). Diese Daten werden gemäß unserer <a href='%{privacy_policy_link}' target='_blank' rel='noopener'>Datenschutzerklärung</a> dauerhaft auf Servern in Deutschland gespeichert, um Ihnen die Nutzung von CodeHarbor zu ermöglichen.
+          html: CodeHarbor bietet Lehrenden eine dedizierte Möglichkeit, sich gemeinsam über automatisch-bewertbare Programmieraufgaben auszutauschen, diese in Sammlungen zu organisieren oder über Gruppen in einem Team kollaborativ zu bearbeiten. Die Plattform basiert dabei grundsätzlich auf dem Prinzip der Datensparsamkeit bei der Erhebung und Verarbeitung personenbezogener Daten. Für die Nutzung unserer Plattform sind daher nur wenige Daten zwingend erforderlich (z.B. Name und E-Mail-Adresse), während andere Daten freiwillig von Ihnen ergänzt werden können (z.B. ein Profilbild). Diese Daten werden gemäß unserer <a href='%{privacy_policy_link}' target='_blank' rel='noopener noreferrer'>Datenschutzerklärung</a> dauerhaft auf Servern in Deutschland gespeichert, um Ihnen die Nutzung von CodeHarbor zu ermöglichen.
           title: Datenschutz
         qr_code_alt_text: 'QR Code, der mit der ''Mein Bildungsraum: Wallet'' App gescannt werden kann'
         regenerate_code: Code erneuern
