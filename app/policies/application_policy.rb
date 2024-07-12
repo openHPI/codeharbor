@@ -12,8 +12,8 @@ class ApplicationPolicy
 
   def method_missing(method_name, *_args)
     if RESOURCE_ACTIONS.include?(method_name)
-      Rails.logger.debug { "Pundit policy does not have method #{method_name}. Returning false as default." }
-      return false
+      Rails.logger.debug { "Pundit policy does not have method #{method_name}. Returning no_one as default." }
+      return no_one
     end
 
     super
@@ -44,6 +44,10 @@ class ApplicationPolicy
   def everyone
     # `everyone` here means `every user logged in`
     @user.present?
+  end
+
+  def no_one
+    false
   end
 
   class Scope
