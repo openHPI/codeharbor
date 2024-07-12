@@ -100,20 +100,20 @@
             = f.nested_fields_for :tests do |test|
               .show-table.exercise-show
                 - if test.object.new_record?
-                  - display_container = 'display: block'
+                  - display_container_class = 'd-block'
                   .table-header
                     = test.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
                       i.fa-solid.fa-xmark.text-danger
                       =< t('.button.remove_test')
                 - else
-                  - display_container = 'display: none'
+                  - display_container_class = 'd-none'
                   .table-header.closed.toggle-next
                     => test.object.title
                     span.fa-solid.fa-caret-down
                     = test.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
                       i.fa-solid.fa-xmark.text-danger
                       =< t('.button.remove_test')
-                .test-container.ms-2.mt-4 style="#{display_container}"
+                .test-container.ms-2.mt-4 class="#{display_container_class}"
                   = render 'test_form', f:, test:
             / .field-element
             = f.add_nested_fields_link :tests, ' ', class: 'btn btn-main', id: 'addTestButton' do
@@ -129,13 +129,13 @@
             = f.nested_fields_for :model_solutions do |model_solution|
               .show-table.exercise-show
                 - if model_solution.object.new_record?
-                  - display_container = 'display: block'
+                  - display_container_class = 'd-block'
                   .table-header
                     = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
                       i.fa-solid.fa-xmark.text-danger
                       =< t('.button.remove_model_solution')
                 - else
-                  - display_container = 'display: none'
+                  - display_container_class = 'd-none'
                   .table-header.closed.toggle-next
                     => ModelSolution.model_name.human
                     => (model_solution.object.task.model_solutions.find_index(model_solution.object) + 1).to_s
@@ -143,7 +143,7 @@
                     = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
                       i.fa-solid.fa-xmark.text-danger
                       =< t('.button.remove_model_solution')
-                .model-solution-container.ms-2.mt-4 style="#{display_container}"
+                .model-solution-container.ms-2.mt-4 class="#{display_container_class}"
                   = render 'model_solution_form', f:, model_solution:
             / .field-element
             = f.add_nested_fields_link :model_solutions, ' ', class: 'btn btn-main', id: 'addTestButton' do
