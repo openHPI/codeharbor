@@ -70,7 +70,7 @@ RSpec.describe User do
       let(:openai_api_key) { 'invalid_key' }
 
       before do
-        allow(TaskService::GptGenerateTests).to receive(:new_client!).with(openai_api_key).and_raise(Gpt::InvalidApiKeyError)
+        allow(TaskService::GptGenerateTests).to receive(:new_client!).with(openai_api_key).and_raise(Gpt::Error::InvalidApiKey)
         user.update(openai_api_key:)
       end
 

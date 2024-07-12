@@ -1,0 +1,9 @@
+---
+de:
+  errors:
+    gpt:
+      error: Beim Generieren des Unit-Tests ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.
+      internal_server_error: Der OpenAI-Server ist derzeit nicht verfügbar. Bitte versuchen Sie es später erneut, wenn das Problem behoben wurde.
+      invalid_api_key: Der API-Schlüssel in Ihrem Profil ist ungültig. Bitte fügen Sie den entsprechenden API-Schlüssel in Ihrem Profil hinzu, um die KI-Funktionen zu nutzen.
+      invalid_task_description: Die angegebene Aufgabenbeschreibung stellt keine gültige Programmieraufgabe dar und kann daher nicht zum Generieren eines Unit-Tests genutzt werden. Bitte stellen Sie sicher, dass die Aufgabenbeschreibung eine klar formulierte Problemstellung enthält, die durch ein Programm gelöst werden kann.
+      missing_language: Für diese Aufgabe ist keine Programmiersprache angegeben. Bitte geben Sie die Sprache an, bevor Sie fortfahren.

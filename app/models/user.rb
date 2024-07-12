@@ -153,7 +153,7 @@ class User < ApplicationRecord
     return unless openai_api_key_changed?
 
     TaskService::GptGenerateTests.new_client! openai_api_key
-  rescue Gpt::InvalidApiKeyError
+  rescue Gpt::Error::InvalidApiKey
     errors.add(:base, :invalid_api_key)
   end
 

@@ -35,7 +35,7 @@ RSpec.describe TaskService::GptGenerateTests do
       let(:programming_language) { nil }
 
       it 'raises MissingLanguageError' do
-        expect { gpt_generate_tests_service }.to raise_error(Gpt::MissingLanguageError)
+        expect { gpt_generate_tests_service }.to raise_error(Gpt::Error::MissingLanguage)
       end
     end
 
@@ -43,7 +43,7 @@ RSpec.describe TaskService::GptGenerateTests do
       let(:openai_api_key) { nil }
 
       it 'raises InvalidApiKeyError' do
-        expect { gpt_generate_tests_service }.to raise_error(Gpt::InvalidApiKeyError)
+        expect { gpt_generate_tests_service }.to raise_error(Gpt::Error::InvalidApiKey)
       end
     end
 
@@ -55,7 +55,27 @@ RSpec.describe TaskService::GptGenerateTests do
       end
 
       it 'raises InvalidApiKeyError' do
-        expect { gpt_generate_tests_service }.to raise_error(Gpt::InvalidApiKeyError)
+        expect { gpt_generate_tests_service }.to raise_error(Gpt::Error::InvalidApiKey)
+      end
+    end
+
+    context 'when OpenAI is not responding' do
+      before do
+        allow(openai_models).to receive(:list).and_raise(Faraday::Error)
+      end
+
+      it 'raises InternalServerError' do
+        expect { gpt_generate_tests_service }.to raise_error(Gpt::Error::InternalServerError)
+      end
+    end
+
+    context 'when the network connection is broken' do
+      before do
+        allow(openai_models).to receive(:list).and_raise(EOFError)
+      end
+
+      it 'raises an error' do
+        expect { gpt_generate_tests_service }.to raise_error(Gpt::Error)
       end
     end
   end
@@ -92,7 +112,27 @@ RSpec.describe TaskService::GptGenerateTests do
       let(:chat_response) { {'choices' => [{'message' => {'content' => 'Python script should assert true without any code block.'}}]} }
 
       it 'raises InvalidTaskDescription' do
-        expect { gpt_generate_tests }.to raise_error(Gpt::InvalidTaskDescription)
+        expect { gpt_generate_tests }.to raise_error(Gpt::Error::InvalidTaskDescription)
+      end
+    end
+
+    context 'when OpenAI is not responding' do
+      before do
+        allow(openai_client).to receive(:chat).and_raise(Faraday::Error)
+      end
+
+      it 'raises InternalServerError' do
+        expect { gpt_generate_tests }.to raise_error(Gpt::Error::InternalServerError)
+      end
+    end
+
+    context 'when the network connection is broken' do
+      before do
+        allow(openai_client).to receive(:chat).and_raise(EOFError)
+      end
+
+      it 'raises an error' do
+        expect { gpt_generate_tests }.to raise_error(Gpt::Error)
       end
     end
   end

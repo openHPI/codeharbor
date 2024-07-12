@@ -1072,9 +1072,9 @@ RSpec.describe TasksController do
       end
     end
 
-    context 'when GptGenerateTests raises MissingLanguageError' do
+    context 'when GptGenerateTests raises Gpt::Error::MissingLanguage' do
       before do
-        allow(TaskService::GptGenerateTests).to receive(:call).and_raise(Gpt::MissingLanguageError)
+        allow(TaskService::GptGenerateTests).to receive(:call).and_raise(Gpt::Error::MissingLanguage)
         post :generate_test, params: {id: task.id}
       end
 
@@ -1083,13 +1083,13 @@ RSpec.describe TasksController do
       end
 
       it 'sets flash to the appropriate message' do
-        expect(flash[:alert]).to eq(I18n.t('tasks.task_service.gpt_generate_tests.no_language'))
+        expect(flash[:alert]).to eq(I18n.t('errors.gpt.missing_language'))
       end
     end
 
-    context 'when GptGenerateTests raises InvalidTaskDescription' do
+    context 'when GptGenerateTests raises Gpt::Error::InvalidTaskDescription' do
       before do
-        allow(TaskService::GptGenerateTests).to receive(:call).and_raise(Gpt::InvalidTaskDescription)
+        allow(TaskService::GptGenerateTests).to receive(:call).and_raise(Gpt::Error::InvalidTaskDescription)
         post :generate_test, params: {id: task.id}
       end
 
@@ -1098,7 +1098,7 @@ RSpec.describe TasksController do
       end
 
       it 'sets flash to the appropriate message' do
-        expect(flash[:alert]).to eq(I18n.t('tasks.task_service.gpt_generate_tests.invalid_description'))
+        expect(flash[:alert]).to eq(I18n.t('errors.gpt.invalid_task_description'))
       end
     end
   end
