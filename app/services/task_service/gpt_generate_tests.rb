@@ -75,6 +75,8 @@ module TaskService
       raise Gpt::InvalidApiKeyError unless response['data']
     rescue Faraday::UnauthorizedError, OpenAI::Error
       raise Gpt::InvalidApiKeyError
+    rescue Faraday::ServerError
+      raise Gpt::OpenaiServerDownError
     end
     private_class_method :validate!
   end

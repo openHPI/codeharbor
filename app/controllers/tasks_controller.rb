@@ -189,17 +189,22 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   def generate_test
     TaskService::GptGenerateTests.call(task: @task, openai_api_key: current_user.openai_api_key)
     flash[:notice] = I18n.t('tasks.task_service.gpt_generate_tests.successful_generation')
-  rescue Gpt::InvalidApiKeyError
-    flash[:alert] = I18n.t('tasks.task_service.gpt_generate_tests.invalid_api_key')
-  rescue Gpt::MissingLanguageError
-    flash[:alert] = I18n.t('tasks.task_service.gpt_generate_tests.no_language')
-  rescue Gpt::InvalidTaskDescription
-    flash[:alert] = I18n.t('tasks.task_service.gpt_generate_tests.invalid_description')
+  rescue Gpt::InvalidApiKeyError, Gpt::MissingLanguageError, Gpt::InvalidTaskDescription, Gpt::OpenaiServerDownError => e
+    flash[:alert] = flash_message_for(e)
   ensure
     redirect_to @task
   end
 
   private
+
+  def flash_message_for(exception)
+    {
+      Gpt::InvalidApiKeyError => I18n.t('tasks.task_service.gpt_generate_tests.invalid_api_key'),
+      Gpt::MissingLanguageError => I18n.t('tasks.task_service.gpt_generate_tests.no_language'),
+      Gpt::InvalidTaskDescription => I18n.t('tasks.task_service.gpt_generate_tests.invalid_description'),
+      Gpt::OpenaiServerDownError => I18n.t('tasks.task_service.gpt_generate_tests.openai_server_down'),
+    }[exception.class]
+  end
 
   def load_and_authorize_task
     @task = Task.find(params[:id])

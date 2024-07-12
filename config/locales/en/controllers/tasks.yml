@@ -30,4 +30,5 @@ en:
         invalid_api_key: The API key in your profile is invalid. Please add the appropriate API key in your profile to use the AI features.
         invalid_description: The task description provided does not represent a valid programming task and therefore cannot be used to generate a unit test. Please make sure that the task description contains a clearly formulated problem that can be solved by a program.
         no_language: Programming language is not specified for this task. Please specify the language before proceeding.
+        openai_server_down: The OpenAI server is currently experiencing an outage. Please try again later when the issue is fixed.
         successful_generation: Unit test generated successfully. Please check the generated test and assign an appropriate filename.
