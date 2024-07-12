@@ -4,19 +4,20 @@
 require 'rails_helper'
 
 RSpec.describe TaskService::GptGenerateTests do
+  let(:openai_api_key) { 'valid_api_key' }
+  let(:openai_client) { OpenAI::Client.new(access_token: openai_api_key) }
+  let(:openai_models) { instance_double(OpenAI::Models, list: {'data' => [{'id' => 'model-id'}]}) }
+
+  let(:programming_language) { create(:programming_language, :python) }
+  let(:task) { create(:task, description: 'Create a Python script.', programming_language:) }
+
+  before do
+    allow(OpenAI::Client).to receive(:new).and_return(openai_client)
+    allow(openai_client).to receive(:models).and_return(openai_models)
+  end
+
   describe '.new' do
     subject(:gpt_generate_tests_service) { described_class.new(task:, openai_api_key:) }
-
-    let(:programming_language) { build(:programming_language, :ruby) }
-    let(:task) { build(:task, description: 'Sample Task', programming_language:) }
-    let(:openai_api_key) { 'valid_api_key' }
-    let(:mock_models) { instance_double(OpenAI::Models, list: {'data' => [{'id' => 'model-id'}]}) }
-    let(:openai_client) { OpenAI::Client.new(access_token: openai_api_key) }
-
-    before do
-      allow(OpenAI::Client).to receive(:new).and_return(openai_client)
-      allow(openai_client).to receive(:models).and_return(mock_models)
-    end
 
     it 'assigns the task' do
       expect(gpt_generate_tests_service.instance_variable_get(:@task)).to be task
@@ -31,7 +32,7 @@ RSpec.describe TaskService::GptGenerateTests do
     end
 
     context 'when language is missing' do
-      let(:task) { build(:task, description: 'Sample Task', programming_language: nil) }
+      let(:programming_language) { nil }
 
       it 'raises MissingLanguageError' do
         expect { gpt_generate_tests_service }.to raise_error(Gpt::MissingLanguageError)
@@ -48,10 +49,9 @@ RSpec.describe TaskService::GptGenerateTests do
 
     context 'when API key is invalid' do
       let(:openai_api_key) { 'invalid_api_key' }
-      let(:mock_models) { instance_double(OpenAI::Models) }
 
       before do
-        allow(mock_models).to receive(:list).and_raise(Faraday::UnauthorizedError)
+        allow(openai_models).to receive(:list).and_raise(Faraday::UnauthorizedError)
       end
 
       it 'raises InvalidApiKeyError' do
@@ -63,20 +63,14 @@ RSpec.describe TaskService::GptGenerateTests do
   describe '#call' do
     subject(:gpt_generate_tests) { described_class.call(task:, openai_api_key:) }
 
-    let(:programming_language) { create(:programming_language, :python) }
-    let(:task) { create(:task, description: 'Create a Python script.', programming_language:) }
-    let(:openai_api_key) { 'valid_api_key' }
-    let(:mock_client) { instance_double(OpenAI::Client) }
-    let(:mock_models) { instance_double(OpenAI::Models, list: {'data' => [{'id' => 'text-davinci-002'}]}) }
+    let(:chat_response) { {'choices' => [{'message' => {'content' => "```Python\ndef test_script():\n  assert true```"}}]} }
 
     before do
-      allow(OpenAI::Client).to receive(:new).and_return(mock_client)
-      allow(mock_client).to receive(:models).and_return(mock_models)
+      allow(openai_client).to receive(:chat).and_return(chat_response)
     end
 
     context 'when the response includes valid code blocks' do
       before do
-        allow(mock_client).to receive(:chat).and_return('choices' => [{'message' => {'content' => "```Python\ndef test_script():\n  assert true```"}}])
         gpt_generate_tests
       end
 
@@ -95,9 +89,7 @@ RSpec.describe TaskService::GptGenerateTests do
     end
 
     context 'when the response does not contain backticks' do
-      before do
-        allow(mock_client).to receive(:chat).and_return({'choices' => [{'message' => {'content' => 'Python script should assert true without any code block.'}}]})
-      end
+      let(:chat_response) { {'choices' => [{'message' => {'content' => 'Python script should assert true without any code block.'}}]} }
 
       it 'raises InvalidTaskDescription' do
         expect { gpt_generate_tests }.to raise_error(Gpt::InvalidTaskDescription)
