@@ -42,57 +42,57 @@ en:
         external_resources: External Resources
         files: Files
         grading_hints: Grading Hints
-        internal_description: Internal description
+        internal_description: Internal Description
         language: Language
         license: License
         meta_data: Metadata
         parent_uuid: Parent UUID
-        programming_language: Programming language
+        programming_language: Programming Language
         submission_restrictions: Submission Restrictions
         tests: Tests
         title: Title
         uuid: UUID
       task/files:
-        attachment: File attachment
-        name: File name
+        attachment: File Attachment
+        name: File Name
         xml_id: File XML ID
       task/model_solutions:
-        xml_id: Model solution XML ID
+        xml_id: Model Solution XML ID
       task/model_solutions/files:
-        attachment: Attachment of a file in a model solution
-        name: Name of a file in a model solution
-        xml_id: XML ID of a file in a model solution
+        attachment: Attachment of a File in a Model Solution
+        name: Name of a File in a Model Solution
+        xml_id: XML ID of a File in a Model Solution
       task/tests:
-        title: Test title
+        title: Test Title
         xml_id: Test XML ID
       task_file:
         attachment: Attachment
         content: Content
-        internal_description: Internal description
+        internal_description: Internal Description
         name: Name
         path: Path
-        usage_by_lms: Usage by lms
-        used_by_grader: Used by grader
+        usage_by_lms: Usage by LMS
+        used_by_grader: Used by Grader
         visible: Visible
         xml_id: XML ID
       test:
         configuration: Configuration
         description: Description
-        internal_description: Internal description
-        test_type: Test type
-        testing_framework: Testing framework
+        internal_description: Internal Description
+        test_type: Test Type
+        testing_framework: Testing Framework
         timeout: Timeout
         title: Title
         validity: Validity
         xml_id: XML ID
       user:
-        first_name: First name
-        last_name: Last name
-        password_set: Passwort set
+        first_name: First Name
+        last_name: Last Name
+        password_set: Passwort Set
         role: Role
-        status_group: Status group
+        status_group: Status Group
       user_identity:
-        omniauth_provider: OmniAuth provider
+        omniauth_provider: OmniAuth Provider
         provider_uid: Provider UID
     errors:
       models:
@@ -120,20 +120,20 @@ en:
               size_over_10_mb: size needs to be less than 10MB
     models:
       account_link:
-        one: Account link
-        other: Account links
+        one: Account Link
+        other: Account Links
       account_link_user:
-        one: Account link
-        other: Account link users
+        one: Account Link
+        other: Account Link Users
       collection:
         one: Collection
         other: Collections
       collection_task:
-        one: Collection task
-        other: Collection tasks
+        one: Collection Task
+        other: Collection Tasks
       collection_user:
-        one: Collection user
-        other: Collection users
+        one: Collection User
+        other: Collection Users
       comment:
         one: Comment
         other: Comments
@@ -141,11 +141,11 @@ en:
         one: Group
         other: Groups
       group_membership:
-        one: Group membership
-        other: Group memberships
+        one: Group Membership
+        other: Group Memberships
       group_task:
-        one: Group task
-        other: Group tasks
+        one: Group Task
+        other: Group Tasks
       label:
         one: Label
         other: Labels
@@ -156,11 +156,11 @@ en:
         one: Message
         other: Messages
       model_solution:
-        one: Model solution
-        other: Model solutions
+        one: Model Solution
+        other: Model Solutions
       programming_language:
-        one: Programming language
-        other: Programming languages
+        one: Programming Language
+        other: Programming Languages
       rating:
         one: Rating
         other: Ratings
@@ -171,23 +171,23 @@ en:
         one: Task
         other: Tasks
       task_file:
-        one: Task file
-        other: Task files
+        one: Task File
+        other: Task Files
       task_label:
-        one: Task label
-        other: Task labels
+        one: Task Label
+        other: Task Labels
       test:
         one: Test
         other: Tests
       testing_framework:
-        one: Testing framework
-        other: Testing frameworks
+        one: Testing Framework
+        other: Testing Frameworks
       user_identity:
-        one: User identity
-        other: User identities
+        one: User Identity
+        other: User Identities
   tasks:
     model:
-      copy_of_task: Copy of task
+      copy_of_task: Copy of Task
   tests:
     model:
       generated_test: AI-generated Unit Test
@@ -199,4 +199,4 @@ en:
       educator: Educator
       learner: Learner
       other: Other
-      unknown: Not specified
+      unknown: Not Specified
