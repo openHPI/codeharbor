@@ -36,7 +36,7 @@
             span
               => t('.search.advanced')
             span.fa-solid.fa-caret-down#drop
-        .dropdown-content.shadow-sm.p-4
+        .dropdown-content.shadow-sm.p-4.hide
           = hidden_field_tag 'advancedFilterActive', @advanced_filter_active.to_s
           = fields_for 'settings' do |_advanced|
             span.row
