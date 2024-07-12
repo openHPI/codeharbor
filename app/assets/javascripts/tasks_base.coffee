@@ -4,7 +4,7 @@ ready = ->
 initializeDropdowns = ->
   $('.toggle-next').on 'click', ->
     $next = $(this).next()
-    $next.toggle()
+    $next.toggleClass('hide')
     $caret = $(this).find('span.fa-solid')
     if $caret.hasClass('fa-caret-down')
       $caret.removeClass('fa-caret-down').addClass('fa-caret-up')
