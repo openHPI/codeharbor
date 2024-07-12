@@ -147,20 +147,15 @@ class User < ApplicationRecord
     name
   end
 
+  private
+
   def validate_openai_api_key
     return unless openai_api_key_changed?
 
-    client = OpenAI::Client.new(access_token: openai_api_key)
-
-    begin
-      response = client.models.list
-      errors.add(:base, :invalid_api_key) unless response['data']
-    rescue Faraday::UnauthorizedError, OpenAI::Error
-      errors.add(:base, :invalid_api_key)
-    end
+    TaskService::GptGenerateTests.new_client! openai_api_key
+  rescue Gpt::InvalidApiKeyError
+    errors.add(:base, :invalid_api_key)
   end
-
-  private
 
   def avatar_format
     avatar_blob = avatar.blob

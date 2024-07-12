@@ -52,12 +52,13 @@ RSpec.describe User do
     end
 
     context 'when openai_api_key is present and valid' do
-      before do
-        allow(OpenAI::Client).to receive(:new).and_return(instance_double(OpenAI::Client, models: mock_models))
-        user.openai_api_key = 'valid_key'
-      end
+      let(:openai_client) { instance_double(OpenAI::Client) }
+      let(:openai_api_key) { 'valid_key' }
 
-      let(:mock_models) { instance_double(OpenAI::Models, list: {'data' => [{'id' => 'model-id'}]}) }
+      before do
+        allow(TaskService::GptGenerateTests).to receive(:new_client!).with(openai_api_key).and_return(openai_client)
+        user.update(openai_api_key:)
+      end
 
       it 'is valid' do
         expect(user).to be_valid
@@ -65,36 +66,40 @@ RSpec.describe User do
     end
 
     context 'when openai_api_key is present and invalid' do
-      before do
-        allow(OpenAI::Client).to receive(:new).and_return(instance_double(OpenAI::Client, models: mock_models))
-        allow(mock_models).to receive(:list).and_raise(OpenAI::Error)
-        user.openai_api_key = 'invalid_key'
-        user.valid?
-      end
+      let(:openai_client) { instance_double(OpenAI::Client) }
+      let(:openai_api_key) { 'invalid_key' }
 
-      let(:mock_models) { instance_double(OpenAI::Models) }
+      before do
+        allow(TaskService::GptGenerateTests).to receive(:new_client!).with(openai_api_key).and_raise(Gpt::InvalidApiKeyError)
+        user.update(openai_api_key:)
+      end
 
       it 'is not valid' do
         expect(user).not_to be_valid
       end
 
       it 'adds an error for invalid api key' do
+        user.valid?
         expect(user.errors[:base]).to include(I18n.t('activerecord.errors.models.user.invalid_api_key'))
       end
     end
 
     context 'when openai_api_key remains the same' do
+      let(:openai_client) { instance_double(OpenAI::Client) }
+      let(:openai_api_key) { 'same_key' }
+
       before do
-        allow(OpenAI::Client).to receive(:new).and_return(instance_double(OpenAI::Client, models: mock_models))
-        user.openai_api_key = 'same_key'
-        user.save!
-        user.valid?
+        allow(TaskService::GptGenerateTests).to receive(:new_client!).with(openai_api_key).and_return(openai_client)
+        user.update(openai_api_key:)
       end
 
-      let(:mock_models) { instance_double(OpenAI::Models, list: {'data' => [{'id' => 'model-id'}]}) }
-
       it 'does not trigger API validation' do
-        expect(user.errors[:base]).not_to include(I18n.t('activerecord.errors.models.user.invalid_api_key'))
+        expect(TaskService::GptGenerateTests).not_to receive(:new_client!)
+        expect { user.update(openai_api_key:) }.not_to change(user, :openai_api_key)
+      end
+
+      it 'is valid' do
+        expect(user).to be_valid
       end
     end
   end

@@ -7,8 +7,7 @@ module TaskService
       raise Gpt::MissingLanguageError if task.programming_language&.language.blank?
 
       @task = task
-      @openai_api_key = openai_api_key
-      validate_api_key!
+      @client = self.class.new_client! openai_api_key
     end
 
     def execute
@@ -20,11 +19,15 @@ module TaskService
       @task.tests << test
     end
 
-    private
+    def self.new_client!(access_token)
+      raise Gpt::InvalidApiKeyError if access_token.blank?
 
-    def client
-      @client ||= OpenAI::Client.new(access_token: @openai_api_key)
+      client = OpenAI::Client.new(access_token:)
+      validate! client
+      client
     end
+
+    private
 
     def gpt_response
       # train client with some prompts
@@ -36,7 +39,7 @@ module TaskService
       messages << {role: 'user', content: @task.description}
 
       # create gpt client
-      response = client.chat(
+      response = @client.chat(
         parameters: {
           model: Settings.open_ai.model,
           messages:,
@@ -67,17 +70,12 @@ module TaskService
       ]
     end
 
-    def validate_api_key!
-      if @openai_api_key.blank?
-        raise Gpt::InvalidApiKeyError
-      else
-        begin
-          response = client.models.list
-          raise Gpt::InvalidApiKeyError unless response['data']
-        rescue Faraday::UnauthorizedError, OpenAI::Error
-          raise Gpt::InvalidApiKeyError
-        end
-      end
+    def self.validate!(client)
+      response = client.models.list
+      raise Gpt::InvalidApiKeyError unless response['data']
+    rescue Faraday::UnauthorizedError, OpenAI::Error
+      raise Gpt::InvalidApiKeyError
     end
+    private_class_method :validate!
   end
 end

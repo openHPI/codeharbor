@@ -11,17 +11,23 @@ RSpec.describe TaskService::GptGenerateTests do
     let(:task) { build(:task, description: 'Sample Task', programming_language:) }
     let(:openai_api_key) { 'valid_api_key' }
     let(:mock_models) { instance_double(OpenAI::Models, list: {'data' => [{'id' => 'model-id'}]}) }
+    let(:openai_client) { OpenAI::Client.new(access_token: openai_api_key) }
 
     before do
-      allow(OpenAI::Client).to receive(:new).and_return(instance_double(OpenAI::Client, models: mock_models))
+      allow(OpenAI::Client).to receive(:new).and_return(openai_client)
+      allow(openai_client).to receive(:models).and_return(mock_models)
     end
 
-    it 'assigns task' do
+    it 'assigns the task' do
       expect(gpt_generate_tests_service.instance_variable_get(:@task)).to be task
     end
 
-    it 'assigns openai_api_key' do
-      expect(gpt_generate_tests_service.instance_variable_get(:@openai_api_key)).to eq openai_api_key
+    it 'assigns the client for OpenAI' do
+      expect(gpt_generate_tests_service.instance_variable_get(:@client)).to be openai_client
+    end
+
+    it 'stores the OpenAI API key in the client' do
+      expect(gpt_generate_tests_service.instance_variable_get(:@client).access_token).to eq openai_api_key
     end
 
     context 'when language is missing' do
@@ -42,11 +48,10 @@ RSpec.describe TaskService::GptGenerateTests do
 
     context 'when API key is invalid' do
       let(:openai_api_key) { 'invalid_api_key' }
-      let(:mock_models_invalid) { instance_double(OpenAI::Models) }
+      let(:mock_models) { instance_double(OpenAI::Models) }
 
       before do
-        allow(mock_models_invalid).to receive(:list).and_raise(Faraday::UnauthorizedError)
-        allow(OpenAI::Client).to receive(:new).and_return(instance_double(OpenAI::Client, models: mock_models_invalid))
+        allow(mock_models).to receive(:list).and_raise(Faraday::UnauthorizedError)
       end
 
       it 'raises InvalidApiKeyError' do
