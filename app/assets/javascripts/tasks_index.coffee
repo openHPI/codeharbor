@@ -88,7 +88,6 @@ intializeAdvancedFilter = ->
   $drop = $('#drop')
   $advanced.click ->
     $dropdownContent.toggleClass('hide')
-    ######$dropdownContent.toggle()
     $search = $('#search')
     if $advancedFilterActive.val() == "true"
       $search.css("border-bottom-left-radius", "4px")
