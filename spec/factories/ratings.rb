@@ -4,6 +4,8 @@ FactoryBot.define do
   factory :rating do
     user
     task
-    rating { 5 }
+    Rating::CATEGORIES.each do |category|
+      send(category) { 5 }
+    end
   end
 end

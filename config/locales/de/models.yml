@@ -35,7 +35,11 @@ de:
       model_solution:
         xml_id: XML-ID
       rating:
-        rating: Bewertung
+        description_quality: Beschreibung
+        model_solution_quality: Musterlösung
+        originality: Originalität
+        overall_rating: Gesamtbewertung
+        test_quality: Tests
       task:
         access_level: Sichtbarkeit
         description: Beschreibung

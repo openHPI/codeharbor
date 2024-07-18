@@ -35,7 +35,11 @@ en:
       model_solution:
         xml_id: XML ID
       rating:
-        rating: Rating
+        description_quality: Description
+        model_solution_quality: Model Solutions
+        originality: Originality
+        overall_rating: Overall Rating
+        test_quality: Tests
       task:
         access_level: Visibility
         description: Description

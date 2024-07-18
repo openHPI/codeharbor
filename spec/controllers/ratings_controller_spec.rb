@@ -7,14 +7,14 @@ RSpec.describe RatingsController do
 
   let(:user) { create(:user) }
   let(:task) { create(:task, access_level: :public) }
-  let(:rating) { 4 }
+  let(:rating) { Rating::CATEGORIES.index_with { 5 } }
 
   let(:valid_attributes) do
-    {task_id: task.id, rating: {rating:}}
+    {task_id: task.id, rating:}
   end
 
   let(:invalid_attributes) do
-    {task_id: task, rating: {rating: 0}}
+    {task_id: task, rating: rating.merge(overall_rating: 0)}
   end
 
   before { sign_in user }
@@ -23,7 +23,13 @@ RSpec.describe RatingsController do
     let(:post_request) { post :create, params: attributes }
     let(:attributes) { valid_attributes }
 
-    render_views
+    shared_examples 'responds with the average_rating of the task' do
+      it do
+        post_request
+        expect(response.body).to eq({average_rating: task.average_rating}.to_json)
+      end
+    end
+
     context 'with valid params' do
       it 'creates a new Rating' do
         expect { post_request }.to change(Rating, :count).by(1)
@@ -33,16 +39,13 @@ RSpec.describe RatingsController do
         expect { post_request }.to change { flash[:notice] }.to(I18n.t('common.notices.object_created', model: Rating.model_name.human))
       end
 
-      it 'responds with overall_rating and user_rating' do
-        post_request
-        expect(response.body).to include('overall_rating').and(include('user_rating'))
-      end
+      include_examples 'responds with the average_rating of the task'
 
       context 'when the user has already rated the task' do
-        let!(:existing_rating) { task.ratings.create(user:, rating: 1) }
+        let!(:existing_rating) { task.ratings.create(user:, overall_rating: 1) }
 
         it 'updates the existing rating' do
-          expect { post_request }.to change { existing_rating.reload.rating }.from(1).to(rating)
+          expect { post_request }.to change { existing_rating.reload.overall_rating }.from(1).to(rating[:overall_rating])
         end
 
         it 'does not create a new rating' do
@@ -53,10 +56,7 @@ RSpec.describe RatingsController do
           expect { post_request }.to change { flash[:notice] }.to(I18n.t('common.notices.object_updated', model: Rating.model_name.human))
         end
 
-        it 'responds with overall_rating and user_rating' do
-          post_request
-          expect(response.body).to include('overall_rating').and(include('user_rating'))
-        end
+        include_examples 'responds with the average_rating of the task'
       end
 
       context 'when user rates his own task' do
@@ -70,10 +70,7 @@ RSpec.describe RatingsController do
           expect { post_request }.to change { flash[:alert] }.to(I18n.t('ratings.handle_own_rating.error'))
         end
 
-        it 'responds with overall_rating and user_rating' do
-          post_request
-          expect(response.body).to include('overall_rating').and(include('user_rating'))
-        end
+        include_examples 'responds with the average_rating of the task'
       end
     end
 
@@ -84,10 +81,7 @@ RSpec.describe RatingsController do
         expect { post_request }.not_to change(Rating, :count)
       end
 
-      it 'responds with error' do
-        post_request
-        expect(response.body).to include(I18n.t('common.errors.generic'))
-      end
+      include_examples 'responds with the average_rating of the task'
     end
   end
 end

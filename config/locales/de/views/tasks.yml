@@ -55,7 +55,6 @@ de:
         advanced: Erweitert
         all_access_levels: egal
         all_time: egal
-        average_rating: Bewertung
         creation_date: Erstellungsdatum
         has_all_labels: Hat Labels
         label: Suche
@@ -63,6 +62,7 @@ de:
         last_week: Letzte Woche
         min_stars: Mindestanzahl an Sternen
         order: Sortieren nach
+        overall_rating: Bewertung
         placeholder: Nach Aufgabe oder Label suchen
         reset: Zurücksetzen
         today: Heute
