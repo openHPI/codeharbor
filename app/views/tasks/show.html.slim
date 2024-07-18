@@ -376,7 +376,6 @@
 
     legend.toggle-next
       span.number = section_index
-      - section_index += 1
       => ModelSolution.model_name.human(count: :many)
       span.fa-solid.fa-caret-up
     - if @model_solutions.empty?
