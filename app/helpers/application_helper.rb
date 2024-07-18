@@ -13,6 +13,10 @@ module ApplicationHelper
     current_path || request.path.start_with?(path) ? 'active' : ''
   end
 
+  def clear_content_for(name)
+    view_flow.content.delete(name)
+  end
+
   def empty
     tag.i(nil, class: 'empty fa-solid fa-minus')
   end

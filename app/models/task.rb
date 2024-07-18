@@ -56,14 +56,13 @@ class Task < ApplicationRecord
                        }.fetch(visibility, public_access)
                      }
   scope :created_before_days, ->(days) { where(created_at: days.to_i.days.ago.beginning_of_day..) if days.to_i.positive? }
-  scope :average_rating, lambda {
-    select('tasks.*, COALESCE(avg_rating, 0) AS average_rating')
-      .joins('LEFT JOIN (SELECT task_id, AVG(rating) AS avg_rating FROM ratings GROUP BY task_id)
+  scope :min_stars, lambda {|stars|
+                      joins('LEFT JOIN (SELECT task_id, AVG(overall_rating) AS avg_overall_rating FROM ratings GROUP BY task_id)
                              AS ratings ON ratings.task_id = tasks.id')
-  }
-  scope :min_stars, ->(stars) { average_rating.where('COALESCE(avg_rating, 0) >= ?', stars) }
-  scope :sort_by_average_rating_asc, -> { average_rating.order(average_rating: 'ASC') }
-  scope :sort_by_average_rating_desc, -> { average_rating.order(average_rating: 'DESC') }
+                        .where('COALESCE(avg_overall_rating, 0) >= ?', stars)
+                    }
+  scope :sort_by_overall_rating_asc, -> { overall_rating.order(overall_rating: :asc) }
+  scope :sort_by_overall_rating_desc, -> { overall_rating.order(overall_rating: :desc) }
   scope :access_level, ->(access_level) { where(access_level:) }
   scope :fulltext_search, lambda {|input|
     r = left_outer_joins(:programming_language)
@@ -139,16 +138,27 @@ class Task < ApplicationRecord
     end
   end
 
-  def average_rating
-    if ratings.empty?
-      0
-    else
-      ratings.sum(&:rating).to_f / ratings.size
+  def average_rating # rubocop:disable Metrics/AbcSize
+    return @average_rating if @average_rating
+
+    ratings_arel = Rating.arel_table
+
+    category_averages = Rating::CATEGORIES.map do |category|
+      average_rating = ratings_arel[category].average
+      coalesced_rating = Arel::Nodes::NamedFunction.new('COALESCE', [average_rating, 0])
+      rounded_rating = Arel::Nodes::NamedFunction.new('ROUND', [coalesced_rating, 1])
+      rounded_rating.as(category.to_s)
     end
+
+    condition = ratings_arel[:task_id].eq(id)
+    query = ratings_arel.project(category_averages).where(condition)
+    result = ActiveRecord::Base.connection.exec_query(query.to_sql, 'Averaging ratings').first
+
+    @average_rating = result.symbolize_keys
   end
 
-  def rating_star
-    (average_rating * 2).round / 2.0
+  def overall_rating
+    average_rating[:overall_rating]
   end
 
   def all_files

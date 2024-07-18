@@ -90,6 +90,20 @@ RSpec.describe Task do
     end
   end
 
+  describe '.min_stars' do
+    let(:good_task) { create(:task) }
+    let(:bad_task) { create(:task) }
+
+    before do
+      create(:rating, task: good_task, overall_rating: 5)
+      create(:rating, task: bad_task, overall_rating: 1)
+    end
+
+    it 'filters the tasks correctly' do
+      expect(described_class.min_stars(3)).to contain_exactly(good_task)
+    end
+  end
+
   describe '#duplicate' do
     subject(:duplicate) { task.duplicate }
 
