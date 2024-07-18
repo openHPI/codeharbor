@@ -89,9 +89,9 @@ en:
       new_comment: New Comment
     show:
       add_to_collection_hint: Save Tasks for later by adding them to a collection.
-      contribution_list_hint: View contributions linked to this task.
+      contribution_list_hint: View Contributions linked to this task.
       button:
-        contribution_list: View related Contributions
+        contribution_list: View Related Contributions
         add_to_collection: Add to Collection
         api_key_required: OpenAI API key is required to generate a test
         create_collection: Create new Collection
