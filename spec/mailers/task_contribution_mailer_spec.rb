@@ -7,7 +7,7 @@ RSpec.describe TaskContributionMailer do
   let(:task_contrib) { create(:task_contribution) }
 
   describe '#contribution_request' do
-    subject(:contribution_request) { described_class.contribution_request(task_contrib) }
+    subject(:contribution_request) { described_class.send_contribution_request(task_contrib) }
 
     it 'sends an email' do
       expect(contribution_request.to).to include(task_contrib.base.user.email)
@@ -23,7 +23,7 @@ RSpec.describe TaskContributionMailer do
   end
 
   describe '#approval_info' do
-    subject(:approval_info) { described_class.approval_info(task_contrib) }
+    subject(:approval_info) { described_class.send_approval_info(task_contrib) }
 
     it 'sends an email' do
       expect(approval_info.to).to include(task_contrib.suggestion.user.email)
@@ -37,7 +37,7 @@ RSpec.describe TaskContributionMailer do
   end
 
   describe '#rejection_info' do
-    subject(:rejection_info) { described_class.rejection_info(task_contrib, duplicate_task) }
+    subject(:rejection_info) { described_class.send_rejection_info(task_contrib, duplicate_task) }
 
     let(:duplicate_task) { create(:task) }
 
