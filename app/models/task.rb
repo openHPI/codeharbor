@@ -117,7 +117,11 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def contribution?
-    task_contribution.present? && task_contribution.status == 'pending'
+    task_contribution.present?
+  end
+
+  def pending_contribution?
+    contribution? && task_contribution.status == 'pending'
   end
 
   def apply_contribution(contrib)
@@ -208,6 +212,14 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
     return query.where(status:) unless status.nil?
 
     query.where(status: :pending)
+  end
+
+  def klass
+    if contribution?
+      TaskContribution
+    else
+      self.class
+    end
   end
 
   private
