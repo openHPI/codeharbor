@@ -21,9 +21,11 @@
                 = t('.button.rate')
               = render 'rating_modal'
 .row
+  - section_index = 1
   .col-md-12.my-3
     legend.toggle-next
-      span.number = '1'
+      span.number = section_index
+      - section_index += 1
       => t('tasks.shared.basic_information')
       span.fa-solid.fa-caret-up
     .show-table.exercise-show
@@ -49,7 +51,8 @@
 
 
     legend.toggle-next.closed
-      span.number = '2'
+      span.number = section_index
+      - section_index += 1
       => t('tasks.shared.additional_info')
       span.fa-solid.fa-caret-down
     .show-table.exercise-show.hide
@@ -140,7 +143,8 @@
             = t('.no_license')
     - if @task.contribution?
       legend.toggle-next.closed
-        span.number = '3'
+        span.number = section_index
+        - section_index += 1
         => t('tasks.shared.contribution_info')
         span.fa-solid.fa-caret-down
       .show-table.exercise-show.hide
@@ -157,7 +161,8 @@
           .col.row-value
             = link_to @task.parent.title, task_path(@task.parent)
     legend.toggle-next
-      span.number = '4'
+      span.number = section_index
+      - section_index += 1
       => Task.human_attribute_name('files')
       span.fa-solid.fa-caret-up
     - if @files.empty?
@@ -229,7 +234,8 @@
                 = file.usage_by_lms
 
     legend.toggle-next
-      span.number = '5'
+      span.number = section_index
+      - section_index += 1
       => Task.human_attribute_name('tests')
       span.fa-solid.fa-caret-up
     - if @tests.empty?
@@ -369,7 +375,8 @@
                         = file.usage_by_lms
 
     legend.toggle-next
-      span.number = '6'
+      span.number = section_index
+      - section_index += 1
       => ModelSolution.model_name.human(count: :many)
       span.fa-solid.fa-caret-up
     - if @model_solutions.empty?
@@ -544,14 +551,14 @@
         = t('.contribution_list_hint')
       .wrapper
         - if !@task.contribution? && policy(@task).edit?
-          = link_to t('.button.contribution_list'), task_task_contributions_path(@task), class: 'btn btn-light', 'data-turbolinks' => false
+          = link_to t('.button.contribution_list'), task_task_contributions_path(@task), class: 'btn btn-light'
         - else
           - if @task.contribution? || @current_user.nil?
             - contrib_list_unavailable_tooltip = unavailable_tooltip
           - else
             - contrib_list_unavailable_tooltip = t('.owner_required_tooltip')
           div data-bs-toggle='tooltip' title=contrib_list_unavailable_tooltip data-bs-delay=150
-            = link_to t('.button.contribution_list'), task_task_contributions_path(@task), class: 'btn btn-outline-dark disabled', 'data-turbolinks' => false
+            = link_to t('.button.contribution_list'), task_task_contributions_path(@task), class: 'btn btn-outline-dark disabled'
 
 
   .col-md-12.pb-3.mt-3
@@ -577,7 +584,7 @@
 
     .actions.btn-group role='group'
       - if policy(@task).edit?
-        - if @task.contribution?
+        - if @task.pending_contribution?
           - edit_url = edit_task_task_contribution_path(@task.parent, @task.task_contribution)
         - else
           - edit_url = edit_task_path(@task)
@@ -588,7 +595,7 @@
         = link_to task_path(@task), class: 'btn btn-important', method: :delete, data: {confirm: t('common.sure')} do
           i.fa-solid.fa-trash-can
           =< t('common.button.delete')
-      - if @task.contribution?
+      - if @task.pending_contribution?
         - if policy(@task.parent).edit?
           = link_to approve_changes_task_task_contribution_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
             i.fa-solid.fa-check
@@ -600,7 +607,7 @@
           = link_to discard_changes_task_task_contribution_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
             i.fa-solid.fa-link-slash
             =< t('task_contributions.buttons.decouple')
-      - else
+      - unless @task.contribution?
         - if policy(@task).contribute?(check_other_contrib: false)
           - if @task.contributions(user: @current_user).any?
             = link_to edit_task_task_contribution_path(@task, @task.contributions(user: @current_user).first), method: :get, class: 'btn btn-important' do
@@ -609,6 +616,11 @@
           - else
             = link_to new_task_task_contribution_path(@task), method: :get, class: 'btn btn-important' do
               i.fa-regular.fa-edit
+              =< t('task_contributions.buttons.contribute')
+        - if @current_user.nil?
+          div[data-bs-toggle='tooltip' title=unavailable_tooltip data-bs-delay=150]
+            = link_to new_task_task_contribution_path(@task), method: :post, class: 'btn btn-important disabled' do
+              i.fa-regular.fa-clone
               =< t('task_contributions.buttons.contribute')
 
         - if policy(@task).duplicate?
