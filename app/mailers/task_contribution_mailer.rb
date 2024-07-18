@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class TaskContributionMailer < ApplicationMailer
-  def contribution_request(task_contrib)
+  def send_contribution_request(task_contrib)
     @task_author = task_contrib.base.user
     @task_contrib = task_contrib
     @contrib_author = task_contrib.suggestion.user
@@ -12,7 +12,7 @@ class TaskContributionMailer < ApplicationMailer
     end
   end
 
-  def approval_info(task_contrib)
+  def send_approval_info(task_contrib)
     @task_contrib = task_contrib
     @contrib_author = task_contrib.suggestion.user
     I18n.with_locale(@contrib_author.preferred_locale || I18n.default_locale) do
@@ -21,7 +21,7 @@ class TaskContributionMailer < ApplicationMailer
     end
   end
 
-  def rejection_info(task_contrib, duplicate)
+  def send_rejection_info(task_contrib, duplicate)
     @task_contrib = task_contrib
     @contrib_author = task_contrib.suggestion.user
     @duplicate = duplicate
