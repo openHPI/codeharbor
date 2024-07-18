@@ -120,16 +120,20 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
     %w[labels]
   end
 
+  def contribution?
+    task_contribution.present?
+  end
+
+  def pending_contribution?
+    contribution? && task_contribution.status == 'pending'
+  end
+
   def apply_contribution(contrib)
     transfer_attributes(contrib.suggestion, %w[id parent_uuid access_level user_id uuid created_at], has_files: true)
     transfer_multiple_entities(model_solutions, contrib.suggestion.model_solutions, 'model_solution')
     transfer_multiple_entities(tests, contrib.suggestion.tests, 'test')
     contrib.status = :merged
     save && contrib.save
-  end
-
-  def contribution?
-    task_contribution.present? && task_contribution.status == 'pending'
   end
 
   def sync_metadata_with_nbp
@@ -232,6 +236,14 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
     return query.where(status:) unless status.nil?
 
     query.where(status: :pending)
+  end
+
+  def klass
+    if contribution?
+      TaskContribution
+    else
+      self.class
+    end
   end
 
   private
