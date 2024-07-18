@@ -51,6 +51,7 @@ en:
         language: Language
         license: License
         meta_data: Metadata
+        parent: Parent
         parent_uuid: Parent UUID
         programming_language: Programming Language
         submission_restrictions: Submission Restrictions

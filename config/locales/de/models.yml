@@ -42,7 +42,6 @@ de:
         overall_rating: Gesamtbewertung
         test_quality: Tests
       task:
-        parent: Ursprüngliche Aufgabe
         access_level: Sichtbarkeit
         description: Beschreibung
         external_resources: Externe Ressourcen
@@ -52,6 +51,7 @@ de:
         language: Sprache
         license: Lizenz
         meta_data: Metadaten
+        parent: Ursprüngliche Aufgabe
         parent_uuid: Übergeordnete UUID
         programming_language: Programmiersprache
         submission_restrictions: Abgabe-Einschränkungen

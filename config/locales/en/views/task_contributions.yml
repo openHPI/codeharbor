@@ -5,10 +5,12 @@ en:
       contribute: Contribute
       decouple: Decouple
       edit_contribution: Edit Contribution
+    index:
+      contributions_for_task: Contributions for %{task_title}
     mailer:
       approval_info:
-        status_message: 'Your Contribution for the Task "%{task}" was approved and merged.'
-        subject_message: 'Your contribution for "%{task}" was approved'
+        status_message: Your Contribution for the Task "%{task}" was approved and merged.
+        subject_message: Your contribution for "%{task}" was approved
       contribution_request:
         request_message: '%{contrib_author} has suggested changes for your Task "%{task}".'
         review_message: Click the link below, to review or merge the changes.
@@ -17,8 +19,8 @@ en:
       greeting: Hello %{user}
       rejection_info:
         duplicate_message: The task linked to your contribution is now a full duplicate.
-        status_message: 'Your Contribution for the Task "%{task}" was rejected.'
-        subject_message: 'Your contribution for "%{task}" was rejected'
+        status_message: Your Contribution for the Task "%{task}" was rejected.
+        subject_message: Your contribution for "%{task}" was rejected
         visibility_message: You may decide to change the visibility to public to let others utilize your changes.
       task_url_message: View task
     new:
@@ -29,5 +31,3 @@ en:
       pending: Pending
     task_contributions:
       no_contributions_yet: There are no contributions for your task(s) yet.
-    index:
-      contributions_for_task: Contributions for %{task_title}
