@@ -84,16 +84,15 @@ en:
       new_task: New Task
     shared:
       additional_info: Additional Information
-      contribution_info: Contribution Information
       basic_information: Basic Information
+      contribution_info: Contribution Information
       new_comment: New Comment
     show:
       add_to_collection_hint: Save Tasks for later by adding them to a collection.
-      contribution_list_hint: View Contributions linked to this task.
       button:
-        contribution_list: View Related Contributions
         add_to_collection: Add to Collection
         api_key_required: OpenAI API key is required to generate a test
+        contribution_list: View Related Contributions
         create_collection: Create new Collection
         download_as_zip: Download this Task as a ZIP file.
         export: Export
@@ -101,6 +100,7 @@ en:
         generate_test: Generate Unit Tests
         rate: Rate
         show_comments: Show Comments
+      contribution_list_hint: View Contributions linked to this task.
       create_collection_placeholder: Collection name
       define_account_link: Please define an account link first
       export_to: Export to
@@ -111,8 +111,8 @@ en:
       no_license: None
       no_model_solution_present: No Model Solutions present
       no_tests: No tests included
-      remove_task_from_collection_warning: Are you sure you want to remove this Task from the Collection?
       owner_required_tooltip: This feature can only be used by the owner of the task.
+      remove_task_from_collection_warning: Are you sure you want to remove this Task from the Collection?
       task_contribution:
         disabled:
           tooltip: This feature is unavailable for task contributions.
