@@ -1,0 +1,9 @@
+---
+en:
+  task_contributions:
+    approve_changes:
+      error: Could not merge tasks.
+      success: The changes were merged successfully.
+    discard_changes:
+      error: The contribution could not be discarded.
+      success: The contribution was discarded successfully.

@@ -7,6 +7,8 @@ RSpec.describe ModelSolution do
     it { is_expected.to belong_to(:task) }
     it { is_expected.to validate_presence_of(:xml_id) }
     it { is_expected.to validate_uniqueness_of(:xml_id).scoped_to(:task_id) }
+
+    it_behaves_like 'parent validation with parent_id', :model_solution
   end
 
   describe '#duplicate' do
@@ -21,7 +23,7 @@ RSpec.describe ModelSolution do
     end
 
     it 'has the same attributes' do
-      expect(duplicate).to have_attributes(model_solution.attributes.except('created_at', 'updated_at', 'id', 'fileable_id'))
+      expect(duplicate).to have_attributes(model_solution.attributes.except('created_at', 'updated_at', 'id', 'fileable_id', 'parent_id'))
     end
 
     it 'creates new files' do
@@ -30,8 +32,13 @@ RSpec.describe ModelSolution do
 
     it 'creates new files with the same attributes' do
       expect(duplicate.files).to match_array(model_solution.files.map do |file|
-                                               have_attributes(file.attributes.except('created_at', 'updated_at', 'id', 'fileable_id'))
+                                               have_attributes(file.attributes.except('created_at', 'updated_at', 'id', 'fileable_id', 'parent_id'))
                                              end)
     end
+  end
+
+  describe '#transfer_multiple_entities' do
+    it_behaves_like 'transfer multiple entities', :model_solution
+    it_behaves_like 'transfer files', :model_solution
   end
 end

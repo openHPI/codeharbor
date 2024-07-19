@@ -1,12 +1,6 @@
 ---
 de:
   tasks:
-    access_request_mailer:
-      greeting: Hallo %{user}
-      message_line1: '%{user} möchte an Ihrer Aufgabe "%{task}" mitarbeiten.'
-      message_line2: Wenn Sie den/die Benutzer:in zum/zur Co-Autor:in ernennen oder in eine Gruppe einladen möchten, klicken Sie auf den Link unten.
-      message_line3: Ansonsten können Sie diese E-Mail ignorieren.
-      subject: '%{user} möchte an Ihrer Aufgabe "%{task}" mitarbeiten.'
     editor:
       button:
         extract_text: Text extrahieren
@@ -48,7 +42,8 @@ de:
         import_zip: ZIP-Datei importieren
         new_task: Neue Aufgabe
       menu_button:
-        group: Aufgaben aus Gruppen
+        contribution: Meine Änderungsvorschläge
+        group: Gruppenaufgaben
         mine: Meine Aufgaben
         public: Öffentlich
       search:
@@ -78,11 +73,13 @@ de:
     shared:
       additional_info: Zusätzliche Informationen
       basic_information: Basisinformationen
+      contribution_info: Informationen zum Änderungsvorschlag
       new_comment: Neuer Kommentar
     show:
       add_to_collection_hint: Speichern Sie Aufgaben für später, indem Sie sie zu einer Sammlung hinzufügen.
       button:
         add_to_collection: Zu Sammlung hinzufügen
+        contribution_list: Verwandte Änderungsvorschläge ansehen
         create_collection: Neue Sammlung anlegen
         download_as_zip: Diese Aufgabe als ZIP-Datei herunterladen.
         export: Exportieren
@@ -90,6 +87,7 @@ de:
         generate_test: Unit-Tests generieren
         rate: Bewerten
         show_comments: Kommentare anzeigen
+      contribution_list_hint: Betrachten Sie Änderungsvorschläg mit Bezug zu dieser Aufgabe.
       create_collection_placeholder: Name der Sammlung
       define_account_link: Bitte definieren Sie zuerst einen Account-Link
       export_to: Exportieren nach
@@ -100,7 +98,11 @@ de:
       no_license: Keine
       no_model_solution_present: Keine Musterlösungen vorhanden
       no_tests: Keine Tests enthalten
+      owner_required_tooltip: Sie müssen der Autor der Aufgabe sein, um die Funktion zu verwenden.
       remove_task_from_collection_warning: Sind Sie sicher, dass Sie diese Aufgabe aus der Sammlung entfernen wollen?
+      task_contribution:
+        disabled:
+          tooltip: Diese Operation ist für Änderungsvorschläge nicht verfügbar.
       undefined: Benutzer:in undefiniert
       yourself: Ihnen selbst
     tasks:
@@ -114,6 +116,7 @@ de:
         no_results_description: Probieren Sie verschiedene Optionen aus, indem Sie auf 'Erweitert' klicken und die Suche wiederholen.
         no_tasks: Sie haben noch keine Aufgaben
     visibility:
+      contribution: Änderungsvorschlag
       label: Sichtbarkeit
       private: Privat
       public: Öffentlich

@@ -46,6 +46,7 @@ en:
         language: Language
         license: License
         meta_data: Metadata
+        parent: Parent
         parent_uuid: Parent UUID
         programming_language: Programming Language
         submission_restrictions: Submission Restrictions
@@ -109,6 +110,8 @@ en:
             language:
               not_de_or_us: 'is not in the correct format. Please use one of the following formats: de / en-US'
               not_iso639: is not a two letter ISO 639-1 or three letter ISO-639-2 language code
+            task_contribution:
+              duplicated: has been created already and is currently waiting for approval. Please edit your existing contribution instead of creating a new one
         task_file:
           attributes:
             xml_id:
@@ -170,6 +173,9 @@ en:
       task:
         one: Task
         other: Tasks
+      task_contribution:
+        one: Task Contribution
+        other: Task Contributions
       task_file:
         one: Task File
         other: Task Files
@@ -185,6 +191,9 @@ en:
       user_identity:
         one: User Identity
         other: User Identities
+  task_contributions:
+    model:
+      contribution_title: Contribution for %{task_title}
   tasks:
     model:
       copy_of_task: Copy of Task

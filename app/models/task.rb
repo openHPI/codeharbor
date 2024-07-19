@@ -2,9 +2,11 @@
 
 require 'nokogiri'
 require 'zip'
-class Task < ApplicationRecord
-  acts_as_taggable_on :state
+class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
+  include TransferValues
+  include ParentValidation
 
+  acts_as_taggable_on :state
   validates :title, presence: true
 
   validates :uuid, uniqueness: true
@@ -12,6 +14,9 @@ class Task < ApplicationRecord
   before_validation :lowercase_language
   validates :language, format: {with: /\A[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*\z/, message: :not_de_or_us}
   validate :primary_language_tag_in_iso639?
+  validate :unique_pending_contribution
+  validates :parent, presence: true, if: -> { contribution? }
+  validate :no_license_change_on_duplicate, on: :update
 
   has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy
 
@@ -30,9 +35,11 @@ class Task < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :ratings, dependent: :destroy
 
+  has_one :task_contribution, dependent: :destroy, inverse_of: :suggestion
   belongs_to :user
   belongs_to :programming_language, optional: true
   belongs_to :license, optional: true
+  belongs_to :parent, class_name: 'Task', foreign_key: :parent_uuid, primary_key: :uuid, optional: true, inverse_of: false
 
   accepts_nested_attributes_for :files, allow_destroy: true
   accepts_nested_attributes_for :tests, allow_destroy: true
@@ -48,11 +55,18 @@ class Task < ApplicationRecord
   }
   scope :visibility, lambda {|visibility, user = nil|
                        {
-                         owner: owner(user),
-                         group: group_access(user),
-                         public: public_access,
-                       }.fetch(visibility, public_access)
+                         owner: owner(user).not_task_contributions,
+                         group: group_access(user).not_task_contributions,
+                         public: public_access.not_task_contributions,
+                         contribution: pending_contribution(user),
+                       }.fetch(visibility, public_access.not_task_contributions)
                      }
+  scope :not_task_contributions, lambda {
+    where.missing(:task_contribution)
+  }
+  scope :pending_contribution, lambda {|user|
+    joins(:task_contribution).where(user:, task_contribution: {status: :pending})
+  }
   scope :created_before_days, ->(days) { where(created_at: days.to_i.days.ago.beginning_of_day..) if days.to_i.positive? }
   scope :average_rating, lambda {
     select('tasks.*, COALESCE(avg_rating, 0) AS average_rating')
@@ -102,26 +116,50 @@ class Task < ApplicationRecord
     %w[labels]
   end
 
+  def contribution?
+    task_contribution.present?
+  end
+
+  def pending_contribution?
+    contribution? && task_contribution.status == 'pending'
+  end
+
+  def apply_contribution(contrib)
+    transfer_attributes(contrib.suggestion, %w[id parent_uuid access_level user_id uuid created_at], has_files: true)
+    transfer_multiple_entities(model_solutions, contrib.suggestion.model_solutions, 'model_solution')
+    transfer_multiple_entities(tests, contrib.suggestion.tests, 'test')
+    contrib.status = :merged
+    save && contrib.save
+  end
+
   # This method creates a duplicate while leaving permissions and ownership unchanged
-  def duplicate
+  def duplicate(set_parent_identifiers: true)
     dup.tap do |task|
-      task.parent_uuid = task.uuid
+      if set_parent_identifiers
+        task.parent_uuid = task.uuid
+      end
       task.uuid = nil
-      task.tests = duplicate_tests
-      task.files = duplicate_files
-      task.model_solutions = duplicate_model_solutions
+      task.tests = duplicate_tests(set_parent_id: set_parent_identifiers)
+      task.files = duplicate_files(set_parent_id: set_parent_identifiers)
+      task.model_solutions = duplicate_model_solutions(set_parent_id: set_parent_identifiers)
     end
   end
 
-  # This method resets all permissions and assigns a useful title
-  def clean_duplicate(user)
+  # This method resets all permissions and optionally assigns a useful title
+  def clean_duplicate(user, change_title: true)
     duplicate.tap do |task|
       task.user = user
       task.groups = []
       task.collections = []
-      task.access_level_private!
-      task.title = "#{I18n.t('tasks.model.copy_of_task')}: #{task.title}"
+      task.access_level = :private
+      if change_title
+        task.title = "#{I18n.t('tasks.model.copy_of_task')}: #{task.title}"
+      end
     end
+  end
+
+  def parent_of?(child)
+    child.parent_uuid.nil? ? false : uuid == child.parent_uuid
   end
 
   def initialize_derivate(user = nil)
@@ -163,18 +201,39 @@ class Task < ApplicationRecord
     title
   end
 
+  def contributions(user: nil, status: nil, all_states: false)
+    task_filter_set = {parent_uuid: uuid}
+    unless user.nil?
+      task_filter_set[:user] = user
+    end
+    query = TaskContribution.joins(:suggestion)
+      .where(suggestion: task_filter_set)
+    return query if all_states
+    return query.where(status:) unless status.nil?
+
+    query.where(status: :pending)
+  end
+
+  def klass
+    if contribution?
+      TaskContribution
+    else
+      self.class
+    end
+  end
+
   private
 
-  def duplicate_tests
-    tests.map(&:duplicate)
+  def duplicate_tests(set_parent_id: true)
+    tests.map {|test| test.duplicate(set_parent_id:) }
   end
 
-  def duplicate_files
-    files.map(&:duplicate)
+  def duplicate_files(set_parent_id: true)
+    files.map {|file| file.duplicate(set_parent_id:) }
   end
 
-  def duplicate_model_solutions
-    model_solutions.map(&:duplicate)
+  def duplicate_model_solutions(set_parent_id: true)
+    model_solutions.map {|model_solution| model_solution.duplicate(set_parent_id:) }
   end
 
   def lowercase_language
@@ -185,6 +244,19 @@ class Task < ApplicationRecord
     if language.present?
       primary_tag = language.split('-').first
       errors.add(:language, :not_iso639) unless ISO_639.find(primary_tag)
+    end
+  end
+
+  def unique_pending_contribution
+    if contribution?
+      other_existing_contrib = parent.contributions(user:).where.not(id: task_contribution.id).any?
+      errors.add(:task_contribution, :duplicated) if other_existing_contrib
+    end
+  end
+
+  def no_license_change_on_duplicate
+    if parent && license_id_changed? && parent.license != license
+      errors.add(:license, :cannot_change_on_duplicate)
     end
   end
 end

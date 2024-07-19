@@ -1,0 +1,9 @@
+---
+de:
+  task_contributions:
+    approve_changes:
+      error: Die Änderungen konnten nicht übernommen werden.
+      success: Die Änderungen wurden erfolgreich übernommen.
+    discard_changes:
+      error: Der Änderungsvorschlag konnte nicht verworfen werden.
+      success: Der Änderungsvorschlag wurde erfolgreich verworfen.

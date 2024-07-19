@@ -1,0 +1,20 @@
+- if @task_contributions.empty?
+  .card.my-4
+    .card-body
+      .col-md-10
+        h4.text-body-secondary
+        = t('.no_contributions_yet')
+- @task_contributions.each do |contrib|
+  .card.my-5
+    .card-header
+      h6
+        span.d-flex.justify-content-between.align-items-center.mt-2
+          = link_to [contrib.base, contrib], class: 'card-task-title fw-bold' do
+            = "#{t('common.created_at')} #{l(contrib.suggestion.created_at, format: :long)}"
+          span.group-label.ms-2
+            span = t("task_contributions.status.#{contrib.status}")
+    .card-body
+      .row.px-3
+        .col-8.col-md-10.px-0
+          .groups-content
+            = "#{t('common.created_by')} #{contrib.suggestion.user.name}"

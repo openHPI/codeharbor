@@ -8,7 +8,7 @@ class TaskPolicy < ApplicationPolicy
   %i[show? download?].each do |action|
     define_method(action) do
       if @user.present?
-        record_owner? || admin? || task.access_level_public? || task_in_group_with?(@user)
+        record_owner? || admin? || task.access_level_public? || task_in_group_with?(@user) || task_contribution?
       else
         task.access_level_public?
       end
@@ -30,6 +30,7 @@ class TaskPolicy < ApplicationPolicy
   %i[add_to_collection? duplicate? export_external_start? export_external_check? export_external_confirm?].each do |action|
     define_method(action) do
       return no_one if @user.blank?
+      return false if task_contribution?
 
       record_owner? || task.access_level_public? || task_in_group_with?(@user) || admin?
     end
@@ -46,7 +47,7 @@ class TaskPolicy < ApplicationPolicy
   end
 
   def destroy?
-    record_owner? || admin?
+    (record_owner? || admin?) && !suggestion?
   end
 
   def manage?
@@ -57,7 +58,17 @@ class TaskPolicy < ApplicationPolicy
     Settings.open_ai.access_token.present? and update?
   end
 
+  def contribute?(check_other_contrib: true)
+    return false if @user.blank?
+
+    (show? && !edit?) && (!check_other_contrib || task.contributions(user: @user).none?)
+  end
+
   private
+
+  def suggestion?
+    task.task_contribution.present?
+  end
 
   def user_required?
     false
@@ -74,5 +85,12 @@ class TaskPolicy < ApplicationPolicy
 
   def task_in_group_with_admin?(user)
     task.groups.any? {|group| group.admin?(user) }
+  end
+
+  def task_contribution?
+    # If the current task is actually a contribution for another task,
+    # we delegate the permission check to the TaskContributionPolicy.
+    # This check is _not_ checking the parent task's permission.
+    task.task_contribution.present? && Pundit.policy(@user, task.task_contribution).show?
   end
 end
