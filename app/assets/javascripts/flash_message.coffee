@@ -1,7 +1,7 @@
 show_ajax_message = (msg, type) ->
   cls = 'alert-success' if type == 'notice'
   cls = 'alert-danger' if type == 'alert'
-  $("#flash-message").html "<div id='flash-#{type}' class='alert #{cls}'>#{msg}</div>"
+  $("#flash-message").html "<div id='flash-#{type}' class='alert flash #{cls} my-2 alert-dismissible fade show'><p class='mb-0' id='flash-notice'>#{decodeURIComponent(msg)}</p><button aria-label='Close' class='btn-close' data-bs-dismiss='alert' type='button'></button></div>"
   $("#flash-#{type}").delay(6000).slideUp 'medium'
 
 $(document).ajaxComplete (event, request) ->
@@ -11,6 +11,5 @@ $(document).ajaxComplete (event, request) ->
 
 ready = ->
   $('#flash-message').children().first().delay(5000).slideUp 'medium'
-
 
 $(document).on('turbolinks:load', ready)

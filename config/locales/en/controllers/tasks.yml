@@ -9,15 +9,17 @@ en:
     export_external_confirm:
       error: 'Export of task (%{title}) failed. <br> Error: %{error}'
       success: Task (%{title}) successfully exported.
+    import:
+      internal_error: An internal error occurred on CodeHarbor while importing the exercise.
     import_confirm:
       error: 'Import of task (%{title}) failed. <br> Error: %{error}'
       success: Task (%{title}) successfully imported.
     import_external:
-      internal_error: An internal error occurred on CodeHarbor while importing the exercise.
       invalid: Invalid exercise
       success: success
     import_start:
       choose_file_error: You need to choose a file.
+      error: 'Import of task could not be started. <br> Error: %{error}'
     proforma_service:
       convert_zip_to_proforma_tasks:
         nested_too_deep: ZIP is nested too deep.
