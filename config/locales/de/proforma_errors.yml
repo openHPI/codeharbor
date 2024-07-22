@@ -2,6 +2,5 @@
 de:
   proforma_errors:
     import: Es ist ein Fehler beim Importieren der ProformaXML ZIP-Datei aufgetreten.
-    import_default: "%{error}"
     no task_xml found: Es konnte keine task.xml in der ZIP-Datei gefunden werden.
     version not supported: Die Version dieses ProformaXML Dokuments wird nicht unterstützt.

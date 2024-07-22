@@ -224,7 +224,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   def prettify_import_errors(error)
     message = "#{t('proforma_errors.import')}<br>"
     message + JSON.parse(error.message).map do |msg|
-                t("proforma_errors.#{msg}", default: t('proforma_errors.import_default', error: msg))
+                t("proforma_errors.#{msg}", default: msg)
               end.join('<br>')
   end
 

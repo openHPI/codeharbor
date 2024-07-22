@@ -722,7 +722,7 @@ RSpec.describe TasksController do
     context 'when zip_file is submitted' do
       let(:zip_file) {}
 
-      it 'renders correct json' do
+      it 'renders correct JSON' do
         post_request
         expect(JSON.parse(response.body, symbolize_names: true)).to eql({status: 'failure', message: 'You need to choose a file.'})
       end
@@ -731,7 +731,7 @@ RSpec.describe TasksController do
     context "when zip_file is 'undefined'" do
       let(:zip_file) { 'undefined' }
 
-      it 'renders correct json' do
+      it 'renders correct JSON' do
         post_request
         expect(JSON.parse(response.body, symbolize_names: true)).to eql({status: 'failure', message: 'You need to choose a file.'})
       end
@@ -742,7 +742,7 @@ RSpec.describe TasksController do
         allow(ProformaService::CacheImportFile).to receive(:call).and_raise(ProformaXML::ProformaError.new(['version not supported']))
       end
 
-      it 'renders correct json' do
+      it 'renders correct JSON' do
         post_request
         expect(JSON.parse(response.body, symbolize_names: true)).to eql({status: 'failure', message: 'Import of task could not be started. <br> Error: An error occurred while importing your ProformaXML ZIP file.<br>The version of this ProformaXML document is not supported.', actions: ''})
       end
@@ -753,7 +753,7 @@ RSpec.describe TasksController do
         allow(ProformaService::CacheImportFile).to receive(:call).and_raise(StandardError)
       end
 
-      it 'renders correct json' do
+      it 'renders correct JSON' do
         post_request
         expect(JSON.parse(response.body, symbolize_names: true)).to eql({status: 'failure', message: 'An internal error occurred on CodeHarbor while importing the exercise.', actions: ''})
       end
@@ -779,7 +779,7 @@ RSpec.describe TasksController do
         expect { post_request }.to change(Task, :count).by(1)
       end
 
-      it 'renders correct json' do
+      it 'renders correct JSON' do
         post_request
         expect(response.body).to include('successfully imported').and(include(I18n.t('tasks.import_actions.button.show_task')).and(include('Hide')))
       end
@@ -787,7 +787,7 @@ RSpec.describe TasksController do
       context 'when import raises a validation error' do
         before { allow(ProformaService::ImportTask).to receive(:call).and_raise(ActiveRecord::RecordInvalid) }
 
-        it 'renders correct json' do
+        it 'renders correct JSON' do
           post_request
           expect(response.body).to include('failed').and(include('Record invalid').and(include('"actions":""')))
         end
@@ -798,7 +798,7 @@ RSpec.describe TasksController do
           allow(ProformaService::ImportTask).to receive(:call).and_raise(StandardError)
         end
 
-        it 'renders correct json' do
+        it 'renders correct JSON' do
           post_request
           expect(JSON.parse(response.body, symbolize_names: true)).to eql({status: 'failure', message: 'An internal error occurred on CodeHarbor while importing the exercise.', actions: ''})
         end
@@ -943,7 +943,7 @@ RSpec.describe TasksController do
     let(:uuid_found) { true }
     let(:error) { nil }
 
-    it 'renders the correct contents as json' do
+    it 'renders the correct contents as JSON' do
       post_request
       expect(response.parsed_body.symbolize_keys[:message]).to eq('message')
       expect(response.parsed_body.symbolize_keys[:actions]).to(
@@ -957,7 +957,7 @@ RSpec.describe TasksController do
     context 'when there is an error' do
       let(:error) { 'error' }
 
-      it 'renders the correct contents as json' do
+      it 'renders the correct contents as JSON' do
         post_request
         expect(response.parsed_body.symbolize_keys[:message]).to eq('message')
         expect(response.parsed_body.symbolize_keys[:actions]).to(
@@ -972,7 +972,7 @@ RSpec.describe TasksController do
     context 'when uuid_found is false' do
       let(:uuid_found) { false }
 
-      it 'renders the correct contents as json' do
+      it 'renders the correct contents as JSON' do
         post_request
         expect(response.parsed_body.symbolize_keys[:message]).to eq('message')
         expect(response.parsed_body.symbolize_keys[:actions]).to(
