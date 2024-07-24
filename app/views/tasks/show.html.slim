@@ -169,7 +169,7 @@
           .table-header.closed.toggle-next
             => file.full_file_name
             span.fa-solid.fa-caret-down
-          .file-content
+          .file-content.hide
             .row
               .col-auto.row-label
                 = TaskFile.human_attribute_name('name')
@@ -241,7 +241,7 @@
           .table-header.closed.toggle-next
             => test.title
             span.fa-solid.fa-caret-down
-          .test-content
+          .test-content.hide
             .row
               .col-auto.row-label
                 = Test.human_attribute_name('title')
@@ -310,7 +310,7 @@
                   .table-header.closed.toggle-next
                     => file.full_file_name
                     span.fa-solid.fa-caret-down
-                  .file-content
+                  .file-content.hide
                     .row
                       .col-auto.row-label
                         = TaskFile.human_attribute_name('name')
@@ -382,7 +382,7 @@
             => ModelSolution.model_name.human
             => @model_solutions.find_index(model_solution) + 1
             span.fa-solid.fa-caret-down
-          .test-content
+          .test-content.hide
             .row
               .col-auto.row-label
                 = ModelSolution.human_attribute_name('description')
@@ -411,7 +411,7 @@
                   .table-header.closed.toggle-next
                     => file.full_file_name
                     span.fa-solid.fa-caret-down
-                  .file-content
+                  .file-content.hide
                     .row
                       .col-auto.row-label
                         = TaskFile.human_attribute_name('name')
