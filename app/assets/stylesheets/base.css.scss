@@ -79,14 +79,17 @@ a.classic-link {
     border-bottom: none;
   }
 
+  .lead-label {
+    font-size: 1.15em;
+  }
+
   .row {
     margin: 8px 2%;
     border-radius: 2px;
     border: 1px #dddddd solid;
     width: 96%;
 
-    .row-label,
-    .inner-section .row-label {
+    .row-label {
       text-align: left;
       background-color: $gray-bg-color;
       font-weight: 700;
@@ -96,20 +99,13 @@ a.classic-link {
       min-width: 80px;
       border-right: 1px #dddddd solid;
     }
-    .row-value,
-    .inner-section .row-value {
+    .row-value {
       text-align: left;
       padding: 6px 8px;
     }
-
-    .inner-section {
-      float: left;
-      display: inline-block;
-    }
   }
 
-  .row.vertical,
-  .inner-section .row-vertical {
+  .row.vertical {
     .row-label {
       width: 100%;
       display: block;
@@ -289,4 +285,9 @@ fieldset.form-group {
 
 .dropdown-title {
   padding-left: 2px;
+}
+
+// Hide the element (useful for hiding element, but does not want to use bootstrap d-none class that persist display: none !important)
+.hide {
+  display: none;
 }

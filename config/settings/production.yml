@@ -15,4 +15,4 @@ omniauth:
 oai_pmh:
   admin_mail: admin@example.org
 open_ai:
-  model: gpt-3.5-turbo
+  model: gpt-4o-mini

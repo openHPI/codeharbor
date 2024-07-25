@@ -63,10 +63,10 @@
           = fields_for :group_tasks do |ff|
             .field-element
               = ff.label :group_ids, Group.model_name.human(count: :many), class: 'form-label'
-              = ff.collection_select :group_ids, current_user.member_groups.uniq, :id, :name, {selected: @task.groups.map(&:id)}, {class: 'my-group form-control', multiple: true, style: 'width: 300px;'}
+              = ff.collection_select :group_ids, current_user.member_groups.uniq, :id, :name, {selected: @task.groups.map(&:id)}, {class: 'my-group form-control', multiple: true}
               - if (@task.groups - current_user.member_groups).length.positive?
                 .unchangeable-groups
-                  span.title style='margin-right: 5px;'
+                  span.title.me-1
                     = "#{t('.unchangeable_groups')}:"
                   - (@task.groups - current_user.member_groups).each_with_index do |group, index|
                     - if index.positive?
@@ -75,7 +75,7 @@
 
           .field-element
             = f.label :labels, Label.model_name.human(count: :many), class: 'form-label'
-            = f.select :label_names, options_for_select(@task.labels.map {|l| [l.name, l.name, {label_color: l.color, label_font_color: l.font_color}] }, @task.labels.map(&:name)), {}, {class: 'labels-select2-tag form-control', multiple: 'multiple', style: 'width: 300px;'}
+            = f.select :label_names, options_for_select(@task.labels.map {|l| [l.name, l.name, {label_color: l.color, label_font_color: l.font_color}] }, @task.labels.map(&:name)), {}, {class: 'labels-select2-tag form-control', multiple: 'multiple'}
 
           .field-element
             = f.label :license, Task.human_attribute_name('license'), class: 'form-label'
@@ -97,7 +97,7 @@
           span.fa-solid.fa-caret-up
         .form-content
           .field-element
-            = f.nested_fields_for :tests, style: 'margin-left: 10px' do |test|
+            = f.nested_fields_for :tests do |test|
               .show-table.exercise-show
                 - if test.object.new_record?
                   - display_container = 'display: block'
@@ -113,7 +113,7 @@
                     = test.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
                       i.fa-solid.fa-xmark.text-danger
                       =< t('.button.remove_test')
-                .test-container style="margin-left: 10px; #{display_container}"
+                .test-container.ms-2.mt-4 style="#{display_container}"
                   = render 'test_form', f:, test:
             / .field-element
             = f.add_nested_fields_link :tests, ' ', class: 'btn btn-main', id: 'addTestButton' do
@@ -126,7 +126,7 @@
           span.fa-solid.fa-caret-up
         .form-content
           .field-element
-            = f.nested_fields_for :model_solutions, style: 'margin-left: 10px' do |model_solution|
+            = f.nested_fields_for :model_solutions do |model_solution|
               .show-table.exercise-show
                 - if model_solution.object.new_record?
                   - display_container = 'display: block'
@@ -143,7 +143,7 @@
                     = model_solution.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
                       i.fa-solid.fa-xmark.text-danger
                       =< t('.button.remove_model_solution')
-                .model-solution-container style="margin-left: 10px; #{display_container}"
+                .model-solution-container.ms-2.mt-4 style="#{display_container}"
                   = render 'model_solution_form', f:, model_solution:
             / .field-element
             = f.add_nested_fields_link :model_solutions, ' ', class: 'btn btn-main', id: 'addTestButton' do

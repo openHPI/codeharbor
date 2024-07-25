@@ -1,6 +1,6 @@
 = form_for :comment, url: task_comment_path(@task, @comment), method: 'put', remote: true do |f|
   .comment-text
-    div style="width: 60%; margin: 0; display: inline-block;"
+    .comment-text-input
       = f.text_field :text, class: 'form-control'
     .actions.btn-group.float-end role='group'
       - if policy(@comment).edit?

@@ -163,7 +163,7 @@ RSpec.describe Task do
       end
 
       it 'has a modified title' do
-        expect(clean_duplicate.title).to eq('Copy of task: title')
+        expect(clean_duplicate.title).to eq('Copy of Task: title')
       end
     end
   end

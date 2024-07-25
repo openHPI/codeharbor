@@ -80,11 +80,11 @@
     .card-footer
       = button_tag type: 'button', class: 'btn no-border index-comment-button', data: {task: task.id} do
         => t('.button.show_comments')
-        span.fa-solid.fa-circle-notch.fa-spin.wait style="display:none;margin-right:5px;"
+        span.fa-solid.fa-circle-notch.fa-spin.wait.me-1 style="display:none;"
         span.fa-solid.fa-caret-down.my-caret
       =< button_tag type: 'button', class: 'btn no-border related-button', data: {task: task.id} do
         => t('.button.related_exercises')
-        span.fa-solid.fa-circle-notch.fa-spin.wait style="display:none;margin-right:5px;"
+        span.fa-solid.fa-circle-notch.fa-spin.wait.me-1 style="display:none;"
         span.fa-solid.fa-caret-down.my-caret
 
     /.related-box data-exercise=exercise.id

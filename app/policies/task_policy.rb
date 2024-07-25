@@ -29,14 +29,14 @@ class TaskPolicy < ApplicationPolicy
 
   %i[add_to_collection? duplicate? export_external_start? export_external_check? export_external_confirm?].each do |action|
     define_method(action) do
-      return false if @user.blank?
+      return no_one if @user.blank?
 
       record_owner? || task.access_level_public? || task_in_group_with?(@user) || admin?
     end
   end
 
   def update?
-    return false if @user.blank?
+    return no_one if @user.blank?
 
     record_owner? || task_in_group_with?(@user) || admin?
   end

@@ -4,9 +4,9 @@
   - if f.object.avatar.attached? && f.object.avatar.persisted?
     .file-show
       = image_tag f.object.avatar.variant(resize_to_limit: [200, 200])
-      br
-      = link_to t('.remove_avatar'), '#', class: 'btn btn-light btn-sm remove-avatar', style: 'margin-top: 10px'
-    .file-input style='display: none'
+      .mt-2
+        = link_to t('.remove_avatar'), '#', class: 'btn btn-light btn-sm remove-avatar'
+    .file-input.hide
       = f.file_field :avatar, class: 'form-control'
   - else
     = f.file_field :avatar, class: 'form-control'
