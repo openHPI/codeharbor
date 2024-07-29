@@ -89,17 +89,26 @@
               .input-group
                 = text_field_tag 'user', nil, form: 'share', class: 'form-control'
                 = submit_tag t('.button.share'), form: 'share', class: 'btn btn-light'
-          .dropup.btn-group
+          .dropdown.btn-group
+            - if @collection.tasks.empty?
+              .btn-group data-bs-toggle='tooltip' title=t('.download_no_exercises') data-bs-delay=150
+                = button_tag class: 'btn btn-important dropdown-toggle disabled', 'data-bs-toggle': 'dropdown' do
+                  => t('common.button.download_zip')
+            - else
+              = button_tag class: 'btn btn-important dropdown-toggle', 'data-bs-toggle': 'dropdown' do
+                => t('common.button.download_zip')
+                span.caret
+              .scrollable.dropdown-menu role='menu'
+                .dropdown-header = "#{t('common.button.available_versions')}: "
+                - ProformaXML::SCHEMA_VERSIONS.each do |proforma_version|
+                  li
+                    = link_to proforma_version, download_all_collection_path(@collection, version: proforma_version), class: 'dropdown-item', target: '_blank', rel: 'noopener noreferrer'
+
+          .dropdown.btn-group
             = button_tag class: 'btn btn-important dropdown-toggle', 'data-bs-toggle': 'dropdown' do
               => t('common.button.export')
               span.caret
             .scrollable.dropdown-menu role='menu'
-              - if @collection.tasks.empty?
-                a.dropdown-item.disabled-cursor title=t('.download_no_exercises')
-                  = t('common.button.download_zip')
-              - else
-                = link_to t('common.button.download_zip'), download_all_collection_path(@collection), 'data-turbolinks': false, class: 'dropdown-item'
-              .dropdown-divider
               .dropdown-header = "#{t('.export_to')}: "
               - if current_user.available_account_links.empty?
                 = link_to t('.define_account_link'), new_user_account_link_path(current_user), class: 'dropdown-item'
