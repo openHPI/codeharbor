@@ -9,7 +9,8 @@ module ProformaService
     end
 
     def execute
-      ProformaXML::Exporter.call(task: ConvertTaskToProformaTask.call(task: @task, options: @options))
+      task = ConvertTaskToProformaTask.call(task: @task, options: @options)
+      ProformaXML::Exporter.call(task:, version: @options[:version])
     end
   end
 end
