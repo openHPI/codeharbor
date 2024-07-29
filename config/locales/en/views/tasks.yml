@@ -104,6 +104,7 @@ en:
       remove_task_from_collection_warning: Are you sure you want to remove this Task from the Collection?
       undefined: User undefined
       yourself: yourself
+      available_versions: "Available ProFormA-XML versions"
     tasks:
       button:
         related_exercises: Show Related Exercises
