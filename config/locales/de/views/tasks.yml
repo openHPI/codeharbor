@@ -104,7 +104,6 @@ de:
       remove_task_from_collection_warning: Sind Sie sicher, dass Sie diese Aufgabe aus der Sammlung entfernen wollen?
       undefined: Benutzer:in undefiniert
       yourself: Ihnen selbst
-      available_versions: "Verfügbare ProFormA-XML Versionen"
     tasks:
       button:
         related_exercises: Verwandte Aufgaben anzeigen

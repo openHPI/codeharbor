@@ -28,6 +28,7 @@ en:
       update: Update
       view: View
       'yes': 'yes'
+      available_versions: "Available ProFormA-XML versions"
     created: Created
     created_at: Created at
     created_by: Created by

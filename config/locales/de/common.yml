@@ -27,6 +27,7 @@ de:
       sign_up: Registrieren
       update: Aktualisieren
       view: Ansehen
+      available_versions: "Verfügbare ProFormA-XML Versionen"
       'yes': Ja
     created: Erstellt
     created_at: Erstellt am
