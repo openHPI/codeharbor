@@ -84,9 +84,10 @@ class CollectionsController < ApplicationController
   end
 
   def download_all
-    binary_zip_data = ProformaService::ExportTasks.call(tasks: @collection.tasks)
-
+    binary_zip_data = ProformaService::ExportTasks.call(tasks: @collection.tasks, options: {version: params[:version]})
     send_data(binary_zip_data.string, type: 'application/zip', filename: "#{@collection.title}.zip", disposition: 'attachment')
+  rescue ProformaXML::PostGenerateValidationError => e
+    redirect_to :root, danger: JSON.parse(e.message).map {|msg| t("proforma_errors.#{msg}", default: msg) }.join('<br>')
   end
 
   def share
