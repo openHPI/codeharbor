@@ -86,8 +86,10 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   end
 
   def download
-    zip_file = ProformaService::ExportTask.call(task: @task)
+    zip_file = ProformaService::ExportTask.call(task: @task, options: { version: params[:version] })
     send_data(zip_file.string, type: 'application/zip', filename: "task_#{@task.id}.zip", disposition: 'attachment')
+  rescue ProformaXML::PostGenerateValidationError => e
+    redirect_to :root, danger: JSON.parse(e.message).map {|msg| t("proforma_errors.#{msg}", default: msg) }.join('<br>')
   end
 
   def import_start # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -101,21 +103,21 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     respond_to do |format|
       format.js { render layout: false }
     end
-  rescue ProformaXML::ProformaError => e
-    messages = prettify_import_errors(e)
-    flash[:alert] = messages
-    render json: {
-      status: 'failure',
-      message: t('.error', error: messages),
-      actions: '',
-    }
-  rescue StandardError => e
-    Sentry.capture_exception(e)
-    render json: {
-      status: 'failure',
-      message: t('tasks.import.internal_error'),
-      actions: '',
-    }
+  # rescue ProformaXML::ProformaError => e
+  #   messages = prettify_import_errors(e)
+  #   flash[:alert] = messages
+  #   render json: {
+  #     status: 'failure',
+  #     message: t('.error', error: messages),
+  #     actions: '',
+  #   }
+  # rescue StandardError => e
+  #   Sentry.capture_exception(e)
+  #   render json: {
+  #     status: 'failure',
+  #     message: t('tasks.import.internal_error'),
+  #     actions: '',
+  #   }
   end
 
   def import_confirm # rubocop:disable Metrics/AbcSize

@@ -675,6 +675,28 @@ RSpec.describe TasksController do
         get_request
         expect(response.header['Content-Disposition']).to include "attachment; filename=\"task_#{task.id}.zip\""
       end
+
+      context 'when proforma_version is 2.0' do
+        let(:proforma_version) { '2.0' }
+
+        it 'sends the correct data' do
+          get_request
+          expect(response.body).to eql 'dummy'
+        end
+      end
+
+      context 'when export task raises an error' do
+        before { allow(ProformaService::ExportTask).to receive(:call).with(task:, options: {version: proforma_version}).and_raise(ProformaXML::PostGenerateValidationError, '["version not supported"]') }
+
+        it 'redirects to root' do
+          get_request
+          expect(response).to redirect_to(root_path)
+        end
+
+        it 'sets the correct flash message' do
+          expect { get_request }.to change { flash[:danger] }.to(I18n.t('proforma_errors.version not supported'))
+        end
+      end
     end
   end
 
