@@ -5,11 +5,13 @@ require 'zip'
 class Task < ApplicationRecord
   acts_as_taggable_on :state
 
+  before_validation :lowercase_language
+  after_commit :sync_metadata_with_nbp, if: -> { Nbp::PushConnector.enabled? }
+
   validates :title, presence: true
 
   validates :uuid, uniqueness: true
 
-  before_validation :lowercase_language
   validates :language, format: {with: /\A[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*\z/, message: :not_de_or_us}
   validate :primary_language_tag_in_iso639?
 
@@ -100,6 +102,13 @@ class Task < ApplicationRecord
 
   def self.ransackable_associations(_auth_object = nil)
     %w[labels]
+  end
+
+  def sync_metadata_with_nbp
+    if access_level_public? || saved_change_to_access_level?
+      NbpSyncJob.perform_later uuid
+      NbpSyncJob.perform_later uuid_previously_was if saved_change_to_uuid? && access_level_previously_was == 'public'
+    end
   end
 
   # This method creates a duplicate while leaving permissions and ownership unchanged

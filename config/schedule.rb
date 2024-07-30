@@ -28,4 +28,5 @@ set :environment, ENV.fetch('RAILS_ENV', nil) if ENV['RAILS_ENV']
 
 every 1.day, at: '3:00 am' do
   rake 'import_cache_files:cleanup'
+  runner 'SolidQueue::Job.clear_finished_in_batches'
 end

@@ -38,7 +38,9 @@ module LomService
         end
         xml.language @task.iso639_lang
         xml.description do
-          xml.string ApplicationController.helpers.render_markdown(@task.description), language: @task.iso639_lang
+          html_fragment = Loofah.fragment(ApplicationController.helpers.render_markdown(@task.description))
+          html_fragment.scrub!(NbpScrubber.new)
+          xml.string html_fragment.to_s, language: @task.iso639_lang
         end
         if @task.programming_language&.language.present?
           xml.keyword do

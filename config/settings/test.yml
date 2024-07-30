@@ -20,5 +20,16 @@ omniauth:
     private_key: ~
 oai_pmh:
   admin_mail: admin@example.org
+nbp:
+  push_connector:
+    enable: true
+    client_id: testing_client_id
+    client_secret: testing_client_secret
+    token_path: 'https://test.provider/token'
+    api_host: 'https://test.api.host'
+    source:
+      organization: test_organization
+      name: CodeHarbor
+      slug: CoHaP2
 open_ai:
   model: gpt-4o-mini
