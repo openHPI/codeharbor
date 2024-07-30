@@ -54,9 +54,11 @@ module TaskService
       raise Gpt::Error::InvalidTaskDescription unless raw_response.include?('```')
 
       raw_response[/```(.*?)```/m, 1].lines[1..]&.join&.strip
+    rescue Faraday::UnauthorizedError => e
+      raise Gpt::Error::UnauthorizedError.new("Unauthorized access to OpenAI: #{e.message}")
     rescue Faraday::Error => e
       raise Gpt::Error::InternalServerError.new("Could not communicate with OpenAI due to #{e.inspect}")
-    rescue Net::OpenTimeout, Net::ReadTimeout, Errno::ECONNRESET, SocketError, EOFError
+    rescue Net::OpenTimeout, Net::ReadTimeout, Errno::ECONNRESET, SocketError, EOFError => e
       raise Gpt::Error.new(e)
     end
 

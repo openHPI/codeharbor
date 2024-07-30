@@ -10,6 +10,8 @@ module Gpt
 
     class MissingLanguage < Error; end
 
+    class UnauthorizedError < Error; end
+
     def localized_message
       I18n.t("errors.gpt.#{self.class.name&.demodulize&.underscore}")
     end
