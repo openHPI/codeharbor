@@ -15,8 +15,7 @@ class NbpSyncAllJob < ApplicationJob
     Task.select(:id, :uuid).find_each {|task| uuids.add(task.uuid) }
 
     # Finally, schedule a full sync for each UUID identified.
-    uuids.each do |uuid|
-      NbpSyncJob.perform_later uuid
-    end
+    sync_jobs = uuids.map {|uuid| NbpSyncJob.new(uuid) }
+    ActiveJob.perform_all_later(sync_jobs)
   end
 end
