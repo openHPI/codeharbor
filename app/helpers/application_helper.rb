@@ -72,6 +72,10 @@ module ApplicationHelper
     end
   end
 
+  def uuid_pattern
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
+  end
+
   def value_column(value)
     tag.div(class: 'col-md-9') do
       block_given? ? yield : symbol_for(value)
