@@ -109,6 +109,7 @@ Rails.application.routes.draw do
       member do
         post :approve_changes
         post :discard_changes
+        post :reject_changes
       end
     end
   end

@@ -587,9 +587,10 @@
           - edit_url = edit_task_task_contribution_path(@task.parent, @task.task_contribution)
         - else
           - edit_url = edit_task_path(@task)
-        = link_to edit_url, class: 'btn btn-important' do
-          i.fa-solid.fa-pen-to-square
-          =< t('common.button.edit')
+        - unless @task.contribution?
+          = link_to edit_url, class: 'btn btn-important' do
+            i.fa-solid.fa-pen-to-square
+            =< t('common.button.edit')
       - if policy(@task).destroy?
         = link_to task_path(@task), class: 'btn btn-important', method: :delete, data: {confirm: t('common.sure')} do
           i.fa-solid.fa-trash-can
@@ -599,7 +600,7 @@
           = link_to approve_changes_task_task_contribution_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
             i.fa-solid.fa-check
             =< t('common.button.approve')
-          = link_to discard_changes_task_task_contribution_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
+          = link_to reject_changes_task_task_contribution_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
             i.fa-solid.fa-xmark
             =< t('common.button.reject')
         - else
