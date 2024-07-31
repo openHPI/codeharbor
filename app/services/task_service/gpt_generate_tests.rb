@@ -29,37 +29,33 @@ module TaskService
 
     private
 
-    def gpt_response # rubocop:disable Metrics/AbcSize
-      # train client with some prompts
-      messages = training_prompts.map do |prompt|
-        {role: 'system', content: prompt}
+    def gpt_response
+      wrap_api_error! do
+        # train client with some prompts
+        messages = training_prompts.map do |prompt|
+          {role: 'system', content: prompt}
+        end
+
+        # send user message
+        messages << {role: 'user', content: @task.description}
+
+        # create gpt client
+        response = @client.chat(
+          parameters: {
+            model: Settings.open_ai.model,
+            messages:,
+            temperature: 0.7, # Lower values insure reproducibility
+          }
+        )
+
+        # parse out the response
+        raw_response = response.dig('choices', 0, 'message', 'content')
+
+        # check for ``` in the response and extract the text between the first set
+        raise Gpt::Error::InvalidTaskDescription unless raw_response.include?('```')
+
+        raw_response[/```(.*?)```/m, 1].lines[1..]&.join&.strip
       end
-
-      # send user message
-      messages << {role: 'user', content: @task.description}
-
-      # create gpt client
-      response = @client.chat(
-        parameters: {
-          model: Settings.open_ai.model,
-          messages:,
-          temperature: 0.7, # Lower values insure reproducibility
-        }
-      )
-
-      # parse out the response
-      raw_response = response.dig('choices', 0, 'message', 'content')
-
-      # check for ``` in the response and extract the text between the first set
-      raise Gpt::Error::InvalidTaskDescription unless raw_response.include?('```')
-
-      raw_response[/```(.*?)```/m, 1].lines[1..]&.join&.strip
-    rescue Faraday::UnauthorizedError => e
-      raise Gpt::Error::UnauthorizedError.new("Unauthorized access to OpenAI: #{e.message}")
-    rescue Faraday::Error => e
-      raise Gpt::Error::InternalServerError.new("Could not communicate with OpenAI due to #{e.inspect}")
-    rescue Net::OpenTimeout, Net::ReadTimeout, Errno::ECONNRESET, SocketError, EOFError => e
-      raise Gpt::Error.new(e)
     end
 
     def training_prompts
@@ -76,16 +72,28 @@ module TaskService
       ]
     end
 
+    def wrap_api_error!(...)
+      # Use a custom forward for the private class method :wrap_api_error! and forward all arguments
+      self.class.send(:wrap_api_error!, ...)
+    end
+
     def self.validate!(client)
-      response = client.models.list
-      raise Gpt::Error::InvalidApiKey unless response['data']
-    rescue Faraday::UnauthorizedError, OpenAI::Error
-      raise Gpt::Error::InvalidApiKey
-    rescue Faraday::Error => e
-      raise Gpt::Error::InternalServerError.new("Could not communicate with OpenAI due to #{e.inspect}")
-    rescue Net::OpenTimeout, Net::ReadTimeout, Errno::ECONNRESET, SocketError, EOFError
-      raise Gpt::Error
+      wrap_api_error! do
+        response = client.models.list
+        raise Gpt::Error::InvalidApiKey unless response['data']
+      end
     end
     private_class_method :validate!
+
+    def self.wrap_api_error!
+      yield
+    rescue Faraday::UnauthorizedError, OpenAI::Error => e
+      raise Gpt::Error::InvalidApiKey.new("Could not authenticate with OpenAI: #{e.message}")
+    rescue Faraday::Error => e
+      raise Gpt::Error::InternalServerError.new("Could not communicate with OpenAI: #{e.inspect}")
+    rescue Net::OpenTimeout, Net::ReadTimeout, Errno::ECONNRESET, SocketError, EOFError => e
+      raise Gpt::Error.new(e)
+    end
+    private_class_method :wrap_api_error!
   end
 end

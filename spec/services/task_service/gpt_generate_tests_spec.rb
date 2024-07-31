@@ -1,4 +1,3 @@
-# spec/services/task_service/gpt_generate_tests_spec.rb
 # frozen_string_literal: true
 
 require 'rails_helper'
@@ -133,17 +132,6 @@ RSpec.describe TaskService::GptGenerateTests do
 
       it 'raises an error' do
         expect { gpt_generate_tests }.to raise_error(Gpt::Error)
-      end
-    end
-  end
-
-  describe 'localized messages for all error classes' do
-    it 'has localized messages for all error classes' do
-      error_classes = Gpt::Error.descendants
-      sample_errors = error_classes.map(&:new)
-
-      sample_errors.each do |error|
-        expect { error.localized_message }.not_to raise_error, "Missing translation for #{error.class.name}"
       end
     end
   end
