@@ -39,8 +39,8 @@ Rails.application.configure do
   # Store uploaded files on the local file system in a temporary directory.
   config.active_storage.service = :test
 
-  # Use a real queuing backend for Active Job (and separate queues per environment).
-  config.active_job.queue_adapter = :solid_queue
+  # Use a testing queuing backend for Active Job (and separate queues per environment).
+  config.active_job.queue_adapter = :test
   config.active_job.queue_name_prefix = 'codeharbor_test'
 
   config.action_mailer.perform_caching = false

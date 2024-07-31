@@ -5,6 +5,9 @@ class TaskContribution < ApplicationRecord
   delegate :user, :user=, :access_level=, to: :suggestion
   accepts_nested_attributes_for :suggestion
 
+  # TODO: Test this scope (maybe already done with the test written for task.rb#l45).
+  scope :for_task_uuid, ->(uuid) { joins(:suggestion).where(suggestion: {parent_uuid: uuid}) }
+
   # TODO: Use `_prefix: true`
   enum status: {pending: 0, closed: 1, merged: 2}, _default: :pending
 
@@ -15,6 +18,15 @@ class TaskContribution < ApplicationRecord
 
   def close
     update(status: :closed)
+  end
+
+  def decouple
+    duplicate = suggestion.duplicate(set_parent_identifiers: false)
+    TaskContribution.transaction do
+      raise ActiveRecord::Rollback unless duplicate.save && close
+
+      duplicate
+    end
   end
 
   def base
