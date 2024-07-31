@@ -136,4 +136,15 @@ RSpec.describe TaskService::GptGenerateTests do
       end
     end
   end
+
+  describe 'localized messages for all error classes' do
+    it 'has localized messages for all error classes' do
+      error_classes = Gpt::Error.descendants
+      sample_errors = error_classes.map(&:new)
+
+      sample_errors.each do |error|
+        expect { error.localized_message }.not_to raise_error, "Missing translation for #{error.class.name}"
+      end
+    end
+  end
 end

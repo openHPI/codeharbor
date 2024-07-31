@@ -7,3 +7,4 @@ en:
       invalid_api_key: The API key in your profile is invalid. Please add the appropriate API key in your profile to use the AI features.
       invalid_task_description: The task description provided does not represent a valid programming task and therefore cannot be used to generate a unit test. Please make sure that the task description contains a clearly formulated problem that can be solved by a program.
       missing_language: Programming language is not specified for this task. Please specify the language before proceeding.
+      unauthorized_error: Unauthorized access to OpenAI detected. This usually happens when the API key is incorrect or expired. Please check your API key and try again.
