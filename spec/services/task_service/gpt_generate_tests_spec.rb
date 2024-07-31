@@ -45,6 +45,10 @@ RSpec.describe TaskService::GptGenerateTests do
         expect { gpt_generate_tests_service }.to raise_error(Gpt::Error::InvalidApiKey)
       end
     end
+  end
+
+  describe '.new_client!' do
+    subject(:gpt_generate_tests_service) { described_class.new_client!(openai_api_key, validate: true) }
 
     context 'when API key is invalid' do
       let(:openai_api_key) { 'invalid_api_key' }

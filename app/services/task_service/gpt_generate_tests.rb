@@ -7,7 +7,8 @@ module TaskService
       raise Gpt::Error::MissingLanguage if task.programming_language&.language.blank?
 
       @task = task
-      @client = self.class.new_client! openai_api_key
+      # We can skip validating here, since an invalid API key will raise during `execute`, too.
+      @client = self.class.new_client! openai_api_key, validate: false
     end
 
     def execute
@@ -19,11 +20,11 @@ module TaskService
       @task.tests << test
     end
 
-    def self.new_client!(access_token)
+    def self.new_client!(access_token, validate: true)
       raise Gpt::Error::InvalidApiKey if access_token.blank?
 
       client = OpenAI::Client.new(access_token:)
-      validate! client
+      validate! client if validate
       client
     end
 
