@@ -7,3 +7,6 @@ en:
     discard_changes:
       error: The contribution could not be discarded.
       success: The contribution was discarded successfully.
+    reject_changes:
+      error: The contribution could not be rejected.
+      success: The contribution was rejected successfully.

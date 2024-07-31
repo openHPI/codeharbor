@@ -24,15 +24,17 @@ class TaskContributionPolicy < ApplicationPolicy
   # show? allows the owner of the base task to view it anytime.
   # Simultaneously, the contributor can view it only while the contrib is still pending
   def discard_changes?
-    task_contribution.pending? && (record_owner? || Pundit.policy(@user, base).edit?)
+    task_contribution.pending? && record_owner?
   end
 
   def show?
     (task_contribution.pending? && record_owner?) || Pundit.policy(@user, base).edit?
   end
 
-  def approve_changes?
-    Pundit.policy(@user, base).edit? && task_contribution.pending?
+  %i[approve_changes? reject_changes?].each do |action|
+    define_method(action) do
+      Pundit.policy(@user, base).edit? && task_contribution.pending?
+    end
   end
 
   %i[edit? update?].each do |action|
