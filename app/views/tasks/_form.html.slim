@@ -7,7 +7,7 @@
 
 .row
   .col-md-12.my-4
-    = simple_form_for @task, html: {class: 'project exercise-validation', multipart: true}, builder: MarkdownFormBuilder do |f|
+    = simple_form_for @task, html: {multipart: true}, builder: MarkdownFormBuilder do |f|
       = render('shared/form_errors', object: @task)
       fieldset.form-group
         legend.toggle-next
