@@ -67,18 +67,19 @@
               .visibility_warning
                 span.d-none#task_visibility_warning data-external-collection-membership=@task.collections.any?{|collection| collection.users.exclude?(current_user)}.to_s
                   = t('.visibility_warning')
-          = fields_for :group_tasks do |ff|
-            .field-element
-              = ff.label :group_ids, Group.model_name.human(count: :many), class: 'form-label'
-              = ff.collection_select :group_ids, current_user.member_groups.uniq, :id, :name, {selected: @task.groups.map(&:id)}, {class: 'my-group form-control', multiple: true}
-              - if (@task.groups - current_user.member_groups).length.positive?
-                .unchangeable-groups
-                  span.title.me-1
-                    = "#{t('.unchangeable_groups')}:"
-                  - (@task.groups - current_user.member_groups).each_with_index do |group, index|
-                    - if index.positive?
-                      = ', '
-                    = group.name
+            / TODO: Test that a task contrib doesn't allow changing the groups
+            = fields_for :group_tasks do |ff|
+              .field-element
+                = ff.label :group_ids, Group.model_name.human(count: :many), class: 'form-label'
+                = ff.collection_select :group_ids, current_user.member_groups.uniq, :id, :name, {selected: @task.groups.map(&:id)}, {class: 'my-group form-control', multiple: true}
+                - if (@task.groups - current_user.member_groups).length.positive?
+                  .unchangeable-groups
+                    span.title.me-1
+                      = "#{t('.unchangeable_groups')}:"
+                    - (@task.groups - current_user.member_groups).each_with_index do |group, index|
+                      - if index.positive?
+                        = ', '
+                      = group.name
 
           .field-element
             = f.label :labels, Label.model_name.human(count: :many), class: 'form-label'

@@ -53,7 +53,7 @@ RSpec.describe TaskContributionPolicy do
       it { is_expected.to forbid_actions %i[create new update destroy] }
 
       context 'when the approval is pending' do
-        it { is_expected.to permit_only_actions %i[approve_changes discard_changes show] }
+        it { is_expected.to permit_only_actions %i[approve_changes reject_changes show] }
       end
 
       context 'when the approval is closed' do

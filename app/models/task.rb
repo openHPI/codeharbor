@@ -12,6 +12,8 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validates :uuid, uniqueness: true
 
   before_validation :lowercase_language
+  before_destroy :handle_contributions
+
   validates :language, format: {with: /\A[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*\z/, message: :not_de_or_us}
   validate :primary_language_tag_in_iso639?
   validate :unique_pending_contribution
@@ -36,6 +38,12 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_many :ratings, dependent: :destroy
 
   has_one :task_contribution, dependent: :destroy, inverse_of: :suggestion
+  # We use a custom query to identify task contributions, and especially don't want to find those TaskContributions having the `task_id`.
+  # Reminder: A TaskContribution object with the current task's ID will identify itself as a contribution (which don't have contributions on their own).
+  # TODO: Test relationship (that it contains exactly the required contribs, not too few and not too many).
+  # TODO (?): Test that the `task_id` is not used in the where
+  has_many :task_contributions, ->(task) { unscope(:where).for_task_uuid(task.uuid) }
+
   belongs_to :user
   belongs_to :programming_language, optional: true
   belongs_to :license, optional: true
@@ -129,6 +137,7 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
     transfer_multiple_entities(model_solutions, contrib.suggestion.model_solutions, 'model_solution')
     transfer_multiple_entities(tests, contrib.suggestion.tests, 'test')
     contrib.status = :merged
+    self.label_names = contrib.suggestion.label_names # TODO: Write a test that changes in labels are correctly applied.
     save && contrib.save
   end
 
@@ -142,6 +151,7 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
       task.tests = duplicate_tests(set_parent_id: set_parent_identifiers)
       task.files = duplicate_files(set_parent_id: set_parent_identifiers)
       task.model_solutions = duplicate_model_solutions(set_parent_id: set_parent_identifiers)
+      task.label_names = label_names # TODO: Test that duplicating a task also duplicates the labels.
     end
   end
 
@@ -238,6 +248,22 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def lowercase_language
     language.downcase! if language.present?
+  end
+
+  def handle_contributions
+    # TODO: Write tests for this method
+    # TODO: Include in this tests that a rollback occurs if an exception occurs.
+    task_contributions.each do |contribution|
+      case contribution.status.to_sym
+        when :pending
+          # We only want to remove the TaskContribution object, but not the suggestion itself.
+          # As a result, the former suggestion will be independent from the current task (that is about to get deleted).
+          contribution.destroy
+        else # :merged, :closed
+          # We are removing the suggestion, which will trigger a deletion of the corresponding TaskContribution.
+          contribution.suggestion.destroy
+      end
+    end
   end
 
   def primary_language_tag_in_iso639?

@@ -7,3 +7,6 @@ de:
     discard_changes:
       error: Der Änderungsvorschlag konnte nicht verworfen werden.
       success: Der Änderungsvorschlag wurde erfolgreich verworfen.
+    reject_changes:
+      error: Der Änderungsvorschlag konnte nicht abgelehnt werden.
+      success: Der Änderungsvorschlag wurde erfolgreich abgelehnt.
