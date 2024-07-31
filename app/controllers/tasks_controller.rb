@@ -209,7 +209,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   # rubocop:enable Metrics/AbcSize
 
   def generate_test
-    TaskService::GptGenerateTests.call(task: @task, openai_api_key: current_user.openai_api_key)
+    GptService::GenerateTests.call(task: @task, openai_api_key: current_user.openai_api_key)
     flash[:notice] = I18n.t('tasks.task_service.gpt_generate_tests.successful_generation')
   rescue Gpt::Error => e
     flash[:alert] = e.localized_message
