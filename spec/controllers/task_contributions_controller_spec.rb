@@ -135,17 +135,64 @@ RSpec.describe TaskContributionsController do
       end
     end
 
-    context 'when TaskContribution.close fails' do
+    context 'when TaskContribution.decouple fails' do
       subject(:post_request) { post :discard_changes, params: {task_id: task.id, id: contribution.id} }
 
       before do
         allow(TaskContribution).to receive(:find).with(contribution.id.to_s).and_return(contribution)
-        allow(contribution).to receive(:close).and_return(false)
+        allow(contribution).to receive(:decouple).and_return(false)
       end
 
       it 'shows a flash message' do
         post_request
         expect(flash[:alert]).to eq(I18n.t('task_contributions.discard_changes.error'))
+      end
+
+      it 'redirects to the modified task' do
+        post_request
+        expect(response).to have_http_status(:redirect)
+        expect(response).to redirect_to([task, contribution])
+      end
+    end
+  end
+
+  describe 'POST #reject_changes' do
+    let(:user) { original_author }
+
+    before do
+      task.save!
+      contribution.save!
+    end
+
+    context 'with valid params' do
+      subject(:post_request) { post :reject_changes, params: {task_id: task.id, id: contribution.id} }
+
+      it 'changes the contribution status' do
+        post_request
+        expect(TaskContribution.find(contribution.id).status).to eq('closed')
+      end
+
+      it 'delivers a rejection email' do
+        expect { post_request }.to have_enqueued_email(TaskContributionMailer, :send_rejection_info)
+      end
+
+      it 'duplicates the task' do # The duplication is tested in the Task model
+        expect { post_request }.to change(Task, :count).by(1)
+        expect(response).to have_http_status(:redirect)
+      end
+    end
+
+    context 'when TaskContribution.decouple fails' do
+      subject(:post_request) { post :reject_changes, params: {task_id: task.id, id: contribution.id} }
+
+      before do
+        allow(TaskContribution).to receive(:find).with(contribution.id.to_s).and_return(contribution)
+        allow(contribution).to receive(:decouple).and_return(false)
+      end
+
+      it 'shows a flash message' do
+        post_request
+        expect(flash[:alert]).to eq(I18n.t('task_contributions.reject_changes.error'))
       end
 
       it 'redirects to the modified task' do

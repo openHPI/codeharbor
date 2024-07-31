@@ -16,11 +16,19 @@ class TaskContributionsController < ApplicationController
   end
 
   def discard_changes
-    duplicate = @task_contribution.suggestion.duplicate(set_parent_identifiers: false)
-    if duplicate.save && @task_contribution.close
+    duplicate = @task_contribution.decouple
+    if duplicate
+      redirect_to duplicate, notice: t('.success')
+    else
+      redirect_to [@task, @task_contribution], alert: t('.error')
+    end
+  end
+
+  def reject_changes
+    duplicate = @task_contribution.decouple
+    if duplicate
       TaskContributionMailer.send_rejection_info(@task_contribution, duplicate).deliver_later
-      self_closed = @task_contribution.user == current_user
-      redirect_to (self_closed ? duplicate : @task), notice: t('.success')
+      redirect_to @task, notice: t('.success')
     else
       redirect_to [@task, @task_contribution], alert: t('.error')
     end
@@ -59,7 +67,16 @@ class TaskContributionsController < ApplicationController
 
   def create # rubocop:disable Metrics/AbcSize
     @task_contribution = TaskContribution.new(suggestion_attributes: task_params, base: @task)
-    @task_contribution.suggestion.assign_attributes(user: current_user, access_level: :private)
+    @task_contribution.suggestion.assign_attributes(
+      user: current_user,
+      access_level: :private,
+      meta_data: @task.meta_data,
+      submission_restrictions: @task.submission_restrictions,
+      external_resources: @task.external_resources,
+      grading_hints: @task.grading_hints
+    )
+    # TODO: Write a test, ensuring that the four previously-added dachsfisch-data are correctly set for a new contrib
+    # TODO: Ensure that accepting the task contrib also updates the four attributes (if changed)
     authorize @task_contribution
 
     if @task_contribution.save(context: :force_validations)

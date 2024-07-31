@@ -41,7 +41,11 @@ class TaskFile < ApplicationRecord
 
   def duplicate(set_parent_id: true)
     dup.tap do |file|
-      file.attachment.attach(attachment.blob) if attachment.attached?
+      if attachment.attached?
+        file.attachment.attach(attachment.blob)
+        file.use_attached_file = 'true'
+      end
+
       if set_parent_id
         file.parent_id = id
       end
