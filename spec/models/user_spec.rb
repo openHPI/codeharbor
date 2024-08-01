@@ -52,11 +52,10 @@ RSpec.describe User do
     end
 
     context 'when openai_api_key is present and valid' do
-      let(:openai_client) { instance_double(OpenAI::Client) }
       let(:openai_api_key) { 'valid_key' }
 
       before do
-        allow(TaskService::GptGenerateTests).to receive(:new_client!).with(openai_api_key).and_return(openai_client)
+        allow(GptService::ValidateApiKey).to receive(:call).with(openai_api_key:)
         user.update(openai_api_key:)
       end
 
@@ -66,11 +65,10 @@ RSpec.describe User do
     end
 
     context 'when openai_api_key is present and invalid' do
-      let(:openai_client) { instance_double(OpenAI::Client) }
       let(:openai_api_key) { 'invalid_key' }
 
       before do
-        allow(TaskService::GptGenerateTests).to receive(:new_client!).with(openai_api_key).and_raise(Gpt::Error::InvalidApiKey)
+        allow(GptService::ValidateApiKey).to receive(:call).with(openai_api_key:).and_raise(Gpt::Error::InvalidApiKey)
         user.update(openai_api_key:)
       end
 
@@ -85,16 +83,15 @@ RSpec.describe User do
     end
 
     context 'when openai_api_key remains the same' do
-      let(:openai_client) { instance_double(OpenAI::Client) }
       let(:openai_api_key) { 'same_key' }
 
       before do
-        allow(TaskService::GptGenerateTests).to receive(:new_client!).with(openai_api_key).and_return(openai_client)
+        allow(GptService::ValidateApiKey).to receive(:call).with(openai_api_key:)
         user.update(openai_api_key:)
       end
 
       it 'does not trigger API validation' do
-        expect(TaskService::GptGenerateTests).not_to receive(:new_client!)
+        expect(GptService::ValidateApiKey).not_to receive(:call)
         expect { user.update(openai_api_key:) }.not_to change(user, :openai_api_key)
       end
 

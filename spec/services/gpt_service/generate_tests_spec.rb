@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe TaskService::GptGenerateTests do
+RSpec.describe GptService::GenerateTests do
   let(:openai_api_key) { 'valid_api_key' }
   let(:openai_client) { OpenAI::Client.new(access_token: openai_api_key) }
   let(:openai_models) { instance_double(OpenAI::Models, list: {'data' => [{'id' => 'model-id'}]}) }
@@ -43,42 +43,6 @@ RSpec.describe TaskService::GptGenerateTests do
 
       it 'raises InvalidApiKeyError' do
         expect { gpt_generate_tests_service }.to raise_error(Gpt::Error::InvalidApiKey)
-      end
-    end
-  end
-
-  describe '.new_client!' do
-    subject(:gpt_generate_tests_service) { described_class.new_client!(openai_api_key, validate: true) }
-
-    context 'when API key is invalid' do
-      let(:openai_api_key) { 'invalid_api_key' }
-
-      before do
-        allow(openai_models).to receive(:list).and_raise(Faraday::UnauthorizedError)
-      end
-
-      it 'raises InvalidApiKeyError' do
-        expect { gpt_generate_tests_service }.to raise_error(Gpt::Error::InvalidApiKey)
-      end
-    end
-
-    context 'when OpenAI is not responding' do
-      before do
-        allow(openai_models).to receive(:list).and_raise(Faraday::Error)
-      end
-
-      it 'raises InternalServerError' do
-        expect { gpt_generate_tests_service }.to raise_error(Gpt::Error::InternalServerError)
-      end
-    end
-
-    context 'when the network connection is broken' do
-      before do
-        allow(openai_models).to receive(:list).and_raise(EOFError)
-      end
-
-      it 'raises an error' do
-        expect { gpt_generate_tests_service }.to raise_error(Gpt::Error)
       end
     end
   end
@@ -136,6 +100,18 @@ RSpec.describe TaskService::GptGenerateTests do
 
       it 'raises an error' do
         expect { gpt_generate_tests }.to raise_error(Gpt::Error)
+      end
+    end
+
+    context 'when API key is invalid' do
+      let(:openai_api_key) { 'invalid_api_key' }
+
+      before do
+        allow(openai_client).to receive(:chat).and_raise(Faraday::UnauthorizedError)
+      end
+
+      it 'raises InvalidApiKeyError' do
+        expect { gpt_generate_tests }.to raise_error(Gpt::Error::InvalidApiKey)
       end
     end
   end

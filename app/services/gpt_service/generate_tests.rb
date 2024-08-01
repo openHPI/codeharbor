@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
-module TaskService
-  class GptGenerateTests < ServiceBase
+module GptService
+  class GenerateTests < GptServiceBase
     def initialize(task:, openai_api_key:)
       super()
       raise Gpt::Error::MissingLanguage if task.programming_language&.language.blank?
 
       @task = task
-      # We can skip validating here, since an invalid API key will raise during `execute`, too.
-      @client = self.class.new_client! openai_api_key, validate: false
+      @client = new_client! openai_api_key
     end
 
     def execute
@@ -18,14 +17,6 @@ module TaskService
       test = Test.new(task: @task, title: I18n.t('tests.model.generated_test'), xml_id: SecureRandom.uuid, files: [test_file])
 
       @task.tests << test
-    end
-
-    def self.new_client!(access_token, validate: true)
-      raise Gpt::Error::InvalidApiKey if access_token.blank?
-
-      client = OpenAI::Client.new(access_token:)
-      validate! client if validate
-      client
     end
 
     private
@@ -72,29 +63,5 @@ module TaskService
         PROMPT
       ]
     end
-
-    def wrap_api_error!(...)
-      # Use a custom forward for the private class method :wrap_api_error! and forward all arguments
-      self.class.send(:wrap_api_error!, ...)
-    end
-
-    def self.validate!(client)
-      wrap_api_error! do
-        response = client.models.list
-        raise Gpt::Error::InvalidApiKey unless response['data']
-      end
-    end
-    private_class_method :validate!
-
-    def self.wrap_api_error!
-      yield
-    rescue Faraday::UnauthorizedError, OpenAI::Error => e
-      raise Gpt::Error::InvalidApiKey.new("Could not authenticate with OpenAI: #{e.message}")
-    rescue Faraday::Error => e
-      raise Gpt::Error::InternalServerError.new("Could not communicate with OpenAI: #{e.inspect}")
-    rescue Net::OpenTimeout, Net::ReadTimeout, Errno::ECONNRESET, SocketError, EOFError => e
-      raise Gpt::Error.new(e)
-    end
-    private_class_method :wrap_api_error!
   end
 end

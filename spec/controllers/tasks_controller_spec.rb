@@ -1088,12 +1088,12 @@ RSpec.describe TasksController do
 
     context 'when GptGenerateTests is successful' do
       before do
-        allow(TaskService::GptGenerateTests).to receive(:call)
+        allow(GptService::GenerateTests).to receive(:call)
         post :generate_test, params: {id: task.id}
       end
 
       it 'calls the GptGenerateTests service with the correct parameters' do
-        expect(TaskService::GptGenerateTests).to have_received(:call).with(task:, openai_api_key: 'valid_api_key')
+        expect(GptService::GenerateTests).to have_received(:call).with(task:, openai_api_key: 'valid_api_key')
       end
 
       it 'redirects to the task show page' do
@@ -1107,7 +1107,7 @@ RSpec.describe TasksController do
 
     context 'when GptGenerateTests raises Gpt::Error::MissingLanguage' do
       before do
-        allow(TaskService::GptGenerateTests).to receive(:call).and_raise(Gpt::Error::MissingLanguage)
+        allow(GptService::GenerateTests).to receive(:call).and_raise(Gpt::Error::MissingLanguage)
         post :generate_test, params: {id: task.id}
       end
 
@@ -1122,7 +1122,7 @@ RSpec.describe TasksController do
 
     context 'when GptGenerateTests raises Gpt::Error::InvalidTaskDescription' do
       before do
-        allow(TaskService::GptGenerateTests).to receive(:call).and_raise(Gpt::Error::InvalidTaskDescription)
+        allow(GptService::GenerateTests).to receive(:call).and_raise(Gpt::Error::InvalidTaskDescription)
         post :generate_test, params: {id: task.id}
       end
 
