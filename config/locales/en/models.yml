@@ -118,6 +118,7 @@ en:
             avatar:
               not_an_image: needs to be an image
               size_over_10_mb: size needs to be less than 10MB
+          invalid_api_key: The API key in your profile is invalid. Please add the appropriate API key in your profile to use the AI features.
     models:
       account_link:
         one: Account Link

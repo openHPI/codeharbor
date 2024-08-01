@@ -54,7 +54,7 @@ class TaskPolicy < ApplicationPolicy
   end
 
   def generate_test?
-    Settings.open_ai.access_token.present? and update?
+    user&.openai_api_key.present? and update?
   end
 
   private

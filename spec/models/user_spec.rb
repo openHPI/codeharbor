@@ -50,6 +50,55 @@ RSpec.describe User do
         expect(user.errors[:avatar]).to include(I18n.t('activerecord.errors.models.user.attributes.avatar.size_over_10_mb'))
       end
     end
+
+    context 'when openai_api_key is present and valid' do
+      let(:openai_api_key) { 'valid_key' }
+
+      before do
+        allow(GptService::ValidateApiKey).to receive(:call).with(openai_api_key:)
+        user.update(openai_api_key:)
+      end
+
+      it 'is valid' do
+        expect(user).to be_valid
+      end
+    end
+
+    context 'when openai_api_key is present and invalid' do
+      let(:openai_api_key) { 'invalid_key' }
+
+      before do
+        allow(GptService::ValidateApiKey).to receive(:call).with(openai_api_key:).and_raise(Gpt::Error::InvalidApiKey)
+        user.update(openai_api_key:)
+      end
+
+      it 'is not valid' do
+        expect(user).not_to be_valid
+      end
+
+      it 'adds an error for invalid api key' do
+        user.valid?
+        expect(user.errors[:base]).to include(I18n.t('activerecord.errors.models.user.invalid_api_key'))
+      end
+    end
+
+    context 'when openai_api_key remains the same' do
+      let(:openai_api_key) { 'same_key' }
+
+      before do
+        allow(GptService::ValidateApiKey).to receive(:call).with(openai_api_key:)
+        user.update(openai_api_key:)
+      end
+
+      it 'does not trigger API validation' do
+        expect(GptService::ValidateApiKey).not_to receive(:call)
+        expect { user.update(openai_api_key:) }.not_to change(user, :openai_api_key)
+      end
+
+      it 'is valid' do
+        expect(user).to be_valid
+      end
+    end
   end
 
   describe '#destroy' do

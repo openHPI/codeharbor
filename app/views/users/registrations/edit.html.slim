@@ -51,6 +51,16 @@
               autocomplete: 'new-password',
               class: 'form-control'
 
+    .form-group.field-element
+      = f.label :openai_api_key, t('users.show.openai_api_key'), class: 'form-label'
+      = f.text_field :openai_api_key,
+              required: false,
+              placeholder: t('users.show.openai_api_key'),
+              autocomplete: 'off',
+              class: 'form-control'
+      small.form-text.text-body-secondary
+        = t('.openai_api_key_usage_html', openai_api_link: 'https://platform.openai.com/api-keys')
+
     = render 'avatar_form', f:
 
     - if resource.password_set?

@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
-module TaskService
-  class GptGenerateTests < ServiceBase
-    def initialize(task:)
+module GptService
+  class GenerateTests < GptServiceBase
+    def initialize(task:, openai_api_key:)
       super()
-      raise Gpt::MissingLanguageError if task.programming_language&.language.blank?
+      raise Gpt::Error::MissingLanguage if task.programming_language&.language.blank?
 
       @task = task
+      @client = new_client! openai_api_key
     end
 
     def execute
@@ -20,35 +21,33 @@ module TaskService
 
     private
 
-    def client
-      @client ||= OpenAI::Client.new
-    end
-
     def gpt_response
-      # train client with some prompts
-      messages = training_prompts.map do |prompt|
-        {role: 'system', content: prompt}
+      wrap_api_error! do
+        # train client with some prompts
+        messages = training_prompts.map do |prompt|
+          {role: 'system', content: prompt}
+        end
+
+        # send user message
+        messages << {role: 'user', content: @task.description}
+
+        # create gpt client
+        response = @client.chat(
+          parameters: {
+            model: Settings.open_ai.model,
+            messages:,
+            temperature: 0.7, # Lower values insure reproducibility
+          }
+        )
+
+        # parse out the response
+        raw_response = response.dig('choices', 0, 'message', 'content')
+
+        # check for ``` in the response and extract the text between the first set
+        raise Gpt::Error::InvalidTaskDescription unless raw_response.include?('```')
+
+        raw_response[/```(.*?)```/m, 1].lines[1..]&.join&.strip
       end
-
-      # send user message
-      messages << {role: 'user', content: @task.description}
-
-      # create gpt client
-      response = client.chat(
-        parameters: {
-          model: Settings.open_ai.model,
-          messages:,
-          temperature: 0.7, # Lower values insure reproducibility
-        }
-      )
-
-      # parse out the response
-      raw_response = response.dig('choices', 0, 'message', 'content')
-
-      # check for ``` in the response and extract the text between the first set
-      raise Gpt::InvalidTaskDescription unless raw_response.include?('```')
-
-      raw_response[/```(.*?)```/m, 1].lines[1..]&.join&.strip
     end
 
     def training_prompts

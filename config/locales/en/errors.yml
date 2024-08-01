@@ -1,0 +1,9 @@
+---
+en:
+  errors:
+    gpt:
+      error: An error occurred while generating the unit test. Please try again later.
+      internal_server_error: The OpenAI server is currently experiencing an outage. Please try again later when the issue is fixed.
+      invalid_api_key: The API key in your profile is invalid or has expired. Please update the API key in your profile to use the AI features and try again.
+      invalid_task_description: The task description provided does not represent a valid programming task and therefore cannot be used to generate a unit test. Please make sure that the task description contains a clearly formulated problem that can be solved by a program.
+      missing_language: Programming language is not specified for this task. Please specify the language before proceeding.

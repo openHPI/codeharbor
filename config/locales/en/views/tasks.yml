@@ -83,6 +83,7 @@ en:
       add_to_collection_hint: Save Tasks for later by adding them to a collection.
       button:
         add_to_collection: Add to Collection
+        api_key_required: OpenAI API key is required to generate a test
         create_collection: Create new Collection
         download_as_zip: Download this Task as a ZIP file.
         export: Export

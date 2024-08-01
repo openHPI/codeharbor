@@ -17,6 +17,7 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: {case_sensitive: false}
   validates :first_name, :last_name, :status_group, presence: true
   validates :password_set, inclusion: [true, false]
+  validate :validate_openai_api_key, if: -> { openai_api_key.present? }
 
   has_many :tasks, dependent: :nullify
 
@@ -147,6 +148,14 @@ class User < ApplicationRecord
   end
 
   private
+
+  def validate_openai_api_key
+    return unless openai_api_key_changed?
+
+    GptService::ValidateApiKey.call(openai_api_key:)
+  rescue Gpt::Error::InvalidApiKey
+    errors.add(:base, :invalid_api_key)
+  end
 
   def avatar_format
     avatar_blob = avatar.blob
