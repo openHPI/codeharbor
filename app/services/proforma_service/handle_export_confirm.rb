@@ -17,7 +17,8 @@ module ProformaService
         @task.reload
       end
 
-      zip_stream = ProformaService::ExportTask.call(task: @task, options: {description_format: 'md'})
+      zip_stream = ProformaService::ExportTask.call(task: @task,
+        options: {description_format: 'md', version: @account_link.proforma_version || ProformaXML::SCHEMA_VERSION_LATEST})
       error = TaskService::PushExternal.call(zip: zip_stream, account_link: @account_link)
 
       [@task, error]

@@ -4,8 +4,10 @@ require 'rails_helper'
 
 RSpec.describe ProformaService::ExportTasks do
   describe '.new' do
-    subject(:export_service) { described_class.new(tasks:) }
+    subject(:export_service) { described_class.new(tasks:, options:) }
 
+    let(:options) { {version: proforma_version} }
+    let(:proforma_version) { '2.1' }
     let(:tasks) { build_list(:task, 2) }
 
     it 'assigns task' do
@@ -14,8 +16,9 @@ RSpec.describe ProformaService::ExportTasks do
   end
 
   describe '#execute' do
-    subject(:export_service) { described_class.call(tasks:) }
+    subject(:export_service) { described_class.call(tasks:, options:) }
 
+    let(:options) { {version: nil} }
     let(:tasks) { create_list(:task, 2) }
     let(:user) { create(:user) }
     let(:zip_files) do
@@ -55,6 +58,15 @@ RSpec.describe ProformaService::ExportTasks do
 
       it 'creates a zip-file with two files' do
         expect(zip_files.count).to be 10
+      end
+    end
+
+    context 'when proforma_version is 2.0' do
+      let(:proforma_version) { '2.0' }
+
+      it 'calls ExportTask with correct arguments' do
+        expect(ProformaService::ExportTask).to receive(:call).twice.and_call_original
+        export_service
       end
     end
   end

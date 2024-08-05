@@ -6,6 +6,7 @@ en:
         api_key: API key
         check_uuid_url: Check UUID URL
         name: Name
+        proforma_version: ProFormA version
         push_url: Push URL
       account_link_user:
         user: User

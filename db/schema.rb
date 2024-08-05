@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_22_075061) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_26_205103) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -29,6 +29,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_22_075061) do
     t.string "api_key"
     t.string "name"
     t.string "check_uuid_url"
+    t.string "proforma_version"
     t.index ["user_id"], name: "index_account_links_on_user_id"
   end
 

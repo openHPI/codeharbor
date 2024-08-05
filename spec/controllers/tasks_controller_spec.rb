@@ -631,12 +631,13 @@ RSpec.describe TasksController do
   end
 
   describe 'GET #download' do
-    subject(:get_request) { get :download, params: {id: task.id} }
+    subject(:get_request) { get :download, params: {id: task.id, version: proforma_version} }
 
     let(:task) { create(:task, valid_attributes) }
     let(:zip) { instance_double(StringIO, string: 'dummy') }
+    let(:proforma_version) { '2.1' }
 
-    before { allow(ProformaService::ExportTask).to receive(:call).with(task:).and_return(zip) }
+    before { allow(ProformaService::ExportTask).to receive(:call).with(task:, options: {version: proforma_version}).and_return(zip) }
 
     context 'when not signed in' do
       it 'redirects to user sign in page' do
@@ -1051,15 +1052,17 @@ RSpec.describe TasksController do
     before do
       sign_in user
       allow(ProformaService::ExportTask).to receive(:call)
-        .with(task: an_instance_of(Task), options: {description_format: 'md'})
+        .with(task: an_instance_of(Task), options: {description_format: 'md', version: export_proforma_version})
         .and_return('zip stream')
       allow(TaskService::PushExternal).to receive(:call)
         .with(zip: 'zip stream', account_link:)
         .and_return(error)
     end
 
+    let(:proforma_version) {}
+    let(:export_proforma_version) { '2.1' }
     let!(:task) { create(:task, valid_attributes) }
-    let(:account_link) { create(:account_link, user: account_link_user) }
+    let(:account_link) { create(:account_link, user: account_link_user, proforma_version:) }
     let(:account_link_user) { user }
     let(:post_request) do
       post :export_external_confirm, params: {push_type:, id: task.id, account_link: account_link.id}, format: :json,
@@ -1137,6 +1140,27 @@ RSpec.describe TasksController do
       it 'renders the correct not authorized JSON' do
         post_request
         expect(response.parsed_body.symbolize_keys[:error]).to eq('You are not authorized for this action.')
+      end
+    end
+
+    context 'when proforma_version is set' do
+      let(:proforma_version) { '2.1' }
+
+      it 'renders correct response' do
+        post_request
+
+        expect(response).to have_http_status(:success)
+      end
+
+      context 'when proforma_version is 2.0' do
+        let(:proforma_version) { '2.0' }
+        let(:export_proforma_version) { '2.0' }
+
+        it 'renders correct response' do
+          post_request
+
+          expect(response).to have_http_status(:success)
+        end
       end
     end
   end
