@@ -2,7 +2,7 @@
 
 module ProformaService
   class ExportTasks < ServiceBase
-    def initialize(tasks:, options:)
+    def initialize(tasks:, options: {})
       super()
       @tasks = tasks
       @options = options
