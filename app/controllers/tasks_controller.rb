@@ -162,52 +162,6 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     render json: t('tasks.import.internal_error'), status: :internal_server_error
   end
 
-  def export_external_start
-    @account_link = AccountLink.find(params[:account_link])
-
-    respond_to do |format|
-      format.js { render layout: false }
-    end
-  end
-
-  def export_external_check
-    external_check = TaskService::CheckExternal.call(uuid: @task.uuid,
-      account_link: AccountLink.find(params[:account_link]))
-    render json: {
-      message: external_check[:message],
-      actions: render_export_actions(task: @task,
-        task_found: external_check[:uuid_found],
-        update_right: external_check[:update_right],
-        error: external_check[:error],
-        exported: false),
-    }, status: :ok
-  end
-
-  # rubocop:disable Metrics/AbcSize
-  def export_external_confirm
-    push_type = params[:push_type]
-
-    return render json: {}, status: :internal_server_error unless %w[create_new export].include? push_type
-
-    export_task, error = ProformaService::HandleExportConfirm.call(user: current_user, task: @task,
-      push_type:, account_link_id: params[:account_link])
-    task_title = export_task.title
-
-    if error.nil?
-      render json: {
-        message: t('.success', title: task_title),
-        status: 'success', actions: render_export_actions(task: export_task, exported: true)
-      }
-    else
-      export_task.destroy if push_type == 'create_new'
-      render json: {
-        message: t('.error', title: task_title, error:),
-        status: 'fail', actions: render_export_actions(task: @task, exported: false, error:)
-      }
-    end
-  end
-  # rubocop:enable Metrics/AbcSize
-
   def generate_test
     GptService::GenerateTests.call(task: @task, openai_api_key: current_user.openai_api_key)
     flash[:notice] = I18n.t('tasks.task_service.gpt_generate_tests.successful_generation')

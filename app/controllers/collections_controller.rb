@@ -157,15 +157,6 @@ class CollectionsController < ApplicationController
     )
   end
 
-  def push_exercises
-    errors = []
-    @collection.tasks.each do |exercise|
-      error = push_exercise(exercise, account_link) # TODO: implement multi export
-      errors << error if error.present?
-    end
-    errors
-  end
-
   def load_and_authorize_collection
     @collection = Collection.find(params[:id])
     authorize @collection
