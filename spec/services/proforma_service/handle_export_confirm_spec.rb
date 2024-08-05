@@ -38,7 +38,8 @@ RSpec.describe ProformaService::HandleExportConfirm do
     let(:user) { create(:user) }
     let!(:task) { create(:task, user:).reload }
     let(:push_type) { 'export' }
-    let(:account_link) { create(:account_link, user:) }
+    let(:account_link) { create(:account_link, user:, proforma_version:) }
+    let(:proforma_version) {}
 
     before do
       allow(ProformaService::ExportTask).to(receive(:call)).and_return('zip_stream')
@@ -51,7 +52,7 @@ RSpec.describe ProformaService::HandleExportConfirm do
 
     it 'calls ExportTask-service with correct arguments' do
       handle_export_confirm
-      expect(ProformaService::ExportTask).to have_received(:call).with(task:, options: {description_format: 'md'})
+      expect(ProformaService::ExportTask).to have_received(:call).with(task:, options: {description_format: 'md', version: '2.1'})
     end
 
     it 'calls PushExternal-service with correct arguments' do
@@ -77,20 +78,38 @@ RSpec.describe ProformaService::HandleExportConfirm do
       it 'does not call ExportTask-service with old task' do
         handle_export_confirm
         expect(ProformaService::ExportTask).to have_received(:call).with(
-          task: not_have_attributes(uuid: task.uuid), options: {description_format: 'md'}
+          task: not_have_attributes(uuid: task.uuid), options: {description_format: 'md', version: '2.1'}
         )
       end
 
       it 'only calls ExportTask-service after uuid has been set' do
         handle_export_confirm
         expect(ProformaService::ExportTask).to have_received(:call).with(
-          task: not_have_attributes(uuid: nil), options: {description_format: 'md'}
+          task: not_have_attributes(uuid: nil), options: {description_format: 'md', version: '2.1'}
         )
       end
 
       it 'calls PushExternal-service with correct arguments' do
         handle_export_confirm
         expect(TaskService::PushExternal).to have_received(:call).with(zip: 'zip_stream', account_link:)
+      end
+    end
+
+    context 'when account_link has a proforma_version' do
+      let(:proforma_version) { '2.1' }
+
+      it 'calls ExportTask-service with correct arguments' do
+        handle_export_confirm
+        expect(ProformaService::ExportTask).to have_received(:call).with(task:, options: {description_format: 'md', version: '2.1'})
+      end
+
+      context 'when proforma_version is 2.0' do
+        let(:proforma_version) { '2.0' }
+
+        it 'calls ExportTask-service with correct arguments' do
+          handle_export_confirm
+          expect(ProformaService::ExportTask).to have_received(:call).with(task:, options: {description_format: 'md', version: '2.0'})
+        end
       end
     end
   end

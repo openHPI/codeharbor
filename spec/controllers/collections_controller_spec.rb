@@ -380,10 +380,10 @@ RSpec.describe CollectionsController do
     let(:collection) { create(:collection, valid_attributes.merge(users: [user], tasks:)) }
     let(:tasks) { create_list(:task, 2) }
     let(:zip) { instance_double(StringIO, string: 'dummy') }
+    let(:proforma_version) { '2.1' }
+    let(:get_request) { get :download_all, params: {id: collection.id, version: proforma_version} }
 
-    let(:get_request) { get :download_all, params: {id: collection.id} }
-
-    before { allow(ProformaService::ExportTasks).to receive(:call).with(tasks: collection.reload.tasks).and_return(zip) }
+    before { allow(ProformaService::ExportTasks).to receive(:call).with(tasks: collection.reload.tasks, options: {version: proforma_version}).and_return(zip) }
 
     it do
       get_request

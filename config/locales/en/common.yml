@@ -4,6 +4,7 @@ en:
     app_name: CodeHarbor
     button:
       abort: Abort
+      available_versions: Available ProFormA versions
       back: Back
       cancel: Cancel
       close: Close
@@ -28,7 +29,6 @@ en:
       update: Update
       view: View
       'yes': 'yes'
-      available_versions: "Available ProFormA-XML versions"
     created: Created
     created_at: Created at
     created_by: Created by
