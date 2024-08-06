@@ -38,13 +38,13 @@ RSpec.describe Nbp::PushConnector do
         before do
           # Disable push connector temporarily
           Settings.nbp.push_connector.enable = false
-          described_class.instance_variable_set :@enabled, nil
+          described_class.remove_instance_variable(:@enabled) if described_class.instance_variable_defined?(:@enabled)
         end
 
         after do
           # Allow push connector to be re-enabled
           Settings.nbp.push_connector.enable = true
-          described_class.instance_variable_set :@enabled, nil
+          described_class.remove_instance_variable(:@enabled) if described_class.instance_variable_defined?(:@enabled)
         end
 
         it 'raises an error' do

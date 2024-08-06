@@ -20,8 +20,9 @@ module Nbp
     end
 
     def self.enabled?
-      @enabled = Settings.nbp&.push_connector&.enable || false if @enabled.nil?
-      @enabled
+      return @enabled if defined? @enabled
+
+      @enabled = Settings.nbp&.push_connector&.enable || false
     end
 
     def push_lom!(xml)
