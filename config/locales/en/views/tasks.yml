@@ -55,7 +55,6 @@ en:
         advanced: Advanced
         all_access_levels: All Visibilities
         all_time: All Time
-        average_rating: Average Rating
         creation_date: Creation Date
         has_all_labels: Has All Labels
         label: Search
@@ -63,6 +62,7 @@ en:
         last_week: Last Week
         min_stars: Minimum number of stars
         order: Order By
+        overall_rating: Average Rating
         placeholder: Search for task or label
         reset: Reset
         today: Today

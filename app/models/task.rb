@@ -56,14 +56,14 @@ class Task < ApplicationRecord
                        }.fetch(visibility, public_access)
                      }
   scope :created_before_days, ->(days) { where(created_at: days.to_i.days.ago.beginning_of_day..) if days.to_i.positive? }
-  scope :average_rating, lambda {
-    select('tasks.*, COALESCE(avg_rating, 0) AS average_rating')
+  scope :overall_rating, lambda {
+    select('tasks.*, COALESCE(avg_rating, 0) AS overall_rating')
       .joins('LEFT JOIN (SELECT task_id, AVG(rating) AS avg_rating FROM ratings GROUP BY task_id)
                              AS ratings ON ratings.task_id = tasks.id')
   }
-  scope :min_stars, ->(stars) { average_rating.where('COALESCE(avg_rating, 0) >= ?', stars) }
-  scope :sort_by_average_rating_asc, -> { average_rating.order(average_rating: 'ASC') }
-  scope :sort_by_average_rating_desc, -> { average_rating.order(average_rating: 'DESC') }
+  scope :min_stars, ->(stars) { overall_rating.where('COALESCE(avg_rating, 0) >= ?', stars) }
+  scope :sort_by_overall_rating_asc, -> { overall_rating.order(overall_rating: :asc) }
+  scope :sort_by_overall_rating_desc, -> { overall_rating.order(overall_rating: :desc) }
   scope :access_level, ->(access_level) { where(access_level:) }
   scope :fulltext_search, lambda {|input|
     r = left_outer_joins(:programming_language)
@@ -140,15 +140,26 @@ class Task < ApplicationRecord
   end
 
   def average_rating
-    if ratings.empty?
-      0
-    else
-      ratings.sum(&:rating).to_f / ratings.size
-    end
+    return @average_rating if @average_rating
+
+    category_averages = Rating::CATEGORIES.map {|category| "AVG (#{category}) AS #{category}" }.join(',')
+
+    @average_rating = ActiveRecord::Base.connection.exec_query(
+      "SELECT #{category_averages} FROM ratings WHERE ratings.task_id = $1",
+      'Averaging ratings', [id]
+    ).first.symbolize_keys.transform_values {|rating| (rating || 0).round(1) }
   end
 
-  def rating_star
-    (average_rating * 2).round / 2.0
+  def average_rating_stars
+    @average_rating_stars ||= average_rating.transform_values {|rating| (rating * 2).round / 2.0 }
+  end
+
+  def overall_rating
+    average_rating[:overall_rating]
+  end
+
+  def overall_rating_stars
+    average_rating_stars[:overall_rating]
   end
 
   def all_files

@@ -1,0 +1,10 @@
+- is_input ||= false
+
+span.task-star-rating data-rating-category=category data-is-rating-input=(is_input ? 'true' : 'false')
+  - [*1..5].each do |i|
+    - if rating >= i
+      .rating-star.fa-solid.fa-star data-rating=i
+    - elsif ((rating * 2).round / 2.0 + 0.5) >= i
+      .rating-star.fa-regular.fa-star-half-stroke data-rating=i
+    - else
+      .rating-star.fa-regular.fa-star data-rating=i

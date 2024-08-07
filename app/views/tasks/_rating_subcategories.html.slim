@@ -1,0 +1,8 @@
+- Rating::SUBCATEGORIES.each do |category|
+  span.rating-category-container
+    span
+      = t("activerecord.attributes.rating.#{category}")
+    span.task-rating
+      span.number-rating data-rating-category=category
+        = task.average_rating[category]
+      = render('task_star_rating', rating: task.average_rating[category], category: category)

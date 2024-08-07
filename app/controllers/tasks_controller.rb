@@ -35,7 +35,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     @tests = @task.tests
     @model_solutions = @task.model_solutions
 
-    @user_rating = @task.ratings&.find_by(user: current_user)&.rating
+    @user_rating = @task.ratings&.find_by(user: current_user) || Rating.new
   end
 
   def new

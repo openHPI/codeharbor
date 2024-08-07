@@ -54,7 +54,7 @@ module LomService
         end
         if @task.ratings.any?
           xml.keyword do
-            xml.string "average rating: #{@task.rating_star}/5.0", language: 'en'
+            xml.string "average rating: #{@task.overall_rating_stars}/5.0", language: 'en'
           end
         end
         @task.labels.each do |label|

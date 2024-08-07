@@ -314,9 +314,9 @@ TaskFile.create!(
     # print("Hello World")
   PYTHON
 
-Rating.create!(rating: 2, task: task1, user: user2)
-Rating.create!(rating: 4, task: task1, user: user4)
-Rating.create!(rating: 5, task: task1, user: user3)
+Rating.create!(overall_rating: 2, task: task1, user: user2)
+Rating.create!(overall_rating: 4, task: task1, user: user4)
+Rating.create!(overall_rating: 5, task: task1, user: user3)
 
 Comment.create!(text: 'Some errors occurred and the description is not that great.', task: task1, user: user2)
 Comment.create!(text: 'Looking forward to show this exercise to my students! Good Work', task: task1, user: user3)

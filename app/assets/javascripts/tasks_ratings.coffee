@@ -2,48 +2,46 @@ ready = ->
   initializeRatings()
 
 initializeRatings = ->
-  $('.rating span').hover (->
-    $(this).removeClass("fa-regular").addClass("fa-solid")
-    rating = this.getAttribute("data-rating")
-    lower = $('.rating span').filter (->
-      $(this).attr("data-rating") < rating
-    )
-    $(lower).removeClass("fa-regular").addClass("fa-solid")
-    upper = $('.rating span').filter (->
-      $(this).attr("data-rating") > rating
-    )
-    $(upper).removeClass("fa-solid").addClass("fa-regular")
+  $(".task-star-rating[data-is-rating-input='true'] .rating-star").hover(->
+    $(this).prevAll().add(this).addClass('fa-solid').removeClass('fa-regular');
+    $(this).nextAll().addClass('fa-regular').removeClass('fa-solid');
   )
 
-  $('.rating span').on 'click', ->
-    rating = this.getAttribute("data-rating")
-    task_id = this.parentElement.getAttribute("data-task-id")
+  $('#ratingModalSaveButton').on 'click', ->
+    modal = $('#ratingModal');
+
+    task_id = $(modal).data("task-id");
+    categories = {};
+    modal.find('.task-star-rating').each(->
+      categories[$(this).data('rating-category')] = $(this).find('.fa-solid').length;
+    )
 
     $.ajax({
       type: "POST",
       url: Routes.task_ratings_path(task_id),
-      data: {rating: {rating: rating}, commit: "Save Rating"},
+      data: {rating: categories},
       dataType: 'json',
       success: (response) ->
-        rating = response.user_rating.rating
-        # USERRATING = rating
-        stars = $('.rating span').filter (->
-          $(this).attr("data-rating") <= rating
-        )
-        $(stars).removeClass("fa-regular").addClass("fa-solid")
+        console.log(response.average_rating)
 
-        overallrating = response.overall_rating
-        $('.starrating span.fa-solid.fa-star[data-rating=1]').attr("color", "red")
-        for num in [1, 2, 3, 4, 5]
-          do (num) ->
-            if overallrating >= num
-              $('.overall-rating[data-rating=' + num + ']').removeClass("fa-star").removeClass("fa-star-half-stroke").removeClass("fa-regular").addClass("fa-star").addClass("fa-solid")
-            else if (overallrating + 0.5) >= num
-              $('.overall-rating[data-rating=' + num + ']').removeClass("fa-star").removeClass("fa-solid").addClass("fa-star-half-stroke")
+        Object.keys(response.average_rating).forEach (category) ->
+          rating = response.average_rating[category]
+
+          $(".averaged-task-ratings .number-rating[data-rating-category=#{category}]").text(rating)
+
+          $(".averaged-task-ratings .task-star-rating[data-rating-category=#{category}] .rating-star").each(->
+            star_idx = $(this).data('rating')
+            $(this).removeClass("fa-regular fa-solid fa-star fa-star-half-stroke")
+
+            console.log(rating, Math.round(rating * 2) / 2.0 + 0.5, star_idx)
+
+            if rating >= star_idx
+              $(this).addClass('fa-solid fa-star')
+            else if (Math.round(rating * 2) / 2.0 + 0.5) >= star_idx
+              $(this).addClass('fa-regular fa-star-half-stroke')
             else
-              $('.overall-rating[data-rating=' + num + ']').removeClass("fa-star-half-stroke").removeClass("fa-solid").addClass("fa-star").addClass("fa-regular")
-      error: (_xhr, _textStatus, message) ->
-        alert("#{I18n.t('common.javascripts.error')}: #{message}");
+              $(this).addClass('fa-regular fa-star')
+          )
     })
 
 

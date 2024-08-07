@@ -4,40 +4,40 @@
       .std-heading data-bs-toggle='tooltip' data-bs-placement='bottom' title=@task.title
         i.i.fa-regular.fa-file-lines
         =< truncate(@task.title, length: 100)
-      span.task-star-rating
-        - [*1..5].each do |i|
-          - if @task.average_rating >= i
-            span.fa-solid.fa-star.overall-rating data-rating=i
-          - elsif (@task.average_rating + 0.5) >= i
-            span.fa-regular.fa-star-half-stroke.overall-rating data-rating=i
-          - else
-            span.fa-regular.fa-star.overall-rating data-rating=i
-        span
-          .rating-dropdown
-            - if current_user && policy(Rating).new?
-              .btn#rate
-                => t('.button.rate')
-                span.fa-solid.fa-caret-down
 
-              .popup-rating.shadow-sm.bg-light
-                .rating data-task-id=@task.id
-                  - if @user_rating
-                    - [*1..5].each do |i|
-                      - if @user_rating >= i
-                        span.fa-solid.fa-star data-rating=i
-                      - else
-                        span.fa-regular.fa-star data-rating=i
-                  - else
-                    - [*1..5].each do |i|
-                      span.fa-regular.fa-star data-rating=i
+      .d-flex.align-items-center
+        span.task-star-rating.rating-subcategories-trigger.averaged-task-ratings
+          = render('task_star_rating', rating: @task.overall_rating, category: :overall_rating)
+          .rating-subcategories-overlay
+            = render('rating_subcategories', task: @task)
+        span.mx-2
+          - if current_user && policy(Rating).new_for_task?(@task)
+            .btn.btn-light.btn-sm data-bs-toggle="modal" data-bs-target="#ratingModal"
+              = t('.button.rate')
+            .modal.fade#ratingModal aria-hidden="true" data-task-id=@task.id
+              .modal-dialog.modal-dialog-centered.modal-sm
+                .modal-content
+                  .modal-header
+                    h6.modal-title
+                      = Rating.model_name.human
+                    button.btn-close data-bs-dismiss="modal" aria-label="Close"
+                  .modal-body
+                    - Rating::SUBCATEGORIES.each do |category|
+                      span.rating-category-container
+                        span
+                          = t("activerecord.attributes.rating.#{category}")
+                        span.task-rating style="font-size: 1.2em;"
+                          = render('task_star_rating', rating: @user_rating.send(category), is_input: true, category: category)
+                    hr
+                    span.rating-category-container
+                      span
+                        = t('activerecord.attributes.rating.overall_rating')
+                      span.task-rating style="font-size: 1.2em;"
+                        = render('task_star_rating', rating: @user_rating.overall_rating, is_input: true, category: :overall_rating)
+                  .modal-footer.pt-0.border-0
+                    .btn.btn-light#ratingModalSaveButton data-bs-dismiss="modal"
+                      = t('common.button.save')
 
-            - else
-              div[data-bs-toggle='tooltip' title=t('.guest.disabled.tooltip') data-bs-delay=150]
-                .btn#rate
-                  => t('.button.rate')
-                  span.fa-solid.fa-caret-down
-
-      /= render 'remove_state_tag', exercise: @task
 .row
   .col-md-12.my-3
     legend.toggle-next

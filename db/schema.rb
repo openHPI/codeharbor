@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_03_221801) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_09_190021) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -181,11 +181,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_03_221801) do
   end
 
   create_table "ratings", id: :serial, force: :cascade do |t|
-    t.integer "rating"
+    t.integer "overall_rating", default: 1
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "task_id"
+    t.integer "originality", default: 1, null: false
+    t.integer "description_quality", default: 1, null: false
+    t.integer "test_quality", default: 1, null: false
+    t.integer "model_solution_quality", default: 1, null: false
     t.index ["task_id"], name: "index_ratings_on_task_id"
     t.index ["user_id"], name: "index_ratings_on_user_id"
   end

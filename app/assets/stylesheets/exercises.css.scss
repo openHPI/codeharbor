@@ -149,23 +149,74 @@ $task-color: #6c757d;
 /* RATING */
 
 .task-rating {
+  position: relative;
   font-size: 0.8em;
-  border: 1px $task-color solid;
+  border-style: solid;
+  border-width: 1px;
+  border-color: $task-color;
   border-radius: 2px;
-  padding: 2px 0px;
+  margin: 2px;
+  display: inline-flex;
+
   .task-star-rating {
     font-size: 1.05em;
     padding: 2px 3px;
   }
   .number-rating {
     background-color: $task-color;
-    padding: 2px 3px;
-    border-right: 1px $task-color solid;
+    padding: 2px 5px 2px 3px;
     color: white;
+    display: inline-block;
   }
 }
 
+.rating-subcategories-overlay {
+  right: -1px;
+  top: 100%;
+  margin-top: 3px;
+  position: absolute;
+  font-size: 0.9em;
+
+  border: 1px #dddddd solid;
+
+  background-color: white;
+  color: #333;
+
+  z-index: 10;
+
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  gap: 0.5em;
+
+  visibility: hidden;
+  transition: visibility 1ms;
+
+  .task-rating {
+    font-size: 0.9em;
+    background-color: var(--bs-card-cap-bg);
+  }
+}
+
+.rating-subcategories-trigger {
+  position: relative;
+}
+
+.rating-subcategories-trigger:hover .rating-subcategories-overlay {
+  visibility: visible;
+  transition-delay: 0.2s;
+}
+
+.rating-category-container {
+  white-space: nowrap;
+  display: flex;
+  gap: 0.8em;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .task-star-rating {
+  white-space: nowrap;
   font-size: 1.2em;
 }
 

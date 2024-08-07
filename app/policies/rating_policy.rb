@@ -5,8 +5,8 @@ class RatingPolicy < ApplicationPolicy
     @record
   end
 
-  def new?
-    everyone
+  def new_for_task?(task)
+    @user != task.user
   end
 
   def create?

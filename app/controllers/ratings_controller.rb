@@ -3,19 +3,18 @@
 class RatingsController < ApplicationController
   before_action :load_and_authorize_task
 
-  def create
+  def create # rubocop:disable Metrics/AbcSize
     return handle_own_rating if @task.user == current_user
 
     rating, notice = handle_rating
     authorize rating
 
     if rating.save
-      overall_rating = @task.average_rating
-      render json: {overall_rating:, user_rating: rating}
       flash.now[:notice] = notice
     else
-      render json: {notice: t('common.errors.generic')}
+      flash.now[:alert] = rating.errors.full_messages.join('. ')
     end
+    render json: {average_rating: @task.average_rating}
   end
 
   private
@@ -27,25 +26,19 @@ class RatingsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the following list through.
   def rating_params
-    params.require(:rating).permit(:rating, :task_id)
+    params.require(:rating).permit(Rating::CATEGORIES)
   end
 
   def handle_own_rating
     flash.now[:alert] = t('ratings.handle_own_rating.error')
-    overall_rating = @task.average_rating
-    render json: {overall_rating:, user_rating: overall_rating}
+    render json: {average_rating: @task.average_rating}
   end
 
   def handle_rating
     rating = @task.ratings.find_or_initialize_by(user: current_user)
-    rating.rating = rating_params[:rating]
+    rating.assign_attributes(rating_params)
 
-    notice = if rating.persisted?
-               t('common.notices.object_updated',
-                 model: Rating.model_name.human)
-             else
-               t('common.notices.object_created', model: Rating.model_name.human)
-             end
+    notice = t(rating.persisted? ? 'common.notices.object_updated' : 'common.notices.object_created', model: Rating.model_name.human)
 
     [rating, notice]
   end

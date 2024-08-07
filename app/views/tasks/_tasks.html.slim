@@ -30,22 +30,16 @@
                 - else
                   i.fas.fa-lock
           span
-            span.task-rating
+            span.task-rating.rating-subcategories-trigger
               span.number-rating
-                = task.average_rating.round(1)
-              span.task-star-rating
-                - [*1..5].each do |i|
-                  span
-                    - if task.rating_star >= i
-                      .fa-solid.fa-star data-rating=i
-                    - elsif (task.rating_star + 0.5) >= i
-                      .fa-regular.fa-star-half-stroke data-rating=i
-                    - else
-                      .fa-regular.fa-star data-rating=i
+                = task.overall_rating
+              = render('task_star_rating', rating: task.overall_rating, category: :overall_rating)
+              .rating-subcategories-overlay
+                = render('rating_subcategories', task: task)
+
             span.task-rating-count.align-bottom
               =< task.ratings.size
               =< Rating.model_name.human(count: :many)
-            / = render 'remove_state_tag', exercise: exercise
     .card-body
       .row.px-3
         .col-8.col-md-10.px-0
