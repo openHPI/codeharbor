@@ -32,6 +32,7 @@ de:
         prog_lang_not_empty_while_public: darf nicht leer sein, wenn die Sichtbarkeit auf öffentlich eingestellt ist
       no_license: Keine Lizenz
       unchangeable_groups: Nicht änderbare Gruppen
+      unchangeable_uuid: Zur Zeit wird das manuelle Setzen der Aufgaben-UUID noch nicht unterstützt.
       visibility_warning: Diese Aufgabe befindet sich derzeit in einer Sammlung. Andere Benutzer:innen können Ihre Aufgabe nicht anzeigen oder bearbeiten. Der Titel bleibt jedoch für diese Benutzer:innen sichtbar.
     import_actions:
       button:

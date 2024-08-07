@@ -237,7 +237,7 @@ RSpec.describe TasksController do
     before { sign_in user }
 
     context 'with valid params' do
-      subject(:post_request) { post :create, params: {task: valid_params} }
+      subject(:post_request) { post :create, params: {task: valid_params, group_tasks: {group_ids: ['']}} }
 
       let(:valid_params) do
         {
@@ -304,7 +304,7 @@ RSpec.describe TasksController do
         end
 
         context 'when no groups are given' do
-          let(:group_tasks_params) { {group_ids: []} }
+          let(:group_tasks_params) { {group_ids: ['']} }
 
           it 'adds no groups to the Task' do
             post_request
@@ -336,7 +336,7 @@ RSpec.describe TasksController do
     end
 
     context 'with invalid params' do
-      subject(:post_request) { post :create, params: {task: invalid_attributes} }
+      subject(:post_request) { post :create, params: {task: invalid_attributes, group_tasks: {group_ids: ['']}} }
 
       it 'assigns a newly created but unsaved task as @task' do
         post_request
@@ -362,7 +362,7 @@ RSpec.describe TasksController do
   end
 
   describe 'PUT #update' do
-    subject(:put_update) { put :update, params: {id: task.to_param, task: changed_attributes} }
+    subject(:put_update) { put :update, params: {id: task.to_param, task: changed_attributes, group_tasks: {group_ids: ['']}} }
 
     before { sign_in user }
 
@@ -441,7 +441,7 @@ RSpec.describe TasksController do
 
       context 'when task has a test' do
         subject(:put_update) do
-          put :update, params: {id: task.to_param, task: changed_attributes.merge(tests_attributes:)}
+          put :update, params: {id: task.to_param, task: changed_attributes.merge(tests_attributes:), group_tasks: {group_ids: ['']}}
         end
 
         let(:test) { build(:test) }
@@ -475,7 +475,7 @@ RSpec.describe TasksController do
         end
 
         context 'when no groups are given' do
-          let(:group_tasks_params) { {group_ids: []} }
+          let(:group_tasks_params) { {group_ids: ['']} }
 
           it 'adds no groups to the Task' do
             put_update
@@ -538,7 +538,7 @@ RSpec.describe TasksController do
     end
 
     context 'with invalid params' do
-      subject(:put_update) { put :update, params: {id: task.to_param, task: invalid_attributes} }
+      subject(:put_update) { put :update, params: {id: task.to_param, task: invalid_attributes, group_tasks: {group_ids: ['']}} }
 
       it 'assigns the task as @task' do
         put_update

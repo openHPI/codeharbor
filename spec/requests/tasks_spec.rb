@@ -38,7 +38,7 @@ RSpec.describe 'Tasks' do
 
     describe 'POST /tasks' do
       it 'has http 302' do
-        post tasks_path, params: {task: valid_params}
+        post tasks_path, params: {task: valid_params, group_tasks: {group_ids: ['']}}
         expect(response).to have_http_status(:found)
       end
     end
@@ -66,14 +66,14 @@ RSpec.describe 'Tasks' do
 
     describe 'PATCH /task/:id' do
       it 'has http 302' do
-        patch task_path(task, task: update_params)
+        patch task_path(task, task: update_params, group_tasks: {group_ids: ['']})
         expect(response).to have_http_status(:found)
       end
     end
 
     describe 'PUT /task/:id' do
       it 'has http 302' do
-        put task_path(task, task: update_params)
+        put task_path(task, task: update_params, group_tasks: {group_ids: ['']})
         expect(response).to have_http_status(:found)
       end
     end

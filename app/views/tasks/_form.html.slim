@@ -7,7 +7,7 @@
 
 .row
   .col-md-12.my-4
-    = simple_form_for @task, html: {class: 'project exercise-validation', multipart: true}, builder: MarkdownFormBuilder do |f|
+    = simple_form_for @task, html: {multipart: true}, builder: MarkdownFormBuilder do |f|
       = render('shared/form_errors', object: @task)
       fieldset.form-group
         legend.toggle-next
@@ -40,10 +40,10 @@
             = f.text_area :internal_description, class: 'form-control'
           .field-element
             = f.label :uuid, Task.human_attribute_name('uuid'), class: 'form-label'
-            = f.text_field :uuid, class: 'form-control'
+            = f.text_field :uuid, type: :uuid, class: 'form-control not-allowed', disabled: true, title: t('.unchangeable_uuid'), 'data-bs-toggle': 'tooltip', pattern: uuid_pattern
           .field-element
             = f.label :parent_uuid, Task.human_attribute_name('parent_uuid'), class: 'form-label'
-            = f.text_field :parent_uuid, class: 'form-control'
+            = f.text_field :parent_uuid, type: :uuid, class: 'form-control', pattern: uuid_pattern
           .field-element
             = f.label :language, Task.human_attribute_name('language'), class: 'form-label'
             = f.text_field :language, class: 'form-control'
