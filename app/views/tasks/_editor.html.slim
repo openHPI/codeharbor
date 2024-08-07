@@ -1,22 +1,18 @@
 - file_attached = file.object.attachment.attached?
 - show_attachment = file_attached || file.object.use_attached_file
-- if show_attachment
-  - editor_display = 'display: none'
-  - attachment_display = 'display: block'
-- else
-  - editor_display = 'display: block'
-  - attachment_display = 'display: none'
-- fileupload_display = file_attached ? 'display: none' : 'display: block'
+- editor_class = show_attachment ? 'hide' : ''
+- attachment_class = show_attachment ? '' : 'hide'
+- fileupload_class = file_attached ? 'hide' : ''
 
 = f.label :content, TaskFile.human_attribute_name('content'), class: 'form-label mb-3'
 a.btn.btn-main.btn-sm.toggle-input href='#'
   = t('.button.toggle_file')
 .toggle-divs
-  .edit style=editor_display
+  .edit class=editor_class
     = file.text_area :content, disabled: show_attachment, class: 'd-none form-control'
     .editor
       = file.text_area :content
-  .attachment style=attachment_display
+  .attachment class=attachment_class
     = file.hidden_field :use_attached_file, value: show_attachment, class: 'use-attached-file'
     - if file_attached
       .btn-group.attachment_present
@@ -29,5 +25,5 @@ a.btn.btn-main.btn-sm.toggle-input href='#'
         - if file.object.text_data?
           .extract-text.btn.btn-main data-file-id=file.object.id
             = t('.button.extract_text')
-    .alternative style=fileupload_display
+    .alternative class=fileupload_class
       = file.file_field :attachment, class: 'alternative-input form-control'

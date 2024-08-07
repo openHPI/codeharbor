@@ -70,7 +70,7 @@
       span.number = '2'
       => t('tasks.shared.additional_info')
       span.fa-solid.fa-caret-down
-    .show-table.exercise-show style="display:none;"
+    .show-table.exercise-show.hide
       .row.vertical
         .col.row-label
           = Task.human_attribute_name('internal_description')
@@ -169,7 +169,7 @@
           .table-header.closed.toggle-next
             => file.full_file_name
             span.fa-solid.fa-caret-down
-          .file-content
+          .file-content.hide
             .row
               .col-auto.row-label
                 = TaskFile.human_attribute_name('name')
@@ -241,7 +241,7 @@
           .table-header.closed.toggle-next
             => test.title
             span.fa-solid.fa-caret-down
-          .test-content
+          .test-content.hide
             .row
               .col-auto.row-label
                 = Test.human_attribute_name('title')
@@ -310,7 +310,7 @@
                   .table-header.closed.toggle-next
                     => file.full_file_name
                     span.fa-solid.fa-caret-down
-                  .file-content
+                  .file-content.hide
                     .row
                       .col-auto.row-label
                         = TaskFile.human_attribute_name('name')
@@ -382,7 +382,7 @@
             => ModelSolution.model_name.human
             => @model_solutions.find_index(model_solution) + 1
             span.fa-solid.fa-caret-down
-          .test-content
+          .test-content.hide
             .row
               .col-auto.row-label
                 = ModelSolution.human_attribute_name('description')
@@ -411,7 +411,7 @@
                   .table-header.closed.toggle-next
                     => file.full_file_name
                     span.fa-solid.fa-caret-down
-                  .file-content
+                  .file-content.hide
                     .row
                       .col-auto.row-label
                         = TaskFile.human_attribute_name('name')
@@ -536,7 +536,7 @@
     .expandable-panel
       = button_tag type: 'button', class: 'full-window-button show-comment-button', data: {task_id: @task.id} do
         => t('.button.show_comments')
-        span.fa-solid.fa-circle-notch.fa-spin.wait.me-1 style="display:none;"
+        span.fa-solid.fa-circle-notch.fa-spin.wait.me-1.hide
         span.fa-solid.fa-caret-down.my-caret
       .comment-box.with-borders.border-top-0 data-task=@task.id
         = form_for :comment, url: task_comments_path(@task), remote: true do |f|

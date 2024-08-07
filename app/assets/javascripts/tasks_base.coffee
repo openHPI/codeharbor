@@ -4,7 +4,7 @@ ready = ->
 initializeDropdowns = ->
   $('.toggle-next').on 'click', ->
     $next = $(this).next()
-    $next.toggle()
+    $next.toggleClass('hide')
     $caret = $(this).find('span.fa-solid')
     if $caret.hasClass('fa-caret-down')
       $caret.removeClass('fa-caret-down').addClass('fa-caret-up')
@@ -19,13 +19,13 @@ loadComments = (url, $wait_icon, $comment_box, onSucess)->
     url: url
     dataType: 'script'
     beforeSend: ->
-      $wait_icon.show()
+      $wait_icon.removeClass('hide')
     success: ->
-      $comment_box.show()
+      $comment_box.removeClass('hide')
       if typeof onSucess == 'function'
         onSucess()
     complete: ->
-      $wait_icon.hide()
+      $wait_icon.addClass('hide')
   })
 
 

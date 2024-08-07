@@ -82,12 +82,12 @@ intializeAdvancedFilter = ->
   $dropdownContent = $('.dropdown-content')
   if $advancedFilterActive
     if $advancedFilterActive.val() == "true"
-      $dropdownContent.show()
+      $dropdownContent.removeClass('hide')
 
   $advanced = $('#advanced')
   $drop = $('#drop')
   $advanced.click ->
-    $dropdownContent.toggle()
+    $dropdownContent.toggleClass('hide')
     $search = $('#search')
     if $advancedFilterActive.val() == "true"
       $search.css("border-bottom-left-radius", "4px")
@@ -126,7 +126,7 @@ initializeIndexComments = ->
             $related_box.addClass('with-bottom-border'))
     else
       $caret.removeClass('fa-caret-up').addClass('fa-caret-down')
-      $comment_box.hide()
+      $comment_box.addClass('hide')
       if $related_box
         $related_box.removeClass('with-bottom-border')
 
