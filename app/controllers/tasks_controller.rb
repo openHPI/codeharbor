@@ -85,7 +85,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   end
 
   def download
-    zip_file = ProformaService::ExportTask.call(task: @task)
+    zip_file = ProformaService::ExportTask.call(task: @task, options: {version: params[:version]})
     send_data(zip_file.string, type: 'application/zip', filename: "task_#{@task.id}.zip", disposition: 'attachment')
   end
 

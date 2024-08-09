@@ -4,6 +4,7 @@ en:
     app_name: CodeHarbor
     button:
       abort: Abort
+      available_versions: Available ProFormA-XML versions
       back: Back
       cancel: Cancel
       close: Close

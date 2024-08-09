@@ -15,6 +15,9 @@
       .input-group
         = f.text_field :api_key, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('.info.token'), class: 'form-control'
         = button_tag t('.button.generate'), type: 'button', class: 'generate-api-key-token btn btn-light'
+    .field-element.form-group
+      = f.label :proforma_version, AccountLink.human_attribute_name('proforma_version'), class: 'form-label'
+      = f.select :proforma_version, options_for_select(ProformaXML::SCHEMA_VERSIONS, @account_link.proforma_version), {include_blank: t('account_links.common.proforma_version.select_default', latest_version: ProformaXML::SCHEMA_VERSION_LATEST)}, {class: 'form-select'}
     .form-group
       .actions.btn-group role='group'
         = f.submit t('.button.save'), class: 'btn btn-important'

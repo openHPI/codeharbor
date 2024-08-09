@@ -8,6 +8,7 @@ RSpec.describe AccountLink do
     it { is_expected.to validate_presence_of(:push_url) }
     it { is_expected.to validate_presence_of(:api_key) }
     it { is_expected.to validate_presence_of(:name) }
+    it { is_expected.to validate_inclusion_of(:proforma_version).in_array(%w[2.1 2.0]).allow_nil }
     it { is_expected.to belong_to(:user) }
   end
 

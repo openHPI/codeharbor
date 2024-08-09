@@ -8,7 +8,7 @@ RSpec.shared_examples 'zipped task node xml' do
   end
 
   it 'contains through schema validatable xml' do
-    expect(ProformaXML::Validator.new(xml_with_namespaces).perform).to be_empty
+    expect(ProformaXML::Validator.call(doc: xml_with_namespaces)).to be_empty
   end
 
   it 'adds task root-node' do

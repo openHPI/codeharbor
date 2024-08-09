@@ -19,6 +19,9 @@
           .row
             .col-auto.row-label = AccountLink.human_attribute_name('api_key')
             .col.row-value = @account_link.api_key
+          .row
+            .col-auto.row-label = AccountLink.human_attribute_name('proforma_version')
+            .col.row-value = @account_link.proforma_version.presence || t('account_links.common.proforma_version.select_default', latest_version: ProformaXML::SCHEMA_VERSION_LATEST)
           - if @account_link.shared_users.any?
             .row.vertical
               .col.row-label = t('account_links.show.shared_users')

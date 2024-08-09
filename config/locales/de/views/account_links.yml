@@ -1,6 +1,9 @@
 ---
 de:
   account_links:
+    common:
+      proforma_version:
+        select_default: aktuellste Version (momentan %{latest_version})
     edit:
       header: Bearbeiten des Account-Links
     form:

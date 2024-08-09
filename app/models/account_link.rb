@@ -5,6 +5,8 @@ class AccountLink < ApplicationRecord
   validates :push_url, presence: true
   validates :api_key, presence: true
   validates :name, presence: true
+  validates :proforma_version, inclusion: {in: [*ProformaXML::SCHEMA_VERSIONS], allow_nil: true}
+  normalizes :proforma_version, with: ->(proforma_version) { proforma_version.presence }
 
   belongs_to :user
 
