@@ -921,6 +921,15 @@ RSpec.describe TasksController do
       get_request
       expect(response).to render_template('export_external_start')
     end
+
+    context 'when account_link is not owned by user' do
+      let(:account_link_user) { create(:user) }
+
+      it 'does not render export_external_start javascript' do
+        get_request
+        expect(response).not_to render_template('export_external_start')
+      end
+    end
   end
 
   describe 'POST #export_external_check' do
@@ -981,6 +990,15 @@ RSpec.describe TasksController do
         expect(response.parsed_body.symbolize_keys[:actions]).to(
           not_include('Overwrite').and(not_include('Create new')).and(not_include('Hide'))
         )
+      end
+    end
+
+    context 'when account_link is not owned by user' do
+      let(:account_link_user) { create(:user) }
+
+      it 'renders the correct not authorized JSON' do
+        post_request
+        expect(response.parsed_body.symbolize_keys[:error]).to eq('You are not authorized for this action.')
       end
     end
   end
@@ -1058,6 +1076,15 @@ RSpec.describe TasksController do
       it 'responds with status 500' do
         post_request
         expect(response).to have_http_status(:internal_server_error)
+      end
+    end
+
+    context 'when account_link is not owned by user' do
+      let(:account_link_user) { create(:user) }
+
+      it 'renders the correct not authorized JSON' do
+        post_request
+        expect(response.parsed_body.symbolize_keys[:error]).to eq('You are not authorized for this action.')
       end
     end
   end

@@ -5,13 +5,13 @@ require 'rails_helper'
 RSpec.describe ProformaService::HandleExportConfirm do
   describe '.new' do
     subject(:handle_export_confirm) do
-      described_class.new(user:, task:, push_type:, account_link_id:)
+      described_class.new(user:, task:, push_type:, account_link:)
     end
 
     let(:user) { build(:user) }
     let(:task) { build(:task, user:) }
     let(:push_type) { 'export' }
-    let(:account_link_id) { create(:account_link, user:).id }
+    let(:account_link) { create(:account_link, user:) }
 
     it 'assigns user' do
       expect(handle_export_confirm.instance_variable_get(:@user)).to be user
@@ -26,13 +26,13 @@ RSpec.describe ProformaService::HandleExportConfirm do
     end
 
     it 'assigns account_link_id' do
-      expect(handle_export_confirm.instance_variable_get(:@account_link_id)).to be account_link_id
+      expect(handle_export_confirm.instance_variable_get(:@account_link)).to be account_link
     end
   end
 
   describe '#execute' do
     subject(:handle_export_confirm) do
-      described_class.call(user:, task:, push_type:, account_link_id: account_link.id)
+      described_class.call(user:, task:, push_type:, account_link:)
     end
 
     let(:user) { create(:user) }
