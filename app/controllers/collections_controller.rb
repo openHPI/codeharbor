@@ -5,6 +5,7 @@ require 'zip'
 class CollectionsController < ApplicationController
   before_action :load_and_authorize_collection, except: %i[index new create]
   before_action :set_option, only: %i[index]
+  before_action :load_and_authorize_account_link, only: %i[push_collection]
 
   def index
     @collections = case @option
@@ -71,6 +72,8 @@ class CollectionsController < ApplicationController
 
   def push_collection
     account_link = AccountLink.find(params[:account_link])
+    authorize account_link
+
     errors = push_exercises
 
     if errors.empty?
@@ -155,15 +158,6 @@ class CollectionsController < ApplicationController
       param_type: 'collection',
       param_id: @collection.id
     )
-  end
-
-  def push_exercises
-    errors = []
-    @collection.tasks.each do |exercise|
-      error = push_exercise(exercise, account_link) # TODO: implement multi export
-      errors << error if error.present?
-    end
-    errors
   end
 
   def load_and_authorize_collection
