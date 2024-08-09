@@ -917,9 +917,28 @@ RSpec.describe TasksController do
       get :export_external_start, params: {id: task.id, account_link: account_link.id}, format: :js, xhr: true
     end
 
-    it 'renders export_external_start javascript' do
-      get_request
-      expect(response).to render_template('export_external_start')
+    shared_examples 'renders success response' do
+      it 'renders export_external_start javascript' do
+        get_request
+        expect(response).to render_template('export_external_start')
+      end
+    end
+
+    include_examples 'renders success response'
+
+    context 'when the account link is shared with the requesting user' do
+      let(:account_link) { create(:account_link, user: create(:user), shared_users: Array.wrap(user)) }
+
+      include_examples 'renders success response'
+    end
+
+    context 'when the account link is neither owned by nor shared with the requesting user' do
+      let(:account_link_user) { create(:user) }
+
+      it 'does not render export_external_start javascript' do
+        get_request
+        expect(response).not_to render_template('export_external_start')
+      end
     end
   end
 
@@ -943,16 +962,20 @@ RSpec.describe TasksController do
     let(:uuid_found) { true }
     let(:error) { nil }
 
-    it 'renders the correct contents as JSON' do
-      post_request
-      expect(response.parsed_body.symbolize_keys[:message]).to eq('message')
-      expect(response.parsed_body.symbolize_keys[:actions]).to(
-        include('button').and(include('Abort').and(include('Overwrite')).and(include('Create new')))
-      )
-      expect(response.parsed_body.symbolize_keys[:actions]).to(
-        not_include('Retry').and(not_include('Hide'))
-      )
+    shared_examples 'renders success json' do
+      it 'renders the correct contents as JSON' do
+        post_request
+        expect(response.parsed_body.symbolize_keys[:message]).to eq('message')
+        expect(response.parsed_body.symbolize_keys[:actions]).to(
+          include('button').and(include('Abort').and(include('Overwrite')).and(include('Create new')))
+        )
+        expect(response.parsed_body.symbolize_keys[:actions]).to(
+          not_include('Retry').and(not_include('Hide'))
+        )
+      end
     end
+
+    include_examples 'renders success json'
 
     context 'when there is an error' do
       let(:error) { 'error' }
@@ -983,6 +1006,21 @@ RSpec.describe TasksController do
         )
       end
     end
+
+    context 'when the account link is shared with the requesting user' do
+      let(:account_link) { create(:account_link, user: create(:user), shared_users: Array.wrap(user)) }
+
+      include_examples 'renders success json'
+    end
+
+    context 'when the account link is neither owned by nor shared with the requesting user' do
+      let(:account_link_user) { create(:user) }
+
+      it 'renders the correct not authorized JSON' do
+        post_request
+        expect(response.parsed_body.symbolize_keys[:error]).to eq('You are not authorized for this action.')
+      end
+    end
   end
 
   describe 'POST #export_external_confirm' do
@@ -1008,19 +1046,23 @@ RSpec.describe TasksController do
     let(:push_type) { 'export' }
     let(:error) {}
 
+    shared_examples 'renders success response' do
+      it 'renders correct response' do
+        post_request
+
+        expect(response).to have_http_status(:success)
+        expect(response.parsed_body.symbolize_keys[:message]).to(include('successfully exported'))
+        expect(response.parsed_body.symbolize_keys[:status]).to(eql('success'))
+        expect(response.parsed_body.symbolize_keys[:actions]).to(include('button').and(include('Hide')))
+        expect(response.parsed_body.symbolize_keys[:actions]).to(not_include('Retry').and(not_include('Abort')))
+      end
+    end
+
     it 'does not create a new task' do
       expect { post_request }.not_to change(Task, :count)
     end
 
-    it 'renders correct response' do
-      post_request
-
-      expect(response).to have_http_status(:success)
-      expect(response.parsed_body.symbolize_keys[:message]).to(include('successfully exported'))
-      expect(response.parsed_body.symbolize_keys[:status]).to(eql('success'))
-      expect(response.parsed_body.symbolize_keys[:actions]).to(include('button').and(include('Hide')))
-      expect(response.parsed_body.symbolize_keys[:actions]).to(not_include('Retry').and(not_include('Abort')))
-    end
+    include_examples 'renders success response'
 
     context 'when push_type is create_new' do
       let(:push_type) { 'create_new' }
@@ -1058,6 +1100,21 @@ RSpec.describe TasksController do
       it 'responds with status 500' do
         post_request
         expect(response).to have_http_status(:internal_server_error)
+      end
+    end
+
+    context 'when the account link is shared with the requesting user' do
+      let(:account_link) { create(:account_link, user: create(:user), shared_users: Array.wrap(user)) }
+
+      include_examples 'renders success response'
+    end
+
+    context 'when the account link is neither owned by nor shared with the requesting user' do
+      let(:account_link_user) { create(:user) }
+
+      it 'renders the correct not authorized JSON' do
+        post_request
+        expect(response.parsed_body.symbolize_keys[:error]).to eq('You are not authorized for this action.')
       end
     end
   end

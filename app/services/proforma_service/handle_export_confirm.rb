@@ -2,12 +2,12 @@
 
 module ProformaService
   class HandleExportConfirm < ServiceBase
-    def initialize(user:, task:, push_type:, account_link_id:)
+    def initialize(user:, task:, push_type:, account_link:)
       super()
       @user = user
       @task = task
       @push_type = push_type
-      @account_link_id = account_link_id
+      @account_link = account_link
     end
 
     def execute
@@ -17,9 +17,8 @@ module ProformaService
         @task.reload
       end
 
-      account_link = AccountLink.find(@account_link_id)
       zip_stream = ProformaService::ExportTask.call(task: @task, options: {description_format: 'md'})
-      error = TaskService::PushExternal.call(zip: zip_stream, account_link:)
+      error = TaskService::PushExternal.call(zip: zip_stream, account_link: @account_link)
 
       [@task, error]
     end

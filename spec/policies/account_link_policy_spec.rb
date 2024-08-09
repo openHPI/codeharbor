@@ -21,7 +21,7 @@ RSpec.describe AccountLinkPolicy do
     context 'when user is listed as shared_user' do
       let(:shared_users) { [user] }
 
-      it { is_expected.to permit_only_actions(%i[new show remove_shared_user]) }
+      it { is_expected.to permit_only_actions(%i[new show remove_shared_user use]) }
     end
 
     context 'when user is admin' do

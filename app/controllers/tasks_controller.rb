@@ -4,6 +4,7 @@ require 'zip'
 
 class TasksController < ApplicationController # rubocop:disable Metrics/ClassLength
   before_action :load_and_authorize_task, except: %i[index new create import_start import_confirm import_uuid_check import_external]
+  before_action :load_and_authorize_account_link, only: %i[export_external_start export_external_check export_external_confirm]
   before_action :only_authorize_action, only: %i[import_start import_confirm import_uuid_check import_external]
 
   before_action :handle_search_params, only: :index
@@ -89,7 +90,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     send_data(zip_file.string, type: 'application/zip', filename: "task_#{@task.id}.zip", disposition: 'attachment')
   end
 
-  def import_start # rubocop:disable Metric/AbcSize, Metrics/MethodLength
+  def import_start # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     zip_file = params[:zip_file]
     unless zip_file.is_a?(ActionDispatch::Http::UploadedFile)
       return render json: {status: 'failure', message: t('.choose_file_error')}
@@ -117,7 +118,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     }
   end
 
-  def import_confirm # rubocop:disable Metric/AbcSize
+  def import_confirm # rubocop:disable Metrics/AbcSize
     proforma_task = ProformaService::ProformaTaskFromCachedFile.call(**import_confirm_params.to_hash.symbolize_keys)
 
     task = ProformaService::ImportTask.call(proforma_task:, user: current_user)
@@ -163,16 +164,13 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   end
 
   def export_external_start
-    @account_link = AccountLink.find(params[:account_link])
-
     respond_to do |format|
       format.js { render layout: false }
     end
   end
 
   def export_external_check
-    external_check = TaskService::CheckExternal.call(uuid: @task.uuid,
-      account_link: AccountLink.find(params[:account_link]))
+    external_check = TaskService::CheckExternal.call(uuid: @task.uuid, account_link: @account_link)
     render json: {
       message: external_check[:message],
       actions: render_export_actions(task: @task,
@@ -183,14 +181,12 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     }, status: :ok
   end
 
-  # rubocop:disable Metrics/AbcSize
   def export_external_confirm
     push_type = params[:push_type]
 
     return render json: {}, status: :internal_server_error unless %w[create_new export].include? push_type
 
-    export_task, error = ProformaService::HandleExportConfirm.call(user: current_user, task: @task,
-      push_type:, account_link_id: params[:account_link])
+    export_task, error = ProformaService::HandleExportConfirm.call(user: current_user, task: @task, push_type:, account_link: @account_link)
     task_title = export_task.title
 
     if error.nil?
@@ -206,7 +202,6 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
       }
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
   def generate_test
     GptService::GenerateTests.call(task: @task, openai_api_key: current_user.openai_api_key)
@@ -229,6 +224,11 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   def load_and_authorize_task
     @task = Task.find(params[:id])
     authorize @task
+  end
+
+  def load_and_authorize_account_link
+    @account_link = AccountLink.find(params[:account_link])
+    authorize @account_link, :use?
   end
 
   def only_authorize_action

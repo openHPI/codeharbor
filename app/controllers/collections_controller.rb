@@ -5,6 +5,7 @@ require 'zip'
 class CollectionsController < ApplicationController
   before_action :load_and_authorize_collection, except: %i[index new create]
   before_action :set_option, only: %i[index]
+  before_action :load_and_authorize_account_link, only: %i[push_collection]
 
   def index
     @collections = case @option
@@ -70,16 +71,15 @@ class CollectionsController < ApplicationController
   end
 
   def push_collection
-    account_link = AccountLink.find(params[:account_link])
-    errors = push_exercises
+    errors = push_tasks
 
     if errors.empty?
-      redirect_to @collection, notice: t('.push_external_notice', account_link: account_link.name)
+      redirect_to @collection, notice: t('.push_external_notice', account_link: @account_link.name)
     else
       errors.each do |error|
         logger.debug(error)
       end
-      redirect_to @collection, alert: t('.not_working', account_link: account_link.name)
+      redirect_to @collection, alert: t('.not_working', account_link: @account_link.name)
     end
   end
 
@@ -157,7 +157,7 @@ class CollectionsController < ApplicationController
     )
   end
 
-  def push_exercises
+  def push_tasks
     errors = []
     @collection.tasks.each do |exercise|
       error = push_exercise(exercise, account_link) # TODO: implement multi export
@@ -169,6 +169,11 @@ class CollectionsController < ApplicationController
   def load_and_authorize_collection
     @collection = Collection.find(params[:id])
     authorize @collection
+  end
+
+  def load_and_authorize_account_link
+    @account_link = AccountLink.find(params[:account_link])
+    authorize @account_link, :use?
   end
 
   # Never trust parameters from the scary internet, only allow the following list through.

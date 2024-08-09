@@ -637,6 +637,74 @@ RSpec.describe CollectionsController do
     end
   end
 
-  # post push_collection later
+  describe 'POST #push_collection' do
+    let!(:collection) { create(:collection, valid_attributes.merge(users:)) }
+    let(:users) { [user] }
+    let(:post_request) { post :push_collection, params: }
+    let(:params) { {id: collection.id, account_link: account_link.id} }
+    let(:account_link) { create(:account_link, user: account_link_user) }
+    let(:account_link_user) { user }
+    let(:push_task_return) { [] }
+
+    before { allow(controller).to receive(:push_tasks).and_return(push_task_return) }
+
+    shared_examples 'redirects to collection and flashes message successfully' do
+      it 'redirects to collection' do
+        post_request
+        expect(response).to redirect_to(collection_path(collection))
+      end
+
+      it 'shows success flash message' do
+        post_request
+        expect(flash[:notice]).to eq I18n.t('collections.push_collection.push_external_notice', account_link: account_link.name)
+      end
+    end
+
+    shared_examples 'redirect to collection-list and flashes not authorized' do
+      it 'redirects to collection list' do
+        post_request
+        expect(response).to redirect_to(collections_url)
+      end
+
+      it 'shows flash message' do
+        post_request
+        expect(flash[:alert]).to eq I18n.t('common.errors.not_authorized')
+      end
+    end
+
+    include_examples 'redirects to collection and flashes message successfully'
+
+    context 'when push_tasks returns errors' do
+      let(:push_task_return) { ['error'] }
+
+      it 'redirects to collection' do
+        post_request
+        expect(response).to redirect_to(collection_path(collection))
+      end
+
+      it 'shows success flash message' do
+        post_request
+        expect(flash[:alert]).to eq I18n.t('collections.push_collection.not_working', account_link: account_link.name)
+      end
+    end
+
+    context 'when user is not in collection' do
+      let(:users) { [create(:user)] }
+
+      include_examples 'redirect to collection-list and flashes not authorized'
+    end
+
+    context 'when the account link is shared with the requesting user' do
+      let(:account_link) { create(:account_link, user: create(:user), shared_users: Array.wrap(user)) }
+
+      include_examples 'redirects to collection and flashes message successfully'
+    end
+
+    context 'when the account link is neither owned by nor shared with the requesting user' do
+      let(:account_link_user) { create(:user) }
+
+      include_examples 'redirect to collection-list and flashes not authorized'
+    end
+  end
   # get collections_all # adminview
 end
