@@ -139,15 +139,23 @@ class Task < ApplicationRecord
     end
   end
 
-  def average_rating
+  def average_rating # rubocop:disable Metrics/AbcSize
     return @average_rating if @average_rating
 
-    category_averages = Rating::CATEGORIES.map {|category| "AVG (#{category}) AS #{category}" }.join(',')
+    ratings_arel = Rating.arel_table
 
-    @average_rating = ActiveRecord::Base.connection.exec_query(
-      "SELECT #{category_averages} FROM ratings WHERE ratings.task_id = $1",
-      'Averaging ratings', [id]
-    ).first.symbolize_keys.transform_values {|rating| (rating || 0).round(1) }
+    category_averages = Rating::CATEGORIES.map do |category|
+      average_rating = ratings_arel[category].average
+      coalesced_rating = Arel::Nodes::NamedFunction.new('COALESCE', [average_rating, 0])
+      rounded_rating = Arel::Nodes::NamedFunction.new('ROUND', [coalesced_rating, 1])
+      rounded_rating.as(category.to_s)
+    end
+
+    condition = ratings_arel[:task_id].eq(id)
+    query = ratings_arel.project(category_averages).where(condition)
+    result = ActiveRecord::Base.connection.exec_query(query.to_sql, 'Averaging ratings').first
+
+    @average_rating = result.symbolize_keys
   end
 
   def overall_rating
