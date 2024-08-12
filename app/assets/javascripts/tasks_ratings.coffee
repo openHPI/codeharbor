@@ -22,8 +22,6 @@ initializeRatings = ->
       data: {rating: categories},
       dataType: 'json',
       success: (response) ->
-        console.log(response.average_rating)
-
         Object.keys(response.average_rating).forEach (category) ->
           rating = response.average_rating[category]
 
@@ -32,8 +30,6 @@ initializeRatings = ->
           $(".averaged-task-ratings .task-star-rating[data-rating-category=#{category}] .rating-star").each(->
             star_idx = $(this).data('rating')
             $(this).removeClass("fa-regular fa-solid fa-star fa-star-half-stroke")
-
-            console.log(rating, Math.round(rating * 2) / 2.0 + 0.5, star_idx)
 
             if rating >= star_idx
               $(this).addClass('fa-solid fa-star')
