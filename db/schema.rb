@@ -181,7 +181,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_22_075061) do
   end
 
   create_table "ratings", id: :serial, force: :cascade do |t|
-    t.integer "overall_rating", default: 1
+    t.integer "overall_rating", default: 1, null: false
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
