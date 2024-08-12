@@ -27,7 +27,7 @@
                         span
                           = t("activerecord.attributes.rating.#{category}")
                         span.task-rating style="font-size: 1.2em;"
-                          = render('task_star_rating', rating: @user_rating.send(category), is_input: true, category: category)
+                          = render('task_star_rating', rating: @user_rating.send(category), is_input: true, category:)
                     hr
                     span.rating-category-container
                       span

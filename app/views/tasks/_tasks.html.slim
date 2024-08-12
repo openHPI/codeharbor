@@ -35,7 +35,7 @@
                 = task.overall_rating
               = render('task_star_rating', rating: task.overall_rating, category: :overall_rating)
               .rating-subcategories-overlay
-                = render('rating_subcategories', task: task)
+                = render('rating_subcategories', task:)
 
             span.task-rating-count.align-bottom
               =< task.ratings.size
