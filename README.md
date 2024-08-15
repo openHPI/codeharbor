@@ -1,5 +1,7 @@
 # CodeHarbor
 
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/openHPI/codeharbor)
+
 [![Build Status](https://github.com/openHPI/codeharbor/workflows/CI/badge.svg)](https://github.com/openHPI/codeharbor/actions?query=workflow%3ACI)
 [![codecov](https://codecov.io/gh/openHPI/codeharbor/branch/master/graph/badge.svg?token=lUL0Fq7Uc9)](https://codecov.io/gh/openHPI/codeharbor)
 
