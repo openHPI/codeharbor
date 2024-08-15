@@ -6,7 +6,7 @@ gem 'acts-as-taggable-on'
 gem 'bcrypt'
 gem 'bootsnap', require: false
 gem 'bootstrap-will_paginate'
-gem 'coffee-rails', '>= 5.0.0' # Use CoffeeScript for .coffee assets and views
+gem 'coffee-rails', require: false
 gem 'config'
 gem 'devise-bootstrap-views'
 gem 'faraday'
@@ -43,7 +43,7 @@ gem 'simple_form'
 gem 'slim-rails'
 gem 'solid_queue'
 gem 'sprockets-rails'
-gem 'terser'
+gem 'terser', require: false
 gem 'turbolinks'
 gem 'whenever', require: false
 

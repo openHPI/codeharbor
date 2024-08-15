@@ -7,6 +7,7 @@ The following environment variables are specifically support in CodeHarbor and a
 | `RAILS_ENV` | `development` | Specifies the Rails environment which can be configured using the files in `config/environments` |  
 | `SECRET_KEY_BASE` | ` ` | Specifies a server-side secret for Rails, must be set for production |  
 | `RAILS_RELATIVE_URL_ROOT` | `/` | Specifies the subpath of the application, used for links and assets |  
+| `DATABASE_URL` | ` ` | Specifies database parameters to use, rather than those specified in `config/database.yml`. A valid URL would be `postgresql://username:password@host:5432/database?pool=5` |  
 | `WEB_CONCURRENCY` | Number of physical CPU cores | Puma worker count in production for cluster mode |
 | `RAILS_MAX_THREADS` | `3` | Maximum Puma thread count per worker |  
 | `PORT` | `7500` | Default port for the web server |

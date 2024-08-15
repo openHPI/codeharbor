@@ -25,11 +25,17 @@ Rails.application.configure do
   # Disable serving static files from `public/`, relying on NGINX/Apache to do so instead.
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
-  # Compress CSS using a preprocessor.
-  config.assets.css_compressor = :sass
+  config.assets.configure do |env|
+    require 'coffee-rails'
+    require 'terser'
+    env.register_compressor 'application/javascript', :terser, Terser::Compressor
 
-  # Compress JavaScript using a preprocessor.
-  config.assets.js_compressor = :terser
+    # Compress CSS using a preprocessor.
+    config.assets.css_compressor = :sass
+
+    # Compress JavaScript using a preprocessor.
+    config.assets.js_compressor = :terser
+  end
 
   # Do not fall back to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
