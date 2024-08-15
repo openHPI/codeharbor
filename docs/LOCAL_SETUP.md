@@ -2,7 +2,7 @@
 
 CodeHarbor consists of a web application that is connected to a PostgreSQL database. The following document will guide you through the setup of CodeHarbor with all aforementioned components.
 
-We recommend using the **native setup** as described below. We also prepared a setup with Vagrant using a virtual machine as [described in this guide](./LOCAL_SETUP_VAGRANT.md). However, the Vagrant setup might be outdated and is not actively maintained (PRs are welcome though!)
+We recommend using the **native setup** as described below or the **devcontainer setup** as [described in this guide](./LOCAL_SETUP_DEVCONTAINER.md). We also prepared a setup with Vagrant using a virtual machine as [described in this guide](./LOCAL_SETUP_VAGRANT.md). However, the Vagrant setup might be outdated and is not actively maintained (PRs are welcome though!)
 
 ## Native setup for CodeHarbor
 
