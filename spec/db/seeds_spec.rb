@@ -14,16 +14,14 @@ RSpec.describe 'seeds' do # rubocop:disable RSpec/DescribeClass
     Rake::Task['db:migrate'].invoke
 
     # We want to execute the seeds for the dev environment against the test database
-    # rubocop:disable Rails/Inquiry
-    allow(Rails).to receive(:env) { 'development'.inquiry }
-    # rubocop:enable Rails/Inquiry
+    allow(Rails).to receive(:env) { 'development'.inquiry } # rubocop:disable Rails/Inquiry
     allow(ActiveRecord::Base).to receive(:establish_connection).and_call_original
     allow(ActiveRecord::Base).to receive(:establish_connection).with(:development) {
       ActiveRecord::Base.establish_connection(:test)
     }
   end
 
-  describe 'execute db:seed', cleaning_strategy: :truncation do
+  describe 'execute db:seed' do
     it 'collects the test results' do
       expect { seed }.not_to raise_error
     end
