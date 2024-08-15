@@ -7,12 +7,12 @@
 // To reference this file, add <%= stylesheet_pack_tag 'stylesheets' %> to the appropriate
 // layout file, like app/views/layouts/application.html.slim
 
-@import '~bootstrap/scss/bootstrap';
+@import 'bootstrap/scss/bootstrap';
 @import 'select2/src/scss/core';
 
 // Import the Ace editor styles
-@import url('~ace-builds/css/ace.css');
-@import url('~ace-builds/css/theme/chrome.css');
+@import url('ace-builds/css/ace.css');
+@import url('ace-builds/css/theme/chrome.css');
 
 
 // We define our own button style here, since `btn-outline-dark` and `btn-outline-light` do not switch colors.
@@ -38,8 +38,8 @@ html[data-bs-theme="light"] {
 }
 
 
-$fa-font-path: '~@fortawesome/fontawesome-free/webfonts/';
-@import '~@fortawesome/fontawesome-free/scss/fontawesome';
-@import '~@fortawesome/fontawesome-free/scss/solid';
-@import '~@fortawesome/fontawesome-free/scss/regular';
-@import '~@fortawesome/fontawesome-free/scss/v4-shims';
+$fa-font-path: '@fortawesome/fontawesome-free/webfonts/';
+@import '@fortawesome/fontawesome-free/scss/fontawesome';
+@import '@fortawesome/fontawesome-free/scss/solid';
+@import '@fortawesome/fontawesome-free/scss/regular';
+@import '@fortawesome/fontawesome-free/scss/v4-shims';
