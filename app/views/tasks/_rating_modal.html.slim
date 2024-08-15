@@ -1,0 +1,27 @@
+.modal.fade#ratingModal aria-hidden="true" data-task-id=@task.id tabindex="-1"
+  .modal-dialog.modal-dialog-centered.modal-sm
+    .modal-content
+      .modal-header
+        h6.modal-title
+          = Rating.model_name.human
+        button.btn-close data-bs-dismiss="modal" aria-label="Close"
+      .modal-body
+        - Rating::SUBCATEGORIES.each do |category|
+          span.rating-category-container
+            span
+              = t("activerecord.attributes.rating.#{category}")
+            span.task-rating
+              = render('task_star_rating', rating: @user_rating.send(category), is_input: true, category:)
+        hr
+        span.rating-category-container
+          span
+            = t('activerecord.attributes.rating.overall_rating')
+          span.task-rating
+            = render('task_star_rating', rating: @user_rating.overall_rating, is_input: true, category: :overall_rating)
+      .modal-footer.pt-0.border-0
+        - if @user_rating.valid?
+          button.btn.btn-light#ratingModalSaveButton data-bs-dismiss="modal"
+            = t('common.button.save')
+        - else
+          button.btn.btn-light#ratingModalSaveButton[data-bs-dismiss="modal" disabled]
+            = t('common.button.save')

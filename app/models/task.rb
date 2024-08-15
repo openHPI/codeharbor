@@ -56,12 +56,11 @@ class Task < ApplicationRecord
                        }.fetch(visibility, public_access)
                      }
   scope :created_before_days, ->(days) { where(created_at: days.to_i.days.ago.beginning_of_day..) if days.to_i.positive? }
-  scope :overall_rating, lambda {
-    select('tasks.*, COALESCE(avg_rating, 0) AS overall_rating')
-      .joins('LEFT JOIN (SELECT task_id, AVG(rating) AS avg_rating FROM ratings GROUP BY task_id)
+  scope :min_stars, lambda {|stars|
+                      joins('LEFT JOIN (SELECT task_id, AVG(overall_rating) AS avg_overall_rating FROM ratings GROUP BY task_id)
                              AS ratings ON ratings.task_id = tasks.id')
-  }
-  scope :min_stars, ->(stars) { overall_rating.where('COALESCE(avg_rating, 0) >= ?', stars) }
+                        .where('COALESCE(avg_overall_rating, 0) >= ?', stars)
+                    }
   scope :sort_by_overall_rating_asc, -> { overall_rating.order(overall_rating: :asc) }
   scope :sort_by_overall_rating_desc, -> { overall_rating.order(overall_rating: :desc) }
   scope :access_level, ->(access_level) { where(access_level:) }

@@ -1,20 +1,34 @@
 ready = ->
   initializeRatings()
 
+find_entered_category_ratings = ->
+  categories = {}
+
+  $('#ratingModal').find('.task-star-rating').each(->
+    category_name = $(this).data('rating-category');
+    category_value = $(this).find('.fa-solid').length;
+
+    categories[category_name] = category_value;
+  )
+  return categories
+
 initializeRatings = ->
-  $(".task-star-rating[data-is-rating-input='true'] .rating-star").hover(->
+  $(".task-star-rating[data-is-rating-input='true'] .rating-star").click(->
     $(this).prevAll().add(this).addClass('fa-solid').removeClass('fa-regular');
     $(this).nextAll().addClass('fa-regular').removeClass('fa-solid');
+
+    valid = true;
+    for key,value of find_entered_category_ratings() when value == 0
+      $('#ratingModalSaveButton').prop('disabled', true);
+      valid = false;
+
+    if valid
+      $('#ratingModalSaveButton').prop("disabled", false);
   )
 
-  $('#ratingModalSaveButton').on 'click', ->
-    modal = $('#ratingModal');
-
-    task_id = $(modal).data("task-id");
-    categories = {};
-    modal.find('.task-star-rating').each(->
-      categories[$(this).data('rating-category')] = $(this).find('.fa-solid').length;
-    )
+  $('#ratingModalSaveButton').click(->
+    task_id = $('#ratingModal').data("task-id");
+    categories = find_entered_category_ratings();
 
     $.ajax({
       type: "POST",
@@ -39,6 +53,7 @@ initializeRatings = ->
               $(this).addClass('fa-regular fa-star')
           )
     })
+  )
 
 
 $(document).on('turbolinks:load', ready)

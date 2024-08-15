@@ -37,7 +37,7 @@
               .rating-subcategories-overlay
                 = render('rating_subcategories', task:)
 
-            span.task-rating-count.align-bottom
+            span.task-rating-count
               =< task.ratings.size
               =< Rating.model_name.human(count: :many)
     .card-body

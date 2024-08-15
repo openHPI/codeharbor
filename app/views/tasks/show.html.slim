@@ -14,30 +14,7 @@
           - if current_user && policy(Rating).new_for_task?(@task)
             .btn.btn-light.btn-sm#ratingModalOpenButton data-bs-toggle="modal" data-bs-target="#ratingModal"
               = t('.button.rate')
-            .modal.fade#ratingModal aria-hidden="true" data-task-id=@task.id
-              .modal-dialog.modal-dialog-centered.modal-sm
-                .modal-content
-                  .modal-header
-                    h6.modal-title
-                      = Rating.model_name.human
-                    button.btn-close data-bs-dismiss="modal" aria-label="Close"
-                  .modal-body
-                    - Rating::SUBCATEGORIES.each do |category|
-                      span.rating-category-container
-                        span
-                          = t("activerecord.attributes.rating.#{category}")
-                        span.task-rating style="font-size: 1.2em;"
-                          = render('task_star_rating', rating: @user_rating.send(category), is_input: true, category:)
-                    hr
-                    span.rating-category-container
-                      span
-                        = t('activerecord.attributes.rating.overall_rating')
-                      span.task-rating style="font-size: 1.2em;"
-                        = render('task_star_rating', rating: @user_rating.overall_rating, is_input: true, category: :overall_rating)
-                  .modal-footer.pt-0.border-0
-                    .btn.btn-light#ratingModalSaveButton data-bs-dismiss="modal"
-                      = t('common.button.save')
-
+            = render 'rating_modal'
 .row
   .col-md-12.my-3
     legend.toggle-next
