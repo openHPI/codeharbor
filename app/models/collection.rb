@@ -27,7 +27,7 @@ class Collection < ApplicationRecord
                    includes(:collection_users).where(collection_users: {user:})
                  }
   scope :favorites, ->(user) { joins(:collection_user_favorites).where('collection_user_favorites.user_id' => user.id) }
-  enum visibility_level: {private: 0, public: 1}, _default: :private, _prefix: true
+  enum :visibility_level, {private: 0, public: 1}, default: :private, prefix: true
 
   def add_task(task)
     tasks << task unless tasks.find_by(id: task.id)

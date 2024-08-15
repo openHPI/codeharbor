@@ -31,7 +31,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.3
+          ruby-version: .ruby-version
           bundler-cache: true
 
       - name: Setup Node
@@ -65,7 +65,6 @@ jobs:
           cp config/action_mailer.yml.ci config/action_mailer.yml
           cp config/content_security_policy.yml.ci config/content_security_policy.yml
           cp config/database.yml.ci config/database.yml
-          cp config/secrets.yml.ci config/secrets.yml
           cp config/mnemosyne.yml.ci config/mnemosyne.yml
 
       - name: Create database
@@ -107,7 +106,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.3
+          ruby-version: .ruby-version
           bundler-cache: true
 
       - name: Run rubocop
@@ -138,7 +137,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.3
+          ruby-version: .ruby-version
           bundler-cache: true
 
       - name: Run slim-lint
