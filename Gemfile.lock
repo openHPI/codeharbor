@@ -136,12 +136,6 @@ GEM
     csv (3.3.0)
     dachsfisch (1.0.0)
       nokogiri (>= 1.14.1, < 2.0.0)
-    database_cleaner (2.0.2)
-      database_cleaner-active_record (>= 2, < 3)
-    database_cleaner-active_record (2.2.0)
-      activerecord (>= 5.a)
-      database_cleaner-core (~> 2.0.0)
-    database_cleaner-core (2.0.1)
     date (3.3.4)
     debug_inspector (1.2.0)
     deep_merge (1.2.2)
@@ -610,7 +604,6 @@ DEPENDENCIES
   capybara
   coffee-rails
   config
-  database_cleaner
   devise (~> 4.9)
   devise-bootstrap-views
   factory_bot_rails
