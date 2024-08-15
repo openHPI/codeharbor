@@ -7,7 +7,7 @@ RSpec.describe NbpSyncJob do
   let(:uuid) { task.uuid }
 
   before do
-    allow(Nbp::PushConnector).to receive(:instance)
+    allow(Nbp::PushConnector).to receive(:instance).and_return(instance_double(Nbp::PushConnector))
     allow(Nbp::PushConnector.instance).to receive(:push_lom!)
     allow(Nbp::PushConnector.instance).to receive(:delete_task!)
   end
