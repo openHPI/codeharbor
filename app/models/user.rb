@@ -46,7 +46,7 @@ class User < ApplicationRecord
   default_scope { where(deleted: [nil, false]) }
 
   # `Other` is a catch-all for any status that doesn't fit into the other categories and should be *last*.
-  enum status_group: {unknown: 0, learner: 2, educator: 3, other: 1}, _default: :unknown, _prefix: true
+  enum :status_group, {unknown: 0, learner: 2, educator: 3, other: 1}, default: :unknown, prefix: true
 
   # Called by Devise and overwritten for soft-deletion
   def destroy

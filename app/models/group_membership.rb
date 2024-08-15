@@ -7,5 +7,5 @@ class GroupMembership < ApplicationRecord
   validates :user_id, uniqueness: {scope: :group_id}
   validates :role, presence: true
 
-  enum role: {applicant: 0, confirmed_member: 1, admin: 2}, _default: :applicant, _prefix: true
+  enum :role, {applicant: 0, confirmed_member: 1, admin: 2}, default: :applicant, prefix: true
 end

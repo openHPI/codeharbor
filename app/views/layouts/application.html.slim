@@ -6,14 +6,16 @@ html lang=I18n.locale data-default-locale=I18n.default_locale
     = render('breadcrumbs_and_title')
     title
       = yield(:title)
-    = favicon_link_tag('/favicon.png', type: 'image/png')
-    = favicon_link_tag('/favicon.png', rel: 'apple-touch-icon', type: 'image/png')
+    = favicon_link_tag('/icon.png', type: 'image/png')
+    = favicon_link_tag('/icon.svg', type: 'image/svg+xml')
+    = favicon_link_tag('/icon.png', rel: 'apple-touch-icon', type: 'image/png')
     = stylesheet_pack_tag('stylesheets', media: 'all', 'data-turbolinks-track': 'reload', integrity: true, crossorigin: 'anonymous')
     = stylesheet_link_tag('application', media: 'all', 'data-turbolinks-track': 'reload', integrity: true, crossorigin: 'anonymous')
     = javascript_pack_tag('application', 'data-turbolinks-track': 'reload', defer: false, integrity: true, crossorigin: 'anonymous')
     = javascript_include_tag('application', 'data-turbolinks-track': 'reload', integrity: true, crossorigin: 'anonymous')
     = yield(:head)
     = csrf_meta_tags
+    = csp_meta_tag
     meta name='sentry' data-enabled=SentryJavascript.active?.to_s data-release=SentryJavascript.release data-dsn=SentryJavascript.dsn data-environment=SentryJavascript.environment
     meta name='current-user' content=current_user&.to_page_context&.to_json
   body.d-flex.flex-column
