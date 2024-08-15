@@ -1,6 +1,8 @@
 # Devcontainer setup
 
-With the devcontainer-based setup, you won't need to (manually) install CodeHarbor and all dependencies on your local instance. Instead, a Docker setup containing all requirements will be configured. The development environment is defined in the `.devcontainer` repository folder and will be applied when you open the project in a supported editor or IDE.
+With the devcontainer-based setup, you won't need to (manually) install CodeHarbor and all dependencies on your local instance. Instead, a Docker setup containing all requirements will be configured.
+
+You can either run a devcontainer locally (with Docker) or remotely (e.g., with GitHub Codespaces). In both cases, the development environment is defined in the `.devcontainer` repository folder and will be applied when you open the project in a supported editor or IDE.
 
 ## Local setup
 
@@ -53,6 +55,14 @@ Click on the blue "Reopen in Container" button in the bottom right corner of you
 **RubyMine:** / **IntelliJ IDEA:**
 Open the file `.devcontainer/devcontainer.json` and click on the blue Docker icon in the top left corner of your editor. More information for [RubyMine](https://www.jetbrains.com/help/ruby/connect-to-devcontainer.html#create_dev_container_inside_ide) or [IntelliJ IDEA](https://www.jetbrains.com/help/idea/connect-to-devcontainer.html#create_dev_container_inside_ide).
 
+## Remote setup with GitHub Codespaces
+
+You can also run the devcontainer remotely with GitHub Codespaces. This way, you can develop CodeHarbor in the cloud without the need to install any dependencies on your local machine.
+
+To get started with GitHub Codespaces, click on the ["Open in GitHub Codespaces"](https://codespaces.new/openHPI/codeharbor) button at the top of the [README.md file](../README.md). This will open the project in a new Codespace. You can find more information on how to set up your project for Codespaces in the [official documentation](https://docs.github.com/en/codespaces/setting-up-your-project-for-codespaces/adding-a-dev-container-configuration/introduction-to-dev-containers).
+
 # Start CodeHarbor
 
 When developing with the devcontainer, you can run CodeHarbor in the same way as you would on your local machine. The only difference is that you're running it inside the devcontainer. You can find more information on how to run CodeHarbor in the [LOCAL_SETUP.md](LOCAL_SETUP.md#start-codeharbor). All ports are forwarded to your local machine, so you can access CodeHarbor in your browser as usual.
+
+In GitHub Codespaces, the ports are forwarded automatically, so you can access CodeHarbor in your browser by clicking on the "Open in Browser" button in the Codespaces environment as soon as the Rails server was started. [More information](https://docs.github.com/de/codespaces/developing-in-a-codespace/forwarding-ports-in-your-codespace).
