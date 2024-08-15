@@ -609,7 +609,7 @@ DEPENDENCIES
   bootstrap-will_paginate
   brakeman
   capybara
-  coffee-rails (>= 5.0.0)
+  coffee-rails
   config
   database_cleaner
   devise (~> 4.9)
