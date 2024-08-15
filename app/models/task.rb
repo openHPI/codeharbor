@@ -114,7 +114,7 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
                                             .having('COUNT(DISTINCT name) = ?', label_names.count))
   }
 
-  enum access_level: {private: 0, public: 1}, _default: :private, _prefix: true
+  enum :access_level, {private: 0, public: 1}, default: :private, prefix: true
 
   def self.ransackable_scopes(_auth_object = nil)
     %i[created_before_days min_stars access_level fulltext_search has_all_labels]
