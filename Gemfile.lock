@@ -96,6 +96,8 @@ GEM
       msgpack (~> 1.2)
     bootstrap-will_paginate (1.0.0)
       will_paginate
+    brakeman (6.2.1)
+      racc
     builder (3.3.0)
     bunny (2.23.0)
       amq-protocol (~> 2.3, >= 2.3.1)
@@ -605,6 +607,7 @@ DEPENDENCIES
   binding_of_caller
   bootsnap
   bootstrap-will_paginate
+  brakeman
   capybara
   coffee-rails (>= 5.0.0)
   config
