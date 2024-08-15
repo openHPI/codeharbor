@@ -13,3 +13,7 @@ module Authentication
     expect(page).to have_content(I18n.t('devise.sessions.signed_in'))
   end
 end
+
+RSpec.configure do |config|
+  config.include Authentication, type: :feature
+end
