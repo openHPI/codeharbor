@@ -8,7 +8,7 @@
 CodeHarbor is a repository system for automatically gradeable programming exercises and enables instructors to exchange of such exercises via the [ProFormA XML](https://github.com/ProFormA/proformaxml) format across diverse code assessment systems.
 
 ## Server Setup and Deployment
-Use [Capistrano](https://capistranorb.com/). Docker and Vagrant are for local development only.
+Use [Capistrano](https://capistranorb.com/). or the provided Dockerfile (only for production). Vagrant is for local development only.
 
 
 ## Development Setup
