@@ -180,15 +180,45 @@ RSpec.describe Task do
     end
   end
 
+  describe '.task_contributions' do
+    let(:task){create(:task)}
+    let(:other_task){create(:task)}
+
+    let(:other_contribution){create(:task_contribution, base: other_task)}
+
+    context 'when the task has a contribution' do
+      let(:contribution){create(:task_contribution, base: task)}
+      it 'returns the contribution' do
+        expect(task.task_contributions).to contain_exactly(contribution)
+      end
+    end
+
+    context 'when the task has no contribution' do
+      it 'returns an empty array' do
+        expect(task.task_contributions).to be_empty
+      end
+
+      context 'when the task is a suggestion' do
+        let(:other_contribution){create(:task_contribution, suggestion: other_task)}
+        it 'returns an empty array' do
+          expect(other_task.task_contributions).to be_empty
+        end
+      end
+    end
+
+
+  end
+
   describe '#duplicate' do
     subject(:duplicate) { task.duplicate }
 
-    let(:task) { create(:task, files:, tests:, model_solutions:, title: 'title', user: task_user, access_level: :public, groups:) }
+    let(:task) { create(:task, files:, tests:, model_solutions:, title: 'title', user: task_user, access_level: :public, groups:, labels:) }
     let(:files) { build_list(:task_file, 2, :exportable) }
     let(:tests) { build_list(:test, 2) }
     let(:model_solutions) { build_list(:model_solution, 2) }
     let(:task_user) { create(:user) }
     let(:groups) { create_list(:group, 1) }
+    let(:labels) { create_list(:label, 2)}
 
     it 'creates a new task' do
       expect(duplicate).not_to be task
@@ -205,6 +235,7 @@ RSpec.describe Task do
     it 'has the same attributes' do
       # TODO: Investigate why state_list = nil changes to state_list = []
       expect(duplicate).to have_attributes(task.attributes.except('created_at', 'updated_at', 'id', 'parent_uuid', 'uuid', 'state_list'))
+      expect(duplicate.labels.length).to eq(2)
     end
 
     it 'creates new files' do
@@ -473,6 +504,103 @@ RSpec.describe Task do
 
       it 'returns true' do
         expect(parent_of).to be(true)
+      end
+    end
+  end
+
+  describe '#handle_contributions_on_destroy' do
+    subject(:destroy) { task.destroy }
+
+    let(:task) { create(:task) }
+    let(:contribution) { task.task_contributions.first }
+    let(:suggestion) { contribution.suggestion }
+    let(:status) { :pending }
+
+    before do
+      create(:task_contribution, base: task, status:)
+    end
+
+    context 'when a contribution is pending' do
+      context 'when deletion is successful' do
+        it 'destroys the contribution' do
+          expect { destroy }.to change(TaskContribution, :count).by(-1)
+          expect(contribution).to be_destroyed
+        end
+
+        it 'does not destroy the suggestion' do
+          destroy
+          expect(suggestion).not_to be_destroyed
+        end
+
+        it 'destroys the base task' do
+          destroy
+          expect(task).to be_destroyed
+        end
+      end
+
+      context 'when a contribution can not be deleted' do
+        before do
+          allow(task).to receive(:task_contributions).and_return([contribution])
+          allow(contribution).to receive(:destroy).and_return(false)
+          destroy
+        end
+
+        it 'does not destroy the base task' do
+          expect(task).not_to be_destroyed
+        end
+
+        it 'does not destroy the contribution' do
+          expect(contribution).not_to be_destroyed
+        end
+
+        it 'does not destroy the suggestion' do
+          expect(suggestion).not_to be_destroyed
+        end
+      end
+
+      context 'when the base task can not be deleted' do
+        before do
+          allow(task).to receive(:before_committed!).and_raise(ActiveRecord::Rollback)
+        end
+
+        it 'does not destroy the base task' do
+          destroy
+          expect(task).not_to be_destroyed
+        end
+
+        it 'does not destroy the contribution' do
+          destroy
+          expect(contribution).not_to be_destroyed
+        end
+
+        it 'does not destroy the suggestion' do
+          destroy
+          expect(suggestion).not_to be_destroyed
+        end
+
+        it 'calls handle_contributions_on_destroy' do
+          expect(task).to receive(:handle_contributions_on_destroy)
+          destroy
+        end
+      end
+    end
+
+    context 'when a contribution is closed' do
+      let(:status) { :closed }
+
+      it 'destroys the contribution' do
+        expect { destroy }.to change(TaskContribution, :count).by(-1)
+        expect(contribution).to be_destroyed
+      end
+
+      it 'destroys the suggestion' do
+        destroy
+        expect(suggestion).to be_destroyed
+      end
+
+      it 'destroys the base task' do
+        destroy
+        expect(task).to be_destroyed
       end
     end
   end
