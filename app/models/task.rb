@@ -10,7 +10,7 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
   acts_as_taggable_on :state
 
   before_validation :lowercase_language
-  before_destroy :handle_contributions
+  before_destroy :handle_contributions_on_destroy
   after_commit :sync_metadata_with_nbp, if: -> { Nbp::PushConnector.enabled? }
 
   validates :title, presence: true
@@ -41,8 +41,7 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_one :task_contribution, dependent: :destroy, inverse_of: :suggestion
   # We use a custom query to identify task contributions, and especially don't want to find those TaskContributions having the `task_id`.
   # Reminder: A TaskContribution object with the current task's ID will identify itself as a contribution (which don't have contributions on their own).
-  # TODO: Test relationship (that it contains exactly the required contribs, not too few and not too many).
-  # TODO (?): Test that the `task_id` is not used in the where
+
   has_many :task_contributions, ->(task) { unscope(:where).for_task_uuid(task.uuid) }
 
   belongs_to :user
@@ -161,7 +160,7 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
       task.tests = duplicate_tests(set_parent_id: set_parent_identifiers)
       task.files = duplicate_files(set_parent_id: set_parent_identifiers)
       task.model_solutions = duplicate_model_solutions(set_parent_id: set_parent_identifiers)
-      task.label_names = label_names # TODO: Test that duplicating a task also duplicates the labels.
+      task.label_names = label_names
     end
   end
 
@@ -273,18 +272,19 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
     language.downcase! if language.present?
   end
 
-  def handle_contributions
+  def handle_contributions_on_destroy
     # TODO: Write tests for this method
     # TODO: Include in this tests that a rollback occurs if an exception occurs.
+    # task_contributions.loaded?
     task_contributions.each do |contribution|
       case contribution.status.to_sym
         when :pending
           # We only want to remove the TaskContribution object, but not the suggestion itself.
           # As a result, the former suggestion will be independent from the current task (that is about to get deleted).
-          contribution.destroy
+          throw :abort unless contribution.destroy
         else # :merged, :closed
           # We are removing the suggestion, which will trigger a deletion of the corresponding TaskContribution.
-          contribution.suggestion.destroy
+          throw :abort unless contribution.suggestion.destroy
       end
     end
   end
