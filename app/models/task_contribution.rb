@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 class TaskContribution < ApplicationRecord
+  # The `suggestion` contains the updated version of the task.
   belongs_to :suggestion, class_name: 'Task', inverse_of: :task_contribution, foreign_key: :task_id
+  # The `base` denotes the original version of the task that should be updated.
+  has_one :base, through: :suggestion, source: :parent, required: true
+
   delegate :user, :user=, :access_level=, to: :suggestion
 
   accepts_nested_attributes_for :suggestion
@@ -27,14 +31,6 @@ class TaskContribution < ApplicationRecord
 
       duplicate
     end
-  end
-
-  def base
-    suggestion.parent
-  end
-
-  def base=(task)
-    suggestion.parent = task
   end
 
   def to_s
