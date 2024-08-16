@@ -157,7 +157,7 @@ RSpec.describe Task do
     end
   end
 
-  describe '.task_contributions' do
+  describe '.contributions' do
     let(:task){create(:task)}
     let(:other_task){create(:task)}
 
@@ -166,19 +166,19 @@ RSpec.describe Task do
     context 'when the task has a contribution' do
       let(:contribution){create(:task_contribution, base: task)}
       it 'returns the contribution' do
-        expect(task.task_contributions).to contain_exactly(contribution)
+        expect(task.contributions).to contain_exactly(contribution)
       end
     end
 
     context 'when the task has no contribution' do
       it 'returns an empty array' do
-        expect(task.task_contributions).to be_empty
+        expect(task.contributions).to be_empty
       end
 
       context 'when the task is a suggestion' do
         let(:other_contribution){create(:task_contribution, suggestion: other_task)}
         it 'returns an empty array' do
-          expect(other_task.task_contributions).to be_empty
+          expect(other_task.contributions).to be_empty
         end
       end
     end
@@ -443,7 +443,7 @@ RSpec.describe Task do
     subject(:destroy) { task.destroy }
 
     let(:task) { create(:task) }
-    let(:contribution) { task.task_contributions.first }
+    let(:contribution) { task.contributions.first }
     let(:suggestion) { contribution.suggestion }
     let(:status) { :pending }
 
@@ -471,7 +471,7 @@ RSpec.describe Task do
 
       context 'when a contribution can not be deleted' do
         before do
-          allow(task).to receive(:task_contributions).and_return([contribution])
+          allow(task).to receive(:contributions).and_return([contribution])
           allow(contribution).to receive(:destroy).and_return(false)
           destroy
         end

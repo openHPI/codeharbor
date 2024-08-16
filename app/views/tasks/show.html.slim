@@ -609,8 +609,9 @@
             =< t('task_contributions.buttons.decouple')
       - unless @task.contribution?
         - if policy(@task).contribute?(check_other_contrib: false)
-          - if @task.contributions(user: @current_user).any?
-            = link_to edit_task_task_contribution_path(@task, @task.contributions(user: @current_user).first), method: :get, class: 'btn btn-important' do
+          - contributions = @task.contributions.joins(:suggestion).where(suggestion: {user: @current_user}, status: :pending)
+          - if contributions.any?
+            = link_to edit_task_task_contribution_path(@task, contributions.first), method: :get, class: 'btn btn-important' do
               i.fa-regular.fa-edit
               =< t('task_contributions.buttons.edit_contribution')
           - else

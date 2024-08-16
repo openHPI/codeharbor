@@ -36,7 +36,7 @@ class TaskContributionsController < ApplicationController
 
   def index
     authorize @task, :edit?
-    @task_contributions = @task.contributions(all_states: true)
+    @task_contributions = @task.contributions
   end
 
   def show
