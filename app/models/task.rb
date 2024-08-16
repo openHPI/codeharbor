@@ -38,16 +38,21 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_many :comments, dependent: :destroy
   has_many :ratings, dependent: :destroy
 
-  has_one :task_contribution, dependent: :destroy, inverse_of: :suggestion
-  # We use a custom query to identify task contributions, and especially don't want to find those TaskContributions having the `task_id`.
-  # Reminder: A TaskContribution object with the current task's ID will identify itself as a contribution (which don't have contributions on their own).
+  # The `parent` designates the original task that the current task is derived from.
+  belongs_to :parent, class_name: 'Task', foreign_key: :parent_uuid, primary_key: :uuid, optional: true, inverse_of: :children
+  # `Children` are either duplicates of or suggestions for the current task.
+  has_many :children, class_name: 'Task', foreign_key: :parent_uuid, primary_key: :uuid, dependent: :nullify, inverse_of: :parent
 
-  has_many :task_contributions, ->(task) { unscope(:where).for_task_uuid(task.uuid) }
+  # A `task_contribution` marks a task as a suggestion for a parent task and thus is optional.
+  has_one :task_contribution, dependent: :destroy, inverse_of: :suggestion, required: false
+  # `Contributions` are the change requests with a status (pending, merged, closed) for the current task.
+  has_many :contributions, through: :children, source: :task_contribution, class_name: 'TaskContribution'
+  # `Suggestions` contain the proposals for the current task.
+  has_many :suggestions, through: :contributions, source: :suggestion
 
   belongs_to :user
   belongs_to :programming_language, optional: true
   belongs_to :license, optional: true
-  belongs_to :parent, class_name: 'Task', foreign_key: :parent_uuid, primary_key: :uuid, optional: true, inverse_of: false
 
   accepts_nested_attributes_for :tests, allow_destroy: true
   accepts_nested_attributes_for :model_solutions, allow_destroy: true
@@ -233,19 +238,6 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
     title
   end
 
-  def contributions(user: nil, status: nil, all_states: false)
-    task_filter_set = {parent_uuid: uuid}
-    unless user.nil?
-      task_filter_set[:user] = user
-    end
-    query = TaskContribution.joins(:suggestion)
-      .where(suggestion: task_filter_set)
-    return query if all_states
-    return query.where(status:) unless status.nil?
-
-    query.where(status: :pending)
-  end
-
   def klass
     if contribution?
       TaskContribution
@@ -276,7 +268,7 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
     # TODO: Write tests for this method
     # TODO: Include in this tests that a rollback occurs if an exception occurs.
     # task_contributions.loaded?
-    task_contributions.each do |contribution|
+    contributions.each do |contribution|
       case contribution.status.to_sym
         when :pending
           # We only want to remove the TaskContribution object, but not the suggestion itself.
@@ -298,7 +290,9 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def unique_pending_contribution
     if contribution?
-      other_existing_contrib = parent.contributions(user:).where.not(id: task_contribution.id).any?
+      other_existing_contrib = parent.contributions.joins(:suggestion)
+        .where(suggestion: {user:}, status: :pending)
+        .where.not(id: task_contribution.id).any?
       errors.add(:task_contribution, :duplicated) if other_existing_contrib
     end
   end
