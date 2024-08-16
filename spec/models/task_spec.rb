@@ -158,13 +158,14 @@ RSpec.describe Task do
   end
 
   describe '.contributions' do
-    let(:task){create(:task)}
-    let(:other_task){create(:task)}
+    let(:task) { create(:task) }
+    let(:other_task) { create(:task) }
 
-    let(:other_contribution){create(:task_contribution, base: other_task)}
+    let(:other_contribution) { create(:task_contribution, base: other_task) }
 
     context 'when the task has a contribution' do
-      let(:contribution){create(:task_contribution, base: task)}
+      let(:contribution) { create(:task_contribution, base: task) }
+
       it 'returns the contribution' do
         expect(task.contributions).to contain_exactly(contribution)
       end
@@ -176,14 +177,13 @@ RSpec.describe Task do
       end
 
       context 'when the task is a suggestion' do
-        let(:other_contribution){create(:task_contribution, suggestion: other_task)}
+        let(:other_contribution) { create(:task_contribution, suggestion: other_task) }
+
         it 'returns an empty array' do
           expect(other_task.contributions).to be_empty
         end
       end
     end
-
-
   end
 
   describe '#duplicate' do
@@ -195,7 +195,7 @@ RSpec.describe Task do
     let(:model_solutions) { build_list(:model_solution, 2) }
     let(:task_user) { create(:user) }
     let(:groups) { create_list(:group, 1) }
-    let(:labels) { create_list(:label, 2)}
+    let(:labels) { create_list(:label, 2) }
 
     it 'creates a new task' do
       expect(duplicate).not_to be task

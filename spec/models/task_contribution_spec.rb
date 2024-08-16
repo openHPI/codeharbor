@@ -4,15 +4,18 @@ require 'rails_helper'
 
 RSpec.describe TaskContribution do
   describe '.for_task_uuid' do
-    let(:parent_task){create(:task)}
-    let(:duplicate){create(:task, parent: parent_task)}
-    let(:contribution){create(:task_contribution, base: parent_task)}
-    let(:other_contribution){create(:task_contribution)}
-    subject(:for_task_uuid) { TaskContribution.for_task_uuid(parent_task.uuid)}
+    subject(:for_task_uuid) { described_class.for_task_uuid(parent_task.uuid) }
+
+    let(:parent_task) { create(:task) }
+    let(:duplicate) { create(:task, parent: parent_task) }
+    let(:contribution) { create(:task_contribution, base: parent_task) }
+    let(:other_contribution) { create(:task_contribution) }
+
     it 'returns only the contribution' do
       expect(for_task_uuid).to contain_exactly(contribution)
     end
   end
+
   describe 'decouple' do
     let(:task_contribution) { create(:task_contribution) }
 
