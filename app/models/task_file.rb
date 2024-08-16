@@ -7,6 +7,8 @@ class TaskFile < ApplicationRecord
   validates :name, presence: true
   validates :attachment, presence: true, if: -> { use_attached_file == 'true' }, on: :force_validations
   validates :xml_id, presence: true
+  validates :visible, inclusion: {in: %w[yes no delayed]}
+  validates :used_by_grader, inclusion: {in: [true, false]}
   validate :unique_xml_id, if: -> { !fileable.nil? }
 
   attr_accessor :use_attached_file, :file_marked_for_deletion

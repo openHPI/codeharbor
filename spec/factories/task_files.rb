@@ -5,6 +5,8 @@ FactoryBot.define do
     name { 'name' }
     fileable factory: :task
     sequence(:xml_id, &:to_s)
+    visible { 'yes' }
+    used_by_grader { false }
 
     trait :with_test do
       fileable factory: :test
