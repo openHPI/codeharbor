@@ -3,9 +3,9 @@
 class TaskContribution < ApplicationRecord
   belongs_to :suggestion, class_name: 'Task', inverse_of: :task_contribution, foreign_key: :task_id
   delegate :user, :user=, :access_level=, to: :suggestion
+
   accepts_nested_attributes_for :suggestion
 
-  # TODO: Test this scope (maybe already done with the test written for task.rb#l45).
   scope :for_task_uuid, ->(uuid) { joins(:suggestion).where(suggestion: {parent_uuid: uuid}) }
 
   # TODO: Use `_prefix: true`

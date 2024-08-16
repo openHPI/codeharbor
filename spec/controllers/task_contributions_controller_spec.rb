@@ -53,6 +53,8 @@ RSpec.describe TaskContributionsController do
         expect(response).to have_http_status(:redirect)
         expect(response).to redirect_to([assigns(:task), assigns(:task_contribution)])
       end
+
+      it 'copies dachsfisch-data'
     end
 
     context 'when new task is invalid' do
