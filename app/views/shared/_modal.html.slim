@@ -1,0 +1,20 @@
+- root_attributes ||= {}
+- root_attributes[:id] ||= id
+- title ||= ''
+- size ||= ''
+- header = true if header.nil?
+- footer_button_text ||= ''
+
+.modal.fade *root_attributes aria-hidden="true" tabindex="-1"
+  .modal-dialog.modal-dialog-centered class=size
+    .modal-content
+      - if header
+        .modal-header
+          h6.modal-title = title
+          button.btn-close data-bs-dismiss="modal" aria-label="Close"
+
+      = yield
+
+      - if footer_button_text.blank?
+        .modal-footer
+          button.btn.btn-light data-bs-dismiss="modal" = footer_button_text
