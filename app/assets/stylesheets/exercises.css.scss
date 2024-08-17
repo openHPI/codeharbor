@@ -172,6 +172,9 @@ $task-color: #6c757d;
 
 .modal-body .task-rating {
   font-size: 1.2em;
+  :hover * {
+    color: darkgrey;
+  }
 }
 
 .rating-subcategories-overlay {
