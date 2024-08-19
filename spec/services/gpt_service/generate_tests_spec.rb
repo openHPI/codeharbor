@@ -66,7 +66,7 @@ RSpec.describe GptService::GenerateTests do
         expect(test_file).to have_attributes(
           content: "def test_script():\n  assert true",
           name: 'test.py',
-          visible: 'yes',
+          visible: 'no',
           used_by_grader: true
         )
       end
