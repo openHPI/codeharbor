@@ -174,4 +174,8 @@ a.no-border:visited {
 .card {
   border-radius: 0px;
   border: 1px #cccccc solid;
+
+  .badge {
+    border-radius: 2px;
+  }
 }
