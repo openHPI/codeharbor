@@ -1,18 +1,15 @@
 - file_attached = file.object.attachment.attached?
 - show_attachment = file_attached || file.object.use_attached_file
-- editor_class = show_attachment ? 'hide' : ''
-- attachment_class = show_attachment ? '' : 'hide'
-- fileupload_class = file_attached ? 'hide' : ''
 
 = f.label :content, TaskFile.human_attribute_name('content'), class: 'form-label mb-3'
 a.btn.btn-main.btn-sm.toggle-input href='#'
   = t('.button.toggle_file')
 .toggle-divs
-  .edit class=editor_class
+  .edit class="#{show_attachment ? 'hide' : ''}"
     = file.text_area :content, disabled: show_attachment, class: 'd-none form-control'
     .editor
       = file.text_area :content
-  .attachment class=attachment_class
+  .attachment class="#{show_attachment ? '' : 'hide'}"
     = file.hidden_field :use_attached_file, value: show_attachment, class: 'use-attached-file'
     - if file_attached
       .btn-group.attachment_present
@@ -25,5 +22,5 @@ a.btn.btn-main.btn-sm.toggle-input href='#'
         - if file.object.text_data?
           .extract-text.btn.btn-main data-file-id=file.object.id
             = t('.button.extract_text')
-    .alternative class=fileupload_class
+    .alternative class="#{file_attached ? 'hide' : ''}"
       = file.file_field :attachment, class: 'alternative-input form-control'

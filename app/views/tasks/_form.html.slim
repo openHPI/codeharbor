@@ -100,13 +100,13 @@
             = f.nested_fields_for :tests do |test|
               .show-table.exercise-show
                 - if test.object.new_record?
-                  - display_container_class = ''
+                  - display_container_class = '' # rubocop:disable Lint/UselessAssignment
                   .table-header
                     = test.remove_nested_fields_link :text, class: 'btn btn-main btn-sm float-end' do
                       i.fa-solid.fa-xmark.text-danger
                       =< t('.button.remove_test')
                 - else
-                  - display_container_class = 'hide'
+                  - display_container_class = 'hide' # rubocop:disable Lint/UselessAssignment
                   .table-header.closed.toggle-next
                     => test.object.title
                     span.fa-solid.fa-caret-down
