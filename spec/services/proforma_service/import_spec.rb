@@ -4,22 +4,22 @@ require 'rails_helper'
 
 RSpec.describe ProformaService::Import do
   describe '.new' do
-    subject(:import_service) { described_class.new(zip:, user:) }
+    subject(:imported_task) { described_class.new(zip:, user:) }
 
     let(:zip) { Tempfile.new('proforma_test_zip_file') }
     let(:user) { build(:user) }
 
     it 'assigns zip' do
-      expect(import_service.instance_variable_get(:@zip)).to be zip
+      expect(imported_task.instance_variable_get(:@zip)).to be zip
     end
 
     it 'assigns user' do
-      expect(import_service.instance_variable_get(:@user)).to be user
+      expect(imported_task.instance_variable_get(:@user)).to be user
     end
   end
 
   describe '#execute' do
-    subject(:import_service) { described_class.call(zip: zip_file, user: import_user) }
+    subject(:imported_task) { described_class.call(zip: zip_file, user: import_user) }
 
     let(:user) { build(:user) }
     let(:import_user) { user }
@@ -57,12 +57,16 @@ RSpec.describe ProformaService::Import do
 
     it { is_expected.to be_an_equal_task_as task }
 
-    it 'sets the correct user as owner of the task' do
-      expect(import_service.user).to be user
+    it 'sets the uuid' do
+      expect(imported_task.uuid).not_to be_blank
     end
 
-    it 'sets the uuid' do
-      expect(import_service.uuid).not_to be_blank
+    context 'when task is imported by a different user, but is admin' do
+      let(:import_user) { build(:admin) }
+
+      it 'does not overwrite existing owner' do
+        expect(imported_task.user).to eql user
+      end
     end
 
     context 'when no task exists' do
@@ -71,18 +75,18 @@ RSpec.describe ProformaService::Import do
       it { is_expected.to be_valid }
 
       it 'sets the correct user as owner of the task' do
-        expect(import_service.user).to be user
+        expect(imported_task.user).to be user
       end
 
       it 'sets the uuid' do
-        expect(import_service.uuid).not_to be_blank
+        expect(imported_task.uuid).not_to be_blank
       end
 
       context 'when task has a uuid' do
         let(:uuid) { SecureRandom.uuid }
 
         it 'sets the uuid' do
-          expect(import_service.uuid).to eql uuid
+          expect(imported_task.uuid).to eql uuid
         end
       end
     end
@@ -91,7 +95,7 @@ RSpec.describe ProformaService::Import do
       let(:meta_data) { attributes_for(:task, :with_meta_data)[:meta_data] }
 
       it 'sets the meta_data' do
-        expect(import_service.meta_data).to eql meta_data
+        expect(imported_task.meta_data).to eql meta_data
       end
     end
 
@@ -99,7 +103,7 @@ RSpec.describe ProformaService::Import do
       let(:submission_restrictions) { attributes_for(:task, :with_submission_restrictions)[:submission_restrictions] }
 
       it 'sets the submission_restrictions' do
-        expect(import_service.submission_restrictions).to eql submission_restrictions
+        expect(imported_task.submission_restrictions).to eql submission_restrictions
       end
     end
 
@@ -107,7 +111,7 @@ RSpec.describe ProformaService::Import do
       let(:external_resources) { attributes_for(:task, :with_external_resources)[:external_resources] }
 
       it 'sets the external_resources' do
-        expect(import_service.external_resources).to eql external_resources
+        expect(imported_task.external_resources).to eql external_resources
       end
     end
 
@@ -115,7 +119,7 @@ RSpec.describe ProformaService::Import do
       let(:grading_hints) { attributes_for(:task, :with_grading_hints)[:grading_hints] }
 
       it 'sets the grading_hints' do
-        expect(import_service.grading_hints).to eql grading_hints
+        expect(imported_task.grading_hints).to eql grading_hints
       end
     end
 
@@ -163,7 +167,7 @@ RSpec.describe ProformaService::Import do
         let(:test_meta_data) { attributes_for(:test, :with_meta_data)[:meta_data] }
 
         it 'sets the meta_data' do
-          expect(import_service.tests.first.meta_data).to eql test_meta_data
+          expect(imported_task.tests.first.meta_data).to eql test_meta_data
         end
       end
 
@@ -173,7 +177,7 @@ RSpec.describe ProformaService::Import do
         end
 
         it 'sets the configuration' do
-          expect(import_service.tests.first.configuration).to eql test_configuration
+          expect(imported_task.tests.first.configuration).to eql test_configuration
         end
       end
     end
@@ -196,11 +200,11 @@ RSpec.describe ProformaService::Import do
       end
 
       it 'imports the tasks from zip containing multiple zips' do
-        expect(import_service).to all be_an(Task)
+        expect(imported_task).to all be_an(Task)
       end
 
       it 'imports the zip exactly how they were exported' do
-        expect(import_service).to all be_an_equal_task_as(task).or be_an_equal_task_as(task2)
+        expect(imported_task).to all be_an_equal_task_as(task).or be_an_equal_task_as(task2)
       end
 
       context 'when a task has files and tests' do
@@ -208,7 +212,7 @@ RSpec.describe ProformaService::Import do
         let(:tests) { build_list(:test, 2, test_type: 'test_type') }
 
         it 'imports the zip exactly how the were exported' do
-          expect(import_service).to all be_an_equal_task_as(task).or be_an_equal_task_as(task2)
+          expect(imported_task).to all be_an_equal_task_as(task).or be_an_equal_task_as(task2)
         end
       end
     end
@@ -222,7 +226,7 @@ RSpec.describe ProformaService::Import do
       end
 
       it 'creates a new task' do
-        expect(import_service.id).not_to be task.id
+        expect(imported_task.id).not_to be task.id
       end
     end
 
@@ -230,14 +234,14 @@ RSpec.describe ProformaService::Import do
       let(:uuid) { SecureRandom.uuid }
 
       it 'updates the old task' do
-        expect(import_service.id).to be task.id
+        expect(imported_task.id).to be task.id
       end
 
       context 'when another user imports the task' do
         let(:import_user) { create(:user) }
 
         it 'creates a new task' do
-          expect(import_service.id).not_to be task.id
+          expect(imported_task.id).not_to be task.id
         end
       end
     end

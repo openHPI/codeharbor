@@ -161,8 +161,10 @@ class Task < ApplicationRecord
     average_rating[:overall_rating]
   end
 
-  def all_files
-    (files + tests.map(&:files) + model_solutions.map(&:files)).flatten
+  def all_files(cached: true)
+    return @all_files if cached && defined?(@all_files)
+
+    @all_files = (files + tests.map(&:files) + model_solutions.map(&:files)).flatten
   end
 
   def label_names=(label_names)
