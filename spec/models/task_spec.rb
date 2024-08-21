@@ -284,4 +284,50 @@ RSpec.describe Task do
       end
     end
   end
+
+  describe '#all_files' do
+    subject(:all_files) { task.all_files }
+
+    let(:task) { create(:task, files:, model_solutions:, tests:) }
+    let(:files) { build_list(:task_file, 1) }
+    let(:model_solutions) do
+      build_list(:model_solution, 2) do |model_solution|
+        model_solution.files = build_list(:task_file, 3)
+      end
+    end
+    let(:tests) do
+      build_list(:test, 4) do |test|
+        test.files = build_list(:task_file, 5)
+      end
+    end
+
+    it { is_expected.to have_attributes(size: 27) }
+
+    context 'with specific task_files' do
+      let(:model_solutions) { build_list(:model_solution, 1, files: model_solution_files) }
+      let(:model_solution_files) { build_list(:task_file, 3) }
+      let(:tests) { build_list(:test, 1, files: test_files) }
+      let(:test_files) { build_list(:task_file, 4) }
+
+      it { is_expected.to match_array(files + model_solution_files + test_files) }
+    end
+
+    context 'when all_files is called again' do
+      before do
+        all_files
+        task.tests.destroy_all
+        task.model_solutions.destroy_all
+      end
+
+      it 'returns the cached result' do
+        expect(all_files).to have_attributes(size: 27)
+      end
+
+      context 'with cache: false' do
+        it 'returns the correct result' do
+          expect(task.all_files(cached: false)).to have_attributes(size: 1)
+        end
+      end
+    end
+  end
 end

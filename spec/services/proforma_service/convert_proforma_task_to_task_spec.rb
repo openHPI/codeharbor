@@ -576,5 +576,31 @@ RSpec.describe ProformaService::ConvertProformaTaskToTask do
         end
       end
     end
+
+    context 'when proforma_task has been exported from task' do
+      let(:proforma_task) { ProformaService::ConvertTaskToProformaTask.call(task:) }
+      let(:task) { create(:task, files: build_list(:task_file, 1, :exportable), tests:, model_solutions:, title: 'title') }
+      let(:tests) { build_list(:test, 1, files: build_list(:task_file, 1, :exportable)) }
+      let(:model_solutions) { build_list(:model_solution, 1, files: build_list(:task_file, 1, :exportable)) }
+
+      it { is_expected.to be_an_equal_task_as task }
+
+      it 'reuses existing objects' do
+        expect(convert_to_task_service).to have_attributes(
+          id: task.id,
+          files: have(1).item.and(include(have_attributes(
+            id: task.files.first.id
+          ))),
+          model_solutions: have(1).item.and(include(have_attributes(
+            id: model_solutions.first.id,
+            files: include(have_attributes(id: model_solutions.first.files.first.id))
+          ))),
+          tests: have(1).item.and(include(have_attributes(
+            id: tests.first.id,
+            files: include(have_attributes(id: tests.first.files.first.id))
+          )))
+        )
+      end
+    end
   end
 end

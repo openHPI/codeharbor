@@ -9,7 +9,7 @@ class TaskFile < ApplicationRecord
   validates :xml_id, presence: true
   validates :visible, inclusion: {in: %w[yes no delayed]}
   validates :used_by_grader, inclusion: {in: [true, false]}
-  validate :unique_xml_id, if: -> { !fileable.nil? }
+  validate :unique_xml_id, if: -> { !fileable.nil? && xml_id_changed? }
 
   attr_accessor :use_attached_file, :file_marked_for_deletion
 
@@ -52,7 +52,7 @@ class TaskFile < ApplicationRecord
 
   def unique_xml_id
     task = fileable.is_a?(Task) ? fileable : fileable.task
-    xml_ids = (task.all_files - [self]).map(&:xml_id)
+    xml_ids = (task.all_files(cached: false) - [self]).map(&:xml_id)
     errors.add(:xml_id, :not_unique) if xml_ids.include? xml_id
   end
 end
