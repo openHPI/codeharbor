@@ -384,8 +384,8 @@ RSpec.describe TasksController do
 
     before { sign_in user }
 
-    let!(:existing_label) { create(:label) }
-    let!(:new_label) { create(:label) }
+    let(:existing_label) { create(:label) }
+    let(:new_label) { create(:label) }
 
     let!(:task) { create(:task, valid_attributes) }
     let(:valid_attributes) do
@@ -428,14 +428,21 @@ RSpec.describe TasksController do
       end
 
       it 'does not create a new label' do
+        create(:task, title: 'An existing task with the new label', labels: [new_label])
         old_labels = Label.all.to_a
         put_update
         expect(Label.all.to_a.difference(old_labels)).to be_empty
       end
 
-      it 'does delete the unused label' do
+      it 'deletes unused labels' do
         put_update
         expect(Label.all).to not_include(existing_label)
+      end
+
+      it 'does not delete any used label' do
+        create(:task, title: 'An existing task with the existing label', labels: [existing_label])
+        put_update
+        expect(Label.all).to include(existing_label)
       end
 
       context 'when requesting a new label to be created' do
