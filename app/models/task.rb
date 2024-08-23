@@ -27,7 +27,7 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
   has_many :groups, through: :group_tasks
 
   has_many :task_labels, dependent: :destroy
-  has_many :labels, through: :task_labels
+  has_many :labels, through: :task_labels, dependent: :destroy
 
   has_many :tests, dependent: :destroy, inverse_of: :task
   has_many :model_solutions, dependent: :destroy, inverse_of: :task
@@ -226,7 +226,7 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
 
   def label_names=(label_names)
     self.labels = label_names.uniq.compact_blank.map {|name| Label.find_or_initialize_by(name:) }
-    Label.where.not(id: TaskLabel.select(:label_id)).destroy_all
+    # Labels without tasks will be deleted as part of `TaskLabel#remove_dangling_labels`.
   end
 
   def label_names
