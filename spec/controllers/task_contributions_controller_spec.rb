@@ -49,7 +49,7 @@ RSpec.describe TaskContributionsController do
   describe 'POST #create' do
     subject(:post_request) { post :create, params: {task_id: task.id, task: task_params} }
 
-    let(:task_params) { attributes_for(:task) }
+    let(:task_params) { attributes_for(:task).except(:uuid) }
     let(:suggestion) { assigns(:task_contribution).suggestion }
 
     context 'with valid params' do

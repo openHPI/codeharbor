@@ -13,7 +13,7 @@ RSpec.describe GroupsController do
   let(:admin_locale) { :de }
 
   let(:valid_post_attributes) do
-    attributes_for(:group, users: [user])
+    build(:group, users: [user]).attributes.except('id', 'created_at', 'updated_at')
   end
 
   let(:invalid_attributes) do

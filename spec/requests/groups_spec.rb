@@ -6,7 +6,7 @@ RSpec.describe 'Groups' do
   context 'when logged in' do
     let(:user) { create(:user) }
     let(:group) { create(:group) }
-    let(:group_params) { attributes_for(:group) }
+    let(:group_params) { build(:group).attributes.except('id', 'created_at', 'updated_at') }
 
     before do
       group.add(user, role: :admin)
