@@ -24,7 +24,7 @@ module TaskParameters
   end
 
   def group_tasks_params
-    params.permit(group_tasks: {group_ids: []})[:group_tasks]
+    params.require(:group_tasks).permit(group_ids: [])
   end
 
   def import_confirm_params

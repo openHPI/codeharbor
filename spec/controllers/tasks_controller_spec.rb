@@ -260,7 +260,7 @@ RSpec.describe TasksController do
       let(:valid_params) do
         {
           title: 'title',
-          descriptions_attributes: {'0' => {text: 'description', primary: true}},
+          description: 'description',
           programming_language_id: create(:programming_language, :ruby).id,
           license_id: create(:license),
           language: 'de',
@@ -387,13 +387,12 @@ RSpec.describe TasksController do
     let(:existing_label) { create(:label) }
     let(:new_label) { create(:label) }
 
-    let!(:task) { create(:task, valid_attributes) }
+    let!(:task) { create(:task, valid_attributes.merge(user:)) }
     let(:valid_attributes) do
       {
-        user:,
         title: 'title',
-        license: create(:license, name: 'old_license'),
-        labels: [existing_label],
+        license_id: create(:license, name: 'old_license').id,
+        label_names: [existing_label.name],
       }
     end
     let(:changed_attributes) do
@@ -471,9 +470,13 @@ RSpec.describe TasksController do
 
         let(:test) { build(:test) }
         let(:new_testing_framework) { create(:testing_framework) }
-        let!(:task) { create(:task, valid_attributes.merge(tests: [test])) }
+        let!(:task) { create(:task, valid_attributes.merge(tests: [test], user:)) }
 
-        let(:tests_attributes) { {'0': test.attributes.symbolize_keys.merge(title: 'new_test_title', testing_framework_id: new_testing_framework.id)} }
+        let(:tests_attributes) do
+          {'0': test.attributes.symbolize_keys
+            .except(:configuration, :created_at, :meta_data, :task_id, :updated_at)
+            .merge(title: 'new_test_title', testing_framework_id: new_testing_framework.id)}
+        end
 
         it 'updates the requested task' do
           expect { put_update }.to change { task.reload.title }.to('new_title')

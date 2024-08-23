@@ -24,8 +24,9 @@ module Users
 
     # PUT /resource
     def update
+      avatar_present = params.require(:user).delete(:avatar_present)
       super do |resource|
-        resource.avatar.purge if params[:user][:avatar].nil? && params[:user][:avatar_present] == 'false'
+        resource.avatar.purge if params[:user][:avatar].nil? && avatar_present == 'false'
         if resource.password_set_changed?
           # If a user tried to set a password but failed, we need to reset the password_set flag.
           # Further, we need to remove the current_password error, since the user didn't enter their current password.

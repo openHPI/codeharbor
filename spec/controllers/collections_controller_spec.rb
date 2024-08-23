@@ -6,7 +6,7 @@ RSpec.describe CollectionsController do
   render_views
 
   let(:valid_attributes) do
-    attributes_for(:collection)
+    build(:collection).attributes.except('id', 'created_at', 'updated_at')
   end
 
   let(:invalid_attributes) do
@@ -274,6 +274,11 @@ RSpec.describe CollectionsController do
 
     context 'with valid params' do
       let(:collection_params) { valid_attributes }
+      let(:collection_tasks_attributes) do
+        collection.collection_tasks.map do |collection_task|
+          collection_task.attributes.symbolize_keys.except(:collection_id, :created_at, :task_id, :updated_at)
+        end
+      end
 
       it 'assigns the requested collection as @collection' do
         put_update
@@ -296,8 +301,8 @@ RSpec.describe CollectionsController do
       context 'with new task order' do
         let(:collection_params) do
           {collection_tasks_attributes: {
-            '0': collection.collection_tasks.first.attributes.merge(rank: 0),
-            '1': collection.collection_tasks.second.attributes.merge(rank: 1),
+            '0': collection_tasks_attributes.first.merge(rank: 0),
+            '1': collection_tasks_attributes.second.merge(rank: 1),
           }}
         end
 
@@ -309,8 +314,8 @@ RSpec.describe CollectionsController do
       context 'when removing a task' do
         let(:collection_params) do
           {collection_tasks_attributes: {
-            '0': collection.collection_tasks.first.attributes.merge(rank: 0),
-            '1': collection.collection_tasks.second.attributes.merge(_destroy: 1),
+            '0': collection_tasks_attributes.first.merge(rank: 0),
+            '1': collection_tasks_attributes.second.merge(_destroy: 1),
           }}
         end
 

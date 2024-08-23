@@ -11,7 +11,7 @@ RSpec.describe AccountLinksController do
   let(:account_link) { create(:account_link, user:) }
   let(:account_link_from_another_user) { create(:account_link, user: another_user) }
 
-  let(:valid_attributes) { attributes_for(:account_link).merge(user:) }
+  let(:valid_attributes) { attributes_for(:account_link) }
   let(:invalid_attributes) do
     {api_key: ''}
   end
@@ -65,14 +65,14 @@ RSpec.describe AccountLinksController do
 
       context 'with valid attributes' do
         it 'updates the requested account_link' do
-          account_link = AccountLink.create! valid_attributes
+          account_link = AccountLink.create! valid_attributes.merge(user:)
           put :update, params: empty_params.merge(id: account_link.to_param, account_link: new_attributes)
           account_link.reload
           expect(account_link.api_key).to eq(new_attributes[:api_key])
         end
 
         it 'redirects to the user' do
-          account_link = AccountLink.create! valid_attributes
+          account_link = AccountLink.create! valid_attributes.merge(user:)
           put :update, params: empty_params.merge(id: account_link.to_param, account_link: valid_attributes)
           expect(response).to redirect_to(user)
         end
@@ -82,7 +82,7 @@ RSpec.describe AccountLinksController do
     describe 'DELETE #destroy' do
       include_examples 'destroy examples', klass: AccountLink, resource: :account_link
       it 'with valid attributes redirects to the user' do
-        account_link = AccountLink.create! valid_attributes
+        account_link = AccountLink.create! valid_attributes.merge(user:)
         delete :destroy, params: empty_params.merge(id: account_link.to_param)
         expect(response).to redirect_to(user)
       end

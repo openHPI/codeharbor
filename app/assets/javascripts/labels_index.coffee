@@ -174,7 +174,7 @@ class LabelsTable
           $.ajax({
             url: "/labels/#{id}",
             type: "PATCH",
-            data: {color: new_color}
+            data: {label: {color: new_color}}
           })
         );
       $.when.apply($, requests).then(@reload_table);
