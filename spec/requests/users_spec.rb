@@ -15,7 +15,7 @@ RSpec.describe 'Users' do
   end
 
   context 'when logged in' do
-    let(:user_params) { attributes_for(:user, current_password: user.password) }
+    let(:user_params) { attributes_for(:user, current_password: user.password).except(:confirmed_at) }
 
     before do
       sign_in user

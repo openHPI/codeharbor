@@ -3,7 +3,7 @@
     = render('shared/form_errors', object: @message)
 
     - if @recipient
-      = f.hidden_field :recipient_hidden, value: @recipient.id
+      = f.hidden_field :recipient_id, value: @recipient.id
     - else
       .field-element
         = f.label :recipient, Message.human_attribute_name('recipient'), class: 'form-label'

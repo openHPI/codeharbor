@@ -9,8 +9,8 @@ RSpec.describe 'Tasks' do
     let(:valid_params) do
       {
         title: 'title',
-        descriptions_attributes: {'0' => {text: 'description', primary: true}},
-        programming_language: create(:programming_language, :ruby).id,
+        description: 'description',
+        programming_language_id: create(:programming_language, :ruby).id,
         license_id: create(:license).id,
         language: 'de',
       }
@@ -19,8 +19,8 @@ RSpec.describe 'Tasks' do
     let(:update_params) do
       {
         title: 'new_title',
-        descriptions_attributes: {'0' => {text: 'description'}},
-        programming_language: create(:programming_language, :ruby).id,
+        description: 'description',
+        programming_language_id: create(:programming_language, :ruby).id,
         license_id: create(:license).id,
       }
     end

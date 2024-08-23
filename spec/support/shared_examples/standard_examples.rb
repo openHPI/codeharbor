@@ -20,7 +20,7 @@ end
 
 RSpec.shared_examples 'edit examples' do |klass:, resource:|
   it "assigns the requested #{resource} as @#{resource}" do
-    object = klass.create! valid_attributes
+    object = klass.create! valid_attributes.merge(user:)
     get :edit, params: empty_params.merge(id: object.to_param)
     expect(assigns(resource)).to eq(object)
   end
@@ -70,7 +70,7 @@ end
 RSpec.shared_examples 'update examples' do |klass:, resource:|
   context 'with valid params' do
     it "assigns the requested #{resource} as @#{resource}" do
-      object = klass.create! valid_attributes
+      object = klass.create! valid_attributes.merge(user:)
       put :update, params: empty_params.merge(:id => object.to_param, resource => valid_attributes)
       expect(assigns(resource)).to eq(object)
     end
@@ -78,13 +78,13 @@ RSpec.shared_examples 'update examples' do |klass:, resource:|
 
   context 'with invalid params' do
     it "assigns the #{resource} as @#{resource}" do
-      object = klass.create! valid_attributes
+      object = klass.create! valid_attributes.merge(user:)
       put :update, params: empty_params.merge(:id => object.to_param, resource => invalid_attributes)
       expect(assigns(resource)).to eq(object)
     end
 
     it "re-renders the 'edit' template" do
-      object = klass.create! valid_attributes
+      object = klass.create! valid_attributes.merge(user:)
       put :update, params: empty_params.merge(:id => object.to_param, resource => invalid_attributes)
       expect(response).to render_template('edit')
     end
@@ -93,7 +93,7 @@ end
 
 RSpec.shared_examples 'destroy examples' do |klass:, resource:|
   it "destroys the requested #{resource}" do
-    object = klass.create! valid_attributes
+    object = klass.create! valid_attributes.merge(user:)
     expect do
       delete :destroy, params: empty_params.merge(id: object.to_param)
     end.to change(klass, :count).by(-1)

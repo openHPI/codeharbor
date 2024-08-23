@@ -27,14 +27,11 @@ class MessagesController < ApplicationController
 
   # rubocop:disable Metrics/AbcSize
   def create
+    recipient = params.require(:message).delete(:recipient)
     @message = Message.new(message_params)
     @message.recipient_status = 'u'
     @message.sender = current_user
-    @message.recipient = if params[:message][:recipient]
-                           User.find_by(email: params[:message][:recipient])
-                         else
-                           User.find(params[:message][:recipient_hidden])
-                         end
+    @message.recipient = User.find_by(email: recipient) if recipient.present?
     authorize @message
 
     if @message.save
