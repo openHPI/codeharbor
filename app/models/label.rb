@@ -72,6 +72,10 @@ class Label < ApplicationRecord
     }.compact
   end
 
+  def to_s
+    name
+  end
+
   def self.ransackable_attributes(_auth_object = nil)
     %w[name]
   end
