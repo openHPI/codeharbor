@@ -3,7 +3,7 @@
   .form-control.placeholder
     = file.label :used_by_grader, TaskFile.human_attribute_name('used_by_grader'), class: 'form-label w-auto me-2'
     .radio-switch
-      = file.radio_button :used_by_grader, true, value: true
+      = file.radio_button :used_by_grader, true, value: true, checked: true
       = file.label :used_by_grader_true, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('common.button.yes'), class: 'radio-left small-radio radio-half' do
         span.fa-stack
           i.fa-solid.fa-check.fa-stack-1x.fa-2x

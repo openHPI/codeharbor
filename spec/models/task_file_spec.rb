@@ -9,6 +9,7 @@ RSpec.describe TaskFile do
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to belong_to(:fileable) }
     it { is_expected.to validate_presence_of(:xml_id) }
+    it { is_expected.to validate_inclusion_of(:visible).in_array(%w[yes no delayed]) }
 
     context 'with task which has another file with the same xml_id' do
       subject(:file) { task.files.first }

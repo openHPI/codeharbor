@@ -13,7 +13,7 @@ module GptService
     def execute
       file_name = "test#{@task.programming_language.file_extension}"
 
-      test_file = TaskFile.new(content: gpt_response, name: file_name, used_by_grader: true, visible: false, xml_id: SecureRandom.uuid)
+      test_file = TaskFile.new(content: gpt_response, name: file_name, used_by_grader: true, visible: 'no', xml_id: SecureRandom.uuid)
       test = Test.new(task: @task, title: I18n.t('tests.model.generated_test'), xml_id: SecureRandom.uuid, files: [test_file])
 
       @task.tests << test
