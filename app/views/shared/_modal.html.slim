@@ -1,20 +1,30 @@
-- root_attributes ||= {}
-- root_attributes[:id] ||= id
+- modal_root_attributes ||= {}
+- footer_button_attributes ||= {}
+- footer_button_text ||= 'Close'
 - title ||= ''
 - size ||= ''
 - header = true if header.nil?
-- footer_button_text ||= ''
+- footer = true if footer.nil?
+- custom_header = false if custom_header.nil?
+- custom_footer = false if custom_footer.nil?
 
-.modal.fade *root_attributes aria-hidden="true" tabindex="-1"
+
+.modal.fade *modal_root_attributes aria-hidden="true" tabindex="-1"
   .modal-dialog.modal-dialog-centered class=size
     .modal-content
-      - if header
+
+      - if custom_header
+        = yield :custom_modal_header
+      - elsif header
         .modal-header
           h6.modal-title = title
           button.btn-close data-bs-dismiss="modal" aria-label="Close"
 
-      = yield
+      .modal-body
+        = yield :modal_body
 
-      - if footer_button_text.blank?
+      - if custom_footer
+        = yield :custom_modal_footer
+      - elsif footer
         .modal-footer
-          button.btn.btn-light data-bs-dismiss="modal" = footer_button_text
+          button.btn.btn-light.m-0 *footer_button_attributes data-bs-dismiss="modal" = footer_button_text

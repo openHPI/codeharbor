@@ -159,7 +159,7 @@ $task-color: #6c757d;
   display: inline-flex;
 
   .task-star-rating {
-    font-size: 1.05em;
+    font-size: 1.2em;
     padding: 2px 3px;
   }
   .number-rating {
@@ -224,7 +224,7 @@ $task-color: #6c757d;
 
 .task-star-rating {
   white-space: nowrap;
-  font-size: 1.2em;
+  line-height: normal;
 }
 
 .task-rating-count {

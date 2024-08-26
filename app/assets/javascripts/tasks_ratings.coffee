@@ -17,6 +17,13 @@ find_entered_category_ratings = ->
   )
   return categories
 
+update_rating_modal_save_button = ->
+  valid = true;
+  for key,value of unsaved_category_ratings when value == 0
+    valid = false;
+  $('#ratingModalSaveButton').prop('disabled', !valid);
+
+
 reset_category_stars = (category) ->
   $(".task-star-rating[data-is-rating-input='true'][data-rating-category='#{category}'] .rating-star").each(->
       if $(this).data('rating') <= unsaved_category_ratings[category]
@@ -29,6 +36,7 @@ reset_unsaved_ratings = ->
   unsaved_category_ratings = Object.assign({}, current_category_ratings)
   for category of unsaved_category_ratings
     reset_category_stars(category)
+  update_rating_modal_save_button()
 
 initializeRatings = ->
   $(".task-star-rating[data-is-rating-input='true'] .rating-star").hover(->
@@ -54,13 +62,7 @@ initializeRatings = ->
 
     unsaved_category_ratings[clicked_category] = star_idx
 
-    valid = true;
-    for key,value of unsaved_category_ratings when value == 0
-      $('#ratingModalSaveButton').prop('disabled', true);
-      valid = false;
-
-    if valid
-      $('#ratingModalSaveButton').prop("disabled", false);
+    update_rating_modal_save_button()
   )
 
   $('#ratingModalSaveButton').click(->
