@@ -29,10 +29,10 @@
                   i.fas.fa-lock-open
                 - else
                   i.fas.fa-lock
-          span
+          span.d-inline-flex.align-items-center
             span.task-rating.rating-subcategories-trigger
-              span.number-rating
-                = task.overall_rating
+              span.number-rating-container
+                .number-rating = task.overall_rating
               = render('task_star_rating', rating: task.overall_rating, category: :overall_rating)
               .rating-subcategories-overlay
                 = render('rating_subcategories', task:)
