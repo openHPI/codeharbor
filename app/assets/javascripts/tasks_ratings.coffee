@@ -10,26 +10,26 @@ find_entered_category_ratings = ->
   categories = {}
 
   $('#ratingModal').find('.task-star-rating').each(->
-    category_name = $(this).data('rating-category');
-    category_value = $(this).find('.fa-solid').length;
+    category_name = $(this).data('rating-category')
+    category_value = $(this).find('.fa-solid').length
 
-    categories[category_name] = category_value;
+    categories[category_name] = category_value
   )
   return categories
 
 update_rating_modal_save_button = ->
-  valid = true;
-  for key,value of unsaved_category_ratings when value == 0
-    valid = false;
-  $('#ratingModalSaveButton').prop('disabled', !valid);
+  valid = true
+  for key, value of unsaved_category_ratings when value == 0
+    valid = false
+  $('#ratingModalSaveButton').prop('disabled', !valid)
 
 
 reset_category_stars = (category) ->
   $(".task-star-rating[data-is-rating-input='true'][data-rating-category='#{category}'] .rating-star").each(->
-      if $(this).data('rating') <= unsaved_category_ratings[category]
-        $(this).addClass('fa-solid').removeClass('fa-regular');
-      else
-        $(this).addClass('fa-regular').removeClass('fa-solid');
+    if $(this).data('rating') <= unsaved_category_ratings[category]
+      $(this).addClass('fa-solid').removeClass('fa-regular')
+    else
+      $(this).addClass('fa-regular').removeClass('fa-solid')
   )
 
 reset_unsaved_ratings = ->
@@ -40,12 +40,12 @@ reset_unsaved_ratings = ->
 
 initializeRatings = ->
   $(".task-star-rating[data-is-rating-input='true'] .rating-star").hover(->
-    $(this).prevAll().add(this).addClass('fa-solid').removeClass('fa-regular');
-    $(this).nextAll().addClass('fa-regular').removeClass('fa-solid');
+    $(this).prevAll().add(this).addClass('fa-solid').removeClass('fa-regular')
+    $(this).nextAll().addClass('fa-regular').removeClass('fa-solid')
   )
 
   $(".task-star-rating[data-is-rating-input='true']").mouseleave(->
-    category = $(this).data('rating-category');
+    category = $(this).data('rating-category')
     reset_category_stars(category)
   )
 
@@ -54,8 +54,8 @@ initializeRatings = ->
   )
 
   $(".task-star-rating[data-is-rating-input='true'] .rating-star").click(->
-    $(this).prevAll().add(this).addClass('fa-solid').removeClass('fa-regular');
-    $(this).nextAll().addClass('fa-regular').removeClass('fa-solid');
+    $(this).prevAll().add(this).addClass('fa-solid').removeClass('fa-regular')
+    $(this).nextAll().addClass('fa-regular').removeClass('fa-solid')
 
     clicked_category = $(this).parent().data('rating-category')
     star_idx = $(this).data('rating')
@@ -66,7 +66,7 @@ initializeRatings = ->
   )
 
   $('#ratingModalSaveButton').click(->
-    task_id = $('#ratingModal').data("task-id");
+    task_id = $('#ratingModal').data("task-id")
 
     $.ajax({
       type: "POST",
