@@ -97,6 +97,11 @@ const envConfig = module.exports = {
     stats: 'minimal',
 }
 
+// Enable working source maps in development mode, overwriting the default 'cheap-module-source-map'.
+if (webpackConfig.mode === 'development') {
+    envConfig.devtool = 'source-map';
+}
+
 // Use the following lines below to remove original plugins and replace them with our custom config.
 // This is especially needed for the `WebpackAssetsManifest` plugin, which would otherwise run twice.
 const customPlugins = envConfig.plugins.map((plugin) => plugin.constructor.name);
