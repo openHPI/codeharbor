@@ -19,7 +19,11 @@
             - if current_user && policy(Rating).new_for_task?(@task)
               .btn.btn-light.btn-sm#ratingModalOpenButton data-bs-toggle="modal" data-bs-target="#ratingModal"
                 = t('.button.rate')
-              = render 'rating_modal'
+              = render 'shared/modal',
+                    title: Rating.model_name.human,
+                    size: 'modal-sm',
+                    modal_root_attributes: {id: 'ratingModal', 'data-task-id': @task.id},
+                    template: 'tasks/_rating_modal'
 .row
   - section_index = 1
   .col-md-12.my-3
@@ -644,5 +648,8 @@
 
     #page_end.mt-5
 
-
-    = render 'tasks/import_export_dialog', title: t('.button.export_tasks')
+    = render 'shared/modal',
+            title: t('.button.export_tasks'),
+            modal_root_attributes: {id: 'import-export-dialog'},
+            modal_body_attributes: {id: 'import-export-modal-body'},
+            template: 'tasks/_import_export_dialog'
