@@ -33,6 +33,10 @@ class TaskContribution < ApplicationRecord
     end
   end
 
+  def self.parent_resource
+    Task
+  end
+
   def to_s
     I18n.t('task_contributions.model.contribution_title', task_title: base.title)
   end
