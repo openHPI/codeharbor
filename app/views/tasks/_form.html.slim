@@ -8,7 +8,7 @@
 .row
   .col-md-12.my-4
     - if @task.contribution?
-      - if action_name == 'show' || action_name == 'new'
+      - if action_name.in?(%w[new create show])
         - url = task_task_contributions_path(@task.parent)
       - else
         - url = task_task_contribution_path(@task.parent, @task.task_contribution)
