@@ -4,7 +4,7 @@ module TransferValues
   def excluded_attributes(entity_type)
     exclude = %w[id parent_id created_at task_id]
     if entity_type == 'task_file'
-      exclude.append('fileable_id')
+      exclude.append('fileable_id', 'fileable_type')
     else
       exclude.append('xml_id')
     end
