@@ -37,7 +37,7 @@ RSpec.describe Test do
   end
 
   describe '#transfer_multiple_entities' do
-    it_behaves_like 'transfer multiple entities', :test
-    it_behaves_like 'transfer files', :test
+    it_behaves_like 'transfer multiple entities', described_class
+    it_behaves_like 'transfer files', described_class
   end
 end
