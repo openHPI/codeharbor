@@ -38,7 +38,7 @@ RSpec.describe ModelSolution do
   end
 
   describe '#transfer_multiple_entities' do
-    it_behaves_like 'transfer multiple entities', :model_solution
-    it_behaves_like 'transfer files', :model_solution
+    it_behaves_like 'transfer multiple entities', described_class
+    it_behaves_like 'transfer files', described_class
   end
 end
