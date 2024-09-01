@@ -3,15 +3,17 @@
 # The primary logic is already covered by 'transfer multiple entities' this is just used to test the recursive call for files
 RSpec.shared_examples 'transfer files' do |model|
   def entities(model)
-    model.to_s.pluralize
+    model.name.underscore.pluralize.to_sym
   end
+
+  let(:model_factory) { model.name.underscore.to_sym }
 
   subject(:transfer_files) { task.transfer_multiple_entities(task.send(entities(model)), other_task.send(entities(model))) }
 
   let(:task) { create(:task) }
   let(:other_task) { create(:task, parent_uuid: task.uuid) }
-  let(:instance1) { build(model, internal_description: 'Instance 1') }
-  let(:instance2) { build(model, internal_description: 'Instance 2') }
+  let(:instance1) { build(model_factory, internal_description: 'Instance 1') }
+  let(:instance2) { build(model_factory, internal_description: 'Instance 2') }
 
   context 'when the entity exists in both tasks' do
     let(:file1) { build(:task_file, name: 'File 1') }

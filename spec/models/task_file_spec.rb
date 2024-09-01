@@ -219,6 +219,6 @@ RSpec.describe TaskFile do
   end
 
   describe '#transfer_multiple_entities' do
-    it_behaves_like 'transfer multiple entities', :task_file
+    it_behaves_like 'transfer multiple entities', described_class
   end
 end
