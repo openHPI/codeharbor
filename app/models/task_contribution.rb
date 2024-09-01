@@ -12,8 +12,7 @@ class TaskContribution < ApplicationRecord
 
   scope :for_task_uuid, ->(uuid) { joins(:suggestion).where(suggestion: {parent_uuid: uuid}) }
 
-  # TODO: Use `_prefix: true`
-  enum status: {pending: 0, closed: 1, merged: 2}, _default: :pending
+  enum :status, {pending: 0, closed: 1, merged: 2}, default: :pending, prefix: true
 
   def self.new_for(task, user)
     suggestion = task.clean_duplicate(user, change_title: false)
