@@ -587,7 +587,7 @@
           - edit_url = edit_task_task_contribution_path(@task.parent, @task.task_contribution)
         - else
           - edit_url = edit_task_path(@task)
-        - unless @task.contribution?
+        - if !@task.contribution? || @task.pending_contribution?
           = link_to edit_url, class: 'btn btn-important' do
             i.fa-solid.fa-pen-to-square
             =< t('common.button.edit')
