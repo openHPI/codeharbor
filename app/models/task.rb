@@ -140,9 +140,9 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def apply_contribution(contrib)
-    transfer_attributes(contrib.suggestion, %w[id parent_uuid access_level user_id uuid created_at])
-    transfer_multiple_entities(model_solutions, contrib.suggestion.model_solutions, 'model_solution')
-    transfer_multiple_entities(tests, contrib.suggestion.tests, 'test')
+    transfer_attributes(contrib.suggestion)
+    transfer_multiple_entities(model_solutions, contrib.suggestion.model_solutions)
+    transfer_multiple_entities(tests, contrib.suggestion.tests)
     contrib.status = :merged
     self.label_names = contrib.suggestion.label_names # TODO: Write a test that changes in labels are correctly applied.
     save && contrib.save
@@ -301,5 +301,9 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
     if parent && license_id_changed? && parent.license != license
       errors.add(:license, :cannot_change_on_duplicate)
     end
+  end
+
+  def excluded_attributes_from_transfer
+    %w[id parent_uuid access_level user_id uuid created_at]
   end
 end
