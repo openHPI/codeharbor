@@ -44,14 +44,14 @@ RSpec.describe TaskPolicy do
       context 'without gpt access token' do
         let(:openai_api_key) { nil }
 
-        it { is_expected.to forbid_only_actions %i[generate_test contribute] }
+        it { is_expected.to forbid_only_actions %i[generate_test] }
         it { is_expected.to permit_actions(generic_user_permissions) }
       end
 
       context 'with gpt access token' do
         let(:openai_api_key) { 'access_token' }
 
-        it { is_expected.to forbid_only_actions %i[generate_test contribute] }
+        it { is_expected.to permit_all_actions }
       end
     end
 
