@@ -77,7 +77,8 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
     where.missing(:task_contribution)
   }
   scope :pending_contribution, lambda {|user|
-    joins(:task_contribution).where(user:, task_contribution: {status: :pending})
+    # Since accessing any contribution that belongs to a non-public task doesn't work, we filter for the parent visibility.
+    joins(:task_contribution, :parent).where(user:, task_contribution: {status: :pending}, parent: access_level_public)
   }
   scope :created_before_days, ->(days) { where(created_at: days.to_i.days.ago.beginning_of_day..) if days.present? }
   scope :min_stars, ->(stars) { with_overall_rating.where('COALESCE(overall_rating, 0) >= ?', stars) }
