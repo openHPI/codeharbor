@@ -58,15 +58,14 @@ RSpec.describe TaskContributionsController do
     context 'when new task is invalid' do
       let(:task_params) { {title: ''} }
 
-      it 'shows a flash message' do
+      it 'shows validation errors' do
         post_request
-        expect(flash[:alert]).to eq(I18n.t('common.errors.model_not_saved', model: 'Task Contribution'))
+        expect(assigns(:task).errors.messages).to include(:title)
       end
 
-      it 'redirects to the original task' do
+      it 'renders the form again' do
         post_request
-        expect(response).to have_http_status(:redirect)
-        expect(response).to redirect_to(task)
+        expect(response).to render_template('tasks/new')
       end
     end
   end
