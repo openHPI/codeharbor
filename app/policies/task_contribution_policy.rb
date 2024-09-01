@@ -20,7 +20,7 @@ class TaskContributionPolicy < ApplicationPolicy
   end
 
   def discard_changes?
-    return no_one unless task_contribution.pending?
+    return no_one unless task_contribution.status_pending?
 
     record_owner? || admin?
   end
@@ -30,12 +30,12 @@ class TaskContributionPolicy < ApplicationPolicy
     # Simultaneously, the contributor can view it only while the contrib is still pending
     return true if Pundit.policy(@user, base).edit?
 
-    task_contribution.pending? && record_owner?
+    task_contribution.status_pending? && record_owner?
   end
 
   %i[approve_changes? reject_changes?].each do |action|
     define_method(action) do
-      return no_one unless task_contribution.pending?
+      return no_one unless task_contribution.status_pending?
 
       Pundit.policy(@user, base).edit?
     end
@@ -43,7 +43,7 @@ class TaskContributionPolicy < ApplicationPolicy
 
   %i[edit? update?].each do |action|
     define_method(action) do
-      return no_one unless task_contribution.pending?
+      return no_one unless task_contribution.status_pending?
 
       record_owner? || admin?
     end
