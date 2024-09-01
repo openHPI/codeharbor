@@ -15,11 +15,14 @@ class TaskFile < ApplicationRecord
   validates :parent_id, uniqueness: {scope: %i[fileable_id fileable_type]}, if: -> { parent_id.present? }
   validate :unique_xml_id, if: -> { !fileable.nil? && xml_id_changed? }
   validate :parent_validation_check
-  attr_accessor :use_attached_file, :file_marked_for_deletion
+  attr_accessor :use_attached_file, :file_marked_for_deletion, :parent_blob_id
 
+  before_validation :attach_parent_blob, if: -> { attachment.blank? && task&.contribution? && parent.present? && parent_blob_id.present? }
   before_save :remove_attachment
 
   def task
+    return nil unless fileable
+
     if fileable.is_a?(Task)
       # This file is directly attached to a task
       fileable
@@ -66,6 +69,13 @@ class TaskFile < ApplicationRecord
   end
 
   private
+
+  def attach_parent_blob
+    # The comparison of the blob ID is used as a safeguard to ensure updated files in a task contribution are not overwritten unintended.
+    return unless parent_blob_id.to_i == parent.attachment.blob.id
+
+    attachment.attach(parent.attachment.blob)
+  end
 
   def remove_attachment
     attachment.purge if use_attached_file != 'true' && attachment.present?

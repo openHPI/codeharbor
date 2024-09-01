@@ -1,3 +1,4 @@
+- parent_blob_id = file.object.attachment&.blob&.id
 - file_attached = file.object.attachment.attached?
 - show_attachment = file_attached || file.object.use_attached_file
 
@@ -11,7 +12,8 @@ a.btn.btn-main.btn-sm.toggle-input href='#'
       = file.text_area :content
   .attachment class="#{show_attachment ? '' : 'hide'}"
     = file.hidden_field :use_attached_file, value: show_attachment, class: 'use-attached-file'
-    - if file_attached
+    = file.hidden_field :parent_blob_id, value: parent_blob_id
+    - if file_attached && parent_blob_id
       .btn-group.attachment_present
         - if file.object.persisted? && file.object.attachment.image?
           = image_tag file.object.attachment.variant(resize_to_limit: [600, 600])
@@ -24,5 +26,5 @@ a.btn.btn-main.btn-sm.toggle-input href='#'
         - if file.object.persisted? && file.object.text_data?
           .extract-text.btn.btn-main data-file-id=file.object.id
             = t('.button.extract_text')
-    .alternative class="#{file_attached ? 'hide' : ''}"
+    .alternative class="#{file_attached && parent_blob_id ? 'hide' : ''}"
       = file.file_field :attachment, class: 'alternative-input form-control file-attachment'
