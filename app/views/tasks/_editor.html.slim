@@ -13,13 +13,15 @@ a.btn.btn-main.btn-sm.toggle-input href='#'
     = file.hidden_field :use_attached_file, value: show_attachment, class: 'use-attached-file'
     - if file_attached
       .btn-group.attachment_present
-        - if file.object.attachment.image?
+        - if file.object.persisted? && file.object.attachment.image?
           = image_tag file.object.attachment.variant(resize_to_limit: [600, 600])
-        - else
+        - elsif file.object.persisted?
           = link_to file.object.attachment.filename, download_attachment_task_file_path(file.object), class: 'btn btn-light border-right-0', 'data-turbolinks' => false
+        - else
+          .btn.btn-light.border-right-0.disabled = file.object.attachment.filename
         = link_to '#', class: 'btn btn-light reupload-attachment border-left-0 me-1', title: t('.button.upload_a_new_file') do
           i.fa-solid.fa-upload.text-secondary
-        - if file.object.text_data?
+        - if file.object.persisted? && file.object.text_data?
           .extract-text.btn.btn-main data-file-id=file.object.id
             = t('.button.extract_text')
     .alternative class="#{file_attached ? 'hide' : ''}"
