@@ -137,7 +137,7 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def pending_contribution?
-    contribution? && task_contribution.status == 'pending'
+    contribution? && task_contribution.status_pending?
   end
 
   def apply_contribution(contrib)
