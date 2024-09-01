@@ -60,7 +60,7 @@ class TaskPolicy < ApplicationPolicy
 
   def contribute?(check_other_contrib: true)
     return false if @user.blank? # Disallow contributing without an active session (anonymous user).
-    return false unless show? && !edit? # Contributing is only allowed if a user cannot make direct changes.
+    return false unless (show? && !edit?) || admin? # Contributing is only allowed if a user cannot make direct changes and is not an admin.
     return true unless check_other_contrib # Allow action, if existing contributions are irrelevant.
 
     # Contributing is only allowed if no other pending contributions exists.
