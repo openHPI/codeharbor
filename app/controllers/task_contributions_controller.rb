@@ -36,7 +36,7 @@ class TaskContributionsController < ApplicationController
 
   def index
     authorize @task, :edit?
-    @task_contributions = @task.contributions
+    @task_contributions = @task.contributions.order(created_at: :desc)
   end
 
   def show
