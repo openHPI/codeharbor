@@ -140,7 +140,7 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def apply_contribution(contrib)
-    transfer_attributes(contrib.suggestion, %w[id parent_uuid access_level user_id uuid created_at], has_files: true)
+    transfer_attributes(contrib.suggestion, %w[id parent_uuid access_level user_id uuid created_at])
     transfer_multiple_entities(model_solutions, contrib.suggestion.model_solutions, 'model_solution')
     transfer_multiple_entities(tests, contrib.suggestion.tests, 'test')
     contrib.status = :merged
