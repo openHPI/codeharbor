@@ -5,7 +5,7 @@ RSpec.shared_examples 'transfer multiple entities' do |model|
     model.to_s == 'task_file' ? 'files' : model.to_s.pluralize
   end
 
-  subject(:transfer_multiple) { task.transfer_multiple_entities(task.send(entities(model)), other_task.send(entities(model)), model.to_s) }
+  subject(:transfer_multiple) { task.transfer_multiple_entities(task.send(entities(model)), other_task.send(entities(model))) }
 
   let(:task) { create(:task) }
   let(:other_task) { create(:task, parent_uuid: task.uuid) }
