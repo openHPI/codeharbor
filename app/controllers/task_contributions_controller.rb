@@ -83,7 +83,8 @@ class TaskContributionsController < ApplicationController
       TaskContributionMailer.send_contribution_request(@task_contribution).deliver_later
       redirect_to [@task, @task_contribution], notice: t('common.notices.object_created', model: TaskContribution.model_name.human)
     else
-      redirect_to @task, alert: t('common.errors.model_not_saved', model: TaskContribution.model_name.human)
+      @task = @task_contribution.suggestion
+      render 'tasks/new'
     end
   end
 
