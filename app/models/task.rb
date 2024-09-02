@@ -239,6 +239,10 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
     title
   end
 
+  def policy_class
+    "#{klass}Policy".constantize
+  end
+
   def klass
     if contribution?
       TaskContribution

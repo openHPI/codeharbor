@@ -24,7 +24,7 @@ RSpec.describe TaskContributionPolicy do
       context 'when the original task is private' do
         let(:access_level) { 'private' }
 
-        it { is_expected.to permit_only_actions %i[discard_changes show update edit] }
+        it { is_expected.to permit_only_actions %i[discard_changes show update edit download] }
       end
 
       context 'when the original task is public' do
@@ -53,14 +53,22 @@ RSpec.describe TaskContributionPolicy do
       it { is_expected.to forbid_actions %i[create new update destroy] }
 
       context 'when the approval is pending' do
-        it { is_expected.to permit_only_actions %i[approve_changes reject_changes show] }
+        it { is_expected.to permit_only_actions %i[approve_changes reject_changes show download index] }
       end
 
       context 'when the approval is closed' do
         let(:contribution_approval_status) { 'closed' }
 
-        it { is_expected.to permit_only_actions %i[show] }
+        it { is_expected.to permit_only_actions %i[show download index] }
       end
     end
+  end
+
+  it 'specifies all policies also present for a task' do
+    contribution_policies = described_class.instance_methods(false).filter {|method| method.ends_with?('?') }
+    task_policies = TaskPolicy.instance_methods(false).filter {|method| method.ends_with?('?') }
+    expect(contribution_policies).to include(*task_policies),
+      'All policies for a task should also be present for a task contribution.' \
+      "Please ensure to implement the missing policies #{task_policies - contribution_policies}."
   end
 end
