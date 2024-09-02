@@ -13,6 +13,29 @@ RSpec.describe TaskContributionsController do
 
   before { sign_in user }
 
+  describe 'GET #index' do
+    subject(:get_request) { get :index, params: {task_id: task.id} }
+
+    context 'without any task contributions' do
+      before { get_request }
+
+      expect_assigns(task: :task, task_contributions: [])
+      expect_http_status(:success)
+      expect_template(:index)
+    end
+
+    context 'with task contributions' do
+      before do
+        contribution.save!
+        get_request
+      end
+
+      expect_assigns(task: :task, task_contributions: TaskContribution.all)
+      expect_http_status(:success)
+      expect_template(:index)
+    end
+  end
+
   describe 'GET #new' do
     it 'assigns a new task as @task' do
       get :new, params: {task_id: task.id}
