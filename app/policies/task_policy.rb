@@ -66,6 +66,12 @@ class TaskPolicy < ApplicationPolicy
     task.contributions.joins(:suggestion).where(suggestion: {user: @user}, status: :pending).none?
   end
 
+  %i[approve_changes? reject_changes? discard_changes?].each do |action|
+    define_method(action) do
+      no_one
+    end
+  end
+
   private
 
   def user_required?
