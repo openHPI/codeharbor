@@ -15,19 +15,13 @@
           p.text-secondary
             = t('.search.no_results_description')
 - @tasks.each do |task|
-  - if task.contribution?
-    - task_show_path = task_task_contribution_path(task.parent, task.task_contribution)
-    - task_edit_path = edit_task_task_contribution_path(task.parent, task.task_contribution)
-  - else
-    - task_show_path = task_path(task)
-    - task_edit_path = edit_task_path(task)
   .card.position-relative.my-5
     .card-header
       h6
         span.programming-language.align-middle.position-absolute.top-0.start-0.translate-middle-y.px-3.mx-3
           = task.programming_language&.language || t('.no_programming_language_selected')
         span.d-flex.justify-content-between.align-items-center.mt-2
-          = link_to task_show_path, class: 'card-task-title fw-bold' do
+          = link_to task.url_for(:show), class: 'card-task-title fw-bold' do
             = truncate(task.title, length: 100)
             - if @visibility == :owner
               span.visibility.align-middle
@@ -68,13 +62,13 @@
         .col-4.col-md-2.px-0
           .exercise-buttons.btn-group.float-end aria-label='...' role='group'
             - if policy(task).show?
-              = link_to task_show_path, class: 'btn btn-light', data: {bs_toggle: 'tooltip', bs_placement: 'top', bs_title: t('common.button.view')} do
+              = link_to task.url_for(:show), class: 'btn btn-light', data: {bs_toggle: 'tooltip', bs_placement: 'top', bs_title: t('common.button.view')} do
                 i.fas.fa-eye aria-hidden="true"
             - if policy(task).edit?
-              = link_to task_edit_path, class: 'btn btn-light', data: {bs_toggle: 'tooltip', bs_placement: 'top', bs_title: t('common.button.edit')} do
+              = link_to task.url_for(:edit), class: 'btn btn-light', data: {bs_toggle: 'tooltip', bs_placement: 'top', bs_title: t('common.button.edit')} do
                 i.fas.fa-edit aria-hidden="true"
             - if policy(task).destroy?
-              = link_to task_path(task), class: 'btn btn-light', method: :delete, data: {bs_toggle: 'tooltip', bs_placement: 'top', bs_title: t('common.button.delete'), confirm: t('common.sure')} do
+              = link_to task.url_for(:destroy), class: 'btn btn-light', method: :delete, data: {bs_toggle: 'tooltip', bs_placement: 'top', bs_title: t('common.button.delete'), confirm: t('common.sure')} do
                 i.fas.fa-trash-alt aria-hidden="true"
 
     .card-footer

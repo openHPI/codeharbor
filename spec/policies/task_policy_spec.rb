@@ -44,14 +44,14 @@ RSpec.describe TaskPolicy do
       context 'without gpt access token' do
         let(:openai_api_key) { nil }
 
-        it { is_expected.to forbid_only_actions %i[generate_test] }
+        it { is_expected.to forbid_only_actions %i[generate_test approve_changes discard_changes reject_changes] }
         it { is_expected.to permit_actions(generic_user_permissions) }
       end
 
       context 'with gpt access token' do
         let(:openai_api_key) { 'access_token' }
 
-        it { is_expected.to permit_all_actions }
+        it { is_expected.to forbid_only_actions %i[approve_changes discard_changes reject_changes] }
       end
     end
 
@@ -61,14 +61,14 @@ RSpec.describe TaskPolicy do
       context 'without gpt access token' do
         let(:openai_api_key) { nil }
 
-        it { is_expected.to forbid_only_actions %i[generate_test contribute] }
+        it { is_expected.to forbid_only_actions %i[generate_test contribute approve_changes discard_changes reject_changes] }
         it { is_expected.to permit_actions(generic_user_permissions + %i[edit update show export_external_start export_external_check export_external_confirm download add_to_collection duplicate]) }
       end
 
       context 'with gpt access token' do
         let(:openai_api_key) { 'access_token' }
 
-        it { is_expected.to forbid_only_actions %i[contribute] }
+        it { is_expected.to forbid_only_actions %i[contribute approve_changes discard_changes reject_changes] }
       end
     end
 
@@ -100,5 +100,13 @@ RSpec.describe TaskPolicy do
         end
       end
     end
+  end
+
+  it 'specifies all policies also present for a task contribution' do
+    task_policies = described_class.instance_methods(false).filter {|method| method.ends_with?('?') }
+    contribution_policies = TaskContributionPolicy.instance_methods(false).filter {|method| method.ends_with?('?') }
+    expect(task_policies).to include(*contribution_policies),
+      'All policies for a task contribution should also be present for a task.' \
+      "Please ensure to implement the missing policies #{contribution_policies - task_policies}."
   end
 end
