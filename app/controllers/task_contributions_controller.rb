@@ -35,7 +35,7 @@ class TaskContributionsController < ApplicationController
   end
 
   def index
-    @task_contributions = @task.contributions.order(created_at: :desc)
+    @task_contributions = @task.contributions.order(created_at: :desc).paginate(page: params[:page], per_page: per_page_param)
     policy(@task_contributions).index? base: @task
   end
 
