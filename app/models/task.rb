@@ -251,6 +251,12 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
   end
 
+  def url_for(action)
+    controller = klass.name&.underscore&.pluralize
+    id_options = contribution? ? {task_id: parent.id, id: task_contribution.id} : {id:}
+    Rails.application.routes.url_helpers.url_for(controller:, action:, **id_options, only_path: true)
+  end
+
   private
 
   def duplicate_tests(set_parent_id: true)
