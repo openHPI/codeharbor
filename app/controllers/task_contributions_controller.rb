@@ -35,8 +35,8 @@ class TaskContributionsController < ApplicationController
   end
 
   def index
-    authorize @task, :edit?
     @task_contributions = @task.contributions.order(created_at: :desc)
+    policy(@task_contributions).index? base: @task
   end
 
   def show
