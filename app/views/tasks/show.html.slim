@@ -583,72 +583,64 @@
 
     .actions.btn-group role='group'
       - if policy(@task).edit?
-        - if @task.pending_contribution?
-          - edit_url = edit_task_task_contribution_path(@task.parent, @task.task_contribution)
-        - else
-          - edit_url = edit_task_path(@task)
-        - if !@task.contribution? || @task.pending_contribution?
-          = link_to edit_url, class: 'btn btn-important' do
-            i.fa-solid.fa-pen-to-square
-            =< t('common.button.edit')
+        = link_to @task.url_for(:edit), class: 'btn btn-important', 'data-turbolinks': false do
+          i.fa-solid.fa-pen-to-square
+          =< t('common.button.edit')
       - if policy(@task).destroy?
         = link_to task_path(@task), class: 'btn btn-important', method: :delete, data: {confirm: t('common.sure')} do
           i.fa-solid.fa-trash-can
           =< t('common.button.delete')
-      - if @task.pending_contribution?
-        - if policy(@task.parent).edit?
-          = link_to approve_changes_task_task_contribution_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
-            i.fa-solid.fa-check
-            =< t('common.button.approve')
-          = link_to reject_changes_task_task_contribution_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
-            i.fa-solid.fa-xmark
-            =< t('common.button.reject')
+      - if policy(@task).approve_changes?
+        = link_to @task.url_for(:approve_changes), method: :post, class: 'btn btn-important' do
+          i.fa-solid.fa-check
+          =< t('common.button.approve')
+      - if policy(@task).reject_changes?
+        = link_to @task.url_for(:reject_changes), method: :post, class: 'btn btn-important' do
+          i.fa-solid.fa-xmark
+          =< t('common.button.reject')
+      - if policy(@task).discard_changes?
+        = link_to @task.url_for(:discard_changes), method: :post, class: 'btn btn-important' do
+          i.fa-solid.fa-link-slash
+          =< t('task_contributions.buttons.decouple')
+
+      - if policy(@task).contribute?(check_other_contrib: false)
+        - contributions = @task.contributions.joins(:suggestion).where(suggestion: {user: @current_user}, status: :pending)
+        - if contributions.any?
+          = link_to edit_task_task_contribution_path(@task, contributions.first), method: :get, class: 'btn btn-important' do
+            i.fa-regular.fa-edit
+            =< t('task_contributions.buttons.edit_contribution')
         - else
-          = link_to discard_changes_task_task_contribution_path(@task.parent, @task.task_contribution), method: :post, class: 'btn btn-important' do
-            i.fa-solid.fa-link-slash
-            =< t('task_contributions.buttons.decouple')
-      - unless @task.contribution?
-        - if policy(@task).contribute?(check_other_contrib: false)
-          - contributions = @task.contributions.joins(:suggestion).where(suggestion: {user: @current_user}, status: :pending)
-          - if contributions.any?
-            = link_to edit_task_task_contribution_path(@task, contributions.first), method: :get, class: 'btn btn-important' do
-              i.fa-regular.fa-edit
-              =< t('task_contributions.buttons.edit_contribution')
-          - else
-            = link_to new_task_task_contribution_path(@task), method: :get, class: 'btn btn-important' do
-              i.fa-regular.fa-edit
-              =< t('task_contributions.buttons.contribute')
-        - if @current_user.nil?
-          div[data-bs-toggle='tooltip' title=unavailable_tooltip data-bs-delay=150]
-            = link_to new_task_task_contribution_path(@task), method: :post, class: 'btn btn-important disabled' do
-              i.fa-regular.fa-clone
-              =< t('task_contributions.buttons.contribute')
+          = link_to new_task_task_contribution_path(@task), method: :get, class: 'btn btn-important' do
+            i.fa-regular.fa-edit
+            =< t('task_contributions.buttons.contribute')
+      - elsif @current_user.nil?
+        .btn-group data-bs-toggle='tooltip' title=unavailable_tooltip data-bs-delay=150
+          = link_to new_task_task_contribution_path(@task), method: :post, class: 'btn btn-important disabled' do
+            i.fa-regular.fa-clone
+            =< t('task_contributions.buttons.contribute')
 
-        - if policy(@task).duplicate?
-          = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important' do
-
+      - if policy(@task).duplicate?
+        = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important' do
+          i.fa-regular.fa-clone
+          =< t('common.button.duplicate')
+      - elsif @current_user.nil?
+        .btn-group data-bs-toggle='tooltip' title=unavailable_tooltip data-bs-delay=150
+          = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important disabled' do
             i.fa-regular.fa-clone
             =< t('common.button.duplicate')
-        - else
-          div[data-bs-toggle='tooltip' title=unavailable_tooltip data-bs-delay=150]
-            = link_to duplicate_task_path(@task), method: :post, class: 'btn btn-important disabled' do
-              i.fa-regular.fa-clone
-              =< t('common.button.duplicate')
+
       - if policy(@task).generate_test?
-        = link_to generate_test_task_path(@task),
-                method: :post,
-                class: 'btn btn-important' do
+        = link_to generate_test_task_path(@task), method: :post, class: 'btn btn-important' do
           i.fa-solid.fa-wand-magic-sparkles
           = t('.button.generate_test')
       - elsif policy(@task).update?
-        div data-bs-toggle='tooltip' title=t('.button.api_key_required') data-bs-delay=150
-          = link_to generate_test_task_path(@task),
-                  method: :post,
-                  class: 'btn btn-important disabled' do
+        .btn-group data-bs-toggle='tooltip' title=t('.button.api_key_required') data-bs-delay=150
+          = link_to generate_test_task_path(@task), method: :post, class: 'btn btn-important disabled' do
             i.fa-solid.fa-wand-magic-sparkles
             = t('.button.generate_test')
+
       - if current_user.present?
-        = link_to t('common.button.back'), tasks_path, class: 'btn btn-important'
+        = link_to t('common.button.back'), :back, class: 'btn btn-important'
 
     #page_end.mt-5
 
