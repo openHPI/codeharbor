@@ -8,6 +8,9 @@
 #   * development: Only needed for local development
 #
 
+# Disable seeding if there are already users in the database
+return if User.any?
+
 ['all', Rails.env].each do |seed|
   seed_file = Rails.root.join("db/seeds/#{seed}.rb")
   if seed_file.exist?
