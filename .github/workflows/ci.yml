@@ -66,19 +66,10 @@ jobs:
           cp config/database.yml.ci config/database.yml
           cp config/mnemosyne.yml.ci config/mnemosyne.yml
 
-      - name: Create database
+      - name: Prepare database
         env:
           RAILS_ENV: test
-        run: bundler exec rake db:schema:load
-      - name: Temporarily create pending SolidQueue migrations
-        # Dependabot might update the SolidQueue gem, which might include new migrations.
-        # However, Dependabot won't add the migrations nor run SolidQueue at all.
-        # Consequently, all tests would still pass and the dependency update would be merged.
-        # To prevent this, we temporarily create the pending migrations *after* the schema has been loaded.
-        # If a new migration was added, a `PendingMigrationError` will be raised and the CI will fail.
-        env:
-          RAILS_ENV: test
-        run: bundler exec rails solid_queue:install:migrations
+        run: bundler exec rake db:prepare
       - name: Precompile assets
         env:
           RAILS_ENV: test
