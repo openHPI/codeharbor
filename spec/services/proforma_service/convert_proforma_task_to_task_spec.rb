@@ -579,9 +579,12 @@ RSpec.describe ProformaService::ConvertProformaTaskToTask do
 
     context 'when proforma_task has been exported from task' do
       let(:proforma_task) { ProformaService::ConvertTaskToProformaTask.call(task:) }
-      let(:task) { create(:task, files: build_list(:task_file, 1, :exportable), tests:, model_solutions:, title: 'title') }
-      let(:tests) { build_list(:test, 1, files: build_list(:task_file, 1, :exportable)) }
-      let(:model_solutions) { build_list(:model_solution, 1, files: build_list(:task_file, 1, :exportable)) }
+      let(:task) { create(:task, files: task_files, tests:, model_solutions:, title: 'title') }
+      let(:task_files) { build_list(:task_file, 1, :exportable, internal_description: 'original task file') }
+      let(:tests) { build_list(:test, 1, files: test_files) }
+      let(:test_files) { build_list(:task_file, 1, :exportable, internal_description: 'original test file') }
+      let(:model_solutions) { build_list(:model_solution, 1, files: model_solution_files) }
+      let(:model_solution_files) { build_list(:task_file, 1, :exportable, internal_description: 'original model-solution file') }
 
       it { is_expected.to be_an_equal_task_as task }
 
@@ -600,6 +603,100 @@ RSpec.describe ProformaService::ConvertProformaTaskToTask do
             files: include(have_attributes(id: tests.first.files.first.id))
           )))
         )
+      end
+
+      context 'when files have been move around' do
+        before do
+          task_file = proforma_task.files.first
+          test_file = proforma_task.tests.first.files.first
+          model_solution_file = proforma_task.model_solutions.first.files.first
+          proforma_task.files = [model_solution_file]
+          proforma_task.tests.first.files = [task_file]
+          proforma_task.model_solutions.first.files = [test_file]
+        end
+
+        it 'imports taskfiles correctly' do
+          expect(convert_to_task_service.files.first).to have_attributes(
+            id: model_solution_files.first.id,
+            internal_description: model_solution_files.first.internal_description
+          )
+        end
+
+        it 'imports testfiles correctly' do
+          expect(convert_to_task_service.tests.first.files.first).to have_attributes(
+            id: task_files.first.id,
+            internal_description: task_files.first.internal_description
+          )
+        end
+
+        it 'imports msfiles correctly' do
+          expect(convert_to_task_service.model_solutions.first.files.first).to have_attributes(
+            id: test_files.first.id,
+            internal_description: test_files.first.internal_description
+          )
+        end
+
+        it 'imports everything correctly' do
+          expect(convert_to_task_service).to have_attributes(
+            id: task.id,
+            files: have(1).item.and(include(have_attributes(
+                                              id: model_solution_files.first.id
+                                            ))),
+            model_solutions: have(1).item.and(include(have_attributes(
+              id: model_solutions.first.id,
+              files: include(have_attributes(id: test_files.first.id))
+            ))),
+            tests: have(1).item.and(include(have_attributes(
+              id: tests.first.id,
+              files: include(have_attributes(id: task_files.first.id))
+            )))
+          )
+        end
+
+        context 'when imported task is persisted' do
+          before do
+            convert_to_task_service.save
+            task.reload
+          end
+
+          it 'imports taskfiles correctly' do
+            expect(task.files.first).to have_attributes(
+              id: model_solution_files.first.id,
+              internal_description: model_solution_files.first.internal_description
+            )
+          end
+
+          it 'imports testfiles correctly' do
+            expect(task.tests.first.files.first).to have_attributes(
+              id: task_files.first.id,
+              internal_description: task_files.first.internal_description
+            )
+          end
+
+          it 'imports msfiles correctly' do
+            expect(task.model_solutions.first.files.first).to have_attributes(
+              id: test_files.first.id,
+              internal_description: test_files.first.internal_description
+            )
+          end
+
+          it 'imports everything correctly' do
+            expect(task).to have_attributes(
+              id: task.id,
+              files: have(1).item.and(include(have_attributes(
+                                                id: model_solution_files.first.id
+                                              ))),
+              model_solutions: have(1).item.and(include(have_attributes(
+                id: model_solutions.first.id,
+                files: include(have_attributes(id: test_files.first.id))
+              ))),
+              tests: have(1).item.and(include(have_attributes(
+                id: tests.first.id,
+                files: include(have_attributes(id: task_files.first.id))
+              )))
+            )
+          end
+        end
       end
     end
   end
