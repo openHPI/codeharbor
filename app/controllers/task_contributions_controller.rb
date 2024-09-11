@@ -75,8 +75,6 @@ class TaskContributionsController < ApplicationController
       external_resources: @task.external_resources,
       grading_hints: @task.grading_hints
     )
-    # TODO: Write a test, ensuring that the four previously-added dachsfisch-data are correctly set for a new contrib
-    # TODO: Ensure that accepting the task contrib also updates the four attributes (if changed)
     authorize @task_contribution
 
     if @task_contribution.save(context: :force_validations)
