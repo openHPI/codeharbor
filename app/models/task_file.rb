@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class TaskFile < ApplicationRecord
-  belongs_to :fileable, polymorphic: true
+  belongs_to :fileable, polymorphic: true, autosave: true, inverse_of: :files
 
   has_one_attached :attachment
   validates :name, presence: true

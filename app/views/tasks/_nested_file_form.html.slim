@@ -1,5 +1,5 @@
 .field-element
-  = f.nested_fields_for :files do |file|
+  = f.nested_fields_for :files, class_name: TaskFile do |file|
     .show-table.exercise-show
       - if file.object.new_record?
         - display_container_class = '' # rubocop:disable Lint/UselessAssignment

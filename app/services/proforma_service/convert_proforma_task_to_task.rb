@@ -7,6 +7,7 @@ module ProformaService
       @proforma_task = proforma_task
       @user = user
       @task = task || Task.new
+      @all_files = @task.all_files
       @file_xml_ids = []
     end
 
@@ -34,9 +35,10 @@ module ProformaService
         grading_hints: @proforma_task.grading_hints,
 
         tests:,
-        model_solutions:,
-        files:
+        model_solutions:
       )
+      upsert_files @proforma_task, @task
+      delete_removed_files
     end
 
     def parent_uuid
@@ -55,13 +57,13 @@ module ProformaService
       Kramdown::Document.new(@proforma_task.description || '', html_to_native: true, line_width: -1).to_kramdown.strip
     end
 
-    def files
-      @proforma_task.files.map {|task_file| file_from_proforma_file(task_file) }
+    def upsert_files(collection, fileable)
+      collection.files.map {|task_file| upsert_file_from_proforma_file(task_file, fileable) }
     end
 
-    def file_from_proforma_file(proforma_task_file)
-      task_file = @task&.all_files&.select {|file| file.xml_id == proforma_task_file.id }&.first || TaskFile.new
-      task_file.assign_attributes(file_attributes(proforma_task_file))
+    def upsert_file_from_proforma_file(proforma_task_file, fileable)
+      task_file = ch_record_for(@all_files, proforma_task_file.id) || TaskFile.new
+      task_file.assign_attributes(file_attributes(proforma_task_file, fileable))
       attach_file_content(proforma_task_file, task_file)
       task_file
     end
@@ -88,7 +90,7 @@ module ProformaService
       "#{xml_id}-#{offset}"
     end
 
-    def file_attributes(proforma_task_file)
+    def file_attributes(proforma_task_file, fileable)
       xml_id = xml_file_id proforma_task_file.id
       @file_xml_ids << xml_id
       {
@@ -99,22 +101,23 @@ module ProformaService
         usage_by_lms: proforma_task_file.usage_by_lms,
         mime_type: proforma_task_file.mimetype,
         xml_id:,
+        fileable:,
       }
     end
 
     def tests
       @proforma_task.tests.map do |test|
-        @task.tests.find_or_initialize_by(xml_id: test.id).tap do |ch_test|
-          ch_test.assign_attributes(
-            title: test.title,
-            description: test.description,
-            internal_description: test.internal_description,
-            test_type: test.test_type,
-            meta_data: test.meta_data,
-            configuration: test.configuration,
-            files: test.files.map {|task_file| file_from_proforma_file(task_file) }
-          )
-        end
+        ch_test = ch_record_for(@task.tests, test.id) || Test.new(xml_id: test.id)
+        upsert_files test, ch_test
+        ch_test.assign_attributes(
+          title: test.title,
+          description: test.description,
+          internal_description: test.internal_description,
+          test_type: test.test_type,
+          meta_data: test.meta_data,
+          configuration: test.configuration
+        )
+        ch_test
       end
     end
 
@@ -135,14 +138,22 @@ module ProformaService
 
     def model_solutions
       @proforma_task.model_solutions.map do |model_solution|
-        @task.model_solutions.find_or_initialize_by(xml_id: model_solution.id).tap do |ch_model_solution|
-          ch_model_solution.assign_attributes(
-            description: model_solution.description,
-            internal_description: model_solution.internal_description,
-            files: model_solution.files.map {|task_file| file_from_proforma_file(task_file) }
-          )
-        end
+        ch_model_solution = ch_record_for(@task.model_solutions, model_solution.id) || ModelSolution.new(xml_id: model_solution.id)
+        upsert_files model_solution, ch_model_solution
+        ch_model_solution.assign_attributes(
+          description: model_solution.description,
+          internal_description: model_solution.internal_description
+        )
+        ch_model_solution
       end
+    end
+
+    def ch_record_for(collection, xml_id)
+      collection.select {|record| record.xml_id == xml_id }&.first
+    end
+
+    def delete_removed_files
+      @all_files.reject {|file| @file_xml_ids.include? file.xml_id }.each(&:destroy)
     end
   end
 end

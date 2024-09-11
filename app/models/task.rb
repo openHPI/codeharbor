@@ -3,6 +3,7 @@
 require 'nokogiri'
 require 'zip'
 class Task < ApplicationRecord
+  include FileConcern
   acts_as_taggable_on :state
 
   before_validation :lowercase_language
@@ -15,16 +16,14 @@ class Task < ApplicationRecord
   validates :language, format: {with: /\A[a-zA-Z]{1,8}(-[a-zA-Z0-9]{1,8})*\z/, message: :not_de_or_us}
   validate :primary_language_tag_in_iso639?
 
-  has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy
-
   has_many :group_tasks, dependent: :destroy
   has_many :groups, through: :group_tasks
 
   has_many :task_labels, dependent: :destroy
   has_many :labels, through: :task_labels
 
-  has_many :tests, dependent: :destroy
-  has_many :model_solutions, dependent: :destroy
+  has_many :tests, dependent: :destroy, inverse_of: :task
+  has_many :model_solutions, dependent: :destroy, inverse_of: :task
 
   has_many :collection_tasks, dependent: :destroy
   has_many :collections, through: :collection_tasks
@@ -36,7 +35,6 @@ class Task < ApplicationRecord
   belongs_to :programming_language, optional: true
   belongs_to :license, optional: true
 
-  accepts_nested_attributes_for :files, allow_destroy: true
   accepts_nested_attributes_for :tests, allow_destroy: true
   accepts_nested_attributes_for :model_solutions, allow_destroy: true
   accepts_nested_attributes_for :group_tasks, allow_destroy: true
