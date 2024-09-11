@@ -14,7 +14,7 @@
         - url = task_task_contribution_path(@task.parent, @task.task_contribution)
     - else
       - url = nil
-    = simple_form_for @task, url:, html: { multipart: true}, builder: MarkdownFormBuilder do |f|
+    = simple_form_for @task, url:, html: {multipart: true}, builder: MarkdownFormBuilder do |f|
       = render('shared/form_errors', object: @task)
       fieldset.form-group
         legend.toggle-next
