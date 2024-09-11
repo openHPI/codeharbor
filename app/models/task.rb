@@ -140,12 +140,14 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
     contribution? && task_contribution.status_pending?
   end
 
-  def apply_contribution(contrib)
+  def apply_contribution(contrib) # rubocop:disable Metrics/AbcSize
+    return false unless contrib.status_pending? && uuid == contrib.suggestion.parent_uuid
+
     transfer_attributes(contrib.suggestion)
     transfer_multiple_entities(model_solutions, contrib.suggestion.model_solutions)
     transfer_multiple_entities(tests, contrib.suggestion.tests)
     contrib.status = :merged
-    self.label_names = contrib.suggestion.label_names # TODO: Write a test that changes in labels are correctly applied.
+    self.label_names = contrib.suggestion.label_names
     save && contrib.save
   end
 
@@ -276,9 +278,6 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
   end
 
   def handle_contributions_on_destroy
-    # TODO: Write tests for this method
-    # TODO: Include in this tests that a rollback occurs if an exception occurs.
-    # task_contributions.loaded?
     contributions.each do |contribution|
       case contribution.status.to_sym
         when :pending
