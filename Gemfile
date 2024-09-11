@@ -51,7 +51,7 @@ gem 'whenever', require: false
 gem 'devise', '~> 4.9'
 gem 'omniauth', '~> 2.1'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
-gem 'omniauth-saml', '~> 2.0'
+gem 'omniauth-saml', '~> 2.2'
 
 # Authorization
 gem 'pundit'
