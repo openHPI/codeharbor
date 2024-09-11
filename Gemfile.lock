@@ -297,9 +297,9 @@ GEM
     omniauth-rails_csrf_protection (1.0.2)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
-    omniauth-saml (2.1.0)
-      omniauth (~> 2.0)
-      ruby-saml (~> 1.12)
+    omniauth-saml (2.2.0)
+      omniauth (~> 2.1)
+      ruby-saml (~> 1.17)
     orm_adapter (0.5.0)
     package_json (0.1.0)
     parallel (1.26.3)
@@ -632,7 +632,7 @@ DEPENDENCIES
   nokogiri
   omniauth (~> 2.1)
   omniauth-rails_csrf_protection (~> 1.0)
-  omniauth-saml (~> 2.0)
+  omniauth-saml (~> 2.2)
   pg
   proformaxml (~> 1.5.1)
   pry-byebug
