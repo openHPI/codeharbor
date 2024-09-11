@@ -605,6 +605,50 @@ RSpec.describe ProformaService::ConvertProformaTaskToTask do
         )
       end
 
+      context 'when files have been deleted' do
+        context 'when task files have been deleted' do
+          before { task.files = [] }
+
+          it 'imports task files correctly' do
+            expect(convert_to_task_service.files).to be_empty
+          end
+
+          it 'saves the task correctly' do
+            convert_to_task_service.save
+            task.reload
+            expect(task.files).to be_empty
+          end
+        end
+
+        context 'when test files have been deleted' do
+          before { task.tests.first.files = [] }
+
+          it 'imports test files correctly' do
+            expect(convert_to_task_service.tests.first.files).to be_empty
+          end
+
+          it 'saves the task correctly' do
+            convert_to_task_service.save
+            task.reload
+            expect(task.tests.first.files).to be_empty
+          end
+        end
+
+        context 'when model solution files have been deleted' do
+          before { task.model_solutions.first.files = [] }
+
+          it 'imports model solution files correctly' do
+            expect(convert_to_task_service.model_solutions.first.files).to be_empty
+          end
+
+          it 'saves the task correctly' do
+            convert_to_task_service.save
+            task.reload
+            expect(task.model_solutions.first.files).to be_empty
+          end
+        end
+      end
+
       context 'when files have been move around' do
         before do
           task_file = proforma_task.files.first
