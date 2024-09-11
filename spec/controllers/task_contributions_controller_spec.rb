@@ -5,10 +5,11 @@ require 'rails_helper'
 RSpec.describe TaskContributionsController do
   render_views
 
-  let(:user) { create(:user) }
+  let(:contribution_user) { create(:user) }
+  let(:user) { contribution_user }
   let(:original_author) { create(:user) }
   let!(:task) { create(:task, user: original_author, access_level: 'public') }
-  let(:contrib_task) { build(:task, user:, title: 'Modified title', parent_uuid: task.uuid) }
+  let(:contrib_task) { build(:task, user: contribution_user, title: 'Modified title', parent_uuid: task.uuid) }
   let(:contribution) { build(:task_contribution, suggestion: contrib_task, base: task, status: :pending) }
 
   before { sign_in user }
