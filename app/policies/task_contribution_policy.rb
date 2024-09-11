@@ -25,10 +25,11 @@ class TaskContributionPolicy < ApplicationPolicy
   end
 
   def index?(base: nil)
+    # This should be fine, because there is no base task without an instance of TaskContribution.
     return everyone if @record == TaskContribution
 
-    if base.blank?
-      contribution = @record.try(:last) || @record
+    if base.blank? # Try to determine the base task from the record.
+      contribution = @record.try(:last) || @record # Get a random contribution if @record is a collection otherwise use @record.
       base = contribution.try(:base)
       return no_one unless base
     end

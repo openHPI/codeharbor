@@ -36,7 +36,7 @@ class TaskContributionsController < ApplicationController
 
   def index
     @task_contributions = @task.contributions.order(created_at: :desc).paginate(page: params[:page], per_page: per_page_param)
-    policy(@task_contributions).index? base: @task
+    raise Pundit::NotAuthorizedError unless policy(TaskContribution).index? base: @task
   end
 
   def show
