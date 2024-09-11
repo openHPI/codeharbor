@@ -147,6 +147,15 @@ RSpec.describe TaskFile do
     it 'has the same attributes' do
       expect(duplicate).to have_attributes(file.attributes.except('created_at', 'updated_at', 'id', 'parent_id'))
     end
+
+    context 'when the file has an attachment' do
+      let(:file) { create(:task_file, :with_attachment) }
+
+      it 'copies the attachment' do
+        expect(duplicate.attachment).to be_attached
+        expect(duplicate.attachment.blob).to have_attributes(file.attachment.blob.attributes.except('filename'))
+      end
+    end
   end
 
   describe '#remove_attachment hook' do
