@@ -535,4 +535,59 @@ RSpec.describe Task do
       end
     end
   end
+
+  describe '#apply_contribution' do
+    subject(:apply_contribution) { task.apply_contribution(contribution) }
+
+    let(:task) { create(:task) }
+    let(:contribution) { create(:task_contribution, base: task) }
+    before do
+      contribution.suggestion.title = 'New title'
+      contribution.suggestion.meta_data = 'New meta data'
+      contribution.suggestion.submission_restrictions = 'New submission restrictions'
+      contribution.suggestion.external_resources = 'New external resources'
+      contribution.suggestion.grading_hints = 'New grading hints'
+    end
+    context 'when the contribution is pending' do
+      it 'applies the contribution' do
+        expect(apply_contribution).to be(true)
+      end
+
+      it 'closes the contribution' do
+        apply_contribution
+        expect(contribution.status_merged?).to be(true)
+      end
+
+      it 'transfers the metadata' do
+        apply_contribution
+        expect(task.meta_data).to eq('New meta data')
+        expect(task.submission_restrictions).to eq('New submission restrictions')
+        expect(task.external_resources).to eq('New external resources')
+        expect(task.grading_hints).to eq('New grading hints')
+      end
+
+      it 'transfers the labels' do
+        label = create(:label)
+        contribution.suggestion.labels << label
+        apply_contribution
+        expect(task.labels).to contain_exactly(label)
+      end
+
+      it 'transfers the attributes' do
+        # The attributes are tested separately, therefore we only test one here
+        apply_contribution
+        expect(task.title).to eq('New title')
+      end
+    end
+
+    context 'when the contribution is closed' do
+      before do
+        contribution.close
+      end
+
+      it 'does not apply the contribution' do
+        expect(apply_contribution).to be(false)
+      end
+    end
+  end
 end

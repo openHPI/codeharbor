@@ -72,6 +72,14 @@ RSpec.describe TaskContributionsController do
         expect(suggestion.task_contribution.status).to eq('pending')
       end
 
+      it 'keeps the original task metadata' do
+        post_request
+        expect(suggestion.meta_data).to eq(task.meta_data)
+        expect(suggestion.submission_restrictions).to eq(task.submission_restrictions)
+        expect(suggestion.external_resources).to eq(task.external_resources)
+        expect(suggestion.grading_hints).to eq(task.grading_hints)
+      end
+
       it 'redirects to the created task' do
         post_request
         expect(response).to have_http_status(:redirect)
