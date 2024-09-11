@@ -541,6 +541,7 @@ RSpec.describe Task do
 
     let(:task) { create(:task) }
     let(:contribution) { create(:task_contribution, base: task) }
+
     before do
       contribution.suggestion.title = 'New title'
       contribution.suggestion.meta_data = 'New meta data'
@@ -548,6 +549,7 @@ RSpec.describe Task do
       contribution.suggestion.external_resources = 'New external resources'
       contribution.suggestion.grading_hints = 'New grading hints'
     end
+
     context 'when the contribution is pending' do
       it 'applies the contribution' do
         expect(apply_contribution).to be(true)
