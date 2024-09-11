@@ -16,10 +16,3 @@ test:
 
 production:
   <<: *default
-  dispatchers:
-    - polling_interval: 1
-      batch_size: 500
-      recurring_tasks:
-        nbp_sync_all_job:
-          class: NbpSyncAllJob
-          schedule: "0 3 * * *"
