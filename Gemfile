@@ -41,6 +41,7 @@ gem 'sassc-rails'
 gem 'shakapacker', '8.0.2'
 gem 'simple_form'
 gem 'slim-rails'
+gem 'solid_cable'
 gem 'solid_queue'
 gem 'sprockets-rails'
 gem 'terser', require: false
