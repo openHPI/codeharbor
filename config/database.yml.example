@@ -29,8 +29,13 @@ default: &default
   <% end %>
 
 development:
-  <<: *default
-  database: codeharbor_development
+  primary: &primary_development
+    <<: *default
+    database: codeharbor_development
+  cable:
+    <<: *primary_development
+    database: codeharbor_development_cable
+    migrations_paths: db/cable_migrate
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -56,5 +61,10 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  <<: *default
-  database: codeharbor_production
+  primary: &primary_production
+    <<: *default
+    database: codeharbor_production
+  cable:
+    <<: *primary_production
+    database: codeharbor_production_cable
+    migrations_paths: db/cable_migrate
