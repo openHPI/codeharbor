@@ -8,7 +8,7 @@ RSpec.describe TaskContributionsController do
   let(:contribution_user) { create(:user) }
   let(:user) { contribution_user }
   let(:original_author) { create(:user) }
-  let!(:task) { create(:task, user: original_author, access_level: 'public') }
+  let!(:task) { create(:task, :with_meta_data, :with_submission_restrictions, :with_external_resources, :with_grading_hints, user: original_author, access_level: 'public') }
   let(:contrib_task) { build(:task, user: contribution_user, title: 'Modified title', parent_uuid: task.uuid) }
   let(:contribution) { build(:task_contribution, suggestion: contrib_task, base: task, status: :pending) }
 
@@ -16,6 +16,8 @@ RSpec.describe TaskContributionsController do
 
   describe 'GET #index' do
     subject(:get_request) { get :index, params: {task_id: task.id} }
+
+    let(:user) { original_author }
 
     context 'without any task contributions' do
       before { get_request }
