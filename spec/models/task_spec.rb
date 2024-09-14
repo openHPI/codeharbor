@@ -542,12 +542,17 @@ RSpec.describe Task do
     let(:task) { create(:task) }
     let(:contribution) { create(:task_contribution, base: task) }
 
+    let(:meta_data) { attributes_for(:task, :with_meta_data)[:meta_data] }
+    let(:submission_restrictions) { attributes_for(:task, :with_submission_restrictions)[:submission_restrictions] }
+    let(:external_resources) { attributes_for(:task, :with_external_resources)[:external_resources] }
+    let(:grading_hints) { attributes_for(:task, :with_grading_hints)[:grading_hints] }
+
     before do
       contribution.suggestion.title = 'New title'
-      contribution.suggestion.meta_data = 'New meta data'
-      contribution.suggestion.submission_restrictions = 'New submission restrictions'
-      contribution.suggestion.external_resources = 'New external resources'
-      contribution.suggestion.grading_hints = 'New grading hints'
+      contribution.suggestion.meta_data = meta_data
+      contribution.suggestion.submission_restrictions = submission_restrictions
+      contribution.suggestion.external_resources = external_resources
+      contribution.suggestion.grading_hints = grading_hints
     end
 
     context 'when the contribution is pending' do
@@ -562,10 +567,10 @@ RSpec.describe Task do
 
       it 'transfers the metadata' do
         apply_contribution
-        expect(task.meta_data).to eq('New meta data')
-        expect(task.submission_restrictions).to eq('New submission restrictions')
-        expect(task.external_resources).to eq('New external resources')
-        expect(task.grading_hints).to eq('New grading hints')
+        expect(task.meta_data).to eq meta_data
+        expect(task.submission_restrictions).to eq submission_restrictions
+        expect(task.external_resources).to eq external_resources
+        expect(task.grading_hints).to eq grading_hints
       end
 
       it 'transfers the labels' do
