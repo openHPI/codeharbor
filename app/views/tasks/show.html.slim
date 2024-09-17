@@ -523,7 +523,7 @@
         => t('.button.show_comments')
         span.fa-solid.fa-circle-notch.fa-spin.wait.me-1.hide
         span.fa-solid.fa-caret-down.my-caret
-      .comment-box.with-borders.border-top-0 data-task=@task.id
+      .comment-box.with-borders.border-top-0.hide data-task=@task.id
         = form_for :comment, url: task_comments_path(@task), remote: true do |f|
           .write-comment
             - if policy(Comment).new?
