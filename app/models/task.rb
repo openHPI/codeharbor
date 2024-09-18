@@ -53,14 +53,14 @@ class Task < ApplicationRecord
                          public: public_access,
                        }.fetch(visibility, public_access)
                      }
-  scope :created_before_days, ->(days) { where(created_at: days.to_i.days.ago.beginning_of_day..) if days.to_i.positive? }
-  scope :min_stars, lambda {|stars|
-                      joins('LEFT JOIN (SELECT task_id, AVG(overall_rating) AS avg_overall_rating FROM ratings GROUP BY task_id)
-                             AS ratings ON ratings.task_id = tasks.id')
-                        .where('COALESCE(avg_overall_rating, 0) >= ?', stars)
-                    }
-  scope :sort_by_overall_rating_asc, -> { overall_rating.order(overall_rating: :asc) }
-  scope :sort_by_overall_rating_desc, -> { overall_rating.order(overall_rating: :desc) }
+  scope :created_before_days, ->(days) { where(created_at: days.to_i.days.ago.beginning_of_day..) if days.present? }
+  scope :min_stars, ->(stars) { with_overall_rating.where('COALESCE(overall_rating, 0) >= ?', stars) }
+  scope :with_overall_rating, lambda {
+    joins('LEFT JOIN (SELECT task_id, AVG(overall_rating) AS overall_rating FROM ratings GROUP BY task_id)
+                             AS ratings ON ratings.task_id = tasks.id').select('tasks.*, overall_rating')
+  }
+  scope :sort_by_overall_rating_asc, -> { with_overall_rating.order('overall_rating ASC NULLS FIRST') }
+  scope :sort_by_overall_rating_desc, -> { with_overall_rating.order('overall_rating DESC NULLS LAST') }
   scope :access_level, ->(access_level) { where(access_level:) }
   scope :fulltext_search, lambda {|input|
     r = left_outer_joins(:programming_language)
@@ -91,6 +91,10 @@ class Task < ApplicationRecord
 
   def self.ransackable_scopes(_auth_object = nil)
     %i[created_before_days min_stars access_level fulltext_search has_all_labels]
+  end
+
+  def self.ransackable_scopes_skip_sanitize_args
+    %i[created_before_days min_stars]
   end
 
   def self.ransackable_attributes(_auth_object = nil)

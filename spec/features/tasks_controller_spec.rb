@@ -82,4 +82,50 @@ RSpec.describe 'TasksController', :js do
       end
     end
   end
+
+  describe '#index' do
+    before { visit(tasks_path) }
+
+    def select_option(param_name, idx)
+      find("#select2-#{param_name}-container").click
+      find("#select2-#{param_name}-results :nth-child(#{idx})").click
+      find('.search-submit-button-tag').click
+    end
+
+    context 'when filtering after min_stars' do
+      let!(:good_task) { create(:task, user:, ratings: create_list(:rating, 1, :good)) }
+
+      before { create(:task, user:, ratings: create_list(:rating, 1, :bad)) }
+
+      it 'only shows the good task' do
+        find_by_id('advanced', wait: true).click
+        select_option('q_min_stars', 3)
+
+        expect(all('.card-task-title').map(&:text)).to contain_exactly(good_task.title)
+      end
+    end
+
+    context 'when filtering after creation date' do
+      let!(:today_task) { create(:task, user:) }
+      let!(:last_week_task) { create(:task, user:, created_at: 3.days.ago) }
+      let!(:all_time_task) { create(:task, user:, created_at: 1.year.ago) }
+
+      let(:all_time) { 1 }
+      let(:today) { 2 }
+      let(:last_week) { 3 }
+
+      it 'shows the correct tasks for every setting' do
+        find_by_id('advanced', wait: true).click
+
+        select_option('q_created_before_days', all_time)
+        expect(all('.card-task-title').map(&:text)).to contain_exactly(today_task.title, last_week_task.title, all_time_task.title)
+
+        select_option('q_created_before_days', last_week)
+        expect(all('.card-task-title').map(&:text)).to contain_exactly(today_task.title, last_week_task.title)
+
+        select_option('q_created_before_days', today)
+        expect(all('.card-task-title').map(&:text)).to contain_exactly(today_task.title)
+      end
+    end
+  end
 end

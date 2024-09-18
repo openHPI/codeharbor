@@ -5,7 +5,19 @@ FactoryBot.define do
     user
     task
     Rating::CATEGORIES.each do |category|
-      send(category) { 5 }
+      send(category) { 3 }
+    end
+
+    trait :bad do
+      Rating::CATEGORIES.each do |category|
+        send(category) { 1 }
+      end
+    end
+
+    trait :good do
+      Rating::CATEGORIES.each do |category|
+        send(category) { 5 }
+      end
     end
   end
 end
