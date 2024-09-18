@@ -65,14 +65,14 @@ RSpec.describe Task do
   describe '.created_before_days' do
     subject { described_class.created_before_days(days) }
 
-    let(:days) { 0 }
+    let(:days) { '' }
     let!(:new_task) { create(:task, created_at: 1.week.ago) }
     let!(:old_task) { create(:task, created_at: 4.weeks.ago) }
 
     it { is_expected.to include new_task, old_task }
 
-    context 'when task days is 1' do
-      let(:days) { 1 }
+    context 'when task days is 0' do
+      let(:days) { 0 }
 
       it { is_expected.to be_empty }
     end
@@ -91,16 +91,39 @@ RSpec.describe Task do
   end
 
   describe '.min_stars' do
-    let(:good_task) { create(:task) }
-    let(:bad_task) { create(:task) }
-
-    before do
-      create(:rating, task: good_task, overall_rating: 5)
-      create(:rating, task: bad_task, overall_rating: 1)
-    end
+    let(:user) { create(:user) }
+    let!(:good_task) { create(:task, user:, ratings: create_list(:rating, 1, :good)) }
+    let!(:bad_task) { create(:task, user:, ratings: create_list(:rating, 1, :bad)) }
+    let!(:unrated_task) { create(:task, user:, ratings: []) }
 
     it 'filters the tasks correctly' do
-      expect(described_class.min_stars(3)).to contain_exactly(good_task)
+      expect(described_class.where(user:).min_stars(3)).to contain_exactly(good_task)
+    end
+
+    it 'includes unrated tasks when filtering after min 0 stars' do
+      expect(described_class.where(user:).min_stars(0)).to contain_exactly(unrated_task, bad_task, good_task)
+    end
+  end
+
+  describe '.sort_by_overall_rating_asc' do
+    let(:user) { create(:user) }
+    let!(:good_task) { create(:task, user:, ratings: create_list(:rating, 1, :good)) }
+    let!(:bad_task) { create(:task, user:, ratings: create_list(:rating, 1, :bad)) }
+    let!(:unrated_task) { create(:task, user:, ratings: []) }
+
+    it 'orders the tasks correctly' do
+      expect(described_class.where(user:).sort_by_overall_rating_asc).to match [unrated_task, bad_task, good_task]
+    end
+  end
+
+  describe '.sort_by_overall_rating_desc' do
+    let(:user) { create(:user) }
+    let!(:good_task) { create(:task, user:, ratings: create_list(:rating, 1, :good)) }
+    let!(:bad_task) { create(:task, user:, ratings: create_list(:rating, 1, :bad)) }
+    let!(:unrated_task) { create(:task, user:, ratings: []) }
+
+    it 'orders the tasks correctly' do
+      expect(described_class.where(user:).sort_by_overall_rating_desc).to match [good_task, bad_task, unrated_task]
     end
   end
 

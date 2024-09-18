@@ -63,7 +63,7 @@
                 p
                   b = t('common.created')
                 span.form-group
-                  = f.select 'created_before_days', options_for_select({t('.search.all_time') => 0, t('.search.today') => 1, t('.search.last_week') => 7, t('.search.last_month') => 30}, selected: @created_before_days), {}, class: 'form-control defaultSelect2 ransack-filter'
+                  = f.select 'created_before_days', options_for_select({t('.search.all_time') => '', t('.search.today') => 0, t('.search.last_week') => 7, t('.search.last_month') => 31}, selected: @created_before_days), {}, class: 'form-control defaultSelect2 ransack-filter'
               .labels.col-md-4.pt-3
                 p
                   b = t('.search.has_all_labels')
