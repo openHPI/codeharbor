@@ -7,6 +7,17 @@ de:
       message_line2: Wenn Sie den/die Benutzer:in zum/zur Co-Autor:in ernennen oder in eine Gruppe einladen möchten, klicken Sie auf den Link unten.
       message_line3: Ansonsten können Sie diese E-Mail ignorieren.
       subject: '%{user} möchte an Ihrer Aufgabe "%{task}" mitarbeiten.'
+    completeness_checklist:
+      checklist: Vollständigkeits-Checkliste
+      description: Beschreibung geschrieben
+      file: Eine Datei hinzugefügt
+      labels: Ein paar Labels ausgewählt
+      language: Sprache ausgewählt
+      license: Lizenz ausgewählt
+      model_solution: Eine Musterlösung hinzugefügt
+      programming_language: Programmiersprache ausgewählt
+      test: Einen Test hinzugefügt
+      title: Titel gewählt
     editor:
       button:
         extract_text: Text extrahieren

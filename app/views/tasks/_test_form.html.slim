@@ -1,6 +1,6 @@
 .field-element
   = test.label :title, Test.human_attribute_name('title'), class: 'form-label'
-  = test.text_field :title, class: 'form-control'
+  = test.text_field :title, class: 'form-control test-title'
 .field-element
   = test.label :testing_framework, Test.human_attribute_name('testing_framework'), class: 'form-label'
   = test.collection_select :testing_framework_id, TestingFramework.all, :id, :name_with_version, {include_blank: t('common.none')}, {class: 'form-control'}

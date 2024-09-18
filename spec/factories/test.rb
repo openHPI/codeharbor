@@ -40,6 +40,8 @@ FactoryBot.define do
       test_type { 'test_type' }
       description { 'description' }
       internal_description { 'internal_description' }
+
+      files { [build(:task_file, :exportable)] }
     end
 
     trait :with_unittest do

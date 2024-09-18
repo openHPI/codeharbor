@@ -16,7 +16,7 @@ initializeEditors = ->
       editor.setReadOnly true
     else
       editor.getSession().on 'change', (e) ->
-        hiddenContent.val(editor.getValue())
+        hiddenContent.val(editor.getValue()).trigger('change')
 
 setAceEditorValue = (editor, value) ->
   aceEditor = $(editor).parent().find('.editor')[0]

@@ -6,7 +6,7 @@ a.btn.btn-main.btn-sm.toggle-input href='#'
   = t('.button.toggle_file')
 .toggle-divs
   .edit class="#{show_attachment ? 'hide' : ''}"
-    = file.text_area :content, disabled: show_attachment, class: 'd-none form-control'
+    = file.text_area :content, disabled: show_attachment, class: 'd-none form-control file-content'
     .editor
       = file.text_area :content
   .attachment class="#{show_attachment ? '' : 'hide'}"
@@ -23,4 +23,4 @@ a.btn.btn-main.btn-sm.toggle-input href='#'
           .extract-text.btn.btn-main data-file-id=file.object.id
             = t('.button.extract_text')
     .alternative class="#{file_attached ? 'hide' : ''}"
-      = file.file_field :attachment, class: 'alternative-input form-control'
+      = file.file_field :attachment, class: 'alternative-input form-control file-attachment'

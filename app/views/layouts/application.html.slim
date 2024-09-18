@@ -44,5 +44,7 @@ html lang=I18n.locale data-default-locale=I18n.default_locale
                 .pt-5
                   = yield
 
+      = content_for :extra_root_content
+
     #footer.footer.py-5.mt-auto
       = render('footer')

@@ -73,6 +73,8 @@ const initializeMarkdownEditors = () => {
           // Keep real form <textarea> in sync
           const content = toastEditor.getMarkdown();
           formInput.value = content;
+          const event = new Event('change', { bubbles: true });
+          formInput.dispatchEvent(event);
         },
         // Fix ToastUI editor bug preventing manual codeblock insertion:
         // Manually inserting a codeblock adding three backticks and hitting enter

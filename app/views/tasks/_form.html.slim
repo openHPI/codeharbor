@@ -146,7 +146,7 @@
                 .model-solution-container.ms-2.mt-4 class="#{display_container_class}"
                   = render 'model_solution_form', f:, model_solution:
             / .field-element
-            = f.add_nested_fields_link :model_solutions, ' ', class: 'btn btn-main', id: 'addTestButton' do
+            = f.add_nested_fields_link :model_solutions, ' ', class: 'btn btn-main', id: 'addModelSolutionButton' do
               i.fa-solid.fa-plus.text-success
               =< t('.button.add_model_solution')
       .form-group
@@ -157,3 +157,6 @@
           = link_to :back, class: 'btn btn-important' do
             i.fa-solid.fa-xmark.text-secondary
             =< t('common.button.cancel')
+
+- content_for :extra_root_content do
+  = render 'completeness_checklist'
