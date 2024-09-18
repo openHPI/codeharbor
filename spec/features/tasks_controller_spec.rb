@@ -30,6 +30,37 @@ RSpec.describe 'TasksController', :js do
         expect(page).to have_css("option[value=\"#{not_existing_label_name}\"][selected=\"selected\"]", visible: :all)
       end
     end
+
+    it 'updates the progress bar when changing the title' do
+      progress_bar = find('.completeness-checklist-container .progress-bar', visible: :all, wait: true)
+
+      expect do
+        find('input', id: 'task_title').set('some title')
+        find('body').click # unselect the input to trigger change event
+      end.to change { progress_bar['aria-valuenow'] }
+    end
+  end
+
+  describe '#edit' do
+    let(:complete_task) do
+      create(:task,
+        user:,
+        description: 'word ' * 100,
+        programming_language: create(:programming_language),
+        license: create(:license),
+        labels: create_list(:label, 2),
+        model_solutions: create_list(:model_solution, 1, :with_content),
+        files: create_list(:task_file, 1, :with_text_attachment),
+        tests: create_list(:test, 1, :with_content))
+    end
+
+    before { visit(edit_task_path(complete_task)) }
+
+    it 'shows a full progress bar' do
+      progress_bar = find('.completeness-checklist-container .progress-bar', visible: :all, wait: true)
+      sleep(0.2) # wait for task_checklist.coffee to execute
+      expect(progress_bar['aria-valuenow']).to eq '100'
+    end
   end
 
   describe '#show' do

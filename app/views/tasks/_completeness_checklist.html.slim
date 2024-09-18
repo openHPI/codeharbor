@@ -1,0 +1,26 @@
+.sticky-bottom
+  .completeness-checklist-container.my-3
+    .checklist-content
+      .maximized-checklist.d-inline-flex
+        .chevron-container.d-flex.align-items-center
+          .fa-solid.fa-chevron-right
+        .p-3
+          h5 = t('.checklist')
+          .progress
+            .progress-bar.progress-bar-striped role='progressbar' aria-valuenow='0' aria-valuemin='0' aria-valuemax='100'
+
+          .d-block.p-2
+            - %i[title programming_language description language labels license file test model_solution].each do |item|
+              .d-flex.align-items-baseline
+                .todo.fa-regular.fa-square.me-2 data-todo-name=item
+                .text-wrap
+                  = t(".#{item}")
+
+      .minimized-checklist.d-none.d-inline-flex
+        .chevron-container.d-flex.align-items-center
+          .fa-solid.fa-chevron-left
+        .d-flex.align-items-center.justify-content-center
+          svg width='80%' viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'
+            circle r='90' cx='110' cy='110' fill='transparent' stroke-dasharray='565.48'
+            circle.bar r='90' cx='110' cy='110' fill='transparent' stroke-dasharray='565.48'
+            text x='52%' y='51%' dominant-baseline='middle' text-anchor='middle' font-size='50px' = '0%'

@@ -7,6 +7,17 @@ en:
       message_line2: If you want to make them a co-author or suggest Membership to a group click the link below.
       message_line3: Otherwise ignore this Email.
       subject: '%{user} wants to contribute to your task "%{task}"'
+    completeness_checklist:
+      checklist: Completeness Checklist
+      description: Description written
+      file: At least 1 file added
+      labels: Some labels added
+      language: Language selected
+      license: License selected
+      model_solution: At least 1 model solution added
+      programming_language: Programming language selected
+      test: At least 1 test added
+      title: Title chosen
     editor:
       button:
         extract_text: Extract text
