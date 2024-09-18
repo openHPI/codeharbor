@@ -71,21 +71,22 @@
               = link_to task_path(task), class: 'btn btn-light', method: :delete, data: {bs_toggle: 'tooltip', bs_placement: 'top', bs_title: t('common.button.delete'), confirm: t('common.sure')} do
                 i.fas.fa-trash-alt aria-hidden="true"
 
-    .card-footer.d-flex.align-items-center.justify-content-between
-      .d-flex.align-items-center
-        = button_tag type: 'button', class: 'btn no-border index-comment-button me-1', data: {task: task.id} do
-          => t('.button.show_comments')
-          span.fa-solid.fa-circle-notch.fa-spin.wait.me-1.hide
-          span.fa-solid.fa-caret-down.my-caret
-        = button_tag type: 'button', class: 'btn no-border related-button', data: {task: task.id} do
-          => t('.button.related_exercises')
-          span.fa-solid.fa-circle-notch.fa-spin.wait.me-1.hide
-          span.fa-solid.fa-caret-down.my-caret
-      - if task.labels.any?
-        .d-flex.align-items-center.ms-lg-auto.flex-column.flex-md-row
-          - task.labels.each do |label|
-            span.badge.bg-secondary.ms-1.my-1
-              = label.name
+    .card-footer.d-flex.align-items-center
+      .row.w-100
+        .col-lg-6.d-flex.align-items-center
+          = button_tag type: 'button', class: 'btn no-border index-comment-button me-1', data: {task: task.id} do
+            => t('.button.show_comments')
+            span.fa-solid.fa-circle-notch.fa-spin.wait.me-1.hide
+            span.fa-solid.fa-caret-down.my-caret
+          =< button_tag type: 'button', class: 'btn no-border related-button', data: {task: task.id} do
+            => t('.button.related_exercises')
+            span.fa-solid.fa-circle-notch.fa-spin.wait.me-1.hide
+            span.fa-solid.fa-caret-down.my-caret
+        - if task.labels.any?
+          .col-lg-6.d-flex.align-items-center.flex-wrap.ms-auto.justify-content-end
+            - task.labels.each do |label|
+              span.badge.bg-secondary.ms-1.my-1
+                = label.name
 
     /.related-box data-exercise=exercise.id
 
