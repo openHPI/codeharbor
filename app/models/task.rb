@@ -94,7 +94,7 @@ class Task < ApplicationRecord
   end
 
   def self.ransackable_scopes_skip_sanitize_args
-    %i[created_before_days min_stars]
+    %i[created_before_days min_stars access_level fulltext_search has_all_labels]
   end
 
   def self.ransackable_attributes(_auth_object = nil)
