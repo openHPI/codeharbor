@@ -19,6 +19,7 @@ en:
         already_member: You are already a member of this collection.
       success_notice: You can now collaborate to this collection.
     share:
+      duplicate_share: You already shared the collection with this user.
       success_notice: Your collection has been sent.
     share_message:
       text: '%{user} sent you their collection "%{collection}"'

@@ -40,6 +40,7 @@ class Message < ApplicationRecord
 
   def destroy_deleted_message
     destroy if deleted_by_both?
+    destroy if deleted_by_one? && param_type == 'collection' # rejected or revoked collection invites should always be deleted
   end
 
   def deleted_by_sender?
@@ -52,5 +53,9 @@ class Message < ApplicationRecord
 
   def deleted_by_both?
     deleted_by_recipient? && deleted_by_sender?
+  end
+
+  def deleted_by_one?
+    deleted_by_recipient? || deleted_by_sender?
   end
 end

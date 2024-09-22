@@ -19,6 +19,7 @@ de:
         already_member: Sie sind bereits ein Mitglied dieser Sammlung.
       success_notice: Sie können jetzt an dieser Sammlung zusammenarbeiten.
     share:
+      duplicate_share: Sie haben die Sammlung bereits mit diesem Nutzer geteilt.
       success_notice: Ihre Sammlung wurde gesendet.
     share_message:
       text: '%{user} hat Ihnen die Sammlung "%{collection}" gesendet.'
