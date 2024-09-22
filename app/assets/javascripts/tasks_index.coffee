@@ -71,9 +71,10 @@ initializeFilter = ->
   $(".change-hidden-field").click ->
     $('#visibility').val(this.id)
     $('#task_search').submit()
-  $('.ransack-filter').change ->
-    # Reset pagination if filter changes
+
+  $('.ransack-filter').on 'input change', ->  # Reset pagination if filter changes
     $('#override-page').prop('disabled', false)
+
   $('#' + $('#visibility').val()).addClass('selected')
   intializeAdvancedFilter()
 
