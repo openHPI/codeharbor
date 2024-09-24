@@ -18,6 +18,8 @@ class Collection < ApplicationRecord
                               }, dependent: :destroy, inverse_of: :collection
   has_many :tasks, through: :collection_tasks
 
+  has_many :messages, dependent: :nullify, inverse_of: :attachment
+
   accepts_nested_attributes_for :collection_tasks, allow_destroy: true
 
   scope :public_access, -> { where(visibility_level: :public) }
@@ -44,6 +46,8 @@ class Collection < ApplicationRecord
   def to_s
     title
   end
+
+  private
 
   def description_is_not_too_long
     excess = description.length - MAX_DESCRIPTION_LENGTH

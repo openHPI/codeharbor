@@ -56,7 +56,7 @@ RSpec.describe MessagesController do
       let(:option) { 'inbox' }
 
       it 'marks the message as read' do
-        expect { get_request }.to change { inbox_message.reload.recipient_status }.to('r')
+        expect { get_request }.to change { inbox_message.reload.recipient_status }.to('read')
       end
 
       it 'shows all messages in inbox' do
@@ -155,11 +155,11 @@ RSpec.describe MessagesController do
 
     let(:user_id) { user }
     let!(:message) { create(:message, sender: recipient, recipient: user, sender_status:) }
-    let(:sender_status) { 's' }
+    let(:sender_status) { :sent }
 
     context 'when message was not deleted by sender' do
       it 'marks the message as deleted' do
-        expect { delete_request }.to change { message.reload.recipient_status }.to('d')
+        expect { delete_request }.to change { message.reload.recipient_status }.to('deleted')
       end
 
       it 'does not delete the message' do
@@ -168,7 +168,7 @@ RSpec.describe MessagesController do
     end
 
     context 'when message was deleted by sender' do
-      let(:sender_status) { 'd' }
+      let(:sender_status) { :deleted }
 
       it 'deletes the message' do
         expect { delete_request }.to change(Message, :count).by(-1)

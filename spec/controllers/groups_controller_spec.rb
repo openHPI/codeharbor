@@ -168,7 +168,7 @@ RSpec.describe GroupsController do
 
     it 'translates access request message into correct language for recipient' do
       post_request
-      expect(I18n.with_locale(admin_locale) { group_admin.received_messages.find_by(param_type: 'group_requested').text }).to eq(I18n.t('groups.send_access_request_message.message', user: user.name, group: group.name, locale: admin_locale))
+      expect(I18n.with_locale(admin_locale) { group_admin.received_messages.find_by(action: :group_request).text }).to eq(I18n.t('groups.messages.group_request', user: user.name, group: group.name, locale: admin_locale))
     end
 
     it 'sends mail in correct language for recipient' do
@@ -194,7 +194,7 @@ RSpec.describe GroupsController do
 
     it 'translates access granted message into correct language for recipient' do
       post_request
-      expect(I18n.with_locale(user_locale) { user.received_messages.find_by(param_type: 'group_accepted').text }).to eq(I18n.t('groups.send_grant_access_messages.message', user: group_admin.name, group: group.name, locale: user_locale))
+      expect(I18n.with_locale(user_locale) { user.received_messages.find_by(action: :group_approval).text }).to eq(I18n.t('groups.messages.group_approval', user: group_admin.name, group: group.name, locale: user_locale))
     end
   end
 
@@ -215,7 +215,7 @@ RSpec.describe GroupsController do
 
     it 'translates access denied message into correct language for recipient' do
       post_request
-      expect(I18n.with_locale(user_locale) { user.received_messages.find_by(param_type: 'group_declined').text }).to eq(I18n.t('groups.send_deny_access_message.message', user: group_admin.name, group: group.name, locale: user_locale))
+      expect(I18n.with_locale(user_locale) { user.received_messages.find_by(action: :group_rejection).text }).to eq(I18n.t('groups.messages.group_rejection', user: group_admin.name, group: group.name, locale: user_locale))
     end
   end
 end

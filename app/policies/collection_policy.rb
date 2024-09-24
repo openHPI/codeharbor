@@ -23,6 +23,6 @@ class CollectionPolicy < ApplicationPolicy
   end
 
   %i[save_shared? view_shared?].each do |action|
-    define_method(action) { Message.received_by(@user).exists?(param_type: 'collection', param_id: collection.id) || admin? }
+    define_method(action) { Message.received_by(@user).exists?(action: :collection_shared, attachment: collection) || admin? }
   end
 end

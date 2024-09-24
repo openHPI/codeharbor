@@ -61,7 +61,7 @@ class GroupsController < ApplicationController
   def request_access
     flash[:notice] = t('.success_notice')
     @group.admins.each do |admin|
-      send_message(admin, :group_requested)
+      send_message(admin, :group_request)
 
       AccessRequestMailer.send_access_request(current_user, admin, @group).deliver_now
     end
@@ -77,9 +77,9 @@ class GroupsController < ApplicationController
 
   def grant_access
     @group.grant_access(@user)
-    send_message(@user, :group_accepted)
+    send_message(@user, :group_approval)
 
-    Message.where(sender: @user, recipient: current_user, param_type: :group_requested, param_id: @group.id).destroy_all
+    @group.messages.where(sender: @user, recipient: current_user, action: :group_request).destroy_all
     redirect_to @group, notice: t('.success_notice')
   end
 
@@ -90,9 +90,9 @@ class GroupsController < ApplicationController
 
   def deny_access
     @group.users.delete(@user)
-    send_message(@user, :group_declined)
+    send_message(@user, :group_rejection)
 
-    Message.where(sender: @user, recipient: current_user, param_type: :group_requested, param_id: @group.id).destroy_all
+    @group.messages.where(sender: @user, recipient: current_user, action: :group_request).destroy_all
     redirect_to @group, notice: t('.success_notice')
   end
 
@@ -108,13 +108,13 @@ class GroupsController < ApplicationController
 
   private
 
-  # type is one of [:group_requested, :group_accepted, :group_declined]
-  def send_message(recipient, type)
+  # action is one of [:group_request, :group_approval, :group_rejection]
+  def send_message(recipient, action)
     Message.create(sender: current_user,
       recipient:,
-      param_type: type,
-      param_id: @group.id,
-      sender_status: 'd')
+      action:,
+      attachment: @group,
+      sender_status: :deleted)
   end
 
   def set_option

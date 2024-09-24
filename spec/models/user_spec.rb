@@ -207,18 +207,6 @@ RSpec.describe User do
       it 'does not delete message' do
         expect { destroy }.not_to change(Message, :count)
       end
-
-      context 'when message has type exercise', pending: 'messages and sharing permissions need to be reworked' do
-        before do
-          create(:message, sender: user, param_type: 'exercise', param_id: create(:task).id)
-          create(:message, sender: user, param_type: 'group_requested', param_id: create(:group).id)
-          create(:message, sender: user, param_type: 'collection', param_id: create(:collection).id)
-        end
-
-        it 'deletes message' do
-          expect { destroy }.to change(Message, :count).by(-3)
-        end
-      end
     end
 
     context 'when user has identities' do

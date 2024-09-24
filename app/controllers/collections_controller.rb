@@ -21,7 +21,7 @@ class CollectionsController < ApplicationController
   end
 
   def show
-    @num_of_invites = Message.where(param_type: 'collection', param_id: @collection.id).where.not(recipient_status: 'd').count
+    @num_of_invites = @collection.messages.where(action: :collection_shared).where.not(recipient_status: :deleted).count
   end
 
   def new
@@ -107,7 +107,7 @@ class CollectionsController < ApplicationController
 
     ActiveRecord::Base.transaction(requires_new: true) do
       @collection.users << current_user
-      message = Message.received_by(current_user).find_by(param_type: 'collection', param_id: @collection.id)
+      message = Message.received_by(current_user).find_by(action: :collection_shared, attachment: @collection)
       message.mark_as_deleted(current_user)
       message.save!
       redirect_to @collection, notice: t('.success_notice')
@@ -154,7 +154,7 @@ class CollectionsController < ApplicationController
   end
 
   def share_message_args
-    {sender: current_user, recipient: User.find_by(email: params[:user]), param_type: 'collection', param_id: @collection.id}
+    {sender: current_user, recipient: User.find_by(email: params[:user]), action: :collection_shared, attachment: @collection}
   end
 
   def push_tasks

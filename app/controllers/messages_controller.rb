@@ -28,7 +28,6 @@ class MessagesController < ApplicationController
   # rubocop:disable Metrics/AbcSize
   def create
     @message = Message.new(message_params)
-    @message.recipient_status = 'u'
     @message.sender = current_user
     @message.recipient = if params[:message][:recipient]
                            User.find_by(email: params[:message][:recipient])
@@ -67,10 +66,7 @@ class MessagesController < ApplicationController
   private
 
   def mark_messages_as_read(messages)
-    messages.each do |message|
-      message.recipient_status = 'r'
-      message.save
-    end
+    messages.each(&:recipient_status_read!)
   end
 
   # Use callbacks to share common setup or constraints between actions.

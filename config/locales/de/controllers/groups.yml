@@ -14,11 +14,9 @@ de:
       success_notice: Sie haben erfolgreich die Gruppe verlassen.
     make_admin:
       success_notice: Benutzer:in zur Administrator:in gemacht.
+    messages:
+      group_approval: "%{user} hat Sie in die Gruppe aufgenommen: %{group}"
+      group_rejection: "%{user} hat Sie nicht in die Gruppe aufgenommen: %{group}"
+      group_request: "%{user} möchte auf Ihre Gruppe zugreifen: %{group}"
     request_access:
       success_notice: Ihre Zugriffsanfrage wurde gesendet.
-    send_access_request_message:
-      message: "%{user} möchte auf Ihre Gruppe zugreifen: %{group}"
-    send_deny_access_message:
-      message: "%{user} hat Sie nicht in die Gruppe aufgenommen: %{group}"
-    send_grant_access_messages:
-      message: "%{user} hat Sie in die Gruppe aufgenommen: %{group}"

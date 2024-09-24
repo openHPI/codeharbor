@@ -14,11 +14,9 @@ en:
       success_notice: You successfully left the group
     make_admin:
       success_notice: Made user to admin.
+    messages:
+      group_approval: "%{user} accepted you to their group: %{group}"
+      group_rejection: "%{user} did not accept you to their group: %{group}"
+      group_request: "%{user} wants to access your group: %{group}"
     request_access:
       success_notice: Your Access request has been sent.
-    send_access_request_message:
-      message: "%{user} wants to access your group: %{group}"
-    send_deny_access_message:
-      message: "%{user} did not accept you to their group: %{group}"
-    send_grant_access_messages:
-      message: "%{user} accepted you to their group: %{group}"
