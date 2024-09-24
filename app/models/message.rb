@@ -27,7 +27,7 @@ class Message < ApplicationRecord
       when 'group_declined'
         I18n.t('groups.send_deny_access_message.message', user: sender.name, group: Group.find(param_id).name)
       when 'collection'
-        I18n.t('collections.share_message.text', user: sender.name, collection: Collection.find_by(id: param_id)&.title)
+        I18n.t('collections.share_message.text', user: sender.name, collection: Collection.find(param_id).title)
       else
         super
     end
