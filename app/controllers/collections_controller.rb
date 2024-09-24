@@ -91,12 +91,10 @@ class CollectionsController < ApplicationController
   end
 
   def share
-    flash_message = if @collection.users.include?(share_message.recipient) || Message.exists?(share_message_args)
-                      {alert: t('.duplicate_share')}
-                    elsif share_message.save
+    flash_message = if @collection.users.exclude?(share_message.recipient) && share_message.save
                       {notice: t('.success_notice')}
                     else
-                      {alert: t('common.errors.something_went_wrong')}
+                      {alert: share_message.errors.full_messages.join(', ')}
                     end
     redirect_to collection_path(@collection), flash_message
   end
