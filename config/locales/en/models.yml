@@ -31,7 +31,7 @@ en:
       license:
         name: Name
       message:
-        recipient: Recipient
+        recipient_id: Recipient
         text: Text
       model_solution:
         xml_id: XML ID
@@ -109,6 +109,9 @@ en:
           attributes:
             base:
               no_admin: No admin in group
+        message:
+          duplicate_share: has already been invited to this collection.
+          user_already_in_collection: has already been added to this collection.
         task:
           attributes:
             language:

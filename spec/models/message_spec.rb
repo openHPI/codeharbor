@@ -11,7 +11,7 @@ RSpec.describe Message do
     context 'with param_type: collection' do
       subject { create(:message, param_type: 'collection', param_id: create(:collection).id) }
 
-      it { is_expected.to validate_uniqueness_of(:param_id).scoped_to(%i[recipient_id param_type]) }
+      it { is_expected.to validate_uniqueness_of(:recipient_id).scoped_to(%i[param_id param_type]).with_message(:duplicate_share) }
     end
   end
 

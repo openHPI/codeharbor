@@ -91,12 +91,11 @@ class CollectionsController < ApplicationController
   end
 
   def share
-    flash_message = if @collection.users.exclude?(share_message.recipient) && share_message.save
-                      {notice: t('.success_notice')}
-                    else
-                      {alert: share_message.errors.full_messages.join(', ')}
-                    end
-    redirect_to collection_path(@collection), flash_message
+    if share_message.save
+      redirect_to collection_path(@collection), notice: t('.success_notice')
+    else
+      redirect_to collection_path(@collection), alert: share_message.errors.full_messages.join(', ')
+    end
   end
 
   def view_shared

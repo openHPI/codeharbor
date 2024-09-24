@@ -470,19 +470,19 @@ RSpec.describe CollectionsController do
     context 'when no email is given' do
       let(:params) { {id: collection.id} }
 
-      it_behaves_like 'error', I18n.t('common.errors.something_went_wrong')
+      it_behaves_like 'error', 'Recipient must exist'
     end
 
     context 'when user already is in collection' do
       let(:users) { [user, recipient] }
 
-      it_behaves_like 'error',  I18n.t('collections.share.duplicate_share')
+      it_behaves_like 'error', "#{Message.human_attribute_name(:recipient_id)} #{I18n.t('activerecord.errors.models.message.user_already_in_collection')}"
     end
 
     context 'when sending a duplicate invite' do
       before { create(:message, sender: user, recipient:, param_type: 'collection', param_id: collection.id) }
 
-      it_behaves_like 'error',  I18n.t('collections.share.duplicate_share')
+      it_behaves_like 'error', "#{Message.human_attribute_name(:recipient_id)} #{I18n.t('activerecord.errors.models.message.duplicate_share')}"
     end
 
     context 'when sending second invite after a first message was deleted by recipient' do
