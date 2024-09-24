@@ -175,9 +175,6 @@ en:
       rating:
         one: Rating
         other: Ratings
-      report:
-        one: Report
-        other: Reports
       task:
         one: Task
         other: Tasks

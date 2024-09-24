@@ -33,7 +33,6 @@ class User < ApplicationRecord
   has_many :account_link_users, dependent: :destroy
   has_many :shared_account_links, through: :account_link_users, dependent: :destroy, source: :account_link
 
-  has_many :reports, dependent: :destroy
   has_many :account_links, dependent: :destroy
 
   has_many :sent_messages, class_name: 'Message', foreign_key: 'sender_id', dependent: :nullify, inverse_of: :sender
