@@ -9,9 +9,13 @@ RSpec.describe Message do
     it { is_expected.not_to validate_uniqueness_of(:param_id).scoped_to(%i[recipient_id param_type]) }
 
     context 'with param_type: collection' do
-      subject { create(:message, param_type: 'collection', param_id: create(:collection).id) }
+      subject { create(:message, param_type: 'collection', param_id: collections.first&.id) }
 
-      it { is_expected.to validate_uniqueness_of(:param_id).scoped_to(%i[recipient_id param_type]) }
+      # TODO: Temporary create a list of collections for the `validate_uniqueness_of` matcher.
+      # As soon as `param` is polymorphic, this can be removed again.
+      let(:collections) { create_list(:collection, 2) }
+
+      it { is_expected.to validate_uniqueness_of(:recipient_id).scoped_to(%i[param_id param_type]).with_message(:duplicate_share) }
     end
   end
 

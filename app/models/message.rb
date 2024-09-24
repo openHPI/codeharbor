@@ -2,7 +2,8 @@
 
 class Message < ApplicationRecord
   validates :text, presence: true, unless: -> { %w[group_requested group_accepted group_declined collection].include?(param_type) }
-  validates :param_id, uniqueness: {scope: %i[recipient_id param_type]}, if: -> { param_type == 'collection' }
+  validates :recipient_id, uniqueness: {scope: %i[param_id param_type], message: :duplicate_share}, if: -> { param_type == 'collection' }
+  validate :recipient_not_in_collection, if: -> { recipient_status != 'd' }
 
   belongs_to :sender, class_name: 'User', inverse_of: :sent_messages
   belongs_to :recipient, class_name: 'User', inverse_of: :received_messages
@@ -40,6 +41,7 @@ class Message < ApplicationRecord
 
   def destroy_deleted_message
     destroy if deleted_by_both?
+    destroy if deleted_by_one? && param_type == 'collection' # rejected or revoked collection invites should always be deleted
   end
 
   def deleted_by_sender?
@@ -52,5 +54,15 @@ class Message < ApplicationRecord
 
   def deleted_by_both?
     deleted_by_recipient? && deleted_by_sender?
+  end
+
+  def deleted_by_one?
+    deleted_by_recipient? || deleted_by_sender?
+  end
+
+  def recipient_not_in_collection
+    if param_type == 'collection' && Collection.find_by(id: param_id)&.users&.include?(recipient)
+      errors.add(:recipient_id, :user_already_in_collection)
+    end
   end
 end

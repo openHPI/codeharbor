@@ -91,10 +91,10 @@ class CollectionsController < ApplicationController
   end
 
   def share
-    if @collection.users.exclude?(share_message.recipient) && share_message.save
+    if share_message.save
       redirect_to collection_path(@collection), notice: t('.success_notice')
     else
-      redirect_to collection_path(@collection), alert: t('common.errors.something_went_wrong')
+      redirect_to collection_path(@collection), alert: share_message.errors.full_messages.join(', ')
     end
   end
 
@@ -150,12 +150,11 @@ class CollectionsController < ApplicationController
   end
 
   def share_message
-    @share_message ||= Message.new(
-      sender: current_user,
-      recipient: User.find_by(email: params[:user]),
-      param_type: 'collection',
-      param_id: @collection.id
-    )
+    @share_message ||= Message.new(share_message_args)
+  end
+
+  def share_message_args
+    {sender: current_user, recipient: User.find_by(email: params[:user]), param_type: 'collection', param_id: @collection.id}
   end
 
   def push_tasks

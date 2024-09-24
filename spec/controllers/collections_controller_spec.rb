@@ -435,22 +435,22 @@ RSpec.describe CollectionsController do
     let(:params) { {id: collection.id, user: recipient.email} }
     let(:recipient) { create(:user) }
 
-    it 'creates a message' do
-      expect { post_request }.to change(Message, :count).by(1)
+    shared_examples 'success' do
+      it 'creates a message' do
+        expect { post_request }.to change(Message, :count).by(1)
+      end
+
+      it 'redirects to collection' do
+        post_request
+        expect(response).to redirect_to collection
+      end
+
+      it 'sets flash message' do
+        expect(post_request.request.flash[:notice]).to eql I18n.t('collections.share.success_notice')
+      end
     end
 
-    it 'redirects to collection' do
-      post_request
-      expect(response).to redirect_to collection
-    end
-
-    it 'sets flash message' do
-      expect(post_request.request.flash[:notice]).to eql I18n.t('collections.share.success_notice')
-    end
-
-    context 'when no email is given' do
-      let(:params) { {id: collection.id} }
-
+    shared_examples 'error' do |expected_flash|
       it 'does not create a message' do
         expect { post_request }.not_to change(Message, :count)
       end
@@ -461,20 +461,34 @@ RSpec.describe CollectionsController do
       end
 
       it 'sets flash message' do
-        expect(post_request.request.flash[:alert]).to eql I18n.t('common.errors.something_went_wrong')
+        expect(post_request.request.flash[:alert]).to eql expected_flash
       end
+    end
+
+    it_behaves_like 'success'
+
+    context 'when no email is given' do
+      let(:params) { {id: collection.id} }
+
+      it_behaves_like 'error', 'Recipient must exist'
     end
 
     context 'when user already is in collection' do
       let(:users) { [user, recipient] }
 
-      it 'does not create a message' do
-        expect { post_request }.not_to change(Message, :count)
-      end
+      it_behaves_like 'error', "#{Message.human_attribute_name(:recipient_id)} #{I18n.t('activerecord.errors.models.message.user_already_in_collection')}"
+    end
 
-      it 'sets flash message' do
-        expect(post_request.request.flash[:alert]).to eql I18n.t('common.errors.something_went_wrong')
-      end
+    context 'when sending a duplicate invite' do
+      before { create(:message, sender: user, recipient:, param_type: 'collection', param_id: collection.id) }
+
+      it_behaves_like 'error', "#{Message.human_attribute_name(:recipient_id)} #{I18n.t('activerecord.errors.models.message.duplicate_share')}"
+    end
+
+    context 'when sending second invite after a first message was deleted by recipient' do
+      before { create(:message, sender: user, recipient:, param_type: 'collection', param_id: collection.id, recipient_status: 'd') }
+
+      it_behaves_like 'success'
     end
   end
 
@@ -533,9 +547,8 @@ RSpec.describe CollectionsController do
         expect { post_request }.to change(collection.reload.users, :count).from(1).to(2)
       end
 
-      it 'soft-deletes the invitation' do
-        post_request
-        expect(send_invitation.reload.recipient_status).to eql 'd'
+      it 'deletes the invitation' do
+        expect { post_request }.to change(Message, :count).by(-1)
       end
 
       it 'adds user to collection' do
