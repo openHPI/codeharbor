@@ -122,7 +122,7 @@ class User < ApplicationRecord
   end
 
   def handle_messages
-    Message.where(sender: self, param_type: %w[group collection]).destroy_all
+    Message.sent_by(self).where.not(action: :plaintext).destroy_all
   end
 
   def handle_user_identities
@@ -130,7 +130,7 @@ class User < ApplicationRecord
   end
 
   def unread_messages_count
-    Message.where(recipient: self, recipient_status: 'u').count.to_s
+    Message.where(recipient: self, recipient_status: :unread).count.to_s
   end
 
   def available_account_links

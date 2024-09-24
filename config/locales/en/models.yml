@@ -135,6 +135,7 @@ en:
         one: Account Link
         other: Account Link Users
       collection:
+        deleted: Deleted Collection
         one: Collection
         other: Collections
       collection_task:
@@ -147,6 +148,7 @@ en:
         one: Comment
         other: Comments
       group:
+        deleted: Deleted Group
         one: Group
         other: Groups
       group_membership:

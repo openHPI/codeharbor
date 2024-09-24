@@ -6,7 +6,6 @@ en:
         deny_access: Deny access
         grant_access: Grant access
         inbox: Inbox
-        make_co_author: Make co-author
         reply: Reply
         save_collection: Save collection
         view: View

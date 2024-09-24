@@ -32,7 +32,7 @@ RSpec.describe CollectionPolicy do
     end
 
     context 'when user has an invitation' do
-      before { create(:message, sender: collection_user, recipient: user, param_type: 'collection', param_id: collection.id, text: 'Invitation') }
+      before { create(:message, sender: collection_user, recipient: user, action: :collection_shared, attachment: collection, text: 'Invitation') }
 
       it { is_expected.to permit_only_actions(%i[index new save_shared view_shared]) }
     end

@@ -7,6 +7,8 @@ class Group < ApplicationRecord
   has_many :group_tasks, dependent: :destroy
   has_many :tasks, through: :group_tasks
 
+  has_many :messages, dependent: :nullify, inverse_of: :attachment
+
   validates :name, presence: true
   validate :admin_in_group
 

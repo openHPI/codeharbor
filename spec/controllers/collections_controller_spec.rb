@@ -125,10 +125,10 @@ RSpec.describe CollectionsController do
 
     context 'when there are pending invites' do
       before do
-        create(:message, sender: user, recipient: create(:user), param_type: 'collection', param_id: collection.id, text: 'Invitation')
+        create(:message, sender: user, recipient: create(:user), action: :collection_shared, attachment: collection, text: 'Invitation')
       end
 
-      let!(:message) { create(:message, sender: user, recipient: create(:user), param_type: 'collection', param_id: collection.id, text: 'Invitation') }
+      let!(:message) { create(:message, sender: user, recipient: create(:user), action: :collection_shared, attachment: collection, text: 'Invitation') }
 
       it 'assigns the correct number to @num_of_invites' do
         get :show, params: {id: collection.to_param}
@@ -480,13 +480,13 @@ RSpec.describe CollectionsController do
     end
 
     context 'when sending a duplicate invite' do
-      before { create(:message, sender: user, recipient:, param_type: 'collection', param_id: collection.id) }
+      before { create(:message, sender: user, recipient:, action: :collection_shared, attachment: collection) }
 
       it_behaves_like 'error', "#{Message.human_attribute_name(:recipient_id)} #{I18n.t('activerecord.errors.models.message.duplicate_share')}"
     end
 
     context 'when sending second invite after a first message was deleted by recipient' do
-      before { create(:message, sender: user, recipient:, param_type: 'collection', param_id: collection.id, recipient_status: 'd') }
+      before { create(:message, sender: user, recipient:, action: :collection_shared, attachment: collection, recipient_status: :deleted) }
 
       it_behaves_like 'success'
     end
@@ -499,7 +499,7 @@ RSpec.describe CollectionsController do
     let(:params) { {id: collection.id, user: collection_owner.id} }
 
     context 'when user has been invited' do
-      before { create(:message, sender: collection.users.first, recipient: user, param_type: 'collection', param_id: collection.id, text: 'Invitation') }
+      before { create(:message, sender: collection.users.first, recipient: user, action: :collection_shared, attachment: collection, text: 'Invitation') }
 
       it 'assigns collection' do
         get_request
@@ -539,7 +539,7 @@ RSpec.describe CollectionsController do
 
     context 'when user has been invited' do
       let!(:send_invitation) do
-        create(:message, sender: collection.users.first, recipient: user, param_type: 'collection', param_id: collection.id,
+        create(:message, sender: collection.users.first, recipient: user, action: :collection_shared, attachment: collection,
           text: 'Invitation')
       end
 

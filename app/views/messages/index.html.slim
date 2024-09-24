@@ -21,15 +21,11 @@ br
   - @messages.each do |message|
     .message-block
       .message-left
-        - case message.param_type
-        - when 'exercise', 'exercise_accepted', 'exercise_declined' # rubocop:disable Layout/CaseIndentation
-          span.fa-regular.fa-file-lines
-        - when 'collection' # rubocop:disable Layout/CaseIndentation
+        - case message.action.to_sym
+        - when :collection_shared # rubocop:disable Layout/CaseIndentation
           span.fa-solid.fa-folder-open
-        - when 'group_requested', 'group_accepted', 'group_declined' # rubocop:disable Layout/CaseIndentation
+        - when :group_request, :group_approval, :group_rejection # rubocop:disable Layout/CaseIndentation
           span.fa-solid.fa-users
-        - when 'report' # rubocop:disable Layout/CaseIndentation
-          span.fa-solid.fa-gear
         - else
           span.fa-solid.fa-envelope
       .message-right
@@ -46,29 +42,20 @@ br
           .message-text
             = message.text
             .btn-group.ms-3
-              -if message.param_type == 'exercise'
-                = link_to t('.button.view'), exercise_path(message.param_id), class: 'btn btn-light btn-sm'
-                = link_to add_author_exercise_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
-                  i.fa-solid.fa-plus.text-success
-                  =< t('.button.make_co_author')
-                = link_to decline_author_exercise_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
-                  i.fa-solid.fa-xmark.text-danger
-                  =< t('.button.deny_access')
-              - if message.param_type == 'collection'
-                = link_to t('.button.view'), view_shared_collection_path(message.param_id, user: message.sender), class: 'btn btn-light btn-sm'
-                = link_to t('.button.save_collection'), save_shared_collection_path(message.param_id), method: 'post', class: 'btn btn-light btn-sm'
-              - if message.param_type == 'group_requested'
-                = link_to t('.button.view'), group_path(message.param_id), class: 'btn btn-light btn-sm'
-                = link_to grant_access_group_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
-                  i.fa-solid.fa-plus.text-success
-                  =< t('.button.grant_access')
-                = link_to deny_access_group_path(message.param_id, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
-                  i.fa-solid.fa-xmark.text-danger
-                  =< t('.button.deny_access')
-              - if message.param_type == 'exercise_accepted' || message.param_type == 'report'
-                = link_to t('.button.view'), exercise_path(message.param_id), class: 'btn btn-light btn-sm'
-              - if message.param_type == 'group_accepted'
-                = link_to t('.button.view'), group_path(message.param_id), class: 'btn btn-light btn-sm'
+              - if message.attachment.present?
+                - if message.action_collection_shared?
+                  = link_to t('.button.view'), view_shared_collection_path(message.attachment, user: message.sender), class: 'btn btn-light btn-sm'
+                  = link_to t('.button.save_collection'), save_shared_collection_path(message.attachment), method: 'post', class: 'btn btn-light btn-sm'
+                - if message.action_group_request?
+                  = link_to t('.button.view'), group_path(message.attachment), class: 'btn btn-light btn-sm'
+                  = link_to grant_access_group_path(message.attachment, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
+                    i.fa-solid.fa-plus.text-success
+                    =< t('.button.grant_access')
+                  = link_to deny_access_group_path(message.attachment, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
+                    i.fa-solid.fa-xmark.text-danger
+                    =< t('.button.deny_access')
+                - if message.action_group_approval?
+                  = link_to t('.button.view'), group_path(message.attachment), class: 'btn btn-light btn-sm'
 
           .message-actions
             .btn-group

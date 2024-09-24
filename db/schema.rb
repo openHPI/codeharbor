@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_26_205103) do
+ActiveRecord::Schema[7.1].define(version: 2024_09_24_144745) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -157,10 +157,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_26_205103) do
     t.integer "recipient_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "param_type"
-    t.integer "param_id"
     t.string "sender_status", default: "s"
     t.string "recipient_status", default: "u"
+    t.integer "action", limit: 2, default: 0, null: false, comment: "Used as enum in Rails"
+    t.string "attachment_type"
+    t.bigint "attachment_id"
+    t.index ["attachment_type", "attachment_id"], name: "index_messages_on_attachment"
   end
 
   create_table "model_solutions", force: :cascade do |t|

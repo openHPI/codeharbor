@@ -135,6 +135,7 @@ de:
         one: Account-Link-Benutzer:in
         other: Account-Link-Benutzer:innen
       collection:
+        deleted: Gelöschte Sammlung
         one: Sammlung
         other: Sammlungen
       collection_task:
@@ -147,6 +148,7 @@ de:
         one: Kommentar
         other: Kommentare
       group:
+        deleted: Gelöschte Gruppe
         one: Gruppe
         other: Gruppen
       group_membership:
