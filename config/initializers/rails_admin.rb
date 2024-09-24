@@ -108,10 +108,6 @@ RailsAdmin.config do |config|
     add_valid_column(self)
   end
 
-  config.model 'Report' do
-    add_valid_column(self)
-  end
-
   config.model 'Task' do
     add_valid_column(self)
   end
