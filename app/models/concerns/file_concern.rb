@@ -18,4 +18,15 @@ module FileConcern
 
     association(:files).reader.records.filter {|file| file.fileable == self }
   end
+
+  # For the transfer of files between two records, we need to overwrite the getter and setter methods for the files association.
+  # We cannot use the `files` method defined above, since it would return a copy of the respective files as an array.
+  # Hence, we define a dedicated getter and setter method for the files association used in the context of task contributions.
+  def files_collection
+    association(:files).reader
+  end
+
+  def files_collection=(files)
+    association(:files).writer files
+  end
 end

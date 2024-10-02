@@ -5,7 +5,7 @@ RSpec.shared_examples 'transfer multiple entities' do |model|
     model.to_s == 'task_file' ? 'files' : model.to_s.pluralize
   end
 
-  let(:entities) { model == TaskFile ? :files : model.name.underscore.pluralize }
+  let(:entities) { model == TaskFile ? :files_collection : model.name.underscore.pluralize }
   let(:model_factory) { model.name.underscore.to_sym }
 
   subject(:transfer_multiple) { task.transfer_multiple_entities(task.send(entities), other_task.send(entities)) }
