@@ -8,7 +8,7 @@ module TransferValues
       attachment.attach(other.attachment.blob)
       self.use_attached_file = 'true'
     elsif !is_a?(TaskFile)
-      transfer_multiple_entities(files, other.files)
+      transfer_multiple_entities(files_collection, other.files_collection)
     end
   end
 
