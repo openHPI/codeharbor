@@ -19,6 +19,7 @@ module ProformaService
     private
 
     def import_task
+      upsert_files @proforma_task, @task
       @task.assign_attributes(
         user:,
         title: @proforma_task.title,
@@ -37,7 +38,6 @@ module ProformaService
         tests:,
         model_solutions:
       )
-      upsert_files @proforma_task, @task
       delete_removed_files
     end
 
