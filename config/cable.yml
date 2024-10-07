@@ -1,11 +1,24 @@
+default: &default
+  adapter: solid_cable # OR postgresql OR redis
+
+  ### Config options for `solid_cable`
+  connects_to:
+    database:
+      writing: cable
+  polling_interval: 0.1.seconds
+  message_retention: 1.day
+  autotrim: true
+  silence_polling: true
+
+  ### Config options for `redis`
+  # url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
+  # channel_prefix: codeharbor_production
+
 development:
-  adapter: postgresql
+  <<: *default
 
 test:
   adapter: test
 
 production:
-  adapter: postgresql # redis
-  # all other options below are only used for redis
-  # url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
-  # channel_prefix: codeharbor_production
+  <<: *default
