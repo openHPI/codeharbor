@@ -87,7 +87,6 @@ group :test do
   gem 'capybara'
   gem 'database_cleaner'
   gem 'factory_bot_rails'
-  gem 'headless'
   gem 'pundit-matchers'
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'
