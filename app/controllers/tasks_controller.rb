@@ -107,7 +107,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     end
   rescue ProformaXML::ProformaError => e
     messages = prettify_import_errors(e)
-    flash[:alert] = messages
+    flash.now[:alert] = messages
     render json: {
       status: 'failure',
       message: t('.error', error: messages),
@@ -209,9 +209,9 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   def generate_test
     GptService::GenerateTests.call(task: @task, openai_api_key: current_user.openai_api_key)
-    flash[:notice] = I18n.t('tasks.task_service.gpt_generate_tests.successful_generation')
+    flash.now[:notice] = I18n.t('tasks.task_service.gpt_generate_tests.successful_generation')
   rescue Gpt::Error => e
-    flash[:alert] = e.localized_message
+    flash.now[:alert] = e.localized_message
   ensure
     redirect_to @task
   end
