@@ -1,12 +1,3 @@
-.bootstrap-modal.modal.fade#import-export-dialog.hide
-  .modal-dialog.modal-lg
-    .modal-content
-      .modal-header
-        h4.modal-title
-          = title
-        = button_tag class: 'btn-close', 'data-bs-dismiss': 'modal' do
-          span.visually-hidden = t('common.button.close')
-      .modal-body#import-export-modal-body
-      .modal-footer
-        = button_tag class: 'btn btn-important', 'data-bs-dismiss': 'modal' do
-          = t('common.button.close')
+- content_for :modal_footer, flush: true do
+  = button_tag class: 'btn btn-important', 'data-bs-dismiss': 'modal' do
+    = t('common.button.close')

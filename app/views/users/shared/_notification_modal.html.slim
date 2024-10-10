@@ -1,19 +1,26 @@
-.bootstrap-modal.modal.fade#notification-modal
-  .modal-dialog
-    .modal-content
-      .modal-header
-        h4.modal-title
-          = title
-        = button_tag class: 'btn-close', data: {'bs-dismiss': 'modal'} do
-          span.visually-hidden = t('common.button.close')
-      .modal-body#notification-modal-body
-        = yield
-      .modal-footer
-        - if defined?(confirm_notification_javascript)
-          = button_tag class: 'btn btn-important green-border', onclick: confirm_notification_javascript do
-            = t('common.button.confirm')
-        - elsif defined?(confirm_notification_button)
-          = button_to confirm_notification_button[:target], method: confirm_notification_button[:method], form_class: 'd-inline margin-right-5px', class: 'btn btn-important green-border' do
-            = t('common.button.confirm')
-        = button_tag class: 'btn btn-important red-border', data: {'bs-dismiss': 'modal'} do
-          = t('common.button.cancel')
+= t('users.shared.notification_modal.delete_modal.content.intro')
+ul
+  li
+    = t('users.shared.notification_modal.delete_modal.content.tasks_header')
+    ul
+      li
+        = t('users.shared.notification_modal.delete_modal.content.tasks_content')
+  li
+    = t('users.shared.notification_modal.delete_modal.content.groups_header')
+    ul
+      li
+        = t('users.shared.notification_modal.delete_modal.content.groups_1')
+      li
+        = t('users.shared.notification_modal.delete_modal.content.groups_2')
+      li
+        = t('users.shared.notification_modal.delete_modal.content.groups_3')
+
+- content_for :modal_footer, flush: true do
+  - if defined?(confirm_notification_javascript)
+    = button_tag class: 'btn btn-important green-border', onclick: confirm_notification_javascript do
+      = t('common.button.confirm')
+  - elsif defined?(confirm_notification_button)
+    = button_to confirm_notification_button[:target], method: confirm_notification_button[:method], form_class: 'd-inline margin-right-5px', class: 'btn btn-important green-border' do
+      = t('common.button.confirm')
+  = button_tag class: 'btn btn-important red-border', data: {'bs-dismiss': 'modal'} do
+    = t('common.button.cancel')

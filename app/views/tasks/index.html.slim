@@ -79,4 +79,8 @@
 
 = render 'tasks/tasks'
 
-= render 'tasks/import_export_dialog', title: t('.button.import_tasks')
+= render 'shared/modal',
+        title: t('.button.import_tasks'),
+        modal_root_attributes: {id: 'import-export-dialog'},
+        modal_body_attributes: {id: 'import-export-modal-body'},
+        template: 'tasks/_import_export_dialog'

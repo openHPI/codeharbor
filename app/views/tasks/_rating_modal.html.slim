@@ -1,22 +1,16 @@
-- content_for :modal_body, flush: true do
-  - Rating::SUBCATEGORIES.each do |category|
-    span.rating-category-container
-      span
-        = t("activerecord.attributes.rating.#{category}")
-      span.task-rating
-        = render('task_star_rating', rating: @user_rating.send(category), is_input: true, category:)
-  hr
+- Rating::SUBCATEGORIES.each do |category|
   span.rating-category-container
     span
-      = t('activerecord.attributes.rating.overall_rating')
+      = t("activerecord.attributes.rating.#{category}")
     span.task-rating
-      = render('task_star_rating', rating: @user_rating.overall_rating, is_input: true, category: :overall_rating)
+      = render('task_star_rating', rating: @user_rating.send(category), is_input: true, category:)
+hr
+span.rating-category-container
+  span
+    = t('activerecord.attributes.rating.overall_rating')
+  span.task-rating
+    = render('task_star_rating', rating: @user_rating.overall_rating, is_input: true, category: :overall_rating)
 
 - content_for :modal_footer, flush: true do
   button.btn.btn-light.m-0#ratingModalSaveButton data-bs-dismiss="modal" disabled=@user_rating.invalid?
     = t('common.button.save')
-
-= render 'shared/modal',
-        title: Rating.model_name.human,
-        size: 'modal-sm',
-        modal_root_attributes: {id: 'ratingModal', 'data-task-id': @task.id}
