@@ -7,7 +7,7 @@ class LabelsController < ApplicationController
   def index; end
 
   def update
-    if @label.update(params.permit(:color))
+    if @label.update(label_params)
       render json: @label.to_h
     else
       flash.now[:alert] = @label.errors.full_messages
@@ -48,6 +48,10 @@ class LabelsController < ApplicationController
   end
 
   private
+
+  def label_params
+    params.require(:label).permit(:color)
+  end
 
   def load_and_authorize_label
     @label = Label.find(params[:id])

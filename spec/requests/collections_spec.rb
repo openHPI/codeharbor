@@ -7,7 +7,7 @@ RSpec.describe 'Collections' do
     let(:user) { create(:user) }
     let(:task) { create(:task) }
     let(:collection) { create(:collection, title: 'Some Collection', users: [user], tasks: [task]) }
-    let(:collection_params) { attributes_for(:collection) }
+    let(:collection_params) { build(:collection).attributes.except('id', 'created_at', 'updated_at') }
 
     before do
       sign_in user
