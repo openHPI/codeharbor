@@ -5,10 +5,11 @@ The following environment variables are specifically support in CodeHarbor and a
 | Environment Variable | Default | Description |  
 |- |- |- |
 | `RAILS_ENV` | `development` | Specifies the Rails environment which can be configured using the files in `config/environments` |  
+| `SECRET_KEY_BASE` | ` ` | Specifies a server-side secret for Rails, must be set for production |  
 | `RAILS_RELATIVE_URL_ROOT` | `/` | Specifies the subpath of the application, used for links and assets |  
+| `DATABASE_URL` | ` ` | Specifies database parameters to use, rather than those specified in `config/database.yml`. A valid URL would be `postgresql://username:password@host:5432/database?pool=5` |  
 | `WEB_CONCURRENCY` | Number of physical CPU cores | Puma worker count in production for cluster mode |
-| `RAILS_MAX_THREADS` | `5` | Maximum Puma thread count per worker |  
-| `RAILS_MIN_THREADS` | `$RAILS_MIN_THREADS` | Minimum Puma thread count per worker |
+| `RAILS_MAX_THREADS` | `3` | Maximum Puma thread count per worker |  
 | `PORT` | `7500` | Default port for the web server |
 | `PIDFILE` | `tmp/pids/server.pid` | Location of the file to store the Puma process ID |
 | `SENTRY_DSN` | ` ` | Specifies the [Sentry error reporting](https://sentry.io) endpoint for the Rails server |  
@@ -22,4 +23,5 @@ The following environment variables are specifically support in CodeHarbor and a
 | `BACKTRACE` | `false` | Enables more verbose log output from framework code during debugging |  
 | `TRUSTED_IP` | ` ` in `development`   | Enables `BetterErrors` for the given IP addresses during development |  
 | `LISTEN_ADDRESS` | `127.0.0.1` in `development` | Specifies the IP address the Vagrant VM server should attach to during development |  
-| `HEADLESS_TEST` | `false` | Enables the test environment to work without a window manager for feature tests (e.g., using Vagrant) |  
+| `HEADLESS` | `false` | Enables the test environment to work without a window manager for feature tests (e.g., using Vagrant) |  
+| `BROWSER` | `chrome` | Specifies the browser to be used for system tests. Supported are `chrome` or `firefox` |  

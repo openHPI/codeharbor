@@ -6,7 +6,7 @@ gem 'acts-as-taggable-on'
 gem 'bcrypt'
 gem 'bootsnap', require: false
 gem 'bootstrap-will_paginate'
-gem 'coffee-rails', '>= 5.0.0' # Use CoffeeScript for .coffee assets and views
+gem 'coffee-rails', require: false
 gem 'config'
 gem 'devise-bootstrap-views'
 gem 'faraday'
@@ -29,7 +29,7 @@ gem 'nokogiri'
 gem 'pg'
 gem 'proformaxml', '~> 1.5.1'
 gem 'puma'
-gem 'rails', '~> 7.1.4'
+gem 'rails', '~> 7.2.1'
 gem 'rails_admin'
 gem 'rails-html-sanitizer'
 gem 'rails-i18n'
@@ -43,7 +43,7 @@ gem 'simple_form'
 gem 'slim-rails'
 gem 'solid_queue'
 gem 'sprockets-rails'
-gem 'terser'
+gem 'terser', require: false
 gem 'turbolinks'
 gem 'whenever', require: false
 
@@ -65,6 +65,7 @@ gem 'sentry-ruby'
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'brakeman'
   gem 'i18n-tasks'
   gem 'letter_opener'
   gem 'listen'
@@ -84,9 +85,7 @@ end
 
 group :test do
   gem 'capybara'
-  gem 'database_cleaner'
   gem 'factory_bot_rails'
-  gem 'headless'
   gem 'pundit-matchers'
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'

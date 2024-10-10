@@ -37,6 +37,7 @@ RSpec.describe 'TasksController', :js do
       expect do
         find('input', id: 'task_title').set('some title')
         find('body').click # unselect the input to trigger change event
+        sleep(0.2) # wait for task_checklist.coffee to execute
       end.to change { progress_bar['aria-valuenow'] }
     end
   end
@@ -87,7 +88,9 @@ RSpec.describe 'TasksController', :js do
         find_by_id('ratingModalOpenButton').click
 
         Rating::CATEGORIES.each do |category|
-          first(".task-star-rating[data-rating-category=#{category}][data-is-rating-input=true] .rating-star[data-rating='#{new_rating[category]}']", minimum: 0, wait: false)&.click
+          next unless new_rating.fetch(category, 0).positive?
+
+          first(".task-star-rating[data-rating-category=#{category}][data-is-rating-input=true] .rating-star[data-rating='#{new_rating[category]}']")&.click
         end
 
         first('#ratingModalSaveButton:not([disabled])', minimum: 0, wait: false)&.click

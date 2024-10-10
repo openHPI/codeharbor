@@ -26,8 +26,8 @@ RSpec.describe 'Authentication' do
     context 'with invalid credentials' do
       it 'does not allow to sign in' do
         click_link(I18n.t('common.button.log_in')) # rubocop:disable Capybara/ClickLinkOrButtonStyle
-        fill_in('Email', with: user.email)
-        fill_in('Password', with: password.reverse)
+        fill_in(:user_email, with: user.email)
+        fill_in(:user_password, with: password.reverse)
         click_button(I18n.t('common.button.log_in')) # rubocop:disable Capybara/ClickLinkOrButtonStyle
         expect(page).to have_content(I18n.t('devise.failure.invalid', authentication_keys: 'Email'))
       end

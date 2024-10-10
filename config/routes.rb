@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  # You can have the root of your site routed with "root"
-  root to: 'home#index'
+  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   resources :home, only: :index do
     collection do
@@ -134,4 +133,15 @@ Rails.application.routes.draw do
   resources :ping, only: :index, defaults: {format: :json}
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+
+  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
+  # Can be used by load balancers and uptime monitors to verify that the app is live.
+  get 'up', to: 'rails/health#show', as: :rails_health_check
+
+  # Render dynamic PWA files from app/views/pwa/*
+  get 'service-worker', to: 'rails/pwa#service_worker', as: :pwa_service_worker, defaults: {format: :js}
+  get 'manifest', to: 'rails/pwa#manifest', as: :pwa_manifest, defaults: {format: :webmanifest}
+
+  # Defines the root path route ("/")
+  root to: 'home#index'
 end

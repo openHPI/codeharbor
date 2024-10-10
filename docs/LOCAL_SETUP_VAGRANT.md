@@ -1,6 +1,6 @@
 # Vagrant setup
 
-With the Vagrant-based setup, you won't need to (manually) install CodeHarbor and all dependencies on your local instance. Instead, a virtual machine containing all requirements will be configure
+With the Vagrant-based setup, you won't need to (manually) install CodeHarbor and all dependencies on your local instance. Instead, a virtual machine containing all requirements will be configured.
 
 ## Install VirtualBox
 
@@ -73,7 +73,7 @@ During the first start, Vagrant will run a provision script and automatically se
 
 ## Start CodeHarbor
 
-For the development environment with Vagrant, two server processes are required: the Rails server for the main application, and a Webpack server providing JavaScript and CSS assets. As those processes will be run in the virtual machine, you always need to connect to the VM with `vagrant ssh`.
+For the development environment with Vagrant, three server processes are required: the Rails server for the main application, a Webpack server providing JavaScript and CSS assets, and the Solid Queue supervisor to process background jobs. As those processes will be run in the virtual machine, you always need to connect to the VM with `vagrant ssh`.
 
 1. Webpack dev server:
 
@@ -81,7 +81,7 @@ This project uses [shakapacker](https://github.com/shakacode/shakapacker) to int
 
   ```shell
   vagrant ssh
-  cd codeocean
+  cd codeharbor
   yarn run webpack-dev-server
   ```
 
@@ -96,6 +96,16 @@ This will launch a dedicated server on port 3045 (default setting) and allow inc
   ```
 
 This will launch the CodeHarbor web application server on port 7500 (default setting) for all interfaces (`0.0.0.0`) and allow incoming connections from your browser. Listening on all interfaces is required, so that you can connect from your VM-external browser to the Rails server.
+
+3. Solid Queue supervisor:
+
+  ```shell
+  vagrant ssh
+  cd codeharbor
+  bundle exec rake solid_queue:start
+  ```
+
+This will launch the Solid Queue supervisor to process background jobs.
 
 **Check with:**  
 Open your web browser at <http://localhost:7500>. Vagrant will redirect requests to your `localhost` automatically to the virtual machine.

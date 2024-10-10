@@ -2,7 +2,7 @@
 
 CodeHarbor consists of a web application that is connected to a PostgreSQL database. The following document will guide you through the setup of CodeHarbor with all aforementioned components.
 
-We recommend using the **native setup** as described below. We also prepared a setup with Vagrant using a virtual machine as [described in this guide](./LOCAL_SETUP_VAGRANT.md). However, the Vagrant setup might be outdated and is not actively maintained (PRs are welcome though!)
+We recommend using the **native setup** as described below or the **devcontainer setup** as [described in this guide](./LOCAL_SETUP_DEVCONTAINER.md). We also prepared a setup with Vagrant using a virtual machine as [described in this guide](./LOCAL_SETUP_VAGRANT.md). However, the Vagrant setup might be outdated and is not actively maintained (PRs are welcome though!)
 
 ## Native setup for CodeHarbor
 
@@ -150,7 +150,7 @@ If you have several Ruby versions installed, check that you are using the latest
 First, copy our templates:
 
 ```shell
-for f in action_mailer.yml content_security_policy.yml database.yml mnemosyne.yml secrets.yml
+for f in action_mailer.yml content_security_policy.yml database.yml mnemosyne.yml
 do
   if [ ! -f config/$f ]
   then
@@ -160,9 +160,9 @@ done
 ```
 
 Then, you should check all config files manually and adjust settings where necessary for your environment.
-For the basic setup you only need to 
-- generate a secret with e.g. `rails secret` and then add it into the three CHANGE_ME fields in `secrets.yml`.
-- add your username for the database in `database.yml`. For macOS, it is the same as your mac username.
+For the basic setup you only need to add your username for the database in `database.yml`. For macOS, it is the same as your Mac username.
+
+For a production configuration, you also need to supply a secret key base. To do so, first generate a secret with `rails secret` and then set it as environment variable `SECRET_KEY_BASE=<your secret>` for the process.
 
 ### Install required project libraries
 
@@ -181,9 +181,7 @@ rake db:setup
 
 ### Start CodeHarbor
 
-For the development environment, three server processes are required: 
-the Rails server for the main application, a Webpack server providing JavaScript and CSS assets
-and the Solid Queue supervisor to process background jobs.
+For the development environment, three server processes are required: the Rails server for the main application, a Webpack server providing JavaScript and CSS assets, and the Solid Queue supervisor to process background jobs.
 
 1. Webpack dev server:
 
@@ -208,6 +206,8 @@ This will launch the CodeHarbor web application server on port 7500 (default set
   ```shell
   bundle exec rake solid_queue:start
   ```
+
+This will launch the Solid Queue supervisor to process background jobs.
 
 **Check with:**  
 Open your web browser at <http://localhost:7500>

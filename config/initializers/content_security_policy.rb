@@ -9,6 +9,7 @@
 require_relative 'sentry_csp'
 require_relative 'sentry_javascript'
 require_relative 'devise'
+require_relative 'github_codespaces'
 
 module CSP
   def self.apply_yml_settings_for(policy)
@@ -32,6 +33,13 @@ module CSP
         get_host_source(value) unless value.nil?
       end
       add_policy(policy, :form_action, settings)
+    end
+  end
+
+  def self.apply_codespaces_settings_for(policy)
+    %w[wss https].each do |scheme|
+      url = GithubCodespaces.url_for(:webpack_dev_server, scheme)
+      add_policy(policy, :connect_src, [url])
     end
   end
 
@@ -84,7 +92,7 @@ Rails.application.configure do
     policy.form_action          :self
     policy.frame_ancestors      :none
     policy.frame_src            :none
-    policy.manifest_src         :none
+    policy.manifest_src         :self
 
     # Trusted Types are not yet added to the application, thus we cannot enforce them.
     # policy.require_trusted_types_for :script
@@ -98,14 +106,15 @@ Rails.application.configure do
     # "An iframe which has both allow-scripts and allow-same-origin for its sandbox attribute can escape its sandboxing."
     policy.sandbox              'allow-downloads', 'allow-forms', 'allow-modals', 'allow-popups', 'allow-same-origin', 'allow-scripts'
 
-    CSP.apply_yml_settings_for      policy
-    CSP.apply_sentry_settings_for   policy if SentryJavascript.active?
-    CSP.apply_omniauth_settings_for policy if Devise.omniauth_configs.present?
+    CSP.apply_yml_settings_for        policy
+    CSP.apply_sentry_settings_for     policy if SentryJavascript.active?
+    CSP.apply_omniauth_settings_for   policy if Devise.omniauth_configs.present?
+    CSP.apply_codespaces_settings_for policy if GithubCodespaces.active?
   end
 
   # Generate session nonces for permitted importmap, inline scripts, and inline styles.
   # config.content_security_policy_nonce_generator = ->(request) { request.session.id.to_s }
-  # config.content_security_policy_nonce_directives = %w[script-src style-src]
+  # config.content_security_policy_nonce_directives = %w(script-src style-src)
 
   # Report violations without enforcing the policy.
   # config.content_security_policy_report_only = true

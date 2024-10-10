@@ -51,18 +51,5 @@ rvm install $ruby_version
 
 ######## CODEHARBOR INSTALL ##########
 
-# Prepare config
-for f in action_mailer.yml content_security_policy.yml database.yml mnemosyne.yml secrets.yml
-do
-  if [ ! -f config/$f ]
-  then
-    cp config/$f.example config/$f
-  fi
-done
-
-# Install dependencies
-bundle install
-yarn install
-
-# Initialize database
-rake db:setup
+# Simply use the Rails-provided setup script
+bin/setup

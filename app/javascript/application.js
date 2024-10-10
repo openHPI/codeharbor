@@ -50,8 +50,15 @@ import locales from "../../tmp/locales.json";
 
 Promise.all(
     Object.keys(locales).map(locale => import(`select2/dist/js/i18n/${locale}`))
-).then(() =>
-    document.dispatchEvent(new Event("select2:locales:loaded"))
+).then(() => {
+    // Since there is a race condition between the locales and turbolinks,
+    // we don't know whether the locales are loaded before or after turbolinks.
+    // Therefore, we trigger the event in both cases.
+    $(document).on('turbolinks:load', () =>
+      $(document).trigger('select2:locales:loaded')
+    );
+    $(document).trigger('select2:locales:loaded')
+  }
 );
 
 // Fetch user locale from html#lang.

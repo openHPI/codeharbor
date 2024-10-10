@@ -30,3 +30,23 @@ updates:
     labels:
       - dependencies
       - github-actions
+
+  - package-ecosystem: docker
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "03:00"
+      timezone: UTC
+    labels:
+      - dependencies
+      - docker
+
+  - package-ecosystem: devcontainers
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "03:00"
+      timezone: UTC
+    labels:
+      - dependencies
+      - devcontainers

@@ -30,7 +30,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.3
+          ruby-version: .ruby-version
           bundler-cache: true
 
       - name: Setup Node
@@ -64,7 +64,6 @@ jobs:
           cp config/action_mailer.yml.ci config/action_mailer.yml
           cp config/content_security_policy.yml.ci config/content_security_policy.yml
           cp config/database.yml.ci config/database.yml
-          cp config/secrets.yml.ci config/secrets.yml
           cp config/mnemosyne.yml.ci config/mnemosyne.yml
 
       - name: Create database
@@ -96,6 +95,14 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
+      - name: Keep screenshots from failed system specs
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: screenshots
+          path: ${{ github.workspace }}/tmp/screenshots
+          if-no-files-found: ignore
+
   lint:
     runs-on: ubuntu-latest
 
@@ -106,7 +113,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.3
+          ruby-version: .ruby-version
           bundler-cache: true
 
       - name: Run rubocop
@@ -137,7 +144,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.3
+          ruby-version: .ruby-version
           bundler-cache: true
 
       - name: Run slim-lint
@@ -151,3 +158,25 @@ jobs:
           name: Slim-Lint Report
           title: Analyze Slim templates for linting issues
           path: checkstyle-result.xml
+
+  scan_ruby:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Scan for common Rails security vulnerabilities using static analysis
+        uses: reviewdog/action-brakeman@v2
+        with:
+          filter_mode: nofilter
+          reporter: github-check
+          skip_install: true
+          use_bundler: true
+          fail_on_error: true

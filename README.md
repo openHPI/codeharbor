@@ -1,5 +1,7 @@
 # CodeHarbor
 
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/openHPI/codeharbor)
+
 [![Build Status](https://github.com/openHPI/codeharbor/workflows/CI/badge.svg)](https://github.com/openHPI/codeharbor/actions?query=workflow%3ACI)
 [![codecov](https://codecov.io/gh/openHPI/codeharbor/branch/master/graph/badge.svg?token=lUL0Fq7Uc9)](https://codecov.io/gh/openHPI/codeharbor)
 
@@ -8,8 +10,7 @@
 CodeHarbor is a repository system for automatically gradeable programming exercises and enables instructors to exchange of such exercises via the [ProFormA XML](https://github.com/ProFormA/proformaxml) format across diverse code assessment systems.
 
 ## Server Setup and Deployment
-Use [Capistrano](https://capistranorb.com/). Docker and Vagrant are for local development only.
-
+Use [Capistrano](https://capistranorb.com/). or the provided Dockerfile (only for production). The devcontainer and Vagrant setup are for local development only.
 
 ## Development Setup
 
