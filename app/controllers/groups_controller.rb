@@ -63,7 +63,7 @@ class GroupsController < ApplicationController
     @group.admins.each do |admin|
       send_message(admin, :group_request)
 
-      AccessRequestMailer.send_access_request(current_user, admin, @group).deliver_now
+      AccessRequestMailer.send_access_request(current_user, admin, @group).deliver_later
     end
     @group.add(current_user, role: :applicant)
     redirect_to groups_path
