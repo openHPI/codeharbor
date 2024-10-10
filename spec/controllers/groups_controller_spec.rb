@@ -3,6 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe GroupsController do
+  include ActiveJob::TestHelper
   render_views
 
   let(:user) { create(:user, preferred_locale: user_locale) }
@@ -172,7 +173,7 @@ RSpec.describe GroupsController do
     end
 
     it 'sends mail in correct language for recipient' do
-      post_request
+      perform_enqueued_jobs { post_request }
       expect(ActionMailer::Base.deliveries.last.body.parts.first.body).to include(I18n.t('groups.access_request_mailer.message_line2', locale: admin_locale))
     end
   end
