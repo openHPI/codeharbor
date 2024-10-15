@@ -3,7 +3,7 @@
 ## Supported Versions
 
 To receive fixes for security vulnerabilities it is required to always upgrade to the latest version of CodeHarbor. 
-See https://github.com/openHPI/codeharbor/tree/master for the latest version.
+See https://github.com/openHPI/codeharbor/tree/main for the latest version.
 
 ## Reporting a Vulnerability
 
