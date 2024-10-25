@@ -18,7 +18,7 @@ module TaskService
     def handle_groups
       return unless @group_tasks_params
 
-      groups = @group_tasks_params[:group_ids].filter(&:present?).map(&:to_i).map {|gid| Group.find(gid) }
+      groups = @group_tasks_params[:group_ids].compact_blank.map(&:to_i).map {|gid| Group.find(gid) }
       remove_groups(@task.groups - groups)
       add_groups(groups - @task.groups)
     end
