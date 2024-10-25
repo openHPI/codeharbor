@@ -117,10 +117,10 @@ set_progress = (progress) ->
   $('.completeness-checklist-container .progress-bar').attr('aria-valuenow', progress).css(width: "#{progress}%")
 
   # circular progress bar hack with strokeDashoffset
-  $circle = $('.minimized-checklist > svg > circle.bar');
+  $circle = $('.minimized-checklist > div > svg > circle.bar');
   $circle.css({strokeDashoffset: ((100-progress)/100) * Math.PI*($circle.attr('r')*2)});
 
-  $('.minimized-checklist > svg > text').text("#{progress}%");
+  $('.minimized-checklist > div > svg > text').text("#{progress}%");
 
   if progress > old_progress && progress == 100
     setTimeout ->
