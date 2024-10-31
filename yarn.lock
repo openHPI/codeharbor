@@ -2758,7 +2758,7 @@ __metadata:
     file-loader: "npm:^6.2.0"
     i18n-js: "npm:^4.5.0"
     jquery: "npm:^3.7.1"
-    jquery-ui: "npm:^1.14.0"
+    jquery-ui: "npm:^1.14.1"
     jquery-ujs: "npm:^1.2.3"
     mini-css-extract-plugin: "npm:^2.9.1"
     rails-erb-loader: "usabilityhub/rails-erb-loader#master"
@@ -4306,12 +4306,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jquery-ui@npm:^1.14.0":
-  version: 1.14.0
-  resolution: "jquery-ui@npm:1.14.0"
+"jquery-ui@npm:^1.14.1":
+  version: 1.14.1
+  resolution: "jquery-ui@npm:1.14.1"
   dependencies:
     jquery: "npm:>=1.12.0 <5.0.0"
-  checksum: 10c0/7139e5273ddf3cb572b32a73dad66a5f4acd1a62dce8f74cdc096643c0ce08fb0ef1a7c8cada8fbb5c27580486351abc8ba9c33f121416f22004a8cd2c456035
+  checksum: 10c0/cf7a3c0aac369e513d78bc5864bbafb6ddf85a43513ca5d00b11d65e2890a6618ff2ef5b8cb2925db9a6b7d0c2482d717fb10cc813e419024ae8bc457e18f51d
   languageName: node
   linkType: hard
 
