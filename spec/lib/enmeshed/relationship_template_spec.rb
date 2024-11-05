@@ -86,7 +86,7 @@ RSpec.describe Enmeshed::RelationshipTemplate do
 
         get_relationship_templates_stub.to_return(body: file_fixture('enmeshed/no_relationship_templates_yet.json'))
 
-        allow(Settings.omniauth.nbp.enmeshed).to receive(:allow_certificate_request).and_return(true)
+        allow(Settings).to receive(:dig).with(:omniauth, :nbp, :enmeshed, :allow_certificate_request).and_return(true)
       end
 
       it 'returns the expected JSON' do

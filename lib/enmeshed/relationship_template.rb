@@ -8,7 +8,7 @@ module Enmeshed
     # To minimize the risk of a template expiring before submission, we set the validity to 12 hours.
     VALIDITY_PERIOD = 12.hours
     # The display name of the service as shown in the enmeshed app.
-    DISPLAY_NAME = Settings.omniauth&.nbp&.enmeshed&.display_name
+    DISPLAY_NAME = Settings.dig(:omniauth, :nbp, :enmeshed, :display_name)
     # These attributes are mandatory in the app and must be provided.
     # See https://enmeshed.eu/integrate/attribute-values for more attributes.
     REQUIRED_ATTRIBUTES = %w[GivenName Surname EMailAddress AffiliationRole].freeze
@@ -117,7 +117,7 @@ module Enmeshed
     end
 
     def relationship_attributes
-      if Settings.omniauth&.nbp&.enmeshed&.allow_certificate_request
+      if Settings.dig(:omniauth, :nbp, :enmeshed, :allow_certificate_request)
         [
           {
             '@type': 'CreateAttributeRequestItem',
