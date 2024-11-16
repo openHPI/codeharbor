@@ -23,8 +23,8 @@ class ReplaceParamTypeAndIdWithAttachmentInMessages < ActiveRecord::Migration[7.
       SET attachment_id = param_id
     SQL
 
-    Message.where(param_type: 'collection').update_all(attachment_type: Collection.name) # rubocop:disable Rails/SkipsModelValidations
-    Message.where(param_type: GROUP_TYPES).update_all(attachment_type: Group.name) # rubocop:disable Rails/SkipsModelValidations
+    Message.where(param_type: 'collection').update_all(attachment_type: Collection.name.demodulize) # rubocop:disable Rails/SkipsModelValidations
+    Message.where(param_type: GROUP_TYPES).update_all(attachment_type: Group.name.demodulize) # rubocop:disable Rails/SkipsModelValidations
 
     Message.in_batches do |batch|
       batch.includes(:attachment).find_each do |message|
