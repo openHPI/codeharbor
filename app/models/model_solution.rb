@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ModelSolution < ApplicationRecord
-  include FileConcern
   include TransferValues
   include ParentValidation
 

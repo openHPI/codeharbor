@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 class Test < ApplicationRecord
-  include FileConcern
   include TransferValues
   include ParentValidation
 
   belongs_to :task, autosave: true, inverse_of: :tests
   belongs_to :testing_framework, optional: true
   belongs_to :parent, class_name: 'Test', optional: true
+  has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy
+  accepts_nested_attributes_for :files, allow_destroy: true
   validates :title, presence: true
   validates :xml_id, presence: true
   validates :parent_id, uniqueness: {scope: :task}, if: -> { parent_id.present? }
