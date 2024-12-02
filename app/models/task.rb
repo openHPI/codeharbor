@@ -3,7 +3,6 @@
 require 'nokogiri'
 require 'zip'
 class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
-  include FileConcern
   include ParentValidation
   include TransferValues
 
@@ -22,6 +21,9 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validate :unique_pending_contribution
   validates :parent, presence: true, if: -> { contribution? }
   validate :no_license_change_on_duplicate, on: :update
+
+  has_many :files, as: :fileable, class_name: 'TaskFile', dependent: :destroy
+  accepts_nested_attributes_for :files, allow_destroy: true
 
   has_many :group_tasks, dependent: :destroy
   has_many :groups, through: :group_tasks
