@@ -2,6 +2,9 @@ name: Dependabot Automerge Check
 on:
   - pull_request_target
 
+permissions:
+  pull-requests: write
+
 jobs:
   auto-merge:
     if: github.actor == 'dependabot[bot]'
@@ -12,4 +15,4 @@ jobs:
       - name: Automerge dependabot dependencies
         uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
-          github-token: ${{ secrets.OPENHPI_BOT_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
