@@ -131,9 +131,11 @@ module Users
     end
 
     def current_user
-      # Check if an existing user is already signed in (passed through the RelayState)
-      # and trying to add a new identity to their account. If so, we load the user information
-      # and set it as the current user. This is necessary to avoid creating a new user.
+      # Check if an existing user is already signed in and trying to add a new identity to their account;
+      # the session ID is passed through the RelayState then (see the `AbstractSaml` strategy).
+      #
+      # If the RelayState contains the ID of the current user, we pass it on, so that the middleware can find the
+      # current user. This is necessary to avoid creating a new user.
       @current_user ||= User.find_by(id: OmniAuth::NonceStore.pop(params[:RelayState])) || super
     end
 

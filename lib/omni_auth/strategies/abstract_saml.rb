@@ -25,10 +25,9 @@ module OmniAuth
         want_assertions_encrypted: true, # Invalidate SAML messages without an EncryptedAssertion
       }
 
-      # Our auto-login mechanism passes a desired application state to the request phase.
-      # So far, this is used to store a temporary token for the current user in the RelayState.
-      # If we forward this via SAML's standard "RelayState" parameter, we will
-      # get it back in the callback phase.
+      # During the request phase, we store the ID of the current user in the `request.params`.
+      # It is passed through via SAML's standard `RelayState` parameter, so it will be preserved and can be used in the
+      # callback phase.
       option :idp_sso_service_url_runtime_params, {
         relay_state: 'RelayState',
       }
@@ -81,9 +80,8 @@ module OmniAuth
         options[:slo_default_relay_state] ||= full_host
 
         if on_request_path? && current_user
-          # We want to store the current user in the SAML RelayState,
-          # so that we can auto-login the user in the callback phase.
-          # This allows a registered user to add further OmniAuth providers.
+          # Store the ID of the current user in the SAML RelayState if a user is logged in, so that it can be accessed
+          # for requesting the current user in the callback phase and to add the new identity to the existing account.
           request.params['relay_state'] = NonceStore.add current_user.id
         end
         super
