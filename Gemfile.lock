@@ -524,7 +524,7 @@ GEM
       activejob (>= 7.2)
       activerecord (>= 7.2)
       railties (>= 7.2)
-    solid_queue (1.1.1)
+    solid_queue (1.1.2)
       activejob (>= 7.1)
       activerecord (>= 7.1)
       concurrent-ruby (>= 1.3.1)
@@ -867,7 +867,7 @@ CHECKSUMS
   slim-rails (3.6.3) sha256=7b8a2e1f76b0c414e2b7ca13e7129172860a054fe1b110205796ab6b5ae94a77
   slim_lint (0.31.1) sha256=9258d00fa9d355c3ad79dba46190225b8b019f354d6ea45accb3011a9f393e9c
   solid_cable (3.0.5) sha256=258ac22d103275b40affdf86421047899aab22376e78719cfe806c5561403459
-  solid_queue (1.1.1) sha256=c5f0b00831fb47404c62109b4066be8c99f3b3f6f0e07d2482f1b5db2c21d0c6
+  solid_queue (1.1.2) sha256=178c9396d1cf0dac595c7508da90ddb397d25848ca007b5c5ed48e6ac6fc360c
   sorbet-runtime (0.5.11708) sha256=df4c1023c02c1cf723e03bc604d1b5a98e77c2db4b573113b2466bcc8a91c1e8
   sorted_set (1.0.3) sha256=4f2b8bee6e8c59cbd296228c0f1f81679357177a8b6859dcc2a99e86cce6372f
   sprockets (4.2.1) sha256=951b13dd2f2fcae840a7184722689a803e0ff9d2702d902bd844b196da773f97
