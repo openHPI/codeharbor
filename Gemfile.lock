@@ -466,7 +466,7 @@ GEM
     ruby-vips (2.2.2)
       ffi (~> 1.12)
       logger
-    rubyzip (2.3.2)
+    rubyzip (2.4.1)
     sassc (2.4.0)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
@@ -847,7 +847,7 @@ CHECKSUMS
   ruby-progressbar (1.13.0) sha256=80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33
   ruby-saml (1.17.0) sha256=0419839ba3312d255e35fe3cc7ae155e4a241fd468796caebcf61164aa01b8a9
   ruby-vips (2.2.2) sha256=af5be8e9f2857a98424d7606ecfc2c21c5e107d0802915190dcc093f56e4dd5b
-  rubyzip (2.3.2) sha256=3f57e3935dc2255c414484fbf8d673b4909d8a6a57007ed754dde39342d2373f
+  rubyzip (2.4.1) sha256=8577c88edc1fde8935eb91064c5cb1aef9ad5494b940cf19c775ee833e075615
   sassc (2.4.0) sha256=4c60a2b0a3b36685c83b80d5789401c2f678c1652e3288315a1551d811d9f83e
   sassc-rails (2.1.2) sha256=5f4fdf3881fc9bdc8e856ffbd9850d70a2878866feae8114aa45996179952db5
   securerandom (0.4.1) sha256=cc5193d414a4341b6e225f0cb4446aceca8e50d5e1888743fac16987638ea0b1
