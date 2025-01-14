@@ -119,7 +119,12 @@ module Enmeshed
           raise ConnectorError.new('NBP provider or enmeshed connector not configured as expected')
         end
 
-        @connection = Faraday.new(CONNECTOR_URL, headers:)
+        @connection = Faraday.new(CONNECTOR_URL, headers:) do |faraday|
+          faraday.options[:open_timeout] = 1
+          faraday.options[:timeout] = 5
+
+          faraday.adapter :net_http_persistent
+        end
       end
 
       # @return [Hash] The headers for the enmeshed connection.
