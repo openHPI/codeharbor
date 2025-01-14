@@ -10,6 +10,7 @@ gem 'coffee-rails', require: false
 gem 'config'
 gem 'devise-bootstrap-views'
 gem 'faraday'
+gem 'faraday-net_http_persistent'
 gem 'http_accept_language'
 gem 'i18n-js'
 gem 'image_processing'

@@ -66,7 +66,7 @@ RSpec.describe Enmeshed::RelationshipTemplate do
           before { get_relationship_templates_stub.to_timeout }
 
           it 'raises an error' do
-            expect { new_template }.to raise_error(Faraday::ConnectionFailed)
+            expect { new_template }.to raise_error(Faraday::TimeoutError)
           end
         end
       end
