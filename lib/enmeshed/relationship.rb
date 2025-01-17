@@ -13,23 +13,6 @@ module Enmeshed
       @relationship_changes = changes
     end
 
-    def self.parse(content)
-      super
-      attributes = {
-        json: content,
-        template: RelationshipTemplate.parse(content[:template]),
-        changes: content[:changes],
-      }
-      new(**attributes)
-    end
-
-    def self.pending_for_nbp_uid(nbp_uid)
-      relationships = Connector.pending_relationships
-
-      # We want to call valid? for all relationships because it internally rejects invalid relationships
-      relationships.select(&:valid?).find {|rel| rel.nbp_uid == nbp_uid }
-    end
-
     def peer
       @json[:peer]
     end
@@ -39,7 +22,8 @@ module Enmeshed
     end
 
     def valid?
-      # templates can only be scanned in their validity period but can theoretically be submitted infinitely late so we sanitize here
+      # Templates can only be scanned in their validity period but can theoretically be submitted infinitely late.
+      # Thus, we sanitize here.
       if expires_at < (RelationshipTemplate::VALIDITY_PERIOD * 2).ago
         reject!
         false
@@ -53,7 +37,9 @@ module Enmeshed
     end
 
     def accept!
-      raise ConnectorError('Relationship should exactly one RelationshipChange') if relationship_changes.size != 1
+      if relationship_changes.size != 1
+        raise ConnectorError.new('Relationship should have exactly one RelationshipChange')
+      end
 
       Rails.logger.debug do
         "Enmeshed::ConnectorApi accepting Relationship for template #{truncated_reference}"
@@ -72,13 +58,34 @@ module Enmeshed
       end
     end
 
+    class << self
+      def parse(content)
+        super
+        attributes = {
+          json: content,
+          template: RelationshipTemplate.parse(content[:template]),
+          changes: content[:changes],
+        }
+        new(**attributes)
+      end
+
+      def pending_for(nbp_uid)
+        relationships = Connector.pending_relationships
+
+        # We want to call valid? for all relationships, because it internally rejects invalid relationships
+        relationships.select(&:valid?).find {|relationship| relationship.nbp_uid == nbp_uid }
+      end
+    end
+
     private
 
     def parse_userdata # rubocop:disable Metrics/AbcSize
       # Since the RelationshipTemplate has a `maxNumberOfAllocations` attribute set to 1,
       # you cannot request multiple Relationships with the same template.
       # Further, RelationshipChanges should not be possible before accepting the Relationship.
-      raise ConnectorError('Relationship should have exactly one RelationshipChange') if relationship_changes.size != 1
+      if relationship_changes.size != 1
+        raise ConnectorError.new('Relationship should have exactly one RelationshipChange')
+      end
 
       change_response_items = relationship_changes.first.dig(:request, :content, :response, :items)
 
@@ -93,6 +100,8 @@ module Enmeshed
         enmeshed_user_attributes[attr_type] = attr_value
       end
 
+      check_for_required_attributes! enmeshed_user_attributes
+
       {
         email: enmeshed_user_attributes['EMailAddress'],
         first_name: enmeshed_user_attributes['GivenName'],
@@ -101,6 +110,15 @@ module Enmeshed
       }
     rescue NoMethodError
       raise ConnectorError.new("Could not parse userdata in relationship change: #{relationship_changes.first}")
+    end
+
+    def check_for_required_attributes!(enmeshed_user_attributes)
+      blank_attributes = enmeshed_user_attributes.select {|_, v| v.blank? }.keys
+      missing_attributes = Enmeshed::RelationshipTemplate::REQUIRED_ATTRIBUTES - enmeshed_user_attributes.keys
+
+      if blank_attributes.any? || missing_attributes.any?
+        raise ConnectorError.new("#{(blank_attributes << missing_attributes).flatten.join(', ')} must not be empty")
+      end
     end
 
     def parse_status_group(affiliation_role)
