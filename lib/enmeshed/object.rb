@@ -18,7 +18,11 @@ module Enmeshed
       end
 
       def validate!(instance)
-        raise ConnectorError.new("Invalid #{klass} schema") unless schema.valid?(instance)
+        unless schema.valid?(instance)
+          error = schema.validate(instance).first.fetch('error')
+          Rails.logger.debug { "Invalid #{klass} schema: #{error}" }
+          raise ConnectorError.new("Invalid #{klass} schema: #{error}")
+        end
       end
     end
   end
