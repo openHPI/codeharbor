@@ -26,7 +26,7 @@ class RatingsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the following list through.
   def rating_params
-    params.require(:rating).permit(Rating::CATEGORIES)
+    params.expect(rating: Rating::CATEGORIES)
   end
 
   def handle_own_rating

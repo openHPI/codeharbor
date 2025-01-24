@@ -50,7 +50,7 @@ class LabelsController < ApplicationController
   private
 
   def label_params
-    params.require(:label).permit(:color)
+    params.expect(label: [:color])
   end
 
   def load_and_authorize_label

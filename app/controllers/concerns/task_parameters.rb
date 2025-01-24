@@ -10,21 +10,21 @@ module TaskParameters
 
   def test_params
     [:id, :title, :testing_framework_id, :description, :internal_description, :test_type, :xml_id, :validity, :timeout, :_destroy,
-     :parent_id, {files_attributes: file_params}]
+     :parent_id, {files_attributes: [file_params]}]
   end
 
   def model_solution_params
-    [:id, :description, :internal_description, :xml_id, :_destroy, :parent_id, {files_attributes: file_params}]
+    [:id, :description, :internal_description, :xml_id, :_destroy, :parent_id, {files_attributes: [file_params]}]
   end
 
   def task_params
-    params.require(:task).permit(:title, :description, :internal_description, :parent_uuid, :language, :license_id,
-      :programming_language_id, :access_level, files_attributes: file_params, tests_attributes: test_params,
-      model_solutions_attributes: model_solution_params, label_names: []).tap {|parameters| fix_nested_files_params(parameters) }
+    params.expect(task: [:title, :description, :internal_description, :parent_uuid, :language, :license_id,
+                         :programming_language_id, :access_level, {files_attributes: [file_params], tests_attributes: [test_params],
+      model_solutions_attributes: [model_solution_params], label_names: []}]).tap {|parameters| fix_nested_files_params(parameters) }
   end
 
   def group_tasks_params
-    params.require(:group_tasks).permit(group_ids: [])
+    params.expect(group_tasks: [group_ids: []])
   end
 
   def import_confirm_params

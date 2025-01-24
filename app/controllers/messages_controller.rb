@@ -81,6 +81,6 @@ class MessagesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the following list through.
   def message_params
-    params.require(:message).permit(:text, :sender_id, :recipient_id, :sender_status, :recipient_status)
+    params.expect(message: %i[text sender_id recipient_id sender_status recipient_status])
   end
 end

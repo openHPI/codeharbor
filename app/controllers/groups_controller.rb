@@ -132,6 +132,6 @@ class GroupsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the following list through.
   def group_params
-    params.require(:group).permit(:name, :description)
+    params.expect(group: %i[name description])
   end
 end

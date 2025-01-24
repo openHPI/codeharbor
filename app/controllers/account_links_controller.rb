@@ -91,6 +91,6 @@ class AccountLinksController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the following list through.
   def account_link_params
-    params.require(:account_link).permit(:push_url, :check_uuid_url, :api_key, :name, :proforma_version)
+    params.expect(account_link: %i[push_url check_uuid_url api_key name proforma_version])
   end
 end
