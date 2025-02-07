@@ -46,7 +46,7 @@ import 'jquery-ui/themes/base/sortable.css'
 
 // I18n locales
 import { I18n } from "i18n-js";
-import locales from "../../tmp/locales.json";
+import locales from "./generated/locales.json";
 
 Promise.all(
     Object.keys(locales).map(locale => import(`select2/dist/js/i18n/${locale}`))
@@ -74,7 +74,7 @@ i18n.locale = userLocale;
 window.I18n = i18n;
 
 // Routes
-import * as Routes from 'routes.js.erb';
+import * as Routes from 'generated/routes';
 window.Routes = Routes;
 
 // ACE editor
