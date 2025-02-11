@@ -7,26 +7,17 @@ RSpec.describe 'Users::NBPWallet::Finalize' do
 
   let(:uid) { 'example-uid' }
   let(:session_params) { {saml_uid: uid, omniauth_provider: 'nbp'} }
+  let(:relationship) { instance_double(Enmeshed::Relationship) }
 
   before do
     set_session(session_params)
   end
 
   context 'without any errors' do
-    let(:relationship) do
-      instance_double(Enmeshed::Relationship,
-        accept!: true,
-        userdata: {
-          email: 'john.oliver@example103.org',
-          first_name: 'john',
-          last_name: 'oliver',
-          status_group: 'learner',
-        })
-    end
-
     before do
       allow(Enmeshed::Relationship).to receive(:pending_for).with(uid).and_return(relationship)
-      allow(relationship).to receive(:peer).and_return('id1EvvJ68x6wdHBwYrFTR31XtALHko9fnbyp')
+      allow(relationship).to receive_messages(peer: 'id1EvvJ68x6wdHBwYrFTR31XtALHko9fnbyp', accept!: true,
+        userdata: {email: 'john.oliver@example103.org', first_name: 'john', last_name: 'oliver', status_group: :learner})
     end
 
     it 'creates a user' do
@@ -112,79 +103,69 @@ RSpec.describe 'Users::NBPWallet::Finalize' do
     end
 
     context 'when an attribute is missing' do
-      # `Enmeshed::ConnectorError` is unknown until 'lib/enmeshed/connector.rb' is loaded, because it's defined there
-      require 'enmeshed/connector'
-
-      let(:relationship) do
-        instance_double(Enmeshed::Relationship, accept!: false, reject!: true)
-      end
-
       before do
         allow(Enmeshed::Relationship).to receive(:pending_for).with(uid).and_return(relationship)
-        allow(relationship).to receive(:userdata).and_raise(Enmeshed::ConnectorError, 'EMailAddress must not be empty')
+        allow(relationship).to receive_messages(
+          userdata: {first_name: 'john', last_name: 'oliver', status_group: :learner},
+          peer: 'id1EvvJ68x6wdHBwYrFTR31XtALHko9fnbyp',
+          reject!: true
+        )
       end
 
-      it_behaves_like 'a handled erroneous request', I18n.t('common.errors.generic')
-      it_behaves_like 'a documented erroneous request', Enmeshed::ConnectorError
+      it_behaves_like 'a handled erroneous request', "Could not create User: Email can't be blank"
     end
 
     context 'with an invalid status group' do
-      let(:relationship) do
-        instance_double(Enmeshed::Relationship,
-          reject!: true,
-          userdata: {
-            email: 'john.oliver@example103.org',
-            first_name: 'john',
-            last_name: 'oliver',
-            status_group: nil,
-          })
-      end
-
       before do
         allow(Enmeshed::Relationship).to receive(:pending_for).with(uid).and_return(relationship)
+        allow(relationship).to receive_messages(reject!: true, peer: 'id1EvvJ68x6wdHBwYrFTR31XtALHko9fnbyp', userdata: {
+          email: 'john.oliver@example103.org',
+          first_name: 'john',
+          last_name: 'oliver',
+          status_group: nil,
+        })
       end
 
-      it_behaves_like 'a handled erroneous request', 'Could not create User: Unknown role. Please select either ' \
-                                                     '"Teacher" or "Student" as your role.'
+      it_behaves_like 'a handled erroneous request', 'Could not create User: Status Group is unknown. ' \
+                                                     'Please select either "Teacher" or "Student" as your role.'
     end
 
-    context 'when the User cannot be saved' do
-      let(:relationship) do
-        instance_double(Enmeshed::Relationship,
-          reject!: true,
-          userdata: {
-            email: 'john.oliver@example103.org',
-            first_name: 'john',
-            last_name: 'oliver',
-            status_group: 'learner',
-          })
+    context 'with a blank name' do
+      before do
+        allow(Enmeshed::Relationship).to receive(:pending_for).with(uid).and_return(relationship)
+        allow(relationship).to receive_messages(
+          userdata: {email: 'john.oliver@example103.org', first_name: ' ', last_name: 'oliver', status_group: :learner},
+          peer: 'id1EvvJ68x6wdHBwYrFTR31XtALHko9fnbyp',
+          reject!: true
+        )
       end
 
+      it_behaves_like 'a handled erroneous request', "Could not create User: First Name can't be blank"
+    end
+
+    context 'when email address already has been taken' do
       before do
-        create(:user, email: relationship.userdata[:email])
+        create(:user, email: 'john.oliver@example103.org')
         allow(Enmeshed::Relationship).to receive(:pending_for).with(uid).and_return(relationship)
-        allow(relationship).to receive(:peer).and_return('id1EvvJ68x6wdHBwYrFTR31XtALHko9fnbyp')
+        allow(relationship).to receive_messages(
+          userdata: {email: 'john.oliver@example103.org', first_name: 'john', last_name: 'oliver', status_group: :learner},
+          peer: 'id1EvvJ68x6wdHBwYrFTR31XtALHko9fnbyp',
+          reject!: true
+        )
       end
 
       it_behaves_like 'a handled erroneous request', 'Could not create User: Email has already been taken'
     end
 
     context 'when the RelationshipChange cannot be accepted' do
-      let(:relationship) do
-        instance_double(Enmeshed::Relationship,
-          accept!: false,
-          reject!: true,
-          userdata: {
-            email: 'john.oliver@example103.org',
-            first_name: 'john',
-            last_name: 'oliver',
-            status_group: 'learner',
-          })
-      end
-
       before do
         allow(Enmeshed::Relationship).to receive(:pending_for).with(uid).and_return(relationship)
-        allow(relationship).to receive(:peer).and_return('id1EvvJ68x6wdHBwYrFTR31XtALHko9fnbyp')
+        allow(relationship).to receive_messages(
+          userdata: {email: 'john.oliver@example103.org', first_name: 'john', last_name: 'oliver', status_group: :learner},
+          peer: 'id1EvvJ68x6wdHBwYrFTR31XtALHko9fnbyp',
+          accept!: false,
+          reject!: true
+        )
       end
 
       it_behaves_like 'a handled erroneous request', I18n.t('common.errors.generic')
