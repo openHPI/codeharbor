@@ -47,6 +47,11 @@ class User < ApplicationRecord
 
   # `Other` is a catch-all for any status that doesn't fit into the other categories and should be *last*.
   enum :status_group, {unknown: 0, learner: 2, educator: 3, other: 1}, default: :unknown, prefix: true
+  # When a user is created through the NBP wallet connection, we want to ensure a valid status group.
+  # We need to check with a string, because any symbol or integer otherwise used is automatically converted.
+  validates :status_group, inclusion: {in: %w[learner educator], message: :unrecognized_role}, on: :create, if: lambda {
+    identities.loaded? && identities.any? {|identity| identity.omniauth_provider == 'nbp' }
+  }
 
   # Called by Devise and overwritten for soft-deletion
   def destroy

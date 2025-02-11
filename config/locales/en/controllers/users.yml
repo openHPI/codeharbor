@@ -1,8 +1,6 @@
 ---
 en:
   users:
-    nbp_wallet:
-      unrecognized_role: Unknown role. Please select either "Teacher" or "Student" as your role.
     omniauth_callbacks:
       failure_deauthorize: Could not remove authorization from %{kind} because "%{reason}".
       failure_deauthorize_last_identity: You cannot deauthorize your %{kind} account because it is your last remaining account. Please create a password to log in in the future.

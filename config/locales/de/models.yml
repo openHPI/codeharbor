@@ -129,6 +129,8 @@ de:
             avatar:
               not_an_image: muss ein Bild sein
               size_over_10_mb: Größe muss kleiner als 10MB sein
+            status_group:
+              unrecognized_role: ist unbekannt. Bitte wählen Sie entweder "Lehrer:in" oder "Schüler:in" als Ihre Rolle.
           invalid_api_key: Der API-Schlüssel in Ihrem Profil ist ungültig. Bitte fügen Sie den entsprechenden API-Schlüssel in Ihrem Profil hinzu, um die KI-Funktionen zu nutzen.
     models:
       account_link:

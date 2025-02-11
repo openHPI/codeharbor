@@ -1,8 +1,6 @@
 ---
 de:
   users:
-    nbp_wallet:
-      unrecognized_role: Unbekannte Rolle. Bitte wählen Sie entweder "Lehrer:in" oder "Schüler:in" als Ihre Rolle.
     omniauth_callbacks:
       failure_deauthorize: 'Das Trennen von Ihrem %{kind}-Account war aufgrund des folgenden Grundes nicht möglich: "%{reason}".'
       failure_deauthorize_last_identity: Sie können sich nicht von Ihrem %{kind}-Account trennen, da dies Ihr letzter verbleibender Account ist. Bitte erstellen Sie ein Passwort, um sich in Zukunft anmelden zu können.
