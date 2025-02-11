@@ -89,9 +89,20 @@ RSpec.describe Enmeshed::Relationship do
   describe '#userdata' do
     subject(:userdata) { described_class.new(json:, template:, response_items:).userdata }
 
-    it 'returns the requested data' do
-      expect(userdata).to eq({email: 'john.oliver@example103.org', first_name: 'John', last_name: 'Oliver',
-        status_group: :educator})
+    shared_examples 'parsed userdata' do
+      it 'passes' do
+        expect { userdata }.not_to raise_error
+      end
+
+      it 'returns the requested data' do
+        expect(userdata).to eq parsed_userdata
+      end
+    end
+
+    it_behaves_like 'parsed userdata' do
+      let(:parsed_userdata) do
+        {email: 'john.oliver@example103.org', first_name: 'John', last_name: 'Oliver', status_group: :educator}
+      end
     end
 
     context 'with a synonym of "learner" as status group' do
@@ -99,38 +110,54 @@ RSpec.describe Enmeshed::Relationship do
         response_items.last[:attribute][:value][:value] = 'Schüler'
       end
 
-      it 'returns the requested data' do
-        expect(userdata).to eq({email: 'john.oliver@example103.org', first_name: 'John', last_name: 'Oliver',
-          status_group: :learner})
+      it_behaves_like 'parsed userdata' do
+        let(:parsed_userdata) do
+          {email: 'john.oliver@example103.org', first_name: 'John', last_name: 'Oliver', status_group: :learner}
+        end
       end
     end
 
-    context 'with a blank attribute' do
+    context 'with gibberish as status group' do
+      before do
+        response_items.last[:attribute][:value][:value] = 'gibberish'
+      end
+
+      it_behaves_like 'parsed userdata' do
+        let(:parsed_userdata) do
+          {email: 'john.oliver@example103.org', first_name: 'John', last_name: 'Oliver', status_group: nil}
+        end
+      end
+    end
+
+    context 'with a blank status group' do
       before do
         response_items.last[:attribute][:value][:value] = ' '
       end
 
-      # The validations of the User model will take care
-      it 'passes' do
-        expect { userdata }.not_to raise_error
+      it_behaves_like 'parsed userdata' do
+        let(:parsed_userdata) do
+          {email: 'john.oliver@example103.org', first_name: 'John', last_name: 'Oliver', status_group: nil}
+        end
       end
     end
 
     context 'with a missing attribute' do
       before do
-        response_items.pop
+        response_items.slice!(3)
       end
 
-      it 'raises an error' do
-        expect { userdata }.to raise_error(Enmeshed::ConnectorError, 'AffiliationRole must not be empty')
+      it_behaves_like 'parsed userdata' do
+        let(:parsed_userdata) do
+          {email: nil, first_name: 'John', last_name: 'Oliver', status_group: :educator}
+        end
       end
     end
 
     context 'without any provided attributes' do
       let(:response_items) { nil }
 
-      it 'raises an error' do
-        expect { userdata }.to raise_error(Enmeshed::ConnectorError, 'Could not parse userdata in the response items: ')
+      it_behaves_like 'parsed userdata' do
+        let(:parsed_userdata) { nil }
       end
     end
   end

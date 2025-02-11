@@ -74,6 +74,8 @@ module Enmeshed
     private
 
     def parse_userdata # rubocop:disable Metrics/AbcSize
+      return if response_items.blank?
+
       user_provided_attributes = response_items.select do |item|
         item[:@type] == 'ReadAttributeAcceptResponseItem'
       end
@@ -91,13 +93,13 @@ module Enmeshed
         email: enmeshed_user_attributes['EMailAddress'],
         first_name: enmeshed_user_attributes['GivenName'],
         last_name: enmeshed_user_attributes['Surname'],
-        status_group: parse_status_group(enmeshed_user_attributes['AffiliationRole'].downcase),
+        status_group: parse_status_group(enmeshed_user_attributes['AffiliationRole']&.downcase),
       }
-    rescue NoMethodError
-      raise ConnectorError.new("Could not parse userdata in the response items: #{response_items}")
     end
 
     def parse_status_group(affiliation_role)
+      return if affiliation_role.blank?
+
       if STATUS_GROUP_SYNONYMS['learner'].any? {|synonym| synonym.downcase.include? affiliation_role }
         :learner
       elsif STATUS_GROUP_SYNONYMS['educator'].any? {|synonym| synonym.downcase.include? affiliation_role }
