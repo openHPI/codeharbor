@@ -99,6 +99,76 @@ RSpec.describe User do
         expect(user).to be_valid
       end
     end
+
+    context 'when creating a new user' do
+      let(:user_info) { {first_name: 'John', last_name: 'Oliver', email: 'john.oliver@example103.org', status_group:} }
+
+      shared_examples 'a valid user' do |group|
+        let(:status_group) { group }
+
+        it 'is valid' do
+          expect(user).to be_valid
+        end
+      end
+
+      shared_examples 'an invalid user' do |group|
+        let(:status_group) { group }
+
+        it 'is not valid' do
+          expect(user).not_to be_valid
+        end
+
+        it 'adds an error for status_group' do
+          user.valid?
+          expect(user.errors[:status_group]).to include(I18n.t('activerecord.errors.models.user.attributes.status_group.unrecognized_role'))
+        end
+      end
+
+      context 'when using #new' do
+        subject(:user) { described_class.new(user_info.merge(password:)) }
+
+        let(:password) { 'password' }
+
+        it_behaves_like 'a valid user', :unknown
+        it_behaves_like 'a valid user', :learner
+        it_behaves_like 'a valid user', :educator
+        it_behaves_like 'a valid user', :other
+      end
+
+      context 'when using #new_from_omniauth' do
+        subject(:user) { described_class.new_from_omniauth(user_info, provider, provider_uid) }
+
+        let(:provider_uid) { '12345' }
+
+        context 'when registered through NBP' do
+          let(:provider) { 'nbp' }
+
+          it_behaves_like 'a valid user', :learner
+          it_behaves_like 'a valid user', :educator
+          it_behaves_like 'an invalid user', :unknown
+          it_behaves_like 'an invalid user', :other
+
+          it_behaves_like 'a valid user', 2
+          it_behaves_like 'a valid user', 3
+          it_behaves_like 'an invalid user', 0
+          it_behaves_like 'an invalid user', 1
+
+          it_behaves_like 'a valid user', 'learner'
+          it_behaves_like 'a valid user', 'educator'
+          it_behaves_like 'an invalid user', 'unknown'
+          it_behaves_like 'an invalid user', 'other'
+        end
+
+        context 'when registering through BIRD' do
+          let(:provider) { 'bird' }
+
+          it_behaves_like 'a valid user', :unknown
+          it_behaves_like 'a valid user', :learner
+          it_behaves_like 'a valid user', :educator
+          it_behaves_like 'a valid user', :other
+        end
+      end
+    end
   end
 
   describe '#destroy' do

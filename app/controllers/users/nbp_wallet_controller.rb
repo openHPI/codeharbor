@@ -48,14 +48,7 @@ module Users
 
     private
 
-    def accept_and_create_user(relationship) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      if relationship.userdata[:status_group].blank?
-        abort_and_refresh(
-          relationship,
-          t('common.errors.model_not_created', model: User.model_name.human, errors: t('users.nbp_wallet.unrecognized_role'))
-        ) and return
-      end
-
+    def accept_and_create_user(relationship) # rubocop:disable Metrics/AbcSize
       user = User.new_from_omniauth(relationship.userdata, 'nbp', @provider_uid)
       user.identities << UserIdentity.new(omniauth_provider: 'enmeshed', provider_uid: relationship.peer)
       user.skip_confirmation_notification!
