@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module TaskService
-  class CheckExternal < ServiceBase
+class TaskService
+  class CheckExternal < TaskService
     def initialize(uuid:, account_link:)
       super()
       @uuid = uuid
@@ -9,11 +9,8 @@ module TaskService
     end
 
     def execute
-      response = connection.post do |req|
-        req.headers['Content-Type'] = 'application/json'
-        req.headers['Authorization'] = authorization_header
-        req.body = {uuid: @uuid}.to_json
-      end
+      body = {uuid: @uuid}.to_json
+      response = self.class.connection.post(@account_link.check_uuid_url) {|request| request_parameters(request, body) }
       response_hash = JSON.parse(response.body, symbolize_names: true).slice(:uuid_found, :update_right)
 
       {error: false, message: message(response_hash)}.merge(response_hash)
@@ -23,8 +20,12 @@ module TaskService
 
     private
 
-    def authorization_header
-      "Bearer #{@account_link.api_key}"
+    def request_parameters(request, body)
+      request.tap do |req|
+        req.headers['Content-Type'] = 'application/json'
+        req.headers['Authorization'] = "Bearer #{@account_link.api_key}"
+        req.body = body
+      end
     end
 
     def message(response_hash)
@@ -36,15 +37,6 @@ module TaskService
         end
       else
         I18n.t('tasks.task_service.check_external.no_task')
-      end
-    end
-
-    def connection
-      Faraday.new(url: @account_link.check_uuid_url) do |faraday|
-        faraday.options[:open_timeout] = 5
-        faraday.options[:timeout] = 5
-
-        faraday.adapter Faraday.default_adapter
       end
     end
   end

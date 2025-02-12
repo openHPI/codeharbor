@@ -116,7 +116,15 @@ module Nbp
     end
 
     def api_conn
-      Faraday.new(url: settings.api_host, headers:)
+      # Refresh headers (incl. the dynamic API token) for each request
+      return @api_conn.tap {|req| req.headers = headers } if @api_conn
+
+      @api_conn ||= Faraday.new(url: settings.api_host, headers:) do |faraday|
+        faraday.options[:open_timeout] = 5
+        faraday.options[:timeout] = 5
+
+        faraday.adapter :net_http_persistent
+      end
     end
 
     def source_slug

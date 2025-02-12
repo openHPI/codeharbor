@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module TaskService
-  class PushExternal < ServiceBase
+class TaskService
+  class PushExternal < TaskService
     def initialize(zip:, account_link:)
       super()
       @zip = zip
@@ -11,7 +11,7 @@ module TaskService
     def execute
       body = @zip.string
       begin
-        response = connection.post {|request| request_parameters(request, body) }
+        response = self.class.connection.post(@account_link.push_url) {|request| request_parameters(request, body) }
         response.success? ? nil : response.body
       rescue StandardError => e
         e
@@ -26,12 +26,6 @@ module TaskService
         req.headers['Content-Length'] = body.length.to_s
         req.headers['Authorization'] = "Bearer #{@account_link.api_key}"
         req.body = body
-      end
-    end
-
-    def connection
-      Faraday.new(url: @account_link.push_url) do |faraday|
-        faraday.adapter Faraday.default_adapter
       end
     end
   end

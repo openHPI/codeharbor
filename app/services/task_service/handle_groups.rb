@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module TaskService
+class TaskService
   class HandleGroups < ServiceBase
     def initialize(user:, task:, group_tasks_params:)
       super()

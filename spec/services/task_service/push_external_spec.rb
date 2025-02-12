@@ -49,14 +49,18 @@ RSpec.describe TaskService::PushExternal do
 
       context 'when response status is 500' do
         let(:status) { 500 }
-        let(:response) { 'an error occured' }
+        let(:response) { 'an error occurred' }
 
         it { is_expected.to be response }
       end
     end
 
     context 'when an error occurs' do
-      before { allow(Faraday).to receive(:new).and_raise(StandardError) }
+      before do
+        # Un-memoize the connection to force a reconnection
+        described_class.instance_variable_set(:@connection, nil)
+        allow(Faraday).to receive(:new).and_raise(StandardError)
+      end
 
       it { is_expected.not_to be_nil }
     end
