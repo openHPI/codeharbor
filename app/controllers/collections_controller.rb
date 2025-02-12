@@ -15,7 +15,9 @@ class CollectionsController < ApplicationController
                        Collection.public_access
                      else
                        Collection.member(current_user)
-                   end.includes(:users, tasks: %i[user groups]).order(id: :asc).paginate(page: params[:page], per_page: per_page_param)
+                   end
+      .includes(:users, collection_tasks: [task: %i[user groups]]).order(title: :asc)
+      .paginate(page: params[:page], per_page: per_page_param)
 
     authorize @collections
   end
