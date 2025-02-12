@@ -41,7 +41,6 @@ $(document).on('turbolinks:load', function () {
       attachStacktrace: true,
       release: sentrySettings.data('release'),
       environment: sentrySettings.data('environment'),
-      autoSessionTracking: true,
       tracesSampleRate: 1.0,
       replaysSessionSampleRate: 0.0,
       replaysOnErrorSampleRate: 1.0,
