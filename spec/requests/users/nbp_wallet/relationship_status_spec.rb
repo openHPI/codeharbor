@@ -12,6 +12,15 @@ RSpec.describe 'Users::NBPWallet::RelationshipStatus' do
     set_session(session_params)
   end
 
+  shared_examples 'an unauthorized JSON request' do
+    expect_json
+    expect_http_status(:unauthorized)
+
+    it 'returns a JSON with the error message' do
+      expect(response.parsed_body['error']).to eq I18n.t('common.errors.not_authorized')
+    end
+  end
+
   context 'without errors' do
     context 'with a Relationship' do
       before { allow(Enmeshed::Relationship).to receive(:pending_for).with(uid).and_return(Enmeshed::Relationship) }
@@ -45,7 +54,7 @@ RSpec.describe 'Users::NBPWallet::RelationshipStatus' do
         relationship_status_request
       end
 
-      it_behaves_like 'an unauthorized request'
+      it_behaves_like 'an unauthorized JSON request'
     end
 
     context 'with a session for a completed user' do
@@ -54,7 +63,7 @@ RSpec.describe 'Users::NBPWallet::RelationshipStatus' do
         relationship_status_request
       end
 
-      it_behaves_like 'an unauthorized request'
+      it_behaves_like 'an unauthorized JSON request'
     end
 
     context 'when the connector is down' do
