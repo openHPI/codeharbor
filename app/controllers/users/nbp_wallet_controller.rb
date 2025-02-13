@@ -86,6 +86,9 @@ module Users
     def require_user!
       @provider_uid = session[:saml_uid]
       raise Pundit::NotAuthorizedError unless @provider_uid.present? && session[:omniauth_provider] == 'nbp'
+      # Already registered users should not be able to access this page
+      raise Pundit::NotAuthorizedError if User.joins(:identities)
+        .exists?(identities: {omniauth_provider: 'nbp', provider_uid: @provider_uid})
     end
   end
 end

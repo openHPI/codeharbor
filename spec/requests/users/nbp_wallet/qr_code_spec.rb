@@ -43,4 +43,13 @@ RSpec.describe 'Users::NBPWallet::QRCode' do
 
     it_behaves_like 'an unauthorized request'
   end
+
+  context 'with a session for a completed user' do
+    before do
+      User.new_from_omniauth(attributes_for(:user, status_group: :learner), 'nbp', uid).save!
+      qr_code_request
+    end
+
+    it_behaves_like 'an unauthorized request'
+  end
 end
