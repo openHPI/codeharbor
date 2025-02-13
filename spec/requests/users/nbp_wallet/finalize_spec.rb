@@ -42,6 +42,11 @@ RSpec.describe 'Users::NBPWallet::Finalize' do
       expect(User.order(:created_at).last).not_to be_confirmed
     end
 
+    it 'clears the session' do
+      finalize_request
+      expect(session.keys).to contain_exactly('flash')
+    end
+
     it 'asks the user to verify the email address' do
       finalize_request
       expect(response).to redirect_to home_index_path
@@ -71,6 +76,11 @@ RSpec.describe 'Users::NBPWallet::Finalize' do
 
       it 'does not send a confirmation mail' do
         expect { finalize_request }.not_to change(ActionMailer::Base, :deliveries)
+      end
+
+      it 'does not clear the session' do
+        finalize_request
+        expect(session.keys).to include('flash', 'omniauth_provider', 'saml_uid', 'session_id')
       end
     end
 
