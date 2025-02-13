@@ -63,6 +63,7 @@ module Users
 
         if relationship.accept!
           user.send_confirmation_instructions
+          session.clear # Clear the session to prevent the user from accessing the NBP Wallet page again
           redirect_to home_index_path, notice: t('devise.registrations.signed_up_but_unconfirmed')
         else
           abort_and_refresh(relationship)
