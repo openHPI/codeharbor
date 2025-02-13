@@ -48,6 +48,15 @@ RSpec.describe 'Users::NBPWallet::RelationshipStatus' do
       it_behaves_like 'an unauthorized request'
     end
 
+    context 'with a session for a completed user' do
+      before do
+        User.new_from_omniauth(attributes_for(:user, status_group: :learner), 'nbp', uid).save!
+        relationship_status_request
+      end
+
+      it_behaves_like 'an unauthorized request'
+    end
+
     context 'when the connector is down' do
       before { allow(Enmeshed::Relationship).to receive(:pending_for).with(uid).and_raise(Faraday::ConnectionFailed) }
 
