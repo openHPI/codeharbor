@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class TaskContributionPolicy < ApplicationPolicy
+  delegate :base, :suggestion, to: :@record
+
   def initialize(user, record)
     super
     @record = record.task_contribution if record.is_a?(Task)
@@ -8,14 +10,6 @@ class TaskContributionPolicy < ApplicationPolicy
 
   def task_contribution
     @record
-  end
-
-  def suggestion
-    @record.suggestion
-  end
-
-  def base
-    @record.base
   end
 
   %i[create? new?].each do |action|

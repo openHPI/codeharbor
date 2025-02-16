@@ -15,9 +15,7 @@ class LabelsController < ApplicationController
     end
   end
 
-  def destroy
-    @label.destroy
-  end
+  delegate :destroy, to: :@label
 
   def merge # rubocop:disable Metrics/AbcSize
     label_ids = params[:label_ids] || []
