@@ -1,7 +1,7 @@
 doctype html
 html lang=I18n.locale data-default-locale=I18n.default_locale
   head
-    meta charset='utf8'
+    meta charset='utf-8'
     meta name='viewport' content='width=device-width, initial-scale=1'
     meta name='mobile-web-app-capable' content='yes'
     = render('breadcrumbs_and_title')
@@ -17,13 +17,13 @@ html lang=I18n.locale data-default-locale=I18n.default_locale
     = javascript_include_tag('application', 'data-turbolinks-track': 'reload', integrity: true, crossorigin: 'anonymous')
     = yield(:head)
     = csrf_meta_tags
-    = csp_meta_tag
-    meta name='sentry' data-enabled=SentryJavascript.active?.to_s data-release=SentryJavascript.release data-dsn=SentryJavascript.dsn data-environment=SentryJavascript.environment
-    meta name='current-user' content=current_user&.to_page_context&.to_json
+    /= csp_meta_tag
+    meta name='sentry' data-enabled=SentryJavascript.active?.to_s data-release=SentryJavascript.release data-dsn=SentryJavascript.dsn data-environment=SentryJavascript.environment content=''
+    meta name='current-user' content=current_user&.to_page_context&.to_json.to_s
   body.d-flex.flex-column
     #content
       header.sticky-top
-        nav.navbar.bg-light.navbar-expand-lg.text-bg-light role='navigation'
+        nav.navbar.bg-light.navbar-expand-lg.text-bg-light
           .container
             = link_to home_index_path, class: 'navbar-brand'
               i.fa-solid.fa-anchor.me-2.text-secondary
