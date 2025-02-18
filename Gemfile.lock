@@ -81,7 +81,7 @@ GEM
       zeitwerk (>= 2.4, < 3.0)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
-    amq-protocol (2.3.2)
+    amq-protocol (2.3.3)
     ast (2.4.2)
     base64 (0.2.0)
     bcrypt (3.1.20)
@@ -292,7 +292,7 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.4)
-    nokogiri (1.18.2)
+    nokogiri (1.18.3)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     omniauth (2.1.2)
@@ -605,7 +605,7 @@ GEM
     will_paginate (4.0.1)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.7.1)
+    zeitwerk (2.7.2)
 
 PLATFORMS
   ruby
@@ -709,7 +709,7 @@ CHECKSUMS
   activesupport (8.0.1) sha256=fd5bc74641c24ac3541055c2879789198ff42adee3e39c2933289ba008912e37
   acts-as-taggable-on (12.0.0) sha256=d14c15a1602cef8997187336cd7eb54a3f97ddebbef61601f83eb1ec51260417
   addressable (2.8.7) sha256=462986537cf3735ab5f3c0f557f14155d778f4b43ea4f485a9deb9c8f7c58232
-  amq-protocol (2.3.2) sha256=3d155ef8f2aed26b2f3fafd6d7ab57e5105865d409c3d9c43e72a40b73dda816
+  amq-protocol (2.3.3) sha256=85b42738290913a35dcc487a2ca0dd260a4150b40ed1954c9c1932df466abc1f
   ast (2.4.2) sha256=1e280232e6a33754cde542bc5ef85520b74db2aac73ec14acef453784447cc12
   base64 (0.2.0) sha256=0f25e9b21a02a0cc0cea8ef92b2041035d39350946e8789c562b2d1a3da01507
   bcrypt (3.1.20) sha256=8410f8c7b3ed54a3c00cd2456bf13917d695117f033218e2483b2e40b0784099
@@ -808,7 +808,7 @@ CHECKSUMS
   net-protocol (0.2.2) sha256=aa73e0cba6a125369de9837b8d8ef82a61849360eba0521900e2c3713aa162a8
   net-smtp (0.5.1) sha256=ed96a0af63c524fceb4b29b0d352195c30d82dd916a42f03c62a3a70e5b70736
   nio4r (2.7.4) sha256=d95dee68e0bb251b8ff90ac3423a511e3b784124e5db7ff5f4813a220ae73ca9
-  nokogiri (1.18.2) sha256=93791cfb33186fe077eb9e1b8a6855b5621e328f81f565334572fa398366f8bf
+  nokogiri (1.18.3) sha256=6b9fc3b14fd0cedd21f6cad8cf565123ba7401e56b5d0aec180c23cdca28fd5a
   omniauth (2.1.2) sha256=def03277298b8f8a5d3ff16cdb2eb5edb9bffed60ee7dda24cc0c89b3ae6a0ce
   omniauth-rails_csrf_protection (1.0.2) sha256=1170fd672aff092b9b7ebebc1453559f073ed001e3ce62a1df616e32f8dc5fe0
   omniauth-saml (2.2.1) sha256=8abb6bf8d38a50f52c7cc905d32877c7b2c79dbc9c225fcc3d3e56723411d602
@@ -925,7 +925,7 @@ CHECKSUMS
   whenever (1.0.0) sha256=d9b71417c43960f5eb125b77207174cba4691091cedae0d282a29cfc72eaa246
   will_paginate (4.0.1) sha256=107b226ebe1d393d274575956a7c472e1eefdd97d8828e01b72d425d15a875b9
   xpath (3.2.0) sha256=6dfda79d91bb3b949b947ecc5919f042ef2f399b904013eb3ef6d20dd3a4082e
-  zeitwerk (2.7.1) sha256=0945986050e4907140895378e74df1fe882a2271ed087cc6c6d6b00d415a2756
+  zeitwerk (2.7.2) sha256=842e067cb11eb923d747249badfb5fcdc9652d6f20a1f06453317920fdcd4673
 
 BUNDLED WITH
    2.6.4
