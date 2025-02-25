@@ -17,6 +17,8 @@ class TaskFile < ApplicationRecord
   validate :parent_validation_check
   attr_accessor :use_attached_file, :file_marked_for_deletion, :parent_blob_id
 
+  normalizes :usage_by_lms, with: ->(usage_by_lms) { usage_by_lms.presence }
+
   before_validation :attach_parent_blob, if: -> { attachment.blank? && task&.contribution? && parent.present? && parent_blob_id.present? }
   before_save :remove_attachment
 
