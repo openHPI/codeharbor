@@ -15,20 +15,20 @@ RSpec.describe 'Authentication' do
 
     context 'with valid credentials' do
       it 'allows to sign in' do
-        click_link(I18n.t('common.button.log_in')) # rubocop:disable Capybara/ClickLinkOrButtonStyle
+        click_link(I18n.t('common.button.log_in'))
         fill_in(:user_email, with: user.email)
         fill_in(:user_password, with: password)
-        click_button(I18n.t('common.button.log_in')) # rubocop:disable Capybara/ClickLinkOrButtonStyle
+        click_button(I18n.t('common.button.log_in'))
         expect(page).to have_content(I18n.t('devise.sessions.signed_in'))
       end
     end
 
     context 'with invalid credentials' do
       it 'does not allow to sign in' do
-        click_link(I18n.t('common.button.log_in')) # rubocop:disable Capybara/ClickLinkOrButtonStyle
+        click_link(I18n.t('common.button.log_in'))
         fill_in(:user_email, with: user.email)
         fill_in(:user_password, with: password.reverse)
-        click_button(I18n.t('common.button.log_in')) # rubocop:disable Capybara/ClickLinkOrButtonStyle
+        click_button(I18n.t('common.button.log_in'))
         expect(page).to have_content(I18n.t('devise.failure.invalid', authentication_keys: 'Email'))
       end
     end
@@ -49,7 +49,7 @@ RSpec.describe 'Authentication' do
       it 'redirects to the desired page immediately after sign-in' do
         fill_in(:user_email, with: user.email)
         fill_in(:user_password, with: password)
-        click_button(I18n.t('common.button.log_in')) # rubocop:disable Capybara/ClickLinkOrButtonStyle
+        click_button(I18n.t('common.button.log_in'))
         expect(page).to have_content(task.title)
       end
 
@@ -59,7 +59,7 @@ RSpec.describe 'Authentication' do
         it 'informs the user about missing permissions' do
           fill_in(:user_email, with: user.email)
           fill_in(:user_password, with: password)
-          click_button(I18n.t('common.button.log_in')) # rubocop:disable Capybara/ClickLinkOrButtonStyle
+          click_button(I18n.t('common.button.log_in'))
           expect(page).to have_content(I18n.t('common.errors.not_authorized'))
         end
       end
