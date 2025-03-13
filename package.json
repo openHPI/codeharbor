@@ -27,7 +27,7 @@
     "sass": "^1.85.1",
     "sass-loader": "^16.0.5",
     "select2": "^4.1.0-rc.0",
-    "shakapacker": "8.1.0",
+    "shakapacker": "8.2.0",
     "style-loader": "^4.0.0",
     "terser-webpack-plugin": "5.3.14",
     "webpack": "5.98.0",
@@ -55,5 +55,5 @@
     "webpack": "./bin/shakapacker",
     "webpack-dev-server": "./bin/shakapacker-dev-server"
   },
-  "packageManager": "yarn@4.6.0"
+  "packageManager": "yarn@4.7.0"
 }
