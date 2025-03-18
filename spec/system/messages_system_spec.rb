@@ -28,7 +28,10 @@ RSpec.describe 'MessagesController', :js do
 
       it 'adds the user to the collection when saving the collection' do
         view_inbox
-        expect { find("[href='#{save_shared_link}'").click }.to change { collection.users.reload.include? user }.from(false).to(true)
+        expect do
+          find("[href='#{save_shared_link}'").click
+          wait_for_ajax
+        end.to change { collection.users.reload.include? user }.from(false).to(true)
       end
 
       context 'when the collection has been deleted' do

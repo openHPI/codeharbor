@@ -152,12 +152,15 @@ RSpec.describe 'TasksController', :js do
         find_by_id('advanced', wait: true).click
 
         select_option('q_created_before_days', all_time)
+        wait_for_ajax
         expect(all('.card-task-title').map(&:text)).to contain_exactly(today_task.title, last_week_task.title, all_time_task.title)
 
         select_option('q_created_before_days', last_week)
+        wait_for_ajax
         expect(all('.card-task-title').map(&:text)).to contain_exactly(today_task.title, last_week_task.title)
 
         select_option('q_created_before_days', today)
+        wait_for_ajax
         expect(all('.card-task-title').map(&:text)).to contain_exactly(today_task.title)
       end
     end
