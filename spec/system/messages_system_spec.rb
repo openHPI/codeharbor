@@ -66,7 +66,10 @@ RSpec.describe 'MessagesController', :js do
 
       it 'confirms the sender as a group member when clicking the grant access link' do
         view_inbox
-        expect { find("[href='#{grant_access_link}'").click }.to change { group.reload.confirmed_member? sender }.from(false).to(true)
+        expect do
+          find("[href='#{grant_access_link}'").click
+          wait_for_ajax
+        end.to change { group.reload.confirmed_member? sender }.from(false).to(true)
       end
 
       context 'when the group has been deleted' do
