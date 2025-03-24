@@ -236,15 +236,22 @@ RSpec.describe ProformaService::ConvertProformaTaskToTask do
           ]
         end
 
+        let(:converted_tests) do
+          # Preload tests and files, then sort files by title to ensure consistent order (for expectations below)
+          ActiveRecord::Associations::Preloader.new(records: [convert_to_task_service], associations: {tests: :files}).call
+          # The converted tests should be in the same order as the original tests. Hence, we sort the converted tests by the original test id.
+          convert_to_task_service.tests.sort_by {|test| tests.index {|t| t.id.to_s == test.xml_id } }
+        end
+
         it 'creates files with correct attributes' do
           attribute_exceptions = %w[id created_at fileable_id updated_at]
-          expect(convert_to_task_service.tests[1].files[0]).to have_attributes(convert_to_task_service.tests[0].files[0].attributes.except(*attribute_exceptions).merge('xml_id' => 'id-2'))
-          expect(convert_to_task_service.tests[2].files[0]).to have_attributes(convert_to_task_service.tests[0].files[0].attributes.except(*attribute_exceptions).merge('xml_id' => 'id-3'))
+          expect(converted_tests[1].files[0]).to have_attributes(converted_tests[0].files[0].attributes.except(*attribute_exceptions).merge('xml_id' => 'id-2'))
+          expect(converted_tests[2].files[0]).to have_attributes(converted_tests[0].files[0].attributes.except(*attribute_exceptions).merge('xml_id' => 'id-3'))
         end
 
         it 'creates separate copies of referenced file' do
-          expect(convert_to_task_service.tests[1].files[0]).to not_eql convert_to_task_service.tests[0].files[0]
-          expect(convert_to_task_service.tests[2].files[0]).to not_eql convert_to_task_service.tests[0].files[0]
+          expect(converted_tests[1].files[0]).to not_eql converted_tests[0].files[0]
+          expect(converted_tests[2].files[0]).to not_eql converted_tests[0].files[0]
         end
 
         it 'is valid' do
