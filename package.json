@@ -33,12 +33,12 @@
     "webpack": "5.98.0",
     "webpack-assets-manifest": "5.2.1",
     "webpack-cli": "6.0.1",
-    "webpack-dev-server": "^5.2.0",
+    "webpack-dev-server": "^5.2.1",
     "webpack-merge": "6.0.1",
     "webpack-subresource-integrity": "^5.2.0-rc.1"
   },
   "devDependencies": {
-    "webpack-dev-server": "^5.2.0"
+    "webpack-dev-server": "^5.2.1"
   },
   "resolutions": {
     "dompurify": "^3.2.4"
