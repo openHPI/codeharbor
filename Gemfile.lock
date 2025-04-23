@@ -170,17 +170,17 @@ GEM
     faraday-net_http_persistent (2.3.0)
       faraday (~> 2.5)
       net-http-persistent (>= 4.0.4, < 5)
-    ffi (1.17.1)
-    ffi (1.17.1-aarch64-linux-gnu)
-    ffi (1.17.1-aarch64-linux-musl)
-    ffi (1.17.1-arm-linux-gnu)
-    ffi (1.17.1-arm-linux-musl)
-    ffi (1.17.1-arm64-darwin)
-    ffi (1.17.1-x86-linux-gnu)
-    ffi (1.17.1-x86-linux-musl)
-    ffi (1.17.1-x86_64-darwin)
-    ffi (1.17.1-x86_64-linux-gnu)
-    ffi (1.17.1-x86_64-linux-musl)
+    ffi (1.17.2)
+    ffi (1.17.2-aarch64-linux-gnu)
+    ffi (1.17.2-aarch64-linux-musl)
+    ffi (1.17.2-arm-linux-gnu)
+    ffi (1.17.2-arm-linux-musl)
+    ffi (1.17.2-arm64-darwin)
+    ffi (1.17.2-x86-linux-gnu)
+    ffi (1.17.2-x86-linux-musl)
+    ffi (1.17.2-x86_64-darwin)
+    ffi (1.17.2-x86_64-linux-gnu)
+    ffi (1.17.2-x86_64-linux-musl)
     fugit (1.11.1)
       et-orbi (~> 1, >= 1.2.11)
       raabro (~> 1.4)
@@ -499,7 +499,7 @@ GEM
       rack (>= 1.1)
       rubocop (>= 1.75.0, < 2.0)
       rubocop-ast (>= 1.38.0, < 2.0)
-    rubocop-rspec (3.5.0)
+    rubocop-rspec (3.6.0)
       lint_roller (~> 1.1)
       rubocop (~> 1.72, >= 1.72.1)
     rubocop-rspec_rails (2.31.0)
@@ -566,7 +566,7 @@ GEM
       actionpack (>= 3.1)
       railties (>= 3.1)
       slim (>= 3.0, < 6.0, != 5.0.0)
-    slim_lint (0.32.2)
+    slim_lint (0.33.0)
       rexml (~> 3.2)
       rubocop (>= 1.0, < 2.0)
       slim (>= 3.0, < 6.0)
@@ -582,12 +582,13 @@ GEM
       fugit (~> 1.11.0)
       railties (>= 7.1)
       thor (~> 1.3.1)
-    sorbet-runtime (0.5.12010)
+    sorbet-runtime (0.5.12032)
     sorted_set (1.0.3)
       rbtree
       set (~> 1.0)
-    sprockets (4.2.1)
+    sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
+      logger
       rack (>= 2.2.4, < 4)
     sprockets-rails (3.5.2)
       actionpack (>= 6.1)
@@ -797,17 +798,17 @@ CHECKSUMS
   faraday-multipart (1.1.0) sha256=856b0f1c7316a4d6c052dd2eef5c42f887d56d93a171fe8880da1af064ca0751
   faraday-net_http (3.4.0) sha256=a1f1e4cd6a2cf21599c8221595e27582d9936819977bbd4089a601f24c64e54a
   faraday-net_http_persistent (2.3.0) sha256=33d4948cabe9f8148222c4ca19634c71e1f25595cccf9da2e02ace8d754f1bb1
-  ffi (1.17.1) sha256=26f6b0dbd1101e6ffc09d3ca640b2a21840cc52731ad8a7ded9fb89e5fb0fc39
-  ffi (1.17.1-aarch64-linux-gnu) sha256=c5d22cb545a3a691d46060f1343c461d1a8d38c3fd71b96b4cbbe6906bf1fd38
-  ffi (1.17.1-aarch64-linux-musl) sha256=88b9d6ae905d21142df27c94bb300042c1aae41b67291885f600eaad16326b1d
-  ffi (1.17.1-arm-linux-gnu) sha256=fe14f5ece94082f3b0e651a09008113281f2764e7ea95f522b64e2fe32e11504
-  ffi (1.17.1-arm-linux-musl) sha256=df14927ca7bd9095148a7d1938bb762bbf189d190cf25d9547395ec7acc198a0
-  ffi (1.17.1-arm64-darwin) sha256=a8e04f79d375742c54ee7f9fff4b4022b87200a4ec0eb082128d3b6559e67b4d
-  ffi (1.17.1-x86-linux-gnu) sha256=01411c78cb3cff3c88cf67b2a7b24534e9b1638253d88581fef44c2083f6a174
-  ffi (1.17.1-x86-linux-musl) sha256=02bcc7bbcff71e021ef05f43469f7c5074ab3422e415b287001bd890c9cbb1c6
-  ffi (1.17.1-x86_64-darwin) sha256=0036199c290462dd7f03bc22933644c1685b7834a21788062bd5df48c72aa7a6
-  ffi (1.17.1-x86_64-linux-gnu) sha256=8c0ade2a5d19f3672bccfe3b58e016ae5f159e3e2e741c856db87fcf07c903d0
-  ffi (1.17.1-x86_64-linux-musl) sha256=3a343086820c96d6fbea4a5ef807fb69105b2b8174678f103b3db210c3f78401
+  ffi (1.17.2) sha256=297235842e5947cc3036ebe64077584bff583cd7a4e94e9a02fdec399ef46da6
+  ffi (1.17.2-aarch64-linux-gnu) sha256=c910bd3cae70b76690418cce4572b7f6c208d271f323d692a067d59116211a1a
+  ffi (1.17.2-aarch64-linux-musl) sha256=69e6556b091d45df83e6c3b19d3c54177c206910965155a6ec98de5e893c7b7c
+  ffi (1.17.2-arm-linux-gnu) sha256=d4a438f2b40224ae42ec72f293b3ebe0ba2159f7d1bd47f8417e6af2f68dbaa5
+  ffi (1.17.2-arm-linux-musl) sha256=977dfb7f3a6381206dbda9bc441d9e1f9366bf189a634559c3b7c182c497aaa3
+  ffi (1.17.2-arm64-darwin) sha256=54dd9789be1d30157782b8de42d8f887a3c3c345293b57ffb6b45b4d1165f813
+  ffi (1.17.2-x86-linux-gnu) sha256=95d8f9ebea23c39888e2ab85a02c98f54acb2f4e79b829250d7267ce741dc7b0
+  ffi (1.17.2-x86-linux-musl) sha256=41741449bab2b9530f42a47baa5c26263925306fad0ac2d60887f51af2e3b24c
+  ffi (1.17.2-x86_64-darwin) sha256=981f2d4e32ea03712beb26e55e972797c2c5a7b0257955d8667ba58f2da6440e
+  ffi (1.17.2-x86_64-linux-gnu) sha256=05d2026fc9dbb7cfd21a5934559f16293815b7ce0314846fee2ac8efbdb823ea
+  ffi (1.17.2-x86_64-linux-musl) sha256=97c0eb3981414309285a64dc4d466bd149e981c279a56371ef811395d68cb95c
   fugit (1.11.1) sha256=e89485e7be22226d8e9c6da411664d0660284b4b1c08cacb540f505907869868
   glob (0.4.1) sha256=e68e50419ffb7f896b39a483c1a37e7a1aa8f1a8c8ea13961f8cd1b50f40715d
   globalid (1.2.1) sha256=70bf76711871f843dbba72beb8613229a49429d1866828476f9c9d6ccc327ce9
@@ -930,7 +931,7 @@ CHECKSUMS
   rubocop-factory_bot (2.27.1) sha256=9d744b5916778c1848e5fe6777cc69855bd96548853554ec239ba9961b8573fe
   rubocop-performance (1.25.0) sha256=6f7d03568a770054117a78d0a8e191cefeffb703b382871ca7743831b1a52ec1
   rubocop-rails (2.31.0) sha256=79476e1075299c3e60fc50549c7c32614f9ebaae719b899ed75785c6786c52bd
-  rubocop-rspec (3.5.0) sha256=710c942fe1af884ba8eea75cbb8bdbb051929a2208880a6fc2e2dce1eed5304c
+  rubocop-rspec (3.6.0) sha256=c0e4205871776727e54dee9cc91af5fd74578001551ba40e1fe1a1ab4b404479
   rubocop-rspec_rails (2.31.0) sha256=775375e18a26a1184a812ef3054b79d218e85601b9ae897f38f8be24dddf1f45
   ruby-openai (8.1.0) sha256=6f69e7f501b3b039fe21807286230dfd51a91143e160ffb45464af30a20a5e14
   ruby-progressbar (1.13.0) sha256=80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33
@@ -954,12 +955,12 @@ CHECKSUMS
   simpleidn (0.2.3) sha256=08ce96f03fa1605286be22651ba0fc9c0b2d6272c9b27a260bc88be05b0d2c29
   slim (5.2.1) sha256=72351dff7e2ff20e2d5c393cfc385bb9142cef5db059141628fd7163ac3c13e7
   slim-rails (3.7.0) sha256=637dd3b07281bc6ee7e3395b153b26f04370dfac517058c334225818fffa1c96
-  slim_lint (0.32.2) sha256=a3e3aada4ce8d854b30bd45c4a17c93682e00fcd6f7830be4d6798681f4a3707
+  slim_lint (0.33.0) sha256=1d05f92915c02febf6bdb5557b73c81e75ca683293d3a51a2ad0e490bb0018de
   solid_cable (3.0.7) sha256=f2bce91e17e2c6e04c3c5e9905cc31b1078ff991702278c8bb1ac2e09f441a21
   solid_queue (1.1.5) sha256=bae0c9d76310f4953ebc57466f2e8c78703a0fbf4b89d25756c23c88f9b6df9b
-  sorbet-runtime (0.5.12010) sha256=5c30eefa2b4bd39c254a4f8357e1a480c2abfc9bc79278bf88c2361ff8dc7bcc
+  sorbet-runtime (0.5.12032) sha256=c346e7c0578160a336770662ecd001dcea28bc63f7924da9519f7d6f1b736475
   sorted_set (1.0.3) sha256=4f2b8bee6e8c59cbd296228c0f1f81679357177a8b6859dcc2a99e86cce6372f
-  sprockets (4.2.1) sha256=951b13dd2f2fcae840a7184722689a803e0ff9d2702d902bd844b196da773f97
+  sprockets (4.2.2) sha256=761e5a49f1c288704763f73139763564c845a8f856d52fba013458f8af1b59b1
   sprockets-rails (3.5.2) sha256=a9e88e6ce9f8c912d349aa5401509165ec42326baf9e942a85de4b76dbc4119e
   stackprof (0.2.27) sha256=aff6d28656c852e74cf632cc2046f849033dc1dedffe7cb8c030d61b5745e80c
   stringio (3.1.7) sha256=5b78b7cb242a315fb4fca61a8255d62ec438f58da2b90be66048546ade4507fa
