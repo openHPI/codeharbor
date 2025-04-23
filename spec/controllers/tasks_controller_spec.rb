@@ -90,7 +90,7 @@ RSpec.describe TasksController do
           context "when using filter keywords from #{description}" do
             let(:ransack_params) { {'fulltext_search' => keywords} }
 
-            include_examples 'shows task1'
+            it_behaves_like 'shows task1'
           end
         end
       end
@@ -98,19 +98,19 @@ RSpec.describe TasksController do
       context 'when a label filter is used' do
         let(:ransack_params) { {'has_all_labels' => %w[l1 l3]} }
 
-        include_examples 'shows task1'
+        it_behaves_like 'shows task1'
       end
 
       context 'when a fulltext search filter and label filter are combined' do
         let(:ransack_params) { {'fulltext_search' => 'key1 key2', 'has_all_labels' => %w[l3]} }
 
-        include_examples 'shows task1'
+        it_behaves_like 'shows task1'
       end
 
       context 'when a programming language filter is used' do
         let(:ransack_params) { {'programming_language_id_in' => ruby_lang.id} }
 
-        include_examples 'shows task1'
+        it_behaves_like 'shows task1'
       end
 
       context 'when a second request without searchparams is made' do
@@ -984,12 +984,12 @@ RSpec.describe TasksController do
       end
     end
 
-    include_examples 'renders success response'
+    it_behaves_like 'renders success response'
 
     context 'when the account link is shared with the requesting user' do
       let(:account_link) { create(:account_link, user: create(:user), shared_users: Array.wrap(user)) }
 
-      include_examples 'renders success response'
+      it_behaves_like 'renders success response'
     end
 
     context 'when the account link is neither owned by nor shared with the requesting user' do
@@ -1035,7 +1035,7 @@ RSpec.describe TasksController do
       end
     end
 
-    include_examples 'renders success json'
+    it_behaves_like 'renders success json'
 
     context 'when there is an error' do
       let(:error) { 'error' }
@@ -1070,7 +1070,7 @@ RSpec.describe TasksController do
     context 'when the account link is shared with the requesting user' do
       let(:account_link) { create(:account_link, user: create(:user), shared_users: Array.wrap(user)) }
 
-      include_examples 'renders success json'
+      it_behaves_like 'renders success json'
     end
 
     context 'when the account link is neither owned by nor shared with the requesting user' do
@@ -1124,7 +1124,7 @@ RSpec.describe TasksController do
       expect { post_request }.not_to change(Task, :count)
     end
 
-    include_examples 'renders success response'
+    it_behaves_like 'renders success response'
 
     context 'when push_type is create_new' do
       let(:push_type) { 'create_new' }
@@ -1168,7 +1168,7 @@ RSpec.describe TasksController do
     context 'when the account link is shared with the requesting user' do
       let(:account_link) { create(:account_link, user: create(:user), shared_users: Array.wrap(user)) }
 
-      include_examples 'renders success response'
+      it_behaves_like 'renders success response'
     end
 
     context 'when the account link is neither owned by nor shared with the requesting user' do

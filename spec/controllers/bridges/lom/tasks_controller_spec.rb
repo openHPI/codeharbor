@@ -30,7 +30,7 @@ RSpec.describe Bridges::Lom::TasksController do
     before { allow(Task).to receive(:find).with(task.id.to_s).and_return(task) }
 
     context 'when allowed to access the LOM' do
-      include_examples 'is a valid LOM response'
+      it_behaves_like 'is a valid LOM response'
     end
 
     context 'when not allowed to access the LOM' do
@@ -58,19 +58,19 @@ RSpec.describe Bridges::Lom::TasksController do
       context 'when no license is specified' do
         let(:license) { nil }
 
-        include_examples 'is a valid LOM response'
+        it_behaves_like 'is a valid LOM response'
       end
 
       context 'when ratings are available' do
         before { create(:rating, task:, user:) }
 
-        include_examples 'is a valid LOM response'
+        it_behaves_like 'is a valid LOM response'
       end
 
       context 'when comments are available' do
         before { create(:comment, task:, user:) }
 
-        include_examples 'is a valid LOM response'
+        it_behaves_like 'is a valid LOM response'
       end
     end
   end

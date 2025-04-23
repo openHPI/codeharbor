@@ -712,7 +712,7 @@ RSpec.describe CollectionsController do
       end
     end
 
-    include_examples 'redirects to collection and flashes message successfully'
+    it_behaves_like 'redirects to collection and flashes message successfully'
 
     context 'when push_tasks returns errors' do
       let(:push_task_return) { ['error'] }
@@ -731,19 +731,19 @@ RSpec.describe CollectionsController do
     context 'when user is not in collection' do
       let(:users) { [create(:user)] }
 
-      include_examples 'redirect to collection-list and flashes not authorized'
+      it_behaves_like 'redirect to collection-list and flashes not authorized'
     end
 
     context 'when the account link is shared with the requesting user' do
       let(:account_link) { create(:account_link, user: create(:user), shared_users: Array.wrap(user)) }
 
-      include_examples 'redirects to collection and flashes message successfully'
+      it_behaves_like 'redirects to collection and flashes message successfully'
     end
 
     context 'when the account link is neither owned by nor shared with the requesting user' do
       let(:account_link_user) { create(:user) }
 
-      include_examples 'redirect to collection-list and flashes not authorized'
+      it_behaves_like 'redirect to collection-list and flashes not authorized'
     end
   end
   # get collections_all # adminview

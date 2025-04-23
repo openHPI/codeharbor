@@ -2,7 +2,7 @@
   .comment-block
     = t('.info.no_comments')
 
--else
+- else
   = link_to task_comments_path(@task), class: 'refresh', remote: true do
     span.fa-solid.fa-arrows-rotate
     =< t('.button.refresh_comments')

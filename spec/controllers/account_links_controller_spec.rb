@@ -38,15 +38,15 @@ RSpec.describe AccountLinksController do
     end
 
     describe 'GET #new' do
-      include_examples 'new examples', klass: AccountLink, resource: :account_link
+      it_behaves_like 'new examples', klass: AccountLink, resource: :account_link
     end
 
     describe 'GET #edit' do
-      include_examples 'edit examples', klass: AccountLink, resource: :account_link
+      it_behaves_like 'edit examples', klass: AccountLink, resource: :account_link
     end
 
     describe 'POST #create' do
-      include_examples 'create examples', klass: AccountLink, resource: :account_link
+      it_behaves_like 'create examples', klass: AccountLink, resource: :account_link
 
       it 'with valid attributes redirects to the user' do
         post :create, params: empty_params.merge(account_link: valid_attributes)
@@ -61,7 +61,7 @@ RSpec.describe AccountLinksController do
         attributes
       end
 
-      include_examples 'update examples', klass: AccountLink, resource: :account_link
+      it_behaves_like 'update examples', klass: AccountLink, resource: :account_link
 
       context 'with valid attributes' do
         it 'updates the requested account_link' do
@@ -80,7 +80,7 @@ RSpec.describe AccountLinksController do
     end
 
     describe 'DELETE #destroy' do
-      include_examples 'destroy examples', klass: AccountLink, resource: :account_link
+      it_behaves_like 'destroy examples', klass: AccountLink, resource: :account_link
       it 'with valid attributes redirects to the user' do
         account_link = AccountLink.create! valid_attributes.merge(user:)
         delete :destroy, params: empty_params.merge(id: account_link.to_param)

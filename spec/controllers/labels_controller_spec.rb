@@ -45,13 +45,13 @@ RSpec.describe LabelsController do
       before { sign_in user }
 
       context 'without requesting more info' do
-        include_examples 'json without the number of referrencing tasks'
+        it_behaves_like 'json without the number of referrencing tasks'
       end
 
       context 'when requesting more info' do
         subject(:get_request) { get :search, params: params.merge(more_info: true) }
 
-        include_examples 'json without the number of referrencing tasks'
+        it_behaves_like 'json without the number of referrencing tasks'
       end
     end
 
@@ -61,7 +61,7 @@ RSpec.describe LabelsController do
       before { sign_in admin }
 
       context 'when not requesting more info' do
-        include_examples 'json without the number of referrencing tasks'
+        it_behaves_like 'json without the number of referrencing tasks'
       end
 
       context 'when requesting more info' do
@@ -122,20 +122,20 @@ RSpec.describe LabelsController do
       context 'with an invalid new label name' do
         let(:new_label_name) { '' }
 
-        include_examples 'error and flash message'
+        it_behaves_like 'error and flash message'
       end
 
       context 'with an already existing new label name' do
         let(:selected_labels) { labels[1..3] }
         let(:new_label_name) { labels.first.name }
 
-        include_examples 'error and flash message'
+        it_behaves_like 'error and flash message'
       end
 
       context 'with no labels to merge' do
         let(:selected_labels) { [] }
 
-        include_examples 'error and flash message'
+        it_behaves_like 'error and flash message'
       end
 
       context 'when the new label name is one of the selected labels except the first' do
