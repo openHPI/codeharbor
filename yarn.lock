@@ -1140,7 +1140,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:7.27.0, @babel/runtime@npm:^7.16.7":
+"@babel/runtime@npm:7.27.1":
+  version: 7.27.1
+  resolution: "@babel/runtime@npm:7.27.1"
+  checksum: 10c0/530a7332f86ac5a7442250456823a930906911d895c0b743bf1852efc88a20a016ed4cd26d442d0ca40ae6d5448111e02a08dd638a4f1064b47d080e2875dc05
+  languageName: node
+  linkType: hard
+
+"@babel/runtime@npm:^7.16.7":
   version: 7.27.0
   resolution: "@babel/runtime@npm:7.27.0"
   dependencies:
@@ -2601,7 +2608,7 @@ __metadata:
     "@babel/core": "npm:7.27.1"
     "@babel/plugin-transform-runtime": "npm:7.27.1"
     "@babel/preset-env": "npm:7.27.1"
-    "@babel/runtime": "npm:7.27.0"
+    "@babel/runtime": "npm:7.27.1"
     "@fortawesome/fontawesome-free": "npm:^6.7.2"
     "@popperjs/core": "npm:^2.11.8"
     "@sentry/browser": "npm:^9.15.0"
