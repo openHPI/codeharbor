@@ -11,3 +11,11 @@
 # nbp_sync_all_job:
 #   class: NbpSyncAllJob
 #   schedule: at 3am every day
+
+import_file_cache_cleanup_job:
+  command: "ImportFileCache.where(created_at: ...1.day.ago).destroy_all"
+  schedule: at 3am every day
+
+clear_finished_jobs:
+  command: "SolidQueue::Job.clear_finished_in_batches"
+  schedule: at 3am every day

@@ -47,7 +47,6 @@ gem 'solid_queue'
 gem 'sprockets-rails'
 gem 'terser', require: false
 gem 'turbolinks'
-gem 'whenever', require: false
 
 # Authentication
 gem 'devise', '~> 4.9'
