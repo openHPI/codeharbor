@@ -569,7 +569,7 @@ GEM
       rexml (~> 3.2)
       rubocop (>= 1.0, < 2.0)
       slim (>= 3.0, < 6.0)
-    solid_cable (3.0.7)
+    solid_cable (3.0.8)
       actioncable (>= 7.2)
       activejob (>= 7.2)
       activerecord (>= 7.2)
@@ -951,7 +951,7 @@ CHECKSUMS
   slim (5.2.1) sha256=72351dff7e2ff20e2d5c393cfc385bb9142cef5db059141628fd7163ac3c13e7
   slim-rails (3.7.0) sha256=637dd3b07281bc6ee7e3395b153b26f04370dfac517058c334225818fffa1c96
   slim_lint (0.33.0) sha256=1d05f92915c02febf6bdb5557b73c81e75ca683293d3a51a2ad0e490bb0018de
-  solid_cable (3.0.7) sha256=f2bce91e17e2c6e04c3c5e9905cc31b1078ff991702278c8bb1ac2e09f441a21
+  solid_cable (3.0.8) sha256=71fcc85587c8899d4c145f25ac15e092ed0ecc14477e67c9220f82ae3cdd8c3a
   solid_queue (1.1.5) sha256=bae0c9d76310f4953ebc57466f2e8c78703a0fbf4b89d25756c23c88f9b6df9b
   sorbet-runtime (0.5.12087) sha256=59601fe1cc0950d6d28cbc289cd29d7a6f0552df79a4fd1666e84ebab8b05478
   sorted_set (1.0.3) sha256=4f2b8bee6e8c59cbd296228c0f1f81679357177a8b6859dcc2a99e86cce6372f
