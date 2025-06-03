@@ -10,21 +10,25 @@ class TaskService
 
     def execute
       response = self.class.connection.post(@account_link.push_url) {|request| request_parameters(request, @zip.string) }
-      return nil if response.success?
-      return I18n.t('tasks.export_external_confirm.not_authorized', account_link: @account_link.name) if response.status == 401
-
-      handle_error(message: response.body)
+      handle_response(response)
     rescue Faraday::ServerError => e
       handle_error(error: e, message: I18n.t('tasks.export_external_confirm.server_error', account_link: @account_link.name))
     rescue StandardError => e
-      handle_error(error: e)
+      handle_error(error: e, message: I18n.t('tasks.export_external_confirm.generic_error'))
     end
 
     private
 
-    def handle_error(message: nil, error: nil)
+    def handle_response(response)
+      return nil if response.success?
+      return I18n.t('tasks.export_external_confirm.not_authorized', account_link: @account_link.name) if response.status == 401
+
+      handle_error(message: response.body)
+    end
+
+    def handle_error(message:, error: nil)
       Sentry.capture_exception(error) if error.present?
-      ERB::Util.html_escape(message || error.to_s)
+      ERB::Util.html_escape(message)
     end
 
     def request_parameters(request, body)
