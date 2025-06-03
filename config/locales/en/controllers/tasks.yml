@@ -9,8 +9,8 @@ en:
     export_external_confirm:
       error: 'Export of task (%{title}) failed. <br><br> Error: %{error}'
       generic_error: An unknown error has occurred while exporting the task.
-      not_authorized: Authorization with could not be established with "%{account_link}". Is the API Key correct?
-      server_error: Connection to %{account_link} failed. Remote host unreachable.
+      not_authorized: Authorization with "%{account_link}" could not be established. Is the API key correct?
+      server_error: Connection to "%{account_link}" failed. Remote host unreachable.
       success: Task (%{title}) successfully exported.
     import:
       internal_error: An internal error occurred on CodeHarbor while importing the exercise.
