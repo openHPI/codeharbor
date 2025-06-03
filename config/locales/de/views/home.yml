@@ -13,9 +13,9 @@ de:
           Wenn Sie einen Account-Link haben, können Sie einfach Aufgaben zu den Autogradern exportieren, die für Sie verfügbar sind. <br/>
           Sie können Ihren eigenen Account-Link erstellen, wenn Sie die push_url eines Autograders haben, der OAuth2-POST-Anfragen verarbeiten kann.</br>
         </p>
-        <h3>Sie möchten einen Autograder verbinden, der bereits OAuth2- und ProFormA-XML-Unterstützung hat:</h3>
+        <h3>Sie möchten einen Autograder verbinden, der bereits OAuth2- und ProFormA-Unterstützung hat:</h3>
         <p>
-          Wenn der Autograder Aufgaben, die über OAuth2-Anfragen im ProFormA-XML-Format gesendet werden, importieren kann, benötigen Sie folgende Konfigurationsparameter: <br/>
+          Wenn der Autograder Aufgaben, die über OAuth2-Anfragen im ProFormA-Format gesendet werden, importieren kann, benötigen Sie folgende Konfigurationsparameter: <br/>
           1. Push-URL: Der Autograder benötigt eine URL, an die CodeHarbor die Aufgabe senden kann. <br/>
           2. OAuth2-Token: Der Autograder muss in der Lage sein, ein Token mit Ihrem Account zu verknüpfen, um Aufgaben zu autorisieren, die zum Autograder gesendet werden. <br/>
              Wenn Sie kein spezifisches Token benötigen, können Sie ein Token generieren, wenn Sie einen Account-Link auf der CodeHarbor-Seite erstellen, oder ein beliebiges Token verwenden, <br/>
@@ -27,10 +27,10 @@ de:
         <p>
           CodeHarbor verwendet das OAuth 2.0-Protokoll, um Aufgaben über eine POST-Anfrage zu senden. <a href="https://oauth.net/2/">https://oauth.net/2/</a><br/>
           CodeHarbor ist in diesem Fall der Client, Ihr Autograder der Ressourcenserver und Sie sind der Ressourcenbesitzer.
-          Wenn Sie eine Aufgabe exportieren, generiert CodeHarbor zunächst eine XML-Datei, die dem ProFormA-XML-Standard für den Austausch von Aufgaben entspricht. <a href="https://github.com/ProFormA/taskxml">https://github.com/ProFormA/taskxml</a>
+          Wenn Sie eine Aufgabe exportieren, generiert CodeHarbor zunächst eine XML-Datei, die dem ProFormA-Standard für den Austausch von Aufgaben entspricht. <a href="https://github.com/ProFormA/taskxml">https://github.com/ProFormA/taskxml</a>
           Anschließend wird eine POST-Anfrage an die von Ihnen gewählte push_url gesendet. Die XML-Datei befindet sich im Anfragekörper und der OAuth2-Token in den Anforderungsheadern ("request.headers['Authorization']"). <br/>
           In Ihrem Autograder müssen Sie sicherstellen, dass der OAuth2-Token validiert wird und der entsprechende Benutzer gefunden wird. Wir empfehlen, eine Schnittstelle hinzuzufügen, damit Benutzer:innen ein OAuth2-Token hinzufügen können. <br/>
-          Die XML-Datei im Anfragekörper muss in die Datenbank geparst werden. Da wir das ProFormA-XML-Format verwenden, können Sie das XML mit XPath parsen. <br/>
+          Die XML-Datei im Anfragekörper muss in die Datenbank geparst werden. Da wir das ProFormA-Format verwenden, können Sie das XML mit XPath parsen. <br/>
           Schließlich antworten Sie bitte mit einem Statuscode 200, wenn alles in Ordnung war, oder mit einem Statuscode 400, wenn dies nicht der Fall war. <br/>
         </p>
     index:

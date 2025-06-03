@@ -6,7 +6,7 @@ de:
         api_key: API-Schlüssel
         check_uuid_url: URL zum Überprüfen der UUID
         name: Name
-        proforma_version: ProFormA Version
+        proforma_version: ProFormA-Version
         push_url: Push-URL
       account_link_user:
         user: Benutzer:in
@@ -67,7 +67,7 @@ de:
       task/model_solutions/files:
         attachment: Anhang einer Datei in einer Musterlösung
         name: Name einer Datei in einer Musterlösung
-        xml_id: XML_ID einer Datei in einer Musterlösung
+        xml_id: XML-ID einer Datei in einer Musterlösung
       task/tests:
         title: Titel eines Tests
         xml_id: XML-ID eines Tests

@@ -804,7 +804,7 @@ RSpec.describe TasksController do
 
       it 'renders correct JSON' do
         post_request
-        expect(JSON.parse(response.body, symbolize_names: true)).to eql({status: 'failure', message: 'Import of task could not be started. <br> Error: An error occurred while importing your ProformaXML ZIP file.<br>The version of this ProformaXML document is not supported.', actions: ''})
+        expect(JSON.parse(response.body, symbolize_names: true)).to eql({status: 'failure', message: 'Import of task could not be started. <br> Error: An error occurred while importing your ProFormA ZIP file.<br>The version of this ProFormA document is not supported.', actions: ''})
       end
     end
 

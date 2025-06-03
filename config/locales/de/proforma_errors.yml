@@ -1,6 +1,6 @@
 ---
 de:
   proforma_errors:
-    import: Es ist ein Fehler beim Importieren der ProformaXML ZIP-Datei aufgetreten.
+    import: Es ist ein Fehler beim Importieren der ProFormA-ZIP-Datei aufgetreten.
     no task_xml found: Es konnte keine task.xml in der ZIP-Datei gefunden werden.
-    version not supported: Die Version dieses ProformaXML Dokuments wird nicht unterstützt.
+    version not supported: Die Version dieses ProFormA-Dokuments wird nicht unterstützt.
