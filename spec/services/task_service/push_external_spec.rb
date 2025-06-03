@@ -72,28 +72,22 @@ RSpec.describe TaskService::PushExternal do
         let(:error) { Faraday::ServerError }
 
         before do
-          allow(Faraday).to receive(:new).and_return(connection)
+          allow(TaskService).to receive(:connection).and_return(connection)
           allow(connection).to receive(:post).and_raise(error)
         end
 
         it { is_expected.to eql I18n.t('tasks.export_external_confirm.server_error', account_link: account_link.name) }
-
-        context 'when another error occurs' do
-          let(:error) { 'another error' }
-
-          it { is_expected.to eql 'another error' }
-        end
       end
     end
 
     context 'when an error occurs' do
+      let(:error) { StandardError.new('Standard error occurred') }
+
       before do
-        # Un-memoize the connection to force a reconnection
-        described_class.instance_variable_set(:@connection, nil)
-        allow(Faraday).to receive(:new).and_raise(StandardError)
+        allow(TaskService).to receive(:connection).and_raise(error)
       end
 
-      it { is_expected.not_to be_nil }
+      it { is_expected.to eql I18n.t('tasks.export_external_confirm.generic_error') }
     end
   end
 end
