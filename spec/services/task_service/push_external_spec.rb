@@ -76,7 +76,7 @@ RSpec.describe TaskService::PushExternal do
           allow(connection).to receive(:post).and_raise(error)
         end
 
-        it { is_expected.to eql I18n.t('tasks.export_external_confirm.server_error', account_link: account_link.name) }
+        it { is_expected.to eql ERB::Util.html_escape(I18n.t('tasks.export_external_confirm.server_error', account_link: account_link.name)) }
       end
     end
 
