@@ -95,7 +95,7 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
-  def handle_destroy
+  def handle_destroy # rubocop:disable Naming/PredicateMethod
     handle_group_memberships
     handle_collection_membership
     handle_messages

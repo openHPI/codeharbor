@@ -46,7 +46,7 @@ class ApplicationPolicy
     @user.present?
   end
 
-  def no_one
+  def no_one # rubocop:disable Naming/PredicateMethod
     false
   end
 
