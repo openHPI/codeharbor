@@ -70,7 +70,7 @@ module Enmeshed
       end
 
       # @return [Boolean] Whether the relationship was accepted successfully.
-      def accept_relationship(relationship_id)
+      def accept_relationship(relationship_id) # rubocop:disable Naming/PredicateMethod
         response = connection.put("/api/v2/Relationships/#{relationship_id}/Accept")
         Rails.logger.debug do
           "Enmeshed::ConnectorApi accepted the relationship; connector response status is #{response.status}"
@@ -80,7 +80,7 @@ module Enmeshed
       end
 
       # @return [Boolean] Whether the relationship was rejected successfully.
-      def reject_relationship(relationship_id)
+      def reject_relationship(relationship_id) # rubocop:disable Naming/PredicateMethod
         response = connection.put("/api/v2/Relationships/#{relationship_id}/Reject")
         Rails.logger.debug do
           'Enmeshed::ConnectorApi rejected the relationship; ' \

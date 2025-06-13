@@ -85,5 +85,5 @@
           i.fa-solid.fa-trash-can.text-danger
           =< t('.button.delete_group')
       - if policy(@group).leave?
-        = link_to t('.button.leave'), leave_group_path(@group), method: :post, class: "leave-btn btn btn-important #{@group.last_admin?(current_user) ? 'disabled' : ''}", data: {confirm: t('common.sure')}
+        = link_to t('.button.leave'), leave_group_path(@group), method: :post, class: "leave-btn btn btn-important #{'disabled' if @group.last_admin?(current_user)}", data: {confirm: t('common.sure')}
       = link_to t('common.button.back'), :back, class: 'btn btn-important'
