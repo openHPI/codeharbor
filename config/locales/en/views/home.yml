@@ -73,12 +73,12 @@ en:
         link2: log in
         paragraph_html: If you want to join our community %{href1} now or %{href2} if you are already a member.
     partners:
-      bmbf:
-        alt_text: Sponsored by the German Federal Ministry of Education and Research
+      bmftr:
+        alt_text: 'With funding from the: German Federal Ministry of Research, Technology and Space'
         disclaimer_html: |
-          The Federal Ministry of Education and Research (BMBF) is funding this project within the framework of the "Initiative National Education Platform".<br>
-          BMBF Grant Number: CoHaP2 (16INB2009)
-        logo: home/logos/bmbf.en.svg
+          The Federal Ministry of Research, Technology and Space (BMFTR) funded this project within the framework of the "Initiative National Education Platform".<br>
+          BMFTR Grant Number: CoHaP2 (16INB2009)
+        logo: home/logos/bmftr.en.svg
       eu:
         alt_text: Funded by the European Union – NextGenerationEU
         disclaimer_html: Funded by the European Union – NextGenerationEU. Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or European Commission. Neither the European Union nor the European Commission can be held responsible for them.

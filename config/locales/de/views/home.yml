@@ -73,12 +73,12 @@ de:
         link2: Anmelden
         paragraph_html: Wenn Sie unserer Community beitreten möchten, klicken Sie jetzt auf %{href1} oder auf %{href2}, wenn Sie bereits Mitglied sind.
     partners:
-      bmbf:
-        alt_text: Gefördert vom Bundesministerium für Bildung und Forschung
+      bmftr:
+        alt_text: 'Gefördert durch: Bundesministerium für Forschung, Technologie und Raumfahrt'
         disclaimer_html: |
-          Das Bundesministerium für Bildung und Forschung (BMBF) fördert dieses Projekt im Rahmen der "Initiative Nationale Bildungsplattform".<br>
-          BMBF Förderkennzeichen: CoHaP2 (16INB2009)
-        logo: home/logos/bmbf.de.svg
+          Das Bundesministeriums für Forschung, Technologie und Raumfahrt (BMFTR) förderte dieses Projekt im Rahmen der "Initiative Nationale Bildungsplattform".<br>
+          BMFTR Förderkennzeichen: CoHaP2 (16INB2009)
+        logo: home/logos/bmftr.de.svg
       eu:
         alt_text: Finanziert von der Europäische Union – NextGenerationEU
         disclaimer_html: Finanziert durch die Europäische Union – NextGenerationEU. Die geäußerten Ansichten und Meinungen sind ausschließlich die des Autors/der Autoren und spiegeln nicht unbedingt die Ansichten der Europäischen Union oder der Europäischen Kommission wieder. Weder die Europäische Union noch die Europäische Kommission können für sie verantwortlich gemacht werden.
