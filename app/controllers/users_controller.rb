@@ -7,7 +7,7 @@ class UsersController < ApplicationController
     if current_user
       redirect_to({id: current_user.id}, alert: t('common.errors.not_authorized'))
     else
-      redirect_to root_path, alert: t('common.errors.not_authorized')
+      redirect_to :root, alert: t('common.errors.not_authorized')
     end
   end
 

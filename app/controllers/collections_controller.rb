@@ -41,7 +41,7 @@ class CollectionsController < ApplicationController
       # Redirect back to task#show as collections with tasks can only be created from that view
       create_collection_with_task
     elsif @collection.save
-      redirect_to collections_path, notice: t('common.notices.object_created', model: Collection.model_name.human)
+      redirect_to Collection, notice: t('common.notices.object_created', model: Collection.model_name.human)
     else
       render :new
     end
@@ -49,7 +49,7 @@ class CollectionsController < ApplicationController
 
   def update
     if @collection.update(collection_params)
-      redirect_to collections_path, notice: t('common.notices.object_updated', model: Collection.model_name.human)
+      redirect_to Collection, notice: t('common.notices.object_updated', model: Collection.model_name.human)
     else
       render :edit
     end
@@ -94,9 +94,9 @@ class CollectionsController < ApplicationController
 
   def share
     if share_message.save
-      redirect_to collection_path(@collection), notice: t('.success_notice')
+      redirect_to @collection, notice: t('.success_notice')
     else
-      redirect_to collection_path(@collection), alert: share_message.errors.full_messages.join(', ')
+      redirect_to @collection, alert: share_message.errors.full_messages.join(', ')
     end
   end
 
@@ -119,10 +119,10 @@ class CollectionsController < ApplicationController
   def leave
     if @collection.users.count == 1
       @collection.destroy
-      redirect_to collections_path, notice: t('common.notices.object_deleted', model: Collection.model_name.human)
+      redirect_to Collection, notice: t('common.notices.object_deleted', model: Collection.model_name.human)
     else
       @collection.users.delete(current_user)
-      redirect_to collections_path, notice: t('.left_successfully')
+      redirect_to Collection, notice: t('.left_successfully')
     end
   end
 

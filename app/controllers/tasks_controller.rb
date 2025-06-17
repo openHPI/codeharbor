@@ -75,7 +75,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   def destroy
     @task.destroy!
-    redirect_to tasks_url, notice: t('common.notices.object_deleted', model: Task.model_name.human)
+    redirect_to Task, notice: t('common.notices.object_deleted', model: Task.model_name.human)
   end
 
   def add_to_collection

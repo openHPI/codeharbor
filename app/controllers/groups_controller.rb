@@ -46,7 +46,7 @@ class GroupsController < ApplicationController
 
   def destroy
     @group.destroy
-    redirect_to groups_url, notice: t('common.notices.object_deleted', model: Group.model_name.human)
+    redirect_to Group, notice: t('common.notices.object_deleted', model: Group.model_name.human)
   end
 
   def leave
@@ -54,7 +54,7 @@ class GroupsController < ApplicationController
       redirect_to @group, alert: t('.cannot_leave_alert')
     else
       @group.users.delete(current_user)
-      redirect_to groups_path, notice: t('.success_notice')
+      redirect_to Group, notice: t('.success_notice')
     end
   end
 
@@ -66,7 +66,7 @@ class GroupsController < ApplicationController
       AccessRequestMailer.send_access_request(current_user, admin, @group).deliver_later
     end
     @group.add(current_user, role: :applicant)
-    redirect_to groups_path
+    redirect_to Group
   end
 
   def remove_task
