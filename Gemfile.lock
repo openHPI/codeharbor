@@ -165,9 +165,9 @@ GEM
       logger
     faraday-multipart (1.1.0)
       multipart-post (~> 2.0)
-    faraday-net_http (3.4.0)
+    faraday-net_http (3.4.1)
       net-http (>= 0.5.0)
-    faraday-net_http_persistent (2.3.0)
+    faraday-net_http_persistent (2.3.1)
       faraday (~> 2.5)
       net-http-persistent (>= 4.0.4, < 5)
     ffi (1.17.2)
@@ -291,8 +291,8 @@ GEM
       rails (>= 3.2.0)
     net-http (0.6.0)
       uri
-    net-http-persistent (4.0.5)
-      connection_pool (~> 2.2)
+    net-http-persistent (4.0.6)
+      connection_pool (~> 2.2, >= 2.2.4)
     net-imap (0.5.8)
       date
       net-protocol
@@ -794,8 +794,8 @@ CHECKSUMS
   factory_bot_rails (6.5.0) sha256=4a7b61635424a57cc60412a18b72b9dcfb02fabfce2c930447a01dce8b37c0a2
   faraday (2.13.1) sha256=cc531eb5467e7d74d4517630fa96f1a7003647cbf20a9a3e067d098941217b75
   faraday-multipart (1.1.0) sha256=856b0f1c7316a4d6c052dd2eef5c42f887d56d93a171fe8880da1af064ca0751
-  faraday-net_http (3.4.0) sha256=a1f1e4cd6a2cf21599c8221595e27582d9936819977bbd4089a601f24c64e54a
-  faraday-net_http_persistent (2.3.0) sha256=33d4948cabe9f8148222c4ca19634c71e1f25595cccf9da2e02ace8d754f1bb1
+  faraday-net_http (3.4.1) sha256=095757fae7872b94eac839c08a1a4b8d84fd91d6886cfbe75caa2143de64ab3b
+  faraday-net_http_persistent (2.3.1) sha256=23ffba37d6a27807a10f033d01918ec958aa73fa6ff0fccfbcd5ce2d2e68fca3
   ffi (1.17.2) sha256=297235842e5947cc3036ebe64077584bff583cd7a4e94e9a02fdec399ef46da6
   ffi (1.17.2-aarch64-linux-gnu) sha256=c910bd3cae70b76690418cce4572b7f6c208d271f323d692a067d59116211a1a
   ffi (1.17.2-aarch64-linux-musl) sha256=69e6556b091d45df83e6c3b19d3c54177c206910965155a6ec98de5e893c7b7c
@@ -853,7 +853,7 @@ CHECKSUMS
   nested_form (0.3.2) sha256=b1c468d7eac781235861c2f74fc9f675df0c4d915d5724aaf7fd29f7891c0538
   nested_form_fields (0.8.4) sha256=e3db8e935b40c6b6027ce65b10ee0c5cf575d1ba175be85154c81d4253635b19
   net-http (0.6.0) sha256=9621b20c137898af9d890556848c93603716cab516dc2c89b01a38b894e259fb
-  net-http-persistent (4.0.5) sha256=6e42880b347e650ffeaf679ae59c9d5a6ed8a22cda6e1b959d9c270050aefa8e
+  net-http-persistent (4.0.6) sha256=2abb3a04438edf6cb9e0e7e505969605f709eda3e3c5211beadd621a2c84dd5d
   net-imap (0.5.8) sha256=52aa5fdfc1a8a3df1f793b20a327e95b5a9dfe1d733e1f0d53075d2dbcfcf593
   net-pop (0.1.2) sha256=848b4e982013c15b2f0382792268763b748cce91c9e91e36b0f27ed26420dff3
   net-protocol (0.2.2) sha256=aa73e0cba6a125369de9837b8d8ef82a61849360eba0521900e2c3713aa162a8
