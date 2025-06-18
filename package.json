@@ -13,7 +13,7 @@
     "@webpack-cli/serve": "^3.0.1",
     "ace-builds": "^1.42.0",
     "babel-loader": "10.0.0",
-    "bootstrap": "^5.3.6",
+    "bootstrap": "^5.3.7",
     "compression-webpack-plugin": "11.1.0",
     "css-loader": "^7.1.2",
     "css-minimizer-webpack-plugin": "^7.0.2",
