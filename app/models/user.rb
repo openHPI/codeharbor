@@ -121,7 +121,7 @@ class User < ApplicationRecord
 
   def handle_collection_membership
     collections.each do |collection|
-      collection.destroy if collection.users.count == 1
+      collection.destroy if collection.users.one?
     end
   end
 

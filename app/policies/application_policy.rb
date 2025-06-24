@@ -41,7 +41,7 @@ class ApplicationPolicy
     @user.present? && @user.role == 'admin'
   end
 
-  def everyone
+  def everyone # rubocop:disable Naming/PredicateMethod
     # `everyone` here means `every user logged in`
     @user.present?
   end

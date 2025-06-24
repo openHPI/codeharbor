@@ -117,7 +117,7 @@ class CollectionsController < ApplicationController
   end
 
   def leave
-    if @collection.users.count == 1
+    if @collection.users.one?
       @collection.destroy
       redirect_to Collection, notice: t('common.notices.object_deleted', model: Collection.model_name.human)
     else
