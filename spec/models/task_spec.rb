@@ -666,4 +666,47 @@ RSpec.describe Task do
       end
     end
   end
+
+  describe '#proforma_valid?' do
+    subject(:proforma_valid) { task.proforma_valid?(schema_version:) }
+
+    let(:task) { create(:task) }
+    let(:schema_version) { nil }
+
+    context 'when the task is valid for all schema versions' do
+      before do
+        allow(ProformaService::ExportTask).to receive(:call).and_return(true)
+      end
+
+      it { is_expected.to be true }
+    end
+
+    context 'when the task is invalid for a schema version' do
+      before do
+        allow(ProformaService::ExportTask).to receive(:call).and_raise(ProformaXML::PostGenerateValidationError, '["version not supported"]')
+      end
+
+      it { is_expected.to be false }
+    end
+
+    context 'when a specific schema version is provided' do
+      let(:schema_version) { '2.0' }
+
+      context 'when the task is valid for the specified schema version' do
+        before do
+          allow(ProformaService::ExportTask).to receive(:call).with(task: task, options: {version: schema_version}).and_return(true)
+        end
+
+        it { is_expected.to be true }
+      end
+
+      context 'when the task is invalid for the specified schema version' do
+        before do
+          allow(ProformaService::ExportTask).to receive(:call).with(task: task, options: {version: schema_version}).and_raise(ProformaXML::PostGenerateValidationError, '["version not supported"]')
+        end
+
+        it { is_expected.to be false }
+      end
+    end
+  end
 end
