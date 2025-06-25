@@ -110,6 +110,16 @@
     margin-bottom: 0 !important;
   }
 }
+.button-box{
+
+  .btn.disabled{
+    border: 1px solid lightgray;
+  }
+}
+
+.disabled-btn-wrapper {
+  width: 100%;
+}
 
 .completeness-checklist-container {
   background: white;

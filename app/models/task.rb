@@ -259,6 +259,17 @@ class Task < ApplicationRecord # rubocop:disable Metrics/ClassLength
     Rails.application.routes.url_helpers.url_for(controller:, action:, **id_options, only_path: true)
   end
 
+  def proforma_valid?(schema_version: nil)
+    check_versions = schema_version.nil? ? ProformaXML::SCHEMA_VERSIONS : [schema_version]
+
+    check_versions.all? do |version|
+      ProformaService::ExportTask.call(task: self, options: {version:})
+      true
+    rescue ProformaXML::PostGenerateValidationError
+      false
+    end
+  end
+
   private
 
   def duplicate_tests(set_parent_id: true)

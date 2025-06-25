@@ -519,13 +519,22 @@
       .wrapper
         - if policy(@task).download?
           .dropdown.btn-group
-            = button_tag class: 'btn btn-light dropdown-toggle', data: {bs_toggle: 'dropdown'} do
-              = t('common.button.download_zip')
+            - if @proforma_valid[nil]
+              = button_tag class: 'btn btn-light dropdown-toggle', data: {bs_toggle: 'dropdown'} do
+                = t('common.button.download_zip')
+            - else
+              .disabled-btn-wrapper data-bs-toggle='tooltip' title=t('.not_proforma_valid', version: '')
+                = button_tag class: 'btn btn-light dropdown-toggle disabled', 'data-bs-toggle': 'dropdown' do
+                  = t('common.button.download_zip')
             ul.scrollable.dropdown-menu role='menu'
               li.dropdown-header = "#{t('common.button.available_versions')}: "
               - ProformaXML::SCHEMA_VERSIONS.each do |proforma_version|
                 li
-                  = link_to(proforma_version, download_task_path(@task, version: proforma_version), class: 'btn btn-light dropdown-item', target: '_blank', rel: 'noopener noreferrer')
+                  - if @proforma_valid[proforma_version]
+                    = link_to proforma_version, download_task_path(@task, version: proforma_version), class: 'btn btn-light dropdown-item', target: '_blank', rel: 'noopener noreferrer'
+                  - else
+                    .disabled-btn-wrapper data-bs-toggle='tooltip' title=t('.not_proforma_valid', version: " (#{proforma_version})")
+                      = link_to(proforma_version, download_task_path(@task, version: proforma_version), class: 'btn btn-light dropdown-item disabled', target: '_blank', rel: 'noopener noreferrer')
 
         - else
           div data-bs-toggle='tooltip' title=unavailable_tooltip data-bs-delay=150
@@ -535,6 +544,7 @@
           .dropdown.btn-group
             = button_tag class: 'btn btn-light dropdown-toggle', data: {bs_toggle: 'dropdown'} do
               = t('.button.export')
+
             ul.scrollable.dropdown-menu role='menu'
               li.dropdown-header = "#{t('tasks.show.export_to')}: "
               - if current_user.available_account_links.empty?
@@ -543,7 +553,12 @@
               - else
                 - current_user.available_account_links.each do |acc_link|
                   li
-                    = button_to(acc_link.name, export_external_start_task_path(account_link: acc_link), method: :post, remote: true, class: 'dropdown-item export-test')
+                    - if @proforma_valid[acc_link.proforma_version || ProformaXML::SCHEMA_VERSION_LATEST]
+                      = link_to(acc_link.name, export_external_start_task_path(account_link: acc_link), method: :post, remote: true, class: 'dropdown-item export-test')
+                    - else
+                      .disabled-btn-wrapper data-bs-toggle='tooltip' title=t('.not_proforma_valid', version: " (#{acc_link.proforma_version || ProformaXML::SCHEMA_VERSION_LATEST})")
+                        = link_to(acc_link.name, export_external_start_task_path(account_link: acc_link), method: :post, remote: true, class: 'dropdown-item export-test disabled')
+
         - else
           div data-bs-toggle='tooltip' title=unavailable_tooltip data-bs-delay=150
             = button_tag class: 'btn btn-outline-dark dropdown-toggle disabled', data: {bs_toggle: 'dropdown'} do
