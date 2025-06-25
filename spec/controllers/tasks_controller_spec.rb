@@ -219,6 +219,29 @@ RSpec.describe TasksController do
           expect(response).to redirect_to([contribution.base, contribution])
         end
       end
+
+      context 'when checking proforma validity' do
+        before do
+          stub_const('ProformaXML::SCHEMA_VERSIONS', ['2.0'])
+
+          task_double = task
+
+          allow(Task).to receive(:find).with(task.to_param).and_return(task_double)
+
+          allow(task_double).to receive(:proforma_valid?).with(schema_version: nil).and_return(true)
+          allow(task_double).to receive(:proforma_valid?).with(schema_version: '2.0').and_return(false)
+        end
+
+        it 'assigns proforma_valid to instance variable' do
+          get_request
+          expect(assigns(:proforma_valid)).to be_a(Hash)
+        end
+
+        it 'includes all values in proforma_valid hash' do
+          get_request
+          expect(assigns(:proforma_valid)).to eql({nil => true, '2.0' => false})
+        end
+      end
     end
   end
 
