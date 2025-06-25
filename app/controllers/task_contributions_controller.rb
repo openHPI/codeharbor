@@ -45,6 +45,7 @@ class TaskContributionsController < ApplicationController
     @files = @task.files
     @tests = @task.tests
     @model_solutions = @task.model_solutions
+    @proforma_valid = ProformaService::Validation.call(task: @task)
 
     @user_rating = @task.ratings&.find_by(user: current_user)&.rating
     render 'tasks/show'
