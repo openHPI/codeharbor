@@ -38,6 +38,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     @tests = @task.tests
     @model_solutions = @task.model_solutions
 
+    @proforma_valid = ProformaService::Validation.call(task: @task)
     @user_rating = @task.ratings&.find_by(user: current_user) || Rating.new(Rating::CATEGORIES.index_with {|_category| 0 })
   end
 

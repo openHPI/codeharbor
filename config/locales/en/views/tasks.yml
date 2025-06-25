@@ -113,6 +113,7 @@ en:
       no_license: None
       no_model_solution_present: No Model Solutions present
       no_tests: No Tests included
+      not_proforma_valid: The task is not exportable in ProFormA%{version}.
       owner_required_tooltip: This feature can only be used by the owner of the task.
       remove_task_from_collection_warning: Are you sure you want to remove this Task from the Collection?
       task_contribution:
