@@ -17,6 +17,7 @@
     .col-md-5
       div
         .input-group
+          #label-settings.d-none data-max-length=Label::MAX_LENGTH
           = button_tag t('.merge'), type: 'button', id: 'merge-labels-button', disabled: true, class: 'btn btn-primary'
           input.form-control#merge-labels-input type='text' placeholder=t('.new_name')
 

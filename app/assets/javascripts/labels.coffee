@@ -1,9 +1,12 @@
-max_label_length = <%= Label::MAX_LENGTH %>
+get_max_label_length = ->
+  if (this._max_label_length == undefined)
+    this._max_label_length = $('#label-settings').data('max-length');
+  return this._max_label_length;
 
 verify_label_name = (label_name) ->
   if label_name == ''
     return I18n.t('labels.javascripts.cannot_be_empty');
-  if label_name.length > max_label_length
+  if label_name.length > get_max_label_length()
     return I18n.t('labels.javascripts.too_long');
   return I18n.t('labels.javascripts.ok');
 
@@ -20,7 +23,7 @@ ready = ->
     tags: true
     multiple: true
     maximumSelectionLength: 10
-    maximumInputLength: max_label_length
+    maximumInputLength: get_max_label_length()
     closeOnSelect: false
     tokenSeparators: [',']
 
