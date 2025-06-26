@@ -9,4 +9,4 @@ ready = ->
       $row_value.parents('.row').remove()
 
 
-$(document).on('turbolinks:load', ready)
+$(document).on('turbo-migration:load', ready)

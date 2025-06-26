@@ -68,4 +68,4 @@ initializeOnUpload = ->
     if fullPath
       $(this).parents('.file-container').find('.file-name').val(fullName)
 
-$(document).on 'turbolinks:load', ready
+$(document).on 'turbo-migration:load', ready

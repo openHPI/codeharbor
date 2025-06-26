@@ -3,4 +3,4 @@ ready = ->
     $(e.currentTarget.parentElement).html(data["button"])
 
 
-$(document).on('turbolinks:load', ready)
+$(document).on('turbo-migration:load', ready)

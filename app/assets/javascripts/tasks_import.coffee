@@ -61,4 +61,4 @@ importConfirm = (importId, subfileId, importType) ->
   })
 
 
-$(document).on('turbolinks:load', ready)
+$(document).on('turbo-migration:load', ready)

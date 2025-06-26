@@ -142,4 +142,4 @@ update_checklist = ->
   , 100
 
 
-$(document).on('turbolinks:load', initialize_checklist)
+$(document).on('turbo-migration:load', initialize_checklist)
