@@ -55,4 +55,4 @@ exportConfirm = (taskId, accountLinkId, pushType) ->
 root = exports ? this;
 root.exportTaskStart = exportTaskStart
 
-$(document).on('turbolinks:load', ready)
+$(document).on('turbo-migration:load', ready)

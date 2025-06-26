@@ -185,4 +185,4 @@ ready = ->
     table = new LabelsTable(table_container);
 
 
-$(document).on('turbolinks:load', ready)
+$(document).on('turbo-migration:load', ready)

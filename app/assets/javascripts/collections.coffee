@@ -13,4 +13,4 @@ update_collections_tasks_order = (e) ->
     $(input_element).val(index);
 
 
-$(document).on('turbolinks:load', ready)
+$(document).on('turbo-migration:load', ready)

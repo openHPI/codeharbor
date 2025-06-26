@@ -26,7 +26,7 @@ const countdownValidity = () => {
   }
 };
 
-window.addEventListener("turbolinks:before-render", () => {
+window.addEventListener("turbo:visit", () => {
   clearInterval(intervalID);
   clearTimeout(timeoutID);
 });
@@ -36,7 +36,7 @@ window.addEventListener("beforeunload", () => {
   clearTimeout(timeoutID);
 });
 
-$(document).on('turbolinks:load', function () {
+$(document).on('turbo-migration:load', function () {
   if (window.location.pathname !== Routes.nbp_wallet_connect_users_path()) {
     return;
   }

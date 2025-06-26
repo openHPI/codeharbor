@@ -32,4 +32,4 @@ loadComments = (url, $wait_icon, $comment_box, onSucess)->
 root = exports ? this;
 root.loadComments = loadComments
 
-$(document).on('turbolinks:load', ready)
+$(document).on('turbo-migration:load', ready)

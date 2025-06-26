@@ -14,4 +14,4 @@ ready = ->
     new bootstrap.Modal('#notification-modal').show();
 
 
-$(document).on('turbolinks:load', ready)
+$(document).on('turbo-migration:load', ready)

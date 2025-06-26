@@ -31,5 +31,5 @@ initializeVisibilityWarning = ->
     warning_message.addClass('d-none')
 
 
-$(document).on('turbolinks:load', ready)
+$(document).on('turbo-migration:load', ready)
 $(document).on('select2:locales:loaded', initializeLoadSelect2)

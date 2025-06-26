@@ -51,10 +51,10 @@ import locales from "./generated/locales.json";
 Promise.all(
     Object.keys(locales).map(locale => import(`select2/dist/js/i18n/${locale}`))
 ).then(() => {
-    // Since there is a race condition between the locales and turbolinks,
-    // we don't know whether the locales are loaded before or after turbolinks.
+    // Since there is a race condition between the locales and Turbo,
+    // we don't know whether the locales are loaded before or after Turbo.
     // Therefore, we trigger the event in both cases.
-    $(document).on('turbolinks:load', () =>
+    $(document).on('turbo-migration:load', () =>
       $(document).trigger('select2:locales:loaded')
     );
     $(document).trigger('select2:locales:loaded')
@@ -85,3 +85,7 @@ import "ace-builds/src-noconflict/ext-language_tools"; // Enable autocompletion
 import "ace-builds/src-noconflict/ext-modelist"; // Enable language mode detection
 ace.config.set("useStrictCSP", true); // Enable strict CSP mode
 window.ace = ace; // Publish ace in global namespace
+
+// Turbo
+import '@hotwired/turbo-rails';
+import './turbo-migration';
