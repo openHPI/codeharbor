@@ -34,4 +34,4 @@ root.getModeByFileExtension = getModeByFileExtension
 root.changeEditorMode = changeEditorMode
 root.setAceEditorValue = setAceEditorValue
 
-$(document).on('turbolinks:load', ready)
+$(document).on('turbo-migration:load', ready)

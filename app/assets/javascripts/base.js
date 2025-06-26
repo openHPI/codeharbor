@@ -18,7 +18,7 @@ $.fn.scrollTo = function (selector) {
   }, ANIMATION_DURATION);
 };
 
-$(document).on('turbolinks:load', function () {
+$(document).on('turbo-migration:load', function () {
   // Update all CSRF tokens on the page to reduce InvalidAuthenticityToken errors
   // See https://github.com/rails/jquery-ujs/issues/456 for details
   $.rails.refreshCSRFTokens();
@@ -34,7 +34,7 @@ $(document).on('turbolinks:load', function () {
   // Initialize Sentry
   const sentrySettings = $('meta[name="sentry"]')
 
-  // Workaround for Turbolinks: We must not re-initialize the Relay object when visiting another page
+  // Workaround for Turbo: We must not re-initialize the Relay object when visiting another page
   if (sentrySettings && sentrySettings.data()['enabled'] && Sentry.getReplay() === undefined) {
     Sentry.init({
       dsn: sentrySettings.data('dsn'),

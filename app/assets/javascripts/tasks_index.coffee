@@ -139,5 +139,5 @@ initializeInputFieldEnterCallback = ->
     event.preventDefault();
 
 
-$(document).on('turbolinks:load', ready)
+$(document).on('turbo-migration:load', ready)
 $(document).on('select2:locales:loaded', initializeSelect2)
