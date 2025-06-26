@@ -82,6 +82,7 @@
                       = group.name
 
           .field-element
+            #label-settings.d-none data-max-length=Label::MAX_LENGTH
             = f.label :labels, Label.model_name.human(count: :many), class: 'form-label'
             = f.select :label_names, options_for_select(@task.labels.map {|l| [l.name, l.name, {label_color: l.color, label_font_color: l.font_color}] }, @task.labels.map(&:name)), {}, {class: 'labels-select2-tag form-control', multiple: 'multiple'}
 
