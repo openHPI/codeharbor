@@ -43,7 +43,7 @@ class CollectionsController < ApplicationController
     elsif @collection.save
       redirect_to Collection, notice: t('common.notices.object_created', model: Collection.model_name.human)
     else
-      render :new
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -51,7 +51,7 @@ class CollectionsController < ApplicationController
     if @collection.update(collection_params)
       redirect_to Collection, notice: t('common.notices.object_updated', model: Collection.model_name.human)
     else
-      render :edit
+      render :edit, status: :unprocessable_content
     end
   end
 
