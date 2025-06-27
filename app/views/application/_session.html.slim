@@ -14,7 +14,7 @@
           - if current_user.unread_messages_count != '0'
             span.menu-number
               = current_user.unread_messages_count
-  li.nav-item = button_to t('.button.log_out'), destroy_user_session_path, method: :delete, class: 'nav-link px-3'
+  li.nav-item = button_to t('.button.log_out'), destroy_user_session_path, method: :delete, class: 'nav-link px-3', data: {turbo: false}
 - else
   = render('navigation_collection_link', target: :new_user_registration_path, text: t('common.button.sign_up'), icon: 'fa-user', cached: true)
   = render('navigation_collection_link', target: :new_user_session_path, text: t('common.button.log_in'), icon: 'fa-right-to-bracket', cached: true)
