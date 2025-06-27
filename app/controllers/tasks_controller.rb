@@ -59,7 +59,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     if @task.save(context: :force_validations)
       redirect_to @task, notice: t('common.notices.object_created', model: Task.model_name.human)
     else
-      render :new
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -69,7 +69,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     if @task.save(context: :force_validations)
       redirect_to @task, notice: t('common.notices.object_updated', model: Task.model_name.human)
     else
-      render :edit
+      render :edit, status: :unprocessable_content
     end
   end
 

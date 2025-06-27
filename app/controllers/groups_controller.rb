@@ -32,7 +32,7 @@ class GroupsController < ApplicationController
     if @group.save
       redirect_to @group, notice: t('common.notices.object_created', model: Group.model_name.human)
     else
-      render :new
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -40,7 +40,7 @@ class GroupsController < ApplicationController
     if @group.update(group_params)
       redirect_to @group, notice: t('common.notices.object_updated', model: Group.model_name.human)
     else
-      render :edit
+      render :edit, status: :unprocessable_content
     end
   end
 

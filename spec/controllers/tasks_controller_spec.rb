@@ -370,9 +370,9 @@ RSpec.describe TasksController do
         let(:invalid_attributes) { {title: '', label_names: [not_existing_label_name]} }
         let(:not_existing_label_name) { 'some new label' }
 
-        it "re-renders the 'new' template successfully" do
+        it "re-renders the 'new' template successfully with status 422" do
           post_request
-          expect(response).to have_http_status(:success)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(response).to render_template('new')
         end
       end
