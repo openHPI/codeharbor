@@ -82,7 +82,7 @@ class TaskContributionsController < ApplicationController
       redirect_to [@task, @task_contribution], notice: t('common.notices.object_created', model: TaskContribution.model_name.human)
     else
       @task = @task_contribution.suggestion
-      render 'tasks/new'
+      render 'tasks/new', status: :unprocessable_content
     end
   end
 
@@ -92,7 +92,8 @@ class TaskContributionsController < ApplicationController
       redirect_to [@task, @task_contribution], notice: t('common.notices.object_updated', model: TaskContribution.model_name.human)
     else
       @task = @task_contribution.suggestion
-      render 'tasks/edit', danger: t('common.errors.changes_not_saved', model: TaskContribution.model_name.human)
+      render 'tasks/edit', danger: t('common.errors.changes_not_saved', model: TaskContribution.model_name.human),
+        status: :unprocessable_content
     end
   end
 

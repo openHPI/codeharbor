@@ -35,7 +35,7 @@ class MessagesController < ApplicationController
     if @message.save
       redirect_to user_messages_path(@user), notice: t('.sent_successfully')
     else
-      render :new
+      render :new, status: :unprocessable_content
     end
   end
 
