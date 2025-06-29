@@ -1,6 +1,5 @@
 ready = ->
   initCollapsable($('.description'), '95px')
-  window.addEventListener 'resize', -> initCollapsable($('.description'), '95px')
   initializeDynamicHideShow()
   initializeFilter()
   initializeIndexComments()
@@ -140,4 +139,5 @@ initializeInputFieldEnterCallback = ->
 
 
 $(document).on('turbo-migration:load', ready)
+$(window).on('resize', -> initCollapsable($('.description'), '95px'))
 $(document).on('select2:locales:loaded', initializeSelect2)
