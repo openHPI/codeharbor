@@ -88,4 +88,5 @@ window.ace = ace; // Publish ace in global namespace
 
 // Turbo
 import '@hotwired/turbo-rails';
+import './turbo-cache-clear';
 import './turbo-migration';

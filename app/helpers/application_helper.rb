@@ -17,6 +17,12 @@ module ApplicationHelper
     view_flow.content.delete(name)
   end
 
+  def clear_turbo_cache_meta_tag
+    if session.delete(:clear_turbo_cache)
+      tag.meta(name: 'custom-turbo-cache', content: 'clear')
+    end
+  end
+
   def empty
     tag.i(nil, class: 'empty fa-solid fa-minus')
   end
