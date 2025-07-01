@@ -18,6 +18,16 @@ en:
         mine: My Collections
         public: Public Collections
       view_shared: View Shared Collection
+    invitation_mailer:
+      collaboration_details: This collaboration will allow you to contribute to and help manage this collection's content.
+      contact_info: If you have any questions about this invitation or your role as a collaborator, please contact the collection owner directly.
+      greeting: Hi %{user},
+      invitation_message: You've been invited to collaborate on the collection "%{collection}".
+      subject: 'Invitation to collection: %{collection}'
+      team_signature: "%{app_name} Team"
+      thank_you: Thank you,
+      view_collection: View collection
+      view_collection_instructions: 'To view the collection and get started with your collaboration, click the link below:'
     new:
       header: New Collection
     shared:
