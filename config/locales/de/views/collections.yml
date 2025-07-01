@@ -18,6 +18,16 @@ de:
         mine: Meine Sammlungen
         public: Öffentliche Sammlungen
       view_shared: Geteilte Sammlung anzeigen
+    invitation_mailer:
+      collaboration_details: Diese Zusammenarbeit ermöglicht es Ihnen, zum Inhalt dieser Sammlung beizutragen und bei der Verwaltung zu helfen.
+      contact_info: Wenn Sie Fragen zu dieser Einladung oder Ihrer Rolle als Mitarbeiter haben, wenden Sie sich bitte direkt an den Besitzer der Sammlung.
+      greeting: Hallo %{user},
+      invitation_message: Sie wurden eingeladen, an der Sammlung "%{collection}" mitzuarbeiten.
+      subject: 'Einladung zur Sammlung: %{collection}'
+      team_signature: "%{app_name} Team"
+      thank_you: Vielen Dank,
+      view_collection: Sammlung anzeigen
+      view_collection_instructions: 'Um die Sammlung anzuzeigen und mit Ihrer Zusammenarbeit zu beginnen, klicken Sie auf den Link unten:'
     new:
       header: Neue Sammlung
     shared:
