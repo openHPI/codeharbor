@@ -94,6 +94,8 @@ class CollectionsController < ApplicationController
 
   def share
     if share_message.save
+      recipient = User.find_by(email: params[:user])
+      CollectionInvitationMailer.with(collection: @collection, recipient:).send_invitation.deliver_later
       redirect_to @collection, notice: t('.success_notice'), status: :see_other
     else
       redirect_to @collection, alert: share_message.errors.full_messages.join(', '), status: :see_other
