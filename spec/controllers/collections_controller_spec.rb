@@ -439,10 +439,22 @@ RSpec.describe CollectionsController do
     let(:post_request) { post :share, params: }
     let(:params) { {id: collection.id, user: recipient.email} }
     let(:recipient) { create(:user) }
+    let(:mailer) { instance_double(ActionMailer::MessageDelivery) }
+
+    before do
+      allow(CollectionInvitationMailer).to receive(:send_invitation).and_return(mailer)
+      allow(mailer).to receive(:deliver_later)
+    end
 
     shared_examples 'success' do
       it 'creates a message' do
         expect { post_request }.to change(Message, :count).by(1)
+      end
+
+      it 'sends an invitation email' do
+        post_request
+        expect(CollectionInvitationMailer).to have_received(:send_invitation).with(collection, recipient)
+        expect(mailer).to have_received(:deliver_later)
       end
 
       it 'redirects to collection' do
@@ -458,6 +470,11 @@ RSpec.describe CollectionsController do
     shared_examples 'error' do |expected_flash|
       it 'does not create a message' do
         expect { post_request }.not_to change(Message, :count)
+      end
+
+      it 'does not send an invitation email' do
+        post_request
+        expect(CollectionInvitationMailer).not_to have_received(:send_invitation)
       end
 
       it 'redirects to collection' do
