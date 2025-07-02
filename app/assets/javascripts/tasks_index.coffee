@@ -24,6 +24,8 @@ initializeSelect2 = ->
     closeOnSelect: false
     placeholder: I18n.t('tasks.javascripts.all_languages')
 
+  $(document).one('turbo:visit', destroy_select2);
+
 toggleHideShowMore = (element) ->
   $parent = $(element).parent()
   $toggle = $(element).find '.more-btn'
@@ -136,6 +138,11 @@ initializeInputFieldEnterCallback = ->
       return
     $('.search-submit-button-tag').click();
     event.preventDefault();
+
+destroy_select2 = ->
+  $('.defaultSelect2').select2('destroy');
+  $('.language-box').select2('destroy');
+  return
 
 
 $(document).on('turbo-migration:load', ready)
