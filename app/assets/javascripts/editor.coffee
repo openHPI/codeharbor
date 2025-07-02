@@ -6,6 +6,14 @@ initializeAce = ->
   $(document).on 'fields_added.nested_form_fields', ->
     $ initializeEditors()
 
+unloadEditors = (event) ->
+  $('.editor').each (_, editor) ->
+    aceEditor = ace.edit(editor)
+    content = aceEditor.getValue();
+    aceEditor.destroy()
+    editor.textContent = content;
+  return
+
 initializeEditors = ->
   $('.editor').each ->
     editor = ace.edit(this)
@@ -17,6 +25,8 @@ initializeEditors = ->
     else
       editor.getSession().on 'change', (e) ->
         hiddenContent.val(editor.getValue()).trigger('change')
+  $(document).one('turbo:visit', unloadEditors);
+  $(window).one('beforeunload', unloadEditors);
 
 setAceEditorValue = (editor, value) ->
   aceEditor = $(editor).parent().find('.editor')[0]
