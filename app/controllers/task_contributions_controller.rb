@@ -8,7 +8,7 @@ class TaskContributionsController < ApplicationController
 
   def approve_changes
     if @task.apply_contribution(@task_contribution)
-      TaskContributionMailer.send_approval_info(@task_contribution).deliver_later
+      TaskContributionMailer.with(task_contrib: @task_contribution).send_approval_info.deliver_later
       redirect_to @task, notice: t('.success')
     else
       redirect_to [@task, @task_contribution], alert: t('.error')
@@ -27,7 +27,7 @@ class TaskContributionsController < ApplicationController
   def reject_changes
     duplicate = @task_contribution.decouple
     if duplicate
-      TaskContributionMailer.send_rejection_info(@task_contribution, duplicate).deliver_later
+      TaskContributionMailer.with(task_contrib: @task_contribution, duplicate:).send_rejection_info.deliver_later
       redirect_to @task, notice: t('.success')
     else
       redirect_to [@task, @task_contribution], alert: t('.error')
@@ -78,7 +78,7 @@ class TaskContributionsController < ApplicationController
     authorize @task_contribution
 
     if @task_contribution.save(context: :force_validations)
-      TaskContributionMailer.send_contribution_request(@task_contribution).deliver_later
+      TaskContributionMailer.with(task_contrib: @task_contribution).send_contribution_request.deliver_later
       redirect_to [@task, @task_contribution], notice: t('common.notices.object_created', model: TaskContribution.model_name.human)
     else
       @task = @task_contribution.suggestion

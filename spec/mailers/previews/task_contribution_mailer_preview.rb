@@ -6,19 +6,19 @@ class TaskContributionMailerPreview < ActionMailer::Preview
   def send_contribution_request
     base = FactoryBot.build(:task, id: 1)
     task_contribution = FactoryBot.build(:task_contribution, base:, id: 2)
-    TaskContributionMailer.send_contribution_request(task_contribution)
+    TaskContributionMailer.with(task_contrib: task_contribution).send_contribution_request
   end
 
   def send_approval_info
     base = FactoryBot.build(:task, id: 1)
     task_contribution = FactoryBot.build(:task_contribution, base:, id: 2)
-    TaskContributionMailer.send_approval_info(task_contribution)
+    TaskContributionMailer.wtih(task_contrib: task_contribution).send_approval_info
   end
 
   def send_rejection_info
     base = FactoryBot.build(:task, id: 1)
     duplicate = FactoryBot.build(:task, parent: base, id: 3)
     task_contribution = FactoryBot.build(:task_contribution, base:, id: 2)
-    TaskContributionMailer.send_rejection_info(task_contribution, duplicate)
+    TaskContributionMailer.with(task_contrib: task_contribution, duplicate:).send_rejection_info
   end
 end
