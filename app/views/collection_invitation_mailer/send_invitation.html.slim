@@ -1,0 +1,9 @@
+
+h3 = t('collections.invitation_mailer.greeting', user: @recipient.name)
+p = t('collections.invitation_mailer.invitation_message', collection: @collection.title)
+p = t('collections.invitation_mailer.collaboration_details')
+p = t('collections.invitation_mailer.view_collection_instructions')
+p = link_to t('collections.invitation_mailer.view_collection'), collection_url(@collection)
+p = t('collections.invitation_mailer.contact_info')
+p = t('collections.invitation_mailer.thank_you')
+p = t('collections.invitation_mailer.team_signature', app_name: t('application.name'))
