@@ -97,10 +97,17 @@ ready = ->
       I18n.t('labels.javascripts.max_limit_reached', {limit: limit})
 
     $('.labels-select2-tag').on 'select2:select', clear_input
+  $(document).one('turbo:visit', destroy_select2);
   return
 
 clear_input = ->
   $('.labels-select2-tag').siblings(".select2").find("textarea").val("");
+  return
+
+destroy_select2 = ->
+  selectElement = $('.labels-select2-tag');
+  selectElement.select2('destroy');
+  selectElement.off('select2:select');
   return
 
 

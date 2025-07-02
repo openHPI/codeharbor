@@ -16,6 +16,8 @@ initializeLoadSelect2 = ->
     closeOnSelect: false
     placeholder: I18n.t('tasks.javascripts.select_groups')
 
+  $(document).one('turbo:visit', destroy_select2);
+
 initializeFileTypeSelection = ->
   $('body').on 'keyup', '.file-name', (event) ->
     editor = $(this).parents('.file-container').find('.editor')[0]
@@ -30,6 +32,10 @@ initializeVisibilityWarning = ->
   $('#task_access_level_public').on 'change', ->
     warning_message.addClass('d-none')
 
+destroy_select2 = ->
+  $('#task_programming_language_id').select2('destroy');
+  $('.my-group').select2('destroy');
+  return
 
 $(document).on('turbo-migration:load', ready)
 $(document).on('select2:locales:loaded', initializeLoadSelect2)
