@@ -7,6 +7,6 @@ class AccessRequestMailerPreview < ActionMailer::Preview
     group = FactoryBot.build(:group, id: 1)
     admin = group.group_memberships.find(&:role_admin?).user
     user = FactoryBot.build(:user)
-    AccessRequestMailer.send_access_request(user, admin, group)
+    AccessRequestMailer.with(user:, admin:, group:).send_access_request
   end
 end
