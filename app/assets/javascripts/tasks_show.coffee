@@ -22,4 +22,4 @@ initializeShowComments = ->
       $comment_box.addClass('hide')
 
 
-$(document).on('turbolinks:load', ready)
+$(document).on('turbo-migration:load', ready)

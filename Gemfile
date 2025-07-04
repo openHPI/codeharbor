@@ -46,7 +46,7 @@ gem 'solid_cable'
 gem 'solid_queue'
 gem 'sprockets-rails'
 gem 'terser', require: false
-gem 'turbolinks'
+gem 'turbo-rails'
 
 # Authentication
 gem 'devise', '~> 4.9'

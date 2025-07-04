@@ -217,7 +217,7 @@
                   - if file.attachment.image?
                     = image_tag(file.attachment.variant(resize_to_limit: [900, 900]))
                   - else
-                    = link_to file.attachment.filename, download_attachment_task_file_path(file), 'data-turbolinks': false
+                    = link_to file.attachment.filename, download_attachment_task_file_path(file), 'data-turbo': false
             .row
               .col-auto.row-label
                 = TaskFile.human_attribute_name('used_by_grader')
@@ -358,7 +358,7 @@
                           - if file.attachment.image?
                             = image_tag(file.attachment.variant(resize_to_limit: [900, 900]))
                           - else
-                            = link_to file.attachment.filename, download_attachment_task_file_path(file), 'data-turbolinks': false
+                            = link_to file.attachment.filename, download_attachment_task_file_path(file), 'data-turbo': false
                     .row
                       .col-auto.row-label
                         = TaskFile.human_attribute_name('used_by_grader')
@@ -459,7 +459,7 @@
                           - if file.attachment.image?
                             = image_tag(file.attachment.variant(resize_to_limit: [900, 900]))
                           - else
-                            = link_to file.attachment.filename, download_attachment_task_file_path(file), 'data-turbolinks': false
+                            = link_to file.attachment.filename, download_attachment_task_file_path(file), 'data-turbo': false
                     .row
                       .col-auto.row-label
                         = TaskFile.human_attribute_name('used_by_grader')
@@ -529,7 +529,7 @@
 
         - else
           div data-bs-toggle='tooltip' title=unavailable_tooltip data-bs-delay=150
-            = link_to t('common.button.download_zip'), download_task_path(@task), class: 'btn btn-outline-dark disabled', 'data-turbolinks' => false
+            = link_to t('common.button.download_zip'), download_task_path(@task), class: 'btn btn-outline-dark disabled', 'data-turbo' => false
 
         - if policy(@task).export_external_start?
           .dropdown.btn-group
@@ -587,7 +587,7 @@
 
     .actions.btn-group role='group'
       - if policy(@task).edit?
-        = link_to @task.url_for(:edit), class: 'btn btn-important', 'data-turbolinks': false do
+        = link_to @task.url_for(:edit), class: 'btn btn-important', 'data-turbo': false do
           i.fa-solid.fa-pen-to-square
           =< t('common.button.edit')
       - if policy(@task).destroy?

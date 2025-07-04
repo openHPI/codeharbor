@@ -12,4 +12,4 @@ $(document).ajaxComplete (event, request) ->
 ready = ->
   $('#flash-message').children().first().delay(5000).slideUp 'medium'
 
-$(document).on('turbolinks:load', ready)
+$(document).on('turbo-migration:load', ready)

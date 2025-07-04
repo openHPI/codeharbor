@@ -42,7 +42,7 @@ module Users
     #   devise_parameter_sanitizer.permit(:sign_in, keys: [:attribute])
     # end
 
-    def after_sign_out_path_for(_)
+    def after_sign_out_path_for(_) # rubocop:disable Metrics/AbcSize
       provider = session[:omniauth_provider]
       if session[:saml_uid] && session[:saml_session_index] && provider
         provider_config = Devise.omniauth_configs[provider.to_sym]
@@ -55,6 +55,8 @@ module Users
       # If SLO is not supported, we first delete all information from the current session
       # This is mainly done to remove the SAML information we stored before
       session.clear
+      # Instruct Turbo to clear the cache
+      session[:clear_turbo_cache] = true
       # Then, we delegate the call to the parent
       super
     end

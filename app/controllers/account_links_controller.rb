@@ -27,7 +27,7 @@ class AccountLinksController < ApplicationController
         format.html { redirect_to @user, notice: t('common.notices.object_created', model: AccountLink.model_name.human) }
         format.json { render :show, status: :created, location: @account_link }
       else
-        format.html { render :new }
+        format.html { render :new, status: :unprocessable_content }
         format.json { render json: @account_link.errors, status: :unprocessable_content }
       end
     end
@@ -39,7 +39,7 @@ class AccountLinksController < ApplicationController
         format.html { redirect_to @account_link.user, notice: t('common.notices.object_updated', model: AccountLink.model_name.human) }
         format.json { render :show, status: :ok, location: @account_link }
       else
-        format.html { render :edit }
+        format.html { render :edit, status: :unprocessable_content }
         format.json { render json: @account_link.errors, status: :unprocessable_content }
       end
     end

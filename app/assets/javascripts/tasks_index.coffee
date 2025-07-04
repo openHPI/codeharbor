@@ -1,6 +1,5 @@
 ready = ->
   initCollapsable($('.description'), '95px')
-  window.addEventListener 'resize', -> initCollapsable($('.description'), '95px')
   initializeDynamicHideShow()
   initializeFilter()
   initializeIndexComments()
@@ -24,6 +23,8 @@ initializeSelect2 = ->
     multiple: true
     closeOnSelect: false
     placeholder: I18n.t('tasks.javascripts.all_languages')
+
+  $(document).one('turbo:visit', destroy_select2);
 
 toggleHideShowMore = (element) ->
   $parent = $(element).parent()
@@ -138,6 +139,12 @@ initializeInputFieldEnterCallback = ->
     $('.search-submit-button-tag').click();
     event.preventDefault();
 
+destroy_select2 = ->
+  $('.defaultSelect2').select2('destroy');
+  $('.language-box').select2('destroy');
+  return
 
-$(document).on('turbolinks:load', ready)
+
+$(document).on('turbo-migration:load', ready)
+$(window).on('resize', -> initCollapsable($('.description'), '95px'))
 $(document).on('select2:locales:loaded', initializeSelect2)

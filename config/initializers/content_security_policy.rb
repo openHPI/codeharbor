@@ -80,7 +80,7 @@ Rails.application.configure do
     # The `script_src` directive is only a fallback for browsers not supporting `script_src_elem` and `script_src_attr`.
     policy.script_src           :self, :unsafe_inline, :report_sample
     # Some dependencies add new styles to the DOM dynamically, requiring :unsafe-inline.
-    # Currently, these include turbolinks, and vis.js.
+    # Currently, these include turbo, and vis.js.
     policy.style_src_elem       :self, :unsafe_inline, :report_sample
     # We still use some inline styles within the application, and through the ToastUi markdown editor.
     policy.style_src_attr       :unsafe_inline, :report_sample

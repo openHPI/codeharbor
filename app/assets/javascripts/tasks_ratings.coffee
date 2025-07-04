@@ -96,4 +96,4 @@ initializeRatings = ->
   )
 
 
-$(document).on('turbolinks:load', ready)
+$(document).on('turbo-migration:load', ready)

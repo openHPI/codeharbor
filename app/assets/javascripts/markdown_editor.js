@@ -180,7 +180,7 @@ const setResizeBtn = (formInput, editor) => {
   });
 };
 
-$(document).on("turbolinks:load", function () {
+$(document).on("turbo-migration:load", function () {
   initializeMarkdownEditors();
   disableImageUpload();
 });
