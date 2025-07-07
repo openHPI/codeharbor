@@ -7,9 +7,10 @@ RSpec.describe 'Users' do
 
   context 'when not logged in' do
     describe '/users/sign_in' do
-      it 'returns http 200' do
-        post user_session_path, params: {email: user.email, password: user.password}
-        expect(response).to have_http_status(:ok)
+      it 'responds with status 303' do
+        post user_session_path, params: {user: {email: user.email, password: user.password}}
+        expect(response).to have_http_status(:see_other)
+        expect(response).to redirect_to(root_path)
       end
     end
   end
