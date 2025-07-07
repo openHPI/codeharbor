@@ -33,7 +33,7 @@ class MessagesController < ApplicationController
     authorize @message
 
     if @message.save
-      redirect_to user_messages_path(@user), notice: t('.sent_successfully')
+      redirect_to user_messages_path(@user), notice: t('.sent_successfully'), status: :see_other
     else
       render :new, status: :unprocessable_content
     end
@@ -44,9 +44,9 @@ class MessagesController < ApplicationController
 
     if @message.save
       redirect_to user_messages_path(@user, option: params[:option]),
-        notice: t('common.notices.object_deleted', model: Message.model_name.human)
+        notice: t('common.notices.object_deleted', model: Message.model_name.human), status: :see_other
     else
-      redirect_to user_messages_path(@user, option: params[:option]), alert: t('.error')
+      redirect_to user_messages_path(@user, option: params[:option]), alert: t('.error'), status: :see_other
     end
   end
 

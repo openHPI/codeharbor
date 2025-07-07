@@ -30,7 +30,7 @@ class GroupsController < ApplicationController
     authorize @group
 
     if @group.save
-      redirect_to @group, notice: t('common.notices.object_created', model: Group.model_name.human)
+      redirect_to @group, notice: t('common.notices.object_created', model: Group.model_name.human), status: :see_other
     else
       render :new, status: :unprocessable_content
     end
@@ -38,7 +38,7 @@ class GroupsController < ApplicationController
 
   def update
     if @group.update(group_params)
-      redirect_to @group, notice: t('common.notices.object_updated', model: Group.model_name.human)
+      redirect_to @group, notice: t('common.notices.object_updated', model: Group.model_name.human), status: :see_other
     else
       render :edit, status: :unprocessable_content
     end
@@ -46,15 +46,15 @@ class GroupsController < ApplicationController
 
   def destroy
     @group.destroy
-    redirect_to Group, notice: t('common.notices.object_deleted', model: Group.model_name.human)
+    redirect_to Group, notice: t('common.notices.object_deleted', model: Group.model_name.human), status: :see_other
   end
 
   def leave
     if @group.last_admin?(current_user)
-      redirect_to @group, alert: t('.cannot_leave_alert')
+      redirect_to @group, alert: t('.cannot_leave_alert'), status: :see_other
     else
       @group.users.delete(current_user)
-      redirect_to Group, notice: t('.success_notice')
+      redirect_to Group, notice: t('.success_notice'), status: :see_other
     end
   end
 
@@ -66,13 +66,13 @@ class GroupsController < ApplicationController
       AccessRequestMailer.with(user: current_user, admin:, group: @group).send_access_request.deliver_later
     end
     @group.add(current_user, role: :applicant)
-    redirect_to Group
+    redirect_to Group, status: :see_other
   end
 
   def remove_task
     task = Task.find(params[:task])
     @group.tasks.delete(task)
-    redirect_to @group, notice: t('common.notices.object_removed', model: Task.model_name.human)
+    redirect_to @group, notice: t('common.notices.object_removed', model: Task.model_name.human), status: :see_other
   end
 
   def grant_access
@@ -80,12 +80,12 @@ class GroupsController < ApplicationController
     send_message(@user, :group_approval)
 
     @group.messages.where(sender: @user, recipient: current_user, action: :group_request).destroy_all
-    redirect_to @group, notice: t('.success_notice')
+    redirect_to @group, notice: t('.success_notice'), status: :see_other
   end
 
   def delete_from_group
     @group.users.delete(@user)
-    redirect_to @group, notice: t('.success_notice')
+    redirect_to @group, notice: t('.success_notice'), status: :see_other
   end
 
   def deny_access
@@ -93,17 +93,17 @@ class GroupsController < ApplicationController
     send_message(@user, :group_rejection)
 
     @group.messages.where(sender: @user, recipient: current_user, action: :group_request).destroy_all
-    redirect_to @group, notice: t('.success_notice')
+    redirect_to @group, notice: t('.success_notice'), status: :see_other
   end
 
   def make_admin
     @group.make_admin(@user)
-    redirect_to @group, notice: t('.success_notice')
+    redirect_to @group, notice: t('.success_notice'), status: :see_other
   end
 
   def demote_admin
     @group.demote_admin(@user)
-    redirect_to @group, notice: t('.success_notice')
+    redirect_to @group, notice: t('.success_notice'), status: :see_other
   end
 
   private

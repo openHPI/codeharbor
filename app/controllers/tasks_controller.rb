@@ -27,9 +27,9 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   def duplicate
     new_entry = @task.clean_duplicate(current_user)
     if new_entry.save(context: :force_validations)
-      redirect_to new_entry, notice: t('common.notices.object_duplicated', model: Task.model_name.human)
+      redirect_to new_entry, notice: t('common.notices.object_duplicated', model: Task.model_name.human), status: :see_other
     else
-      redirect_to @task, alert: t('.error_alert')
+      redirect_to @task, alert: t('.error_alert'), status: :see_other
     end
   end
 
@@ -57,7 +57,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     authorize @task
 
     if @task.save(context: :force_validations)
-      redirect_to @task, notice: t('common.notices.object_created', model: Task.model_name.human)
+      redirect_to @task, notice: t('common.notices.object_created', model: Task.model_name.human), status: :see_other
     else
       render :new, status: :unprocessable_content
     end
@@ -67,7 +67,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     @task.assign_attributes(task_params)
     TaskService::HandleGroups.call(user: current_user, task: @task, group_tasks_params:)
     if @task.save(context: :force_validations)
-      redirect_to @task, notice: t('common.notices.object_updated', model: Task.model_name.human)
+      redirect_to @task, notice: t('common.notices.object_updated', model: Task.model_name.human), status: :see_other
     else
       render :edit, status: :unprocessable_content
     end
@@ -75,15 +75,15 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
 
   def destroy
     @task.destroy!
-    redirect_to Task, notice: t('common.notices.object_deleted', model: Task.model_name.human)
+    redirect_to Task, notice: t('common.notices.object_deleted', model: Task.model_name.human), status: :see_other
   end
 
   def add_to_collection
     collection = Collection.find(params[:collection])
     if collection.add_task(@task)
-      redirect_to @task, notice: t('.success_notice')
+      redirect_to @task, notice: t('.success_notice'), status: :see_other
     else
-      redirect_to @task, alert: t('.error')
+      redirect_to @task, alert: t('.error'), status: :see_other
     end
   end
 
@@ -91,7 +91,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
     zip_file = ProformaService::ExportTask.call(task: @task, options: {version: params[:version]})
     send_data(zip_file.string, type: 'application/zip', filename: "task_#{@task.id}.zip", disposition: 'attachment')
   rescue ProformaXML::PostGenerateValidationError => e
-    redirect_to :root, danger: JSON.parse(e.message).map {|msg| t("proforma_errors.#{msg}", default: msg) }.join('<br>')
+    redirect_to :root, danger: JSON.parse(e.message).map {|msg| t("proforma_errors.#{msg}", default: msg) }.join('<br>'), status: :see_other
   end
 
   def import_start # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -213,7 +213,7 @@ class TasksController < ApplicationController # rubocop:disable Metrics/ClassLen
   rescue Gpt::Error => e
     flash.now[:alert] = e.localized_message
   ensure
-    redirect_to @task
+    redirect_to @task, status: :see_other
   end
 
   private

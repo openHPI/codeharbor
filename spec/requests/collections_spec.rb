@@ -21,9 +21,9 @@ RSpec.describe 'Collections' do
     end
 
     describe 'POST /collections' do
-      it 'has http 302' do
+      it 'responds with status 303' do
         post collections_path, params: {collection: collection_params}
-        expect(response).to have_http_status(:found)
+        expect(response).to have_http_status(:see_other)
       end
     end
 
@@ -49,23 +49,23 @@ RSpec.describe 'Collections' do
     end
 
     describe 'PATCH /collection/:id' do
-      it 'has http 302' do
+      it 'responds with status 303' do
         patch collection_path(collection, collection: collection_params)
-        expect(response).to have_http_status(:found)
+        expect(response).to have_http_status(:see_other)
       end
     end
 
     describe 'PUT /collection/:id' do
-      it 'has http 302' do
+      it 'responds with status 303' do
         put collection_path(collection, collection: collection_params)
-        expect(response).to have_http_status(:found)
+        expect(response).to have_http_status(:see_other)
       end
     end
 
     describe 'POST /collection/:id/remove_task/:task_id' do
-      it 'has http 302' do
+      it 'responds with status 303' do
         patch remove_task_collection_path(collection, collection:, task:)
-        expect(response).to have_http_status(:found)
+        expect(response).to have_http_status(:see_other)
       end
     end
   end

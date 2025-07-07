@@ -48,7 +48,7 @@ module Users
         # i18n-tasks-use t('users.omniauth_callbacks.failure_deauthorize')
         set_flash(:alert, '.failure_deauthorize', reason: identity.errors.full_messages.join(', '))
       end
-      redirect_to edit_user_registration_path
+      redirect_to edit_user_registration_path, status: :see_other
     end
 
     private
@@ -89,7 +89,7 @@ module Users
     def register_new_user # rubocop:disable Metrics/AbcSize
       if omniauth_provider == 'nbp'
         # go through NBP wallet connection process to create new account
-        redirect_to nbp_wallet_connect_users_path
+        redirect_to nbp_wallet_connect_users_path, status: :see_other
       else
         user = User.new_from_omniauth(omniauth_user_info, omniauth_provider, provider_uid)
         user.skip_confirmation!
@@ -99,7 +99,7 @@ module Users
           sign_in_and_redirect user, event: :authentication
         else
           set_flash(:alert, 'devise.omniauth_callbacks.failure', reason: user.errors.full_messages.join(', '))
-          redirect_to new_user_registration_url
+          redirect_to new_user_registration_url, status: :see_other
         end
       end
     end

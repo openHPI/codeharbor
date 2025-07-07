@@ -9,18 +9,18 @@ class TaskContributionsController < ApplicationController
   def approve_changes
     if @task.apply_contribution(@task_contribution)
       TaskContributionMailer.with(task_contrib: @task_contribution).send_approval_info.deliver_later
-      redirect_to @task, notice: t('.success')
+      redirect_to @task, notice: t('.success'), status: :see_other
     else
-      redirect_to [@task, @task_contribution], alert: t('.error')
+      redirect_to [@task, @task_contribution], alert: t('.error'), status: :see_other
     end
   end
 
   def discard_changes
     duplicate = @task_contribution.decouple
     if duplicate
-      redirect_to duplicate, notice: t('.success')
+      redirect_to duplicate, notice: t('.success'), status: :see_other
     else
-      redirect_to [@task, @task_contribution], alert: t('.error')
+      redirect_to [@task, @task_contribution], alert: t('.error'), status: :see_other
     end
   end
 
@@ -28,9 +28,9 @@ class TaskContributionsController < ApplicationController
     duplicate = @task_contribution.decouple
     if duplicate
       TaskContributionMailer.with(task_contrib: @task_contribution, duplicate:).send_rejection_info.deliver_later
-      redirect_to @task, notice: t('.success')
+      redirect_to @task, notice: t('.success'), status: :see_other
     else
-      redirect_to [@task, @task_contribution], alert: t('.error')
+      redirect_to [@task, @task_contribution], alert: t('.error'), status: :see_other
     end
   end
 
@@ -79,7 +79,9 @@ class TaskContributionsController < ApplicationController
 
     if @task_contribution.save(context: :force_validations)
       TaskContributionMailer.with(task_contrib: @task_contribution).send_contribution_request.deliver_later
-      redirect_to [@task, @task_contribution], notice: t('common.notices.object_created', model: TaskContribution.model_name.human)
+      redirect_to [@task, @task_contribution],
+        notice: t('common.notices.object_created', model: TaskContribution.model_name.human),
+        status: :see_other
     else
       @task = @task_contribution.suggestion
       render 'tasks/new', status: :unprocessable_content
@@ -89,7 +91,9 @@ class TaskContributionsController < ApplicationController
   def update
     @task_contribution.suggestion.assign_attributes(task_params.except(:parent_uuid))
     if @task_contribution.save(context: :force_validations)
-      redirect_to [@task, @task_contribution], notice: t('common.notices.object_updated', model: TaskContribution.model_name.human)
+      redirect_to [@task, @task_contribution],
+        notice: t('common.notices.object_updated', model: TaskContribution.model_name.human),
+        status: :see_other
     else
       @task = @task_contribution.suggestion
       render 'tasks/edit', danger: t('common.errors.changes_not_saved', model: TaskContribution.model_name.human),

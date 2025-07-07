@@ -21,9 +21,9 @@ RSpec.describe 'Groups' do
     end
 
     describe 'POST /groups' do
-      it 'has http 302' do
+      it 'responds with status 303' do
         post groups_path, params: {group: group_params}
-        expect(response).to have_http_status(:found)
+        expect(response).to have_http_status(:see_other)
       end
     end
 
@@ -49,23 +49,23 @@ RSpec.describe 'Groups' do
     end
 
     describe 'PATCH /group/:id' do
-      it 'has http 302' do
+      it 'responds with status 303' do
         patch group_path(group, group: group_params)
-        expect(response).to have_http_status(:found)
+        expect(response).to have_http_status(:see_other)
       end
     end
 
     describe 'PUT /group/:id' do
-      it 'has http 302' do
+      it 'responds with status 303' do
         put group_path(group, group: group_params)
-        expect(response).to have_http_status(:found)
+        expect(response).to have_http_status(:see_other)
       end
     end
 
     describe 'DELETE /group/:id' do
-      it 'has http 302' do
+      it 'responds with status 303' do
         delete group_path(group)
-        expect(response).to have_http_status(:found)
+        expect(response).to have_http_status(:see_other)
       end
     end
   end

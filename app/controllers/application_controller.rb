@@ -79,12 +79,12 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       format.any do
         if redirect_loop? || unauthorized_nbp_request?(status)
-          redirect_to :root, alert: message
+          redirect_to :root, alert: message, status: :see_other
         elsif current_user.nil? && status == :unauthorized
           store_location_for(:user, request.fullpath) if current_user.nil?
-          redirect_to new_user_session_path, alert: t('common.errors.not_signed_in')
+          redirect_to new_user_session_path, alert: t('common.errors.not_signed_in'), status: :see_other
         else
-          redirect_back fallback_location: :root, allow_other_host: false, alert: message
+          redirect_back fallback_location: :root, allow_other_host: false, alert: message, status: :see_other
         end
       end
       format.json { render json: {error: message}, status: }

@@ -8,14 +8,14 @@ module Users
 
     def connect
       if Enmeshed::Relationship.pending_for(@provider_uid).present?
-        redirect_to nbp_wallet_finalize_users_path and return
+        redirect_to(nbp_wallet_finalize_users_path, status: :see_other) and return
       end
 
       @relationship_template = Enmeshed::RelationshipTemplate.create!(nbp_uid: @provider_uid)
     rescue Enmeshed::ConnectorError, Faraday::Error => e
       Sentry.capture_exception(e)
       Rails.logger.debug { e }
-      redirect_to new_user_registration_path, alert: t('common.errors.generic_try_later')
+      redirect_to new_user_registration_path, alert: t('common.errors.generic_try_later'), status: :see_other
     end
 
     def qr_code
@@ -32,7 +32,7 @@ module Users
     rescue Enmeshed::ConnectorError, Faraday::Error => e
       Sentry.capture_exception(e)
       Rails.logger.debug { e }
-      redirect_to nbp_wallet_connect_users_path, alert: t('common.errors.generic')
+      redirect_to nbp_wallet_connect_users_path, alert: t('common.errors.generic'), status: :see_other
     end
 
     def finalize
@@ -64,7 +64,7 @@ module Users
         if relationship.accept!
           user.send_confirmation_instructions
           session.clear # Clear the session to prevent the user from accessing the NBP Wallet page again
-          redirect_to home_index_path, notice: t('devise.registrations.signed_up_but_unconfirmed')
+          redirect_to home_index_path, notice: t('devise.registrations.signed_up_but_unconfirmed'), status: :see_other
         else
           abort_and_refresh(relationship)
           raise ActiveRecord::Rollback
@@ -80,7 +80,7 @@ module Users
       Sentry.capture_exception(e)
       Rails.logger.debug { e }
     ensure
-      redirect_to nbp_wallet_connect_users_path, alert: reason
+      redirect_to nbp_wallet_connect_users_path, alert: reason, status: :see_other
     end
 
     def require_user!
