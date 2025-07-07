@@ -41,7 +41,7 @@ class CollectionsController < ApplicationController
       # Redirect back to task#show as collections with tasks can only be created from that view
       create_collection_with_task
     elsif @collection.save
-      redirect_to Collection, notice: t('common.notices.object_created', model: Collection.model_name.human)
+      redirect_to Collection, notice: t('common.notices.object_created', model: Collection.model_name.human), status: :see_other
     else
       render :new, status: :unprocessable_content
     end
@@ -49,7 +49,7 @@ class CollectionsController < ApplicationController
 
   def update
     if @collection.update(collection_params)
-      redirect_to Collection, notice: t('common.notices.object_updated', model: Collection.model_name.human)
+      redirect_to Collection, notice: t('common.notices.object_updated', model: Collection.model_name.human), status: :see_other
     else
       render :edit, status: :unprocessable_content
     end
@@ -58,17 +58,17 @@ class CollectionsController < ApplicationController
   def remove_task
     redirect_target = params[:return_to_task] ? Task.find(params[:task]) : @collection
     if @collection.remove_task(params[:task])
-      redirect_to redirect_target, notice: t('common.notices.object_removed', model: Task.model_name.human)
+      redirect_to redirect_target, notice: t('common.notices.object_removed', model: Task.model_name.human), status: :see_other
     else
-      redirect_to redirect_target, alert: t('.cannot_remove_alert')
+      redirect_to redirect_target, alert: t('.cannot_remove_alert'), status: :see_other
     end
   end
 
   def remove_all
     if @collection.remove_all
-      redirect_to @collection, notice: t('.success_notice')
+      redirect_to @collection, notice: t('.success_notice'), status: :see_other
     else
-      redirect_to @collection, alert: t('.cannot_remove_alert')
+      redirect_to @collection, alert: t('.cannot_remove_alert'), status: :see_other
     end
   end
 
@@ -76,12 +76,12 @@ class CollectionsController < ApplicationController
     errors = push_tasks
 
     if errors.empty?
-      redirect_to @collection, notice: t('.push_external_notice', account_link: @account_link.name)
+      redirect_to @collection, notice: t('.push_external_notice', account_link: @account_link.name), status: :see_other
     else
       errors.each do |error|
         logger.debug(error)
       end
-      redirect_to @collection, alert: t('.not_working', account_link: @account_link.name)
+      redirect_to @collection, alert: t('.not_working', account_link: @account_link.name), status: :see_other
     end
   end
 
@@ -89,14 +89,14 @@ class CollectionsController < ApplicationController
     binary_zip_data = ProformaService::ExportTasks.call(tasks: @collection.tasks, options: {version: params[:version]})
     send_data(binary_zip_data.string, type: 'application/zip', filename: "#{@collection.title}.zip", disposition: 'attachment')
   rescue ProformaXML::PostGenerateValidationError => e
-    redirect_to :root, danger: JSON.parse(e.message).map {|msg| t("proforma_errors.#{msg}", default: msg) }.join('<br>')
+    redirect_to :root, danger: JSON.parse(e.message).map {|msg| t("proforma_errors.#{msg}", default: msg) }.join('<br>'), status: :see_other
   end
 
   def share
     if share_message.save
-      redirect_to @collection, notice: t('.success_notice')
+      redirect_to @collection, notice: t('.success_notice'), status: :see_other
     else
-      redirect_to @collection, alert: share_message.errors.full_messages.join(', ')
+      redirect_to @collection, alert: share_message.errors.full_messages.join(', '), status: :see_other
     end
   end
 
@@ -105,24 +105,28 @@ class CollectionsController < ApplicationController
   end
 
   def save_shared # rubocop:disable Metrics/AbcSize
-    return redirect_to user_messages_path(current_user), alert: t('.errors.already_member') if @collection.users.include? current_user
+    if @collection.users.include? current_user
+      return redirect_to user_messages_path(current_user),
+        alert: t('.errors.already_member'),
+        status: :see_other
+    end
 
     ActiveRecord::Base.transaction(requires_new: true) do
       @collection.users << current_user
       message = Message.received_by(current_user).find_by(action: :collection_shared, attachment: @collection)
       message.mark_as_deleted(current_user)
       message.save!
-      redirect_to @collection, notice: t('.success_notice')
+      redirect_to @collection, notice: t('.success_notice'), status: :see_other
     end
   end
 
   def leave
     if @collection.users.one?
       @collection.destroy
-      redirect_to Collection, notice: t('common.notices.object_deleted', model: Collection.model_name.human)
+      redirect_to Collection, notice: t('common.notices.object_deleted', model: Collection.model_name.human), status: :see_other
     else
       @collection.users.delete(current_user)
-      redirect_to Collection, notice: t('.left_successfully')
+      redirect_to Collection, notice: t('.left_successfully'), status: :see_other
     end
   end
 
@@ -134,14 +138,14 @@ class CollectionsController < ApplicationController
       current_user.favorite_collections << @collection
       flash_message = t('.favorite.added')
     end
-    redirect_to @collection, notice: flash_message
+    redirect_to @collection, notice: flash_message, status: :see_other
   end
 
   private
 
   def create_collection_with_task
     if @collection.save
-      redirect_to @collection.tasks.first, notice: t('collections.create.success_notice')
+      redirect_to @collection.tasks.first, notice: t('collections.create.success_notice'), status: :see_other
     else
       flash.now[:alert] = t('collections.create.error')
     end

@@ -37,9 +37,9 @@ RSpec.describe 'Tasks' do
     end
 
     describe 'POST /tasks' do
-      it 'has http 302' do
+      it 'responds with status 303' do
         post tasks_path, params: {task: valid_params, group_tasks: {group_ids: ['']}}
-        expect(response).to have_http_status(:found)
+        expect(response).to have_http_status(:see_other)
       end
     end
 
@@ -65,23 +65,23 @@ RSpec.describe 'Tasks' do
     end
 
     describe 'PATCH /task/:id' do
-      it 'has http 302' do
+      it 'responds with status 303' do
         patch task_path(task, task: update_params, group_tasks: {group_ids: ['']})
-        expect(response).to have_http_status(:found)
+        expect(response).to have_http_status(:see_other)
       end
     end
 
     describe 'PUT /task/:id' do
-      it 'has http 302' do
+      it 'responds with status 303' do
         put task_path(task, task: update_params, group_tasks: {group_ids: ['']})
-        expect(response).to have_http_status(:found)
+        expect(response).to have_http_status(:see_other)
       end
     end
 
     describe 'DELETE /task/:id' do
-      it 'has http 302' do
+      it 'responds with status 303' do
         delete task_path(task)
-        expect(response).to have_http_status(:found)
+        expect(response).to have_http_status(:see_other)
       end
     end
   end

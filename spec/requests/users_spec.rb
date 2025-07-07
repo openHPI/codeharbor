@@ -22,7 +22,7 @@ RSpec.describe 'Users' do
     end
 
     describe 'GET /users/sign_up' do
-      it 'returns http 302' do
+      it 'responds with status 302' do
         get new_user_registration_path
         expect(response).to have_http_status(:found)
       end
@@ -43,23 +43,23 @@ RSpec.describe 'Users' do
     end
 
     describe 'PATCH /users' do
-      it 'returns http 302' do
+      it 'responds with status 303' do
         patch user_registration_path(user, user: user_params, format: :html)
-        expect(response).to have_http_status(:found)
+        expect(response).to have_http_status(:see_other)
       end
     end
 
     describe 'PUT /users' do
-      it 'returns http 302' do
+      it 'responds with status 303' do
         put user_registration_path(user, user: user_params, format: :html)
-        expect(response).to have_http_status(:found)
+        expect(response).to have_http_status(:see_other)
       end
     end
 
     describe 'DELETE /users' do
-      it 'returns http 302' do
+      it 'responds with status 303' do
         delete user_registration_path(user, format: :html)
-        expect(response).to have_http_status(:found)
+        expect(response).to have_http_status(:see_other)
       end
     end
   end

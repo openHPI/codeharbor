@@ -4,7 +4,7 @@ class TaskFilesController < ApplicationController
   before_action :load_and_authorize_task_file
 
   def download_attachment
-    redirect_to rails_blob_path(@task_file.attachment, disposition: 'attachment')
+    redirect_to rails_blob_path(@task_file.attachment, disposition: 'attachment'), status: :see_other
   end
 
   def extract_text_data
