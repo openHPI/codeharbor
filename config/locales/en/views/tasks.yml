@@ -25,6 +25,8 @@ en:
       delayed: delayed
       display: display
       download: download
+      edit: edit
+      no_value: no value
     form:
       button:
         add_model_solution: Add Model Solution
