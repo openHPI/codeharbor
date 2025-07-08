@@ -65,7 +65,7 @@
         - @group.tasks.each do |task|
           .table-list.group-tasks
             .btn-group
-              = link_to task.title, task_path(task), class: 'btn btn-light'
+              = link_to(task.title, task_path(task), class: 'btn btn-light')
               - if policy(@group).remove_task?
                 = button_to(remove_task_group_path(task:), method: :patch, form_class: 'd-inline-block', class: 'btn btn-light') do
                   i.fa-solid.fa-xmark.text-secondary
@@ -78,7 +78,7 @@
       - if policy(@group).request_access?
         = button_to(t('groups.shared.button.request_membership'), request_access_group_path(@group), method: :post, class: 'btn btn-important h-100')
       - if policy(@group).edit?
-        = link_to edit_group_path(@group), class: 'btn btn-important' do
+        = link_to(edit_group_path(@group), class: 'btn btn-important') do
           i.fa-solid.fa-pen-to-square
           =< t('common.button.edit')
         = button_to(group_path(@group), class: 'btn btn-important h-100', method: :delete, data: {confirm: t('common.sure')}) do
@@ -86,4 +86,4 @@
           =< t('.button.delete_group')
       - if policy(@group).leave?
         = button_to(t('.button.leave'), leave_group_path(@group), method: :post, class: "leave-btn btn btn-important h-100 #{'disabled' if @group.last_admin?(current_user)}", data: {confirm: t('common.sure')})
-      = link_to t('common.button.back'), :back, class: 'btn btn-important'
+      = link_to(t('common.button.back'), :back, class: 'btn btn-important')

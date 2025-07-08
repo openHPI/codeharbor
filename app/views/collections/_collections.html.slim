@@ -13,7 +13,7 @@
     .card-header
       h6
         span.d-flex.justify-content-between.align-items-center.mt-2
-          = link_to collection_path(collection), class: 'card-task-title fw-bold' do
+          = link_to(collection_path(collection), class: 'card-task-title fw-bold') do
             - if current_user.favorite_collections.include?(collection)
               i.fa-solid.fa-star>
             = truncate(collection.title, length: 100)
@@ -49,16 +49,16 @@
                 - if task
                   .btn-group.m-1
                     - if policy(task).show?
-                      = link_to task.title, task_path(task), class: 'btn btn-light'
+                      = link_to(task.title, task_path(task), class: 'btn btn-light')
                     - else
-                      = link_to task.title, task_path(task), class: 'btn btn-light disabled'
+                      = link_to(task.title, task_path(task), class: 'btn btn-light disabled')
 
         .col-4.col-md-2.px-0
           .btn-group.float-end aria-label='...' role='group'
             - if policy(collection).show?
-              = link_to collection_path(collection), class: 'btn btn-light', data: {bs_toggle: 'tooltip', bs_placement: 'top', bs_title: t('common.button.view')} do
+              = link_to(collection_path(collection), class: 'btn btn-light', data: {bs_toggle: 'tooltip', bs_placement: 'top', bs_title: t('common.button.view')}) do
                 i.fas.fa-eye aria-hidden="true"
             - if policy(collection).edit?
-              = link_to edit_collection_path(collection), class: 'btn btn-light', data: {bs_toggle: 'tooltip', bs_placement: 'top', bs_title: t('common.button.edit')} do
+              = link_to(edit_collection_path(collection), class: 'btn btn-light', data: {bs_toggle: 'tooltip', bs_placement: 'top', bs_title: t('common.button.edit')}) do
                 i.fas.fa-edit aria-hidden="true"
 = render('shared/pagination', collection: @collections)

@@ -23,7 +23,7 @@
         = button_tag type: 'submit', class: 'btn btn-important' do
           i.fa-solid.fa-envelope
           =< t('devise.confirmations.new.resend_confirmation_instructions')
-        = link_to :back, class: 'btn btn-important' do
+        = link_to(:back, class: 'btn btn-important') do
           i.fa-solid.fa-xmark.text-secondary
           =< t('common.button.back')
 

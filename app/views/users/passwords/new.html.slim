@@ -23,7 +23,7 @@
         = button_tag type: 'submit', class: 'btn btn-important' do
           i.fa-solid.fa-key
           =< t('devise.passwords.new.send_me_reset_password_instructions')
-        = link_to :back, class: 'btn btn-important' do
+        = link_to(:back, class: 'btn btn-important') do
           i.fa-solid.fa-xmark.text-secondary
           =< t('common.button.back')
 

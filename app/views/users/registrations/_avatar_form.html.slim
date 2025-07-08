@@ -5,7 +5,7 @@
     .file-show
       = image_tag f.object.avatar.variant(resize_to_limit: [200, 200])
       .mt-2
-        = link_to t('.remove_avatar'), '#', class: 'btn btn-light btn-sm remove-avatar'
+        = link_to(t('.remove_avatar'), '#', class: 'btn btn-light btn-sm remove-avatar')
     .file-input.hide
       = f.file_field :avatar, class: 'form-control'
   - else

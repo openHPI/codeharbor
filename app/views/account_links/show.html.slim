@@ -36,10 +36,10 @@
 
 .actions.btn-group
   - if policy(@account_link).edit?
-    = link_to edit_user_account_link_path(@user, @account_link), class: 'btn btn-important' do
+    = link_to(edit_user_account_link_path(@user, @account_link), class: 'btn btn-important') do
       i.fa-solid.fa-pen-to-square
       =< t('common.button.edit')
     = button_to(user_account_link_path(@user, @account_link), class: 'btn btn-important h-100', method: :delete, data: {confirm: t('common.sure')}) do
       i.fa-solid.fa-trash-can.text-danger
       =< t('common.button.delete')
-  = link_to t('common.button.back'), user_path(@user), class: 'btn btn-important'
+  = link_to(t('common.button.back'), user_path(@user), class: 'btn btn-important')

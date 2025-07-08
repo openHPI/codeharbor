@@ -3,4 +3,4 @@ h3
 p = t('task_contributions.mailer.rejection_info.status_message', task: @task_contrib.base.title)
 p = t('task_contributions.mailer.rejection_info.duplicate_message')
 p = t('task_contributions.mailer.rejection_info.visibility_message')
-p = link_to t('task_contributions.mailer.task_url_message'), task_url(@duplicate)
+p = link_to(t('task_contributions.mailer.task_url_message'), task_url(@duplicate))

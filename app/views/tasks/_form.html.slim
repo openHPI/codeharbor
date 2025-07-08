@@ -160,7 +160,7 @@
           = button_tag type: 'submit', class: 'btn btn-important' do
             i.fa-regular.fa-file-lines
             =< t('common.button.save_object', model: @task.klass.model_name.human)
-          = link_to :back, class: 'btn btn-important' do
+          = link_to(:back, class: 'btn btn-important') do
             i.fa-solid.fa-xmark.text-secondary
             =< t('common.button.cancel')
 

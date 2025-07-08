@@ -27,7 +27,7 @@ html lang=I18n.locale data-default-locale=I18n.default_locale
       header.sticky-top
         nav.navbar.bg-light.navbar-expand-lg.text-bg-light
           .container
-            = link_to home_index_path, class: 'navbar-brand'
+            = link_to(home_index_path, class: 'navbar-brand')
               i.fa-solid.fa-anchor.me-2.text-secondary
               = application_name
             button.navbar-toggler.rounded-0.m-2 data-bs-target='#navbar-collapse' data-bs-toggle='collapse' type='button' aria-expanded='false' aria-label='Toggle navigation' aria-controls='navbar-collapse'

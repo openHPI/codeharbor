@@ -4,15 +4,15 @@
       h5.py-2
         = t('.more.header')
       p
-        = link_to t('.more.link'), about_home_index_path
+        = link_to(t('.more.link'), about_home_index_path)
       p
         | &copy;
         = ' '
-        = link_to t('.hasso_plattner_institute'), 'https://hpi.de/'
+        = link_to(t('.hasso_plattner_institute'), 'https://hpi.de/')
         = ' - '
-        = link_to t('.imprint'), t('.imprint_link')
+        = link_to(t('.imprint'), t('.imprint_link'))
         = ' - '
-        = link_to t('.privacy_policy'), t('.privacy_policy_link')
+        = link_to(t('.privacy_policy'), t('.privacy_policy_link'))
     .col-md-6
       h5.py-2
         = t('.about.header')

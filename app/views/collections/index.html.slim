@@ -4,12 +4,12 @@
   .row
     .col-md-12
       .btn-group[role='group']
-        = link_to t('.options.mine'), collections_path(option: 'mine'), class: 'btn btn-main btn-tab-group', id: 'mine'
-        = link_to t('.options.favorites'), collections_path(option: 'favorites'), class: 'btn btn-main btn-tab-group', id: 'favorites'
-        = link_to t('.options.public'), collections_path(option: 'public'), class: 'btn btn-main btn-tab-group', id: 'public'
+        = link_to(t('.options.mine'), collections_path(option: 'mine'), class: 'btn btn-main btn-tab-group', id: 'mine')
+        = link_to(t('.options.favorites'), collections_path(option: 'favorites'), class: 'btn btn-main btn-tab-group', id: 'favorites')
+        = link_to(t('.options.public'), collections_path(option: 'public'), class: 'btn btn-main btn-tab-group', id: 'public')
 
       - if policy(Group).new?
-        = link_to new_collection_path, class: 'btn btn-main float-end nav-btn-collection' do
+        = link_to(new_collection_path, class: 'btn btn-main float-end nav-btn-collection') do
           i.fa-solid.fa-plus
           =< t('.new_collection')
 br

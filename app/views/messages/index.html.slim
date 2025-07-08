@@ -2,11 +2,11 @@
 .nav-container.mb-5
   .col-md-12
     .btn-group role='group'
-      = link_to t('.button.inbox'), user_messages_path(option: 'inbox'), class: 'btn btn-main btn-tab-message', id: 'inbox'
-      = link_to t('messages.index.sent'), user_messages_path(option: 'sent'), class: 'btn btn-main btn-tab-message', id: 'sent'
+      = link_to(t('.button.inbox'), user_messages_path(option: 'inbox'), class: 'btn btn-main btn-tab-message', id: 'inbox')
+      = link_to(t('messages.index.sent'), user_messages_path(option: 'sent'), class: 'btn btn-main btn-tab-message', id: 'sent')
 
     - if policy(Message).new?
-      = link_to new_user_message_path, class: 'btn btn-main nav-btn float-end' do
+      = link_to(new_user_message_path, class: 'btn btn-main nav-btn float-end') do
         i.fa-solid.fa-envelope
         =< t('messages.shared.new')
 br
@@ -44,10 +44,10 @@ br
             .btn-group.ms-3
               - if message.attachment.present?
                 - if message.action_collection_shared?
-                  = link_to t('.button.view'), view_shared_collection_path(message.attachment, user: message.sender), class: 'btn btn-light btn-sm'
+                  = link_to(t('.button.view'), view_shared_collection_path(message.attachment, user: message.sender), class: 'btn btn-light btn-sm')
                   = button_to(t('.button.save_collection'), save_shared_collection_path(message.attachment), method: :post, class: 'btn btn-light btn-sm')
                 - if message.action_group_request?
-                  = link_to t('.button.view'), group_path(message.attachment), class: 'btn btn-light btn-sm'
+                  = link_to(t('.button.view'), group_path(message.attachment), class: 'btn btn-light btn-sm')
                   = button_to(grant_access_group_path(message.attachment, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm') do
                     i.fa-solid.fa-plus.text-success
                     =< t('.button.grant_access')
@@ -55,12 +55,12 @@ br
                     i.fa-solid.fa-xmark.text-danger
                     =< t('.button.deny_access')
                 - if message.action_group_approval?
-                  = link_to t('.button.view'), group_path(message.attachment), class: 'btn btn-light btn-sm'
+                  = link_to(t('.button.view'), group_path(message.attachment), class: 'btn btn-light btn-sm')
 
           .message-actions
             .btn-group
               - unless @option == 'sent'
-                = link_to reply_user_messages_path(recipient: message.sender), class: 'btn btn-light btn-sm' do
+                = link_to(reply_user_messages_path(recipient: message.sender), class: 'btn btn-light btn-sm') do
                   i.fa-solid.fa-reply
                   =< t('.button.reply')
               = button_to(user_message_path(current_user, message, option: @option), method: :delete, class: 'btn btn-light btn-sm', data: {confirm: t('common.sure')}) do

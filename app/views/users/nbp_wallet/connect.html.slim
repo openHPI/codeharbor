@@ -5,7 +5,7 @@
 
 .row
   .col-8.col-md-4.col-lg-3
-    = link_to @relationship_template.url
+    = link_to(@relationship_template.url)
       = image_tag @relationship_template.qr_code_path,
         data: {id: 'nbp_wallet_qr_code', 'remaining-validity': @relationship_template.remaining_validity.seconds},
         alt: t('.qr_code_alt_text'),

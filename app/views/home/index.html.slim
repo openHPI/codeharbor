@@ -14,7 +14,7 @@ section#hero.hero
               = t('.hero.subtitle')
           - unless user_signed_in?
             .lc-block.d-grid.gap-2.d-sm-flex.justify-content-sm-center.mb-5
-              = link_to t('common.button.sign_up').titleize, new_user_registration_path, class: 'btn btn-main btn-light btn-lg px-4 gap-3'
+              = link_to(t('common.button.sign_up').titleize, new_user_registration_path, class: 'btn btn-main btn-light btn-lg px-4 gap-3')
       .col-lg-6.col-md-5.col-sm-12
         .lc-block.d-grid.gap-2.d-md-flex.justify-content-sm-center
           = image_tag('home/computer_desk.jpeg', class: 'img-fluid', alt: t('.hero.alt_text'))
@@ -84,7 +84,7 @@ section#features.features
         h2.pb-3
           = t('.sign_in.header')
       p
-        = t('.sign_in.paragraph_html', href1: (link_to t('.sign_in.link1'), new_user_registration_path, class: 'classic-link'), href2: (link_to t('.sign_in.link2'), new_user_session_path, class: 'classic-link'))
+        = t('.sign_in.paragraph_html', href1: link_to(t('.sign_in.link1'), new_user_registration_path, class: 'classic-link'), href2: link_to(t('.sign_in.link2'), new_user_session_path, class: 'classic-link'))
 
 section#partners.partners
   .container.pb-5

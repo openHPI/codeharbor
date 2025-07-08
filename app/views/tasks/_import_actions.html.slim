@@ -1,5 +1,5 @@
 - if imported
-  = link_to t('.button.show_task'), task, class: 'btn btn-light btn-sm float-end show-action import-export-button', target: '_blank', rel: 'noopener noreferrer'
+  = link_to(t('.button.show_task'), task, class: 'btn btn-light btn-sm float-end show-action import-export-button', target: '_blank', rel: 'noopener noreferrer')
 - elsif exists && updatable
   = button_tag type: 'button', class: 'btn btn-light btn-sm float-end import-action import-export-button', data: {'import-type' => 'import'} do
     i.fa-solid.fa-check.confirm-icon.export-button-icon

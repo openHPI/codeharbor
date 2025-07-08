@@ -7,5 +7,5 @@
 = render('task_contributions')
 
 = render('shared/pagination', collection: @task_contributions)
-= link_to t('common.button.back'), task_path(@task), class: 'btn btn-important'
+= link_to(t('common.button.back'), task_path(@task), class: 'btn btn-important')
 #page_end.mt-5

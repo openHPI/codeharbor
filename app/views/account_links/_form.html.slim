@@ -21,6 +21,6 @@
     .form-group
       .actions.btn-group role='group'
         = f.submit t('.button.save'), class: 'btn btn-important'
-        = link_to :back, class: 'btn btn-important' do
+        = link_to(:back, class: 'btn btn-important') do
           i.fa-solid.fa-xmark.text-secondary
           =< t('common.button.cancel')

@@ -61,7 +61,7 @@
         |:
       .row-value
         .mb-2
-          = link_to new_user_account_link_path(@user), class: 'btn btn-light btn-sm' do
+          = link_to(new_user_account_link_path(@user), class: 'btn btn-light btn-sm') do
             i.fa-solid.fa-plus
             =< t('.account_links.add')
           =< button_tag type: 'button', class: 'btn btn-light btn-sm show-description' do
@@ -69,7 +69,7 @@
         .account-link-description.info-box
           span.fa-solid.fa-circle-info
           = t('account_links.show.description_html')
-          = link_to t('.account_links.more_information'), account_link_documentation_home_index_path
+          = link_to(t('.account_links.more_information'), account_link_documentation_home_index_path)
         - @user.account_links.each do |account_link|
           .table-list
             = account_link.name
@@ -77,8 +77,8 @@
               span title=t('account_links.show.shared_with_users', count: account_link.shared_users.count)
                 = " (#{t('account_links.show.shared')})"
             .btn-group.float-end
-              = link_to t('common.button.show'), user_account_link_path(current_user, account_link), class: 'btn btn-light btn-sm'
-              = link_to edit_user_account_link_path(current_user, account_link), class: 'btn btn-light btn-sm' do
+              = link_to(t('common.button.show'), user_account_link_path(current_user, account_link), class: 'btn btn-light btn-sm')
+              = link_to(edit_user_account_link_path(current_user, account_link), class: 'btn btn-light btn-sm') do
                 i.fa-solid.fa-pen-to-square
                 =< t('common.button.edit')
               = button_to(user_account_link_path(current_user, account_link), method: :delete, data: {confirm: t('common.sure')}, class: 'btn btn-light btn-sm') do
@@ -94,24 +94,24 @@
             .table-list
               = account_link.name
               .btn-group.float-end
-                = link_to t('common.button.show'), user_account_link_path(current_user, account_link), class: 'btn btn-light btn-sm'
+                = link_to(t('common.button.show'), user_account_link_path(current_user, account_link), class: 'btn btn-light btn-sm')
                 = button_to(remove_shared_user_user_account_link_path(account_link.user.id, account_link.id), method: :post, params: {shared_user: current_user.id}, data: {confirm: t('common.sure')}, class: 'btn btn-light btn-sm', remote: true, form_class: 'remove-account-link-form') do
                   i.fa-solid.fa-xmark
                   =< t('common.button.remove')
 .actions.mb-4.btn-group role='group'
   - if policy(@user).message?
-    = link_to reply_user_messages_path(current_user, recipient: @user), class: 'btn btn-important' do
+    = link_to(reply_user_messages_path(current_user, recipient: @user), class: 'btn btn-important') do
       i.fa-solid.fa-envelope
       =< t('.send_message')
   - if policy(@user).edit?
-    = link_to edit_user_registration_path, class: 'btn btn-important' do
+    = link_to(edit_user_registration_path, class: 'btn btn-important') do
       i.fa-solid.fa-pen-to-square
       =< t('common.button.edit')
   - if policy(@user).delete?
     = button_tag type: 'button', class: 'btn btn-important delete-user' do
       i.fa-solid.fa-trash-can
       =< t('common.button.delete')
-  = link_to t('common.button.back'), :back, class: 'btn btn-important'
+  = link_to(t('common.button.back'), :back, class: 'btn btn-important')
 
 = render('shared/modal',
         title: t('.delete_modal.title'),

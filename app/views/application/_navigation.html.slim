@@ -5,6 +5,6 @@
     = render('navigation_collection_link', model: Group, cached: true)
     - if current_user.role == 'admin'
       li.nav-item
-        = link_to rails_admin.dashboard_path, 'data-turbo': false, class: 'nav-link px-3' do
+        = link_to(rails_admin.dashboard_path, 'data-turbo': false, class: 'nav-link px-3') do
           i.fa-solid.fa-lock
           =< t('.rails_admin')

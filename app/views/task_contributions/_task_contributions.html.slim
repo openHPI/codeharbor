@@ -9,7 +9,7 @@
     .card-header
       h6
         span.d-flex.justify-content-between.align-items-center.mt-2
-          = link_to [contrib.base, contrib], class: 'card-task-title fw-bold' do
+          = link_to([contrib.base, contrib], class: 'card-task-title fw-bold') do
             = "#{t('common.created_at')} #{l(contrib.suggestion.created_at, format: :long)}"
           span.group-label.ms-2
             span = t("task_contributions.status.#{contrib.status}")

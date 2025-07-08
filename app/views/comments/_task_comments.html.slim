@@ -3,7 +3,7 @@
     = t('.info.no_comments')
 
 - else
-  = link_to task_comments_path(@task), class: 'refresh', remote: true do
+  = link_to(task_comments_path(@task), class: 'refresh', remote: true) do
     span.fa-solid.fa-arrows-rotate
     =< t('.button.refresh_comments')
   - @comments.each do |comment|
@@ -17,14 +17,14 @@
         = comment.text
         .btn-group.float-end role='group'
           - if policy(comment).edit?
-            = link_to edit_task_comment_path(@task, comment), class: 'btn btn-light btn-sm', remote: true do
+            = link_to(edit_task_comment_path(@task, comment), class: 'btn btn-light btn-sm', remote: true) do
               i.fa-solid.fa-pen-to-square
               =< t('common.button.edit')
             = button_to(task_comment_path(@task, comment), class: 'btn btn-light btn-sm', method: :delete, remote: true, data: {confirm: t('common.sure')})
               i.fa-solid.fa-trash-can
               =< t('common.button.delete')
       .more-btn-wrapper
-        = link_to task, class: 'more-btn' do
+        = link_to(task, class: 'more-btn') do
           span.more-tag
             = t('common.button.show_more')
           span.less-tag.d-none
