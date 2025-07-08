@@ -45,7 +45,7 @@ br
               - if message.attachment.present?
                 - if message.action_collection_shared?
                   = link_to t('.button.view'), view_shared_collection_path(message.attachment, user: message.sender), class: 'btn btn-light btn-sm'
-                  = button_to t('.button.save_collection'), save_shared_collection_path(message.attachment), method: 'post', class: 'btn btn-light btn-sm'
+                  = button_to t('.button.save_collection'), save_shared_collection_path(message.attachment), method: :post, class: 'btn btn-light btn-sm'
                 - if message.action_group_request?
                   = link_to t('.button.view'), group_path(message.attachment), class: 'btn btn-light btn-sm'
                   = button_to grant_access_group_path(message.attachment, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do

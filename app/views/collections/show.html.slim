@@ -74,7 +74,7 @@
   .col-md-12.mb-4
     .actions.btn-group role='group'
       - if action_name == 'view_shared'
-        = button_to t('.button.collaborate'), save_shared_collection_path(@collection), method: 'post', class: 'btn btn-important h-100'
+        = button_to t('.button.collaborate'), save_shared_collection_path(@collection), method: :post, class: 'btn btn-important h-100'
         = link_to t('common.button.back'), user_messages_path(current_user), class: 'btn btn-important'
       - else
         - if policy(@collection).edit?
