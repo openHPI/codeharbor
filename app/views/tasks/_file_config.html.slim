@@ -4,11 +4,11 @@
     = file.label :used_by_grader, TaskFile.human_attribute_name('used_by_grader'), class: 'form-label w-auto me-2'
     .radio-switch
       = file.radio_button :used_by_grader, true, value: true, checked: true
-      = file.label :used_by_grader_true, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('common.button.yes'), class: 'radio-left small-radio radio-half' do
+      = file.label :used_by_grader_true, data: {'bs-toggle': 'tooltip', placement: 'bottom'}, title: t('common.button.yes'), class: 'radio-left small-radio radio-half' do
         span.fa-stack
           i.fa-solid.fa-check.fa-stack-1x.fa-2x
       = file.radio_button :used_by_grader, false, value: false
-      = file.label :used_by_grader_false, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('common.button.no'), class: 'radio-right small-radio radio-half' do
+      = file.label :used_by_grader_false, data: {'bs-toggle': 'tooltip', placement: 'bottom'}, title: t('common.button.no'), class: 'radio-right small-radio radio-half' do
         span.fa-stack
           i.fa-solid.fa-xmark.fa-stack-1x.fa-2x
 
@@ -16,15 +16,15 @@
     = file.label :used_by_grader, TaskFile.human_attribute_name('visible'), class: 'form-label w-auto me-2'
     .radio-switch
       = file.radio_button :visible, 'yes', value: 'yes', checked: true
-      = file.label :visible_yes, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('common.button.yes'), class: 'radio-left small-radio radio-third' do
+      = file.label :visible_yes, data: {'bs-toggle': 'tooltip', placement: 'bottom'}, title: t('common.button.yes'), class: 'radio-left small-radio radio-third' do
         span.fa-stack
           i.fa-regular.fa-eye.fa-stack-1x.fa-2x
       = file.radio_button :visible, 'no', value: 'no'
-      = file.label :visible_no, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('common.button.no'), class: 'radio-right radio-left small-radio radio-third' do
+      = file.label :visible_no, data: {'bs-toggle': 'tooltip', placement: 'bottom'}, title: t('common.button.no'), class: 'radio-right radio-left small-radio radio-third' do
         span.fa-stack
           i.fa-regular.fa-eye-slash.fa-stack-1x.fa-2x
       = file.radio_button :visible, 'delayed', value: 'delayed'
-      = file.label :visible_delayed, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('.delayed'), class: 'radio-right small-radio radio-third' do
+      = file.label :visible_delayed, data: {'bs-toggle': 'tooltip', placement: 'bottom'}, title: t('.delayed'), class: 'radio-right small-radio radio-third' do
         span.fa-stack
           i.fa-regular.fa-clock.fa-stack-1x.fa-2x
 
@@ -32,18 +32,18 @@
     = file.label :usage_by_lms, TaskFile.human_attribute_name('usage_by_lms'), class: 'form-label w-auto me-2'
     .radio-switch
       = file.radio_button :usage_by_lms, 'edit', value: 'edit'
-      = file.label :usage_by_lms_edit, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('common.button.edit'), class: 'radio-left small-radio radio-third' do
+      = file.label :usage_by_lms_edit, data: {'bs-toggle': 'tooltip', placement: 'bottom'}, title: t('.edit'), class: 'radio-left small-radio radio-quarter' do
         span.fa-stack
           i.fa-solid.fa-pencil.fa-stack-1x.fa-2x
       = file.radio_button :usage_by_lms, 'display', value: 'display'
-      = file.label :usage_by_lms_display, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('.display'), class: 'radio-right radio-left small-radio radio-third' do
+      = file.label :usage_by_lms_display, data: {'bs-toggle': 'tooltip', placement: 'bottom'}, title: t('.display'), class: 'radio-right radio-left small-radio radio-quarter' do
         span.fa-stack
           i.fa-regular.fa-eye.fa-stack-1x.fa-2x
       = file.radio_button :usage_by_lms, 'download', value: 'download'
-      = file.label :usage_by_lms_download, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('.download'), class: 'radio-right small-radio radio-third' do
+      = file.label :usage_by_lms_download, data: {'bs-toggle': 'tooltip', placement: 'bottom'}, title: t('.download'), class: 'radio-right radio-left small-radio radio-quarter' do
         span.fa-stack
           i.fa-solid.fa-download.fa-stack-1x.fa-2x
       = file.radio_button :usage_by_lms, ''
-      = file.label :usage_by_lms_, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('.no_value'), class: 'radio-right small-radio radio-quarter' do
+      = file.label :usage_by_lms_, data: {'bs-toggle': 'tooltip', placement: 'bottom'}, title: t('.no_value'), class: 'radio-right small-radio radio-quarter' do
         span.fa-stack
           i.fa-solid.fa-ban.fa-stack-1x.fa-2x
