@@ -16,7 +16,7 @@
         .table-list
           => admin.email
           - if policy(@group).demote_admin? && @group.admins.length > 1
-            = link_to demote_admin_group_path(group: @group, user: admin), method: :post, class: 'btn btn-light btn-sm', data: {confirm: admin == current_user ? t('.demote_yourself.confirm') : t('.demote_admin.confirm')} do
+            = button_to demote_admin_group_path(group: @group, user: admin), method: :post, form_class: 'd-inline-block', class: 'btn btn-light btn-sm', data: {confirm: admin == current_user ? t('.demote_yourself.confirm') : t('.demote_admin.confirm')} do
               i.fa-solid.fa-arrow-down
               =< (admin == current_user ? t('.button.demote_yourself') : t('.button.demote_admin'))
 
@@ -30,10 +30,10 @@
             => member.email
             - if policy(@group).edit?
               - if @group.group_membership_for(member).role_confirmed_member?
-                = link_to make_admin_group_path(group: @group, user: member), method: :post, class: 'btn btn-light btn-sm' do
+                = button_to make_admin_group_path(group: @group, user: member), method: :post, form_class: 'd-inline-block', class: 'btn btn-light btn-sm' do
                   i.fa-solid.fa-plus
                   =< t('.button.make_admin')
-              = link_to delete_from_group_group_path(group: @group, user: member), method: :patch, class: 'btn btn-light btn-sm' do
+              = button_to delete_from_group_group_path(group: @group, user: member), method: :patch, form_class: 'd-inline-block', class: 'btn btn-light btn-sm' do
                 i.fa-solid.fa-xmark
                 =< t('common.button.remove')
       - else
@@ -50,10 +50,10 @@
             .table-list
               => user.email
               .btn-group.float-end
-                = link_to grant_access_group_path(group: @group, user:), method: :post, class: 'btn btn-light btn-sm' do
+                = button_to grant_access_group_path(group: @group, user:), method: :post, form_class: 'd-inline-block', class: 'btn btn-light btn-sm' do
                   i.fa-solid.fa-plus
                   =< t('.button.grant_access')
-                = link_to deny_access_group_path(group: @group, user:), method: :post, class: 'btn btn-light btn-sm' do
+                = button_to deny_access_group_path(group: @group, user:), method: :post, form_class: 'd-inline-block', class: 'btn btn-light btn-sm' do
                   i.fa-solid.fa-xmark
                   =< t('.button.deny_access')
         - else
@@ -67,7 +67,7 @@
             .btn-group
               = link_to task.title, task_path(task), class: 'btn btn-light'
               - if policy(@group).remove_task?
-                = link_to remove_task_group_path(task:), method: :patch, class: 'btn btn-light' do
+                = button_to remove_task_group_path(task:), method: :patch, form_class: 'd-inline-block', class: 'btn btn-light' do
                   i.fa-solid.fa-xmark.text-secondary
       - else
         = t('.has_no_tasks')
@@ -76,14 +76,14 @@
   .col-md-12.mb-4
     .actions.btn-group role='group'
       - if policy(@group).request_access?
-        = link_to t('groups.shared.button.request_membership'), request_access_group_path(@group), method: :post, class: 'btn btn-important'
+        = button_to t('groups.shared.button.request_membership'), request_access_group_path(@group), method: :post, class: 'btn btn-important h-100'
       - if policy(@group).edit?
         = link_to edit_group_path(@group), class: 'btn btn-important' do
           i.fa-solid.fa-pen-to-square
           =< t('common.button.edit')
-        = link_to group_path(@group), class: 'btn btn-important', method: :delete, data: {confirm: t('common.sure')} do
+        = button_to group_path(@group), class: 'btn btn-important h-100', method: :delete, data: {confirm: t('common.sure')} do
           i.fa-solid.fa-trash-can.text-danger
           =< t('.button.delete_group')
       - if policy(@group).leave?
-        = link_to t('.button.leave'), leave_group_path(@group), method: :post, class: "leave-btn btn btn-important #{'disabled' if @group.last_admin?(current_user)}", data: {confirm: t('common.sure')}
+        = button_to t('.button.leave'), leave_group_path(@group), method: :post, class: "leave-btn btn btn-important h-100 #{'disabled' if @group.last_admin?(current_user)}", data: {confirm: t('common.sure')}
       = link_to t('common.button.back'), :back, class: 'btn btn-important'

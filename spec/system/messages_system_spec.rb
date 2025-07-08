@@ -20,16 +20,16 @@ RSpec.describe 'MessagesController', :js do
       let(:view_shared_link) { view_shared_collection_path(collection, user: collection_owner) }
       let(:save_shared_link) { save_shared_collection_path(collection) }
 
-      it 'shows the message with a link to the collection' do
+      it 'shows the message with actions to the collection' do
         view_inbox
         expect(page).to have_link(href: view_shared_link)
-        expect(page).to have_link(href: save_shared_link)
+        expect(page).to have_form_button(action: save_shared_link)
       end
 
       it 'adds the user to the collection when saving the collection' do
         view_inbox
         expect do
-          find("[href='#{save_shared_link}'").click
+          click_button(I18n.t('messages.index.button.save_collection'))
           wait_for_ajax
         end.to change { collection.users.reload.include? user }.from(false).to(true)
       end
@@ -58,16 +58,16 @@ RSpec.describe 'MessagesController', :js do
       let(:grant_access_link) { grant_access_group_path(group, user: sender) }
       let(:deny_access_link) { deny_access_group_path(group, user: sender) }
 
-      it 'shows the message with links to grant or deny the request' do
+      it 'shows the message with actions to grant or deny the request' do
         view_inbox
-        expect(page).to have_link(href: grant_access_link)
-        expect(page).to have_link(href: deny_access_link)
+        expect(page).to have_form_button(action: grant_access_link)
+        expect(page).to have_form_button(action: deny_access_link)
       end
 
       it 'confirms the sender as a group member when clicking the grant access link' do
         view_inbox
         expect do
-          find("[href='#{grant_access_link}'").click
+          click_button(I18n.t('messages.index.button.grant_access'))
           wait_for_ajax
         end.to change { group.reload.confirmed_member? sender }.from(false).to(true)
       end
