@@ -492,11 +492,11 @@
               - current_user.collections.order(created_at: :desc).each do |collection|
                 li
                   - if collection.tasks.include?(@task)
-                    = button_to remove_task_collection_path(collection, task: @task, return_to_task: true), method: :patch, class: 'dropdown-item', data: {confirm: t('.remove_task_from_collection_warning')} do
+                    = button_to(remove_task_collection_path(collection, task: @task, return_to_task: true), method: :patch, class: 'dropdown-item', data: {confirm: t('.remove_task_from_collection_warning')}) do
                       span.collection-checkmark
                         = "✓ #{collection.title}"
                   - else
-                    = button_to add_to_collection_task_path(collection:), method: :post, class: 'dropdown-item' do
+                    = button_to(add_to_collection_task_path(collection:), method: :post, class: 'dropdown-item') do
                       span.collection-checkmark
                         = collection.title
 
@@ -543,7 +543,7 @@
               - else
                 - current_user.available_account_links.each do |acc_link|
                   li
-                    = button_to acc_link.name, export_external_start_task_path(account_link: acc_link), method: :post, remote: true, class: 'dropdown-item export-test'
+                    = button_to(acc_link.name, export_external_start_task_path(account_link: acc_link), method: :post, remote: true, class: 'dropdown-item export-test')
         - else
           div data-bs-toggle='tooltip' title=unavailable_tooltip data-bs-delay=150
             = button_tag class: 'btn btn-outline-dark dropdown-toggle disabled', 'data-bs-toggle': 'dropdown' do
@@ -591,19 +591,19 @@
           i.fa-solid.fa-pen-to-square
           =< t('common.button.edit')
       - if policy(@task).destroy?
-        = button_to task_path(@task), class: 'btn btn-important h-100', method: :delete, data: {confirm: t('common.sure')} do
+        = button_to(task_path(@task), class: 'btn btn-important h-100', method: :delete, data: {confirm: t('common.sure')}) do
           i.fa-solid.fa-trash-can
           =< t('common.button.delete')
       - if policy(@task).approve_changes?
-        = button_to @task.url_for(:approve_changes), method: :post, class: 'btn btn-important h-100' do
+        = button_to(@task.url_for(:approve_changes), method: :post, class: 'btn btn-important h-100') do
           i.fa-solid.fa-check
           =< t('common.button.approve')
       - if policy(@task).reject_changes?
-        = button_to @task.url_for(:reject_changes), method: :post, class: 'btn btn-important h-100' do
+        = button_to(@task.url_for(:reject_changes), method: :post, class: 'btn btn-important h-100') do
           i.fa-solid.fa-xmark
           =< t('common.button.reject')
       - if policy(@task).discard_changes?
-        = button_to @task.url_for(:discard_changes), method: :post, class: 'btn btn-important h-100' do
+        = button_to(@task.url_for(:discard_changes), method: :post, class: 'btn btn-important h-100') do
           i.fa-solid.fa-link-slash
           =< t('task_contributions.buttons.decouple')
 
@@ -619,27 +619,27 @@
             =< t('task_contributions.buttons.contribute')
       - elsif @current_user.nil?
         .btn-group data-bs-toggle='tooltip' title=unavailable_tooltip data-bs-delay=150
-          = button_to new_task_task_contribution_path(@task), method: :post, class: 'btn btn-important disabled h-100' do
+          = button_to(new_task_task_contribution_path(@task), method: :post, class: 'btn btn-important disabled h-100') do
             i.fa-regular.fa-clone
             =< t('task_contributions.buttons.contribute')
 
       - if policy(@task).duplicate?
-        = button_to duplicate_task_path(@task), method: :post, class: 'btn btn-important h-100' do
+        = button_to(duplicate_task_path(@task), method: :post, class: 'btn btn-important h-100') do
           i.fa-regular.fa-clone
           =< t('common.button.duplicate')
       - elsif @current_user.nil?
         .btn-group data-bs-toggle='tooltip' title=unavailable_tooltip data-bs-delay=150
-          = button_to duplicate_task_path(@task), method: :post, class: 'btn btn-important disabled h-100' do
+          = button_to(duplicate_task_path(@task), method: :post, class: 'btn btn-important disabled h-100') do
             i.fa-regular.fa-clone
             =< t('common.button.duplicate')
 
       - if policy(@task).generate_test?
-        = button_to generate_test_task_path(@task), method: :post, class: 'btn btn-important h-100' do
+        = button_to(generate_test_task_path(@task), method: :post, class: 'btn btn-important h-100') do
           i.fa-solid.fa-wand-magic-sparkles
           = t('.button.generate_test')
       - elsif policy(@task).update?
         .btn-group data-bs-toggle='tooltip' title=t('.button.api_key_required') data-bs-delay=150
-          = button_to generate_test_task_path(@task), method: :post, class: 'btn btn-important disabled h-100' do
+          = button_to(generate_test_task_path(@task), method: :post, class: 'btn btn-important disabled h-100') do
             i.fa-solid.fa-wand-magic-sparkles
             = t('.button.generate_test')
 

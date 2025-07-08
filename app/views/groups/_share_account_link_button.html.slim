@@ -1,8 +1,8 @@
 - if shared_user.shared_account_links.include?(account_link)
-  = button_to remove_shared_user_user_account_link_path(current_user, account_link), method: :post, params: {shared_user: shared_user.id}, form_class: 'share-account-link-form', class: 'dropdown-item account-link-share', remote: true, title: t('.unshare_tooltip', account_link: account_link.name, user: shared_user.email) do
+  = button_to(remove_shared_user_user_account_link_path(current_user, account_link), method: :post, params: {shared_user: shared_user.id}, form_class: 'share-account-link-form', class: 'dropdown-item account-link-share', remote: true, title: t('.unshare_tooltip', account_link: account_link.name, user: shared_user.email)) do
     i.fa-solid.fa-square-check
     =< account_link.name
 - else
-  = button_to add_shared_user_user_account_link_path(current_user, account_link), method: :post, params: {shared_user: shared_user.id}, form_class: 'share-account-link-form', class: 'dropdown-item account-link-share', remote: true, title: t('.share_tooltip', account_link: account_link.name, user: shared_user.email) do
+  = button_to(add_shared_user_user_account_link_path(current_user, account_link), method: :post, params: {shared_user: shared_user.id}, form_class: 'share-account-link-form', class: 'dropdown-item account-link-share', remote: true, title: t('.share_tooltip', account_link: account_link.name, user: shared_user.email)) do
     i.fa-solid.fa-square
     =< account_link.name

@@ -81,7 +81,7 @@
               = link_to edit_user_account_link_path(current_user, account_link), class: 'btn btn-light btn-sm' do
                 i.fa-solid.fa-pen-to-square
                 =< t('common.button.edit')
-              = button_to user_account_link_path(current_user, account_link), method: :delete, data: {confirm: t('common.sure')}, class: 'btn btn-light btn-sm' do
+              = button_to(user_account_link_path(current_user, account_link), method: :delete, data: {confirm: t('common.sure')}, class: 'btn btn-light btn-sm') do
                 i.fa-solid.fa-trash-can
                 =< t('common.button.delete')
     - if @user.shared_account_links.any?
@@ -95,7 +95,7 @@
               = account_link.name
               .btn-group.float-end
                 = link_to t('common.button.show'), user_account_link_path(current_user, account_link), class: 'btn btn-light btn-sm'
-                = button_to remove_shared_user_user_account_link_path(account_link.user.id, account_link.id), method: :post, params: {shared_user: current_user.id}, data: {confirm: t('common.sure')}, class: 'btn btn-light btn-sm', remote: true, form_class: 'remove-account-link-form' do
+                = button_to(remove_shared_user_user_account_link_path(account_link.user.id, account_link.id), method: :post, params: {shared_user: current_user.id}, data: {confirm: t('common.sure')}, class: 'btn btn-light btn-sm', remote: true, form_class: 'remove-account-link-form') do
                   i.fa-solid.fa-xmark
                   =< t('common.button.remove')
 .actions.mb-4.btn-group role='group'

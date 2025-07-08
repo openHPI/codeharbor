@@ -52,7 +52,7 @@
           i.fa-solid.fa-folder-open
           =< t('.button.save')
         - if @collection.tasks.present?
-          = button_to remove_all_collection_path(@collection), method: :patch, data: {confirm: t('common.sure')}, class: 'btn btn-important h-100' do
+          = button_to(remove_all_collection_path(@collection), method: :patch, data: {confirm: t('common.sure')}, class: 'btn btn-important h-100') do
             i.fa-solid.fa-xmark.text-danger
             =< t('.button.remove_all')
         = link_to :back, class: 'btn btn-important' do

@@ -21,6 +21,6 @@
 
   - if devise_mapping.omniauthable?
     - resource_class.omniauth_providers.each do |provider|
-      = button_to t('devise.shared.links.sign_in_with_provider', provider: OmniAuth::Utils.camelize(provider)),
-              omniauth_authorize_path(resource_name, provider), method: :post
+      = button_to(t('devise.shared.links.sign_in_with_provider', provider: OmniAuth::Utils.camelize(provider)),
+              omniauth_authorize_path(resource_name, provider), method: :post)
       br

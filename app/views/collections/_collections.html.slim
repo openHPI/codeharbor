@@ -34,7 +34,7 @@
               - else
                 = render_markdown(collection.description)
             .more-btn-wrapper
-              = button_to collection, class: 'more-btn' do
+              = button_to(collection, class: 'more-btn') do
                 .more-tag
                   = t('common.button.show_more')
                   span.fa-solid.fa-caret-down.ms-1

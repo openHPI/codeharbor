@@ -45,13 +45,13 @@ br
               - if message.attachment.present?
                 - if message.action_collection_shared?
                   = link_to t('.button.view'), view_shared_collection_path(message.attachment, user: message.sender), class: 'btn btn-light btn-sm'
-                  = button_to t('.button.save_collection'), save_shared_collection_path(message.attachment), method: :post, class: 'btn btn-light btn-sm'
+                  = button_to(t('.button.save_collection'), save_shared_collection_path(message.attachment), method: :post, class: 'btn btn-light btn-sm')
                 - if message.action_group_request?
                   = link_to t('.button.view'), group_path(message.attachment), class: 'btn btn-light btn-sm'
-                  = button_to grant_access_group_path(message.attachment, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
+                  = button_to(grant_access_group_path(message.attachment, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm') do
                     i.fa-solid.fa-plus.text-success
                     =< t('.button.grant_access')
-                  = button_to deny_access_group_path(message.attachment, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm' do
+                  = button_to(deny_access_group_path(message.attachment, user: message.sender.id), method: :post, class: 'btn btn-light btn-sm') do
                     i.fa-solid.fa-xmark.text-danger
                     =< t('.button.deny_access')
                 - if message.action_group_approval?
@@ -63,7 +63,7 @@ br
                 = link_to reply_user_messages_path(recipient: message.sender), class: 'btn btn-light btn-sm' do
                   i.fa-solid.fa-reply
                   =< t('.button.reply')
-              = button_to user_message_path(current_user, message, option: @option), method: :delete, class: 'btn btn-light btn-sm', data: {confirm: t('common.sure')} do
+              = button_to(user_message_path(current_user, message, option: @option), method: :delete, class: 'btn btn-light btn-sm', data: {confirm: t('common.sure')}) do
                 i.fa-solid.fa-trash-can
                 =< t('common.button.delete')
   = render('shared/pagination', collection: @messages)

@@ -83,12 +83,12 @@
             - provider_name = OmniAuth::Utils.camelize(provider)
             - configured_providers = current_user.omniauth_identities.pluck(:omniauth_provider)
             - if configured_providers.include?(provider.to_s) && (configured_providers.size > 1 || resource.password_set?)
-              = button_to t('.remove_identity', kind: provider_name), omniauth_deauthorize_path(provider), class: 'btn btn-light btn-sm mb-2 me-2', method: :delete
+              = button_to(t('.remove_identity', kind: provider_name), omniauth_deauthorize_path(provider), class: 'btn btn-light btn-sm mb-2 me-2', method: :delete)
             - elsif configured_providers.include?(provider.to_s)
               a.btn.btn-light.btn-sm.mb-2.me-2.disabled href='#'
                 = t('.cannot_remove_last_identity', kind: provider_name)
             - else
-              = button_to t('.add_identity', kind: provider_name), omniauth_authorize_path(resource_name, provider), class: 'btn btn-light btn-sm mb-2 me-2', method: :post
+              = button_to(t('.add_identity', kind: provider_name), omniauth_authorize_path(resource_name, provider), class: 'btn btn-light btn-sm mb-2 me-2', method: :post)
 
     .form-group.py-3
       .btn-group role='group'
