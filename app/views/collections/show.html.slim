@@ -79,7 +79,7 @@
       - else
         - if policy(@collection).edit?
           .btn-group
-            = button_tag type: 'button', 'data-bs-toggle': 'dropdown', aria: {haspopup: 'true', expanded: 'false'}, class: 'btn btn-important nav-btn-exercise dropdown-toggle split' do
+            = button_tag type: 'button', data: {bs_toggle: 'dropdown'}, aria: {haspopup: 'true', expanded: 'false'}, class: 'btn btn-important nav-btn-exercise dropdown-toggle split' do
               => t('.button.share')
               span.caret
             .dropdown-menu#share-collection-menu
@@ -92,10 +92,10 @@
           .dropdown.btn-group
             - if @collection.tasks.empty?
               .btn-group data-bs-toggle='tooltip' title=t('.download_no_exercises') data-bs-delay=150
-                = button_tag class: 'btn btn-important dropdown-toggle disabled', 'data-bs-toggle': 'dropdown' do
+                = button_tag class: 'btn btn-important dropdown-toggle disabled', data: {bs_toggle: 'dropdown'} do
                   => t('common.button.download_zip')
             - else
-              = button_tag class: 'btn btn-important dropdown-toggle', 'data-bs-toggle': 'dropdown' do
+              = button_tag class: 'btn btn-important dropdown-toggle', data: {bs_toggle: 'dropdown'} do
                 => t('common.button.download_zip')
                 span.caret
               .scrollable.dropdown-menu role='menu'
@@ -105,7 +105,7 @@
                     = link_to(proforma_version, download_all_collection_path(@collection, version: proforma_version), class: 'dropdown-item', target: '_blank', rel: 'noopener noreferrer')
 
           .dropdown.btn-group
-            = button_tag class: 'btn btn-important dropdown-toggle', 'data-bs-toggle': 'dropdown' do
+            = button_tag class: 'btn btn-important dropdown-toggle', data: {bs_toggle: 'dropdown'} do
               => t('common.button.export')
               span.caret
             .scrollable.dropdown-menu role='menu'

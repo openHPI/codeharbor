@@ -15,7 +15,7 @@
             = link_to(new_task_path, class: 'btn btn-main nav-btn-exercise') do
               i.fa-solid.fa-plus.text-success
               =< t('.button.new_task')
-            = button_tag type: 'button', 'data-bs-toggle': 'dropdown', aria: {haspopup: 'true', expanded: 'false'}, class: 'btn btn-main nav-btn-exercise dropdown-toggle split' do
+            = button_tag type: 'button', data: {bs_toggle: 'dropdown'}, aria: {haspopup: 'true', expanded: 'false'}, class: 'btn btn-main nav-btn-exercise dropdown-toggle split' do
               span.caret
             ul.dropdown-menu.rounded-0.shadow-sm#xml-import
               li.dropdown-header.dropdown-title
@@ -69,7 +69,7 @@
                 p
                   b = t('.search.has_all_labels')
                 span.form-group
-                  = f.select 'has_all_labels', options_for_select(@req_labels.map {|l| [l.name, l.name, {label_color: l.color, label_font_color: l.font_color}] }, @req_labels.pluck(:name)), {}, {class: 'labels-select2-tag form-control ransack-filter', multiple: true, 'data-tags': false}
+                  = f.select 'has_all_labels', options_for_select(@req_labels.map {|l| [l.name, l.name, {label_color: l.color, label_font_color: l.font_color}] }, @req_labels.pluck(:name)), {}, {class: 'labels-select2-tag form-control ransack-filter', multiple: true, data: {tags: false}}
               - if @visibility == :owner
                 .other.col-md-4.pt-3
                   p
