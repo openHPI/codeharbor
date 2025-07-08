@@ -28,21 +28,21 @@ RSpec.describe 'Collections' do
     end
 
     describe 'GET /collections/new' do
-      it 'has http 200' do
+      it 'responds with status 200' do
         get new_collection_path
         expect(response).to have_http_status(:ok)
       end
     end
 
     describe 'GET /collections/:id/edit' do
-      it 'has http 200' do
+      it 'responds with status 200' do
         get edit_collection_path(collection)
         expect(response).to have_http_status(:ok)
       end
     end
 
     describe 'GET /collection/:id' do
-      it 'has http 200' do
+      it 'responds with status 200' do
         get collection_path(collection)
         expect(response).to have_http_status(:ok)
       end

@@ -16,7 +16,7 @@ RSpec.describe Bridges::Lom::TasksController do
     subject(:get_request) { get :show, params: {id: task.to_param} }
 
     shared_examples 'is a valid LOM response' do
-      it 'returns HTTP OK' do
+      it 'responds with status 200' do
         expect(response).to have_http_status :ok
       end
 
@@ -36,7 +36,7 @@ RSpec.describe Bridges::Lom::TasksController do
     context 'when not allowed to access the LOM' do
       let(:access_level) { :private }
 
-      it 'returns HTTP forbidden' do
+      it 'responds with status 403' do
         get_request
         expect(response).to have_http_status :forbidden
       end

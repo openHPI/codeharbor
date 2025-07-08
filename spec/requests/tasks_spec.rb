@@ -44,21 +44,21 @@ RSpec.describe 'Tasks' do
     end
 
     describe 'GET /tasks/new' do
-      it 'has http 200' do
+      it 'responds with status 200' do
         get new_task_path
         expect(response).to have_http_status(:ok)
       end
     end
 
     describe 'GET /tasks/:id/edit' do
-      it 'has http 200' do
+      it 'responds with status 200' do
         get edit_task_path(task)
         expect(response).to have_http_status(:ok)
       end
     end
 
     describe 'GET /task/:id' do
-      it 'has http 200' do
+      it 'responds with status 200' do
         get task_path(task)
         expect(response).to have_http_status(:ok)
       end

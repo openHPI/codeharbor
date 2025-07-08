@@ -28,21 +28,21 @@ RSpec.describe 'Groups' do
     end
 
     describe 'GET /groups/new' do
-      it 'has http 200' do
+      it 'responds with status 200' do
         get new_group_path
         expect(response).to have_http_status(:ok)
       end
     end
 
     describe 'GET /groups/:id/edit' do
-      it 'has http 200' do
+      it 'responds with status 200' do
         get edit_group_path(group)
         expect(response).to have_http_status(:ok)
       end
     end
 
     describe 'GET /group/:id' do
-      it 'has http 200' do
+      it 'responds with status 200' do
         get group_path(group)
         expect(response).to have_http_status(:ok)
       end

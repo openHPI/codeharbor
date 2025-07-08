@@ -30,14 +30,14 @@ RSpec.describe 'Users' do
     end
 
     describe 'GET /users/edit' do
-      it 'returns http 200' do
+      it 'responds with status 200' do
         get edit_user_registration_path
         expect(response).to have_http_status(:ok)
       end
     end
 
     describe 'GET /users/:id' do
-      it 'returns http 200' do
+      it 'responds with status 200' do
         get user_path(user)
         expect(response).to have_http_status(:ok)
       end
