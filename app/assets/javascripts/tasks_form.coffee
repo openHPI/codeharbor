@@ -1,7 +1,6 @@
 ready = ->
   initializeFileTypeSelection()
   initializeVisibilityWarning()
-  initializeRadioButtonDeselection()
 
 initializeLoadSelect2 = ->
   $('#task_programming_language_id').select2
@@ -32,25 +31,6 @@ initializeVisibilityWarning = ->
       warning_message.removeClass('d-none')
   $('#task_access_level_public').on 'change', ->
     warning_message.addClass('d-none')
-
-initializeRadioButtonDeselection = ->
-  radios = $('.radio-switch input[type="radio"][name*="[usage_by_lms]"]')
-  hidden_field = $('input[name="file[usage_by_lms]"][type="hidden"]')
-
-  radios.each ->
-    $radio = $(this)
-    $radio.data('was-checked', $radio.prop('checked'))
-
-  radios.on 'click', ->
-    $radio = $(this)
-
-    if $radio.prop('checked') and $radio.data('was-checked')
-      $radio.prop('checked', false).data('was-checked', false)
-      hidden_field.val(null) # Reset the value to `nil`
-    else
-      radios.data('was-checked', false) # Reset all other radios
-      $radio.data('was-checked', true)
-      hidden_field.val('') # Clear hidden field since something is selected
 
 destroy_select2 = ->
   $('#task_programming_language_id').select2('destroy');

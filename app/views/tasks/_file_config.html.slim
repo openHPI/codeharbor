@@ -31,7 +31,6 @@
   .form-control.placeholder
     = file.label :usage_by_lms, TaskFile.human_attribute_name('usage_by_lms'), class: 'form-label w-auto me-2'
     .radio-switch
-      = file.hidden_field :usage_by_lms, value: nil, class: 'fallback'
       = file.radio_button :usage_by_lms, 'edit', value: 'edit'
       = file.label :usage_by_lms_edit, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('common.button.edit'), class: 'radio-left small-radio radio-third' do
         span.fa-stack
@@ -44,3 +43,7 @@
       = file.label :usage_by_lms_download, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('.download'), class: 'radio-right small-radio radio-third' do
         span.fa-stack
           i.fa-solid.fa-download.fa-stack-1x.fa-2x
+      = file.radio_button :usage_by_lms, ''
+      = file.label :usage_by_lms_, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('.no_value'), class: 'radio-right small-radio radio-quarter' do
+        span.fa-stack
+          i.fa-solid.fa-ban.fa-stack-1x.fa-2x
