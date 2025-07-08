@@ -10,4 +10,4 @@
   = model_solution.text_field :xml_id, class: 'form-control', value: model_solution.object.xml_id.presence || '__nested_field_for_replace_with_index__'
 .files-header
   = label_tag nil, "#{Task.human_attribute_name('files')}:"
-= render 'tasks/nested_file_form', f: model_solution, nested_form_placeholder: 'ms-__nested_field_for_replace_with_index__-__task_model_solutions___nested_field_for_replace_with_index___files_index__'
+= render('tasks/nested_file_form', f: model_solution, nested_form_placeholder: 'ms-__nested_field_for_replace_with_index__-__task_model_solutions___nested_field_for_replace_with_index___files_index__')

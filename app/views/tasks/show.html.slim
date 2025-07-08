@@ -19,11 +19,11 @@
             - if current_user && policy(Rating).new_for_task?(@task)
               .btn.btn-light.btn-sm#ratingModalOpenButton data-bs-toggle="modal" data-bs-target="#ratingModal"
                 = t('.button.rate')
-              = render 'shared/modal',
+              = render('shared/modal',
                     title: Rating.model_name.human,
                     size: 'modal-sm',
                     modal_root_attributes: {id: 'ratingModal', 'data-task-id': @task.id},
-                    template: 'tasks/_rating_modal'
+                    template: 'tasks/_rating_modal')
 .row
   - section_index = 1
   .col-md-12.my-3
@@ -67,10 +67,10 @@
         .row-value
           = @task.internal_description
 
-      = render 'tasks/dachsfisch_json_as_xml', dachsfisch_attribute: @task.meta_data, name: 'meta_data'
-      = render 'tasks/dachsfisch_json_as_xml', dachsfisch_attribute: @task.submission_restrictions, name: 'submission_restrictions'
-      = render 'tasks/dachsfisch_json_as_xml', dachsfisch_attribute: @task.external_resources, name: 'external_resources'
-      = render 'tasks/dachsfisch_json_as_xml', dachsfisch_attribute: @task.grading_hints, name: 'grading_hints'
+      = render('tasks/dachsfisch_json_as_xml', dachsfisch_attribute: @task.meta_data, name: 'meta_data')
+      = render('tasks/dachsfisch_json_as_xml', dachsfisch_attribute: @task.submission_restrictions, name: 'submission_restrictions')
+      = render('tasks/dachsfisch_json_as_xml', dachsfisch_attribute: @task.external_resources, name: 'external_resources')
+      = render('tasks/dachsfisch_json_as_xml', dachsfisch_attribute: @task.grading_hints, name: 'grading_hints')
       .row
         .col-auto.row-label
           = t('common.created_at')
@@ -277,7 +277,7 @@
               .col.row-value
                 = test.internal_description
 
-            = render 'tasks/dachsfisch_json_as_xml', dachsfisch_attribute: test.meta_data, name: 'meta_data'
+            = render('tasks/dachsfisch_json_as_xml', dachsfisch_attribute: test.meta_data, name: 'meta_data')
             - if test.configuration.present?
               .row.vertical
                 .row-label
@@ -648,8 +648,8 @@
 
     #page_end.mt-5
 
-    = render 'shared/modal',
+    = render('shared/modal',
             title: t('.button.export_tasks'),
             modal_root_attributes: {id: 'import-export-dialog'},
             modal_body_attributes: {id: 'import-export-modal-body'},
-            template: 'tasks/_import_export_dialog'
+            template: 'tasks/_import_export_dialog')

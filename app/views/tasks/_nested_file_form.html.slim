@@ -16,7 +16,7 @@
             i.fa-solid.fa-xmark.text-danger
             =< t('.remove_file')
       .file-container.mx-2.my-3 class=display_container_class
-        = render 'tasks/file_form', f:, file:, nested_form_placeholder:
+        = render('tasks/file_form', f:, file:, nested_form_placeholder:)
   = f.add_nested_fields_link :files, ' ', class: 'btn btn-main', id: 'addFileButton' do
     i.fa-solid.fa-plus.text-success
     =< t('.add_file')

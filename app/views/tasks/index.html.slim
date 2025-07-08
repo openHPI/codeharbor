@@ -77,10 +77,10 @@
                   span.form-group
                     = f.select 'access_level', options_for_select({t('.search.all_access_levels') => '', t('tasks.visibility.private') => :private, t('tasks.visibility.public') => :public}, selected: @access_level), {}, class: 'form-control defaultSelect2 ransack-filter'
 
-= render 'tasks/tasks'
+= render('tasks/tasks')
 
-= render 'shared/modal',
+= render('shared/modal',
         title: t('.button.import_tasks'),
         modal_root_attributes: {id: 'import-export-dialog'},
         modal_body_attributes: {id: 'import-export-modal-body'},
-        template: 'tasks/_import_export_dialog'
+        template: 'tasks/_import_export_dialog')

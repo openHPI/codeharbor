@@ -61,7 +61,7 @@
       small.form-text.text-body-secondary
         = t('.openai_api_key_usage_html', openai_api_link: 'https://platform.openai.com/api-keys')
 
-    = render 'avatar_form', f:
+    = render('avatar_form', f:)
 
     - if resource.password_set?
       .form-group.field-element

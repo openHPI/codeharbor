@@ -50,7 +50,7 @@
               autocomplete: 'current-password',
               class: 'form-control'
 
-    = render 'avatar_form', f:
+    = render('avatar_form', f:)
 
     .form-group.py-3
       .btn-group role='group'
@@ -61,4 +61,4 @@
           i.fa-solid.fa-xmark.text-secondary
           =< t('common.button.back')
 
-  = render 'users/shared/links'
+  = render('users/shared/links')

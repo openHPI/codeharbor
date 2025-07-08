@@ -4,7 +4,7 @@
       .std-heading data-bs-toggle='tooltip' data-bs-placement='bottom' title=t('.contributions_for_task', task_title: @task.title)
         i.i.fa-regular.fa-file-lines
         =< truncate(t('.contributions_for_task', task_title: @task.title), length: 100)
-= render 'task_contributions'
+= render('task_contributions')
 
 = render('shared/pagination', collection: @task_contributions)
 = link_to t('common.button.back'), task_path(@task), class: 'btn btn-important'

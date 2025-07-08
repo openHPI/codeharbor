@@ -95,7 +95,7 @@
           => Task.human_attribute_name('files')
           span.fa-solid.fa-caret-up
         .form-content
-          = render 'tasks/nested_file_form', f:, nested_form_placeholder: 'f-__nested_field_for_replace_with_index__'
+          = render('tasks/nested_file_form', f:, nested_form_placeholder: 'f-__nested_field_for_replace_with_index__')
       fieldset.form-group
         legend.toggle-next
           span.number = '4'
@@ -120,7 +120,7 @@
                       i.fa-solid.fa-xmark.text-danger
                       =< t('.button.remove_test')
                 .test-container.ms-2.mt-4 class=display_container_class
-                  = render 'tasks/test_form', f:, test:
+                  = render('tasks/test_form', f:, test:)
             / .field-element
             = f.add_nested_fields_link :tests, ' ', class: 'btn btn-main', id: 'addTestButton' do
               i.fa-solid.fa-plus.text-success
@@ -150,7 +150,7 @@
                       i.fa-solid.fa-xmark.text-danger
                       =< t('.button.remove_model_solution')
                 .model-solution-container.ms-2.mt-4 class="#{display_container_class}"
-                  = render 'tasks/model_solution_form', f:, model_solution:
+                  = render('tasks/model_solution_form', f:, model_solution:)
             / .field-element
             = f.add_nested_fields_link :model_solutions, ' ', class: 'btn btn-main', id: 'addModelSolutionButton' do
               i.fa-solid.fa-plus.text-success
@@ -165,4 +165,4 @@
             =< t('common.button.cancel')
 
 - content_for :extra_root_content do
-  = render 'tasks/completeness_checklist'
+  = render('tasks/completeness_checklist')
