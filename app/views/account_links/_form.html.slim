@@ -3,17 +3,17 @@
     = render('shared/form_errors', object: @account_link)
     .field-element.form-group
       = f.label :name, AccountLink.human_attribute_name('name'), class: 'form-label'
-      = f.text_field :name, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('.info.name'), class: 'form-control'
+      = f.text_field :name, data: {'bs-toggle': 'tooltip', placement: 'bottom'}, title: t('.info.name'), class: 'form-control'
     .field-element.form-group
       = f.label :push_url, AccountLink.human_attribute_name('push_url'), class: 'form-label'
-      = f.text_field :push_url, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('.info.push_url'), class: 'form-control'
+      = f.text_field :push_url, data: {'bs-toggle': 'tooltip', placement: 'bottom'}, title: t('.info.push_url'), class: 'form-control'
     .field-element.form-group
       = f.label :check_uuid_url, AccountLink.human_attribute_name('check_uuid_url'), class: 'form-label'
-      = f.text_field :check_uuid_url, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('.info.check_uuid_url'), class: 'form-control'
+      = f.text_field :check_uuid_url, data: {'bs-toggle': 'tooltip', placement: 'bottom'}, title: t('.info.check_uuid_url'), class: 'form-control'
     .field-element.form-group
       = f.label :api_key, AccountLink.human_attribute_name('api_key'), class: 'form-label'
       .input-group
-        = f.text_field :api_key, data: {toggle: 'tooltip', placement: 'bottom'}, title: t('.info.token'), class: 'form-control'
+        = f.text_field :api_key, data: {'bs-toggle': 'tooltip', placement: 'bottom'}, title: t('.info.token'), class: 'form-control'
         = button_tag t('.button.generate'), type: 'button', class: 'generate-api-key-token btn btn-light'
     .field-element.form-group
       = f.label :proforma_version, AccountLink.human_attribute_name('proforma_version'), class: 'form-label'
