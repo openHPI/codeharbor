@@ -610,11 +610,11 @@
       - if policy(@task).contribute?(check_other_contrib: false)
         - contributions = @task.contributions.joins(:suggestion).where(suggestion: {user: @current_user}, status: :pending)
         - if contributions.any?
-          = link_to edit_task_task_contribution_path(@task, contributions.first), method: :get, class: 'btn btn-important' do
+          = link_to edit_task_task_contribution_path(@task, contributions.first), class: 'btn btn-important' do
             i.fa-regular.fa-edit
             =< t('task_contributions.buttons.edit_contribution')
         - else
-          = link_to new_task_task_contribution_path(@task), method: :get, class: 'btn btn-important' do
+          = link_to new_task_task_contribution_path(@task), class: 'btn btn-important' do
             i.fa-regular.fa-edit
             =< t('task_contributions.buttons.contribute')
       - elsif @current_user.nil?
