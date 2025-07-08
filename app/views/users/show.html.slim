@@ -81,7 +81,7 @@
               = link_to edit_user_account_link_path(current_user, account_link), class: 'btn btn-light btn-sm' do
                 i.fa-solid.fa-pen-to-square
                 =< t('common.button.edit')
-              = link_to user_account_link_path(current_user, account_link), method: :delete, data: {confirm: t('common.sure')}, class: 'btn btn-light btn-sm' do
+              = button_to user_account_link_path(current_user, account_link), method: :delete, data: {confirm: t('common.sure')}, class: 'btn btn-light btn-sm' do
                 i.fa-solid.fa-trash-can
                 =< t('common.button.delete')
     - if @user.shared_account_links.any?

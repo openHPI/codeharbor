@@ -62,6 +62,23 @@
 }
 
 .btn-group {
+
+  // Align buttons in a link group, similar to `.btn-group .btn + .btn` etc.
+  .button_to {
+    &:not(:first-child) {
+      margin-left: -1px;
+      .btn {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+
+    &:not(:last-child) .btn {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
   .btn-important {
     white-space: normal;
     padding: 10px 20px;
