@@ -1,6 +1,7 @@
 ready = ->
   initializeFileTypeSelection()
   initializeVisibilityWarning()
+  initializeNewFileTooltips()
 
 initializeLoadSelect2 = ->
   $('#task_programming_language_id').select2
@@ -31,6 +32,10 @@ initializeVisibilityWarning = ->
       warning_message.removeClass('d-none')
   $('#task_access_level_public').on 'change', ->
     warning_message.addClass('d-none')
+
+initializeNewFileTooltips = ->
+  $(document).on "fields_added.nested_form_fields", (event, param) ->
+    $('[data-bs-toggle="tooltip"]').tooltip();
 
 destroy_select2 = ->
   $('#task_programming_language_id').select2('destroy');

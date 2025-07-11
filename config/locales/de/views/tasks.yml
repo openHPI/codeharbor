@@ -25,6 +25,8 @@ de:
       delayed: Verzögert
       display: Anzeigen
       download: Herunterladen
+      edit: Bearbeiten
+      no_value: Kein Wert
     form:
       button:
         add_model_solution: Musterlösung hinzufügen
