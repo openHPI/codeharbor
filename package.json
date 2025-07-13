@@ -9,7 +9,7 @@
     "@fortawesome/fontawesome-free": "^6.7.2",
     "@hotwired/turbo-rails": "^8.0.16",
     "@popperjs/core": "^2.11.8",
-    "@sentry/browser": "^9.37.0",
+    "@sentry/browser": "^9.38.0",
     "@toast-ui/editor": "^3.2.2",
     "@webpack-cli/serve": "^3.0.1",
     "ace-builds": "^1.43.1",
@@ -31,7 +31,7 @@
     "shakapacker": "8.3.0",
     "style-loader": "^4.0.0",
     "terser-webpack-plugin": "5.3.14",
-    "webpack": "5.100.0",
+    "webpack": "5.100.1",
     "webpack-assets-manifest": "6.2.1",
     "webpack-cli": "6.0.1",
     "webpack-dev-server": "^5.2.2",
@@ -56,5 +56,5 @@
     "webpack": "./bin/shakapacker",
     "webpack-dev-server": "./bin/shakapacker-dev-server"
   },
-  "packageManager": "yarn@4.7.0"
+  "packageManager": "yarn@4.9.2"
 }
