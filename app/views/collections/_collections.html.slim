@@ -57,8 +57,8 @@
           .btn-group.float-end aria-label='...' role='group'
             - if policy(collection).show?
               = link_to(collection_path(collection), class: 'btn btn-light', data: {bs_toggle: 'tooltip', bs_placement: 'top', bs_title: t('common.button.view')}) do
-                i.fas.fa-eye aria-hidden="true"
+                i.fas.fa-eye aria-hidden='true'
             - if policy(collection).edit?
               = link_to(edit_collection_path(collection), class: 'btn btn-light', data: {bs_toggle: 'tooltip', bs_placement: 'top', bs_title: t('common.button.edit')}) do
-                i.fas.fa-edit aria-hidden="true"
+                i.fas.fa-edit aria-hidden='true'
 = render('shared/pagination', collection: @collections)

@@ -30,12 +30,12 @@
           .btn-group.float-end aria-label='...' role='group'
             - if policy(group).show?
               = link_to(group, class: 'btn btn-light', data: {bs_toggle: 'tooltip', bs_placement: 'top', bs_title: t('common.button.show')}) do
-                i.fas.fa-eye aria-hidden="true"
+                i.fas.fa-eye aria-hidden='true'
               - if policy(group).edit?
                 = link_to(edit_group_path(group), class: 'btn btn-light', data: {bs_toggle: 'tooltip', bs_placement: 'top', bs_title: t('common.button.edit')}) do
-                  i.fas.fa-edit aria-hidden="true"
+                  i.fas.fa-edit aria-hidden='true'
                 = button_to(group, class: 'btn btn-light', method: :delete, data: {bs_toggle: 'tooltip', bs_placement: 'top', bs_title: t('common.button.delete')}) do
-                  i.fas.fa-trash-alt aria-hidden="true"
+                  i.fas.fa-trash-alt aria-hidden='true'
 
             - elsif group.applicants.include?(current_user)
               = t('.wait_to_get_accepted')

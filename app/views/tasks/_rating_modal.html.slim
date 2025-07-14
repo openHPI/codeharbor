@@ -12,5 +12,5 @@ span.rating-category-container
     = render('task_star_rating', rating: @user_rating.overall_rating, is_input: true, category: :overall_rating)
 
 - content_for :modal_footer, flush: true do
-  button.btn.btn-light.m-0#ratingModalSaveButton data-bs-dismiss="modal" disabled=@user_rating.invalid?
+  button.btn.btn-light.m-0#ratingModalSaveButton data-bs-dismiss='modal' disabled=@user_rating.invalid?
     = t('common.button.save')

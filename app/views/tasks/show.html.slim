@@ -17,7 +17,7 @@
               = render('rating_subcategories', task: @task)
           span.mx-2
             - if current_user && policy(Rating).new_for_task?(@task)
-              .btn.btn-light.btn-sm#ratingModalOpenButton data-bs-toggle="modal" data-bs-target="#ratingModal"
+              .btn.btn-light.btn-sm#ratingModalOpenButton data-bs-toggle='modal' data-bs-target='#ratingModal'
                 = t('.button.rate')
               = render('shared/modal',
                     title: Rating.model_name.human,

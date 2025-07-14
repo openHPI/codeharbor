@@ -63,13 +63,13 @@
           .exercise-buttons.btn-group.float-end aria-label='...' role='group'
             - if policy(task).show?
               = link_to(task.url_for(:show), class: 'btn btn-light', data: {bs_toggle: 'tooltip', bs_placement: 'top', bs_title: t('common.button.view')}) do
-                i.fas.fa-eye aria-hidden="true"
+                i.fas.fa-eye aria-hidden='true'
             - if policy(task).edit?
               = link_to(task.url_for(:edit), class: 'btn btn-light', data: {bs_toggle: 'tooltip', bs_placement: 'top', bs_title: t('common.button.edit')}) do
-                i.fas.fa-edit aria-hidden="true"
+                i.fas.fa-edit aria-hidden='true'
             - if policy(task).destroy?
               = button_to(task.url_for(:destroy), class: 'btn btn-light', method: :delete, data: {bs_toggle: 'tooltip', bs_placement: 'top', bs_title: t('common.button.delete'), confirm: t('common.sure')}) do
-                i.fas.fa-trash-alt aria-hidden="true"
+                i.fas.fa-trash-alt aria-hidden='true'
 
     .card-footer.d-flex.align-items-center.pe-2
       .row.w-100
