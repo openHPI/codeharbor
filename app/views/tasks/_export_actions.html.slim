@@ -16,6 +16,6 @@
       = button_tag type: 'button', class: 'btn btn-light btn-sm float-end export-action import-export-button', data: {'export-type' => 'export'} do
         i.fa-solid.fa-check.confirm-icon.export-button-icon
         = t('common.button.export')
-= button_tag type: 'submit', class: 'btn btn-light btn-sm float-end import-export-button', data: {'bs-dismiss': 'modal'} do
+= button_tag type: 'submit', class: 'btn btn-light btn-sm float-end import-export-button', data: {bs_dismiss: 'modal'} do
   i.fa-solid.fa-xmark.abort-icon.export-button-icon
   = exported ? t('common.button.hide') : t('common.button.abort')

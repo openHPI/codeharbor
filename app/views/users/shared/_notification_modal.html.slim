@@ -22,5 +22,5 @@ ul
   - elsif defined?(confirm_notification_button)
     = button_to(confirm_notification_button[:target], method: confirm_notification_button[:method], form_class: 'd-inline margin-right-5px', class: 'btn btn-important green-border') do
       = t('common.button.confirm')
-  = button_tag class: 'btn btn-important red-border', data: {'bs-dismiss': 'modal'} do
+  = button_tag class: 'btn btn-important red-border', data: {bs_dismiss: 'modal'} do
     = t('common.button.cancel')
