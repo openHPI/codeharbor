@@ -524,7 +524,7 @@
                 = t('common.button.download_zip')
             - else
               .disabled-btn-wrapper data-bs-toggle='tooltip' title=t('.not_proforma_valid', version: '')
-                = button_tag class: 'btn btn-light dropdown-toggle disabled', 'data-bs-toggle': 'dropdown' do
+                = button_tag class: 'btn btn-light dropdown-toggle disabled', data: {bs_toggle: 'dropdown'} do
                   = t('common.button.download_zip')
             ul.scrollable.dropdown-menu role='menu'
               li.dropdown-header = "#{t('common.button.available_versions')}: "
