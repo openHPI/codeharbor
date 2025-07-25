@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe GroupsController do
   include ActiveJob::TestHelper
+
   render_views
 
   let(:user) { create(:user, preferred_locale: user_locale) }
