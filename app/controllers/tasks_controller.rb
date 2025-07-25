@@ -4,6 +4,7 @@ require 'zip'
 
 class TasksController < ApplicationController # rubocop:disable Metrics/ClassLength
   include TaskParameters
+
   before_action :load_and_authorize_task, except: %i[index new create import_start import_confirm import_uuid_check import_external]
   before_action :load_and_authorize_account_link, only: %i[export_external_start export_external_check export_external_confirm]
   before_action :only_authorize_action, only: %i[import_start import_confirm import_uuid_check import_external]
