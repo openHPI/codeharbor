@@ -16,6 +16,7 @@ de:
     markdown_editor:
       collapse: Editor zuklappen
       expand: Editor aufklappen
+    name: CodeHarbor
     navigation:
       rails_admin: Rails Admin
     session:
