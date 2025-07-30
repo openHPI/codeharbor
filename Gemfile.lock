@@ -516,7 +516,7 @@ GEM
       faraday (>= 1)
       faraday-multipart (>= 1)
     ruby-progressbar (1.13.0)
-    ruby-saml (1.18.0)
+    ruby-saml (1.18.1)
       nokogiri (>= 1.13.10)
       rexml
     ruby-vips (2.2.4)
@@ -939,7 +939,7 @@ CHECKSUMS
   rubocop-rspec_rails (2.31.0) sha256=775375e18a26a1184a812ef3054b79d218e85601b9ae897f38f8be24dddf1f45
   ruby-openai (8.1.0) sha256=6f69e7f501b3b039fe21807286230dfd51a91143e160ffb45464af30a20a5e14
   ruby-progressbar (1.13.0) sha256=80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33
-  ruby-saml (1.18.0) sha256=de342a55925fd5ce6114d0802651c324428c0fec26e7fe52bf3a7cfa54dbfa6d
+  ruby-saml (1.18.1) sha256=1b0e7a44aef150b4197955f5e015d593672e242cfdc5d06aa7554ec2350b9107
   ruby-vips (2.2.4) sha256=a305d34c8b38bf93fcb45e9c652dfba4464f3ff86d9a2ccfe3361841e7ea1c49
   rubyzip (2.4.1) sha256=8577c88edc1fde8935eb91064c5cb1aef9ad5494b940cf19c775ee833e075615
   sassc (2.4.0) sha256=4c60a2b0a3b36685c83b80d5789401c2f678c1652e3288315a1551d811d9f83e
