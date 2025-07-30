@@ -19,6 +19,7 @@ inherit_from:
 AllCops:
   UseCache: True
   NewCops: enable
+  MigratedSchemaVersion: 20240924144745
   Exclude:
     - 'bin/*'
     - 'db/*schema.rb'

@@ -5,17 +5,6 @@
 Layout/LineLength:
   Max: 140
 
-# We don't want to change previous migrations...
-#
-Rails/CreateTableWithTimestamps:
-  Enabled: false
-
-Rails/BulkChangeTable:
-  Enabled: false
-
-Rails/ThreeStateBooleanColumn:
-  Enabled: false
-
 # The models need to be fixed anyway
 #
 Rails/UniqueValidationWithoutIndex:
