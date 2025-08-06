@@ -8,7 +8,8 @@ RSpec.describe Nbp::PushConnector do
   let(:token_expiration) { 600 }
 
   let(:task) { create(:task) }
-  let(:task_xml) { (Nokogiri::XML::Builder.new(encoding: 'UTF-8') {|xml| LomService::ExportLom.call(task:, xml:) }).to_xml }
+  let(:task_xml_builder) { Nokogiri::XML::Builder.new(encoding: 'UTF-8') {|xml| LomService::ExportLom.call(task:, xml:) } }
+  let(:task_xml) { task_xml_builder.to_xml }
 
   let(:connector) { Class.new(described_class).instance } # https://stackoverflow.com/a/23901644
 
