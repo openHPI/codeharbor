@@ -1,0 +1,13 @@
+= t('collections.invitation_mailer.greeting', user: @recipient.name)
+
+= t('collections.invitation_mailer.invitation_message', collection: @collection.title)
+
+= t('collections.invitation_mailer.collaboration_details')
+
+= t('collections.invitation_mailer.view_collection_instructions')
+= collection_url(@collection)
+
+= t('collections.invitation_mailer.contact_info')
+
+= t('collections.invitation_mailer.thank_you')
+= t('collections.invitation_mailer.team_signature', app_name: t('application.name'))
