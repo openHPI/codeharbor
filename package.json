@@ -23,7 +23,7 @@
     "jquery": "^3.7.1",
     "jquery-ui": "^1.14.1",
     "jquery-ujs": "^1.2.3",
-    "mini-css-extract-plugin": "^2.9.3",
+    "mini-css-extract-plugin": "^2.9.4",
     "rails_admin": "3.3.0",
     "sass": "^1.90.0",
     "sass-loader": "^16.0.5",
