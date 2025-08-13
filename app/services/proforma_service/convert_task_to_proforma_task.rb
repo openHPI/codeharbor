@@ -6,6 +6,7 @@ module ProformaService
       super()
       @task = task
       @options = options
+      @all_files = []
     end
 
     def execute
@@ -78,6 +79,21 @@ module ProformaService
       end
     end
 
+    def task_files_equal?(task_file, other)
+      task_file.filename == other.filename &&
+        task_file.used_by_grader == other.used_by_grader &&
+        task_file.visible == other.visible &&
+        task_file.usage_by_lms == other.usage_by_lms &&
+        task_file.internal_description == other.internal_description &&
+        task_content_equal?(task_file, other)
+    end
+
+    def task_content_equal?(task_file, other)
+      task_file.content == other.content &&
+        task_file.binary == other.binary &&
+        task_file.mimetype == other.mimetype
+    end
+
     def task_file(file)
       task_file = ProformaXML::TaskFile.new(
         id: file.xml_id,
@@ -88,6 +104,11 @@ module ProformaService
         internal_description: file.internal_description
       )
       add_content_to_task_file(file, task_file)
+
+      original_file = @all_files.find {|f| task_files_equal?(f, task_file) }
+      return original_file if original_file
+
+      @all_files << task_file
       task_file
     end
 
