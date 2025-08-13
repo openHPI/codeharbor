@@ -445,6 +445,12 @@ RSpec.describe CollectionsController do
         expect { post_request }.to change(Message, :count).by(1)
       end
 
+      it 'sends an invitation email' do
+        expect { post_request }
+          .to have_enqueued_mail(CollectionInvitationMailer, :send_invitation)
+          .with(params: {collection:, recipient:}, args: [])
+      end
+
       it 'redirects to collection' do
         post_request
         expect(response).to redirect_to collection
@@ -458,6 +464,12 @@ RSpec.describe CollectionsController do
     shared_examples 'error' do |expected_flash|
       it 'does not create a message' do
         expect { post_request }.not_to change(Message, :count)
+      end
+
+      it 'does not send an invitation email' do
+        expect { post_request }
+          .not_to have_enqueued_mail(CollectionInvitationMailer, :send_invitation)
+          .with(params: {collection:, recipient:}, args: [])
       end
 
       it 'redirects to collection' do
