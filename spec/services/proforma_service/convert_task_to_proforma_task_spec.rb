@@ -273,6 +273,25 @@ RSpec.describe ProformaService::ConvertTaskToProformaTask do
       it 'creates a task with two tests' do
         expect(proforma_task.tests).to have(2).items
       end
+
+      context 'with different files' do
+        let(:tests) do
+          [build(:test, files: build_list(:task_file, 1, content: 'file1')),
+           build(:test, files: build_list(:task_file, 1, content: 'file2'))]
+        end
+
+        it 'creates a task with two files' do
+          expect(proforma_task.all_files).to have(2).items
+        end
+      end
+
+      context 'with equal files used in both tests' do
+        let(:tests) { build_list(:test, 2, files: build_list(:task_file, 1)) }
+
+        it 'creates a task with one file' do
+          expect(proforma_task.all_files).to have(1).items
+        end
+      end
     end
 
     context 'when exercise has description formatted in markdown' do
