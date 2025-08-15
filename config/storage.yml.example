@@ -1,0 +1,15 @@
+test:
+  service: Disk
+  root: <%= Rails.root.join("tmp/storage") %>
+
+local:
+  service: Disk
+  root: <%= Rails.root.join("storage") %>
+
+# Local storage is used by default. To use another storage provider in production,
+# please set ACTIVE_STORAGE_SERVICE=aws and the corresponding configuration.
+# The aws-sdk-s3 GEM is included to support S3-compatible providers. 
+# 
+# aws:
+#   service: S3
+#   ...

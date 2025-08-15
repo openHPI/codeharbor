@@ -3,6 +3,7 @@
 source 'https://rubygems.org'
 
 gem 'acts-as-taggable-on'
+gem 'aws-sdk-s3', require: false
 gem 'bcrypt'
 gem 'bootsnap', require: false
 gem 'bootstrap-will_paginate'
