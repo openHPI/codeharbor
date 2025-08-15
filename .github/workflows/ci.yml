@@ -64,6 +64,7 @@ jobs:
         run: |
           cp config/action_mailer.yml.ci config/action_mailer.yml
           cp config/content_security_policy.yml.ci config/content_security_policy.yml
+          cp config/storage.yml.ci config/storage.yml
           cp config/database.yml.ci config/database.yml
           cp config/mnemosyne.yml.ci config/mnemosyne.yml
 

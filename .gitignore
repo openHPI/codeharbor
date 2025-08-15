@@ -43,6 +43,7 @@
 /config/mnemosyne.yml
 /config/settings.local.yml
 /config/settings/*.local.yml
+/config/storage.yml
 /config/environments/*.local.yml
 
 # Ignore temporary files
