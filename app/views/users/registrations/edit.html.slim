@@ -6,7 +6,7 @@
         =< t('devise.registrations.edit.title', resource: User.model_name.human)
 
 .row.my-4
-  = form_for(resource, as: resource_name, url: registration_path(resource_name), html: {method: :put}) do |f|
+  = form_for(resource, as: resource_name, url: registration_path(resource_name), html: {method: :put}, id: 'edit_user') do |f|
     = render('shared/form_errors', object: resource, title: t('common.errors.changes_not_saved'))
 
     .form-group.field-element
@@ -74,27 +74,27 @@
         small.form-text.text-body-secondary = t('devise.registrations.edit.we_need_your_current_password_to_confirm_your_changes')
 
 
-    - if devise_mapping.omniauthable? && resource_class.omniauth_providers.any?
-      .form-group.field-element
-        .form-label
-          = t('.manage_omniauth')
-        .form-content.manage_omniauth
-          - resource_class.omniauth_providers.each do |provider|
-            - provider_name = OmniAuth::Utils.camelize(provider)
-            - configured_providers = current_user.omniauth_identities.pluck(:omniauth_provider)
-            - if configured_providers.include?(provider.to_s) && (configured_providers.size > 1 || resource.password_set?)
-              = button_to(t('.remove_identity', kind: provider_name), omniauth_deauthorize_path(provider), class: 'btn btn-light btn-sm mb-2 me-2', method: :delete)
-            - elsif configured_providers.include?(provider.to_s)
-              a.btn.btn-light.btn-sm.mb-2.me-2.disabled href='#'
-                = t('.cannot_remove_last_identity', kind: provider_name)
-            - else
-              = button_to(t('.add_identity', kind: provider_name), omniauth_authorize_path(resource_name, provider), class: 'btn btn-light btn-sm mb-2 me-2', method: :post)
+  - if devise_mapping.omniauthable? && resource_class.omniauth_providers.any?
+    .form-group.field-element.px-4
+      .form-label
+        = t('.manage_omniauth')
+      .form-content.manage_omniauth
+        - resource_class.omniauth_providers.each do |provider|
+          - provider_name = OmniAuth::Utils.camelize(provider)
+          - configured_providers = current_user.omniauth_identities.pluck(:omniauth_provider)
+          - if configured_providers.include?(provider.to_s) && (configured_providers.size > 1 || resource.password_set?)
+            = button_to(t('.remove_identity', kind: provider_name), omniauth_deauthorize_path(provider), class: 'btn btn-light btn-sm mb-2 me-2', method: :delete)
+          - elsif configured_providers.include?(provider.to_s)
+            a.btn.btn-light.btn-sm.mb-2.me-2.disabled href='#'
+              = t('.cannot_remove_last_identity', kind: provider_name)
+          - else
+            = button_to(t('.add_identity', kind: provider_name), omniauth_authorize_path(resource_name, provider), class: 'btn btn-light btn-sm mb-2 me-2', method: :post)
 
-    .form-group.py-3
-      .btn-group role='group'
-        = button_tag type: 'submit', class: 'btn btn-important' do
-          i.fa-solid.fa-user
-          =< t('common.button.update')
-        = link_to(:back, class: 'btn btn-important') do
-          i.fa-solid.fa-xmark.text-secondary
-          =< t('common.button.back')
+  .form-group.py-3
+    .btn-group role='group'
+      = button_tag type: 'submit', class: 'btn btn-important', form: 'edit_user' do
+        i.fa-solid.fa-user
+        =< t('common.button.update')
+      = link_to(:back, class: 'btn btn-important') do
+        i.fa-solid.fa-xmark.text-secondary
+        =< t('common.button.back')

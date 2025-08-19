@@ -2,8 +2,8 @@
   - append_javascript_pack_tag('toast-ui')
   - append_stylesheet_pack_tag('toast-ui')
 
-= form_for @collection, builder: MarkdownFormBuilder, data: {turbo: false} do |f|
-  .my-4
+.my-4
+  = form_for @collection, builder: MarkdownFormBuilder, data: {turbo: false}, id: 'edit_collection' do |f|
     = render('shared/form_errors', object: @collection)
     .form-group
       .field-element
@@ -46,15 +46,15 @@
                         i.fa-solid.fa-xmark.vert-align.text-danger.lead
 
         br
-    .form-group
-      .actions.btn-group role='group'
-        = button_tag type: 'submit', class: 'btn btn-important' do
-          i.fa-solid.fa-folder-open
-          =< t('.button.save')
-        - if @collection.tasks.present?
-          = button_to(remove_all_collection_path(@collection), method: :patch, data: {confirm: t('common.sure')}, class: 'btn btn-important h-100') do
-            i.fa-solid.fa-xmark.text-danger
-            =< t('.button.remove_all')
-        = link_to(:back, class: 'btn btn-important') do
-          i.fa-solid.fa-xmark
-          =< t('common.button.cancel')
+  .form-group
+    .actions.btn-group role='group'
+      = button_tag type: 'submit', class: 'btn btn-important', form: 'edit_collection' do
+        i.fa-solid.fa-folder-open
+        =< t('.button.save')
+      - if @collection.tasks.present?
+        = button_to(remove_all_collection_path(@collection), method: :patch, data: {confirm: t('common.sure')}, class: 'btn btn-important h-100') do
+          i.fa-solid.fa-xmark.text-danger
+          =< t('.button.remove_all')
+      = link_to(:back, class: 'btn btn-important') do
+        i.fa-solid.fa-xmark
+        =< t('common.button.cancel')

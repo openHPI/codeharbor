@@ -1,12 +1,12 @@
-= form_for :comment, url: task_comment_path(@task, @comment), method: :put, remote: true do |f|
-  .comment-text
-    .comment-text-input
+.comment-text
+  .comment-text-input
+    = form_for :comment, url: task_comment_path(@task, @comment), method: :put, remote: true, id: "edit_comment_#{@comment.id}", class: 'd-inline' do |f|
       = f.text_field :text, class: 'form-control'
-    .actions.btn-group.float-end role='group'
-      - if policy(@comment).edit?
-        = button_tag type: 'submit', class: 'btn btn-light btn-sm' do
-          i.fa-solid.fa-floppy-disk
-          =< t('common.button.save')
-        = button_to(task_comment_path(@task, @comment), class: 'btn btn-light btn-sm', method: :delete, remote: true, data: {confirm: t('common.sure')})
-          i.fa-solid.fa-trash-can
-          =< t('common.button.delete')
+  .actions.btn-group.float-end role='group'
+    - if policy(@comment).edit?
+      = button_tag type: 'submit', class: 'btn btn-light btn-sm', form: "edit_comment_#{@comment.id}" do
+        i.fa-solid.fa-floppy-disk
+        =< t('common.button.save')
+      = button_to(task_comment_path(@task, @comment), class: 'btn btn-light btn-sm', method: :delete, remote: true, data: {confirm: t('common.sure')})
+        i.fa-solid.fa-trash-can
+        =< t('common.button.delete')
