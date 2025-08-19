@@ -88,7 +88,7 @@
             a.btn.btn-light.btn-sm.mb-2.me-2.disabled href='#'
               = t('.cannot_remove_last_identity', kind: provider_name)
           - else
-            = button_to(t('.add_identity', kind: provider_name), omniauth_authorize_path(resource_name, provider), class: 'btn btn-light btn-sm mb-2 me-2', method: :post)
+            = button_to(t('.add_identity', kind: provider_name), omniauth_authorize_path(resource_name, provider), class: 'btn btn-light btn-sm mb-2 me-2', method: :post, data: {turbo: false})
 
   .form-group.py-3
     .btn-group role='group'

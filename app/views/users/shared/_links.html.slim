@@ -24,4 +24,5 @@
       = button_to(t('devise.shared.links.sign_in_with_provider', provider: OmniAuth::Utils.camelize(provider)),
               omniauth_authorize_path(resource_name, provider),
               class: 'btn btn-link p-0 border-0',
-              method: :post)
+              method: :post,
+              data: {turbo: false})
