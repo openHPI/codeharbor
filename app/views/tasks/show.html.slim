@@ -95,17 +95,20 @@
       .row
         .col-auto.row-label
           = Task.human_attribute_name('uuid')
+          | :
         .col.row-value
           = @task.uuid
       - unless @task.contribution?
         .row
           .col-auto.row-label
             = Task.human_attribute_name('parent_uuid')
+            | :
           .col.row-value
             = @task.parent_uuid
       .row
         .col-auto.row-label
           = Task.human_attribute_name('language')
+          | :
         .col.row-value
           = @task.language
       .row
