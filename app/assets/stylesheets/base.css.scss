@@ -181,13 +181,16 @@ table.vertical-table {
     background-color: #eeeeee;
   }
 
-  a {
+  a,
+  .btn-link {
     padding: 10px 60px;
     background-color: #f5f5f5;
     display: inline-block;
   }
   a:hover,
-  a:focus {
+  a:focus,
+  .btn-link:hover,
+  .btn-link:focus {
     background-color: #f0f0f0;
     color: black;
     text-decoration: none;
