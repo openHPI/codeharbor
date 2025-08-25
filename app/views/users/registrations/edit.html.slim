@@ -6,7 +6,7 @@
         =< t('devise.registrations.edit.title', resource: User.model_name.human)
 
 .row.my-4
-  = form_for(resource, as: resource_name, url: registration_path(resource_name), html: {method: :put}, id: 'edit_user') do |f|
+  = form_for(resource, as: resource_name, url: registration_path(resource_name), html: {method: :put, id: 'edit_user'}) do |f|
     = render('shared/form_errors', object: resource, title: t('common.errors.changes_not_saved'))
 
     .form-group.field-element

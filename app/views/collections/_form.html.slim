@@ -3,7 +3,7 @@
   - append_stylesheet_pack_tag('toast-ui')
 
 .my-4
-  = form_for @collection, builder: MarkdownFormBuilder, data: {turbo: false}, id: 'edit_collection' do |f|
+  = form_for @collection, builder: MarkdownFormBuilder, data: {turbo: false}, html: {id: @collection.new_record? ? 'new_collection' : "edit_collection_#{@collection.id}"} do |f|
     = render('shared/form_errors', object: @collection)
     .form-group
       .field-element
