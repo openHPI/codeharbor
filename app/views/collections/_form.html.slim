@@ -48,7 +48,7 @@
         br
   .form-group
     .actions.btn-group role='group'
-      = button_tag type: 'submit', class: 'btn btn-important', form: 'edit_collection' do
+      = button_tag type: 'submit', class: 'btn btn-important', form: @collection.new_record? ? 'new_collection' : "edit_collection_#{@collection.id}" do
         i.fa-solid.fa-folder-open
         =< t('.button.save')
       - if @collection.tasks.present?
