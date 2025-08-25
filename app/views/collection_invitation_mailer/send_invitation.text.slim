@@ -1,13 +1,15 @@
 = t('collections.invitation_mailer.greeting', user: @recipient.name)
-
-= t('collections.invitation_mailer.invitation_message', collection: @collection.title)
-
-= t('collections.invitation_mailer.collaboration_details')
-
+= "\n\n"
+= t('collections.invitation_mailer.invitation_message', collection: @collection.title).html_safe
+= "\n\n"
+= t('collections.invitation_mailer.collaboration_details').html_safe
+= "\n\n"
 = t('collections.invitation_mailer.view_collection_instructions')
+= "\n\n"
 = collection_url(@collection)
-
+= "\n\n"
 = t('collections.invitation_mailer.contact_info')
-
+= "\n\n"
 = t('collections.invitation_mailer.thank_you')
+= "\n"
 = t('collections.invitation_mailer.team_signature', app_name: t('application.name'))
