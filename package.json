@@ -25,7 +25,7 @@
     "jquery-ujs": "^1.2.3",
     "mini-css-extract-plugin": "^2.9.4",
     "rails_admin": "3.3.0",
-    "sass": "^1.92.1",
+    "sass": "^1.93.1",
     "sass-loader": "^16.0.5",
     "select2": "^4.1.0-rc.0",
     "shakapacker": "8.4.0",
