@@ -135,7 +135,7 @@ GEM
     csv (3.3.5)
     dachsfisch (1.0.2)
       nokogiri (>= 1.14.1, < 2.0.0)
-    date (3.4.1)
+    date (3.5.0)
     debug_inspector (1.2.0)
     deep_merge (1.2.2)
     devise (4.9.4)
@@ -432,7 +432,7 @@ GEM
       tsort (>= 0.2)
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
-    rake (13.3.0)
+    rake (13.3.1)
     ransack (4.4.1)
       activerecord (>= 7.2)
       activesupport (>= 7.2)
@@ -550,7 +550,7 @@ GEM
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
     set (1.1.2)
-    shakapacker (8.4.0)
+    shakapacker (9.2.0)
       activesupport (>= 5.2)
       package_json
       rack-proxy (>= 0.6.1)
@@ -726,7 +726,7 @@ DEPENDENCIES
   selenium-webdriver
   sentry-rails
   sentry-ruby
-  shakapacker (= 8.4.0)
+  shakapacker (= 9.2.0)
   shoulda-matchers
   simple_form
   simplecov
@@ -783,7 +783,7 @@ CHECKSUMS
   crass (1.0.6) sha256=dc516022a56e7b3b156099abc81b6d2b08ea1ed12676ac7a5657617f012bd45d
   csv (3.3.5) sha256=6e5134ac3383ef728b7f02725d9872934f523cb40b961479f69cf3afa6c8e73f
   dachsfisch (1.0.2) sha256=d8002414310cc8dc5d87d61d04d660f59f4cd095981ba20f09439c5e5b8d3c13
-  date (3.4.1) sha256=bf268e14ef7158009bfeaec40b5fa3c7271906e88b196d958a89d4b408abe64f
+  date (3.5.0) sha256=5e74fd6c04b0e65d97ad4f3bb5cb2d8efb37f386cc848f46310b4593ffc46ee5
   debug_inspector (1.2.0) sha256=9bdfa02eebc3da163833e6a89b154084232f5766087e59573b70521c77ea68a2
   deep_merge (1.2.2) sha256=83ced3a3d7f95f67de958d2ce41b1874e83c8d94fe2ddbff50c8b4b82323563a
   devise (4.9.4) sha256=920042fe5e704c548aa4eb65ebdd65980b83ffae67feb32c697206bfd975a7f8
@@ -915,7 +915,7 @@ CHECKSUMS
   rails_admin (3.3.0) sha256=666c40a0931ee4f6e29e6db1df69df72417218d553af25b2fb56cdc94e2cfbf9
   railties (8.0.3) sha256=ace31dcad7134299a64d6d96310d76d32868756e58e2983e25b121acd457f1d2
   rainbow (3.1.1) sha256=039491aa3a89f42efa1d6dec2fc4e62ede96eb6acd95e52f1ad581182b79bc6a
-  rake (13.3.0) sha256=96f5092d786ff412c62fde76f793cc0541bd84d2eb579caa529aa8a059934493
+  rake (13.3.1) sha256=8c9e89d09f66a26a01264e7e3480ec0607f0c497a861ef16063604b1b08eb19c
   ransack (4.4.1) sha256=6aeaac36fc19088570e10da1044e6cfd88c740e20f871b84566fd30e32b7a63d
   rb-fsevent (0.11.2) sha256=43900b972e7301d6570f64b850a5aa67833ee7d87b458ee92805d56b7318aefe
   rb-inotify (0.11.1) sha256=a0a700441239b0ff18eb65e3866236cd78613d6b9f78fea1f9ac47a85e47be6e
@@ -956,7 +956,7 @@ CHECKSUMS
   sentry-rails (5.28.0) sha256=a0cbba7ce86312172db9d1b3c39c5302de07e446e7df3f68e4f4b1d240a91fc2
   sentry-ruby (5.28.0) sha256=745c1db3b85c765993dfeb941830aeafff82d85330cd953410c7f37197b0bd99
   set (1.1.2) sha256=ca33a60d202e788041d94a5d4c12315b1639875576f1a266f3a10913646d8ef1
-  shakapacker (8.4.0) sha256=df234ed4a9173407adc288df0d7f156c485ada9214b23d8f0e2c734f11c1aca8
+  shakapacker (9.2.0) sha256=4224378a3b093cb29d0c5a084bca5af516206851d273d8121637c73d98ca8543
   shoulda-matchers (6.5.0) sha256=ef6b572b2bed1ac4aba6ab2c5ff345a24b6d055a93a3d1c3bfc86d9d499e3f44
   simple_form (5.4.0) sha256=eb1ce5b0ec36ae171f2e2a07ec479ad3eaeb53fa750aa3f775a7cb7b684810ee
   simplecov (0.22.0) sha256=fe2622c7834ff23b98066bb0a854284b2729a569ac659f82621fc22ef36213a5
