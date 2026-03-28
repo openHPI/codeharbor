@@ -66,6 +66,7 @@ jobs:
           cp config/content_security_policy.yml.ci config/content_security_policy.yml
           cp config/database.yml.ci config/database.yml
           cp config/mnemosyne.yml.ci config/mnemosyne.yml
+          cp config/storage.yml.ci config/storage.yml
 
       - name: Prepare database
         env:
